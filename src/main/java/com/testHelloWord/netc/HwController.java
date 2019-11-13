@@ -1,4 +1,4 @@
-package com.netc;
+package com.testHelloWord.netc;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
