@@ -4,6 +4,7 @@ import java.math.BigInteger;
 import java.time.LocalDate;
 
 public abstract class AbstractAccountOperation {
+    private BigInteger id;
     private BigInteger amount;
     private LocalDate date;
     private Debt debt;
