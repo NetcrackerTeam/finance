@@ -1,4 +1,4 @@
 package com.netcracker.models;
 
-public class template {
+public enum CategoryExpense {
 }
