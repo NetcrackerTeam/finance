@@ -12,4 +12,6 @@ public class MonthReport {
     private LocalDate date;
     private Map<CategoryExpense, Long> categoryExpenseLongMap;
     private Map<CategoryIncome, Long>  categoryIncomeLongMap;
+
+
 }
