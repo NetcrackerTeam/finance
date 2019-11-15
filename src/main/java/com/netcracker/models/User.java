@@ -10,7 +10,6 @@ public class User {
     private PersonalDebitAccount personalDebitAccount;
     private FamilyDebitAccount familyDebitAccount;
 
-
     public static class Builder {
         private final BigInteger id;
         private final String name;
@@ -46,6 +45,30 @@ public class User {
         this.name = builder.name;
         this.eMail = builder.eMail;
         this.password = builder.password;
+    }
+
+    public BigInteger getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String geteMail() {
+        return eMail;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public PersonalDebitAccount getPersonalDebitAccount() {
+        return personalDebitAccount;
+    }
+
+    public FamilyDebitAccount getFamilyDebitAccount() {
+        return familyDebitAccount;
     }
 
     public void setPassword(String password) {
