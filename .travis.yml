@@ -11,6 +11,6 @@ branches:
     - master
 deploy:
   provider: heroku
-  app: helloworldexam
+  app: teamexample
   api_key:
-    secure: 07a7cdd9-b311-4190-9662-62d8fd0c67fc
+    secure: ab4919bf-99db-49e4-a9fa-e12fa9ebfb32
