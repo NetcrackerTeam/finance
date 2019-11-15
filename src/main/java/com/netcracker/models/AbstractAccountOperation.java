@@ -9,4 +9,8 @@ public abstract class AbstractAccountOperation {
     private LocalDate date;
     private Debt debt;
     private Long userId;
+
+    public BigInteger getId() {
+        return this.id;
+    }
 }

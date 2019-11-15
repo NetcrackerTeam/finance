@@ -14,8 +14,6 @@ public abstract   class AbstractCreditAccount {
     private  int monthDay;
     private boolean isPaid;
 
-
-
     public BigInteger getCreditId() {
         return creditId;
     }
