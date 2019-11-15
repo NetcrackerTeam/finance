@@ -3,39 +3,32 @@ package com.netcracker.dao.impl;
 import com.netcracker.dao.UserDao;
 import com.netcracker.models.User;
 
+import java.math.BigInteger;
+import java.util.List;
+
 public class UserDaoImpl implements UserDao {
-    @Override
+
     public void createUser() {
 
     }
 
-    @Override
-    public User getUserById() {
+    public User getUserById(BigInteger id) {
         return null;
     }
 
-    @Override
-    public User getUserByLogin() {
+    public User getUserByLogin(String login) {
         return null;
     }
 
-    @Override
-    public void deleteUser() {
+    public void updateUserPasswordById(BigInteger id, BigInteger newPassword) {
 
     }
 
-    @Override
-    public void updateUserPasswordById() {
-
-    }
-
-    @Override
-    public User getUsersByFamilyAccountId() {
+    public User getAllUsersByFamilyAccountId(List<BigInteger> id) {
         return null;
     }
 
-    @Override
-    public User getUserByFamilyAccountId() {
+    public User getUserByFamilyAccountId(BigInteger id) {
         return null;
     }
 }
