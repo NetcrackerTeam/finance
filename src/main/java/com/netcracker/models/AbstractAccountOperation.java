@@ -13,4 +13,8 @@ public abstract class AbstractAccountOperation {
     public BigInteger getId() {
         return this.id;
     }
+
+    public void setId(BigInteger id) {
+        this.id = id;
+    }
 }
