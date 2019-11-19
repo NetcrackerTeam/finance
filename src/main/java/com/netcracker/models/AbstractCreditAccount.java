@@ -12,6 +12,7 @@ public abstract class AbstractCreditAccount {
     private Long creditRate;
     private LocalDate dateTo;
     private  int monthDay;
+    private Debt debt;
     private boolean isPaid;
 
     protected static abstract class BaseBuilder <T extends AbstractCreditAccount, B extends BaseBuilder> {
@@ -64,6 +65,10 @@ public abstract class AbstractCreditAccount {
             actualClass.setMonthDay(monthDay);
             return actualClassBuilder;
         }
+        public B debtCredit(Debt debt) {
+            actualClass.setDebt(debt);
+            return actualClassBuilder;
+        }
 
         public B isPaid(boolean isPaid) {
             actualClass.setPaid(isPaid);
@@ -110,6 +115,10 @@ public abstract class AbstractCreditAccount {
     protected void setPaid (boolean isPaid) {
         this.isPaid = isPaid;
     }
+
+    public Debt getDebt() { return debt; }
+
+    public void setDebt(Debt debt) { this.debt = debt; }
 
     public BigInteger getCreditId() {
         return creditId;
