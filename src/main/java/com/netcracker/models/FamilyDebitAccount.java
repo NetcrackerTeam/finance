@@ -7,7 +7,7 @@ public class FamilyDebitAccount extends AbstractDebitAccount {
     private List<FamilyCreditAccount> familyCreditAccountList;
 
 
-    public static class Builder extends BaseBuilder<FamilyDebitAccount, BaseBuilder> {
+    public static class Builder extends BaseBuilder<FamilyDebitAccount, Builder> {
 
         public Builder DebitFamilyAccountList(List<User> listUser, List<FamilyCreditAccount> listFamilyDebitAccount) {
             actualClass.setFamilyCreditAccountList(listFamilyDebitAccount);

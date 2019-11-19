@@ -1,13 +1,33 @@
 package com.netcracker.models;
 
 public class AccountExpense extends AbstractAccountOperation {
-    private CategoryExpense categoryExpence;
+    private CategoryExpense categoryExpense;
 
-    public CategoryExpense getCategoryExpence() {
-        return categoryExpence;
+
+    public static class Builder extends BaseBuilder<AccountExpense, Builder> {
+
+
+        public Builder categoryIncome(CategoryExpense expense) {
+            actualClass.setCategoryExpense(expense);
+            return this;
+        }
+
+        @Override
+        protected AccountExpense getActual() {
+            return new AccountExpense();
+        }
+
+        @Override
+        protected Builder getActualBuilder() {
+            return this;
+        }
     }
 
-    public void setCategoryExpence(CategoryExpense categoryExpence) {
-        this.categoryExpence = categoryExpence;
+    public CategoryExpense getCategoryExpense() {
+        return categoryExpense;
+    }
+
+    public void setCategoryExpense(CategoryExpense categoryExpense) {
+        this.categoryExpense = categoryExpense;
     }
 }

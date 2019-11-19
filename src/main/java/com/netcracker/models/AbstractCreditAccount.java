@@ -4,7 +4,7 @@ import java.math.BigInteger;
 import java.time.LocalDate;
 
 public abstract class AbstractCreditAccount {
-    private  BigInteger creditId ;
+    private    BigInteger creditId ;
     private String name;
     private Long amount;
     private Long paidAmount;

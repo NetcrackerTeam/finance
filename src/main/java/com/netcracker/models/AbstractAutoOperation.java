@@ -4,7 +4,24 @@ public abstract class AbstractAutoOperation extends AbstractAccountOperation {
     private int dayOfMonth;
 
 
-    public int getDayOfMonth() {
+    public static class BuilderAutoOperation extends BaseBuilder<AbstractAutoOperation, BaseBuilder> {
+
+        public BuilderAutoOperation dayOfMonth(int dayOfMonth) {
+            actualClass.setDayOfMonth(dayOfMonth);
+            return this;
+        }
+        @Override
+        protected AbstractAutoOperation getActual() {
+            return null;
+        }
+
+        @Override
+        protected BaseBuilder getActualBuilder() {
+            return null;
+        }
+    }
+
+        public int getDayOfMonth() {
         return dayOfMonth;
     }
 
