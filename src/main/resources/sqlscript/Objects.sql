@@ -95,3 +95,4 @@ INSERT INTO OBJECTS (OBJECT_ID,PARENT_ID,OBJECT_TYPE_ID,NAME,DESCRIPTION) VALUES
 --Создание пользователя
 INSERT INTO OBJECTS (OBJECT_TYPE_ID,PARENT_ID,NAME,DESCRIPTION) VALUES (objects_id_s.nextval,null,2,'PER_DEB_ACC4','Personal debet account4'); --  ID-50
 --создание персонального
+commit;
