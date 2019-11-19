@@ -498,8 +498,6 @@
  insert into attributes(attr_id, object_id, values) values(7, 50, '12000');
  
  ----------------------------------------------------------------------------
- 
- 
- 
+ commit;
  
  
