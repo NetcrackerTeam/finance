@@ -28,8 +28,6 @@ INSERT INTO OBJTYPE (OBJECT_TYPE_ID,PARENT_ID,NAME,DESCRIPTION) VALUES (800,NULL
 
 
 
-
-
  
 INSERT INTO OBJTYPE (OBJECT_TYPE_ID,PARENT_ID,NAME,DESCRIPTION) VALUES (1,NULL,'USER',NULL);
 -- обьектный тип - пользователь
@@ -43,7 +41,7 @@ INSERT INTO OBJTYPE (OBJECT_TYPE_ID,PARENT_ID,NAME,DESCRIPTION) VALUES (5,300,'C
 -- обьектный тип - персональный отчет по категории расходов
 INSERT INTO OBJTYPE (OBJECT_TYPE_ID,PARENT_ID,NAME,DESCRIPTION) VALUES (6,600,'CRED_ACC_PER','credit account Personal');
 -- обьектный тип - персональный кредитный аккаунт
-INSERT INTO OBJTYPE (OBJECT_TYPE_ID,PARENT_ID,NAME,DESCRIPTION) VALUES (7,600,'CRED_OPER_PER','credit operation Personal');
+INSERT INTO OBJTYPE (OBJECT_TYPE_ID,PARENT_ID,NAME,DESCRIPTION) VALUES (7,700,'CRED_OPER_PER','credit operation Personal');
 -- обьектный тип - персональный кредитная операция
 INSERT INTO OBJTYPE (OBJECT_TYPE_ID,PARENT_ID,NAME,DESCRIPTION) VALUES (8,800,' DEBT_PER','debt Personal');
 -- обьектный тип - персональный долг
@@ -65,9 +63,9 @@ INSERT INTO OBJTYPE (OBJECT_TYPE_ID,PARENT_ID,NAME,DESCRIPTION) VALUES (15,200,'
 -- обьектный тип - семейный отчет по категории доходов
 INSERT INTO OBJTYPE (OBJECT_TYPE_ID,PARENT_ID,NAME,DESCRIPTION) VALUES (16,300,'CAT_REP_FAM_EXP','Catery report family expense');
 -- обьектный тип - семейный отчет по категории расходов
-INSERT INTO OBJTYPE (OBJECT_TYPE_ID,PARENT_ID,NAME,DESCRIPTION) VALUES (17,500,'CRED_ACC_FAM','credit account Family');
+INSERT INTO OBJTYPE (OBJECT_TYPE_ID,PARENT_ID,NAME,DESCRIPTION) VALUES (17,600,'CRED_ACC_FAM','credit account Family');
 -- обьектный тип - семейный кредитный аккаунт
-INSERT INTO OBJTYPE (OBJECT_TYPE_ID,PARENT_ID,NAME,DESCRIPTION) VALUES (18,600,'CRED_OPER_FAM','credit operation Family');
+INSERT INTO OBJTYPE (OBJECT_TYPE_ID,PARENT_ID,NAME,DESCRIPTION) VALUES (18,700,'CRED_OPER_FAM','credit operation Family');
 -- обьектный тип - семейный кредитная операция
 INSERT INTO OBJTYPE (OBJECT_TYPE_ID,PARENT_ID,NAME,DESCRIPTION) VALUES (19,800,' DEBT_FAM','debt family');
 -- обьектный тип - семеный долг
@@ -79,7 +77,6 @@ INSERT INTO OBJTYPE (OBJECT_TYPE_ID,PARENT_ID,NAME,DESCRIPTION) VALUES (22,500,'
 -- обьектный тип - семейные авторасходы
 INSERT INTO OBJTYPE (OBJECT_TYPE_ID,PARENT_ID,NAME,DESCRIPTION) VALUES (23,400,'ACC_AUTO_INC_FAM','account autoincome personal family');
 -- обьектный тип - семейные автодоходы
-
 
 --ЗАПОЛНЕНИЕ ТИПОВ АТРИБУТОВ
 --USER
@@ -173,107 +170,131 @@ INSERT INTO ATTRTYPE (ATTR_ID,OBJECT_TYPE_ID,OBJECT_TYPE_ID_REF,NAME) VALUES (39
 --TYPE ATTR CREDIT OPERATION
 INSERT INTO ATTRTYPE (ATTR_ID,OBJECT_TYPE_ID,OBJECT_TYPE_ID_REF,NAME) VALUES (40,700,NULL,'AMOUNT');
 INSERT INTO ATTRTYPE (ATTR_ID,OBJECT_TYPE_ID,OBJECT_TYPE_ID_REF,NAME) VALUES (41,700,NULL,'DATE');
-INSERT INTO ATTRTYPE (ATTR_ID,OBJECT_TYPE_ID,OBJECT_TYPE_ID_REF,NAME) VALUES (42,700,NULL,'DEBTS');
+
 
 --DEBT 
-INSERT INTO ATTRTYPE (ATTR_ID,OBJECT_TYPE_ID,OBJECT_TYPE_ID_REF,NAME) VALUES (43,8,2,'PERSONAL_DEBET_ACCOUNT_ID');
+INSERT INTO ATTRTYPE (ATTR_ID,OBJECT_TYPE_ID,OBJECT_TYPE_ID_REF,NAME) VALUES (42,8,6,'PERSONAL_CREDIT_ACCOUNT_ID');
 --PERSONAL
 
-INSERT INTO ATTRTYPE (ATTR_ID,OBJECT_TYPE_ID,OBJECT_TYPE_ID_REF,NAME) VALUES (44,19,13,'FAMILY_DEBET_ACCOUNT_ID');
+INSERT INTO ATTRTYPE (ATTR_ID,OBJECT_TYPE_ID,OBJECT_TYPE_ID_REF,NAME) VALUES (43,19,17,'FAMILY_CREDIT_ACCOUNT_ID');
 --FAMILY
 
 --TYPE ATTR DEBT 
-INSERT INTO ATTRTYPE (ATTR_ID,OBJECT_TYPE_ID,OBJECT_TYPE_ID_REF,NAME) VALUES (45,800,NULL,'DATE_FROM');
-INSERT INTO ATTRTYPE (ATTR_ID,OBJECT_TYPE_ID,OBJECT_TYPE_ID_REF,NAME) VALUES (46,800,NULL,'DATE_TO');
-INSERT INTO ATTRTYPE (ATTR_ID,OBJECT_TYPE_ID,OBJECT_TYPE_ID_REF,NAME) VALUES (47,800,NULL,'AMOUNT_DEBT');
+INSERT INTO ATTRTYPE (ATTR_ID,OBJECT_TYPE_ID,OBJECT_TYPE_ID_REF,NAME) VALUES (44,800,NULL,'DATE_FROM');
+INSERT INTO ATTRTYPE (ATTR_ID,OBJECT_TYPE_ID,OBJECT_TYPE_ID_REF,NAME) VALUES (45,800,NULL,'DATE_TO');
+INSERT INTO ATTRTYPE (ATTR_ID,OBJECT_TYPE_ID,OBJECT_TYPE_ID_REF,NAME) VALUES (46,800,NULL,'AMOUNT_DEBT');
 
 
 
 --TRANSACTION expense
-INSERT INTO ATTRTYPE (ATTR_ID,OBJECT_TYPE_ID,OBJECT_TYPE_ID_REF,NAME) VALUES (48,9,2,'PERSONAL_DEBET_ACCOUNT_ID');
+INSERT INTO ATTRTYPE (ATTR_ID,OBJECT_TYPE_ID,OBJECT_TYPE_ID_REF,NAME) VALUES (47,9,2,'PERSONAL_DEBET_ACCOUNT_ID');
 --PERSONAL
 
-INSERT INTO ATTRTYPE (ATTR_ID,OBJECT_TYPE_ID,OBJECT_TYPE_ID_REF,NAME) VALUES (49,20,13,'FAMILY_DEBET_ACCOUNT_ID');
+INSERT INTO ATTRTYPE (ATTR_ID,OBJECT_TYPE_ID,OBJECT_TYPE_ID_REF,NAME) VALUES (48,20,13,'FAMILY_DEBET_ACCOUNT_ID');
 --FAMILY
 
-INSERT INTO ATTRTYPE (ATTR_ID,OBJECT_TYPE_ID,OBJECT_TYPE_ID_REF,NAME) VALUES (50,20,1,'TRANSACTION_EXPENSE_USER_ID');
+INSERT INTO ATTRTYPE (ATTR_ID,OBJECT_TYPE_ID,OBJECT_TYPE_ID_REF,NAME) VALUES (49,20,1,'TRANSACTION_EXPENSE_USER_ID');
 --FAMILY participant user EXPENSE
 
 --TYPE ATTR TRANSACTION expense 
-INSERT INTO ATTRTYPE (ATTR_ID,OBJECT_TYPE_ID,OBJECT_TYPE_ID_REF,NAME) VALUES (51,500,NULL,'AMOUNT');
-INSERT INTO ATTRTYPE (ATTR_ID,OBJECT_TYPE_ID,OBJECT_TYPE_ID_REF,NAME) VALUES (52,500,NULL,'CATEGORY');
-INSERT INTO ATTRTYPE (ATTR_ID,OBJECT_TYPE_ID,OBJECT_TYPE_ID_REF,NAME) VALUES (53,500,NULL,'DATE');
+INSERT INTO ATTRTYPE (ATTR_ID,OBJECT_TYPE_ID,OBJECT_TYPE_ID_REF,NAME) VALUES (50,500,NULL,'AMOUNT');
+INSERT INTO ATTRTYPE (ATTR_ID,OBJECT_TYPE_ID,OBJECT_TYPE_ID_REF,NAME) VALUES (51,500,NULL,'CATEGORY');
+INSERT INTO ATTRTYPE (ATTR_ID,OBJECT_TYPE_ID,OBJECT_TYPE_ID_REF,NAME) VALUES (52,500,NULL,'DATE');
 
 --TRANSACTION INCOME
-INSERT INTO ATTRTYPE (ATTR_ID,OBJECT_TYPE_ID,OBJECT_TYPE_ID_REF,NAME) VALUES (54,10,2,'PERSONAL_DEBET_ACCOUNT_ID');
+INSERT INTO ATTRTYPE (ATTR_ID,OBJECT_TYPE_ID,OBJECT_TYPE_ID_REF,NAME) VALUES (53,10,2,'PERSONAL_DEBET_ACCOUNT_ID');
 --PERSONAL
 
-INSERT INTO ATTRTYPE (ATTR_ID,OBJECT_TYPE_ID,OBJECT_TYPE_ID_REF,NAME) VALUES (55,21,13,'FAMILY_DEBET_ACCOUNT_ID');
+INSERT INTO ATTRTYPE (ATTR_ID,OBJECT_TYPE_ID,OBJECT_TYPE_ID_REF,NAME) VALUES (54,21,13,'FAMILY_DEBET_ACCOUNT_ID');
 --FAMILY
-INSERT INTO ATTRTYPE (ATTR_ID,OBJECT_TYPE_ID,OBJECT_TYPE_ID_REF,NAME) VALUES (56,21,1,'TRANSACTION_INCOME_USER_ID');
+INSERT INTO ATTRTYPE (ATTR_ID,OBJECT_TYPE_ID,OBJECT_TYPE_ID_REF,NAME) VALUES (55,21,1,'TRANSACTION_INCOME_USER_ID');
 --FAMILY participant user income
 
 --TYPE ATTR TRANSACTION INCOME 
-INSERT INTO ATTRTYPE (ATTR_ID,OBJECT_TYPE_ID,OBJECT_TYPE_ID_REF,NAME) VALUES (57,400,NULL,'AMOUNT');
-INSERT INTO ATTRTYPE (ATTR_ID,OBJECT_TYPE_ID,OBJECT_TYPE_ID_REF,NAME) VALUES (58,400,NULL,'CATEGORY');
-INSERT INTO ATTRTYPE (ATTR_ID,OBJECT_TYPE_ID,OBJECT_TYPE_ID_REF,NAME) VALUES (59,400,NULL,'DATE');
+INSERT INTO ATTRTYPE (ATTR_ID,OBJECT_TYPE_ID,OBJECT_TYPE_ID_REF,NAME) VALUES (56,400,NULL,'AMOUNT');
+INSERT INTO ATTRTYPE (ATTR_ID,OBJECT_TYPE_ID,OBJECT_TYPE_ID_REF,NAME) VALUES (57,400,NULL,'CATEGORY');
+INSERT INTO ATTRTYPE (ATTR_ID,OBJECT_TYPE_ID,OBJECT_TYPE_ID_REF,NAME) VALUES (58,400,NULL,'DATE');
 
 --AUTOOPERATION EXPENSE
-INSERT INTO ATTRTYPE (ATTR_ID,OBJECT_TYPE_ID,OBJECT_TYPE_ID_REF,NAME) VALUES (60,11,2,'PERSONAL_DEBET_ACCOUNT_ID');
+INSERT INTO ATTRTYPE (ATTR_ID,OBJECT_TYPE_ID,OBJECT_TYPE_ID_REF,NAME) VALUES (59,11,2,'PERSONAL_DEBET_ACCOUNT_ID');
 --PERSONAL
 
-INSERT INTO ATTRTYPE (ATTR_ID,OBJECT_TYPE_ID,OBJECT_TYPE_ID_REF,NAME) VALUES (61,22,13,'FAMILY_DEBET_ACCOUNT_ID');
+INSERT INTO ATTRTYPE (ATTR_ID,OBJECT_TYPE_ID,OBJECT_TYPE_ID_REF,NAME) VALUES (60,22,13,'FAMILY_DEBET_ACCOUNT_ID');
 --FAMILY
-INSERT INTO ATTRTYPE (ATTR_ID,OBJECT_TYPE_ID,OBJECT_TYPE_ID_REF,NAME) VALUES (62,22,1,'TRANSACTION_AUTOEXPENSE_USER_ID');
+INSERT INTO ATTRTYPE (ATTR_ID,OBJECT_TYPE_ID,OBJECT_TYPE_ID_REF,NAME) VALUES (61,22,1,'TRANSACTION_AUTOEXPENSE_USER_ID');
 --FAMILY participant user income
 
 --TYPE ATTR AUTOOPERATION EXPENSE
-INSERT INTO ATTRTYPE (ATTR_ID,OBJECT_TYPE_ID,OBJECT_TYPE_ID_REF,NAME) VALUES (63,11,NULL,'DAY_OF_MONTH');
-INSERT INTO ATTRTYPE (ATTR_ID,OBJECT_TYPE_ID,OBJECT_TYPE_ID_REF,NAME) VALUES (64,22,NULL,'DAY_OF_MONTH');
+INSERT INTO ATTRTYPE (ATTR_ID,OBJECT_TYPE_ID,OBJECT_TYPE_ID_REF,NAME) VALUES (62,11,NULL,'DAY_OF_MONTH');
+INSERT INTO ATTRTYPE (ATTR_ID,OBJECT_TYPE_ID,OBJECT_TYPE_ID_REF,NAME) VALUES (63,22,NULL,'DAY_OF_MONTH');
 
 --AUTOOPERATION INCOME
-INSERT INTO ATTRTYPE (ATTR_ID,OBJECT_TYPE_ID,OBJECT_TYPE_ID_REF,NAME) VALUES (65,12,2,'PERSONAL_DEBET_ACCOUNT_ID');
+INSERT INTO ATTRTYPE (ATTR_ID,OBJECT_TYPE_ID,OBJECT_TYPE_ID_REF,NAME) VALUES (64,12,2,'PERSONAL_DEBET_ACCOUNT_ID');
 --PERSONAL
 
-INSERT INTO ATTRTYPE (ATTR_ID,OBJECT_TYPE_ID,OBJECT_TYPE_ID_REF,NAME) VALUES (66,23,13,'FAMILY_DEBET_ACCOUNT_ID');
+INSERT INTO ATTRTYPE (ATTR_ID,OBJECT_TYPE_ID,OBJECT_TYPE_ID_REF,NAME) VALUES (65,23,13,'FAMILY_DEBET_ACCOUNT_ID');
 --FAMILY
-INSERT INTO ATTRTYPE (ATTR_ID,OBJECT_TYPE_ID,OBJECT_TYPE_ID_REF,NAME) VALUES (67,23,1,'TRANSACTION_AUTOEXPENSE_USER_ID');
+INSERT INTO ATTRTYPE (ATTR_ID,OBJECT_TYPE_ID,OBJECT_TYPE_ID_REF,NAME) VALUES (66,23,1,'TRANSACTION_AUTOEXPENSE_USER_ID');
 --FAMILY participant user income
 
 --TYPE ATTR AUTOOPERATION INCOME
-INSERT INTO ATTRTYPE (ATTR_ID,OBJECT_TYPE_ID,OBJECT_TYPE_ID_REF,NAME) VALUES (68,12,NULL,'DAY_OF_MONTH');
-INSERT INTO ATTRTYPE (ATTR_ID,OBJECT_TYPE_ID,OBJECT_TYPE_ID_REF,NAME) VALUES (69,23,NULL,'DAY_OF_MONTH');
+INSERT INTO ATTRTYPE (ATTR_ID,OBJECT_TYPE_ID,OBJECT_TYPE_ID_REF,NAME) VALUES (67,12,NULL,'DAY_OF_MONTH');
+INSERT INTO ATTRTYPE (ATTR_ID,OBJECT_TYPE_ID,OBJECT_TYPE_ID_REF,NAME) VALUES (68,23,NULL,'DAY_OF_MONTH');
+
 
 
 --LISTS
 -- атрибут категории для операции расхода
-insert into Lists(attr_id, list_value_id, value) values(52, 1, 'FOOD');
-insert into Lists(attr_id, list_value_id, value) values(52, 2, 'RESIDENTIAL');
-insert into Lists(attr_id, list_value_id, value) values(52, 3, 'ENTERTAINMENT');
-insert into Lists(attr_id, list_value_id, value) values(52, 4, 'TAXES');
-insert into Lists(attr_id, list_value_id, value) values(52, 5, 'EDUCATION');
-insert into Lists(attr_id, list_value_id, value) values(52, 6, 'MEDICINE');
-insert into Lists(attr_id, list_value_id, value) values(52, 7, 'TRANSPORT');
-insert into Lists(attr_id, list_value_id, value) values(52, 8, 'GIFTS');
-insert into Lists(attr_id, list_value_id, value) values(52, 9, 'CHILDREN');
-insert into Lists(attr_id, list_value_id, value) values(52, 10, 'SPORT');
-insert into Lists(attr_id, list_value_id, value) values(52, 11, 'CLOTHES');
-insert into Lists(attr_id, list_value_id, value) values(52, 12, 'CREDIT');
-insert into Lists(attr_id, list_value_id, value) values(52, 13, 'OTHER');
+insert into Lists(attr_id, list_value_id, value) values(51, 1, 'FOOD');
+insert into Lists(attr_id, list_value_id, value) values(51, 2, 'RESIDENTIAL');
+insert into Lists(attr_id, list_value_id, value) values(51, 3, 'ENTERTAINMENT');
+insert into Lists(attr_id, list_value_id, value) values(51, 4, 'TAXES');
+insert into Lists(attr_id, list_value_id, value) values(51, 5, 'EDUCATION');
+insert into Lists(attr_id, list_value_id, value) values(51, 6, 'MEDICINE');
+insert into Lists(attr_id, list_value_id, value) values(51, 7, 'TRANSPORT');
+insert into Lists(attr_id, list_value_id, value) values(51, 8, 'GIFTS');
+insert into Lists(attr_id, list_value_id, value) values(51, 9, 'CHILDREN');
+insert into Lists(attr_id, list_value_id, value) values(51, 10, 'SPORT');
+insert into Lists(attr_id, list_value_id, value) values(51, 11, 'CLOTHES');
+insert into Lists(attr_id, list_value_id, value) values(51, 12, 'CREDIT');
+insert into Lists(attr_id, list_value_id, value) values(51, 13, 'OTHER');
 
 -- атрибут категории для операции дохода
-insert into Lists(attr_id, list_value_id, value) values(58, 14, 'SALARY');
-insert into Lists(attr_id, list_value_id, value) values(58, 15, 'AWARD');
-insert into Lists(attr_id, list_value_id, value) values(58, 16, 'PERSENTS');
-insert into Lists(attr_id, list_value_id, value) values(58, 17, 'GIFTS');
-insert into Lists(attr_id, list_value_id, value) values(58, 18, 'OTHER');
+insert into Lists(attr_id, list_value_id, value) values(57, 14, 'SALARY');
+insert into Lists(attr_id, list_value_id, value) values(57, 15, 'AWARD');
+insert into Lists(attr_id, list_value_id, value) values(57, 16, 'PERSENTS');
+insert into Lists(attr_id, list_value_id, value) values(57, 17, 'GIFTS');
+insert into Lists(attr_id, list_value_id, value) values(57, 18, 'OTHER');
+
+-- REPORT CATEGORY AS EXPENSE
+insert into Lists(attr_id, list_value_id, value) values(25, 19, 'FOOD');
+insert into Lists(attr_id, list_value_id, value) values(25, 20, 'RESIDENTIAL');
+insert into Lists(attr_id, list_value_id, value) values(25, 21, 'ENTERTAINMENT');
+insert into Lists(attr_id, list_value_id, value) values(25, 22, 'TAXES');
+insert into Lists(attr_id, list_value_id, value) values(25, 23, 'EDUCATION');
+insert into Lists(attr_id, list_value_id, value) values(25, 24, 'MEDICINE');
+insert into Lists(attr_id, list_value_id, value) values(25, 25, 'TRANSPORT');
+insert into Lists(attr_id, list_value_id, value) values(25, 26, 'GIFTS');
+insert into Lists(attr_id, list_value_id, value) values(25, 27, 'CHILDREN');
+insert into Lists(attr_id, list_value_id, value) values(25, 28, 'SPORT');
+insert into Lists(attr_id, list_value_id, value) values(25, 29, 'CLOTHES');
+insert into Lists(attr_id, list_value_id, value) values(25, 30, 'CREDIT');
+insert into Lists(attr_id, list_value_id, value) values(25, 31, 'OTHER');
 
 
---CREDIT IS PAID
-insert into Lists(attr_id, list_value_id, value) values(35, 19, 'YES');
-insert into Lists(attr_id, list_value_id, value) values(35, 20, 'NO');
+-- REPORT CATEGORY AS INCOME
+insert into Lists(attr_id, list_value_id, value) values(20, 32, 'SALARY');
+insert into Lists(attr_id, list_value_id, value) values(20, 33, 'AWARD');
+insert into Lists(attr_id, list_value_id, value) values(20, 34, 'PERSENTS');
+insert into Lists(attr_id, list_value_id, value) values(20, 35, 'GIFTS');
+insert into Lists(attr_id, list_value_id, value) values(20, 36, 'OTHER');
+
+-- CREDIT IS PAID
+insert into Lists(attr_id, list_value_id, value) values(35, 37, 'YES');
+insert into Lists(attr_id, list_value_id, value) values(35, 38, 'NO');
 
 -- USER IS ACTIVE
-insert into Lists(attr_id, list_value_id, value) values(6, 21, 'YES');
-insert into Lists(attr_id, list_value_id, value) values(6, 22, 'NO');
+insert into Lists(attr_id, list_value_id, value) values(6, 39, 'YES');
+insert into Lists(attr_id, list_value_id, value) values(6, 40, 'NO');
 
+COMMIT;
