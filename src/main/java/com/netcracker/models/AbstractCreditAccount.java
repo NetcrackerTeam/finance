@@ -15,8 +15,8 @@ public abstract class AbstractCreditAccount {
     private boolean isPaid;
 
     protected static abstract class BaseBuilder <T extends AbstractCreditAccount, B extends BaseBuilder> {
-        private T actualClass;
-        private B actualClassBuilder;
+        protected T actualClass;
+        protected B actualClassBuilder;
         protected abstract T getActual();
         protected abstract B getActualBuilder();
 

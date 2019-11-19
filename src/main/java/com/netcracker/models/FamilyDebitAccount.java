@@ -6,13 +6,28 @@ public class FamilyDebitAccount extends AbstractDebitAccount {
     private List<User> participants;
     private List<FamilyCreditAccount> familyCreditAccountList;
 
-    public FamilyDebitAccount(List<User> participants) {
-        this.participants = participants;
-    }
 
-    public FamilyDebitAccount(List<User> participants, List<FamilyCreditAccount> familyCreditAccountList) {
-        this.participants = participants;
-        this.familyCreditAccountList = familyCreditAccountList;
+    public static class Builder extends BaseBuilder<FamilyDebitAccount, BaseBuilder> {
+
+        public Builder DebitFamilyAccountList(List<User> listUser, List<FamilyCreditAccount> listFamilyDebitAccount) {
+            actualClass.setFamilyCreditAccountList(listFamilyDebitAccount);
+            return this;
+        }
+
+        public Builder DebitFamilyUserList(List<User> listUser) {
+            actualClass.setParticipants(listUser);
+            return this;
+        }
+
+        @Override
+        protected FamilyDebitAccount getActual() {
+            return new FamilyDebitAccount();
+        }
+
+        @Override
+        protected Builder getActualBuilder() {
+            return this;
+        }
     }
 
     public List<User> getParticipants() {

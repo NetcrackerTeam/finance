@@ -2,12 +2,27 @@ package com.netcracker.models;
 
 import java.util.List;
 
-public class PersonalDebitAccount extends AbstractDebitAccount{
+public class PersonalDebitAccount extends AbstractDebitAccount {
     private List<PersonalCreditAccount> personalCreditAccountList;
 
-    public PersonalDebitAccount(List<PersonalCreditAccount> personalCreditAccountList) {
-        this.personalCreditAccountList = personalCreditAccountList;
+    public static class Builder extends BaseBuilder<PersonalDebitAccount, BaseBuilder> {
+
+        public Builder DebitPersonalAccountList(List<PersonalCreditAccount> list) {
+            actualClass.setPersonalCreditAccountList(list);
+            return this;
+        }
+
+        @Override
+        protected PersonalDebitAccount getActual() {
+            return new PersonalDebitAccount();
+        }
+
+        @Override
+        protected Builder getActualBuilder() {
+            return this;
+        }
     }
+
 
     public List<PersonalCreditAccount> getPersonalCreditAccountList() {
         return personalCreditAccountList;
@@ -16,4 +31,5 @@ public class PersonalDebitAccount extends AbstractDebitAccount{
     public void setPersonalCreditAccountList(List<PersonalCreditAccount> personalCreditAccountList) {
         this.personalCreditAccountList = personalCreditAccountList;
     }
+
 }

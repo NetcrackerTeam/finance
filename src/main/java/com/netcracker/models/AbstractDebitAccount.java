@@ -9,4 +9,73 @@ public abstract class AbstractDebitAccount {
     private User owner;
     private List<AccountIncome> accountIncomesList;
     private List<AccountExpense> accountExpensesList;
+
+    protected static abstract class BaseBuilder<T extends AbstractDebitAccount, B extends BaseBuilder> {
+        protected T actualClass;
+        protected B actualClassBuilder;
+        protected abstract T getActual();
+        protected abstract B getActualBuilder();
+
+        public BaseBuilder() {
+            this.actualClass = getActual();
+            this.actualClassBuilder = getActualBuilder();
+        }
+
+        public B debitId(BigInteger id) {
+            actualClass.setId(id);
+            return actualClassBuilder;
+        }
+
+        public B debitAmount(Long amount) {
+            actualClass.setAmount(amount);
+            return actualClassBuilder;
+        }
+
+        public B debitOwner(User owner) {
+            actualClass.setOwner(owner);
+            return actualClassBuilder;
+        }
+
+        public B debitAccountIncomesList(List<AccountIncome> list ) {
+            actualClass.setAccountIncomesList(list);
+            return actualClassBuilder;
+        }
+        public B debitAccountExpensesList(List<AccountExpense> list) {
+            actualClass.setAccountExpensesList(list);
+            return actualClassBuilder;
+        }
+
+
+
+        public T build() {
+            return actualClass;
+        }
+    }
+
+
+    public BigInteger getId() { return id; }
+
+    public void setId(BigInteger id) { this.id = id; }
+
+    public Long getAmount() { return amount; }
+
+    public void setAmount(Long amount) { this.amount = amount; }
+
+    public User getOwner() { return owner; }
+
+    public void setOwner(User owner) { this.owner = owner; }
+
+    public List<AccountIncome> getAccountIncomesList() { return accountIncomesList; }
+
+    public void setAccountIncomesList(List<AccountIncome> accountIncomesList) {
+        this.accountIncomesList = accountIncomesList;
+    }
+
+    public List<AccountExpense> getAccountExpensesList() {
+        return accountExpensesList;
+    }
+
+    public void setAccountExpensesList(List<AccountExpense> accountExpensesList) {
+        this.accountExpensesList = accountExpensesList;
+    }
 }
