@@ -28,6 +28,8 @@ INSERT INTO OBJTYPE (OBJECT_TYPE_ID,PARENT_ID,NAME,DESCRIPTION) VALUES (800,NULL
 
 
 
+
+
  
 INSERT INTO OBJTYPE (OBJECT_TYPE_ID,PARENT_ID,NAME,DESCRIPTION) VALUES (1,NULL,'USER',NULL);
 -- обьектный тип - пользователь
@@ -92,7 +94,7 @@ INSERT INTO ATTRTYPE (ATTR_ID,OBJECT_TYPE_ID,OBJECT_TYPE_ID_REF,NAME) VALUES (6,
 
 --PERSONAL ACCOUNT
 INSERT INTO ATTRTYPE (ATTR_ID,OBJECT_TYPE_ID,OBJECT_TYPE_ID_REF,NAME) VALUES (7,2,NULL,'AMOUNT');
-
+INSERT INTO ATTRTYPE (ATTR_ID,OBJECT_TYPE_ID,OBJECT_TYPE_ID_REF,NAME) VALUES (70,2,NULL,'ISACTIVE');
 --FAMILY ACCOUNT
 INSERT INTO ATTRTYPE (ATTR_ID,OBJECT_TYPE_ID,OBJECT_TYPE_ID_REF,NAME) VALUES (8,13,1,'OWNER_FAMILY_ACC'); 
 --REFERENCE TO USER
@@ -301,5 +303,10 @@ insert into Lists(attr_id, list_value_id, value) values(6, 40, 'NO');
 -- FAMILY ACC IS ACTIVE
 insert into Lists(attr_id, list_value_id, value) values(69, 41, 'YES');
 insert into Lists(attr_id, list_value_id, value) values(69, 42, 'NO');
+
+-- PERSONAL ACC IS ACTIVE
+insert into Lists(attr_id, list_value_id, value) values(70, 43, 'YES');
+insert into Lists(attr_id, list_value_id, value) values(70, 44, 'NO');
+
 
 COMMIT;
