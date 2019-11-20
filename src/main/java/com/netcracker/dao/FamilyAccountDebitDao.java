@@ -7,7 +7,7 @@ import java.math.BigInteger;
 public interface FamilyAccountDebitDao {
     public FamilyDebitAccount getFamilyAccountById(BigInteger id);
 
-    public void createFamilyAccount();
+    public void createFamilyAccount(Integer amount);
 
     public void deleteFamilyAccount(BigInteger id);
 

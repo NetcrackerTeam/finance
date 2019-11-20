@@ -7,6 +7,7 @@ public abstract class AbstractDebitAccount {
     private BigInteger id;
     private Long amount;
     private User owner;
+    private String name;
     private List<AccountIncome> accountIncomesList;
     private List<AccountExpense> accountExpensesList;
 
@@ -20,6 +21,12 @@ public abstract class AbstractDebitAccount {
             this.actualClass = getActual();
             this.actualClassBuilder = getActualBuilder();
         }
+
+        public B DebitObjectName(String name) {
+            actualClass.setObjectName(name);
+            return actualClassBuilder;
+        }
+
 
         public B debitId(BigInteger id) {
             actualClass.setId(id);
@@ -56,6 +63,12 @@ public abstract class AbstractDebitAccount {
     public BigInteger getId() { return id; }
 
     public void setId(BigInteger id) { this.id = id; }
+
+    public abstract int getObjectTypeId();
+
+    public String getObjectName() { return name; }
+
+    public void setObjectName(String name) { this.name = name; }
 
     public Long getAmount() { return amount; }
 
