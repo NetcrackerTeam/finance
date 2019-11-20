@@ -1,25 +1,25 @@
 package com.netcracker.dao;
 
-import com.netcracker.models.AutoOperationExpense;
-import com.netcracker.models.AutoOperationIncome;
 import com.netcracker.models.CategoryExpense;
 import com.netcracker.models.CategoryIncome;
 
+import java.math.BigInteger;
+
 public interface AutoOperationDao {
-    public void createFamilyIncomeAutoOper(CategoryIncome income);
+    void createFamilyIncomeAutoOperation(CategoryIncome income);
 
-    public void createPersonalIncomeAutoOper(CategoryIncome income );
+    void createPersonalIncomeAutoOperation(CategoryIncome income );
 
-    public void deleteFamilyIncomeAutoOper( );
+    void deleteFamilyIncomeAutoOperation(BigInteger autoOperationId);
 
-    public void deletePersonalIncomeAutoOper(CategoryIncome income);
+    void deletePersonalIncomeAutoOperation(CategoryIncome income);
 
-    public void createFamilyExpenseAutoOper(CategoryExpense expense);
+    void createFamilyExpenseAutoOperation(CategoryExpense expense);
 
-    public void createPersonalExpenseAutoOper(CategoryExpense expense);
+    void createPersonalExpenseAutoOperation(CategoryExpense expense);
 
-    public void deleteFamilyIncExpenseOper();
+    void deleteFamilyIncExpenseOperation(BigInteger autoOperationId);
 
-    public void deletePersonalExpenseAutoOper();
+    void deletePersonalExpenseAutoOperation(BigInteger autoOperationId);
 
 }
