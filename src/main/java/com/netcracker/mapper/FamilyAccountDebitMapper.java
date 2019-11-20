@@ -1,4 +1,4 @@
-package com.netcracker.mappers;
+package com.netcracker.mapper;
 
 import com.netcracker.models.FamilyDebitAccount;
 import com.netcracker.models.User;
