@@ -36,7 +36,7 @@ public class FamilyAccountDebitDaoImpl extends FamilyDebitAccount implements Fam
                 super.getObjectName()
         });
         this.template.update(ADD_AMOUNT, new Object[]{
-                super.getObjectTypeId(),
+                super.getId(),
                 amount
         });
 
