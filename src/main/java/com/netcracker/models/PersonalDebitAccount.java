@@ -5,11 +5,6 @@ import java.util.List;
 public class PersonalDebitAccount extends AbstractDebitAccount {
     private List<PersonalCreditAccount> personalCreditAccountList;
 
-    @Override
-    public int getObjectTypeId() {
-        return 0;
-    }
-
     public static class Builder extends BaseBuilder<PersonalDebitAccount, Builder> {
 
         public Builder DebitPersonalAccountList(List<PersonalCreditAccount> list) {

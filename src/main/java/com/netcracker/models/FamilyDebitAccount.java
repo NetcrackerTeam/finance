@@ -5,7 +5,6 @@ import java.util.List;
 public class FamilyDebitAccount extends AbstractDebitAccount {
     private List<User> participants;
     private List<FamilyCreditAccount> familyCreditAccountList;
-    private static final int type_id = 13;
 
 
     public static class Builder extends BaseBuilder<FamilyDebitAccount, Builder> {
@@ -45,11 +44,6 @@ public class FamilyDebitAccount extends AbstractDebitAccount {
 
     public void setFamilyCreditAccountList(List<FamilyCreditAccount> familyCreditAccountList) {
         this.familyCreditAccountList = familyCreditAccountList;
-    }
-
-    @Override
-    public int getObjectTypeId() {
-        return type_id;
     }
 
 }

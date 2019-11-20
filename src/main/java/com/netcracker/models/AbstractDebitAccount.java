@@ -64,8 +64,6 @@ public abstract class AbstractDebitAccount {
 
     public void setId(BigInteger id) { this.id = id; }
 
-    public abstract int getObjectTypeId();
-
     public String getObjectName() { return name; }
 
     public void setObjectName(String name) { this.name = name; }

@@ -18,7 +18,7 @@ public class FamilyAccountDebitMapper implements RowMapper<FamilyDebitAccount> {
         familyDebitAccount.setId(new BigInteger(Integer.valueOf(rs.getInt("OBJECT_ID")).toString()));
         familyDebitAccount.setObjectName(rs.getString("NAME"));
         familyDebitAccount.setAmount(rs.getLong("values"));
-        familyDebitAccount.setOwner((User)rs.getObject("reference"));
+     //   familyDebitAccount.setOwner((User)rs.getObject("reference"));
         return familyDebitAccount;
     }
 }

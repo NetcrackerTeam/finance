@@ -98,6 +98,7 @@ INSERT INTO ATTRTYPE (ATTR_ID,OBJECT_TYPE_ID,OBJECT_TYPE_ID_REF,NAME) VALUES (8,
 --REFERENCE TO USER
 
 INSERT INTO ATTRTYPE (ATTR_ID,OBJECT_TYPE_ID,OBJECT_TYPE_ID_REF,NAME) VALUES (9,13,NULL,'AMOUNT');
+INSERT INTO ATTRTYPE (ATTR_ID,OBJECT_TYPE_ID,OBJECT_TYPE_ID_REF,NAME) VALUES (69,13,NULL,'ISACTIVE');
 
 --PERSONAL REPORT REFERENCE
 INSERT INTO ATTRTYPE (ATTR_ID,OBJECT_TYPE_ID,OBJECT_TYPE_ID_REF,NAME) VALUES (10,3,2,'PERSONAL_DEBET_ACCOUNT_ID');
@@ -296,5 +297,9 @@ insert into Lists(attr_id, list_value_id, value) values(35, 38, 'NO');
 -- USER IS ACTIVE
 insert into Lists(attr_id, list_value_id, value) values(6, 39, 'YES');
 insert into Lists(attr_id, list_value_id, value) values(6, 40, 'NO');
+
+-- FAMILY ACC IS ACTIVE
+insert into Lists(attr_id, list_value_id, value) values(69, 41, 'YES');
+insert into Lists(attr_id, list_value_id, value) values(69, 42, 'NO');
 
 COMMIT;
