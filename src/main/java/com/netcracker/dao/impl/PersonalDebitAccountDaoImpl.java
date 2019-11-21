@@ -7,6 +7,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 
 import javax.sql.DataSource;
 import java.math.BigInteger;
+import java.sql.ResultSet;
 
 public class PersonalDebitAccountDaoImpl  implements PersonalDebitAccountDao {
     private JdbcTemplate template;
@@ -23,9 +24,8 @@ public class PersonalDebitAccountDaoImpl  implements PersonalDebitAccountDao {
     @Override
     public void createPersonalAccount(PersonalDebitAccount pda) {
         this.template.update(CREATE_PERSONAL_ACCOUNT, new Object[]{
-                pda.getId(),
-                pda.getAmount(),
-                pda.getOwner()
+                pda.getObjectName(),
+                pda.getAmount()
         });
     }
 
@@ -36,5 +36,14 @@ public class PersonalDebitAccountDaoImpl  implements PersonalDebitAccountDao {
 
     @Override
     public void deletePersonalAccountByUserId(BigInteger id) {
+        String sql = "SELECT reference FROM objreference WHERE attr_id = 1 and object_id = ?";
+
+        BigInteger reference =  template.queryForObject(
+                sql, new Object[]{id}, BigInteger.class);
+        if(reference == null){
+            assert(false);
+        } else {
+            deletePersonalAccountById(reference);
+        }
     }
 }

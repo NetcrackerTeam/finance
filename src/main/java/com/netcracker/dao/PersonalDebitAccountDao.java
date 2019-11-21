@@ -15,7 +15,7 @@ public interface PersonalDebitAccountDao {
 
     String GET_PERSONAL_ACCOUNT_BY_ID = "SELECT * FROM Objects WHERE OBJECT_TYPE_ID = ?";
     String CREATE_PERSONAL_ACCOUNT = "INSERT ALL" +
-            "INTO OBJECTS (OBJECT_ID,PARENT_ID,OBJECT_TYPE_ID,NAME,DESCRIPTION)" +
+            "INTO objects (OBJECT_ID,PARENT_ID,OBJECT_TYPE_ID,NAME,DESCRIPTION)" +
             "VALUES (OBJECTS_ID_S.NEXTVAL,NULL,2,?,NULL);" +
             "into attributes(attr_id, object_id, values)" +
             "VALUES (2, OBJECT_SEQUENCE.CURRVAL,?)";

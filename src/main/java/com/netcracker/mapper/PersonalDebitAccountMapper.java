@@ -13,7 +13,6 @@ public class PersonalDebitAccountMapper implements RowMapper<PersonalDebitAccoun
         PersonalDebitAccount pda = new PersonalDebitAccount();
         pda.setId(new BigInteger(Integer.valueOf(rs.getInt("OBJECT_ID")).toString()));
         pda.setAmount(rs.getLong("Amount"));
-        pda.setObjectName(rs.getString("Owner"));
         return pda;
     }
 }
