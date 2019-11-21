@@ -1,9 +1,8 @@
 package com.netcracker.dao.impl;
 
 import com.netcracker.dao.FamilyAccountDebitDao;
-import com.netcracker.mapper.FamilyAccountDebitMapper;
+import com.netcracker.dao.impl.mapper.FamilyAccountDebitMapper;
 import com.netcracker.models.FamilyDebitAccount;
-import com.netcracker.models.User;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import javax.sql.DataSource;
