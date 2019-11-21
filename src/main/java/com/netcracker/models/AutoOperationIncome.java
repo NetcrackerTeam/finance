@@ -1,5 +1,7 @@
 package com.netcracker.models;
 
+import com.netcracker.models.enums.CategoryIncome;
+
 public class AutoOperationIncome extends AbstractAutoOperation {
     private CategoryIncome categoryIncome;
 
