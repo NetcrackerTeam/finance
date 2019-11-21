@@ -3,7 +3,6 @@ package com.netcracker.models;
 public class AutoOperationIncome extends AbstractAutoOperation {
     private CategoryIncome categoryIncome;
 
-
     public static class Builder extends BaseBuilder<AutoOperationIncome, Builder> {
 
         public Builder categoryIncome(CategoryIncome income) {
