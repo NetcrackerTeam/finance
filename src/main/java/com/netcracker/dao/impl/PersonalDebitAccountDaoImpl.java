@@ -1,13 +1,12 @@
 package com.netcracker.dao.impl;
 
 import com.netcracker.dao.PersonalDebitAccountDao;
-import com.netcracker.mapper.PersonalDebitAccountMapper;
+import com.netcracker.dao.impl.mapper.PersonalDebitAccountMapper;
 import com.netcracker.models.PersonalDebitAccount;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import javax.sql.DataSource;
 import java.math.BigInteger;
-import java.sql.ResultSet;
 
 public class PersonalDebitAccountDaoImpl  implements PersonalDebitAccountDao {
     private JdbcTemplate template;

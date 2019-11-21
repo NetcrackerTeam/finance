@@ -1,4 +1,4 @@
-package com.netcracker.mapper;
+package com.netcracker.dao.impl.mapper;
 
 import com.netcracker.models.PersonalDebitAccount;
 import org.springframework.jdbc.core.RowMapper;
