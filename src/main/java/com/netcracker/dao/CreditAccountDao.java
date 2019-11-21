@@ -7,11 +7,20 @@ import java.math.BigInteger;
 import java.util.List;
 
 public interface CreditAccountDao {
-    public PersonalCreditAccount getPersonalCreditById(BigInteger id);
+    String SELECT_PERSONAL_CREDIT_QUERY = "";
+    String SELECT_FAMILY_CREDIT_QUERY = "";
+    String SELECT_PERSONAL_CREDITS_BY_ACCOUNT_QUERY = "";
+    String SELECT_FAMILY_CREDITS_BY_ACCOUNT_QUERY = "";
 
-    public FamilyCreditAccount getFamilyCreditById(BigInteger id);
+    PersonalCreditAccount getPersonalCreditById(BigInteger id);
 
-    public List<PersonalCreditAccount> getAllPersonalCreditsByAccountId();
+    FamilyCreditAccount getFamilyCreditById(BigInteger id);
 
-    public List<FamilyCreditAccount> getAllFamilyCreditsByAccountId(List<BigInteger> id);
+    List<PersonalCreditAccount> getAllPersonalCreditsByAccountId(BigInteger id);
+
+    List<FamilyCreditAccount> getAllFamilyCreditsByAccountId(BigInteger id);
+
+    boolean addPersonalCreditPayment(BigInteger id, long amount);
+
+    boolean addFamilyCreditPayment(BigInteger id, long amount);
 }
