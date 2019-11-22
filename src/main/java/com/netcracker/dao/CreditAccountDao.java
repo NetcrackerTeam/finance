@@ -11,6 +11,8 @@ public interface CreditAccountDao {
     String SELECT_FAMILY_CREDIT_QUERY = "";
     String SELECT_PERSONAL_CREDITS_BY_ACCOUNT_QUERY = "";
     String SELECT_FAMILY_CREDITS_BY_ACCOUNT_QUERY = "";
+    String ADD_PERSONAL_CREDIT_PAYMENT_QUERY = "";
+    String ADD_FAMILY_CREDIT_PAYMENT_QUERY = "";
 
     PersonalCreditAccount getPersonalCreditById(BigInteger id);
 
