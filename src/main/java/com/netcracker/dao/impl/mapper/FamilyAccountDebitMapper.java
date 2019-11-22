@@ -1,6 +1,7 @@
 package com.netcracker.dao.impl.mapper;
 
 import com.netcracker.models.FamilyDebitAccount;
+import com.netcracker.models.User;
 import org.springframework.jdbc.core.RowMapper;
 
 
@@ -13,11 +14,10 @@ public class FamilyAccountDebitMapper implements RowMapper<FamilyDebitAccount> {
 
     @Override
     public FamilyDebitAccount mapRow(ResultSet rs, int i) throws SQLException {
-        FamilyDebitAccount familyDebitAccount = new FamilyDebitAccount();
-        familyDebitAccount.setId(new BigInteger(Integer.valueOf(rs.getInt("OBJECT_ID")).toString()));
-        familyDebitAccount.setObjectName(rs.getString("NAME"));
-        familyDebitAccount.setAmount(rs.getLong("values"));
-     //   familyDebitAccount.setOwner((User)rs.getObject("reference"));
-        return familyDebitAccount;
+        return new FamilyDebitAccount.Builder()
+        .debitId(new BigInteger(rs.getString("debit_id")))
+        .debitObjectName(rs.getString("NAME"))
+        .debitAmount((rs.getLong("values"))).build();
+       // .debitOwner(new User.Builder())
     }
 }

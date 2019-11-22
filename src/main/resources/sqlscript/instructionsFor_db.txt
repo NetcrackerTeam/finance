@@ -1,0 +1,6 @@
+1 - start db_creation_final.sql
+2 - start inserts.sql
+3 - start objects_id_s_final.sql
+4 - start Objects.sql
+5 - start Attributes.sql
+6 - start template_final.sql

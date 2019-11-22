@@ -4,20 +4,24 @@ import java.math.BigInteger;
 import java.util.Date;
 
 public class Debt {
-    private final BigInteger debtId;
+    private  BigInteger debtId;
     private Date dateFrom;
     private Date dateTo;
     private Long amountDebt;
 
 
     public static class Builder {
-        private final BigInteger debtId;
+        private  BigInteger debtId;
         private Date dateFrom;
         private Date dateTo;
         private Long amountDebt;
 
-        public Builder(BigInteger debtId) {
+        public Builder() {
+        }
+
+        public Builder debtId(BigInteger id){
             this.debtId = debtId;
+            return this;
         }
 
         public Builder dateFrom(Date date) {

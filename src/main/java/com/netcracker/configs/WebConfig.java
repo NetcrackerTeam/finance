@@ -29,7 +29,7 @@ public class WebConfig implements WebMvcConfigurer {
         return resolver;
     }
 
-    @Bean
+    @Bean(name = "dataSource")
     public DataSource getDataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName(env.getProperty("db.driver-class-name"));
