@@ -3,8 +3,8 @@ package com.netcracker.dao.impl;
 import com.netcracker.dao.AutoOperationDao;
 import com.netcracker.models.AutoOperationExpense;
 import com.netcracker.models.AutoOperationIncome;
-import com.netcracker.models.CategoryExpense;
-import com.netcracker.models.CategoryIncome;
+import com.netcracker.models.enums.CategoryIncome;
+import com.netcracker.models.enums.CategoryExpense;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -26,7 +26,7 @@ public class AutoOperationDaoImpl implements AutoOperationDao {
 
     @Override
     public AutoOperationIncome getAutoOperationIncomeById(BigInteger autoOperationId) {
-        return jdbcTemplate.queryForObject(GET_INCOME_AO, new Object[] {autoOperationId}, new AutoOperationIncomeMapper());
+        return jdbcTemplate.queryForObject(GET_INCOME_PERSONAL_AO, new Object[] {autoOperationId}, new AutoOperationIncomeMapper());
     }
 
     @Override
