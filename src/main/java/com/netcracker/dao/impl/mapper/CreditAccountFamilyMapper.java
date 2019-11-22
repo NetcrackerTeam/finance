@@ -14,7 +14,7 @@ public class CreditAccountFamilyMapper implements RowMapper<FamilyCreditAccount>
     public FamilyCreditAccount mapRow(ResultSet resultSet, int i) throws SQLException {
 
         //ToDO: waiting for debt mapper
-        Debt debt = null;
+        Debt debt = new Debt.Builder().build();
 
         AbstractCreditAccount personalCreditAccount =
                 new FamilyCreditAccount.Builder()
