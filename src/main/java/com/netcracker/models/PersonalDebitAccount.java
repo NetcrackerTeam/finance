@@ -31,5 +31,4 @@ public class PersonalDebitAccount extends AbstractDebitAccount {
     public void setPersonalCreditAccountList(List<PersonalCreditAccount> personalCreditAccountList) {
         this.personalCreditAccountList = personalCreditAccountList;
     }
-
 }

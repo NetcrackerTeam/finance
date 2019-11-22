@@ -1,5 +1,7 @@
 package com.netcracker.models;
 
+import com.netcracker.models.enums.CategoryExpense;
+
 public class AccountExpense extends AbstractAccountOperation {
     private CategoryExpense categoryExpense;
 

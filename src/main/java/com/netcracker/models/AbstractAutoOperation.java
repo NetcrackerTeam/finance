@@ -29,4 +29,5 @@ public abstract class AbstractAutoOperation extends AbstractAccountOperation {
         this.dayOfMonth = dayOfMonth;
     }
 
+
 }

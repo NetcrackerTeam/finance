@@ -3,27 +3,42 @@ package com.netcracker.models;
 import java.math.BigInteger;
 
 public class User {
-    private final BigInteger id;
-    private final String name;
-    private final String eMail;
+    private  BigInteger id;
+    private  String name;
+    private  String eMail;
     private String password;
     private PersonalDebitAccount personalDebitAccount;
     private FamilyDebitAccount familyDebitAccount;
 
     public static class Builder {
-        private final BigInteger id;
-        private final String name;
-        private final String eMail;
+        private  BigInteger id;
+        private  String name;
+        private  String eMail;
         private String password;
         private PersonalDebitAccount personalDebitAccount;
         private FamilyDebitAccount familyDebitAccount;
 
-        public Builder(BigInteger id, String name, String eMail, String password) {
-            this.id = id;
-            this.name = name;
-            this.eMail = eMail;
-            this.password = password;
+        public Builder() {
         }
+
+        public Builder user_id(BigInteger id){
+            this.id = id;
+            return this;
+        }
+        public Builder user_name(String name ){
+            this.name = name;
+            return this;
+        }
+        public Builder user_eMail(String eMail ){
+            this.eMail = eMail;
+            return this;
+        }
+
+        public Builder user_password(String password ){
+            this.password= password;
+            return this;
+        }
+
 
         public Builder personalDebit(PersonalDebitAccount val) {
             this.personalDebitAccount = val;

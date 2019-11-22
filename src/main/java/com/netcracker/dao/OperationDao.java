@@ -1,6 +1,7 @@
 package com.netcracker.dao;
 
-import com.netcracker.models.*;
+import com.netcracker.models.enums.CategoryExpense;
+import com.netcracker.models.enums.CategoryIncome;
 
 import java.math.BigInteger;
 import java.util.Date;

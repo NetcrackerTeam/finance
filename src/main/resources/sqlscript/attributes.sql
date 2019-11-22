@@ -96,7 +96,7 @@
  insert into attributes(attr_id, object_id, value) values(33, 10, '20');
  insert into attributes(attr_id, object_id, value) values(34, 10, SYSDATE+90);
  insert into attributes(attr_id, object_id, list_value_id) values(35, 10, 38);
- insert into attributes(attr_id, object_id, list_value_id) values(36, 10, 1);
+ insert into attributes(attr_id, object_id, value) values(36, 10, '1');
 	-- reference to personal_deb1
 	INSERT INTO OBJREFERENCE (ATTR_ID,OBJECT_ID,REFERENCE) VALUES (27,10,2);
  
@@ -108,7 +108,7 @@
  insert into attributes(attr_id, object_id, value) values(33, 11, '20');
  insert into attributes(attr_id, object_id, value) values(34, 11, SYSDATE+90);
  insert into attributes(attr_id, object_id, list_value_id) values(35, 11, 38);
- insert into attributes(attr_id, object_id, list_value_id) values(36, 11, 1);
+ insert into attributes(attr_id, object_id, value) values(36, 11, '1');
  	
 	-- reference to family_deb1
 	INSERT INTO OBJREFERENCE (ATTR_ID,OBJECT_ID,REFERENCE) VALUES (28,11,3);
@@ -330,7 +330,7 @@
  insert into attributes(attr_id, object_id, value) values(33, 33, '20');
  insert into attributes(attr_id, object_id, value) values(34, 33, SYSDATE+90);
  insert into attributes(attr_id, object_id, list_value_id) values(35, 33, 38);
- insert into attributes(attr_id, object_id, list_value_id) values(36, 33, 1);
+ insert into attributes(attr_id, object_id, value) values(36, 33, '1');
 	-- reference to personal_deb2
 	INSERT INTO OBJREFERENCE (ATTR_ID,OBJECT_ID,REFERENCE) VALUES (27,33,25);
  
@@ -342,7 +342,7 @@
  insert into attributes(attr_id, object_id, value) values(33, 34, '20');
  insert into attributes(attr_id, object_id, value) values(34, 34, SYSDATE+90);
  insert into attributes(attr_id, object_id, list_value_id) values(35, 34, 38);
- insert into attributes(attr_id, object_id, list_value_id) values(36, 34, 1);
+ insert into attributes(attr_id, object_id, value) values(36, 34, '1');
  	
 	-- reference to family_deb2
 	INSERT INTO OBJREFERENCE (ATTR_ID,OBJECT_ID,REFERENCE) VALUES (28,34,26);

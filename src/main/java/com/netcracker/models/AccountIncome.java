@@ -1,6 +1,6 @@
 package com.netcracker.models;
 
-import java.util.List;
+import com.netcracker.models.enums.CategoryIncome;
 
 public class AccountIncome extends AbstractAccountOperation {
     private CategoryIncome categoryIncome;
