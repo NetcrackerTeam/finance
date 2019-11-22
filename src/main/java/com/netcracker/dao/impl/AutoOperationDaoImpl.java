@@ -1,8 +1,8 @@
 package com.netcracker.dao.impl;
 
 import com.netcracker.dao.AutoOperationDao;
-import com.netcracker.models.CategoryExpense;
 import com.netcracker.models.CategoryIncome;
+import com.netcracker.models.enums.CategoryExpense;
 
 import java.math.BigInteger;
 
@@ -29,14 +29,15 @@ public class AutoOperationDaoImpl implements AutoOperationDao {
     }
 
     @Override
-    public void createFamilyExpenseAutoOperation(CategoryExpense expense) {
+    public void createPersonalExpenseAutoOperation(CategoryExpense expense) {
 
     }
 
     @Override
-    public void createPersonalExpenseAutoOperation(CategoryExpense expense) {
+    public void createFamilyExpenseAutoOperation(CategoryExpense expense) {
 
     }
+
 
     @Override
     public void deleteFamilyIncExpenseOperation(BigInteger autoOperationId) {
