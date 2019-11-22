@@ -60,12 +60,9 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public Collection<User> getAllUsersByFamilyAccountId(List<BigInteger> userId, BigInteger familyId) {
-        return null;
-    }
-
-    @Override
-    public User getUserByFamilyAccountId(BigInteger id, BigInteger familyId) {
+    public Collection<User> getAllUsersByFamilyAccountId( BigInteger familyId) {
+        logger.info("Entering getAllUsers(familyId=" + familyId + ")");
+     //   return template.query(GET_All_USER, new AllUserMapper(), familyId);
         return null;
     }
 }

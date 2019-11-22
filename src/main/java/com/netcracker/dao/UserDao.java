@@ -15,9 +15,8 @@ public interface UserDao {
 
     public void updateUserPasswordById(BigInteger id, String newPassword);
 
-    public Collection<User> getAllUsersByFamilyAccountId(List<BigInteger> userId, BigInteger familyId);
+    public Collection<User> getAllUsersByFamilyAccountId( BigInteger familyId);
 
-    public User getUserByFamilyAccountId(BigInteger id, BigInteger familyId);
 
 
     String CREATE_USER = "INSERT ALL ";
