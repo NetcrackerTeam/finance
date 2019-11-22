@@ -46,12 +46,17 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public User getUserByLogin(String login) {
-        return null;
+        logger.info("Entering getUserByUserLogin(login=" + login + ")");
+        return template.queryForObject(GET_USER_BY_USER_ID, new Object[]{login},
+                new UserDaoMapper());
     }
 
     @Override
     public void updateUserPasswordById(BigInteger id, String newPassword) {
-
+        logger.info(
+                "Entering updatePassword(id=" + id + "," + " password=" + newPassword
+                        + ")");
+        template.update(UPDATE_PASSWORD, newPassword, id);
     }
 
     @Override
