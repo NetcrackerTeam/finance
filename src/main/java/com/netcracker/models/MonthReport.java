@@ -17,7 +17,7 @@ public class MonthReport {
     private Map<CategoryExpense, Long> categoryExpenseLongMap;
     private Map<CategoryIncome, Long>  categoryIncomeLongMap;
     public static  class Builder {
-        private final BigInteger id;
+        private BigInteger id;
         private Long totalIncome;
         private Long totalExpense;
         private Long balance;
@@ -25,8 +25,11 @@ public class MonthReport {
         private Map<CategoryExpense, Long> categoryExpenseLongMap;
         private Map<CategoryIncome, Long>  categoryIncomeLongMap;
 
-        public Builder(BigInteger id) {
-            this.id = id;
+        public Builder() {
+        }
+        public Builder id(BigInteger val) {
+            this.id = val;
+            return this;
         }
 
         public Builder totalIncome( Long val) {
@@ -45,7 +48,7 @@ public class MonthReport {
             this.date = val;
             return this;
         }
-        public Builder categoryExpenseLongMap( Map<CategoryExpense,Long> val) {
+        public Builder categoryExpenseLongMap(Map<CategoryExpense,Long> val) {
             this.categoryExpenseLongMap = val;
             return this;
         }

@@ -20,7 +20,7 @@ public class OperationDaoImpl implements OperationDao {
 
     @Override
     public void addIncomePersonalByAccId(BigInteger id, int income) {
-      // return template.execute(ADD_INCOME_PERSONAL_BY_ACCOUNT_ID, new Object[]{id, income});
+//        return template.execute(ADD_INCOME_PERSONAL_BY_ACCOUNT_ID, new Object[]{id, income});
     }
 
     @Override
