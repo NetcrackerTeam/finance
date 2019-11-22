@@ -1,8 +1,8 @@
 package com.netcracker.dao.impl;
 
 import com.netcracker.dao.OperationDao;
-import com.netcracker.models.CategoryExpense;
-import com.netcracker.models.CategoryIncome;
+import com.netcracker.models.enums.CategoryExpense;
+import com.netcracker.models.enums.CategoryIncome;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import javax.sql.DataSource;
@@ -20,7 +20,7 @@ public class OperationDaoImpl implements OperationDao {
 
     @Override
     public void addIncomePersonalByAccId(BigInteger id, int income) {
-        return template.execute(ADD_INCOME_PERSONAL_BY_ACCOUNT_ID, new Object[]{id, income});
+//        return template.execute(ADD_INCOME_PERSONAL_BY_ACCOUNT_ID, new Object[]{id, income});
     }
 
     @Override
