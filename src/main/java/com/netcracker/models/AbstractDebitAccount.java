@@ -22,7 +22,7 @@ public abstract class AbstractDebitAccount {
             this.actualClassBuilder = getActualBuilder();
         }
 
-        public B DebitObjectName(String name) {
+        public B debitObjectName(String name) {
             actualClass.setObjectName(name);
             return actualClassBuilder;
         }

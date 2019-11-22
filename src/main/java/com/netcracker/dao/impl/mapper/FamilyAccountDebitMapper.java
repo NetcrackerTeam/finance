@@ -13,11 +13,12 @@ public class FamilyAccountDebitMapper implements RowMapper<FamilyDebitAccount> {
 
     @Override
     public FamilyDebitAccount mapRow(ResultSet rs, int i) throws SQLException {
-        FamilyDebitAccount familyDebitAccount = new FamilyDebitAccount();
-        familyDebitAccount.setId(new BigInteger(Integer.valueOf(rs.getInt("OBJECT_ID")).toString()));
-        familyDebitAccount.setObjectName(rs.getString("NAME"));
-        familyDebitAccount.setAmount(rs.getLong("values"));
-     //   familyDebitAccount.setOwner((User)rs.getObject("reference"));
-        return familyDebitAccount;
+        return  (FamilyDebitAccount) new  FamilyDebitAccount.Builder()
+            .debitId(new BigInteger(rs.getString("DEBIT_ID")))
+            .debitObjectName(rs.getString("NAME"))
+            .debitAmount(rs.getLong("values"))
+           // .debitAccountExpensesList()
+           // .debitAccountIncomesList()
+           // .debitOwner((User)rs.getObject("reference"));
     }
 }
