@@ -46,7 +46,6 @@ INSERT INTO OBJECTS (OBJECT_ID,PARENT_ID,OBJECT_TYPE_ID,NAME,DESCRIPTION) VALUES
 INSERT INTO OBJECTS (OBJECT_ID,PARENT_ID,OBJECT_TYPE_ID,NAME,DESCRIPTION) VALUES (objects_id_s.nextval,NULL,12,'ACC_AUTO_INC_PER1','account autoincome personal1');-- ID-22
 INSERT INTO OBJECTS (OBJECT_ID,PARENT_ID,OBJECT_TYPE_ID,NAME,DESCRIPTION) VALUES (objects_id_s.nextval,NULL,23,'ACC_AUTO_INC_FAM1','account autoincome personal family1');-- ID-23
 --персональные и симейные автодоходы
-
 --Создание обьектов User2
 INSERT INTO OBJECTS (OBJECT_ID,PARENT_ID,OBJECT_TYPE_ID,NAME,DESCRIPTION) VALUES (objects_id_s.nextval,NULL,1,'user2','user2'); --ID-24
 --Создание пользователя
@@ -95,4 +94,78 @@ INSERT INTO OBJECTS (OBJECT_ID,PARENT_ID,OBJECT_TYPE_ID,NAME,DESCRIPTION) VALUES
 --Создание пользователя
 INSERT INTO OBJECTS (OBJECT_ID,PARENT_ID,OBJECT_TYPE_ID,NAME,DESCRIPTION) VALUES (objects_id_s.nextval,null,2,'PER_DEB_ACC4','Personal debet account4'); --  ID-50
 --создание персонального
+
+--Создание обьектов User5
+INSERT INTO OBJECTS (OBJECT_ID,PARENT_ID,OBJECT_TYPE_ID,NAME,DESCRIPTION) VALUES (objects_id_s.nextval,NULL,1,'user5','user5'); --ID-51
+--Создание пользователя
+INSERT INTO OBJECTS (OBJECT_ID,PARENT_ID,OBJECT_TYPE_ID,NAME,DESCRIPTION) VALUES (objects_id_s.nextval,null,2,'PER_DEB_ACC5','Personal debet account5'); --  ID-52
+INSERT INTO OBJECTS (OBJECT_ID,PARENT_ID,OBJECT_TYPE_ID,NAME,DESCRIPTION) VALUES (objects_id_s.nextval,null,13,'FAM_DEB_ACC5','Family debet account5'); --  ID-53
+--создание персонального и семейного счета 
+INSERT INTO OBJECTS (OBJECT_ID,PARENT_ID,OBJECT_TYPE_ID,NAME,DESCRIPTION) VALUES (objects_id_s.nextval,NULL,3,'PER_REP5','Personal report5'); --  ID-54
+INSERT INTO OBJECTS (OBJECT_ID,PARENT_ID,OBJECT_TYPE_ID,NAME,DESCRIPTION) VALUES (objects_id_s.nextval,NULL,14,'FAM_REP5','Family report5'); --  ID-55
+--Персональные и семейные репорты
+INSERT INTO OBJECTS (OBJECT_ID,PARENT_ID,OBJECT_TYPE_ID,NAME,DESCRIPTION) VALUES (objects_id_s.nextval,NULL,4,'CAT_REP_PER_INC5','Catery report personal income5');-- ID-56
+INSERT INTO OBJECTS (OBJECT_ID,PARENT_ID,OBJECT_TYPE_ID,NAME,DESCRIPTION) VALUES (objects_id_s.nextval,NULL,15,'CAT_REP_FAM_INC5','Catery report family income5');-- ID-57
+--персональный и симейный отчет по категории доходов
+INSERT INTO OBJECTS (OBJECT_ID,PARENT_ID,OBJECT_TYPE_ID,NAME,DESCRIPTION) VALUES (objects_id_s.nextval,NULL,5,'CAT_REP_PER_EXP5','Catery report personal expense5');-- ID-58
+INSERT INTO OBJECTS (OBJECT_ID,PARENT_ID,OBJECT_TYPE_ID,NAME,DESCRIPTION) VALUES (objects_id_s.nextval,NULL,16,'CAT_REP_FAM_EXP5','Catery report family expense5');-- ID-59
+--персональный и семейный отчет по категории расходов
+INSERT INTO OBJECTS (OBJECT_ID,PARENT_ID,OBJECT_TYPE_ID,NAME,DESCRIPTION) VALUES (objects_id_s.nextval,NULL,6,'CRED_ACC_PER5','credit account Personal5');-- ID-60
+INSERT INTO OBJECTS (OBJECT_ID,PARENT_ID,OBJECT_TYPE_ID,NAME,DESCRIPTION) VALUES (objects_id_s.nextval,NULL,17,'CRED_ACC_FAM5','credit account Family5');-- ID-61
+--персональный и симейный кредитный аккаунт
+INSERT INTO OBJECTS (OBJECT_ID,PARENT_ID,OBJECT_TYPE_ID,NAME,DESCRIPTION) VALUES (objects_id_s.nextval,NULL,7,'CRED_OPER_PER5','credit operation Personal5');-- ID-62
+INSERT INTO OBJECTS (OBJECT_ID,PARENT_ID,OBJECT_TYPE_ID,NAME,DESCRIPTION) VALUES (objects_id_s.nextval,NULL,18,'CRED_OPER_FAM5','credit operation Family5');-- ID-63
+--персональные и симейные кредитные операции
+INSERT INTO OBJECTS (OBJECT_ID,PARENT_ID,OBJECT_TYPE_ID,NAME,DESCRIPTION) VALUES (objects_id_s.nextval,NULL,8,'DEBT_PER5','debt Personal5');-- ID-64
+INSERT INTO OBJECTS (OBJECT_ID,PARENT_ID,OBJECT_TYPE_ID,NAME,DESCRIPTION) VALUES (objects_id_s.nextval,NULL,19,'DEBT_FAM5','debt family5');-- ID-65
+--персональный и симейные долги
+INSERT INTO OBJECTS (OBJECT_ID,PARENT_ID,OBJECT_TYPE_ID,NAME,DESCRIPTION) VALUES (objects_id_s.nextval,NULL,9,'ACC_EXPEN_PER5','account expense personal5');-- ID-66
+INSERT INTO OBJECTS (OBJECT_ID,PARENT_ID,OBJECT_TYPE_ID,NAME,DESCRIPTION) VALUES (objects_id_s.nextval,NULL,20,'ACC_EXPEN_FAM5','account expense Family5');-- ID-67
+--персональные и симейные расходы
+INSERT INTO OBJECTS (OBJECT_ID,PARENT_ID,OBJECT_TYPE_ID,NAME,DESCRIPTION) VALUES (objects_id_s.nextval,NULL,10,'ACC_INC_PER5','account income personal5');-- ID-68
+INSERT INTO OBJECTS (OBJECT_ID,PARENT_ID,OBJECT_TYPE_ID,NAME,DESCRIPTION) VALUES (objects_id_s.nextval,NULL,21,'ACC_INC_FAM5','account income Family5');-- ID-69
+--персональные и симейные доходы
+INSERT INTO OBJECTS (OBJECT_ID,PARENT_ID,OBJECT_TYPE_ID,NAME,DESCRIPTION) VALUES (objects_id_s.nextval,NULL,11,'ACC_AUTO_EXPEN_PER5','account autoexpense personal5');-- ID-70
+INSERT INTO OBJECTS (OBJECT_ID,PARENT_ID,OBJECT_TYPE_ID,NAME,DESCRIPTION) VALUES (objects_id_s.nextval,NULL,22,'ACC_AUTO_EXPEN_FAM5','account autoexpense personal family5');-- ID-71
+--персональные и симейные авторасходы
+INSERT INTO OBJECTS (OBJECT_ID,PARENT_ID,OBJECT_TYPE_ID,NAME,DESCRIPTION) VALUES (objects_id_s.nextval,NULL,12,'ACC_AUTO_INC_PER5','account autoincome personal5');-- ID-72
+INSERT INTO OBJECTS (OBJECT_ID,PARENT_ID,OBJECT_TYPE_ID,NAME,DESCRIPTION) VALUES (objects_id_s.nextval,NULL,23,'ACC_AUTO_INC_FAM5','account autoincome personal family5');-- ID-73
+--персональные и симейные автодоходы
+
+--Создание обьектов User6
+INSERT INTO OBJECTS (OBJECT_ID,PARENT_ID,OBJECT_TYPE_ID,NAME,DESCRIPTION) VALUES (objects_id_s.nextval,NULL,1,'user6','user6'); --ID-74
+--Создание пользователя
+INSERT INTO OBJECTS (OBJECT_ID,PARENT_ID,OBJECT_TYPE_ID,NAME,DESCRIPTION) VALUES (objects_id_s.nextval,null,2,'PER_DEB_ACC6','Personal debet account6'); --  ID-75
+INSERT INTO OBJECTS (OBJECT_ID,PARENT_ID,OBJECT_TYPE_ID,NAME,DESCRIPTION) VALUES (objects_id_s.nextval,null,13,'FAM_DEB_ACC6','Family debet account6'); --  ID-76
+--создание персонального и семейного счета 
+INSERT INTO OBJECTS (OBJECT_ID,PARENT_ID,OBJECT_TYPE_ID,NAME,DESCRIPTION) VALUES (objects_id_s.nextval,NULL,3,'PER_REP6','Personal report6'); --  ID-77
+INSERT INTO OBJECTS (OBJECT_ID,PARENT_ID,OBJECT_TYPE_ID,NAME,DESCRIPTION) VALUES (objects_id_s.nextval,NULL,14,'FAM_REP6','Family report6'); --  ID-78
+--Персональные и семейные репорты
+INSERT INTO OBJECTS (OBJECT_ID,PARENT_ID,OBJECT_TYPE_ID,NAME,DESCRIPTION) VALUES (objects_id_s.nextval,NULL,4,'CAT_REP_PER_INC6','Catery report personal income6');-- ID-79
+INSERT INTO OBJECTS (OBJECT_ID,PARENT_ID,OBJECT_TYPE_ID,NAME,DESCRIPTION) VALUES (objects_id_s.nextval,NULL,15,'CAT_REP_FAM_INC6','Catery report family income6');-- ID-80
+--персональный и симейный отчет по категории доходов
+INSERT INTO OBJECTS (OBJECT_ID,PARENT_ID,OBJECT_TYPE_ID,NAME,DESCRIPTION) VALUES (objects_id_s.nextval,NULL,5,'CAT_REP_PER_EXP6','Catery report personal expense6');-- ID-81
+INSERT INTO OBJECTS (OBJECT_ID,PARENT_ID,OBJECT_TYPE_ID,NAME,DESCRIPTION) VALUES (objects_id_s.nextval,NULL,16,'CAT_REP_FAM_EXP6','Catery report family expense6');-- ID-82
+--персональный и семейный отчет по категории расходов
+INSERT INTO OBJECTS (OBJECT_ID,PARENT_ID,OBJECT_TYPE_ID,NAME,DESCRIPTION) VALUES (objects_id_s.nextval,NULL,6,'CRED_ACC_PER6','credit account Personal6');-- ID-83
+INSERT INTO OBJECTS (OBJECT_ID,PARENT_ID,OBJECT_TYPE_ID,NAME,DESCRIPTION) VALUES (objects_id_s.nextval,NULL,17,'CRED_ACC_FAM6','credit account Family6');-- ID-84
+--персональный и симейный кредитный аккаунт
+INSERT INTO OBJECTS (OBJECT_ID,PARENT_ID,OBJECT_TYPE_ID,NAME,DESCRIPTION) VALUES (objects_id_s.nextval,NULL,7,'CRED_OPER_PER6','credit operation Personal6');-- ID-85
+INSERT INTO OBJECTS (OBJECT_ID,PARENT_ID,OBJECT_TYPE_ID,NAME,DESCRIPTION) VALUES (objects_id_s.nextval,NULL,18,'CRED_OPER_FAM6','credit operation Family6');-- ID-86
+--персональные и симейные кредитные операции
+INSERT INTO OBJECTS (OBJECT_ID,PARENT_ID,OBJECT_TYPE_ID,NAME,DESCRIPTION) VALUES (objects_id_s.nextval,NULL,8,'DEBT_PER6','debt Personal6');-- ID-87
+INSERT INTO OBJECTS (OBJECT_ID,PARENT_ID,OBJECT_TYPE_ID,NAME,DESCRIPTION) VALUES (objects_id_s.nextval,NULL,19,'DEBT_FAM6','debt family6');-- ID-88
+--персональный и симейные долги
+INSERT INTO OBJECTS (OBJECT_ID,PARENT_ID,OBJECT_TYPE_ID,NAME,DESCRIPTION) VALUES (objects_id_s.nextval,NULL,9,'ACC_EXPEN_PER6','account expense personal6');-- ID-89
+INSERT INTO OBJECTS (OBJECT_ID,PARENT_ID,OBJECT_TYPE_ID,NAME,DESCRIPTION) VALUES (objects_id_s.nextval,NULL,20,'ACC_EXPEN_FAM6','account expense Family6');-- ID-90
+--персональные и симейные расходы
+INSERT INTO OBJECTS (OBJECT_ID,PARENT_ID,OBJECT_TYPE_ID,NAME,DESCRIPTION) VALUES (objects_id_s.nextval,NULL,10,'ACC_INC_PER6','account income personal6');-- ID-91
+INSERT INTO OBJECTS (OBJECT_ID,PARENT_ID,OBJECT_TYPE_ID,NAME,DESCRIPTION) VALUES (objects_id_s.nextval,NULL,21,'ACC_INC_FAM6','account income Family6');-- ID-92
+--персональные и симейные доходы
+INSERT INTO OBJECTS (OBJECT_ID,PARENT_ID,OBJECT_TYPE_ID,NAME,DESCRIPTION) VALUES (objects_id_s.nextval,NULL,11,'ACC_AUTO_EXPEN_PER6','account autoexpense personal6');-- ID-93
+INSERT INTO OBJECTS (OBJECT_ID,PARENT_ID,OBJECT_TYPE_ID,NAME,DESCRIPTION) VALUES (objects_id_s.nextval,NULL,22,'ACC_AUTO_EXPEN_FAM6','account autoexpense personal family6');-- ID-94
+--персональные и симейные авторасходы
+INSERT INTO OBJECTS (OBJECT_ID,PARENT_ID,OBJECT_TYPE_ID,NAME,DESCRIPTION) VALUES (objects_id_s.nextval,NULL,12,'ACC_AUTO_INC_PER6','account autoincome personal6');-- ID-95
+INSERT INTO OBJECTS (OBJECT_ID,PARENT_ID,OBJECT_TYPE_ID,NAME,DESCRIPTION) VALUES (objects_id_s.nextval,NULL,23,'ACC_AUTO_INC_FAM6','account autoincome personal family6');-- ID-96
+--персональные и симейные автодоходы
 commit;
