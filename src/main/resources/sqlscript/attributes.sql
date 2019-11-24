@@ -328,7 +328,7 @@
  insert into attributes(attr_id, object_id, value) values(31, 33, '20000');
  insert into attributes(attr_id, object_id, value) values(32, 33, '5000');
  insert into attributes(attr_id, object_id, value) values(33, 33, '20');
- insert into attributes(attr_id, object_id, value) values(34, 33, SYSDATE+90);
+ insert into attributes(attr_id, object_id, DATE_VALUE) values(34, 33, SYSDATE+90);
  insert into attributes(attr_id, object_id, list_value_id) values(35, 33, 38);
  insert into attributes(attr_id, object_id, value) values(36, 33, '1');
 	-- reference to personal_deb2
@@ -340,7 +340,7 @@
  insert into attributes(attr_id, object_id, value) values(31, 34, '15000');
  insert into attributes(attr_id, object_id, value) values(32, 34, '2000');
  insert into attributes(attr_id, object_id, value) values(33, 34, '20');
- insert into attributes(attr_id, object_id, value) values(34, 34, SYSDATE+90);
+ insert into attributes(attr_id, object_id, DATE_VALUE) values(34, 34, SYSDATE+90);
  insert into attributes(attr_id, object_id, list_value_id) values(35, 34, 38);
  insert into attributes(attr_id, object_id, value) values(36, 34, '1');
  	
@@ -603,7 +603,7 @@
  insert into attributes(attr_id, object_id, value) values(31, 60, '10000');
  insert into attributes(attr_id, object_id, value) values(32, 60, '5000');
  insert into attributes(attr_id, object_id, value) values(33, 60, '20');
- insert into attributes(attr_id, object_id, value) values(34, 60, SYSDATE+90);
+ insert into attributes(attr_id, object_id, DATE_VALUE) values(34, 60, SYSDATE+90);
  insert into attributes(attr_id, object_id, list_value_id) values(35, 60, 38);
  insert into attributes(attr_id, object_id, value) values(36, 60, '10');
 	-- reference to personal_deb5
@@ -615,7 +615,7 @@
  insert into attributes(attr_id, object_id, value) values(31, 61, '15000');
  insert into attributes(attr_id, object_id, value) values(32, 61, '2000');
  insert into attributes(attr_id, object_id, value) values(33, 61, '20');
- insert into attributes(attr_id, object_id, value) values(34, 61, SYSDATE+90);
+ insert into attributes(attr_id, object_id, DATE_VALUE) values(34, 61, SYSDATE+90);
  insert into attributes(attr_id, object_id, list_value_id) values(35, 61, 38);
  insert into attributes(attr_id, object_id, value) values(36, 61, '10');
  	
@@ -759,31 +759,31 @@
  insert into attributes(attr_id, object_id, value) values(5, 74, 'User6');
  insert into attributes(attr_id, object_id, list_value_id) values(6, 74, 39);
  
-	-- reference to personal_deb_acc5
+	-- reference to personal_deb_acc6
 	INSERT INTO OBJREFERENCE (ATTR_ID,OBJECT_ID,REFERENCE) VALUES (1,74,75);
  
-	-- reference to family_deb_acc5
+	-- reference to family_deb_acc6
 	INSERT INTO OBJREFERENCE (ATTR_ID,OBJECT_ID,REFERENCE) VALUES (2,74,76);
  
- -- атрибуты для personal_deb_acc5
+ -- атрибуты для personal_deb_acc6
  insert into attributes(attr_id, object_id, value) values(7, 75, '25000');
  insert into attributes(attr_id, object_id, list_value_id) values(70, 75, 43);
  
- -- атрибуты для family_deb_acc5
+ -- атрибуты для family_deb_acc6
  insert into attributes(attr_id, object_id, value) values(9, 76, '20000');
  insert into attributes(attr_id, object_id, list_value_id) values(69, 76, 41);
  
-	-- reference to user5
+	-- reference to user6
 	INSERT INTO OBJREFERENCE (ATTR_ID,OBJECT_ID,REFERENCE) VALUES (8,76,74);
 -----------------------------------------------------------------------------
--- атрибуты для personal_report5
+-- атрибуты для personal_report6
  insert into attributes(attr_id, object_id, value) values(12, 77, '5000');
  insert into attributes(attr_id, object_id, value) values(13, 77, '2500');
  insert into attributes(attr_id, object_id, value) values(14, 77, '27500');
  insert into attributes(attr_id, object_id, DATE_VALUE) values(15, 77, TO_DATE('1-01-2020', 'dd-mm-yyyy'));
  insert into attributes(attr_id, object_id, DATE_VALUE) values(16, 77, TO_DATE('30-01-2020', 'dd-mm-yyyy'));
  
-	-- reference to personal_deb_acc5
+	-- reference to personal_deb_acc6
 	INSERT INTO OBJREFERENCE (ATTR_ID,OBJECT_ID,REFERENCE) VALUES (10,77,75);
  -----------------------------------------------------------------------------
 -- атрибуты для family_report5
@@ -793,167 +793,167 @@
  insert into attributes(attr_id, object_id, DATE_VALUE) values(15, 78, TO_DATE('1-01-2020', 'dd-mm-yyyy'));
  insert into attributes(attr_id, object_id, DATE_VALUE) values(16, 78, TO_DATE('30-01-2020', 'dd-mm-yyyy'));
  
-	-- reference to family_deb_acc5
+	-- reference to family_deb_acc6
 	INSERT INTO OBJREFERENCE (ATTR_ID,OBJECT_ID,REFERENCE) VALUES (11,78,76);
 -----------------------------------------------------------------------------	
--- атрибуты для personal_category_report income5
+-- атрибуты для personal_category_report income6
  insert into attributes(attr_id, object_id, list_value_id) values(20, 79, 33);
  insert into attributes(attr_id, object_id, value) values(21, 79, '8000');
 	
-	-- reference to personal_report5
+	-- reference to personal_report6
 	INSERT INTO OBJREFERENCE (ATTR_ID,OBJECT_ID,REFERENCE) VALUES (17,79,77);
  
--- атрибуты для family_category_report income5
+-- атрибуты для family_category_report income6
  insert into attributes(attr_id, object_id, list_value_id) values(20, 80, 33);
  insert into attributes(attr_id, object_id, value) values(21, 80, '5500');
 	
-	-- reference to family_report5
+	-- reference to family_report6
 	INSERT INTO OBJREFERENCE (ATTR_ID,OBJECT_ID,REFERENCE) VALUES (18,80,78);
  
-	-- REFERENCE TO USER5 AS A PARTICIPANT FAMILY BILL
+	-- REFERENCE TO USER6 AS A PARTICIPANT FAMILY BILL
 	INSERT INTO OBJREFERENCE (ATTR_ID,OBJECT_ID,REFERENCE) VALUES (19,80,74);
 -----------------------------------------------------------------------------	
--- атрибуты для personal_category_report expense5
+-- атрибуты для personal_category_report expense6
  insert into attributes(attr_id, object_id, list_value_id) values(25, 81, 19);
  insert into attributes(attr_id, object_id, value) values(26, 81, '5500');
 	
-	-- reference to personal_report5
+	-- reference to personal_report6
 	INSERT INTO OBJREFERENCE (ATTR_ID,OBJECT_ID,REFERENCE) VALUES (22,81,77);
  
--- атрибуты для family_category_report expense5
+-- атрибуты для family_category_report expense6
  insert into attributes(attr_id, object_id, list_value_id) values(25, 82, 21);
  insert into attributes(attr_id, object_id, value) values(26, 82, '4500');
 	
-	-- reference to family_report5
+	-- reference to family_report6
 	INSERT INTO OBJREFERENCE (ATTR_ID,OBJECT_ID,REFERENCE) VALUES (23,82,78);
  
-	-- REFERENCE TO USER AS A PARTICIPANT FAMILY BILL5
+	-- REFERENCE TO USER AS A PARTICIPANT FAMILY BILL6
 	INSERT INTO OBJREFERENCE (ATTR_ID,OBJECT_ID,REFERENCE) VALUES (24,82,74);
 ----------------------------------------------------------------------------- 
  
--- атрибуты для credit account Personal5
+-- атрибуты для credit account Personal6
  insert into attributes(attr_id, object_id, DATE_VALUE) values(29, 83, SYSDATE);
  insert into attributes(attr_id, object_id, value) values(30, 83, 'Credit_Money6');
  insert into attributes(attr_id, object_id, value) values(31, 83, '16000');
  insert into attributes(attr_id, object_id, value) values(32, 83, '6000');
  insert into attributes(attr_id, object_id, value) values(33, 83, '25');
- insert into attributes(attr_id, object_id, value) values(34, 83, SYSDATE+90);
+ insert into attributes(attr_id, object_id, DATE_VALUE) values(34, 83, SYSDATE+90);
  insert into attributes(attr_id, object_id, list_value_id) values(35, 83, 38);
  insert into attributes(attr_id, object_id, value) values(36, 83, '10');
-	-- reference to personal_deb5
+	-- reference to personal_deb6
 	INSERT INTO OBJREFERENCE (ATTR_ID,OBJECT_ID,REFERENCE) VALUES (27,83,75);
  
--- атрибуты для credit account Family5
+-- атрибуты для credit account Family6
  insert into attributes(attr_id, object_id, DATE_VALUE) values(29, 84, SYSDATE);
  insert into attributes(attr_id, object_id, value) values(30, 84, 'Credit_Money6');
  insert into attributes(attr_id, object_id, value) values(31, 84, '16000');
  insert into attributes(attr_id, object_id, value) values(32, 84, '6000');
  insert into attributes(attr_id, object_id, value) values(33, 84, '25');
- insert into attributes(attr_id, object_id, value) values(34, 84, SYSDATE+90);
+ insert into attributes(attr_id, object_id, DATE_VALUE) values(34, 84, SYSDATE+90);
  insert into attributes(attr_id, object_id, list_value_id) values(35, 84, 38);
  insert into attributes(attr_id, object_id, value) values(36, 84, '10');
  	
-	-- reference to family_deb5
+	-- reference to family_deb6
 	INSERT INTO OBJREFERENCE (ATTR_ID,OBJECT_ID,REFERENCE) VALUES (28,84,76);
  ----------------------------------------------------------------------------- 
  
--- атрибуты для credit operation Personal5
+-- атрибуты для credit operation Personal6
  insert into attributes(attr_id, object_id, VALUE) values(40, 85, '7000');
  insert into attributes(attr_id, object_id, DATE_VALUE) values(41, 85, SYSDATE);
  
-	-- reference to credit_acc_personal5
+	-- reference to credit_acc_personal6
 	INSERT INTO OBJREFERENCE (ATTR_ID,OBJECT_ID,REFERENCE) VALUES (37,85,83);
  
--- атрибуты для credit operation Family5
+-- атрибуты для credit operation Family6
  insert into attributes(attr_id, object_id, VALUE) values(40, 86, '6000');
  insert into attributes(attr_id, object_id, DATE_VALUE) values(41, 86, SYSDATE);
  	
-	-- reference to credit_acc_family5
+	-- reference to credit_acc_family6
 	INSERT INTO OBJREFERENCE (ATTR_ID,OBJECT_ID,REFERENCE) VALUES (38,86,84);
-	-- reference to user5
+	-- reference to user6
 	INSERT INTO OBJREFERENCE (ATTR_ID,OBJECT_ID,REFERENCE) VALUES (39,86,74);
  ----------------------------------------------------------------------------- 
  
--- атрибуты для debt Personal5
+-- атрибуты для debt Personal6
  insert into attributes(attr_id, object_id, DATE_VALUE) values(44, 87, SYSDATE);
  insert into attributes(attr_id, object_id, DATE_VALUE) values(45, 87, SYSDATE+90);
  insert into attributes(attr_id, object_id, VALUE) values(46, 87, '0');
  
-	-- reference to credit_acc_personal5
+	-- reference to credit_acc_personal6
 	INSERT INTO OBJREFERENCE (ATTR_ID,OBJECT_ID,REFERENCE) VALUES (42,87,83);
  
--- атрибуты для debt Family5
+-- атрибуты для debt Family6
  insert into attributes(attr_id, object_id, DATE_VALUE) values(44, 88, SYSDATE);
  insert into attributes(attr_id, object_id, DATE_VALUE) values(45, 88, SYSDATE+90);
  insert into attributes(attr_id, object_id, VALUE) values(46, 88, '8000');
  	
-	-- reference to credit_acc_family5
+	-- reference to credit_acc_family6
 	INSERT INTO OBJREFERENCE (ATTR_ID,OBJECT_ID,REFERENCE) VALUES (43,88,84);
  ----------------------------------------------------------------------------- 
  
--- атрибуты для account expense personal5
+-- атрибуты для account expense personal6
  insert into attributes(attr_id, object_id, value) values(50, 89, '6500');
  insert into attributes(attr_id, object_id, list_value_id) values(51, 89, 1);
  insert into attributes(attr_id, object_id, DATE_VALUE) values(52, 89, TO_DATE('17-11-2019', 'dd-mm-yyyy'));
  
-	-- reference to personal_deb_acc5
+	-- reference to personal_deb_acc6
 	INSERT INTO OBJREFERENCE (ATTR_ID,OBJECT_ID,REFERENCE) VALUES (47,89,75);
  
--- атрибуты для account expense Family5
+-- атрибуты для account expense Family6
  insert into attributes(attr_id, object_id, value) values(50, 90, '4000');
  insert into attributes(attr_id, object_id, list_value_id) values(51, 90, 1);
  insert into attributes(attr_id, object_id, DATE_VALUE) values(52, 90, TO_DATE('17-11-2019', 'dd-mm-yyyy'));
  	
-	-- reference to family_deb_acc5
+	-- reference to family_deb_acc6
 	INSERT INTO OBJREFERENCE (ATTR_ID,OBJECT_ID,REFERENCE) VALUES (48,90,76);
-	-- reference to user1 in family_deb_acc5
+	-- reference to user1 in family_deb_acc6
 	INSERT INTO OBJREFERENCE (ATTR_ID,OBJECT_ID,REFERENCE) VALUES (49,90,74);
 
  ----------------------------------------------------------------------------- 
  
--- атрибуты для account income personal5
+-- атрибуты для account income personal6
  insert into attributes(attr_id, object_id, value) values(56, 91, '9500');
  insert into attributes(attr_id, object_id, list_value_id) values(57, 91, 32);
  insert into attributes(attr_id, object_id, DATE_VALUE) values(58, 91, TO_DATE('17-12-2019', 'dd-mm-yyyy'));
  
-	-- reference to personal_deb_acc5
+	-- reference to personal_deb_acc6
 	INSERT INTO OBJREFERENCE (ATTR_ID,OBJECT_ID,REFERENCE) VALUES (53,91,75);
  
--- атрибуты для account income family5
+-- атрибуты для account income family6
  insert into attributes(attr_id, object_id, value) values(56, 92, '8500');
  insert into attributes(attr_id, object_id, list_value_id) values(57, 92, 32);
  insert into attributes(attr_id, object_id, DATE_VALUE) values(58, 92, TO_DATE('17-12-2019', 'dd-mm-yyyy'));
  	
-	-- reference to family_deb_acc5
+	-- reference to family_deb_acc6
 	INSERT INTO OBJREFERENCE (ATTR_ID,OBJECT_ID,REFERENCE) VALUES (54,92,76);
-	-- reference to user1 in family_deb_acc5
+	-- reference to user1 in family_deb_acc6
 	INSERT INTO OBJREFERENCE (ATTR_ID,OBJECT_ID,REFERENCE) VALUES (55,92,74);
 
  ----------------------------------------------------------------------------- 
  
--- атрибуты для account autoexpense personal5
+-- атрибуты для account autoexpense personal6
  insert into attributes(attr_id, object_id, value) values(62, 93, 1);
  insert into attributes(attr_id, object_id, value) values(56, 93, '17000');
  insert into attributes(attr_id, object_id, list_value_id) values(57, 93, 15);
  insert into attributes(attr_id, object_id, DATE_VALUE) values(58, 93, TO_DATE('02-12-2019', 'dd-mm-yyyy'));
 	
-	-- reference to personal_deb_acc5
+	-- reference to personal_deb_acc6
 	INSERT INTO OBJREFERENCE (ATTR_ID,OBJECT_ID,REFERENCE) VALUES (59,93,75);
  
--- атрибуты для account autoexpense family5
+-- атрибуты для account autoexpense family6
  insert into attributes(attr_id, object_id, value) values(63, 94, 1);
  insert into attributes(attr_id, object_id, value) values(56, 94, '16000');
  insert into attributes(attr_id, object_id, list_value_id) values(57, 94, 15);
  insert into attributes(attr_id, object_id, DATE_VALUE) values(58, 94, TO_DATE('03-12-2019', 'dd-mm-yyyy'));
 	
-	-- reference to family_deb_acc5
+	-- reference to family_deb_acc6
 	INSERT INTO OBJREFERENCE (ATTR_ID,OBJECT_ID,REFERENCE) VALUES (60,94,76);
  
-	-- REFERENCE TO USER5 AS A PARTICIPANT FAMILY BILL
+	-- REFERENCE TO USER6 AS A PARTICIPANT FAMILY BILL
 	INSERT INTO OBJREFERENCE (ATTR_ID,OBJECT_ID,REFERENCE) VALUES (61,94,74);
 ----------------------------------------------------------------------------- 
 
--- атрибуты для ACC_AUTO_INC_PER5
+-- атрибуты для ACC_AUTO_INC_PER6
  insert into attributes(attr_id, object_id, value) values(67, 95, 1);
  insert into attributes(attr_id, object_id, value) values(56, 95, '13000');
  insert into attributes(attr_id, object_id, list_value_id) values(57, 95, 15);
@@ -968,10 +968,10 @@
  insert into attributes(attr_id, object_id, list_value_id) values(57, 96, 15);
  insert into attributes(attr_id, object_id, DATE_VALUE) values(58, 96, TO_DATE('15-12-2019', 'dd-mm-yyyy'));
 	
-	-- reference to femily_deb_acc5
+	-- reference to femily_deb_acc6
 	INSERT INTO OBJREFERENCE (ATTR_ID,OBJECT_ID,REFERENCE) VALUES (65,96,76);
  
-	-- REFERENCE TO USER5 AS A PARTICIPANT FAMILY BILL
+	-- REFERENCE TO USER6 AS A PARTICIPANT FAMILY BILL
 	INSERT INTO OBJREFERENCE (ATTR_ID,OBJECT_ID,REFERENCE) VALUES (66,96,74);
 ----------------------------------------------------------------------------- 
  
