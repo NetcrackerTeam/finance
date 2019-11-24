@@ -94,7 +94,7 @@
  insert into attributes(attr_id, object_id, value) values(31, 10, '10000');
  insert into attributes(attr_id, object_id, value) values(32, 10, '2000');
  insert into attributes(attr_id, object_id, value) values(33, 10, '20');
- insert into attributes(attr_id, object_id, value) values(34, 10, SYSDATE+90);
+ insert into attributes(attr_id, object_id, DATE_VALUE) values(34, 10, SYSDATE+90);
  insert into attributes(attr_id, object_id, list_value_id) values(35, 10, 38);
  insert into attributes(attr_id, object_id, value) values(36, 10, '1');
 	-- reference to personal_deb1
@@ -106,7 +106,7 @@
  insert into attributes(attr_id, object_id, value) values(31, 11, '15000');
  insert into attributes(attr_id, object_id, value) values(32, 11, '3000');
  insert into attributes(attr_id, object_id, value) values(33, 11, '20');
- insert into attributes(attr_id, object_id, value) values(34, 11, SYSDATE+90);
+ insert into attributes(attr_id, object_id, DATE_VALUE) values(34, 11, SYSDATE+90);
  insert into attributes(attr_id, object_id, list_value_id) values(35, 11, 38);
  insert into attributes(attr_id, object_id, value) values(36, 11, '1');
  	
