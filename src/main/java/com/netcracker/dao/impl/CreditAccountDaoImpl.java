@@ -7,30 +7,31 @@ import com.netcracker.models.FamilyCreditAccount;
 import com.netcracker.models.PersonalCreditAccount;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.List;
 
-@Repository
+@Component
 public class CreditAccountDaoImpl implements CreditAccountDao {
 
     private JdbcTemplate jdbcTemplate;
 
     @Autowired
-    public void setDataSource(final DataSource dataSource) {
+    public CreditAccountDaoImpl(DataSource dataSource) {
         jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
     @Override
     public PersonalCreditAccount getPersonalCreditById(BigInteger id) {
-        return jdbcTemplate.queryForObject(SELECT_PERSONAL_CREDIT_QUERY, new Object[]{id}, new CreditAccountPersonalMapper());
+        return jdbcTemplate.queryForObject(SELECT_CREDIT_QUERY, new Object[]{id}, new CreditAccountPersonalMapper());
     }
 
     @Override
     public FamilyCreditAccount getFamilyCreditById(BigInteger id) {
-        return jdbcTemplate.queryForObject(SELECT_FAMILY_CREDIT_QUERY, new Object[]{id}, new CreditAccountFamilyMapper());
+        return jdbcTemplate.queryForObject(SELECT_CREDIT_QUERY, new Object[]{new BigDecimal(id)}, new CreditAccountFamilyMapper());
     }
 
     @Override
@@ -44,16 +45,16 @@ public class CreditAccountDaoImpl implements CreditAccountDao {
     }
 
     @Override
-    public boolean addPersonalCreditPayment(BigInteger id, long amount) {
-        return addCreditPayment(id, amount, ADD_PERSONAL_CREDIT_PAYMENT_QUERY) == 1;
+    public void addPersonalCreditPayment(BigInteger id, long amount) {
+        addCreditPayment(id, amount, ADD_PERSONAL_CREDIT_PAYMENT_QUERY);
     }
 
     @Override
-    public boolean addFamilyCreditPayment(BigInteger id, long amount) {
-        return addCreditPayment(id, amount, ADD_FAMILY_CREDIT_PAYMENT_QUERY) == 1;
+    public void addFamilyCreditPayment(BigInteger id, long amount) {
+        addCreditPayment(id, amount, ADD_FAMILY_CREDIT_PAYMENT_QUERY);
     }
 
-    private int addCreditPayment(BigInteger id, long amount, String query) {
-        return jdbcTemplate.update(query, new Object[]{id, amount});
+    private void addCreditPayment(BigInteger id, long amount, String query) {
+        jdbcTemplate.update(query, new Object[]{id, amount});
     }
 }
