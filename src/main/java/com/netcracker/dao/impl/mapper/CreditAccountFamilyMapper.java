@@ -4,6 +4,7 @@ import com.netcracker.models.AbstractCreditAccount;
 import com.netcracker.models.Debt;
 import com.netcracker.models.FamilyCreditAccount;
 import com.netcracker.models.PersonalCreditAccount;
+import com.netcracker.models.enums.CreditStatusPaid;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;
@@ -13,8 +14,8 @@ public class CreditAccountFamilyMapper implements RowMapper<FamilyCreditAccount>
     @Override
     public FamilyCreditAccount mapRow(ResultSet resultSet, int i) throws SQLException {
 
-        //ToDO: waiting for debt mapper
-        Debt debt = null;
+        CreditDebtMapper debtMapper = new CreditDebtMapper();
+        Debt debt = debtMapper.mapRow(resultSet, i);
 
         AbstractCreditAccount personalCreditAccount =
                 new FamilyCreditAccount.Builder()
@@ -27,14 +28,9 @@ public class CreditAccountFamilyMapper implements RowMapper<FamilyCreditAccount>
                         .dateTo(resultSet.getDate("date_to").toLocalDate())
                         .monthDay(Integer.valueOf(resultSet.getString("month_day")))
                         .debtCredit(debt)
-                        .isPaid(isPaidParser(resultSet.getString("is_paid")))
+                        .isPaid(CreditStatusPaid.getStatusByKey(resultSet.getBigDecimal("is_paid").toBigInteger()))
                         .build();
 
         return (FamilyCreditAccount) personalCreditAccount;
-    }
-
-    private boolean isPaidParser (String queryResult) {
-        //ToDo: waiting for enum isPaid
-        return queryResult.equals("YES");
     }
 }

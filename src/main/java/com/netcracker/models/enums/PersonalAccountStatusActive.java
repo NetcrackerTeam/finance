@@ -2,12 +2,12 @@ package com.netcracker.models.enums;
 
 import java.math.BigInteger;
 
-public enum UserStatusActive {
-    YES (new BigInteger("39")),
-    NO (new BigInteger("40"));
+public enum PersonalAccountStatusActive {
+    YES (new BigInteger("43")),
+    NO (new BigInteger("44"));
     private BigInteger id ;
 
-    UserStatusActive(BigInteger id) {
+    PersonalAccountStatusActive(BigInteger id) {
         this.id = id;
     }
 
