@@ -18,14 +18,12 @@ public interface OperationDao {
     String ADD_INCOME_FAMILY_BY_ACCOUNT_ID = null;
     String ADD_EXPENSE_FAMILY_BY_ACCOUNT_ID = null;
 
-    String GET_PERSONAL_INCOME_OPERATIONS_BY_ID_DATE = "Select ";
-    String GET_PERSONAL_EXPENSE_OPERATIONS_BY_ID_DATE = null;
+    String GET_INCOMES_PERSONAL_AFTER_DATE_BY_ACCOUNT_ID = "Select ";
+    String GET_EXPENSES_PERSONAL_AFTER_DATE_BY_ACCOUNT_ID = null;
 
-    String GET_FAMILY_INCOME_OPERATIONS_BY_ID_DATE = null;
-    String GET_FAMILY_EXPENSE_OPERATIONS_BY_ID_DATE = null;
+    String GET_INCOMES_FAMILY_AFTER_DATE_BY_ACCOUNT_ID = null;
+    String GET_EXPENSES_FAMILY_AFTER_DATE_BY_ACCOUNT_ID = null;
 
-    String GET_CATEGORIES_INCOME = null;
-    String GET_CATEGORIES_EXPENSE = null;
 
 
     void addIncomePersonalByAccId(BigInteger id, int income);
@@ -36,15 +34,12 @@ public interface OperationDao {
 
     void addExpenseFamilyByAccId(BigInteger id, int expense);
 
-    List<AccountIncome> getPersonalIncomeOperationsByIdDate(BigInteger id, Date date);
+    List<AccountIncome> getIncomesPersonalAfterDateByAccountId(BigInteger id, Date date);
 
-    List<AccountExpense> getPersonalExpenseOperationsByIdDate(BigInteger id, Date date);
+    List<AccountExpense> getExpensesPersonalAfterDateByAccountId(BigInteger id, Date date);
 
-    List<AccountIncome> getFamilyIncomeOperationsByIdDate(BigInteger id, Date data);
+    List<AccountIncome> getIncomesFamilyAfterDateByAccountId(BigInteger id, Date data);
 
-    List<AccountExpense> getFamilyExpenseOperationsByIdDate(BigInteger id, Date data);
+    List<AccountExpense> getExpensesFamilyAfterDateByAccountId(BigInteger id, Date data);
 
-    Map<CategoryIncome, Long> getCategoriesIncome();
-
-    Map<CategoryExpense, Long> getCategoriesExpense();
 }

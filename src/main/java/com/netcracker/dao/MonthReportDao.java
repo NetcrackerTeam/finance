@@ -1,20 +1,30 @@
 package com.netcracker.dao;
 
 import com.netcracker.models.FamilyDebitAccount;
+import com.netcracker.models.MonthReport;
 import com.netcracker.models.PersonalDebitAccount;
+
+import java.math.BigInteger;
 
 public interface MonthReportDao {
 
-    public void createPersonalMonthReport(PersonalDebitAccount personalDebitAccount);
+    String CREATE_PERSONAL_MONTH_REPORT = "";
+    String CREATE_FAMILY_MONTH_REPORT = "";
+    String DELETE_PERSONAL_MONTH_REPORT = "";
+    String DELETE_FAMILY_MONTH_REPORT = "";
+    String GET_MONTH_REPORT_BY_FAMILY_ACCOUNT_ID = "";
+    String GET_MONTH_REPORT_BY_PERSONAL_ACCOUNT_ID = "";
 
-    public void createFamilyMonthReport(FamilyDebitAccount familyDebitAccount);
+    void createPersonalMonthReport(PersonalDebitAccount personalDebitAccount);
 
-    public void deletePersonalMonthReport();
+    void createFamilyMonthReport(FamilyDebitAccount familyDebitAccount);
 
-    public void deleteFamilyMonthReport();
+    void deletePersonalMonthReport(BigInteger id);
 
-    public void getMonthReportByFamilyAccountId();
+    void deleteFamilyMonthReport(BigInteger id);
 
-    public void getMonthReportByPersonalAccountId();
+    MonthReport getMonthReportByFamilyAccountId(BigInteger id);
+
+    MonthReport getMonthReportByPersonalAccountId(BigInteger id);
 
 }
