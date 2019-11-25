@@ -1,19 +1,21 @@
 package com.netcracker.models;
 
+import com.netcracker.models.enums.CreditStatusPaid;
+
 import java.math.BigInteger;
 import java.time.LocalDate;
 
 public abstract class AbstractCreditAccount {
-    private    BigInteger creditId ;
+    private BigInteger creditId ;
     private String name;
     private Long amount;
     private Long paidAmount;
     private LocalDate date;
     private Long creditRate;
     private LocalDate dateTo;
-    private  int monthDay;
+    private int monthDay;
     private Debt debt;
-    private boolean isPaid;
+    private CreditStatusPaid isPaid;
 
     protected static abstract class BaseBuilder <T extends AbstractCreditAccount, B extends BaseBuilder> {
         protected T actualClass;
@@ -70,7 +72,7 @@ public abstract class AbstractCreditAccount {
             return actualClassBuilder;
         }
 
-        public B isPaid(boolean isPaid) {
+        public B isPaid(CreditStatusPaid isPaid) {
             actualClass.setPaid(isPaid);
             return actualClassBuilder;
         }
@@ -112,7 +114,7 @@ public abstract class AbstractCreditAccount {
         this.monthDay = monthDay;
     }
 
-    protected void setPaid (boolean isPaid) {
+    protected void setPaid (CreditStatusPaid isPaid) {
         this.isPaid = isPaid;
     }
 
@@ -152,7 +154,7 @@ public abstract class AbstractCreditAccount {
         return monthDay;
     }
 
-    public boolean isPaid() {
+    public CreditStatusPaid isPaid() {
         return isPaid;
     }
 
