@@ -3,8 +3,8 @@ package com.netcracker.models.enums;
 import java.math.BigInteger;
 
 public enum FamilyAccountStatusActive {
-    YES (new BigInteger("39")),
-    NO (new BigInteger("40"));
+    YES (new BigInteger("41")),
+    NO (new BigInteger("42"));
     private BigInteger id ;
 
     FamilyAccountStatusActive(BigInteger id) {
