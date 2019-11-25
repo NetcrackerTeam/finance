@@ -7,9 +7,24 @@ import java.math.BigInteger;
 import java.util.List;
 
 public interface CreditAccountDao {
-    String SELECT_CREDIT_QUERY = "select distinct cred.OBJECT_ID credit_id, name_at.value name, amount_at.value amount,\n" +
+
+    PersonalCreditAccount getPersonalCreditById(BigInteger id);
+
+    FamilyCreditAccount getFamilyCreditById(BigInteger id);
+
+    List<PersonalCreditAccount> getAllPersonalCreditsByAccountId(BigInteger id);
+
+    List<FamilyCreditAccount> getAllFamilyCreditsByAccountId(BigInteger id);
+
+    void addPersonalCreditPayment(BigInteger id, long amount);
+
+    void addFamilyCreditPayment(BigInteger id, long amount);
+
+    String SELECT_CREDIT_QUERY = "select cred.object_id credit_id, name_at.value name, amount_at.value amount,\n" +
             "  paid_at.value paid, date_at.date_value date_cr,  rate_at.value credit_rate, \n" +
-            "  date_to_at.date_value date_to, month_day_at.value month_day, list_paid.value is_paid\n" +
+            "  date_to_at.date_value date_to, month_day_at.value month_day, list_paid.value is_paid,\n" +
+            "  debt_date_from_at.date_value debt_from, debt_date_to_at.date_value debt_to,\n" +
+            "  debt_amount_at.value debt_amount\n" +
             "    from objects cred\n" +
             "        left join attributes name_at on cred.object_id = name_at.object_id\n" +
             "        left join attributes amount_at on cred.object_id = amount_at.object_id\n" +
@@ -20,13 +35,14 @@ public interface CreditAccountDao {
             "        left join attributes month_day_at on cred.object_id = month_day_at.object_id\n" +
             "        left join attributes is_paid_at on cred.object_id = is_paid_at.object_id\n" +
             "        left join lists list_paid on is_paid_at.list_value_id = list_paid.list_value_id\n" +
-            "        left join objreference refer on refer.reference = cred.object_id \n" +
-            "        left join objects debt on refer.object_id = debt.object_id\n" +
+            "        left join objreference debt_ref on cred.object_id = debt_ref.reference\n" +
+            "        left join objects debt on debt_ref.object_id = debt.object_id\n" +
             "        left join attributes debt_date_from_at on debt.object_id = debt_date_from_at.object_id\n" +
-            "        left join attributes debt_date_to_at on debt.object_id = debt_date_from_at.object_id\n" +
-            "        left join attributes debt_amount_at on debt.object_id = debt_date_from_at.object_id\n" +
+            "        left join attributes debt_date_to_at on debt.object_id = debt_date_to_at.object_id\n" +
+            "        left join attributes debt_amount_at on debt.object_id = debt_amount_at.object_id\n" +
             "        \n" +
             "    where cred.object_id = ?\n" +
+            "        and debt.object_type_id = 19\n" +
             "        and date_at.attr_id = 29\n" +
             "        and name_at.attr_id = 30\n" +
             "        and amount_at.attr_id = 31\n" +
@@ -42,16 +58,4 @@ public interface CreditAccountDao {
     String SELECT_FAMILY_CREDITS_BY_ACCOUNT_QUERY = "";
     String ADD_PERSONAL_CREDIT_PAYMENT_QUERY = "";
     String ADD_FAMILY_CREDIT_PAYMENT_QUERY = "";
-
-    PersonalCreditAccount getPersonalCreditById(BigInteger id);
-
-    FamilyCreditAccount getFamilyCreditById(BigInteger id);
-
-    List<PersonalCreditAccount> getAllPersonalCreditsByAccountId(BigInteger id);
-
-    List<FamilyCreditAccount> getAllFamilyCreditsByAccountId(BigInteger id);
-
-    void addPersonalCreditPayment(BigInteger id, long amount);
-
-    void addFamilyCreditPayment(BigInteger id, long amount);
 }
