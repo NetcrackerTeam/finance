@@ -26,12 +26,12 @@ public class CreditAccountDaoImpl implements CreditAccountDao {
 
     @Override
     public PersonalCreditAccount getPersonalCreditById(BigInteger id) {
-        return jdbcTemplate.queryForObject(SELECT_CREDIT_QUERY, new Object[]{id}, new CreditAccountPersonalMapper());
+        return jdbcTemplate.queryForObject(SELECT_PERSONAL_CREDIT_QUERY, new Object[]{new BigDecimal(id)}, new CreditAccountPersonalMapper());
     }
 
     @Override
     public FamilyCreditAccount getFamilyCreditById(BigInteger id) {
-        return jdbcTemplate.queryForObject(SELECT_CREDIT_QUERY, new Object[]{new BigDecimal(id)}, new CreditAccountFamilyMapper());
+        return jdbcTemplate.queryForObject(SELECT_FAMILY_CREDIT_QUERY, new Object[]{new BigDecimal(id)}, new CreditAccountFamilyMapper());
     }
 
     @Override

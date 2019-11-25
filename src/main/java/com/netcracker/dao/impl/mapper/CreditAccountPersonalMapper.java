@@ -15,6 +15,7 @@ public class CreditAccountPersonalMapper implements RowMapper<PersonalCreditAcco
     public PersonalCreditAccount mapRow(ResultSet resultSet, int i) throws SQLException {
         CreditDebtMapper debtMapper = new CreditDebtMapper();
         Debt debt = debtMapper.mapRow(resultSet, i);
+
         AbstractCreditAccount personalCreditAccount =
                 new PersonalCreditAccount.Builder()
                         .creditId(resultSet.getBigDecimal("credit_id").toBigInteger())
