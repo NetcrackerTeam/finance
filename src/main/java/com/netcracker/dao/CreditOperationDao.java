@@ -6,11 +6,11 @@ import java.math.BigInteger;
 import java.util.List;
 
 public interface CreditOperationDao {
-    public void createFamilyCreditOperation();
+    void createFamilyCreditOperation();
 
-    public void createPersonalCreditOperation();
+    void createPersonalCreditOperation();
 
-    public CreditOperation getAllCreditOperByCreditFamId(List<BigInteger> id);
+    CreditOperation getAllCreditOperByCreditFamId(List<BigInteger> id);
 
-    public CreditOperation getAllCreditOperByCreditPersId(List<BigInteger> id);
+    CreditOperation getAllCreditOperByCreditPersId(List<BigInteger> id);
 }

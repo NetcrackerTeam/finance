@@ -18,8 +18,4 @@ public class PersonalCreditAccount extends AbstractCreditAccount {
             return this;
         }
     }
-
-//    public static void main(String[] args) {
-//        PersonalCreditAccount s = new PersonalCreditAccount.Builder().isPaid(true).name("dsa").build();
-//    }
 }
