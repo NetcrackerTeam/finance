@@ -1,21 +1,27 @@
 package com.netcracker.models;
 
+import com.netcracker.models.enums.FamilyAccountStatusActive;
+
 import java.util.List;
 
 public class FamilyDebitAccount extends AbstractDebitAccount {
     private List<User> participants;
     private List<FamilyCreditAccount> familyCreditAccountList;
-
+    private FamilyAccountStatusActive familyAccountStatus;
 
     public static class Builder extends BaseBuilder<FamilyDebitAccount, Builder> {
 
-        public Builder DebitFamilyAccountList(List<User> listUser, List<FamilyCreditAccount> listFamilyDebitAccount) {
+        public Builder debitFamilyAccountList(List<User> listUser, List<FamilyCreditAccount> listFamilyDebitAccount) {
             actualClass.setFamilyCreditAccountList(listFamilyDebitAccount);
             return this;
         }
 
-        public Builder DebitFamilyUserList(List<User> listUser) {
+        public Builder debitFamilyUserList(List<User> listUser) {
             actualClass.setParticipants(listUser);
+            return this;
+        }
+        public Builder debitFamilyAccountStatus(FamilyAccountStatusActive familyAccountStatus) {
+            actualClass.setStatus(familyAccountStatus);
             return this;
         }
 
@@ -46,4 +52,7 @@ public class FamilyDebitAccount extends AbstractDebitAccount {
         this.familyCreditAccountList = familyCreditAccountList;
     }
 
+    public FamilyAccountStatusActive getStatus() { return familyAccountStatus; }
+
+    public void setStatus(FamilyAccountStatusActive familyAccountStatus) { this.familyAccountStatus = familyAccountStatus; }
 }
