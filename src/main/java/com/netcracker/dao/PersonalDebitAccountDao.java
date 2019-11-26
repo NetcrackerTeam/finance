@@ -19,5 +19,6 @@ public interface PersonalDebitAccountDao {
             "VALUES (OBJECTS_ID_S.NEXTVAL,NULL,2,?,NULL);" +
             "into attributes(attr_id, object_id, values)" +
             "VALUES (2, OBJECT_SEQUENCE.CURRVAL,?)";
-    String DELETE_USER_FROM_PERSONAL_ACCOUNT = "DELETE FROM OBJREFERENCE WHERE ATTR_ID = 2, OBJECT_ID = ?, REFERENCE = ?";
+    String UNACTIVE_USER_FROM_PERSONAL_ACCOUNT = "DELETE FROM OBJREFERENCE WHERE ATTR_ID = 2, OBJECT_ID = ?, REFERENCE = ?";
+    String DELETE_USER_FROM_PERSONAL_ACCOUNT = "SELECT reference FROM objreference WHERE attr_id = 1 and object_id = ?";
 }
