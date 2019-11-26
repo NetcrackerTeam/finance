@@ -13,16 +13,6 @@ public enum CreditStatusPaid {
         this.id = id;
     }
 
-
-
-//    private static final Map<BigInteger, CreditStatusPaid> map;
-//    static {
-//        map = new HashMap<BigInteger, CreditStatusPaid>();
-//        for (CreditStatusPaid c : CreditStatusPaid.values()) {
-//            map.put(c.id, c);
-//        }
-//    }
-
     public BigInteger getId() {
         return id;
     }
@@ -33,8 +23,4 @@ public enum CreditStatusPaid {
                 return c;
             throw new IllegalArgumentException();
     }
-
-//    public CreditStatusPaid getByKey (BigInteger key) {
-//        return map.get(key);
-//    }
 }

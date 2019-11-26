@@ -16,7 +16,19 @@ public interface FamilyAccountDebitDao {
     void deleteUserFromAccountById(BigInteger account_id, BigInteger user_id);
 
     String ADD_USER_BY_ID = "INSERT INTO OBJREFERENCE (ATTR_ID,OBJECT_ID,REFERENCE) VALUES (8,?,?)";
-    String FIND_FAMILY_ACCOUNT_BY_ID = "SELECT NAME FROM OBJECTS WHERE OBJECT_ID = ?";
+
+
+    String FIND_FAMILY_ACCOUNT_BY_ID = "SELECT " +
+            "debit.object_id as debit_id, debit.name as name, attr1.value as amount, attr2.list_value_id as status "
+            +
+            "from OBJECTS debit, attributes attr1, attributes attr2 "
+            +
+            "where debit.object_type_id = 13 " +
+            "and debit.object_id = ? " +
+            "and attr1.object_id = debit.object_id " +
+            "and attr1.attr_id = 9 " +
+            "and attr2.object_id = debit.object_id " +
+            "and attr2.attr_id = 69 ";
     String ADD_NEW_FAMILY_ACCOUNT = "INSERT ALL " +
             "INTO OBJECTS(OBJECT_ID,OBJECT_TYPE_ID,NAME) VALUES (objects_id_s.nextval, 2, ?)"
             +
