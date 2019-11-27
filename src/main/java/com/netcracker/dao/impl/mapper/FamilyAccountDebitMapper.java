@@ -19,8 +19,12 @@ public class FamilyAccountDebitMapper implements RowMapper<FamilyDebitAccount> {
     @Override
     public FamilyDebitAccount mapRow(ResultSet rs, int i) throws SQLException {
 
-//        UserDaoMapper userMapper = new UserDaoMapper();
-//        User user = userMapper.mapRow(rs, i);
+        UserDaoMapper userMapper = new UserDaoMapper();
+        User user = userMapper.mapRow(rs, i);
+
+//        UserDaoMapper list_user_mapper = new UserDaoMapper();
+//        ArrayList<User> list_user = new ArrayList<>();
+//        list_user.add(list_user_mapper.mapRow(rs, i));
 //
 //        AccountIncomeMapper incomeMapper = new AccountIncomeMapper();
 //        ArrayList<AccountIncome> income = new ArrayList<>();
@@ -33,14 +37,14 @@ public class FamilyAccountDebitMapper implements RowMapper<FamilyDebitAccount> {
 
         return new FamilyDebitAccount.Builder()
                 .debitId(rs.getBigDecimal("debit_id").toBigInteger())
-                .debitObjectName(rs.getString("name"))
-                .debitAmount(Long.valueOf(rs.getString("amount")))
-                .debitFamilyAccountStatus(FamilyAccountStatusActive.getStatusByKey(rs.getBigDecimal("status").toBigInteger())).build();
-                //.debitOwner(user).build();
+                .debitObjectName(rs.getString("name_debit"))
+                .debitAmount(Long.valueOf(rs.getString("amount_debit")))
+                .debitFamilyAccountStatus(FamilyAccountStatusActive.getStatusByKey(rs.getBigDecimal("status_debit").toBigInteger()))
+                .debitOwner(user).build();
                 //.debitAccountIncomesList(income)
                 //.debitAccountExpensesList(expense).build();
                 //.debitFamilyAccountList()
-                //.debitFamilyUserList()
+                //.debitFamilyUserList(list_user).build();
 
     }
 }
