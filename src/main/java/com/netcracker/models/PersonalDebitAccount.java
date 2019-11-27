@@ -2,8 +2,8 @@ package com.netcracker.models;
 
 import java.util.List;
 
-public class PersonalDebitAccount extends AbstractDebitAccount {
-    private List<PersonalCreditAccount> personalCreditAccountList;
+
+qa    private List<PersonalCreditAccount> personalCreditAccountList;
 
     public static class Builder extends BaseBuilder<PersonalDebitAccount, Builder> {
 
