@@ -6,10 +6,13 @@ import com.netcracker.models.PersonalDebitAccount;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
+import java.math.BigDecimal;
 import java.math.BigInteger;
 
+@Component
 public class PersonalDebitAccountDaoImpl  implements PersonalDebitAccountDao {
     private static final Logger logger = Logger.getLogger(PersonalDebitAccountDaoImpl.class);
     private JdbcTemplate template;
@@ -22,7 +25,7 @@ public class PersonalDebitAccountDaoImpl  implements PersonalDebitAccountDao {
     @Override
     public PersonalDebitAccount getPersonalAccountById(BigInteger id) {
         logger.info("Entering insert(getPersonalAccountBy=" + id + ")");
-        return this.template.queryForObject(GET_PERSONAL_ACCOUNT_BY_ID, new Object[]{id}, new PersonalDebitAccountMapper());
+        return this.template.queryForObject(GET_PERSONAL_ACCOUNT_BY_ID, new Object[]{new BigDecimal(id)}, new PersonalDebitAccountMapper());
     }
 
     @Override
