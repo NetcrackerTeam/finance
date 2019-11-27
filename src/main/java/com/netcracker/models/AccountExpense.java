@@ -9,7 +9,7 @@ public class AccountExpense extends AbstractAccountOperation {
     public static class Builder extends BaseBuilder<AccountExpense, Builder> {
 
 
-        public Builder categoryIncome(CategoryExpense expense) {
+        public Builder categoryExpense(CategoryExpense expense) {
             actualClass.setCategoryExpense(expense);
             return this;
         }

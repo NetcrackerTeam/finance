@@ -8,13 +8,6 @@ import java.math.BigInteger;
 
 public interface MonthReportDao {
 
-    String CREATE_PERSONAL_MONTH_REPORT = "";
-    String CREATE_FAMILY_MONTH_REPORT = "";
-    String DELETE_PERSONAL_MONTH_REPORT = "";
-    String DELETE_FAMILY_MONTH_REPORT = "";
-    String GET_MONTH_REPORT_BY_FAMILY_ACCOUNT_ID = "";
-    String GET_MONTH_REPORT_BY_PERSONAL_ACCOUNT_ID = "";
-
     void createPersonalMonthReport(PersonalDebitAccount personalDebitAccount);
 
     void createFamilyMonthReport(FamilyDebitAccount familyDebitAccount);
@@ -26,5 +19,13 @@ public interface MonthReportDao {
     MonthReport getMonthReportByFamilyAccountId(BigInteger id);
 
     MonthReport getMonthReportByPersonalAccountId(BigInteger id);
+
+
+    String CREATE_PERSONAL_MONTH_REPORT = "";
+    String CREATE_FAMILY_MONTH_REPORT = "";
+    String DELETE_PERSONAL_MONTH_REPORT = "";
+    String DELETE_FAMILY_MONTH_REPORT = "";
+    String GET_MONTH_REPORT_BY_FAMILY_ACCOUNT_ID = "";
+    String GET_MONTH_REPORT_BY_PERSONAL_ACCOUNT_ID = "";
 
 }

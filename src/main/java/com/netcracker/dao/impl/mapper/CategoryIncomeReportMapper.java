@@ -12,10 +12,9 @@ public class CategoryIncomeReportMapper implements RowMapper<CategoryIncomeRepor
     public CategoryIncomeReport mapRow(ResultSet resultSet, int i) throws SQLException {
         CategoryIncomeReport categoryIncomeReport =
                 new CategoryIncomeReport.Builder()
-                    .idIncomeReport(resultSet.getBigDecimal("category_expense_report")
-                            .toBigInteger())
+                    .idIncomeReport(resultSet.getBigDecimal("category_expense_report").toBigInteger())
                     .amount(resultSet.getBigDecimal("amount"))
-                    .expense(CategoryIncome.getNameByKey(resultSet.getBigDecimal("category").toBigInteger()))
+                    .income(CategoryIncome.getNameByKey(resultSet.getBigDecimal("category").toBigInteger()))
                     .build();
         return categoryIncomeReport;
     }
