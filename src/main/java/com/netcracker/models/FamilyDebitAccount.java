@@ -11,15 +11,15 @@ public class FamilyDebitAccount extends AbstractDebitAccount {
 
     public static class Builder extends BaseBuilder<FamilyDebitAccount, Builder> {
 
-        public Builder debitFamilyAccountList(List<User> listUser, List<FamilyCreditAccount> listFamilyDebitAccount) {
-            actualClass.setFamilyCreditAccountList(listFamilyDebitAccount);
-            return this;
-        }
-
-        public Builder debitFamilyUserList(List<User> listUser) {
-            actualClass.setParticipants(listUser);
-            return this;
-        }
+//        public Builder debitFamilyAccountList(List<User> listUser, List<FamilyCreditAccount> listFamilyDebitAccount) {
+//            actualClass.setFamilyCreditAccountList(listFamilyDebitAccount);
+//            return this;
+//        }
+//
+//        public Builder debitFamilyUserList(List<User> listUser) {
+//            actualClass.setParticipants(listUser);
+//            return this;
+//        }
         public Builder debitFamilyAccountStatus(FamilyAccountStatusActive familyAccountStatus) {
             actualClass.setStatus(familyAccountStatus);
             return this;
