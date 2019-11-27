@@ -5,6 +5,7 @@ import com.netcracker.models.enums.CategoryIncome;
 
 import java.math.BigInteger;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Map;
 
 public class MonthReport {
@@ -14,16 +15,16 @@ public class MonthReport {
     private Long totalExpense;
     private Long balance;
     private LocalDate date;
-    private Map<CategoryExpense, Long> categoryExpenseLongMap;
-    private Map<CategoryIncome, Long>  categoryIncomeLongMap;
+    private List<CategoryExpenseReport> categoryExpense;
+    private List<CategoryIncomeReport> categoryIncome;
     public static  class Builder {
         private BigInteger id;
         private Long totalIncome;
         private Long totalExpense;
         private Long balance;
         private LocalDate date;
-        private Map<CategoryExpense, Long> categoryExpenseLongMap;
-        private Map<CategoryIncome, Long>  categoryIncomeLongMap;
+        private List<CategoryExpenseReport> categoryExpense;
+        private List<CategoryIncomeReport>  categoryIncome;
 
         public Builder() {
         }
@@ -48,12 +49,12 @@ public class MonthReport {
             this.date = val;
             return this;
         }
-        public Builder categoryExpenseLongMap(Map<CategoryExpense,Long> val) {
-            this.categoryExpenseLongMap = val;
+        public Builder categoryExpense(List<CategoryExpenseReport> val) {
+            this.categoryExpense = val;
             return this;
         }
-        public Builder categoryIncomeLongMap( Map<CategoryIncome, Long> val) {
-            this.categoryIncomeLongMap = val;
+        public Builder categoryIncome( List<CategoryIncomeReport> val) {
+            this.categoryIncome = val;
             return this;
         }
 
@@ -86,12 +87,12 @@ public class MonthReport {
         return date;
     }
 
-    public Map<CategoryExpense, Long> getCategoryExpenseLongMap() {
-        return categoryExpenseLongMap;
+    public List<CategoryExpenseReport> getCategoryExpense() {
+        return categoryExpense;
     }
 
-    public Map<CategoryIncome, Long> getCategoryIncomeLongMap() {
-        return categoryIncomeLongMap;
+    public List<CategoryIncomeReport> getCategoryIncome() {
+        return categoryIncome;
     }
 
     public void setTotalIncome(Long totalIncome) {
@@ -110,11 +111,11 @@ public class MonthReport {
         this.date = date;
     }
 
-    public void setCategoryExpenseLongMap(Map<CategoryExpense, Long> categoryExpenseLongMap) {
-        this.categoryExpenseLongMap = categoryExpenseLongMap;
+    public void setCategoryExpense(List<CategoryExpenseReport> categoryExpense) {
+        this.categoryExpense = categoryExpense;
     }
 
-    public void setCategoryIncomeLongMap(Map<CategoryIncome, Long> categoryIncomeLongMap) {
-        this.categoryIncomeLongMap = categoryIncomeLongMap;
+    public void setCategoryIncome(List<CategoryIncomeReport> categoryIncome) {
+        this.categoryIncome = categoryIncome;
     }
 }
