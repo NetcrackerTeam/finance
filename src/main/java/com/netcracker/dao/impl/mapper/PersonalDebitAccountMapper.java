@@ -6,7 +6,6 @@ import com.netcracker.models.User;
 import com.netcracker.models.enums.PersonalAccountStatusActive;
 import org.springframework.jdbc.core.RowMapper;
 
-import java.math.BigInteger;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -23,7 +22,5 @@ public class PersonalDebitAccountMapper implements RowMapper<PersonalDebitAccoun
                 .debitAmount(Long.valueOf(rs.getString("amount_personal_debit")))
                 .debitPersonalAccountStatus(PersonalAccountStatusActive.getStatusByKey(rs.getBigDecimal("status_personal_debit").toBigInteger()))
                 .debitOwner(user).build();
-
-
     }
 }
