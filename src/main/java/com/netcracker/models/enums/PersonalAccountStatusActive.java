@@ -14,4 +14,11 @@ public enum PersonalAccountStatusActive {
     public BigInteger getId() {
         return id;
     }
+
+    public static PersonalAccountStatusActive getStatusByKey(BigInteger key) {
+        for (PersonalAccountStatusActive c : values())
+            if (c.getId().equals(key))
+                return c;
+        throw new IllegalArgumentException();
+    }
 }
