@@ -4,6 +4,7 @@ import com.netcracker.dao.PersonalDebitAccountDao;
 import com.netcracker.dao.impl.mapper.PersonalDebitAccountMapper;
 import com.netcracker.models.PersonalDebitAccount;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import javax.sql.DataSource;
@@ -13,7 +14,8 @@ public class PersonalDebitAccountDaoImpl  implements PersonalDebitAccountDao {
     private static final Logger logger = Logger.getLogger(PersonalDebitAccountDaoImpl.class);
     private JdbcTemplate template;
 
-    public void setDataSource(DataSource dataSource) {
+    @Autowired
+    public PersonalDebitAccountDaoImpl(DataSource dataSource) {
         this.template = new JdbcTemplate(dataSource);
     }
 
@@ -24,30 +26,28 @@ public class PersonalDebitAccountDaoImpl  implements PersonalDebitAccountDao {
     }
 
     @Override
-    public void createPersonalAccount(PersonalDebitAccount pda) {
-        logger.info("Entering insert(createPersonalAccount=" + pda + ")");
+    public PersonalDebitAccount createPersonalAccount(PersonalDebitAccount personalDebitAccount) {
+        logger.info("Entering insert(createPersonalAccount=" + personalDebitAccount + ")");
         this.template.update(CREATE_PERSONAL_ACCOUNT, new Object[]{
-                pda.getObjectName(),
-                pda.getAmount()
+                personalDebitAccount.getObjectName(),
+                personalDebitAccount.getAmount()
         });
+        return personalDebitAccount;
     }
 
     @Override
     public void deletePersonalAccountById(BigInteger id) {
         logger.info("Entering unactive(deletePersonalAccount=" + id + ")");
-        this.template.update(UNACTIVE_USER_FROM_PERSONAL_ACCOUNT,new Object[]{id});
+        this.template.update(DELETE_USER_FROM_PERSONAL_ACCOUNT, id);
     }
 
     @Override
     public void deletePersonalAccountByUserId(BigInteger id) {
         logger.info("Entering unactive(deletePersonalAccountByUser=" + id + ")");
-
-        BigInteger reference =  template.queryForObject(
-                DELETE_USER_FROM_PERSONAL_ACCOUNT, new Object[]{id}, BigInteger.class);
-        if(reference == null){
+        if(this.getPersonalAccountById(id).getStatus().equals("NO")){
             assert(false);
         } else {
-            deletePersonalAccountById(reference);
+            template.update(UNACTIVE_USER_FROM_PERSONAL_ACCOUNT, id);
         }
     }
 }
