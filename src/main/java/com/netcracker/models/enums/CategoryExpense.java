@@ -27,4 +27,11 @@ public enum CategoryExpense {
     public BigInteger getId() {
         return id;
     }
+
+    public static CategoryExpense getNameByKey(BigInteger key) {
+        for (CategoryExpense c : values())
+            if (c.getId().equals(key))
+                return c;
+        throw new IllegalArgumentException();
+    }
 }
