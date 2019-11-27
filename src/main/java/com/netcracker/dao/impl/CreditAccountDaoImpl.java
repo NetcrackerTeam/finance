@@ -36,25 +36,25 @@ public class CreditAccountDaoImpl implements CreditAccountDao {
 
     @Override
     public List<PersonalCreditAccount> getAllPersonalCreditsByAccountId(BigInteger id) {
-        return jdbcTemplate.query(SELECT_PERSONAL_CREDITS_BY_ACCOUNT_QUERY, new Object[]{id}, new CreditAccountPersonalMapper());
+        return jdbcTemplate.query(SELECT_PERSONAL_CREDITS_BY_ACCOUNT_QUERY, new Object[]{new BigDecimal(id)}, new CreditAccountPersonalMapper());
     }
 
     @Override
     public List<FamilyCreditAccount> getAllFamilyCreditsByAccountId(BigInteger id) {
-        return jdbcTemplate.query(SELECT_FAMILY_CREDITS_BY_ACCOUNT_QUERY, new Object[]{id}, new CreditAccountFamilyMapper());
+        return jdbcTemplate.query(SELECT_FAMILY_CREDITS_BY_ACCOUNT_QUERY, new Object[]{new BigDecimal(id)}, new CreditAccountFamilyMapper());
     }
 
     @Override
-    public void addPersonalCreditPayment(BigInteger id, long amount) {
-        addCreditPayment(id, amount, ADD_PERSONAL_CREDIT_PAYMENT_QUERY);
+    public void updatePersonalCreditPayment(BigInteger id, long amount) {
+        addCreditPayment(id, amount);
     }
 
     @Override
-    public void addFamilyCreditPayment(BigInteger id, long amount) {
-        addCreditPayment(id, amount, ADD_FAMILY_CREDIT_PAYMENT_QUERY);
+    public void updateFamilyCreditPayment(BigInteger id, long amount) {
+        addCreditPayment(id, amount);
     }
 
-    private void addCreditPayment(BigInteger id, long amount, String query) {
-        jdbcTemplate.update(query, new Object[]{id, amount});
+    private void addCreditPayment(BigInteger id, long amount) {
+        jdbcTemplate.update(UPDATE_CREDIT_PAYMENT_QUERY, String.valueOf(amount), new BigDecimal(id));
     }
 }

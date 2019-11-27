@@ -16,79 +16,156 @@ public interface CreditAccountDao {
 
     List<FamilyCreditAccount> getAllFamilyCreditsByAccountId(BigInteger id);
 
-    void addPersonalCreditPayment(BigInteger id, long amount);
+    void updatePersonalCreditPayment(BigInteger id, long amount);
 
-    void addFamilyCreditPayment(BigInteger id, long amount);
+    void updateFamilyCreditPayment(BigInteger id, long amount);
 
-    String SELECT_FAMILY_CREDIT_QUERY = "select cred.OBJECT_ID credit_id, name_at.value name, amount_at.value amount,\n" +
-            "  paid_at.value paid, date_at.date_value date_cr,  rate_at.value credit_rate, \n" +
-            "  date_to_at.date_value date_to, month_day_at.value month_day, is_paid_at.list_value_id is_paid,\n" +
-            "  debt_date_from_at.date_value debt_from, debt_date_to_at.date_value debt_to,\n" +
-            "  debt_amount_at.value debt_amount, debt.object_id debt_id\n" +
-            "    from objects cred\n" +
-            "        left join attributes name_at on cred.object_id = name_at.object_id\n" +
-            "        left join attributes amount_at on cred.object_id = amount_at.object_id\n" +
-            "        left join attributes paid_at on cred.object_id = paid_at.object_id\n" +
-            "        left join attributes date_at on cred.object_id = date_at.object_id\n" +
-            "        left join attributes rate_at on cred.object_id = rate_at.object_id\n" +
-            "        left join attributes date_to_at on cred.object_id = date_to_at.object_id\n" +
-            "        left join attributes month_day_at on cred.object_id = month_day_at.object_id\n" +
-            "        left join attributes is_paid_at on cred.object_id = is_paid_at.object_id\n" +
-            "        left join objreference debt_ref on cred.object_id = debt_ref.reference\n" +
-            "        left join objects debt on debt_ref.object_id = debt.object_id\n" +
-            "        left join attributes debt_date_from_at on debt.object_id = debt_date_from_at.object_id\n" +
-            "        left join attributes debt_date_to_at on debt.object_id = debt_date_to_at.object_id\n" +
-            "        left join attributes debt_amount_at on debt.object_id = debt_amount_at.object_id\n" +
+    String SELECT_FAMILY_CREDIT_QUERY = "SELECT CRED.OBJECT_ID CREDIT_ID, NAME_AT.VALUE NAME, AMOUNT_AT.VALUE AMOUNT,\n" +
+            "  PAID_AT.VALUE PAID, DATE_AT.DATE_VALUE DATE_CR,  RATE_AT.VALUE CREDIT_RATE, \n" +
+            "  DATE_TO_AT.DATE_VALUE DATE_TO, MONTH_DAY_AT.VALUE MONTH_DAY, IS_PAID_AT.LIST_VALUE_ID IS_PAID,\n" +
+            "  DEBT_DATE_FROM_AT.DATE_VALUE DEBT_FROM, DEBT_DATE_TO_AT.DATE_VALUE DEBT_TO,\n" +
+            "  DEBT_AMOUNT_AT.VALUE DEBT_AMOUNT, DEBT.OBJECT_ID DEBT_ID\n" +
+            "    FROM OBJECTS CRED\n" +
+            "        LEFT JOIN ATTRIBUTES NAME_AT ON CRED.OBJECT_ID = NAME_AT.OBJECT_ID\n" +
+            "        LEFT JOIN ATTRIBUTES AMOUNT_AT ON CRED.OBJECT_ID = AMOUNT_AT.OBJECT_ID\n" +
+            "        LEFT JOIN ATTRIBUTES PAID_AT ON CRED.OBJECT_ID = PAID_AT.OBJECT_ID\n" +
+            "        LEFT JOIN ATTRIBUTES DATE_AT ON CRED.OBJECT_ID = DATE_AT.OBJECT_ID\n" +
+            "        LEFT JOIN ATTRIBUTES RATE_AT ON CRED.OBJECT_ID = RATE_AT.OBJECT_ID\n" +
+            "        LEFT JOIN ATTRIBUTES DATE_TO_AT ON CRED.OBJECT_ID = DATE_TO_AT.OBJECT_ID\n" +
+            "        LEFT JOIN ATTRIBUTES MONTH_DAY_AT ON CRED.OBJECT_ID = MONTH_DAY_AT.OBJECT_ID\n" +
+            "        LEFT JOIN ATTRIBUTES IS_PAID_AT ON CRED.OBJECT_ID = IS_PAID_AT.OBJECT_ID\n" +
+            "        LEFT JOIN OBJREFERENCE DEBT_REF ON CRED.OBJECT_ID = DEBT_REF.REFERENCE\n" +
+            "        LEFT JOIN OBJECTS DEBT ON DEBT_REF.OBJECT_ID = DEBT.OBJECT_ID\n" +
+            "        LEFT JOIN ATTRIBUTES DEBT_DATE_FROM_AT ON DEBT.OBJECT_ID = DEBT_DATE_FROM_AT.OBJECT_ID\n" +
+            "        LEFT JOIN ATTRIBUTES DEBT_DATE_TO_AT ON DEBT.OBJECT_ID = DEBT_DATE_TO_AT.OBJECT_ID\n" +
+            "        LEFT JOIN ATTRIBUTES DEBT_AMOUNT_AT ON DEBT.OBJECT_ID = DEBT_AMOUNT_AT.OBJECT_ID\n" +
             "        \n" +
-            "    where cred.object_id = ?\n" +
-            "        and debt.object_type_id = 19\n" +
-            "        and date_at.attr_id = 29\n" +
-            "        and name_at.attr_id = 30\n" +
-            "        and amount_at.attr_id = 31\n" +
-            "        and paid_at.attr_id = 32\n" +
-            "        and rate_at.attr_id = 33\n" +
-            "        and date_to_at.attr_id = 34\n" +
-            "        and is_paid_at.attr_id = 35\n" +
-            "        and month_day_at.attr_id = 36\n" +
-            "        and debt_date_from_at.attr_id = 44\n" +
-            "        and debt_date_to_at.attr_id = 45\n" +
-            "        and debt_amount_at.attr_id = 46";
+            "    WHERE CRED.OBJECT_ID = ?/*CREDIT FAMILY ACCOUNT ID*/\n" +
+            "        AND DEBT.OBJECT_TYPE_ID = 19/*DEBT FAMILY OBJECT TYPE ID*/\n" +
+            "        AND DATE_AT.ATTR_ID = 29/*CREATION DATE ATTRIBUTE*/\n" +
+            "        AND NAME_AT.ATTR_ID = 30/*NAME ATTRIBUTE*/\n" +
+            "        AND AMOUNT_AT.ATTR_ID = 31/*CREDIT AMOUNT ATTRIBUTE*/\n" +
+            "        AND PAID_AT.ATTR_ID = 32/*PAID CREDIT AMOUNT ATTRIBUTE*/\n" +
+            "        AND RATE_AT.ATTR_ID = 33/*CREDIT RATE ATTRIBUTE*/\n" +
+            "        AND DATE_TO_AT.ATTR_ID = 34/*CREDIT DATE TO ATTRIBUTE*/\n" +
+            "        AND IS_PAID_AT.ATTR_ID = 35/*STATUS OF CREDIT ATTRIBUTE*/\n" +
+            "        AND MONTH_DAY_AT.ATTR_ID = 36/*PAYMENT CREDIT DAY OF MONTH ATTRIBUTE*/\n" +
+            "        AND DEBT_DATE_FROM_AT.ATTR_ID = 44/*DEBT DATE FROM ATTRIBUTE*/\n" +
+            "        AND DEBT_DATE_TO_AT.ATTR_ID = 45/*DEBT DATE TO ATTRIBUTE*/\n" +
+            "        AND DEBT_AMOUNT_AT.ATTR_ID = 46/*DEBT AMOUNT ATTRIBUTE*/";
 
-    String SELECT_PERSONAL_CREDIT_QUERY = "select cred.OBJECT_ID credit_id, name_at.value name, amount_at.value amount,\n" +
-            "  paid_at.value paid, date_at.date_value date_cr,  rate_at.value credit_rate, \n" +
-            "  date_to_at.date_value date_to, month_day_at.value month_day, is_paid_at.list_value_id is_paid,\n" +
-            "  debt_date_from_at.date_value debt_from, debt_date_to_at.date_value debt_to,\n" +
-            "  debt_amount_at.value debt_amount, debt.object_id debt_id\n" +
-            "    from objects cred\n" +
-            "        left join attributes name_at on cred.object_id = name_at.object_id\n" +
-            "        left join attributes amount_at on cred.object_id = amount_at.object_id\n" +
-            "        left join attributes paid_at on cred.object_id = paid_at.object_id\n" +
-            "        left join attributes date_at on cred.object_id = date_at.object_id\n" +
-            "        left join attributes rate_at on cred.object_id = rate_at.object_id\n" +
-            "        left join attributes date_to_at on cred.object_id = date_to_at.object_id\n" +
-            "        left join attributes month_day_at on cred.object_id = month_day_at.object_id\n" +
-            "        left join attributes is_paid_at on cred.object_id = is_paid_at.object_id\n" +
-            "        left join objreference debt_ref on cred.object_id = debt_ref.reference\n" +
-            "        left join objects debt on debt_ref.object_id = debt.object_id\n" +
-            "        left join attributes debt_date_from_at on debt.object_id = debt_date_from_at.object_id\n" +
-            "        left join attributes debt_date_to_at on debt.object_id = debt_date_to_at.object_id\n" +
-            "        left join attributes debt_amount_at on debt.object_id = debt_amount_at.object_id\n" +
+    String SELECT_PERSONAL_CREDIT_QUERY = "SELECT CRED.OBJECT_ID CREDIT_ID, NAME_AT.VALUE NAME, AMOUNT_AT.VALUE AMOUNT,\n" +
+            "  PAID_AT.VALUE PAID, DATE_AT.DATE_VALUE DATE_CR,  RATE_AT.VALUE CREDIT_RATE, \n" +
+            "  DATE_TO_AT.DATE_VALUE DATE_TO, MONTH_DAY_AT.VALUE MONTH_DAY, IS_PAID_AT.LIST_VALUE_ID IS_PAID,\n" +
+            "  DEBT_DATE_FROM_AT.DATE_VALUE DEBT_FROM, DEBT_DATE_TO_AT.DATE_VALUE DEBT_TO,\n" +
+            "  DEBT_AMOUNT_AT.VALUE DEBT_AMOUNT, DEBT.OBJECT_ID DEBT_ID\n" +
+            "    FROM OBJECTS CRED\n" +
+            "        LEFT JOIN ATTRIBUTES NAME_AT ON CRED.OBJECT_ID = NAME_AT.OBJECT_ID\n" +
+            "        LEFT JOIN ATTRIBUTES AMOUNT_AT ON CRED.OBJECT_ID = AMOUNT_AT.OBJECT_ID\n" +
+            "        LEFT JOIN ATTRIBUTES PAID_AT ON CRED.OBJECT_ID = PAID_AT.OBJECT_ID\n" +
+            "        LEFT JOIN ATTRIBUTES DATE_AT ON CRED.OBJECT_ID = DATE_AT.OBJECT_ID\n" +
+            "        LEFT JOIN ATTRIBUTES RATE_AT ON CRED.OBJECT_ID = RATE_AT.OBJECT_ID\n" +
+            "        LEFT JOIN ATTRIBUTES DATE_TO_AT ON CRED.OBJECT_ID = DATE_TO_AT.OBJECT_ID\n" +
+            "        LEFT JOIN ATTRIBUTES MONTH_DAY_AT ON CRED.OBJECT_ID = MONTH_DAY_AT.OBJECT_ID\n" +
+            "        LEFT JOIN ATTRIBUTES IS_PAID_AT ON CRED.OBJECT_ID = IS_PAID_AT.OBJECT_ID\n" +
+            "        LEFT JOIN OBJREFERENCE DEBT_REF ON CRED.OBJECT_ID = DEBT_REF.REFERENCE\n" +
+            "        LEFT JOIN OBJECTS DEBT ON DEBT_REF.OBJECT_ID = DEBT.OBJECT_ID\n" +
+            "        LEFT JOIN ATTRIBUTES DEBT_DATE_FROM_AT ON DEBT.OBJECT_ID = DEBT_DATE_FROM_AT.OBJECT_ID\n" +
+            "        LEFT JOIN ATTRIBUTES DEBT_DATE_TO_AT ON DEBT.OBJECT_ID = DEBT_DATE_TO_AT.OBJECT_ID\n" +
+            "        LEFT JOIN ATTRIBUTES DEBT_AMOUNT_AT ON DEBT.OBJECT_ID = DEBT_AMOUNT_AT.OBJECT_ID\n" +
             "        \n" +
-            "    where cred.object_id = ?\n" +
-            "        and debt.object_type_id = 8\n" +
-            "        and date_at.attr_id = 29\n" +
-            "        and name_at.attr_id = 30\n" +
-            "        and amount_at.attr_id = 31\n" +
-            "        and paid_at.attr_id = 32\n" +
-            "        and rate_at.attr_id = 33\n" +
-            "        and date_to_at.attr_id = 34\n" +
-            "        and is_paid_at.attr_id = 35\n" +
-            "        and month_day_at.attr_id = 36\n" +
-            "        and debt_date_from_at.attr_id = 44\n" +
-            "        and debt_date_to_at.attr_id = 45\n" +
-            "        and debt_amount_at.attr_id = 46";
-    String SELECT_PERSONAL_CREDITS_BY_ACCOUNT_QUERY = "";
-    String SELECT_FAMILY_CREDITS_BY_ACCOUNT_QUERY = "";
-    String ADD_PERSONAL_CREDIT_PAYMENT_QUERY = "";
-    String ADD_FAMILY_CREDIT_PAYMENT_QUERY = "";
+            "    WHERE CRED.OBJECT_ID = ?/*CREDIT PERSONAL ACCOUNT ID*/\n" +
+            "        AND DEBT.OBJECT_TYPE_ID = 8/*DEBT PERSONAL OBJECT TYPE ID*/\n" +
+            "        AND DATE_AT.ATTR_ID = 29/*CREATION DATE ATTRIBUTE*/\n" +
+            "        AND NAME_AT.ATTR_ID = 30/*NAME ATTRIBUTE*/\n" +
+            "        AND AMOUNT_AT.ATTR_ID = 31/*CREDIT AMOUNT ATTRIBUTE*/\n" +
+            "        AND PAID_AT.ATTR_ID = 32/*PAID CREDIT AMOUNT ATTRIBUTE*/\n" +
+            "        AND RATE_AT.ATTR_ID = 33/*CREDIT RATE ATTRIBUTE*/\n" +
+            "        AND DATE_TO_AT.ATTR_ID = 34/*CREDIT DATE TO ATTRIBUTE*/\n" +
+            "        AND IS_PAID_AT.ATTR_ID = 35/*STATUS OF CREDIT ATTRIBUTE*/\n" +
+            "        AND MONTH_DAY_AT.ATTR_ID = 36/*PAYMENT CREDIT DAY OF MONTH ATTRIBUTE*/\n" +
+            "        AND DEBT_DATE_FROM_AT.ATTR_ID = 44/*DEBT DATE FROM ATTRIBUTE*/\n" +
+            "        AND DEBT_DATE_TO_AT.ATTR_ID = 45/*DEBT DATE TO ATTRIBUTE*/\n" +
+            "        AND DEBT_AMOUNT_AT.ATTR_ID = 46/*DEBT AMOUNT ATTRIBUTE*/";
+
+    String SELECT_PERSONAL_CREDITS_BY_ACCOUNT_QUERY = "SELECT CRED.OBJECT_ID CREDIT_ID, NAME_AT.VALUE NAME, AMOUNT_AT.VALUE AMOUNT,\n" +
+            "  PAID_AT.VALUE PAID, DATE_AT.DATE_VALUE DATE_CR,  RATE_AT.VALUE CREDIT_RATE, \n" +
+            "  DATE_TO_AT.DATE_VALUE DATE_TO, MONTH_DAY_AT.VALUE MONTH_DAY, IS_PAID_AT.LIST_VALUE_ID IS_PAID,\n" +
+            "  DEBT_DATE_FROM_AT.DATE_VALUE DEBT_FROM, DEBT_DATE_TO_AT.DATE_VALUE DEBT_TO,\n" +
+            "  DEBT_AMOUNT_AT.VALUE DEBT_AMOUNT, DEBT.OBJECT_ID DEBT_ID\n" +
+            "    FROM OBJECTS CRED\n" +
+            "        LEFT JOIN OBJREFERENCE REFER_ACC ON CRED.OBJECT_ID = REFER_ACC.OBJECT_ID\n" +
+            "        LEFT JOIN OBJECTS ACC_OBJ ON REFER_ACC.REFERENCE = ACC_OBJ.OBJECT_ID\n" +
+            "        LEFT JOIN ATTRIBUTES NAME_AT ON CRED.OBJECT_ID = NAME_AT.OBJECT_ID\n" +
+            "        LEFT JOIN ATTRIBUTES AMOUNT_AT ON CRED.OBJECT_ID = AMOUNT_AT.OBJECT_ID\n" +
+            "        LEFT JOIN ATTRIBUTES PAID_AT ON CRED.OBJECT_ID = PAID_AT.OBJECT_ID\n" +
+            "        LEFT JOIN ATTRIBUTES DATE_AT ON CRED.OBJECT_ID = DATE_AT.OBJECT_ID\n" +
+            "        LEFT JOIN ATTRIBUTES RATE_AT ON CRED.OBJECT_ID = RATE_AT.OBJECT_ID\n" +
+            "        LEFT JOIN ATTRIBUTES DATE_TO_AT ON CRED.OBJECT_ID = DATE_TO_AT.OBJECT_ID\n" +
+            "        LEFT JOIN ATTRIBUTES MONTH_DAY_AT ON CRED.OBJECT_ID = MONTH_DAY_AT.OBJECT_ID\n" +
+            "        LEFT JOIN ATTRIBUTES IS_PAID_AT ON CRED.OBJECT_ID = IS_PAID_AT.OBJECT_ID\n" +
+            "        LEFT JOIN OBJREFERENCE DEBT_REF ON CRED.OBJECT_ID = DEBT_REF.REFERENCE\n" +
+            "        LEFT JOIN OBJECTS DEBT ON DEBT_REF.OBJECT_ID = DEBT.OBJECT_ID\n" +
+            "        LEFT JOIN ATTRIBUTES DEBT_DATE_FROM_AT ON DEBT.OBJECT_ID = DEBT_DATE_FROM_AT.OBJECT_ID\n" +
+            "        LEFT JOIN ATTRIBUTES DEBT_DATE_TO_AT ON DEBT.OBJECT_ID = DEBT_DATE_TO_AT.OBJECT_ID\n" +
+            "        LEFT JOIN ATTRIBUTES DEBT_AMOUNT_AT ON DEBT.OBJECT_ID = DEBT_AMOUNT_AT.OBJECT_ID\n" +
+            "        \n" +
+            "    WHERE REFER_ACC.REFERENCE = ?/*FAMILY DEBIT ACCOUNT ID*/\n" +
+            "        AND ACC_OBJ.OBJECT_TYPE_ID = 13/*FAMILY ACCOUNT OBJECT TYPE ID*/\n" +
+            "        AND REFER_ACC.ATTR_ID = 28/*ATTRIBUTE RELATION FAM CREDIT AND DEBIT ACC*/\n" +
+            "        AND DEBT.OBJECT_TYPE_ID = 19/*FAMILY DEBT OBJECT TYPE ID*/\n" +
+            "        AND DATE_AT.ATTR_ID = 29/*CREATION DATE ATTRIBUTE*/\n" +
+            "        AND NAME_AT.ATTR_ID = 30/*NAME ATTRIBUTE*/\n" +
+            "        AND AMOUNT_AT.ATTR_ID = 31/*CREDIT AMOUNT ATTRIBUTE*/\n" +
+            "        AND PAID_AT.ATTR_ID = 32/*PAID CREDIT AMOUNT ATTRIBUTE*/\n" +
+            "        AND RATE_AT.ATTR_ID = 33/*CREDIT RATE ATTRIBUTE*/\n" +
+            "        AND DATE_TO_AT.ATTR_ID = 34/*CREDIT DATE TO ATTRIBUTE*/\n" +
+            "        AND IS_PAID_AT.ATTR_ID = 35/*STATUS OF CREDIT ATTRIBUTE*/\n" +
+            "        AND MONTH_DAY_AT.ATTR_ID = 36/*PAYMENT CREDIT DAY OF MONTH ATTRIBUTE*/\n" +
+            "        AND DEBT_DATE_FROM_AT.ATTR_ID = 44/*DEBT DATE FROM ATTRIBUTE*/\n" +
+            "        AND DEBT_DATE_TO_AT.ATTR_ID = 45/*DEBT DATE TO ATTRIBUTE*/\n" +
+            "        AND DEBT_AMOUNT_AT.ATTR_ID = 46/*DEBT AMOUNT ATTRIBUTE*/";
+
+    String SELECT_FAMILY_CREDITS_BY_ACCOUNT_QUERY = "SELECT CRED.OBJECT_ID CREDIT_ID, NAME_AT.VALUE NAME, AMOUNT_AT.VALUE AMOUNT,\n" +
+            "  PAID_AT.VALUE PAID, DATE_AT.DATE_VALUE DATE_CR,  RATE_AT.VALUE CREDIT_RATE, \n" +
+            "  DATE_TO_AT.DATE_VALUE DATE_TO, MONTH_DAY_AT.VALUE MONTH_DAY, IS_PAID_AT.LIST_VALUE_ID IS_PAID,\n" +
+            "  DEBT_DATE_FROM_AT.DATE_VALUE DEBT_FROM, DEBT_DATE_TO_AT.DATE_VALUE DEBT_TO,\n" +
+            "  DEBT_AMOUNT_AT.VALUE DEBT_AMOUNT, DEBT.OBJECT_ID DEBT_ID\n" +
+            "    FROM OBJECTS CRED\n" +
+            "        LEFT JOIN OBJREFERENCE REFER_ACC ON CRED.OBJECT_ID = REFER_ACC.OBJECT_ID\n" +
+            "        LEFT JOIN OBJECTS ACC_OBJ ON REFER_ACC.REFERENCE = ACC_OBJ.OBJECT_ID\n" +
+            "        LEFT JOIN ATTRIBUTES NAME_AT ON CRED.OBJECT_ID = NAME_AT.OBJECT_ID\n" +
+            "        LEFT JOIN ATTRIBUTES AMOUNT_AT ON CRED.OBJECT_ID = AMOUNT_AT.OBJECT_ID\n" +
+            "        LEFT JOIN ATTRIBUTES PAID_AT ON CRED.OBJECT_ID = PAID_AT.OBJECT_ID\n" +
+            "        LEFT JOIN ATTRIBUTES DATE_AT ON CRED.OBJECT_ID = DATE_AT.OBJECT_ID\n" +
+            "        LEFT JOIN ATTRIBUTES RATE_AT ON CRED.OBJECT_ID = RATE_AT.OBJECT_ID\n" +
+            "        LEFT JOIN ATTRIBUTES DATE_TO_AT ON CRED.OBJECT_ID = DATE_TO_AT.OBJECT_ID\n" +
+            "        LEFT JOIN ATTRIBUTES MONTH_DAY_AT ON CRED.OBJECT_ID = MONTH_DAY_AT.OBJECT_ID\n" +
+            "        LEFT JOIN ATTRIBUTES IS_PAID_AT ON CRED.OBJECT_ID = IS_PAID_AT.OBJECT_ID\n" +
+            "        LEFT JOIN OBJREFERENCE DEBT_REF ON CRED.OBJECT_ID = DEBT_REF.REFERENCE\n" +
+            "        LEFT JOIN OBJECTS DEBT ON DEBT_REF.OBJECT_ID = DEBT.OBJECT_ID\n" +
+            "        LEFT JOIN ATTRIBUTES DEBT_DATE_FROM_AT ON DEBT.OBJECT_ID = DEBT_DATE_FROM_AT.OBJECT_ID\n" +
+            "        LEFT JOIN ATTRIBUTES DEBT_DATE_TO_AT ON DEBT.OBJECT_ID = DEBT_DATE_TO_AT.OBJECT_ID\n" +
+            "        LEFT JOIN ATTRIBUTES DEBT_AMOUNT_AT ON DEBT.OBJECT_ID = DEBT_AMOUNT_AT.OBJECT_ID\n" +
+            "        \n" +
+            "    WHERE REFER_ACC.REFERENCE = ?/*PERSONAL DEBIT ACCOUNT ID*/\n" +
+            "        AND ACC_OBJ.OBJECT_TYPE_ID = 2/*PERSONAL ACCOUNT OBJECT TYPE ID*/\n" +
+            "        AND REFER_ACC.ATTR_ID = 27/*ATTRIBUTE RELATION PER CREDIT AND DEBIT ACC*/\n" +
+            "        AND DEBT.OBJECT_TYPE_ID = 8/*PERSONAL DEBT OBJECT TYPE ID*/\n" +
+            "        AND DATE_AT.ATTR_ID = 29/*CREATION DATE ATTRIBUTE*/\n" +
+            "        AND NAME_AT.ATTR_ID = 30/*NAME ATTRIBUTE*/\n" +
+            "        AND AMOUNT_AT.ATTR_ID = 31/*CREDIT AMOUNT ATTRIBUTE*/\n" +
+            "        AND PAID_AT.ATTR_ID = 32/*PAID CREDIT AMOUNT ATTRIBUTE*/\n" +
+            "        AND RATE_AT.ATTR_ID = 33/*CREDIT RATE ATTRIBUTE*/\n" +
+            "        AND DATE_TO_AT.ATTR_ID = 34/*CREDIT DATE TO ATTRIBUTE*/\n" +
+            "        AND IS_PAID_AT.ATTR_ID = 35/*STATUS OF CREDIT ATTRIBUTE*/\n" +
+            "        AND MONTH_DAY_AT.ATTR_ID = 36/*PAYMENT CREDIT DAY OF MONTH ATTRIBUTE*/\n" +
+            "        AND DEBT_DATE_FROM_AT.ATTR_ID = 44/*DEBT DATE FROM ATTRIBUTE*/\n" +
+            "        AND DEBT_DATE_TO_AT.ATTR_ID = 45/*DEBT DATE TO ATTRIBUTE*/\n" +
+            "        AND DEBT_AMOUNT_AT.ATTR_ID = 46/*DEBT AMOUNT ATTRIBUTE*/";
+
+    String UPDATE_CREDIT_PAYMENT_QUERY = "UPDATE ATTRIBUTES\n" +
+            "    SET VALUE = ?/*NEW CREDIT PAYED AMOUNT */\n" +
+            "    WHERE ATTR_ID = 32/*PAID AMOUNT ATTRIBUTE ID*/\n" +
+            "    AND OBJECT_ID = ?/*CREDIT ACCOUNT ID*/";
 }
