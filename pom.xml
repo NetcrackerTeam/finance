@@ -69,12 +69,14 @@
             <artifactId>jstl</artifactId>
             <version>1.2</version>
         </dependency>
+
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-test</artifactId>
-            <version>4.3.12.RELEASE</version>
+            <version>${spring-framework-version}</version>
             <scope>test</scope>
         </dependency>
+
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -89,6 +91,7 @@
             <url>https://code.lds.org/nexus/content/groups/main-repo</url>
         </repository>
     </repositories>
+
     <build>
         <finalName>financeApp</finalName>
         <plugins>

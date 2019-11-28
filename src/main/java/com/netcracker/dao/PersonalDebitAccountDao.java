@@ -10,9 +10,9 @@ public interface PersonalDebitAccountDao {
 
     PersonalDebitAccount createPersonalAccount(PersonalDebitAccount personalDebitAccount);
 
-    void deletePersonalAccountById(BigInteger id);
+    void deletePersonalAccountById(BigInteger account_id, BigInteger user_id);
 
-    void deletePersonalAccountByUserId(BigInteger id);
+    void deletePersonalAccountByUserId(BigInteger account_id);
 
     String GET_PERSONAL_ACCOUNT_BY_ID = "SELECT " +
             "debit.object_id as personal_id, debit.name as name_personal_debit, attr1.value as amount_personal_debit, attr2.list_value_id as status_personal_debit, " +
@@ -36,11 +36,12 @@ public interface PersonalDebitAccountDao {
             "and attr3_user.attr_id = 4 ";
 
     String CREATE_PERSONAL_ACCOUNT = "INSERT ALL " +
-            "INTO OBJECTS(OBJECT_ID,OBJECT_TYPE_ID,NAME) VALUES (objects_id_s.nextval, 2, ?) "
-            +
-            "INTO ATTRIBUTES(ATTR_ID, OBJECT_ID, VALUE) VALUES(7, objects_id_s.currval, ?) "
-            +
-            "INTO ATTRIBUTES(ATTR_ID, OBJECT_ID, VALUE) VALUES(70, objects_id_s.currval, ?) ";
-    String DELETE_USER_FROM_PERSONAL_ACCOUNT = "DELETE FROM OBJREFERENCE WHERE ATTR_ID = 2, OBJECT_ID = ?, REFERENCE = ?";
+            "INTO OBJECTS (OBJECT_ID,OBJECT_TYPE_ID,NAME) VALUES (objects_id_s.nextval, 2, ?) " +
+            "INTO ATTRIBUTES (ATTR_ID, OBJECT_ID, VALUE) VALUES(7, objects_id_s.currval, ?) " +
+            "INTO ATTRIBUTES (ATTR_ID, OBJECT_ID, VALUE) VALUES(70, objects_id_s.currval, ?) " +
+            "INTO OBJREFERENCE (ATTR_ID,OBJECT_ID,REFERENCE) VALUES (1,objects_id_s.currval,?) " +
+            "SELECT * " +
+            "FROM Dual";
+    String DELETE_USER_FROM_PERSONAL_ACCOUNT = "DELETE FROM OBJREFERENCE WHERE ATTR_ID = 7 and OBJECT_ID = ? and REFERENCE = ?";
     String UNACTIVE_USER_FROM_PERSONAL_ACCOUNT = "update attributes set list_value_id = 44 where attr_id = 70 and object_id = ?";
 }

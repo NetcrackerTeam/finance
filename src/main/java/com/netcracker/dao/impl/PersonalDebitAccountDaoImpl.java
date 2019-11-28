@@ -34,25 +34,26 @@ public class PersonalDebitAccountDaoImpl  implements PersonalDebitAccountDao {
         this.template.update(CREATE_PERSONAL_ACCOUNT, new Object[]{
                 personalDebitAccount.getObjectName(),
                 personalDebitAccount.getAmount(),
-                personalDebitAccount.getOwner(),
-                personalDebitAccount.getStatus()
+                personalDebitAccount.getStatus().toString(),
+                personalDebitAccount.getOwner().toString()
         });
         return personalDebitAccount;
     }
 
     @Override
-    public void deletePersonalAccountById(BigInteger id) {
-        logger.info("Entering unactive(deletePersonalAccount=" + id + ")");
-        this.template.update(DELETE_USER_FROM_PERSONAL_ACCOUNT, id);
+    public void deletePersonalAccountById(BigInteger account_id, BigInteger user_id) {
+        logger.info("Entering unactive(deletePersonalAccount=" + account_id + ")");
+        this.template.update(DELETE_USER_FROM_PERSONAL_ACCOUNT, new Object[]{
+                account_id.toString(),
+                user_id.toString()
+        });
     }
 
     @Override
-    public void deletePersonalAccountByUserId(BigInteger id) {
-        logger.info("Entering unactive(deletePersonalAccountByUser=" + id + ")");
-        if(this.getPersonalAccountById(id).getStatus().equals("NO")){
-            assert(false);
-        } else {
-            template.update(UNACTIVE_USER_FROM_PERSONAL_ACCOUNT, id);
-        }
+    public void deletePersonalAccountByUserId(BigInteger account_id) {
+        logger.info("Entering unactive(deletePersonalAccountByUser=" + account_id + ")");
+        this.template.update(UNACTIVE_USER_FROM_PERSONAL_ACCOUNT, new Object[]{
+                account_id.toString(),
+        });
     }
 }
