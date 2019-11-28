@@ -3,6 +3,7 @@ package com.netcracker.dao.impl;
 import com.netcracker.configs.WebConfig;
 import com.netcracker.dao.FamilyAccountDebitDao;
 import com.netcracker.dao.UserDao;
+import com.netcracker.dao.impl.mapper.UserDaoMapper;
 import com.netcracker.models.*;
 import com.netcracker.models.enums.FamilyAccountStatusActive;
 import org.junit.Before;
@@ -32,19 +33,22 @@ public class FamilyAccountDebitDaoTests {
     @Autowired
     private FamilyAccountDebitDao familyAccountDebitDao;
    // @Autowired
-  //  private  UserDao userDao;
+   // private  UserDao userDao;
     @Autowired
     private DataSource dataSource;
     private JdbcTemplate template;
     private static final String  SQL_ACTIVE = "update attributes set list_value_id = 41 where attr_id = 69 and object_id = ?";
     private static final String  CREATE_USER = "INSERT ALL " +
-            "INTO OBJECTS(OBJECT_ID,OBJECT_TYPE_ID,NAME) VALUES (150, 1, 'USERTEST') "
+            "INTO OBJECTS(OBJECT_ID,OBJECT_TYPE_ID,NAME) VALUES (150, 1, 'user_new') "
             +
-            "INTO ATTRIBUTES(ATTR_ID, OBJECT_ID, VALUE) VALUES(9, objects_id_s.currval, ?) "
+            "INTO ATTRIBUTES(ATTR_ID, OBJECT_ID, VALUE) VALUES(5, 150, 'Eugen9') "
             +
-            "INTO ATTRIBUTES(ATTR_ID, OBJECT_ID, VALUE) VALUES(9, objects_id_s.currval, ?) "
+            "INTO ATTRIBUTES(ATTR_ID, OBJECT_ID, VALUE) VALUES(3, 150, 'mail@gmail.com') "
             +
-            "INTO ATTRIBUTES(ATTR_ID, OBJECT_ID, VALUE) VALUES(9, objects_id_s.currval, ?) ";
+            "INTO ATTRIBUTES(ATTR_ID, OBJECT_ID, VALUE) VALUES(4, 150, 'password') "
+            +
+            "SELECT * FROM DUAL";
+    private static final String DELETE_USER = " delete from objects where object_id = 150 ";
 
     @Before
     public void setUp() {
@@ -72,24 +76,24 @@ public class FamilyAccountDebitDaoTests {
     @Test
     public void createFamilyAccount(){
         User owner = new User.Builder()
+                .user_id(BigInteger.valueOf(150))
                 .user_name("Eugen9")
                 .user_eMail("mail@gmail.com")
                 .user_password("password").build();
-
+     //   System.out.println(owner.getId());
     //    userDao.createUser(owner);
-
-
+       template.update(CREATE_USER);
         FamilyDebitAccount familyDebitAccount = new FamilyDebitAccount.Builder()
                .debitObjectName("Name1")
                .debitAmount(6000L)
                .debitFamilyAccountStatus(FamilyAccountStatusActive.YES)
                .debitOwner(owner).build();
 
-        familyAccountDebitDao.createFamilyAccount(familyDebitAccount);
+        FamilyDebitAccount familyDebitAccount2 = familyAccountDebitDao.createFamilyAccount(familyDebitAccount);
 //
 //
-//        FamilyDebitAccount familyDebitAccount2 = familyAccountDebitDao.getFamilyAccountById(BigInteger.valueOf(300));
-//        assertEquals(BigInteger.valueOf(300),familyDebitAccount2.getId());
+       assertEquals("Name1",familyDebitAccount2.getObjectName());
+      //  template.update(DELETE_USER);
     }
     @Test
     public void deleteUserFromFamilyAccount(){

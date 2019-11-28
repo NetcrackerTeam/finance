@@ -44,10 +44,11 @@ public class FamilyAccountDebitDaoImpl implements FamilyAccountDebitDao {
         this.template.update(ADD_NEW_FAMILY_ACCOUNT, new Object[]{
                 familyDebitAccount.getObjectName(),
                 familyDebitAccount.getAmount().toString(),
-                familyDebitAccount.getStatus().toString(),
+                familyDebitAccount.getStatus().getId().toString(),
                 familyDebitAccount.getOwner().getId().toString(),
                 familyDebitAccount.getOwner().getId().toString()
         });
+        //logger.debug("Entering insert(FamilyDebitAccount)");
         return familyDebitAccount;
     }
 
