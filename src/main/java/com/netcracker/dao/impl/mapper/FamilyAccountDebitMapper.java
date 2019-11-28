@@ -43,7 +43,6 @@ public class FamilyAccountDebitMapper implements RowMapper<FamilyDebitAccount> {
                 .debitOwner(user).build();
                 //.debitAccountIncomesList(income)
                 //.debitAccountExpensesList(expense).build();
-                //.debitFamilyAccountList()
                 //.debitFamilyUserList(list_user).build();
 
     }

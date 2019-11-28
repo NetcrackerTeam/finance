@@ -19,13 +19,27 @@ public class MonthReportDaoImpl implements MonthReportDao {
     }
 
     @Override
-    public void createPersonalMonthReport(PersonalDebitAccount personalDebitAccount) {
-        template.update(CREATE_PERSONAL_MONTH_REPORT, new Object[]{personalDebitAccount});
+    public void createPersonalMonthReport(MonthReport monthReport) {
+        template.update(CREATE_PERSONAL_MONTH_REPORT, new Object[]{
+                monthReport.getBalance(),
+                monthReport.getTotalExpense(),
+                monthReport.getTotalIncome(),
+                monthReport.getDate_from(),
+                monthReport.getDate_to(),
+                monthReport.getCategoryExpense(),
+                monthReport.getCategoryIncome()
+        });
     }
 
     @Override
-    public void createFamilyMonthReport(FamilyDebitAccount familyDebitAccount) {
-        template.update(CREATE_FAMILY_MONTH_REPORT, new Object[]{familyDebitAccount});
+    public void createFamilyMonthReport(MonthReport monthReport) {
+        template.update(CREATE_FAMILY_MONTH_REPORT, new Object[]{
+                monthReport.getTotalIncome(),
+                monthReport.getTotalExpense(),
+                monthReport.getBalance(),
+                monthReport.getDate_from(),
+                monthReport.getDate_to(),
+        });
     }
 
     @Override

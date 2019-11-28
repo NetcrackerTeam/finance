@@ -80,34 +80,38 @@ public interface FamilyAccountDebitDao {
            "\t\t\t\tand attr3_us_part.attr_id = 4";
 
     String GET_INCOME_LIST = "SELECT \n" +
-            "\tincome.object_id as account_income_id, attr1.value as income_amount, attr2.date_value as date_income, us.object_id as user_id \n" +
-            "    from OBJECTS income,  objects us, attributes attr1, attributes attr2, objects debit, OBJREFERENCE objref1, OBJREFERENCE objref2 \t\t\t\t\t\n" +
+            "\tincome.object_id as account_income_id, attr1.value as income_amount, attr2.date_value as date_income, attr3.list_value_id as category, us.object_id as user_id \n" +
+            "    from OBJECTS income,  objects us, attributes attr1, attributes attr2, attributes attr3, objects debit, OBJREFERENCE objref1, OBJREFERENCE objref2 \t\t\t\t\t\n" +
             "\t\t\twhere debit.object_type_id = 13 and us.object_type_id = 1 and income.object_type_id = 21\n" +
-            "                and debit.object_id = ?\n" +
+            "        and debit.object_id = ?\n" +
             "\t\t\t\tand objref1.attr_id = 54\n" +
             "\t\t\t\tand objref1.reference = debit.object_id\n" +
             "\t\t\t\tand income.object_id = objref1.object_id\n" +
-            "                and objref2.attr_id = 55\n" +
+            "        and objref2.attr_id = 55\n" +
             "\t\t\t\tand objref2.object_id = income.object_id\n" +
             "\t\t\t\tand us.object_id = objref2.reference\n" +
             "\t\t\t\tand attr1.object_id = income.object_id\n" +
             "\t\t\t\tand attr1.attr_id = 56\n" +
             "\t\t\t\tand attr2.object_id = income.object_id\n" +
-            "\t\t\t\tand attr2.attr_id = 58\n";
+            "\t\t\t\tand attr2.attr_id = 58\n" +
+            "        and attr3.object_id = income.object_id\n" +
+            "\t\t\t\tand attr3.attr_id = 57";
 
     String GET_EXPENSE_LIST = "SELECT \n" +
-            "\texpense.object_id as account_income_id, attr1.value as expense_amount, attr2.date_value as date_expense, us.object_id as user_id \n" +
-            "    from OBJECTS expense,  objects us, attributes attr1, attributes attr2, objects debit, OBJREFERENCE objref1, OBJREFERENCE objref2 \t\t\t\t\t\n" +
+            "\texpense.object_id as account_expense_id, attr1.value as expense_amount, attr2.date_value as date_expense, attr3.list_value_id as category, us.object_id as user_id \n" +
+            "    from OBJECTS expense,  objects us, attributes attr1, attributes attr2, attributes attr3, objects debit, OBJREFERENCE objref1, OBJREFERENCE objref2 \t\t\t\t\t\n" +
             "\t\t\twhere debit.object_type_id = 13 and us.object_type_id = 1 and expense.object_type_id = 20\n" +
-            "                and debit.object_id = ?\n" +
+            "        and debit.object_id = 3\n" +
             "\t\t\t\tand objref1.attr_id = 48\n" +
             "\t\t\t\tand objref1.reference = debit.object_id\n" +
             "\t\t\t\tand expense.object_id = objref1.object_id\n" +
-            "                and objref2.attr_id = 49\n" +
+            "        and objref2.attr_id = 49\n" +
             "\t\t\t\tand objref2.object_id = expense.object_id\n" +
             "\t\t\t\tand us.object_id = objref2.reference\n" +
             "\t\t\t\tand attr1.object_id = expense.object_id\n" +
             "\t\t\t\tand attr1.attr_id = 50\n" +
             "\t\t\t\tand attr2.object_id = expense.object_id\n" +
-            "\t\t\t\tand attr2.attr_id = 52\n";
+            "\t\t\t\tand attr2.attr_id = 52\n" +
+            "        and attr3.object_id = expense.object_id\n" +
+            "\t\t\t\tand attr3.attr_id = 51";
 }
