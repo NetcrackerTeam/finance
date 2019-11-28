@@ -1,5 +1,7 @@
 package com.netcracker.configs;
 
+import com.netcracker.dao.CreditAccountDao;
+import com.netcracker.dao.impl.CreditAccountDaoImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -39,4 +41,21 @@ public class WebConfig implements WebMvcConfigurer {
 
         return dataSource;
     }
+
+//        @Bean(name = "projectDAO")
+//    public CreditAccountDao getProjectDAO() {
+//        CreditAccountDao projectDAO = new CreditAccountDaoImpl();
+//        projectDAO.setDataSource(getDataSource());
+//        return projectDAO;
+//    }
+//    @Bean(name = "creditAccountDao")
+//    public CreditAccountDao getProjectDAO() {
+//        CreditAccountDaoImpl creditAccountDao = new CreditAccountDaoImpl();
+//        creditAccountDao.setDataSource(getDataSource());
+//        creditAccountDao.setDataSource(getDataSource());
+//        return creditAccountDao;
+//    }
+//    public CreditAccountDao getCreditAccountDao() {
+//        return new CreditAccountDaoImpl(getDataSource());
+//    }
 }
