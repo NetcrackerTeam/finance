@@ -59,17 +59,10 @@ public class FamilyAccountDebitDaoImpl implements FamilyAccountDebitDao {
     @Override
     public void addUserToAccountById(BigInteger account_id, BigInteger user_id) {
         logger.debug("Entering insert(addUserToAccountById=" + account_id + " " + user_id + ")");
-       // User user = this.template.queryForObject(CHEK_USER_ACTIVE_AND_REFERENCED, new Object[]{user_id}, User.class);
-        if(new UserDaoImpl().getUserById(user_id).getFamilyDebitAccount() != null){
-            logger.debug("Entering check(User_Is_HAS_ACCOUNT_FAMILY=" + account_id + " " + user_id +")");
-        } else if (new UserDaoImpl().getUserById(user_id).getName().equals("NO")){
-            logger.debug("Entering check(User_Is_UnActive=" + user_id + ")");
-        } else{
             this.template.update(ADD_USER_BY_ID, new Object[]{
                     account_id,
                     user_id
             });
-        }
     }
 
     @Override
