@@ -59,10 +59,12 @@ public interface FamilyAccountDebitDao {
             +
             "INTO ATTRIBUTES(ATTR_ID, OBJECT_ID, VALUE) VALUES(69, objects_id_s.currval, ?) "
             +
-            "INTO OBJREFERENCE(ATTR_ID,OBJECT_ID,REFERENCE) VALUES (2,?,objects_id_s.currval)"
+            "INTO OBJREFERENCE(ATTR_ID,OBJECT_ID,REFERENCE) VALUES (2,?,objects_id_s.currval) "
             +
-            "INTO OBJREFERENCE(ATTR_ID,OBJECT_ID,REFERENCE) VALUES (8,objects_id_s.currval, ?)";
-    String DELETE_USER_FROM_FAMILY_ACCOUNT = "DELETE FROM OBJREFERENCE WHERE ATTR_ID = 8, OBJECT_ID = ?, REFERENCE = ?";
+            "INTO OBJREFERENCE(ATTR_ID,OBJECT_ID,REFERENCE) VALUES (8,objects_id_s.currval, ?) "
+            +
+            "SELECT * FROM DUAL";
+    String DELETE_USER_FROM_FAMILY_ACCOUNT = "DELETE FROM OBJREFERENCE WHERE ATTR_ID = 8 and OBJECT_ID = ? and REFERENCE = ?";
 
     String SET_FAMILY_ACCOUNT_UNACTIVE = "update attributes set list_value_id = 42 where attr_id = 69 and object_id = ?";
 
@@ -72,7 +74,7 @@ public interface FamilyAccountDebitDao {
            "\tus_part.object_id as USER_ID, attr1_us_part.value as NAME, attr2_us_part.value as EMAIL, attr3_us_part.value as PASSWORD  \n" +
            "\t\tfrom OBJECTS debit, objects us_part, attributes attr1_us_part, attributes attr2_us_part, attributes attr3_us_part, OBJREFERENCE objref  \t\t\t\t\t\n" +
            "\t\t\twhere debit.object_type_id = 13 and us_part.object_type_id = 1\n" +
-           "\t\t\tand debit.object_id = 3\n" +
+           "\t\t\tand debit.object_id = ?\n" +
            "\t\t\t\tand objref.attr_id = 8\n" +
            "\t\t\t\tand objref.object_id = debit.object_id\n" +
            "\t\t\t\tand us_part.object_id = objref.reference\n" +
@@ -105,7 +107,7 @@ public interface FamilyAccountDebitDao {
             "\texpense.object_id as account_expense_id, attr1.value as expense_amount, attr2.date_value as date_expense, attr3.list_value_id as category, us.object_id as user_id \n" +
             "    from OBJECTS expense,  objects us, attributes attr1, attributes attr2, attributes attr3, objects debit, OBJREFERENCE objref1, OBJREFERENCE objref2 \t\t\t\t\t\n" +
             "\t\t\twhere debit.object_type_id = 13 and us.object_type_id = 1 and expense.object_type_id = 20\n" +
-            "        and debit.object_id = 3\n" +
+            "        and debit.object_id = ?\n" +
             "\t\t\t\tand objref1.attr_id = 48\n" +
             "\t\t\t\tand objref1.reference = debit.object_id\n" +
             "\t\t\t\tand expense.object_id = objref1.object_id\n" +

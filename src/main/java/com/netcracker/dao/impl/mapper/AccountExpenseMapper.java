@@ -16,11 +16,11 @@ public class AccountExpenseMapper implements RowMapper<AccountExpense> {
     public AccountExpense mapRow(ResultSet resultSet, int i) throws SQLException {
         AbstractAccountOperation accountExpense =
                 new AccountExpense.Builder()
-                        .accountId(resultSet.getBigDecimal("account_income_id").toBigInteger())
-                        .accountAmount(resultSet.getBigDecimal("income_amount").toBigInteger())
+                        .accountId(resultSet.getBigDecimal("account_expense_id").toBigInteger())
+                        .accountAmount(resultSet.getBigDecimal("expense_amount").toBigInteger())
+                        .accountDate(resultSet.getDate("date_expense").toLocalDate())
                         .categoryExpense(CategoryExpense.getNameByKey(resultSet.getBigDecimal("category").toBigInteger()))
-                        .accountDate(resultSet.getDate("date").toLocalDate())
-                        .accountUserId(resultSet.getLong("user_id"))
+                        .accountUserId(resultSet.getBigDecimal("user_id").toBigInteger())
                         .build();
         return (AccountExpense) accountExpense;
     }

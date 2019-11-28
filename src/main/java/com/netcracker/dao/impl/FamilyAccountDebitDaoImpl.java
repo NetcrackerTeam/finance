@@ -43,10 +43,10 @@ public class FamilyAccountDebitDaoImpl implements FamilyAccountDebitDao {
         logger.debug("Entering insert(FamilyDebitAccount=" + familyDebitAccount + ")");
         this.template.update(ADD_NEW_FAMILY_ACCOUNT, new Object[]{
                 familyDebitAccount.getObjectName(),
-                familyDebitAccount.getAmount(),
-                familyDebitAccount.getStatus(),
-                familyDebitAccount.getOwner().getId(),
-                familyDebitAccount.getOwner().getId()
+                familyDebitAccount.getAmount().toString(),
+                familyDebitAccount.getStatus().toString(),
+                familyDebitAccount.getOwner().getId().toString(),
+                familyDebitAccount.getOwner().getId().toString()
         });
         return familyDebitAccount;
     }
@@ -54,15 +54,15 @@ public class FamilyAccountDebitDaoImpl implements FamilyAccountDebitDao {
     @Override
     public void deleteFamilyAccount(BigInteger id) {
         logger.debug("Entering unactive(deleteFamilyAccount=" + id + ")");
-        this.template.update(SET_FAMILY_ACCOUNT_UNACTIVE, new Object[]{id});
+        this.template.update(SET_FAMILY_ACCOUNT_UNACTIVE, new Object[]{new BigDecimal(id)});
     }
 
     @Override
     public void addUserToAccountById(BigInteger account_id, BigInteger user_id) {
         logger.debug("Entering insert(addUserToAccountById=" + account_id + " " + user_id + ")");
             this.template.update(ADD_USER_BY_ID, new Object[]{
-                    account_id,
-                    user_id
+                    account_id.toString(),
+                    user_id.toString()
             });
     }
 
@@ -70,26 +70,26 @@ public class FamilyAccountDebitDaoImpl implements FamilyAccountDebitDao {
     public void deleteUserFromAccountById(BigInteger account_id, BigInteger user_id) {
         logger.debug("Entering unactive(deleteUserFromAccountById=" + account_id + " " + user_id + ")");
         this.template.update(DELETE_USER_FROM_FAMILY_ACCOUNT, new Object[]{
-                account_id,
-                user_id
+                account_id.toString(),
+                user_id.toString()
         });
     }
 
     @Override
     public ArrayList<User> getParticipantsOfFamilyAccount(BigInteger debit_id) {
         logger.debug("Entering list(getParticipantsOfFamilyAccount=" + debit_id+ ")");
-        return (ArrayList<User>) this.template.query(GET_PARTICIPANTS,  new UserDaoMapper());
+        return (ArrayList<User>) this.template.query(GET_PARTICIPANTS, new Object[]{new BigDecimal(debit_id)}, new UserDaoMapper());
     }
 
     @Override
-    public List<AccountIncome> getIncomesOfFamilyAccount(BigInteger debit_id) {
+    public ArrayList<AccountIncome> getIncomesOfFamilyAccount(BigInteger debit_id) {
         logger.debug("Entering list(getParticipantsOfFamilyAccount=" + debit_id+ ")");
-        return (ArrayList<AccountIncome>) this.template.query(GET_INCOME_LIST,  new AccountIncomeMapper());
+        return (ArrayList<AccountIncome>) this.template.query(GET_INCOME_LIST, new Object[]{new BigDecimal(debit_id)}, new AccountIncomeMapper());
     }
 
     @Override
-    public List<AccountExpense> getExpensesOfFamilyAccount(BigInteger debit_id) {
+    public ArrayList<AccountExpense> getExpensesOfFamilyAccount(BigInteger debit_id) {
         logger.debug("Entering list(getParticipantsOfFamilyAccount=" + debit_id+ ")");
-        return (ArrayList<AccountExpense>) this.template.query(GET_EXPENSE_LIST,  new AccountExpenseMapper());
+        return (ArrayList<AccountExpense>) this.template.query(GET_EXPENSE_LIST, new Object[]{new BigDecimal(debit_id)},  new AccountExpenseMapper());
     }
 }
