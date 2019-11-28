@@ -57,7 +57,11 @@ public interface FamilyAccountDebitDao {
             +
             "INTO ATTRIBUTES(ATTR_ID, OBJECT_ID, VALUE) VALUES(9, objects_id_s.currval, ?) "
             +
-            "INTO ATTRIBUTES(ATTR_ID, OBJECT_ID, VALUE) VALUES(69, objects_id_s.currval, ?) ";
+            "INTO ATTRIBUTES(ATTR_ID, OBJECT_ID, VALUE) VALUES(69, objects_id_s.currval, ?) "
+            +
+            "INTO OBJREFERENCE(ATTR_ID,OBJECT_ID,REFERENCE) VALUES (2,?,objects_id_s.currval)"
+            +
+            "INTO OBJREFERENCE(ATTR_ID,OBJECT_ID,REFERENCE) VALUES (8,objects_id_s.currval, ?)";
     String DELETE_USER_FROM_FAMILY_ACCOUNT = "DELETE FROM OBJREFERENCE WHERE ATTR_ID = 8, OBJECT_ID = ?, REFERENCE = ?";
 
     String SET_FAMILY_ACCOUNT_UNACTIVE = "update attributes set list_value_id = 42 where attr_id = 69 and object_id = ?";
