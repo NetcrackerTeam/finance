@@ -21,6 +21,7 @@ public class PersonalDebitAccountMapper implements RowMapper<PersonalDebitAccoun
                 .debitObjectName(rs.getString("name_personal_debit"))
                 .debitAmount(Long.valueOf(rs.getString("amount_personal_debit")))
                 .debitPersonalAccountStatus(PersonalAccountStatusActive.getStatusByKey(rs.getBigDecimal("status_personal_debit").toBigInteger()))
-                .debitOwner(user).build();
+                .debitOwner(user)
+                .build();
     }
 }

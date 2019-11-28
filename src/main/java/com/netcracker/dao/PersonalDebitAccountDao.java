@@ -5,6 +5,7 @@ import com.netcracker.models.PersonalDebitAccount;
 import java.math.BigInteger;
 
 public interface PersonalDebitAccountDao {
+
     PersonalDebitAccount getPersonalAccountById(BigInteger id);
 
     PersonalDebitAccount createPersonalAccount(PersonalDebitAccount personalDebitAccount);
@@ -14,14 +15,10 @@ public interface PersonalDebitAccountDao {
     void deletePersonalAccountByUserId(BigInteger id);
 
     String GET_PERSONAL_ACCOUNT_BY_ID = "SELECT " +
-            "debit.object_id as personal_id, debit.name as name_personal_debit, attr1.value as amount_personal_debit, attr2.list_value_id as status_personal_debit, "
-            +
-            "us.object_id as USER_ID, attr1_user.value as NAME, attr2_user.value as EMAIL, attr3_user.value as PASSWORD "
-            +
-            "from OBJECTS debit, attributes attr1, attributes attr2,  "
-            +
-            "objects us, attributes attr1_user, attributes attr2_user, attributes attr3_user, OBJREFERENCE objref "
-            +
+            "debit.object_id as personal_id, debit.name as name_personal_debit, attr1.value as amount_personal_debit, attr2.list_value_id as status_personal_debit, " +
+            "us.object_id as USER_ID, attr1_user.value as NAME, attr2_user.value as EMAIL, attr3_user.value as PASSWORD " +
+            "from OBJECTS debit, attributes attr1, attributes attr2,  " +
+            "objects us, attributes attr1_user, attributes attr2_user, attributes attr3_user, OBJREFERENCE objref " +
             "where debit.object_type_id = 2 and us.object_type_id = 1 " +
             "and debit.object_id = ? " +
             "and attr1.object_id = debit.object_id " +

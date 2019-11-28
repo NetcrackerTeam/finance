@@ -33,7 +33,9 @@ public class PersonalDebitAccountDaoImpl  implements PersonalDebitAccountDao {
         logger.info("Entering insert(createPersonalAccount=" + personalDebitAccount + ")");
         this.template.update(CREATE_PERSONAL_ACCOUNT, new Object[]{
                 personalDebitAccount.getObjectName(),
-                personalDebitAccount.getAmount()
+                personalDebitAccount.getAmount(),
+                personalDebitAccount.getOwner(),
+                personalDebitAccount.getStatus()
         });
         return personalDebitAccount;
     }
