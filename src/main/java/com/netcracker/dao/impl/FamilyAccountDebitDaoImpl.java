@@ -2,8 +2,12 @@ package com.netcracker.dao.impl;
 
 import com.netcracker.dao.FamilyAccountDebitDao;
 import com.netcracker.dao.UserDao;
+import com.netcracker.dao.impl.mapper.AccountExpenseMapper;
+import com.netcracker.dao.impl.mapper.AccountIncomeMapper;
 import com.netcracker.dao.impl.mapper.FamilyAccountDebitMapper;
 import com.netcracker.dao.impl.mapper.UserDaoMapper;
+import com.netcracker.models.AccountExpense;
+import com.netcracker.models.AccountIncome;
 import com.netcracker.models.FamilyDebitAccount;
 import com.netcracker.models.User;
 import org.apache.log4j.Logger;
@@ -39,47 +43,54 @@ public class FamilyAccountDebitDaoImpl implements FamilyAccountDebitDao {
         logger.debug("Entering insert(FamilyDebitAccount=" + familyDebitAccount + ")");
         this.template.update(ADD_NEW_FAMILY_ACCOUNT, new Object[]{
                 familyDebitAccount.getObjectName(),
-                familyDebitAccount.getAmount(),
-                familyDebitAccount.getStatus(),
-                familyDebitAccount.getOwner()
+                familyDebitAccount.getAmount().toString(),
+                familyDebitAccount.getStatus().getId().toString(),
+                familyDebitAccount.getOwner().getId().toString(),
+                familyDebitAccount.getOwner().getId().toString()
         });
+        //logger.debug("Entering insert(FamilyDebitAccount)");
         return familyDebitAccount;
     }
 
     @Override
     public void deleteFamilyAccount(BigInteger id) {
         logger.debug("Entering unactive(deleteFamilyAccount=" + id + ")");
-        this.template.update(SET_FAMILY_ACCOUNT_UNACTIVE, new Object[]{id});
+        this.template.update(SET_FAMILY_ACCOUNT_UNACTIVE, new Object[]{new BigDecimal(id)});
     }
 
     @Override
     public void addUserToAccountById(BigInteger account_id, BigInteger user_id) {
         logger.debug("Entering insert(addUserToAccountById=" + account_id + " " + user_id + ")");
-       // User user = this.template.queryForObject(CHEK_USER_ACTIVE_AND_REFERENCED, new Object[]{user_id}, User.class);
-        if(new UserDaoImpl().getUserById(user_id).getFamilyDebitAccount() != null){
-            logger.debug("Entering check(User_Is_HAS_ACCOUNT_FAMILY=" + account_id + " " + user_id +")");
-        } else if (new UserDaoImpl().getUserById(user_id).getName().equals("NO")){
-            logger.debug("Entering check(User_Is_UnActive=" + user_id + ")");
-        } else{
             this.template.update(ADD_USER_BY_ID, new Object[]{
-                    account_id,
-                    user_id
+                    account_id.toString(),
+                    user_id.toString()
             });
-        }
     }
 
     @Override
     public void deleteUserFromAccountById(BigInteger account_id, BigInteger user_id) {
         logger.debug("Entering unactive(deleteUserFromAccountById=" + account_id + " " + user_id + ")");
         this.template.update(DELETE_USER_FROM_FAMILY_ACCOUNT, new Object[]{
-                account_id,
-                user_id
+                account_id.toString(),
+                user_id.toString()
         });
     }
 
     @Override
     public ArrayList<User> getParticipantsOfFamilyAccount(BigInteger debit_id) {
         logger.debug("Entering list(getParticipantsOfFamilyAccount=" + debit_id+ ")");
-        return (ArrayList<User>) this.template.query(GET_PARTICIPANTS,  new UserDaoMapper());
+        return (ArrayList<User>) this.template.query(GET_PARTICIPANTS, new Object[]{new BigDecimal(debit_id)}, new UserDaoMapper());
+    }
+
+    @Override
+    public ArrayList<AccountIncome> getIncomesOfFamilyAccount(BigInteger debit_id) {
+        logger.debug("Entering list(getParticipantsOfFamilyAccount=" + debit_id+ ")");
+        return (ArrayList<AccountIncome>) this.template.query(GET_INCOME_LIST, new Object[]{new BigDecimal(debit_id)}, new AccountIncomeMapper());
+    }
+
+    @Override
+    public ArrayList<AccountExpense> getExpensesOfFamilyAccount(BigInteger debit_id) {
+        logger.debug("Entering list(getParticipantsOfFamilyAccount=" + debit_id+ ")");
+        return (ArrayList<AccountExpense>) this.template.query(GET_EXPENSE_LIST, new Object[]{new BigDecimal(debit_id)},  new AccountExpenseMapper());
     }
 }

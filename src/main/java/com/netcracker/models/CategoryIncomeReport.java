@@ -29,7 +29,7 @@ public class CategoryIncomeReport {
             return this;
         }
 
-        public Builder expense(CategoryIncome income) {
+        public Builder income(CategoryIncome income) {
             this.income = income;
             return this;
         }
