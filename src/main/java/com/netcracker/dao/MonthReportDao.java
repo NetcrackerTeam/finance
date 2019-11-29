@@ -47,8 +47,7 @@ public interface MonthReportDao {
             "         INTO ATTRIBUTES(ATTR_ID, OBJECT_ID, DATE_VALUE) VALUES(16, OBJECTS_ID_S.currval,TO_DATE(TO_CHAR(?), 'dd-mm-yyyy'))\n" +
             "         INTO OBJREFERENCE (ATTR_ID,OBJECT_ID,REFERENCE) VALUES (11,OBJECTS_ID_S.currval,3)\n" +
             "         SELECT * FROM DUAL;";
-    String DELETE_PERSONAL_MONTH_REPORT = "delete from OBJECTS where OBJECT_ID = ?"
-            + "delete from ATTRIBUTES where OBJECT_ID = ?";
+    String DELETE_PERSONAL_MONTH_REPORT = "delete from OBJECTS where OBJECT_ID = ?";
 
     String DELETE_FAMILY_MONTH_REPORT = "delete from OBJECTS where OBJECT_ID = ?";
 
