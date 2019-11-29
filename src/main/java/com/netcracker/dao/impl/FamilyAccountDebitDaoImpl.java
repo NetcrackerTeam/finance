@@ -45,8 +45,8 @@ public class FamilyAccountDebitDaoImpl implements FamilyAccountDebitDao {
                 familyDebitAccount.getObjectName(),
                 familyDebitAccount.getAmount().toString(),
                 familyDebitAccount.getStatus().getId().toString(),
-                familyDebitAccount.getOwner().getId().toString(),
-                familyDebitAccount.getOwner().getId().toString()
+                new BigDecimal(familyDebitAccount.getOwner().getId()),
+                new BigDecimal(familyDebitAccount.getOwner().getId())
         });
         //logger.debug("Entering insert(FamilyDebitAccount)");
         return familyDebitAccount;

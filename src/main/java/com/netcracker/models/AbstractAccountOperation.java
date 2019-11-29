@@ -1,12 +1,12 @@
 package com.netcracker.models;
 
 import java.math.BigInteger;
-import java.time.LocalDate;
+import java.util.Date;
 
 public abstract class AbstractAccountOperation {
     private BigInteger id;
     private Long amount;
-    private LocalDate date;
+    private Date date;
     private Debt debt;
     private BigInteger userId;
 
@@ -33,7 +33,7 @@ public abstract class AbstractAccountOperation {
             return actualClassBuilder;
         }
 
-        public B accountDate(LocalDate date) {
+        public B accountDate(Date date) {
             actualClass.setDate(date);
             return actualClassBuilder;
         }
@@ -62,7 +62,7 @@ public abstract class AbstractAccountOperation {
         return amount;
     }
 
-    public LocalDate getDate() {
+    public Date getDate() {
         return date;
     }
 
@@ -82,7 +82,7 @@ public abstract class AbstractAccountOperation {
         this.amount = amount;
     }
 
-    public void setDate(LocalDate date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 

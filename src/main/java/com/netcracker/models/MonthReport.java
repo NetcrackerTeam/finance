@@ -14,8 +14,7 @@ public class MonthReport {
     private Long totalIncome;
     private Long totalExpense;
     private Long balance;
-    private LocalDate date_from;
-    private LocalDate date_to;
+    private LocalDate date_of;
     private List<CategoryExpenseReport> categoryExpense;
     private List<CategoryIncomeReport> categoryIncome;
     public static  class Builder {
@@ -23,8 +22,8 @@ public class MonthReport {
         private Long totalIncome;
         private Long totalExpense;
         private Long balance;
-        private LocalDate date_from;
-        private LocalDate date_to;
+        private LocalDate date_of;
+
         private List<CategoryExpenseReport> categoryExpense;
         private List<CategoryIncomeReport>  categoryIncome;
 
@@ -47,12 +46,8 @@ public class MonthReport {
             this.balance = val;
             return this;
         }
-        public Builder date_to( LocalDate val) {
-            this.date_to = val;
-            return this;
-        }
-        public Builder date_from( LocalDate val) {
-            this.date_from = val;
+        public Builder date_of( LocalDate val) {
+            this.date_of = val;
             return this;
         }
         public Builder categoryExpense(List<CategoryExpenseReport> val) {
@@ -89,21 +84,16 @@ public class MonthReport {
         return balance;
     }
 
-    public LocalDate getDate_from() {
-        return date_from;
+    public LocalDate getDate_of() {
+        return date_of;
     }
 
-    public void setDate_from(LocalDate date_from) {
-        this.date_from = date_from;
+    public void setDate_of(LocalDate date_of) {
+        this.date_of = date_of;
     }
 
-    public LocalDate getDate_to() {
-        return date_to;
-    }
 
-    public void setDate_to(LocalDate date_to) {
-        this.date_to = date_to;
-    }
+
 
     public List<CategoryExpenseReport> getCategoryExpense() {
         return categoryExpense;
