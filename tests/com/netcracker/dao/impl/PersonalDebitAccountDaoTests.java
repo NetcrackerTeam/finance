@@ -3,6 +3,7 @@ package com.netcracker.dao.impl;
 import com.netcracker.configs.WebConfig;
 import com.netcracker.dao.PersonalDebitAccountDao;
 import com.netcracker.dao.UserDao;
+import com.netcracker.dao.impl.mapper.CurrentSequenceMapper;
 import com.netcracker.models.PersonalDebitAccount;
 import com.netcracker.models.User;
 import com.netcracker.models.enums.PersonalAccountStatusActive;
@@ -35,13 +36,13 @@ public class PersonalDebitAccountDaoTests {
     private JdbcTemplate template;
     private PersonalDebitAccount personalDebitAccount;
     private static final String  CREATE_USER = "INSERT ALL " +
-            "INTO OBJECTS(OBJECT_ID,OBJECT_TYPE_ID,NAME) VALUES (127, 1, 'user_Tests') "
+            "INTO OBJECTS(OBJECT_ID,OBJECT_TYPE_ID,NAME) VALUES (objects_id_s.nextval, 1, 'user_Tests') "
             +
-            "INTO ATTRIBUTES(ATTR_ID, OBJECT_ID, VALUE) VALUES(5, 127, 'UserTests') "
+            "INTO ATTRIBUTES(ATTR_ID, OBJECT_ID, VALUE) VALUES(5, objects_id_s.currval, ?) "
             +
-            "INTO ATTRIBUTES(ATTR_ID, OBJECT_ID, VALUE) VALUES(3, 127, 'mail@gmail.com') "
+            "INTO ATTRIBUTES(ATTR_ID, OBJECT_ID, VALUE) VALUES(3, objects_id_s.currval, ?) "
             +
-            "INTO ATTRIBUTES(ATTR_ID, OBJECT_ID, VALUE) VALUES(4, 127, 'password') "
+            "INTO ATTRIBUTES(ATTR_ID, OBJECT_ID, VALUE) VALUES(4, objects_id_s.currval, ?) "
             +
             "SELECT * " +
                     "FROM Dual";
@@ -72,14 +73,19 @@ public class PersonalDebitAccountDaoTests {
     @Test
     public void createPersonalAccount(){
         User owner = new User.Builder()
-                .user_id(BigInteger.valueOf(125))
+                .user_id(BigInteger.valueOf(getCurrentSequenceId()))
                 .user_name("Dimas")
                 .user_eMail("mailDimas@gmail.com")
                 .user_password("passwordDima")
                 .build();
-        template.update(CREATE_USER);
+        template.update(CREATE_USER, new Object[] {
+                owner.getName(),
+                owner.geteMail(),
+                owner.getPassword()
+        });
 
         PersonalDebitAccount personalDebitAccount = new PersonalDebitAccount.Builder()
+                .debitId(BigInteger.valueOf(getCurrentSequenceId()))
                 .debitObjectName("PER_DEB_ACC1")
                 .debitAmount(Long.valueOf(1234L))
                 .debitPersonalAccountStatus(PersonalAccountStatusActive.YES)
@@ -98,5 +104,11 @@ public class PersonalDebitAccountDaoTests {
     @Test
     public void deletePersonalAccountByUserId (){
         personalDebitAccountDao.deletePersonalAccountByUserId(BigInteger.valueOf(121));
+    }
+
+    private Integer getCurrentSequenceId() {
+        String GET_CURRENT_SEQUENCE_ID = "select last_number from user_sequences where sequence_name = 'OBJECTS_ID_S'";
+        int newId = template.queryForObject(GET_CURRENT_SEQUENCE_ID, new CurrentSequenceMapper());
+        return newId++;
     }
 }
