@@ -24,10 +24,7 @@ public class MonthReportDaoImpl implements MonthReportDao {
                 monthReport.getBalance(),
                 monthReport.getTotalExpense(),
                 monthReport.getTotalIncome(),
-                monthReport.getDate_from(),
-                monthReport.getDate_to(),
-                monthReport.getCategoryExpense(),
-                monthReport.getCategoryIncome()
+                monthReport.getDate_of()
         });
     }
 
@@ -37,8 +34,7 @@ public class MonthReportDaoImpl implements MonthReportDao {
                 monthReport.getTotalIncome(),
                 monthReport.getTotalExpense(),
                 monthReport.getBalance(),
-                monthReport.getDate_from(),
-                monthReport.getDate_to(),
+                monthReport.getDate_of(),
         });
     }
 
