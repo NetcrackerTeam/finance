@@ -1,6 +1,5 @@
 package com.netcracker.dao.impl;
 
-import com.netcracker.AssertUtils;
 import com.netcracker.configs.WebConfig;
 import com.netcracker.dao.CreditOperationDao;
 import com.netcracker.dao.impl.mapper.CurrentSequenceMapper;
@@ -126,7 +125,7 @@ public class CreditOperationTest {
         return format.parse(stringToParse);
     }
 
-    protected Integer getCurrentSequenceId() {
+    private Integer getCurrentSequenceId() {
         String GET_CURRENT_SEQUENCE_ID = "select last_number from user_sequences where sequence_name = 'OBJECTS_ID_S'";
         int newId = jdbcTemplate.queryForObject(GET_CURRENT_SEQUENCE_ID, new CurrentSequenceMapper());
         return newId++;

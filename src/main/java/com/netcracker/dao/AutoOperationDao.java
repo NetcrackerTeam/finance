@@ -4,7 +4,7 @@ import com.netcracker.models.AbstractAutoOperation;
 import com.netcracker.models.AutoOperationExpense;
 import com.netcracker.models.AutoOperationIncome;
 
-import java.math.BigInteger;
+import java.util.Collection;
 import java.util.List;
 
 public interface AutoOperationDao {
@@ -26,7 +26,7 @@ public interface AutoOperationDao {
 
     void deleteAutoOperation(Integer autoOperationId);
 
-    List<AbstractAutoOperation> getAllTodayOperations(Integer debitAccountId);
+    Collection<AbstractAutoOperation> getAllTodayOperations(Integer debitAccountId);
 
     String CREATE_PERSONAL_INCOME_AO = "insert all " +
             "into objects (object_id, parent_id, object_type_id, name, description) " +

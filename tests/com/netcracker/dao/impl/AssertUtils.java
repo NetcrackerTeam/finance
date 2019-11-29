@@ -1,4 +1,4 @@
-package com.netcracker;
+package com.netcracker.dao.impl;
 
 import com.netcracker.models.AutoOperationExpense;
 import com.netcracker.models.AutoOperationIncome;

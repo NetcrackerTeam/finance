@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Component
@@ -22,7 +23,6 @@ public class AutoOperationDaoImpl implements AutoOperationDao {
     public AutoOperationDaoImpl(DataSource dataSource){
         jdbcTemplate = new JdbcTemplate(dataSource);
     }
-
 
     @Override
     public AutoOperationIncome getFamilyIncomeAutoOperation(Integer autoOperationId) {
@@ -90,12 +90,12 @@ public class AutoOperationDaoImpl implements AutoOperationDao {
     }
 
     @Override
-    public List<AbstractAutoOperation> getAllTodayOperations(Integer debitAccountId) {
-        List<AutoOperationIncome> allIncomes = jdbcTemplate.query(GET_ALL_TODAY_AO_INCOME, new Object[]{debitAccountId,
+    public Collection<AbstractAutoOperation> getAllTodayOperations(Integer debitAccountId) {
+        Collection<AutoOperationIncome> allIncomes = jdbcTemplate.query(GET_ALL_TODAY_AO_INCOME, new Object[]{debitAccountId,
         debitAccountId}, new AutoOperationIncomeMapper());
-        List<AutoOperationExpense> allExpenses = jdbcTemplate.query(GET_ALL_TODAY_AO_EXPENSE, new Object[]{debitAccountId,
+        Collection<AutoOperationExpense> allExpenses = jdbcTemplate.query(GET_ALL_TODAY_AO_EXPENSE, new Object[]{debitAccountId,
         debitAccountId}, new AutoOperationExpenseMapper());
-        List<AbstractAutoOperation> allOperations = new ArrayList<>(allIncomes);
+        Collection<AbstractAutoOperation> allOperations = new ArrayList<>(allIncomes);
         allOperations.addAll(allExpenses);
         return allOperations;
     }
