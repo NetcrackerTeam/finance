@@ -7,28 +7,100 @@ import java.util.Date;
 
 public interface CreditDeptDao {
 
+    /**
+     * Get personal credit debt by personal credit id.
+     *
+     * @param id personal credit id
+     * @return debt object
+     */
     public Debt getPersonalDebtByCreditId(BigInteger id);
 
+    /**
+     * Get family credit debt by family credit id.
+     *
+     * @param id family credit id
+     * @return debt object
+     */
     public Debt getFamilyDebtByCreditId(BigInteger id);
 
+    /**
+     * Get personal debt by debt id.
+     *
+     * @param id personal debt id
+     * @return debt object
+     */
     public Debt getPersonalDebtById(BigInteger id);
 
+    /**
+     * Get family debt by debt id.
+     *
+     * @param id family debt id
+     * @return debt object
+     */
     public Debt getFamilyDebtById(BigInteger id);
 
+    /**
+     * Change starting debt date of personal credit.
+     *
+     * @param id   debt id
+     * @param date new starting debt date
+     */
     public void updatePersonalDebtDateFrom(BigInteger id, Date date);
 
+    /**
+     * Change starting debt date of family credit.
+     *
+     * @param id   debt id
+     * @param date new starting debt date
+     */
     public void updateFamilyDebtDateFrom(BigInteger id, Date date);
 
+    /**
+     * Change ending debt date of personal credit.
+     *
+     * @param id   debt id
+     * @param date new ending debt date
+     */
     public void updatePersonalDebtDateTo(BigInteger id, Date date);
 
+    /**
+     * Change ending debt date of family credit.
+     *
+     * @param id   debt id
+     * @param date new ending debt date
+     */
     public void updateFamilyDebtDateTo(BigInteger id, Date date);
 
+    /**
+     * Change debt total amount of personal credit.
+     *
+     * @param id     debt id
+     * @param amount new debt amount
+     */
     public void updatePersonalDebtAmount(BigInteger id, long amount);
 
+    /**
+     * Change debt total amount of family credit.
+     *
+     * @param id     debt id
+     * @param amount new debt amount
+     */
     public void updateFamilyDebtAmount(BigInteger id, long amount);
 
+    /**
+     * Create personal debt to personal credit. Needed when
+     * create personal credit account.
+     *
+     * @param id personal credit id
+     */
     public void createPersonalDebtByCreditId(BigInteger id);
 
+    /**
+     * Create family debt to personal credit. Needed when
+     * create family credit account.
+     *
+     * @param id family credit id
+     */
     public void createFamilyDebtByCreditId(BigInteger id);
 
     String SELECT_PERSONAL_DEBT_BY_CREDIT_ID_QUERY = "SELECT DEBT_DATE_FROM_AT.DATE_VALUE DEBT_FROM, DEBT_DATE_TO_AT.DATE_VALUE DEBT_TO,\n" +
