@@ -13,4 +13,4 @@ deploy:
   provider: heroku
   app: teamexample
   api_key:
-    secure: ab4919bf-99db-49e4-a9fa-e12fa9ebfb32
+    secure: 3f72c6ba-31d0-4d50-a2ef-33ed37ae61d4
