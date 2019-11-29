@@ -5,7 +5,7 @@ import com.netcracker.models.enums.CategoryExpense;
 public class AutoOperationExpense extends AbstractAutoOperation {
     private CategoryExpense categoryExpense;
 
-    public static class Builder extends BaseBuilder<AutoOperationExpense, Builder> {
+    public static class Builder extends BaseBuilderAO<AutoOperationExpense, Builder> {
 
         public Builder categoryExpense(CategoryExpense expense) {
             actualClass.setCategoryExpense(expense);

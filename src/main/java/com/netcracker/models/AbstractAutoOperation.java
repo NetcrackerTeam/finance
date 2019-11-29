@@ -3,25 +3,30 @@ package com.netcracker.models;
 public abstract class AbstractAutoOperation extends AbstractAccountOperation {
     private int dayOfMonth;
 
+    protected static abstract class BaseBuilderAO<T extends AbstractAutoOperation, B extends BaseBuilder> extends BaseBuilder<T, B>{
+        protected T actualClass;
+        protected B actualClassBuilder;
 
-    public static class BuilderAutoOperation extends BaseBuilder<AbstractAutoOperation, BaseBuilder> {
+        protected abstract T getActual();
 
-        public BuilderAutoOperation dayOfMonth(int dayOfMonth) {
+        protected abstract B getActualBuilder();
+
+        protected BaseBuilderAO() {
+            actualClass = getActual();
+            actualClassBuilder = getActualBuilder();
+        }
+
+        public B dayOfMonth(int dayOfMonth) {
             actualClass.setDayOfMonth(dayOfMonth);
-            return this;
-        }
-        @Override
-        protected AbstractAutoOperation getActual() {
-            return null;
+            return actualClassBuilder;
         }
 
-        @Override
-        protected BaseBuilder getActualBuilder() {
-            return null;
+        public T build() {
+            return actualClass;
         }
     }
 
-        public int getDayOfMonth() {
+    public int getDayOfMonth() {
         return dayOfMonth;
     }
 

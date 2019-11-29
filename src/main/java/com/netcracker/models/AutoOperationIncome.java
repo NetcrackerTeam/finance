@@ -5,7 +5,7 @@ import com.netcracker.models.enums.CategoryIncome;
 public class AutoOperationIncome extends AbstractAutoOperation {
     private CategoryIncome categoryIncome;
 
-    public static class Builder extends BaseBuilder<AutoOperationIncome, Builder> {
+    public static class Builder extends BaseBuilderAO<AutoOperationIncome, Builder> {
 
         public Builder categoryIncome(CategoryIncome income) {
             actualClass.setCategoryIncome(income);

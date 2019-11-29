@@ -1,5 +1,9 @@
 package com.netcracker.configs;
 
+import com.netcracker.dao.AutoOperationDao;
+import com.netcracker.dao.CreditOperationDao;
+import com.netcracker.dao.impl.AutoOperationDaoImpl;
+import com.netcracker.dao.impl.CreditOperationDaoImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -38,5 +42,15 @@ public class WebConfig implements WebMvcConfigurer {
         dataSource.setPassword(env.getProperty("db.password"));
 
         return dataSource;
+    }
+
+    @Bean(name = "creditOperationDao")
+    public CreditOperationDao getCreditOperationDao() {
+        return new CreditOperationDaoImpl(getDataSource());
+    }
+
+    @Bean(name = "autoOperationDao")
+    public AutoOperationDao getAutoOperationDao() {
+        return new AutoOperationDaoImpl(getDataSource());
     }
 }

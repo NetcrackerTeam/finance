@@ -5,10 +5,10 @@ import java.time.LocalDate;
 
 public abstract class AbstractAccountOperation {
     private BigInteger id;
-    private BigInteger amount;
+    private Long amount;
     private LocalDate date;
     private Debt debt;
-    private Long userId;
+    private BigInteger userId;
 
     protected static abstract class BaseBuilder<T extends AbstractAccountOperation, B extends BaseBuilder> {
         protected T actualClass;
@@ -23,13 +23,12 @@ public abstract class AbstractAccountOperation {
             actualClassBuilder = getActualBuilder();
         }
 
-
         public B accountId(BigInteger id) {
             actualClass.setId(id);
             return actualClassBuilder;
         }
 
-        public B accountAmount(BigInteger amount) {
+        public B accountAmount(Long amount) {
             actualClass.setAmount(amount);
             return actualClassBuilder;
         }
@@ -44,8 +43,7 @@ public abstract class AbstractAccountOperation {
             return actualClassBuilder;
         }
 
-
-        public B accountUserId(Long id) {
+        public B accountUserId(BigInteger id) {
             actualClass.setUserId(id);
             return actualClassBuilder;
         }
@@ -56,12 +54,11 @@ public abstract class AbstractAccountOperation {
 
     }
 
-
     public BigInteger getId() {
         return id;
     }
 
-    public BigInteger getAmount() {
+    public Long getAmount() {
         return amount;
     }
 
@@ -73,7 +70,7 @@ public abstract class AbstractAccountOperation {
         return debt;
     }
 
-    public Long getUserId() {
+    public BigInteger getUserId() {
         return userId;
     }
 
@@ -81,7 +78,7 @@ public abstract class AbstractAccountOperation {
         this.id = id;
     }
 
-    public void setAmount(BigInteger amount) {
+    public void setAmount(Long amount) {
         this.amount = amount;
     }
 
@@ -93,7 +90,7 @@ public abstract class AbstractAccountOperation {
         this.debt = debt;
     }
 
-    public void setUserId(Long userId) {
+    public void setUserId(BigInteger userId) {
         this.userId = userId;
     }
 }

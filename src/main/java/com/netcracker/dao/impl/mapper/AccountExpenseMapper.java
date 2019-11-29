@@ -15,9 +15,9 @@ public class AccountExpenseMapper implements RowMapper<AccountExpense> {
         AbstractAccountOperation accountExpense =
                 new AccountIncome.Builder()
                         .accountId(resultSet.getBigDecimal("account_income_id").toBigInteger())
-                        .accountAmount(resultSet.getBigDecimal("income_amount").toBigInteger())
+                        .accountAmount(resultSet.getLong("income_amount"))
                         .accountDate(resultSet.getDate("date").toLocalDate())
-                        .accountUserId(resultSet.getLong("user_id"))
+                        .accountUserId(resultSet.getBigDecimal("user_id").toBigInteger())
                         .build();
         return (AccountExpense) accountExpense;
     }

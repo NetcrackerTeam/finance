@@ -4,12 +4,11 @@ import java.math.BigInteger;
 import java.util.Date;
 
 public class CreditOperation {
-    private  BigInteger creditOperationId;
+    private BigInteger creditOperationId;
     private Long amount;
     private Date date;
 
-    public CreditOperation(BigInteger creditOperationId, Long amount, Date date) {
-        this.creditOperationId = creditOperationId;
+    public CreditOperation(Long amount, Date date) {
         this.amount = amount;
         this.date = date;
     }
