@@ -3,7 +3,6 @@ package com.netcracker.dao.impl.mapper;
 import com.netcracker.models.AbstractCreditAccount;
 import com.netcracker.models.Debt;
 import com.netcracker.models.FamilyCreditAccount;
-import com.netcracker.models.PersonalCreditAccount;
 import com.netcracker.models.enums.CreditStatusPaid;
 import org.springframework.jdbc.core.RowMapper;
 

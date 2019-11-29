@@ -5,8 +5,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public enum CreditStatusPaid {
-    YES (new BigInteger("38")),
-    NO (new BigInteger("39"));
+    YES (new BigInteger("37")),
+    NO (new BigInteger("38"));
     private BigInteger id ;
 
     CreditStatusPaid(BigInteger id) {
