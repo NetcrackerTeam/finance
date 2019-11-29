@@ -54,7 +54,7 @@ public class CreditAccountDaoImplTest {
                 new Debt.Builder()
                         .debtId(new BigInteger("14"))
                         .amountDebt(0L)
-                        .dateFrom(Date.valueOf(LocalDate.of(2019, 11, 24)))
+                        .dateFrom(Date.valueOf(LocalDate.of(2019, 12, 2)))
                         .dateTo(Date.valueOf(LocalDate.of(2020, 2, 22)))
                         .build();
 
