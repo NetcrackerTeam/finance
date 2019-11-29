@@ -16,8 +16,8 @@ import java.util.Locale;
 public class HwController {
 @Autowired
 private FamilyAccountDebitDao familyAccountDebitDao;
-@Autowired
-private PersonalDebitAccountDao personalDebitAccountDao;
+//@Autowired
+//private PersonalDebitAccountDao personalDebitAccountDao;
     Logger logger = Logger.getLogger(HwController.class);
     @GetMapping( "/" )
     public String welcomePage(Model model) {
