@@ -5,6 +5,7 @@ import com.netcracker.dao.impl.mapper.CreditAccountFamilyMapper;
 import com.netcracker.dao.impl.mapper.CreditAccountPersonalMapper;
 import com.netcracker.models.FamilyCreditAccount;
 import com.netcracker.models.PersonalCreditAccount;
+import com.netcracker.models.enums.CreditStatusPaid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
@@ -54,7 +55,49 @@ public class CreditAccountDaoImpl implements CreditAccountDao {
         addCreditPayment(id, amount);
     }
 
+    @Override
+    public void createPersonalCreditByDebitAccountId(BigInteger id, PersonalCreditAccount creditAccount) {
+        jdbcTemplate.update(CREATE_PERSONAL_CREDIT_QUERY,
+                creditAccount.getDate(),
+                String.valueOf(creditAccount.getName()),
+                String.valueOf(creditAccount.getAmount()),
+                String.valueOf(creditAccount.getPaidAmount()),
+                String.valueOf(creditAccount.getPaidAmount()),
+                String.valueOf(creditAccount.getCreditRate()),
+                creditAccount.getDateTo(),
+                new BigDecimal(creditAccount.isPaid().getId()),
+                new BigDecimal(id));
+    }
+
+    @Override
+    public void createFamilyCreditByDebitAccountId(BigInteger id, FamilyCreditAccount creditAccount) {
+        jdbcTemplate.update(CREATE_FAMILY_CREDIT_QUERY,
+                creditAccount.getDate(),
+                String.valueOf(creditAccount.getName()),
+                String.valueOf(creditAccount.getAmount()),
+                String.valueOf(creditAccount.getPaidAmount()),
+                String.valueOf(creditAccount.getPaidAmount()),
+                String.valueOf(creditAccount.getCreditRate()),
+                creditAccount.getDateTo(),
+                new BigDecimal(creditAccount.isPaid().getId()),
+                new BigDecimal(id));
+    }
+
+    @Override
+    public void updateIsPaidStatusPersonalCredit(BigInteger id, CreditStatusPaid statusPaid) {
+        updatePaidStatus(id, statusPaid);
+    }
+
+    @Override
+    public void updateIsPaidStatusFamilyCredit(BigInteger id, CreditStatusPaid statusPaid) {
+        updatePaidStatus(id, statusPaid);
+    }
+
     private void addCreditPayment(BigInteger id, long amount) {
         jdbcTemplate.update(UPDATE_CREDIT_PAYMENT_QUERY, String.valueOf(amount), new BigDecimal(id));
+    }
+
+    private void updatePaidStatus(BigInteger id, CreditStatusPaid statusPaid) {
+        jdbcTemplate.update(UPDATE_ISPAID_STATUS_CREDIT_QUERY, String.valueOf(statusPaid.getId()), new BigDecimal(id));
     }
 }

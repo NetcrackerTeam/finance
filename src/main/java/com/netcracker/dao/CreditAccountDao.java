@@ -2,23 +2,96 @@ package com.netcracker.dao;
 
 import com.netcracker.models.FamilyCreditAccount;
 import com.netcracker.models.PersonalCreditAccount;
+import com.netcracker.models.enums.CreditStatusPaid;
 
 import java.math.BigInteger;
 import java.util.List;
 
 public interface CreditAccountDao {
 
+    /**
+     * Get personal credit account from database.
+     *
+     * @param id personal credit id
+     * @return personal credit object
+     */
     PersonalCreditAccount getPersonalCreditById(BigInteger id);
 
+    /**
+     * Get family credit account from database.
+     *
+     * @param id personal credit id
+     * @return personal credit object
+     */
     FamilyCreditAccount getFamilyCreditById(BigInteger id);
 
+    /**
+     * Get list of existing personal credits using personal
+     * debit account id.
+     *
+     * @param id personal debit id
+     * @return existing personal credits
+     */
     List<PersonalCreditAccount> getAllPersonalCreditsByAccountId(BigInteger id);
 
+    /**
+     * Get list of existing family credits using family
+     * debit account id.
+     *
+     * @param id family debit id
+     * @return existing family credits
+     */
     List<FamilyCreditAccount> getAllFamilyCreditsByAccountId(BigInteger id);
 
+    /**
+     * Change personal credit payed money to new value.
+     *
+     * @param id        personal credit account id
+     * @param amount    new payed amount
+     */
     void updatePersonalCreditPayment(BigInteger id, long amount);
 
+    /**
+     * Change family credit payed money to new value.
+     *
+     * @param id        family credit account id
+     * @param amount    new payed amount
+     */
     void updateFamilyCreditPayment(BigInteger id, long amount);
+
+    /**
+     * Create new personal credit account to existing personal
+     * debit account with data.
+     *
+     * @param id            personal debit account id
+     * @param creditAccount personal credit account object
+     */
+    void createPersonalCreditByDebitAccountId(BigInteger id, PersonalCreditAccount creditAccount);
+
+    /**
+     * Create new family credit account to existing family
+     * debit account with data.
+     *
+     * @param id            family debit account id
+     * @param creditAccount family credit account object
+     */
+    void createFamilyCreditByDebitAccountId(BigInteger id, FamilyCreditAccount creditAccount);
+
+    /**
+     * Change if paid status in personal credit account.
+     *
+     * @param id            personal credit account id
+     * @param statusPaid    enum status value
+     */
+    void updateIsPaidStatusPersonalCredit(BigInteger id, CreditStatusPaid statusPaid);
+
+    /**
+     * Change if paid status in family credit account.
+     *
+     * @param id            family credit account id
+     * @param statusPaid    enum status value
+     */
+    void updateIsPaidStatusFamilyCredit(BigInteger id, CreditStatusPaid statusPaid);
 
     String SELECT_FAMILY_CREDIT_QUERY = "SELECT CRED.OBJECT_ID CREDIT_ID, NAME_AT.VALUE NAME, AMOUNT_AT.VALUE AMOUNT,\n" +
             "  PAID_AT.VALUE PAID, DATE_AT.DATE_VALUE DATE_CR,  RATE_AT.VALUE CREDIT_RATE, \n" +
@@ -110,10 +183,10 @@ public interface CreditAccountDao {
             "        LEFT JOIN ATTRIBUTES DEBT_DATE_TO_AT ON DEBT.OBJECT_ID = DEBT_DATE_TO_AT.OBJECT_ID\n" +
             "        LEFT JOIN ATTRIBUTES DEBT_AMOUNT_AT ON DEBT.OBJECT_ID = DEBT_AMOUNT_AT.OBJECT_ID\n" +
             "        \n" +
-            "    WHERE REFER_ACC.REFERENCE = ?/*FAMILY DEBIT ACCOUNT ID*/\n" +
-            "        AND ACC_OBJ.OBJECT_TYPE_ID = 13/*FAMILY ACCOUNT OBJECT TYPE ID*/\n" +
-            "        AND REFER_ACC.ATTR_ID = 28/*ATTRIBUTE RELATION FAM CREDIT AND DEBIT ACC*/\n" +
-            "        AND DEBT.OBJECT_TYPE_ID = 19/*FAMILY DEBT OBJECT TYPE ID*/\n" +
+            "    WHERE REFER_ACC.REFERENCE = ?/*PERSONAL DEBIT ACCOUNT ID*/\n" +
+            "        AND ACC_OBJ.OBJECT_TYPE_ID = 2/*PERSONAL ACCOUNT OBJECT TYPE ID*/\n" +
+            "        AND REFER_ACC.ATTR_ID = 27/*ATTRIBUTE RELATION PER CREDIT AND DEBIT ACC*/\n" +
+            "        AND DEBT.OBJECT_TYPE_ID = 8/*PERSONAL DEBT OBJECT TYPE ID*/\n" +
             "        AND DATE_AT.ATTR_ID = 29/*CREATION DATE ATTRIBUTE*/\n" +
             "        AND NAME_AT.ATTR_ID = 30/*NAME ATTRIBUTE*/\n" +
             "        AND AMOUNT_AT.ATTR_ID = 31/*CREDIT AMOUNT ATTRIBUTE*/\n" +
@@ -148,10 +221,10 @@ public interface CreditAccountDao {
             "        LEFT JOIN ATTRIBUTES DEBT_DATE_TO_AT ON DEBT.OBJECT_ID = DEBT_DATE_TO_AT.OBJECT_ID\n" +
             "        LEFT JOIN ATTRIBUTES DEBT_AMOUNT_AT ON DEBT.OBJECT_ID = DEBT_AMOUNT_AT.OBJECT_ID\n" +
             "        \n" +
-            "    WHERE REFER_ACC.REFERENCE = ?/*PERSONAL DEBIT ACCOUNT ID*/\n" +
-            "        AND ACC_OBJ.OBJECT_TYPE_ID = 2/*PERSONAL ACCOUNT OBJECT TYPE ID*/\n" +
-            "        AND REFER_ACC.ATTR_ID = 27/*ATTRIBUTE RELATION PER CREDIT AND DEBIT ACC*/\n" +
-            "        AND DEBT.OBJECT_TYPE_ID = 8/*PERSONAL DEBT OBJECT TYPE ID*/\n" +
+            "    WHERE REFER_ACC.REFERENCE = ?/*FAMILY DEBIT ACCOUNT ID*/\n" +
+            "        AND ACC_OBJ.OBJECT_TYPE_ID = 13/*FAMILY ACCOUNT OBJECT TYPE ID*/\n" +
+            "        AND REFER_ACC.ATTR_ID = 28/*ATTRIBUTE RELATION FAM CREDIT AND DEBIT ACC*/\n" +
+            "        AND DEBT.OBJECT_TYPE_ID = 19/*FAMILY DEBT OBJECT TYPE ID*/\n" +
             "        AND DATE_AT.ATTR_ID = 29/*CREATION DATE ATTRIBUTE*/\n" +
             "        AND NAME_AT.ATTR_ID = 30/*NAME ATTRIBUTE*/\n" +
             "        AND AMOUNT_AT.ATTR_ID = 31/*CREDIT AMOUNT ATTRIBUTE*/\n" +
@@ -168,4 +241,36 @@ public interface CreditAccountDao {
             "    SET VALUE = ?/*NEW CREDIT PAYED AMOUNT */\n" +
             "    WHERE ATTR_ID = 32/*PAID AMOUNT ATTRIBUTE ID*/\n" +
             "    AND OBJECT_ID = ?/*CREDIT ACCOUNT ID*/";
+
+    String CREATE_PERSONAL_CREDIT_QUERY = "INSERT ALL\n" +
+            "     INTO OBJECTS (OBJECT_ID,PARENT_ID,OBJECT_TYPE_ID, NAME) VALUES (OBJECTS_ID_S.NEXTVAL,NULL,6, 'CRED_ACC_PER') /*6 OBJECT TYPE PERSONAL CREDIT ACC*/\n" +
+            "     INTO ATTRIBUTES(ATTR_ID, OBJECT_ID, DATE_VALUE) VALUES(29, OBJECTS_ID_S.CURRVAL, SYSDATE) /*CREATION DATE ATTRIBUTE*/\n" +
+            "     INTO ATTRIBUTES(ATTR_ID, OBJECT_ID, VALUE) VALUES(30, OBJECTS_ID_S.CURRVAL, 'CREDIT_MONEY1') /*NAME ATTRIBUTE*/\n" +
+            "     INTO ATTRIBUTES(ATTR_ID, OBJECT_ID, VALUE) VALUES(31, OBJECTS_ID_S.CURRVAL, '10000') /*CREDIT AMOUNT ATTRIBUTE*/\n" +
+            "     INTO ATTRIBUTES(ATTR_ID, OBJECT_ID, VALUE) VALUES(32, OBJECTS_ID_S.CURRVAL, '2000') /*PAID CREDIT AMOUNT ATTRIBUTE*/\n" +
+            "     INTO ATTRIBUTES(ATTR_ID, OBJECT_ID, VALUE) VALUES(33, OBJECTS_ID_S.CURRVAL, '20') /*CREDIT RATE ATTRIBUTE*/\n" +
+            "     INTO ATTRIBUTES(ATTR_ID, OBJECT_ID, DATE_VALUE) VALUES(34, OBJECTS_ID_S.CURRVAL, SYSDATE+90) /*CREDIT DATE TO ATTRIBUTE*/\n" +
+            "     INTO ATTRIBUTES(ATTR_ID, OBJECT_ID, LIST_VALUE_ID) VALUES(35, OBJECTS_ID_S.CURRVAL, 38) /*STATUS OF CREDIT ATTRIBUTE*/\n" +
+            "     INTO ATTRIBUTES(ATTR_ID, OBJECT_ID, VALUE) VALUES(36, OBJECTS_ID_S.CURRVAL, '1') /*PAYMENT CREDIT DAY OF MONTH ATTRIBUTE*/\n" +
+            "    INTO OBJREFERENCE (ATTR_ID,OBJECT_ID,REFERENCE) VALUES (27,OBJECTS_ID_S.CURRVAL,?)/*ATTRIBUTE RELATION PER CREDIT AND DEBIT ACC*/\n" +
+            "    SELECT * FROM DUAL";
+
+    String CREATE_FAMILY_CREDIT_QUERY = "INSERT ALL\n" +
+            "     INTO OBJECTS (OBJECT_ID,PARENT_ID,OBJECT_TYPE_ID, NAME) VALUES (OBJECTS_ID_S.NEXTVAL,NULL,17, 'CRED_ACC_PER') /*17 OBJECT TYPE FAMILY CREDIT ACC*/\n" +
+            "     INTO ATTRIBUTES(ATTR_ID, OBJECT_ID, DATE_VALUE) VALUES(29, OBJECTS_ID_S.CURRVAL, ?) /*CREATION DATE ATTRIBUTE*/\n" +
+            "     INTO ATTRIBUTES(ATTR_ID, OBJECT_ID, VALUE) VALUES(30, OBJECTS_ID_S.CURRVAL, ?) /*NAME ATTRIBUTE*/\n" +
+            "     INTO ATTRIBUTES(ATTR_ID, OBJECT_ID, VALUE) VALUES(31, OBJECTS_ID_S.CURRVAL, ?) /*CREDIT AMOUNT ATTRIBUTE*/\n" +
+            "     INTO ATTRIBUTES(ATTR_ID, OBJECT_ID, VALUE) VALUES(32, OBJECTS_ID_S.CURRVAL, ?) /*PAID CREDIT AMOUNT ATTRIBUTE*/\n" +
+            "     INTO ATTRIBUTES(ATTR_ID, OBJECT_ID, VALUE) VALUES(33, OBJECTS_ID_S.CURRVAL, ?) /*CREDIT RATE ATTRIBUTE*/\n" +
+            "     INTO ATTRIBUTES(ATTR_ID, OBJECT_ID, DATE_VALUE) VALUES(34, OBJECTS_ID_S.CURRVAL, ?) /*CREDIT DATE TO ATTRIBUTE*/\n" +
+            "     INTO ATTRIBUTES(ATTR_ID, OBJECT_ID, LIST_VALUE_ID) VALUES(35, OBJECTS_ID_S.CURRVAL, ?) /*STATUS OF CREDIT ATTRIBUTE*/\n" +
+            "     INTO ATTRIBUTES(ATTR_ID, OBJECT_ID, VALUE) VALUES(36, OBJECTS_ID_S.CURRVAL, ?) /*PAYMENT CREDIT DAY OF MONTH ATTRIBUTE*/\n" +
+            "    INTO OBJREFERENCE (ATTR_ID,OBJECT_ID,REFERENCE) VALUES (27,OBJECTS_ID_S.CURRVAL,?)/*ATTRIBUTE RELATION PER CREDIT AND DEBIT ACC*/\n" +
+            "    SELECT * FROM DUAL";
+
+    String UPDATE_ISPAID_STATUS_CREDIT_QUERY = "UPDATE ATTRIBUTES\n" +
+            "    SET LIST_VALUE_ID = ?/*NEW STATUS */\n" +
+            "    WHERE ATTR_ID = 35/*CREDIT STATUS ATTRIBUTE ID*/\n" +
+            "    AND OBJECT_ID = ?/*DEBT ID*/\n";
+
 }

@@ -45,8 +45,8 @@ public class CreditAccountDaoImplTest {
         Debt famDebtOne =
                 new Debt.Builder()
                         .amountDebt(0L)
-                        .dateFrom(Date.valueOf(LocalDate.of(2019, 11, 24)))
-                        .dateTo(Date.valueOf(LocalDate.of(2020, 2, 22)))
+                        .dateFrom(Date.valueOf(LocalDate.of(2019, 11, 29)))
+                        .dateTo(Date.valueOf(LocalDate.of(2020, 2, 27)))
                         .debtId(new BigInteger("15"))
                         .build();
 
@@ -54,8 +54,8 @@ public class CreditAccountDaoImplTest {
                 new Debt.Builder()
                         .debtId(new BigInteger("14"))
                         .amountDebt(0L)
-                        .dateFrom(Date.valueOf(LocalDate.of(2019, 12, 2)))
-                        .dateTo(Date.valueOf(LocalDate.of(2020, 2, 22)))
+                        .dateFrom(Date.valueOf(LocalDate.of(2019, 11, 29)))
+                        .dateTo(Date.valueOf(LocalDate.of(2020, 2, 27)))
                         .build();
 
         familyCreditAccountOne =
@@ -65,8 +65,8 @@ public class CreditAccountDaoImplTest {
                         .amount(15000L)
                         .paidAmount(3000L)
                         .creditRate(20L)
-                        .date(LocalDate.of(2019, 11, 24))
-                        .dateTo(LocalDate.of(2020, 2, 22))
+                        .date(LocalDate.of(2019, 11, 29))
+                        .dateTo(LocalDate.of(2020, 2, 27))
                         .monthDay(1)
                         .isPaid(CreditStatusPaid.getStatusByKey(new BigInteger("38")))
                         .debtCredit(famDebtOne)
@@ -78,9 +78,9 @@ public class CreditAccountDaoImplTest {
                         .name("Credit_Money1")
                         .amount(10000L)
                         .paidAmount(2000L)
-                        .date(LocalDate.of(2019, 11, 24))
+                        .date(LocalDate.of(2019, 11, 29))
                         .creditRate(20L)
-                        .dateTo(LocalDate.of(2020, 2, 22))
+                        .dateTo(LocalDate.of(2020, 2, 27))
                         .monthDay(1)
                         .isPaid(CreditStatusPaid.getStatusByKey(new BigInteger("38")))
                         .debtCredit(perDebtOne)
