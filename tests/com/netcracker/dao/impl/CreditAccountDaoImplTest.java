@@ -42,21 +42,19 @@ public class CreditAccountDaoImplTest {
         Locale.setDefault(Locale.ENGLISH);
         personalListCredits = new ArrayList<>();
         familyListCredits = new ArrayList<>();
-        Debt famDebtOne =
-                new Debt.Builder()
-                        .amountDebt(0L)
-                        .dateFrom(Date.valueOf(LocalDate.of(2019, 11, 29)))
-                        .dateTo(Date.valueOf(LocalDate.of(2020, 2, 27)))
-                        .debtId(new BigInteger("15"))
-                        .build();
+        Debt famDebtOne = new Debt.Builder()
+                .amountDebt(0L)
+                .dateFrom(Date.valueOf(LocalDate.of(2019, 11, 29)))
+                .dateTo(Date.valueOf(LocalDate.of(2020, 2, 27)))
+                .debtId(new BigInteger("15"))
+                .build();
 
-        Debt perDebtOne =
-                new Debt.Builder()
-                        .debtId(new BigInteger("14"))
-                        .amountDebt(0L)
-                        .dateFrom(Date.valueOf(LocalDate.of(2019, 11, 29)))
-                        .dateTo(Date.valueOf(LocalDate.of(2020, 2, 27)))
-                        .build();
+        Debt perDebtOne = new Debt.Builder()
+                .debtId(new BigInteger("14"))
+                .amountDebt(0L)
+                .dateFrom(Date.valueOf(LocalDate.of(2019, 11, 29)))
+                .dateTo(Date.valueOf(LocalDate.of(2020, 2, 27)))
+                .build();
 
         familyCreditAccountOne =
                 new FamilyCreditAccount.Builder()
@@ -124,6 +122,7 @@ public class CreditAccountDaoImplTest {
         BigInteger accId = personalCreditAccountOne.getCreditId();
 
         creditAccountDao.updatePersonalCreditPayment(accId, newAmount);
+
         assertEquals(personalCreditAccountOne.getAmount(), creditAccountDao.getPersonalCreditById(accId).getAmount());
     }
 
@@ -133,6 +132,7 @@ public class CreditAccountDaoImplTest {
         BigInteger accId = familyCreditAccountOne.getCreditId();
 
         creditAccountDao.updateFamilyCreditPayment(accId, newAmount);
+
         assertEquals(familyCreditAccountOne.getAmount(), creditAccountDao.getFamilyCreditById(accId).getAmount());
     }
 
