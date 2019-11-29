@@ -3,17 +3,21 @@ package com.netcracker.dao.impl;
 import com.netcracker.dao.CreditDeptDao;
 import com.netcracker.dao.impl.mapper.CreditDebtMapper;
 import com.netcracker.models.Debt;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Date;
 
+@Component
 public class CreditDeptDaoImpl implements CreditDeptDao {
 
     private JdbcTemplate jdbcTemplate;
 
+    @Autowired
     public CreditDeptDaoImpl(DataSource dataSource) {
         jdbcTemplate = new JdbcTemplate(dataSource);
     }

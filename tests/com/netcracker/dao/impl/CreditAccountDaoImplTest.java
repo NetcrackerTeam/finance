@@ -136,6 +136,28 @@ public class CreditAccountDaoImplTest {
         assertEquals(familyCreditAccountOne.getAmount(), creditAccountDao.getFamilyCreditById(accId).getAmount());
     }
 
+    @Test
+    public void updateIsPaidStatusPersonalCreditTest() {
+        CreditStatusPaid statusPaid = CreditStatusPaid.NO;
+        BigInteger creditId = personalCreditAccountOne.getCreditId();
+
+        creditAccountDao.updateIsPaidStatusPersonalCredit(creditId, statusPaid);
+        PersonalCreditAccount result = creditAccountDao.getPersonalCreditById(creditId);
+
+        assertEquals(statusPaid, result.isPaid());
+    }
+
+    @Test
+    public void updateIsPaidStatusFamilyCreditTest() {
+        CreditStatusPaid statusPaid = CreditStatusPaid.NO;
+        BigInteger creditId = familyCreditAccountOne.getCreditId();
+
+        creditAccountDao.updateIsPaidStatusFamilyCredit(creditId, statusPaid);
+        FamilyCreditAccount result = creditAccountDao.getFamilyCreditById(creditId);
+
+        assertEquals(statusPaid, result.isPaid());
+    }
+
     private void checkEqualsCredit(AbstractCreditAccount creditOne, AbstractCreditAccount creditTwo) {
         assertEquals(creditOne.getCreditId(), creditTwo.getCreditId());
         assertEquals(creditOne.getName(), creditTwo.getName());
