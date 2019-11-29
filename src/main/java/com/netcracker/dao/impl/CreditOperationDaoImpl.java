@@ -14,6 +14,7 @@ import java.util.Collection;
 public class CreditOperationDaoImpl implements CreditOperationDao {
     protected JdbcTemplate jdbcTemplate;
 
+
     @Autowired
     public CreditOperationDaoImpl (DataSource dataSource) {
         jdbcTemplate = new JdbcTemplate(dataSource);

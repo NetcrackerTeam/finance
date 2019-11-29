@@ -72,6 +72,7 @@ public interface CreditOperationDao {
             "  and credit_acc_name.object_id = credit_acc_family.object_id \n" +
             "  and amount.object_id = credit_operation.object_id and dates.object_id = credit_operation.object_id";
 
+
     String DELETE_FROM_OBJECTS = "delete from objects where object_id = ?";
     String DELETE_FROM_ATTRIBUTES = "delete from attributes where object_id = ?";
     String DELETE_FROM_OBJREFERENCE = "delete from objreference where object_id = ?";

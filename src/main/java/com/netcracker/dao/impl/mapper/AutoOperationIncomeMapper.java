@@ -8,6 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class AutoOperationIncomeMapper implements RowMapper<AutoOperationIncome> {
+
     @Override
     public AutoOperationIncome mapRow(ResultSet resultSet, int i) throws SQLException {
         return new AutoOperationIncome.Builder()

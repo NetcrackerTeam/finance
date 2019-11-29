@@ -53,4 +53,5 @@ public class WebConfig implements WebMvcConfigurer {
     public AutoOperationDao getAutoOperationDao() {
         return new AutoOperationDaoImpl(getDataSource());
     }
+
 }

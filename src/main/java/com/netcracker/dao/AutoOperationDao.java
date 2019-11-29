@@ -145,6 +145,7 @@ public interface AutoOperationDao {
             "\tand category.object_id = auto_operation.object_id and dates.object_id = auto_operation.object_id \n" +
             "\tand email.object_id = users.object_id and user_name.object_id = users.object_id";
 
+
     String GET_ALL_TODAY_AO_INCOME = "select auto_operation.object_id as ao_object_id, auto_operation.name, debit_account.object_id as debit_id, \n" +
             "  day_of_month.value as day_of_month, amount.value as amount, category.list_value_id as category_id, \n" +
             "  lists.value as category, dates.date_value as date_of_creation\n" +

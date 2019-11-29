@@ -23,6 +23,7 @@ public class AutoOperationDaoImpl implements AutoOperationDao {
         jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
+
     @Override
     public AutoOperationIncome getFamilyIncomeAutoOperation(Integer autoOperationId) {
         return jdbcTemplate.queryForObject(GET_FAMILY_AO, new Object[]{familyIncome_family_ref_attr_id_1,

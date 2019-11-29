@@ -26,6 +26,7 @@ public class AutoOperationTest {
     protected JdbcTemplate jdbcTemplate;
     @Autowired
     private DataSource dataSource;
+
     @Autowired
     private AutoOperationDao autoOperationDao;
 

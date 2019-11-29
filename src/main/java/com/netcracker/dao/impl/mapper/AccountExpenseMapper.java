@@ -13,7 +13,7 @@ public class AccountExpenseMapper implements RowMapper<AccountExpense> {
     @Override
     public AccountExpense mapRow(ResultSet resultSet, int i) throws SQLException {
         AbstractAccountOperation accountExpense =
-                new AccountIncome.Builder()
+                new AccountExpense.Builder()
                         .accountId(resultSet.getBigDecimal("account_income_id").toBigInteger())
                         .accountAmount(resultSet.getLong("income_amount"))
                         .accountDate(resultSet.getDate("date").toLocalDate())
