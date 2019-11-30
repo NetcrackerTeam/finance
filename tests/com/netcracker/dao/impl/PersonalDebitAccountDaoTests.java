@@ -96,7 +96,7 @@ public class PersonalDebitAccountDaoTests {
                 .build();
 
         PersonalDebitAccount personalDebitAccount1 = personalDebitAccountDao.createPersonalAccount(personalDebitAccount);
-        assertEquals("Name1",personalDebitAccount1.getObjectName());
+        assertEquals("PER_DEB_ACC1",personalDebitAccount1.getObjectName());
         template.update(DELETE_USER);
         template.update(DELETE_ACC);
     }
