@@ -3,6 +3,7 @@ package com.netcracker.dao.impl.mapper;
 import com.netcracker.models.FamilyDebitAccount;
 import com.netcracker.models.PersonalDebitAccount;
 import com.netcracker.models.User;
+import com.netcracker.models.enums.UserStatusActive;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.math.BigInteger;
@@ -21,10 +22,11 @@ public class UserDaoMapper implements RowMapper<User> {
 
 
         return new User.Builder()
-                .user_id(new BigInteger(resultSet.getString("USER_ID")))
+                .user_id(resultSet.getBigDecimal("USER_ID").toBigInteger())
                 .user_name(resultSet.getString("NAME"))
                 .user_eMail(resultSet.getString("EMAIL"))
                 .user_password(resultSet.getString("PASSWORD"))
+                .userActive(UserStatusActive.valueOf(resultSet.getString("IS_ACTIVE")))
                 .personalDebit(pDebit)
                 .familyDebit(familyDeBAcc).build();
     }

@@ -19,7 +19,11 @@ public interface UserDao {
 
 
 
-    String CREATE_USER = "INSERT ALL ";
+    String CREATE_USER = "INSERT ALL  "  +
+            "INTO OBJECTS (OBJECT_ID,PARENT_ID,OBJECT_TYPE_ID,NAME,DESCRIPTION) VALUES (objects_id_s.NEXTVAL,NULL,1,?,NULL) "
+            +""+
+            "SELECT * " +
+            "FROM Dual";;
 
     String GET_USER_BY_USER_ID = "SELECT  ";
 

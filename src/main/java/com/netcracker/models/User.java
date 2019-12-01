@@ -1,5 +1,7 @@
 package com.netcracker.models;
 
+import com.netcracker.models.enums.UserStatusActive;
+
 import java.math.BigInteger;
 
 public class User {
@@ -9,6 +11,9 @@ public class User {
     private String password;
     private PersonalDebitAccount personalDebitAccount;
     private FamilyDebitAccount familyDebitAccount;
+    private UserStatusActive  userStatusActive;
+
+
 
     public static class Builder {
         private  BigInteger id;
@@ -17,6 +22,7 @@ public class User {
         private String password;
         private PersonalDebitAccount personalDebitAccount;
         private FamilyDebitAccount familyDebitAccount;
+        private UserStatusActive  userStatusActive;
 
         public Builder() {
         }
@@ -50,6 +56,11 @@ public class User {
             return this;
         }
 
+        public Builder userActive(UserStatusActive val){
+            this.userStatusActive = val;
+            return this;
+        }
+
         public User build() {
             return new User(this);
         }
@@ -60,6 +71,7 @@ public class User {
         this.name = builder.name;
         this.eMail = builder.eMail;
         this.password = builder.password;
+        this.userStatusActive = builder.userStatusActive;
     }
 
     public BigInteger getId() {
@@ -88,5 +100,8 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+    public UserStatusActive getUserStatusActive() {
+        return userStatusActive;
     }
 }

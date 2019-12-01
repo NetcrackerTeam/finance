@@ -10,7 +10,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import javax.sql.DataSource;
 import java.math.BigInteger;
 import java.util.Collection;
-import java.util.List;
 
 public class UserDaoImpl implements UserDao {
 
