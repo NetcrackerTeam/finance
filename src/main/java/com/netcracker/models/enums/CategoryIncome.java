@@ -6,7 +6,7 @@ public enum CategoryIncome {
     DEFAULT(new BigInteger("0")),
     SALARY(new BigInteger("14")),
     AWARD(new BigInteger("15")),
-    PERSENTS(new BigInteger("16")),
+    PRESENTS(new BigInteger("16")),
     GIFTS(new BigInteger("17")),
     OTHER(new BigInteger("18"));
 

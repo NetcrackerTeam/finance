@@ -51,7 +51,7 @@ public class AutoOperationTest {
         assertEquals("operationId=9004 userId=1 dayOfMonth=4 amount=3500 categoryId=34 date=2019-11-28",
                 "operationId=" + autoOperationIncome.getId() + " userId=" + autoOperationIncome.getUserId() +
                         " dayOfMonth=" + autoOperationIncome.getDayOfMonth() + " amount=" + autoOperationIncome.getAmount() +
-                        " categoryId=" + autoOperationIncome.getCategoryIncome().getId() + " date=" + autoOperationIncome.getDate());
+                        " categoryId=" + autoOperationIncome.getCategoryIncome() + " date=" + autoOperationIncome.getDate());
     }
 
     @Test
@@ -61,7 +61,7 @@ public class AutoOperationTest {
         assertEquals("operationId=9003 userId=1 dayOfMonth=3 amount=3000 categoryId=16 date=2019-11-29",
                 "operationId=" + autoOperationExpense.getId() + " userId=" + autoOperationExpense.getUserId() +
                         " dayOfMonth=" + autoOperationExpense.getDayOfMonth() + " amount=" + autoOperationExpense.getAmount() +
-                        " categoryId=" + autoOperationExpense.getCategoryExpense().getId() + " date=" + autoOperationExpense.getDate());
+                        " categoryId=" + autoOperationExpense.getCategoryExpense() + " date=" + autoOperationExpense.getDate());
     }
 
     @Test
@@ -71,7 +71,7 @@ public class AutoOperationTest {
         assertEquals("operationId=9002 userId=1 dayOfMonth=2 amount=2500 categoryId=33 date=2019-11-29",
                 "operationId=" + autoOperationIncome.getId() + " userId=" + autoOperationIncome.getUserId() +
                         " dayOfMonth=" + autoOperationIncome.getDayOfMonth() + " amount=" + autoOperationIncome.getAmount() +
-                        " categoryId=" + autoOperationIncome.getCategoryIncome().getId() + " date=" + autoOperationIncome.getDate());
+                        " categoryId=" + autoOperationIncome.getCategoryIncome() + " date=" + autoOperationIncome.getDate());
     }
 
     @Test
@@ -81,13 +81,13 @@ public class AutoOperationTest {
         assertEquals("operationId=9003 userId=1 dayOfMonth=1 amount=2000 categoryId=15 date=2019-11-29",
                 "operationId=" + autoOperationExpense.getId() + " userId=" + autoOperationExpense.getUserId() +
                         " dayOfMonth=" + autoOperationExpense.getDayOfMonth() + " amount=" + autoOperationExpense.getAmount() +
-                        " categoryId=" + autoOperationExpense.getCategoryExpense().getId() + " date=" + autoOperationExpense.getDate());
+                        " categoryId=" + autoOperationExpense.getCategoryExpense() + " date=" + autoOperationExpense.getDate());
     }
 
     @Test
     public void createFamilyIncomeAutoOperation() throws ParseException {
         AutoOperationIncome expAutoOperation = new AutoOperationIncome.Builder().accountId(BigInteger.valueOf(getCurrentSequenceId()))
-                .accountUserId(BigInteger.valueOf(1)).categoryIncome(CategoryIncome.PERSENTS).accountAmount(Long.valueOf("150.50"))
+                .accountUserId(BigInteger.valueOf(1)).categoryIncome(CategoryIncome.PRESENTS).accountAmount(Long.valueOf("150"))
                 .dayOfMonth(2).accountDate(stringToDate("2019-11-29")).build();
         AutoOperationIncome actualAutoOperation = autoOperationDao.createFamilyIncomeAutoOperation(expAutoOperation);
         AssertUtils.assertAutoOperationIncome(expAutoOperation, actualAutoOperation);
@@ -123,7 +123,7 @@ public class AutoOperationTest {
     @Test
     public void getAllTodayOperations() throws ParseException {
         AutoOperationIncome expAutoOperation = new AutoOperationIncome.Builder().accountId(BigInteger.valueOf(getCurrentSequenceId()))
-                .accountUserId(BigInteger.valueOf(1)).categoryIncome(CategoryIncome.PERSENTS).accountAmount(Long.valueOf("3500"))
+                .accountUserId(BigInteger.valueOf(1)).categoryIncome(CategoryIncome.PRESENTS).accountAmount(Long.valueOf("3500"))
                 .dayOfMonth(4).accountDate(stringToDate("2019-11-29")).build();
         Collection<AbstractAutoOperation> expCollection = new ArrayList<>();
         expCollection.add(expAutoOperation);

@@ -13,7 +13,6 @@ import org.springframework.stereotype.Component;
 import javax.sql.DataSource;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 @Component
 public class AutoOperationDaoImpl implements AutoOperationDao {
@@ -26,9 +25,12 @@ public class AutoOperationDaoImpl implements AutoOperationDao {
 
     @Override
     public AutoOperationIncome getFamilyIncomeAutoOperation(Integer autoOperationId) {
-        return jdbcTemplate.queryForObject(GET_FAMILY_AO, new Object[]{familyIncome_family_ref_attr_id_1,
-        familyIncome_users_ref_attr_id_2, autoOperationId, familyIncome_day_of_month_attr_id_4},
+        return jdbcTemplate.queryForObject(GET_FAMILY_INCOME_AO, new Object[]{autoOperationId}, new AutoOperationIncomeMapper());
+        /*return jdbcTemplate.queryForObject(GET_FAMILY_AO, new Object[]{65, 66, autoOperationId, 68},
                 new AutoOperationIncomeMapper());
+        /*return jdbcTemplate.queryForObject(GET_FAMILY_AO, new Object[]{familyIncome_family_ref_attr_id_1,
+        familyIncome_users_ref_attr_id_2, autoOperationId, familyIncome_day_of_month_attr_id_4},
+                new AutoOperationIncomeMapper());*/
     }
 
     @Override
@@ -53,15 +55,14 @@ public class AutoOperationDaoImpl implements AutoOperationDao {
     @Override
     public AutoOperationIncome createFamilyIncomeAutoOperation(AutoOperationIncome autoOperationIncome) {
         jdbcTemplate.update(CREATE_FAMILY_INCOME_AO, autoOperationIncome.getDayOfMonth(), autoOperationIncome.getAmount().toString(),
-        autoOperationIncome.getCategoryIncome().getId().toString(), autoOperationIncome.getId().toString(),
-        autoOperationIncome.getUserId().toString());
+        autoOperationIncome.getCategoryIncome().toString(), autoOperationIncome.getUserId().toString(), 3);
         return autoOperationIncome;
     }
 
     @Override
     public AutoOperationIncome createPersonalIncomeAutoOperation(AutoOperationIncome autoOperationIncome) {
         jdbcTemplate.update(CREATE_PERSONAL_INCOME_AO, autoOperationIncome.getDayOfMonth(), autoOperationIncome.getAmount().toString(),
-                autoOperationIncome.getCategoryIncome().getId().toString(), autoOperationIncome.getId().toString(),
+                autoOperationIncome.getCategoryIncome().toString(),
                 autoOperationIncome.getUserId().toString());
         return autoOperationIncome;
     }
@@ -69,7 +70,7 @@ public class AutoOperationDaoImpl implements AutoOperationDao {
     @Override
     public AutoOperationExpense createFamilyExpenseAutoOperation(AutoOperationExpense autoOperationExpense) {
         jdbcTemplate.update(CREATE_FAMILY_EXPENSE_AO, autoOperationExpense.getDayOfMonth(), autoOperationExpense.getAmount().toString(),
-                autoOperationExpense.getCategoryExpense().getId().toString(), autoOperationExpense.getId().toString(),
+                autoOperationExpense.getCategoryExpense().toString(), autoOperationExpense.getId().toString(),
                 autoOperationExpense.getUserId().toString());
         return autoOperationExpense;
     }
@@ -77,7 +78,7 @@ public class AutoOperationDaoImpl implements AutoOperationDao {
     @Override
     public AutoOperationExpense createPersonalExpenseAutoOperation(AutoOperationExpense autoOperationExpense) {
         jdbcTemplate.update(CREATE_PERSONAL_EXPENSE_AO, autoOperationExpense.getDayOfMonth(), autoOperationExpense.getAmount().toString(),
-                autoOperationExpense.getCategoryExpense().getId().toString(), autoOperationExpense.getId().toString(),
+                autoOperationExpense.getCategoryExpense().toString(), autoOperationExpense.getId().toString(),
                 autoOperationExpense.getUserId().toString());
         return autoOperationExpense;
     }

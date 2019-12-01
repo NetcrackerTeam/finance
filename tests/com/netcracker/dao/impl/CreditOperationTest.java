@@ -38,6 +38,7 @@ public class CreditOperationTest {
         Locale.setDefault(Locale.ENGLISH);
         jdbcTemplate = new JdbcTemplate(dataSource);
     }
+
     @Test
     public void getCreditOperationPersonal() {
         CreditOperation creditOperation = creditOperationDao.getCreditOperationPersonal(8001);

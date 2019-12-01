@@ -5,7 +5,6 @@ import com.netcracker.models.AutoOperationExpense;
 import com.netcracker.models.AutoOperationIncome;
 
 import java.util.Collection;
-import java.util.List;
 
 public interface AutoOperationDao {
     AutoOperationIncome getFamilyIncomeAutoOperation(Integer autoOperationId);
@@ -28,69 +27,69 @@ public interface AutoOperationDao {
 
     Collection<AbstractAutoOperation> getAllTodayOperations(Integer debitAccountId);
 
-    String CREATE_PERSONAL_INCOME_AO = "insert all " +
-            "into objects (object_id, parent_id, object_type_id, name, description) " +
-            "values (objects_id_s.nextval, null, 12, 'personal_income_ao', null) " +
-            "into attributes (attr_id, object_id, value, date_value, list_value_id) " +
-            "values (67, objects_id_s.currval /*personal_income*/, ? /*day_of_month*/, null, null) \n" +
-            "into attributes (attr_id, object_id, value, date_value, list_value_id) " +
-            "values (56 /*amount*/, objects_id_s.currval, ? /*amount*/, null, null) \n" +
-            "into attributes (attr_id, object_id, value, date_value, list_value_id) " +
-            "values (57 /*category*/, objects_id_s.currval, null, null, ? /*32-36*/) \n" +
-            "into attributes (attr_id, object_id, value, date_value, list_value_id) " +
-            "values (58 /*current_date*/, objects_id_s.currval, null, trunc(current_date), null) \n" +
-            "into objreference (attr_id, object_id, reference) values " +
-            "(64, objects_id_s.currval /*expense_object_id*/, ? /*personal_debit_acc_object_id*/) " + "select * from dual";
+    String CREATE_PERSONAL_INCOME_AO = "INSERT ALL " +
+            "INTO OBJECTS (OBJECT_ID, PARENT_ID, OBJECT_TYPE_ID, NAME, DESCRIPTION) " +
+            "VALUES (OBJECTS_ID_S.NEXTVAL, NULL, 12, 'PERSONAL_INCOME_AO', NULL) " +
+            "INTO ATTRIBUTES (ATTR_ID, OBJECT_ID, VALUE, DATE_VALUE, LIST_VALUE_ID) " +
+            "VALUES (67, OBJECTS_ID_S.CURRVAL /*PERSONAL_INCOME*/, ? /*DAY_OF_MONTH*/, NULL, NULL) " +
+            "INTO ATTRIBUTES (ATTR_ID, OBJECT_ID, VALUE, DATE_VALUE, LIST_VALUE_ID) " +
+            "VALUES (56 /*AMOUNT*/, OBJECTS_ID_S.CURRVAL, ? /*AMOUNT*/, NULL, NULL) " +
+            "INTO ATTRIBUTES (ATTR_ID, OBJECT_ID, VALUE, DATE_VALUE, LIST_VALUE_ID) " +
+            "VALUES (57 /*CATEGORY*/, OBJECTS_ID_S.CURRVAL, NULL, NULL, ? /*32-36*/) " +
+            "INTO ATTRIBUTES (ATTR_ID, OBJECT_ID, VALUE, DATE_VALUE, LIST_VALUE_ID) " +
+            "VALUES (58 /*CURRENT_DATE*/, OBJECTS_ID_S.CURRVAL, NULL, TRUNC(CURRENT_DATE), NULL) " +
+            "INTO OBJREFERENCE (ATTR_ID, OBJECT_ID, REFERENCE) VALUES " +
+            "(64, OBJECTS_ID_S.CURRVAL /*EXPENSE_OBJECT_ID*/, ? /*PERSONAL_DEBIT_ACC_OBJECT_ID*/) " + "SELECT * FROM DUAL";
 
-    String CREATE_PERSONAL_EXPENSE_AO = "insert all " +
-            "into objects (object_id, parent_id, object_type_id, name, description) " +
-            "values (objects_id_s.nextval, null, 11, 'personal_expense_ao', null) " +
-            "into attributes (attr_id, object_id, value, date_value, list_value_id) " +
-            "values (62, objects_id_s.currval /*personal_expense*/, ? /*day_of_month*/, null, null) \n" +
-            "into attributes (attr_id, object_id, value, date_value, list_value_id) " +
-            "values (56 /*amount*/, objects_id_s.currval, ? /*amount*/, null, null) \n" +
-            "into attributes (attr_id, object_id, value, date_value, list_value_id) " +
-            "values (57 /*category*/, objects_id_s.currval, null, null, ? /*14-18*/) \n" +
-            "into attributes (attr_id, object_id, value, date_value, list_value_id) " +
-            "values (58 /*current_date*/, objects_id_s.currval, null, trunc(current_date), null) \n" +
-            "into objreference (attr_id, object_id, reference) " +
-            "values (59, objects_id_s.currval /*expense_object_id*/, ? /*personal_debit_acc_object_id*/) " + "select * from dual";
+    String CREATE_PERSONAL_EXPENSE_AO = "INSERT ALL " +
+            "INTO OBJECTS (OBJECT_ID, PARENT_ID, OBJECT_TYPE_ID, NAME, DESCRIPTION) " +
+            "VALUES (OBJECTS_ID_S.NEXTVAL, NULL, 11, 'PERSONAL_EXPENSE_AO', NULL) " +
+            "INTO ATTRIBUTES (ATTR_ID, OBJECT_ID, VALUE, DATE_VALUE, LIST_VALUE_ID) " +
+            "VALUES (62, OBJECTS_ID_S.CURRVAL /*PERSONAL_EXPENSE*/, ? /*DAY_OF_MONTH*/, NULL, NULL) " +
+            "INTO ATTRIBUTES (ATTR_ID, OBJECT_ID, VALUE, DATE_VALUE, LIST_VALUE_ID) " +
+            "VALUES (50 /*AMOUNT*/, OBJECTS_ID_S.CURRVAL, ? /*AMOUNT*/, NULL, NULL) " +
+            "INTO ATTRIBUTES (ATTR_ID, OBJECT_ID, VALUE, DATE_VALUE, LIST_VALUE_ID) " +
+            "VALUES (51 /*CATEGORY*/, OBJECTS_ID_S.CURRVAL, NULL, NULL, ? /*14-18*/) " +
+            "INTO ATTRIBUTES (ATTR_ID, OBJECT_ID, VALUE, DATE_VALUE, LIST_VALUE_ID) " +
+            "VALUES (52 /*CURRENT_DATE*/, OBJECTS_ID_S.CURRVAL, NULL, TRUNC(CURRENT_DATE), NULL) " +
+            "INTO OBJREFERENCE (ATTR_ID, OBJECT_ID, REFERENCE) " +
+            "VALUES (59, OBJECTS_ID_S.CURRVAL /*EXPENSE_OBJECT_ID*/, ? /*PERSONAL_DEBIT_ACC_OBJECT_ID*/) " + "SELECT * FROM DUAL";
 
-    String CREATE_FAMILY_INCOME_AO = "insert all " +
-            "into objects (object_id, parent_id, object_type_id, name, description) " +
-            "values (objects_id_s.nextval, null, 23, 'family_income_ao', null) " +
-            "into attributes (attr_id, object_id, value, date_value, list_value_id) " +
-            "values (68, objects_id_s.currval /*family_income*/, ? /*day_of_month*/, null, null) \n" +
-            "into attributes (attr_id, object_id, value, date_value, list_value_id) " +
-            "values (56 /*amount*/, objects_id_s.currval, ? /*amount*/, null, null) \n" +
-            "into attributes (attr_id, object_id, value, date_value, list_value_id) " +
-            "values (57 /*category*/, objects_id_s.currval, null, null, ? /*32-36*/) \n" +
-            "into attributes (attr_id, object_id, value, date_value, list_value_id) " +
-            "values (58 /*current_date*/, objects_id_s.currval, null, trunc(current_date), null) \n" +
-            "into objreference (attr_id, object_id, reference) " +
-            "values (65, objects_id_s.currval /*income_object_id*/, ? /*family_debit_acc_object_id*/) \n" +
-            "into objreference (attr_id, object_id, reference) " +
-            "values (66 /*transaction_auto_income*/, objects_id_s.currval, ? /*reference_to_user*/) " + "select * from dual";
+    String CREATE_FAMILY_INCOME_AO = "INSERT ALL " +
+            "INTO OBJECTS (OBJECT_ID, PARENT_ID, OBJECT_TYPE_ID, NAME, DESCRIPTION) " +
+            "VALUES (OBJECTS_ID_S.NEXTVAL, NULL, 23, 'FAMILY_INCOME_AO', NULL) " +
+            "INTO ATTRIBUTES (ATTR_ID, OBJECT_ID, VALUE, DATE_VALUE, LIST_VALUE_ID) " +
+            "VALUES (68, OBJECTS_ID_S.CURRVAL /*FAMILY_INCOME*/, ? /*DAY_OF_MONTH*/, NULL, NULL) " +
+            "INTO ATTRIBUTES (ATTR_ID, OBJECT_ID, VALUE, DATE_VALUE, LIST_VALUE_ID) " +
+            "VALUES (56 /*AMOUNT*/, OBJECTS_ID_S.CURRVAL, ? /*AMOUNT*/, NULL, NULL) " +
+            "INTO ATTRIBUTES (ATTR_ID, OBJECT_ID, VALUE, DATE_VALUE, LIST_VALUE_ID) " +
+            "VALUES (57 /*CATEGORY*/, OBJECTS_ID_S.CURRVAL, NULL, NULL, ? /*32-36*/) " +
+            "INTO ATTRIBUTES (ATTR_ID, OBJECT_ID, VALUE, DATE_VALUE, LIST_VALUE_ID) " +
+            "VALUES (58 /*CURRENT_DATE*/, OBJECTS_ID_S.CURRVAL, NULL, TRUNC(CURRENT_DATE), NULL) " +
+            "INTO OBJREFERENCE (ATTR_ID, OBJECT_ID, REFERENCE) " +
+            "VALUES (65, OBJECTS_ID_S.CURRVAL /*INCOME_OBJECT_ID*/, ? /*FAMILY_DEBIT_ACC_OBJECT_ID*/) " +
+            "INTO OBJREFERENCE (ATTR_ID, OBJECT_ID, REFERENCE) " +
+            "VALUES (66 /*TRANSACTION_AUTO_INCOME*/, OBJECTS_ID_S.CURRVAL, ? /*REFERENCE_TO_USER*/) " + "SELECT * FROM DUAL";
 
-    String CREATE_FAMILY_EXPENSE_AO = "insert all " +
-            "into objects (object_id, parent_id, object_type_id, name, description) " +
-            "values (objects_id_s.nextval, null, 22, 'family_expense_ao', null) " +
-            "into attributes (attr_id, object_id, value, date_value, list_value_id) " +
-            "values (63, objects_id_s.currval /*family_expense*/, ? /*day_of_month*/, null, null) \n" +
-            "into attributes (attr_id, object_id, value, date_value, list_value_id) " +
-            "values (56 /*amount*/, objects_id_s.currval, ? /*amount*/, null, null) \n" +
-            "into attributes (attr_id, object_id, value, date_value, list_value_id) " +
-            "values (57 /*category*/, objects_id_s.currval, null, null, ? /*14-18*/) \n" +
-            "into attributes (attr_id, object_id, value, date_value, list_value_id) " +
-            "values (58 /*current_date*/, objects_id_s.currval, null, trunc(current_date), null) \n" +
-            "into objreference (attr_id, object_id, reference) " +
-            "values (60, objects_id_s.currval /*expense_object_id*/, ? /*family_debit_acc_object_id*/) \n" +
-            "into objreference (attr_id, object_id, reference) " +
-            "values (61 /*transaction_auto_expense*/, objects_id_s.currval, ? /*reference_to_user*/) " + "select * from dual";
+    String CREATE_FAMILY_EXPENSE_AO = "INSERT ALL " +
+            "INTO OBJECTS (OBJECT_ID, PARENT_ID, OBJECT_TYPE_ID, NAME, DESCRIPTION) " +
+            "VALUES (OBJECTS_ID_S.NEXTVAL, NULL, 22, 'FAMILY_EXPENSE_AO', NULL) " +
+            "INTO ATTRIBUTES (ATTR_ID, OBJECT_ID, VALUE, DATE_VALUE, LIST_VALUE_ID) " +
+            "VALUES (63, OBJECTS_ID_S.CURRVAL /*FAMILY_EXPENSE*/, ? /*DAY_OF_MONTH*/, NULL, NULL) " +
+            "INTO ATTRIBUTES (ATTR_ID, OBJECT_ID, VALUE, DATE_VALUE, LIST_VALUE_ID) " +
+            "VALUES (50 /*AMOUNT*/, OBJECTS_ID_S.CURRVAL, ? /*AMOUNT*/, NULL, NULL) " +
+            "INTO ATTRIBUTES (ATTR_ID, OBJECT_ID, VALUE, DATE_VALUE, LIST_VALUE_ID) " +
+            "VALUES (51 /*CATEGORY*/, OBJECTS_ID_S.CURRVAL, NULL, NULL, ? /*14-18*/) " +
+            "INTO ATTRIBUTES (ATTR_ID, OBJECT_ID, VALUE, DATE_VALUE, LIST_VALUE_ID) " +
+            "VALUES (52 /*CURRENT_DATE*/, OBJECTS_ID_S.CURRVAL, NULL, TRUNC(CURRENT_DATE), NULL) " +
+            "INTO OBJREFERENCE (ATTR_ID, OBJECT_ID, REFERENCE) " +
+            "VALUES (60, OBJECTS_ID_S.CURRVAL /*EXPENSE_OBJECT_ID*/, ? /*FAMILY_DEBIT_ACC_OBJECT_ID*/) " +
+            "INTO OBJREFERENCE (ATTR_ID, OBJECT_ID, REFERENCE) " +
+            "VALUES (61 /*TRANSACTION_AUTO_EXPENSE*/, OBJECTS_ID_S.CURRVAL, ? /*REFERENCE_TO_USER*/) " + "SELECT * FROM DUAL";
 
-    String DELETE_FROM_OBJECTS = "delete from objects where object_id = ?";
-    String DELETE_FROM_ATTRIBUTES = "delete from attributes where object_id = ?";
-    String DELETE_FROM_OBJREFERENCE = "delete from objreference where object_id = ?";
+    String DELETE_FROM_OBJECTS = "DELETE FROM OBJECTS WHERE OBJECT_ID = ?";
+    String DELETE_FROM_ATTRIBUTES = "DELETE FROM ATTRIBUTES WHERE OBJECT_ID = ?";
+    String DELETE_FROM_OBJREFERENCE = "DELETE FROM OBJREFERENCE WHERE OBJECT_ID = ?";
 
     int personalExpense_user_debit_acc_ref_attr_id_1 = 59;
     int personalExpense_day_of_month_attr_id_3 = 62;
@@ -104,97 +103,118 @@ public interface AutoOperationDao {
     int familyIncome_users_ref_attr_id_2 = 66;
     int familyIncome_day_of_month_attr_id_4 = 68;
 
-    String GET_PERSONAL_AO = "select auto_operation.object_id as ao_object_id, auto_operation.name, user_debit_acc.object_id as user_debit_acc_id, \n" +
-            "  users.object_id as user_id, \n" +
-            "  email.value as email, user_name.value as user_name, day_of_month.value as day_of_month, amount.value as amount, \n" +
-            "  category.list_value_id as category_id, lists.value as category, dates.date_value as date_of_creation\n" +
-            "from objects auto_operation, objects user_debit_acc, objects users, lists, objreference user_debit_acc_ref,\n" +
-            "  attributes amount, \n" +
-            "  attributes category, attributes dates, attributes day_of_month, attributes email, attributes user_name, \n" +
-            "  objreference users_ref \n" +
-            "where user_debit_acc_ref.attr_id = ? and auto_operation.object_id = ? \n" +
-            "  and auto_operation.object_id = user_debit_acc_ref.object_id \n" +
-            "  and user_debit_acc.object_id = user_debit_acc_ref.reference\n" +
-            "  and users.object_id = users_ref.object_id and user_debit_acc.object_id = users_ref.reference \n" +
-            "  and day_of_month.attr_id = ? and amount.attr_id = 56 \n" +
-            "  and category.attr_id = 57 and dates.attr_id = 58 \n" +
-            "  and email.attr_id = 3 and user_name.attr_id = 5\n" +
-            "  and category.list_value_id = lists.list_value_id\n" +
-            "  and day_of_month.object_id = auto_operation.object_id and amount.object_id = auto_operation.object_id \n" +
-            "  and category.object_id = auto_operation.object_id and dates.object_id = auto_operation.object_id \n" +
-            "  and email.object_id = users.object_id and user_name.object_id = users.object_id";
+    String GET_PERSONAL_AO = "SELECT AUTO_OPERATION.OBJECT_ID AS AO_OBJECT_ID, AUTO_OPERATION.NAME, " +
+            "  USER_DEBIT_ACC.OBJECT_ID AS USER_DEBIT_ACC_ID,  USERS.OBJECT_ID AS USER_ID, " +
+            "  EMAIL.VALUE AS EMAIL, USER_NAME.VALUE AS USER_NAME, DAY_OF_MONTH.VALUE AS DAY_OF_MONTH, AMOUNT.VALUE AS AMOUNT, " +
+            "  CATEGORY.LIST_VALUE_ID AS CATEGORY_ID, LISTS.VALUE AS CATEGORY, DATES.DATE_VALUE AS DATE_OF_CREATION " +
+            "FROM OBJECTS AUTO_OPERATION, OBJECTS USER_DEBIT_ACC, OBJECTS USERS, LISTS, OBJREFERENCE USER_DEBIT_ACC_REF, " +
+            "  ATTRIBUTES AMOUNT, " +
+            "  ATTRIBUTES CATEGORY, ATTRIBUTES DATES, ATTRIBUTES DAY_OF_MONTH, ATTRIBUTES EMAIL, ATTRIBUTES USER_NAME, " +
+            "  OBJREFERENCE USERS_REF " +
+            "WHERE USER_DEBIT_ACC_REF.ATTR_ID = ? AND AUTO_OPERATION.OBJECT_ID = ? " +
+            "  AND AUTO_OPERATION.OBJECT_ID = USER_DEBIT_ACC_REF.OBJECT_ID " +
+            "  AND USER_DEBIT_ACC.OBJECT_ID = USER_DEBIT_ACC_REF.REFERENCE " +
+            "  AND USERS.OBJECT_ID = USERS_REF.OBJECT_ID AND USER_DEBIT_ACC.OBJECT_ID = USERS_REF.REFERENCE " +
+            "  AND DAY_OF_MONTH.ATTR_ID = ? AND AMOUNT.ATTR_ID = 56 " +
+            "  AND CATEGORY.ATTR_ID = 57 AND DATES.ATTR_ID = 58 " +
+            "  AND EMAIL.ATTR_ID = 3 AND USER_NAME.ATTR_ID = 5 " +
+            "  AND CATEGORY.LIST_VALUE_ID = LISTS.LIST_VALUE_ID " +
+            "  AND DAY_OF_MONTH.OBJECT_ID = AUTO_OPERATION.OBJECT_ID AND AMOUNT.OBJECT_ID = AUTO_OPERATION.OBJECT_ID " +
+            "  AND CATEGORY.OBJECT_ID = AUTO_OPERATION.OBJECT_ID AND DATES.OBJECT_ID = AUTO_OPERATION.OBJECT_ID " +
+            "  AND EMAIL.OBJECT_ID = USERS.OBJECT_ID AND USER_NAME.OBJECT_ID = USERS.OBJECT_ID";
 
-    String GET_FAMILY_AO = "select auto_operation.object_id as ao_object_id, auto_operation.name, \n" +
-            "\tfamily_debit_acc.object_id as family_debit_acc_id, \n" +
-            "\tusers.object_id as user_id, \n" +
-            "\temail.value as email, user_name.value as user_name, \n" +
-            "\tday_of_month.value as day_of_month, amount.value as amount, \n" +
-            "\tcategory.list_value_id as category_id, lists.value as category, dates.date_value as date_of_creation\n" +
-            "from objects auto_operation, objects family_debit_acc, objects users, lists,\n" +
-            "\tattributes amount, attributes category, attributes dates, attributes day_of_month, attributes email, \n" +
-            "\tattributes user_name, objreference family_ref, objreference users_ref \n" +
-            "where family_ref.attr_id = ? and users_ref.attr_id = ? \n" +
-            "\tand auto_operation.object_id = ? \n" +
-            "\tand auto_operation.object_id = family_ref.object_id and family_debit_acc.object_id = family_ref.reference \n" +
-            "\tand auto_operation.object_id = users_ref.object_id and users.object_id = users_ref.reference \n" +
-            "\tand day_of_month.attr_id = ? and amount.attr_id = 56 \n" +
-            "\tand category.attr_id = 57 and dates.attr_id = 58 \n" +
-            "\tand email.attr_id = 3 and user_name.attr_id = 5\n" +
-            "\tand category.list_value_id = lists.list_value_id \n" +
-            "\tand day_of_month.object_id = auto_operation.object_id and amount.object_id = auto_operation.object_id \n" +
-            "\tand category.object_id = auto_operation.object_id and dates.object_id = auto_operation.object_id \n" +
-            "\tand email.object_id = users.object_id and user_name.object_id = users.object_id";
+    String GET_FAMILY_AO = "SELECT AUTO_OPERATION.OBJECT_ID AS AO_OBJECT_ID, AUTO_OPERATION.NAME, " +
+            "  FAMILY_DEBIT_ACC.OBJECT_ID AS FAMILY_DEBIT_ACC_ID, " +
+            "  USERS.OBJECT_ID AS USER_ID, " +
+            "  EMAIL.VALUE AS EMAIL, USER_NAME.VALUE AS USER_NAME, " +
+            "  DAY_OF_MONTH.VALUE AS DAY_OF_MONTH, AMOUNT.VALUE AS AMOUNT, " +
+            "  CATEGORY.LIST_VALUE_ID AS CATEGORY_ID, LISTS.VALUE AS CATEGORY, DATES.DATE_VALUE AS DATE_OF_CREATION " +
+            "FROM OBJECTS AUTO_OPERATION, OBJECTS FAMILY_DEBIT_ACC, OBJECTS USERS, LISTS, " +
+            "  ATTRIBUTES AMOUNT, ATTRIBUTES CATEGORY, ATTRIBUTES DATES, ATTRIBUTES DAY_OF_MONTH, ATTRIBUTES EMAIL, " +
+            "  ATTRIBUTES USER_NAME, OBJREFERENCE FAMILY_REF, OBJREFERENCE USERS_REF " +
+            "WHERE FAMILY_REF.ATTR_ID = ? AND USERS_REF.ATTR_ID = ? " +
+            "  AND AUTO_OPERATION.OBJECT_ID = ? " +
+            "  AND AUTO_OPERATION.OBJECT_ID = FAMILY_REF.OBJECT_ID AND FAMILY_DEBIT_ACC.OBJECT_ID = FAMILY_REF.REFERENCE " +
+            "  AND AUTO_OPERATION.OBJECT_ID = USERS_REF.OBJECT_ID AND USERS.OBJECT_ID = USERS_REF.REFERENCE " +
+            "  AND DAY_OF_MONTH.ATTR_ID = ? AND AMOUNT.ATTR_ID = 56 " +
+            "  AND CATEGORY.ATTR_ID = 57 AND DATES.ATTR_ID = 58 " +
+            "  AND EMAIL.ATTR_ID = 3 AND USER_NAME.ATTR_ID = 5 " +
+            "  AND CATEGORY.LIST_VALUE_ID = LISTS.LIST_VALUE_ID " +
+            "  AND DAY_OF_MONTH.OBJECT_ID = AUTO_OPERATION.OBJECT_ID AND AMOUNT.OBJECT_ID = AUTO_OPERATION.OBJECT_ID " +
+            "  AND CATEGORY.OBJECT_ID = AUTO_OPERATION.OBJECT_ID AND DATES.OBJECT_ID = AUTO_OPERATION.OBJECT_ID " +
+            "  AND EMAIL.OBJECT_ID = USERS.OBJECT_ID AND USER_NAME.OBJECT_ID = USERS.OBJECT_ID";
+
+    String GET_ALL_TODAY_AO_INCOME = "SELECT AUTO_OPERATION.OBJECT_ID AS AO_OBJECT_ID, AUTO_OPERATION.NAME, DEBIT_ACCOUNT.OBJECT_ID AS DEBIT_ID, " +
+            "  DAY_OF_MONTH.VALUE AS DAY_OF_MONTH, AMOUNT.VALUE AS AMOUNT, CATEGORY.LIST_VALUE_ID AS CATEGORY_ID, " +
+            "  LISTS.VALUE AS CATEGORY, DATES.DATE_VALUE AS DATE_OF_CREATION " +
+            "FROM OBJECTS AUTO_OPERATION, OBJECTS DEBIT_ACCOUNT, LISTS, ATTRIBUTES AMOUNT, ATTRIBUTES CATEGORY, ATTRIBUTES DATES, " +
+            "  OBJREFERENCE, ATTRIBUTES DAY_OF_MONTH " +
+            "WHERE DEBIT_ACCOUNT.OBJECT_ID = ? AND DAY_OF_MONTH.ATTR_ID = 67 " +
+            "  AND DATES.DATE_VALUE = TRUNC(CURRENT_DATE) " +
+            "  AND AUTO_OPERATION.OBJECT_ID = OBJREFERENCE.OBJECT_ID AND DEBIT_ACCOUNT.OBJECT_ID = OBJREFERENCE.REFERENCE " +
+            "  AND AMOUNT.ATTR_ID = 56 AND CATEGORY.LIST_VALUE_ID = LISTS.LIST_VALUE_ID " +
+            "  AND CATEGORY.ATTR_ID = 57 AND DATES.ATTR_ID = 67 " +
+            "  AND DAY_OF_MONTH.OBJECT_ID = AUTO_OPERATION.OBJECT_ID AND AMOUNT.OBJECT_ID = AUTO_OPERATION.OBJECT_ID " +
+            "  AND CATEGORY.OBJECT_ID = AUTO_OPERATION.OBJECT_ID AND DATES.OBJECT_ID = AUTO_OPERATION.OBJECT_ID " +
+            "UNION ALL " +
+            "SELECT AUTO_OPERATION.OBJECT_ID AS AO_OBJECT_ID, AUTO_OPERATION.NAME, DEBIT_ACCOUNT.OBJECT_ID AS DEBIT_ID, " +
+            "  DAY_OF_MONTH.VALUE AS DAY_OF_MONTH, AMOUNT.VALUE AS AMOUNT, CATEGORY.LIST_VALUE_ID AS CATEGORY_ID, " +
+            "  LISTS.VALUE AS CATEGORY, DATES.DATE_VALUE AS DATE_OF_CREATION " +
+            "FROM OBJECTS AUTO_OPERATION, OBJECTS DEBIT_ACCOUNT, LISTS, ATTRIBUTES AMOUNT, ATTRIBUTES CATEGORY, ATTRIBUTES DATES, " +
+            "  OBJREFERENCE, ATTRIBUTES DAY_OF_MONTH " +
+            "WHERE DEBIT_ACCOUNT.OBJECT_ID = ? AND DAY_OF_MONTH.ATTR_ID = 68 " +
+            "  AND DATES.DATE_VALUE = TRUNC(CURRENT_DATE) " +
+            "  AND AUTO_OPERATION.OBJECT_ID = OBJREFERENCE.OBJECT_ID AND DEBIT_ACCOUNT.OBJECT_ID = OBJREFERENCE.REFERENCE " +
+            "  AND AMOUNT.ATTR_ID = 56 AND CATEGORY.LIST_VALUE_ID = LISTS.LIST_VALUE_ID " +
+            "  AND CATEGORY.ATTR_ID = 57 AND DATES.ATTR_ID = 58 " +
+            "  AND DAY_OF_MONTH.OBJECT_ID = AUTO_OPERATION.OBJECT_ID AND AMOUNT.OBJECT_ID = AUTO_OPERATION.OBJECT_ID " +
+            "  AND CATEGORY.OBJECT_ID = AUTO_OPERATION.OBJECT_ID AND DATES.OBJECT_ID = AUTO_OPERATION.OBJECT_ID";
 
 
-    String GET_ALL_TODAY_AO_INCOME = "select auto_operation.object_id as ao_object_id, auto_operation.name, debit_account.object_id as debit_id, \n" +
-            "  day_of_month.value as day_of_month, amount.value as amount, category.list_value_id as category_id, \n" +
-            "  lists.value as category, dates.date_value as date_of_creation\n" +
-            "from objects auto_operation, objects debit_account, lists, attributes amount, attributes category, attributes dates,\n" +
-            "  objreference, attributes day_of_month \n" +
-            "where debit_account.object_id = ? and day_of_month.attr_id = 67 \n" +
-            "  and dates.date_value = trunc(current_date)\n" +
-            "  and auto_operation.object_id = objreference.object_id and debit_account.object_id = objreference.reference \n" +
-            "  and amount.attr_id = 56 and category.list_value_id = lists.list_value_id \n" +
-            "  and category.attr_id = 57 and dates.attr_id = 67 \n" +
-            "  and day_of_month.object_id = auto_operation.object_id and amount.object_id = auto_operation.object_id \n" +
-            "  and category.object_id = auto_operation.object_id and dates.object_id = auto_operation.object_id\n" +
-            "UNION ALL\n" +
-            "select auto_operation.object_id as ao_object_id, auto_operation.name, debit_account.object_id as debit_id, \n" +
-            "  day_of_month.value as day_of_month, amount.value as amount, category.list_value_id as category_id, \n" +
-            "  lists.value as category, dates.date_value as date_of_creation\n" +
-            "from objects auto_operation, objects debit_account, lists, attributes amount, attributes category, attributes dates,\n" +
-            "  objreference, attributes day_of_month \n" +
-            "where debit_account.object_id = ? and day_of_month.attr_id = 68\n" +
-            "  and dates.date_value = trunc(current_date)\n" +
-            "  and auto_operation.object_id = objreference.object_id and debit_account.object_id = objreference.reference \n" +
-            "  and amount.attr_id = 56 and category.list_value_id = lists.list_value_id \n" +
-            "  and category.attr_id = 57 and dates.attr_id = 58 \n" +
-            "  and day_of_month.object_id = auto_operation.object_id and amount.object_id = auto_operation.object_id \n" +
-            "  and category.object_id = auto_operation.object_id and dates.object_id = auto_operation.object_id";
+    String GET_ALL_TODAY_AO_EXPENSE = "SELECT AUTO_OPERATION.OBJECT_ID AS AO_OBJECT_ID, AUTO_OPERATION.NAME, DEBIT_ACCOUNT.OBJECT_ID AS DEBIT_ID, " +
+            "  DAY_OF_MONTH.VALUE AS DAY_OF_MONTH, AMOUNT.VALUE AS AMOUNT, CATEGORY.LIST_VALUE_ID AS CATEGORY_ID, " +
+            "  LISTS.VALUE AS CATEGORY, DATES.DATE_VALUE AS DATE_OF_CREATION" +
+            "FROM OBJECTS AUTO_OPERATION, OBJECTS DEBIT_ACCOUNT, LISTS, ATTRIBUTES AMOUNT, ATTRIBUTES CATEGORY, ATTRIBUTES DATES," +
+            "  OBJREFERENCE, ATTRIBUTES DAY_OF_MONTH " +
+            "WHERE DEBIT_ACCOUNT.OBJECT_ID = ? AND DAY_OF_MONTH.ATTR_ID = 62 " +
+            "  AND DATES.DATE_VALUE = TRUNC(CURRENT_DATE) " +
+            "  AND AUTO_OPERATION.OBJECT_ID = OBJREFERENCE.OBJECT_ID AND DEBIT_ACCOUNT.OBJECT_ID = OBJREFERENCE.REFERENCE " +
+            "  AND AMOUNT.ATTR_ID = 56 AND CATEGORY.LIST_VALUE_ID = LISTS.LIST_VALUE_ID " +
+            "  AND CATEGORY.ATTR_ID = 57 AND DATES.ATTR_ID = 58 " +
+            "  AND DAY_OF_MONTH.OBJECT_ID = AUTO_OPERATION.OBJECT_ID AND AMOUNT.OBJECT_ID = AUTO_OPERATION.OBJECT_ID " +
+            "  AND CATEGORY.OBJECT_ID = AUTO_OPERATION.OBJECT_ID AND DATES.OBJECT_ID = AUTO_OPERATION.OBJECT_ID " +
+            "UNION ALL " +
+            "SELECT AUTO_OPERATION.OBJECT_ID AS AO_OBJECT_ID, AUTO_OPERATION.NAME, DEBIT_ACCOUNT.OBJECT_ID AS DEBIT_ID, " +
+            "  DAY_OF_MONTH.VALUE AS DAY_OF_MONTH, AMOUNT.VALUE AS AMOUNT, CATEGORY.LIST_VALUE_ID AS CATEGORY_ID, " +
+            "  LISTS.VALUE AS CATEGORY, DATES.DATE_VALUE AS DATE_OF_CREATION" +
+            "FROM OBJECTS AUTO_OPERATION, OBJECTS DEBIT_ACCOUNT, LISTS, ATTRIBUTES AMOUNT, ATTRIBUTES CATEGORY, ATTRIBUTES DATES," +
+            "  OBJREFERENCE, ATTRIBUTES DAY_OF_MONTH " +
+            "WHERE DEBIT_ACCOUNT.OBJECT_ID = ? AND DAY_OF_MONTH.ATTR_ID = 63 " +
+            "  AND DATES.DATE_VALUE = TRUNC(CURRENT_DATE) " +
+            "  AND AUTO_OPERATION.OBJECT_ID = OBJREFERENCE.OBJECT_ID AND DEBIT_ACCOUNT.OBJECT_ID = OBJREFERENCE.REFERENCE " +
+            "  AND AMOUNT.ATTR_ID = 56 AND CATEGORY.LIST_VALUE_ID = LISTS.LIST_VALUE_ID " +
+            "  AND CATEGORY.ATTR_ID = 57 AND DATES.ATTR_ID = 58 " +
+            "  AND DAY_OF_MONTH.OBJECT_ID = AUTO_OPERATION.OBJECT_ID AND AMOUNT.OBJECT_ID = AUTO_OPERATION.OBJECT_ID " +
+            "  AND CATEGORY.OBJECT_ID = AUTO_OPERATION.OBJECT_ID AND DATES.OBJECT_ID = AUTO_OPERATION.OBJECT_ID";
 
-    String GET_ALL_TODAY_AO_EXPENSE = "select auto_operation.object_id as ao_object_id, auto_operation.name, debit_account.object_id as debit_id, \n" +
-            "  day_of_month.value as day_of_month, amount.value as amount, category.list_value_id as category_id, \n" +
-            "  lists.value as category, dates.date_value as date_of_creation\n" +
-            "from objects auto_operation, objects debit_account, lists, attributes amount, attributes category, attributes dates,\n" +
-            "  objreference, attributes day_of_month \n" +
-            "where debit_account.object_id = ? and day_of_month.attr_id = 62\n" +
-            "  and dates.date_value = trunc(current_date)\n" +
-            "  and auto_operation.object_id = objreference.object_id and debit_account.object_id = objreference.reference \n" +
-            "  and amount.attr_id = 56 and category.list_value_id = lists.list_value_id \n" +
-            "  and category.attr_id = 57 and dates.attr_id = 58 \n" +
-            "  and day_of_month.object_id = auto_operation.object_id and amount.object_id = auto_operation.object_id \n" +
-            "  and category.object_id = auto_operation.object_id and dates.object_id = auto_operation.object_id\n" +
-            "UNION ALL\n" +
-            "select auto_operation.object_id as ao_object_id, auto_operation.name, debit_account.object_id as debit_id, \n" +
-            "  day_of_month.value as day_of_month, amount.value as amount, category.list_value_id as category_id, \n" +
-            "  lists.value as category, dates.date_value as date_of_creation\n" +
-            "from objects auto_operation, objects debit_account, lists, attributes amount, attributes category, attributes dates,\n" +
-            "  objreference, attributes day_of_month \n" +
-            "where debit_account.object_id = ? and day_of_month.attr_id = 63\n" +
-            "  and dates.date_value = trunc(current_date)\n" +
-            "  and auto_operation.object_id = objreference.object_id and debit_account.object_id = objreference.reference \n" +
-            "  and amount.attr_id = 56 and category.list_value_id = lists.list_value_id \n" +
-            "  and category.attr_id = 57 and dates.attr_id = 58 \n" +
-            "  and day_of_month.object_id = auto_operation.object_id and amount.object_id = auto_operation.object_id \n" +
-            "  and category.object_id = auto_operation.object_id and dates.object_id = auto_operation.object_id";
+    String GET_FAMILY_INCOME_AO = "SELECT AUTO_OPERATION.OBJECT_ID AS AO_OBJECT_ID, AUTO_OPERATION.NAME, " +
+            "  FAMILY_DEBIT_ACC.OBJECT_ID AS FAMILY_DEBIT_ACC_ID, " +
+            "  USERS.OBJECT_ID AS USER_ID, " +
+            "  EMAIL.VALUE AS EMAIL, USER_NAME.VALUE AS USER_NAME, " +
+            "  DAY_OF_MONTH.VALUE AS DAY_OF_MONTH, AMOUNT.VALUE AS AMOUNT, " +
+            "  CATEGORY.LIST_VALUE_ID AS CATEGORY_ID, DATES.DATE_VALUE AS DATE_OF_CREATION " +
+            "FROM OBJECTS AUTO_OPERATION, OBJECTS FAMILY_DEBIT_ACC, OBJECTS USERS, " +
+            "  ATTRIBUTES AMOUNT, ATTRIBUTES CATEGORY, ATTRIBUTES DATES, ATTRIBUTES DAY_OF_MONTH, ATTRIBUTES EMAIL, " +
+            "  ATTRIBUTES USER_NAME, OBJREFERENCE FAMILY_REF, OBJREFERENCE USERS_REF " +
+            "WHERE FAMILY_REF.ATTR_ID = 65 AND USERS_REF.ATTR_ID = 66 " +
+            "  AND AUTO_OPERATION.OBJECT_ID = ? " +
+            "  AND AUTO_OPERATION.OBJECT_ID = FAMILY_REF.OBJECT_ID AND FAMILY_DEBIT_ACC.OBJECT_ID = FAMILY_REF.REFERENCE " +
+            "  AND AUTO_OPERATION.OBJECT_ID = USERS_REF.OBJECT_ID AND USERS.OBJECT_ID = USERS_REF.REFERENCE " +
+            "  AND DAY_OF_MONTH.ATTR_ID = 68 AND AMOUNT.ATTR_ID = 56 " +
+            "  AND CATEGORY.ATTR_ID = 57 AND DATES.ATTR_ID = 58 " +
+            "  AND EMAIL.ATTR_ID = 3 AND USER_NAME.ATTR_ID = 5 " +
+            "  AND DAY_OF_MONTH.OBJECT_ID = AUTO_OPERATION.OBJECT_ID AND AMOUNT.OBJECT_ID = AUTO_OPERATION.OBJECT_ID " +
+            "  AND CATEGORY.OBJECT_ID = AUTO_OPERATION.OBJECT_ID AND DATES.OBJECT_ID = AUTO_OPERATION.OBJECT_ID " +
+            "  AND EMAIL.OBJECT_ID = USERS.OBJECT_ID AND USER_NAME.OBJECT_ID = USERS.OBJECT_ID";
+
 }

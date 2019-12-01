@@ -3,8 +3,6 @@ package com.netcracker.dao;
 import com.netcracker.models.CreditOperation;
 
 import java.util.Collection;
-import java.util.Date;
-import java.util.List;
 
 public interface CreditOperationDao {
     CreditOperation getCreditOperationPersonal(Integer creditOperationId);
@@ -21,88 +19,87 @@ public interface CreditOperationDao {
 
     void deleteCreditOperation(Integer creditOperationId);
 
-    String CREATE_CREDIT_OPERATION_PERSONAL = "insert all " +
-            "into objects (object_id, parent_id, object_type_id, name, description) " +
-            "values (objects_id_s.nextval, null, 7, 'credit_operation_personal', null) " +
-            "into attributes (attr_id, object_id, value, date_value, list_value_id) " +
-            "values (40 /*amount*/, objects_id_s.currval, ? /*amount*/, null, null) \n" +
-            "into attributes (attr_id, object_id, value, date_value, list_value_id) " +
-            "values (41 /*date*/, objects_id_s.currval, null, ?, null) \n" +
-            "into objreference (attr_id, object_id, reference) " +
-            "values (37, objects_id_s.currval, ? /*reference to credit_acc_personal*/) " + "select * from dual";
+    String CREATE_CREDIT_OPERATION_PERSONAL = "INSERT ALL " +
+            "INTO OBJECTS (OBJECT_ID, PARENT_ID, OBJECT_TYPE_ID, NAME, DESCRIPTION) " +
+            "VALUES (OBJECTS_ID_S.NEXTVAL, NULL, 7, 'CREDIT_OPERATION_PERSONAL', NULL) " +
+            "INTO ATTRIBUTES (ATTR_ID, OBJECT_ID, VALUE, DATE_VALUE, LIST_VALUE_ID) " +
+            "VALUES (40 /*AMOUNT*/, OBJECTS_ID_S.CURRVAL, ? /*AMOUNT*/, NULL, NULL) " +
+            "INTO ATTRIBUTES (ATTR_ID, OBJECT_ID, VALUE, DATE_VALUE, LIST_VALUE_ID) " +
+            "VALUES (41 /*DATE*/, OBJECTS_ID_S.CURRVAL, NULL, ?, NULL) " +
+            "INTO OBJREFERENCE (ATTR_ID, OBJECT_ID, REFERENCE) " +
+            "VALUES (37, OBJECTS_ID_S.CURRVAL, ? /*REFERENCE TO CREDIT_ACC_PERSONAL*/) " + "SELECT * FROM DUAL";
 
-    String CREATE_CREDIT_OPERATION_FAMILY = "insert all " +
-            "into objects (object_id, parent_id, object_type_id, name, description) " +
-            "values (objects_id_s.nextval, null, 18, 'credit_operation_family', null) " +
-            "into attributes (attr_id, object_id, value, date_value, list_value_id) " +
-            "values (40 /*amount*/, objects_id_s.currval, ? /*amount*/, null, null) \n" +
-            "into attributes (attr_id, object_id, value, date_value, list_value_id) " +
-            "values (41 /*date*/, objects_id_s.currval, null, ?, null) \n" +
-            "into objreference (attr_id, object_id, reference) " +
-            "values (38, objects_id_s.currval, ? /*reference to credit_acc_family*/) \n" +
-            "into objreference (attr_id, object_id, reference) " +
-            "values (39, objects_id_s.currval, ? /*reference to user*/) " + "select * from dual";
+    String CREATE_CREDIT_OPERATION_FAMILY = "INSERT ALL " +
+            "INTO OBJECTS (OBJECT_ID, PARENT_ID, OBJECT_TYPE_ID, NAME, DESCRIPTION) " +
+            "VALUES (OBJECTS_ID_S.NEXTVAL, NULL, 18, 'CREDIT_OPERATION_FAMILY', NULL) " +
+            "INTO ATTRIBUTES (ATTR_ID, OBJECT_ID, VALUE, DATE_VALUE, LIST_VALUE_ID) " +
+            "VALUES (40 /*AMOUNT*/, OBJECTS_ID_S.CURRVAL, ? /*AMOUNT*/, NULL, NULL) " +
+            "INTO ATTRIBUTES (ATTR_ID, OBJECT_ID, VALUE, DATE_VALUE, LIST_VALUE_ID) " +
+            "VALUES (41 /*DATE*/, OBJECTS_ID_S.CURRVAL, NULL, ?, NULL) " +
+            "INTO OBJREFERENCE (ATTR_ID, OBJECT_ID, REFERENCE) " +
+            "VALUES (38, OBJECTS_ID_S.CURRVAL, ? /*REFERENCE TO CREDIT_ACC_FAMILY*/) " +
+            "INTO OBJREFERENCE (ATTR_ID, OBJECT_ID, REFERENCE) " +
+            "VALUES (39, OBJECTS_ID_S.CURRVAL, ? /*REFERENCE TO USER*/) " + "SELECT * FROM DUAL";
 
     String GET_CREDIT_OPERATION_PERSONAL =
-            "select credit_acc_personal.object_id as credit_acc_personal_id, credit_acc_name.value as credit_acc_name, \n" +
-            "\tcredit_operation.object_id as operation_id, credit_operation.name as operation_name, \n" +
-            "\tamount.value as amount, dates.date_value as date_value \n" +
-            "from objects credit_acc_personal, objects credit_operation, attributes credit_acc_name, \n" +
-            "\tattributes amount, attributes dates, objreference credit_acc_ref_user\n" +
-            "where credit_acc_ref_user.attr_id = 37 and credit_operation.object_id = ? \n" +
-            "\tand credit_operation.object_id = credit_acc_ref_user.object_id \n" +
-            "\tand credit_acc_personal.object_id = credit_acc_ref_user.reference \n" +
-            "\tand credit_acc_name.attr_id = 30 and amount.attr_id = 40 and dates.attr_id = 41 \n" +
-            "\tand credit_acc_name.object_id = credit_acc_personal.object_id \n" +
-            "\tand amount.object_id = credit_operation.object_id and dates.object_id = credit_operation.object_id";
+            "SELECT CREDIT_ACC_PERSONAL.OBJECT_ID AS CREDIT_ACC_PERSONAL_ID, CREDIT_ACC_NAME.VALUE AS CREDIT_ACC_NAME, " +
+                    "  CREDIT_OPERATION.OBJECT_ID AS OPERATION_ID, CREDIT_OPERATION.NAME AS OPERATION_NAME, " +
+                    "  AMOUNT.VALUE AS AMOUNT, DATES.DATE_VALUE AS DATE_VALUE " +
+                    "FROM OBJECTS CREDIT_ACC_PERSONAL, OBJECTS CREDIT_OPERATION, ATTRIBUTES CREDIT_ACC_NAME, " +
+                    "  ATTRIBUTES AMOUNT, ATTRIBUTES DATES, OBJREFERENCE CREDIT_ACC_REF_USER " +
+                    "WHERE CREDIT_ACC_REF_USER.ATTR_ID = 37 AND CREDIT_OPERATION.OBJECT_ID = ? " +
+                    "  AND CREDIT_OPERATION.OBJECT_ID = CREDIT_ACC_REF_USER.OBJECT_ID " +
+                    "  AND CREDIT_ACC_PERSONAL.OBJECT_ID = CREDIT_ACC_REF_USER.REFERENCE " +
+                    "  AND CREDIT_ACC_NAME.ATTR_ID = 30 AND AMOUNT.ATTR_ID = 40 AND DATES.ATTR_ID = 41 " +
+                    "  AND CREDIT_ACC_NAME.OBJECT_ID = CREDIT_ACC_PERSONAL.OBJECT_ID " +
+                    "  AND AMOUNT.OBJECT_ID = CREDIT_OPERATION.OBJECT_ID AND DATES.OBJECT_ID = CREDIT_OPERATION.OBJECT_ID";
 
     String GET_CREDIT_OPERATION_FAMILY =
-            "select credit_acc_family.object_id as credit_id_family, acc_personal.object_id as id_user, \n" +
-            "  credit_acc_name.value as credit_acc_name, credit_operation.object_id as operation_id, \n" +
-            "  credit_operation.name as operation_name, amount.value as amount, dates.date_value as date_value \n" +
-            "from objects credit_acc_family, objects acc_personal, objects credit_operation, attributes credit_acc_name, \n" +
-            "  attributes amount, attributes dates, objreference acc_ref_user, objreference credit_acc_ref_family\n" +
-            "where credit_operation.object_id = ? \n" +
-            "  and credit_acc_ref_family.attr_id = 38 and acc_ref_user.attr_id = 39\n" +
-            "  and credit_operation.object_id = credit_acc_ref_family.object_id \n" +
-            "  and credit_acc_family.object_id = credit_acc_ref_family.reference \n" +
-            "  and credit_operation.object_id = acc_ref_user.object_id \n" +
-            "  and acc_personal.object_id = acc_ref_user.reference \n" +
-            "  and credit_acc_name.attr_id = 30 and amount.attr_id = 40 and dates.attr_id = 41 \n" +
-            "  and credit_acc_name.object_id = credit_acc_family.object_id \n" +
-            "  and amount.object_id = credit_operation.object_id and dates.object_id = credit_operation.object_id";
+            "SELECT CREDIT_ACC_FAMILY.OBJECT_ID AS CREDIT_ID_FAMILY, ACC_PERSONAL.OBJECT_ID AS ID_USER, " +
+                    "  CREDIT_ACC_NAME.VALUE AS CREDIT_ACC_NAME, CREDIT_OPERATION.OBJECT_ID AS OPERATION_ID, " +
+                    "  CREDIT_OPERATION.NAME AS OPERATION_NAME, AMOUNT.VALUE AS AMOUNT, DATES.DATE_VALUE AS DATE_VALUE " +
+                    "FROM OBJECTS CREDIT_ACC_FAMILY, OBJECTS ACC_PERSONAL, OBJECTS CREDIT_OPERATION, ATTRIBUTES CREDIT_ACC_NAME, " +
+                    "  ATTRIBUTES AMOUNT, ATTRIBUTES DATES, OBJREFERENCE ACC_REF_USER, OBJREFERENCE CREDIT_ACC_REF_FAMILY " +
+                    "WHERE CREDIT_OPERATION.OBJECT_ID = ? " +
+                    "  AND CREDIT_ACC_REF_FAMILY.ATTR_ID = 38 AND ACC_REF_USER.ATTR_ID = 39 " +
+                    "  AND CREDIT_OPERATION.OBJECT_ID = CREDIT_ACC_REF_FAMILY.OBJECT_ID " +
+                    "  AND CREDIT_ACC_FAMILY.OBJECT_ID = CREDIT_ACC_REF_FAMILY.REFERENCE " +
+                    "  AND CREDIT_OPERATION.OBJECT_ID = ACC_REF_USER.OBJECT_ID " +
+                    "  AND ACC_PERSONAL.OBJECT_ID = ACC_REF_USER.REFERENCE " +
+                    "  AND CREDIT_ACC_NAME.ATTR_ID = 30 AND AMOUNT.ATTR_ID = 40 AND DATES.ATTR_ID = 41 " +
+                    "  AND CREDIT_ACC_NAME.OBJECT_ID = CREDIT_ACC_FAMILY.OBJECT_ID " +
+                    "  AND AMOUNT.OBJECT_ID = CREDIT_OPERATION.OBJECT_ID AND DATES.OBJECT_ID = CREDIT_OPERATION.OBJECT_ID";
 
-
-    String DELETE_FROM_OBJECTS = "delete from objects where object_id = ?";
-    String DELETE_FROM_ATTRIBUTES = "delete from attributes where object_id = ?";
-    String DELETE_FROM_OBJREFERENCE = "delete from objreference where object_id = ?";
+    String DELETE_FROM_OBJECTS = "DELETE FROM OBJECTS WHERE OBJECT_ID = ?";
+    String DELETE_FROM_ATTRIBUTES = "DELETE FROM ATTRIBUTES WHERE OBJECT_ID = ?";
+    String DELETE_FROM_OBJREFERENCE = "DELETE FROM OBJREFERENCE WHERE OBJECT_ID = ?";
 
     String GET_ALL_CREDIT_OPERATIONS_PERSONAL =
-            "select credit_acc_personal.object_id as credit_acc_personal_id, credit_acc_name.value as credit_acc_name, \n" +
-            "  credit_operation.object_id as operation_id, credit_operation.name as operation_name, \n" +
-            "  amount.value as amount, dates.date_value as date_value \n" +
-            "from objects credit_acc_personal, objects credit_operation, attributes credit_acc_name, \n" +
-            "  attributes amount, attributes dates, objreference credit_acc_ref_user\n" +
-            "where credit_acc_personal.object_id = ? and credit_acc_ref_user.attr_id = 37\n" +
-            "  and credit_operation.object_id = credit_acc_ref_user.object_id \n" +
-            "  and credit_acc_personal.object_id = credit_acc_ref_user.reference \n" +
-            "  and credit_acc_name.attr_id = 30 and amount.attr_id = 40 and dates.attr_id = 41 \n" +
-            "  and credit_acc_name.object_id = credit_acc_personal.object_id \n" +
-            "  and amount.object_id = credit_operation.object_id and dates.object_id = credit_operation.object_id";
+            "SELECT CREDIT_ACC_PERSONAL.OBJECT_ID AS CREDIT_ACC_PERSONAL_ID, CREDIT_ACC_NAME.VALUE AS CREDIT_ACC_NAME, " +
+                    "  CREDIT_OPERATION.OBJECT_ID AS OPERATION_ID, CREDIT_OPERATION.NAME AS OPERATION_NAME, " +
+                    "  AMOUNT.VALUE AS AMOUNT, DATES.DATE_VALUE AS DATE_VALUE " +
+                    "FROM OBJECTS CREDIT_ACC_PERSONAL, OBJECTS CREDIT_OPERATION, ATTRIBUTES CREDIT_ACC_NAME, " +
+                    "  ATTRIBUTES AMOUNT, ATTRIBUTES DATES, OBJREFERENCE CREDIT_ACC_REF_USER " +
+                    "WHERE CREDIT_ACC_PERSONAL.OBJECT_ID = ? AND CREDIT_ACC_REF_USER.ATTR_ID = 37 " +
+                    "  AND CREDIT_OPERATION.OBJECT_ID = CREDIT_ACC_REF_USER.OBJECT_ID " +
+                    "  AND CREDIT_ACC_PERSONAL.OBJECT_ID = CREDIT_ACC_REF_USER.REFERENCE " +
+                    "  AND CREDIT_ACC_NAME.ATTR_ID = 30 AND AMOUNT.ATTR_ID = 40 AND DATES.ATTR_ID = 41 " +
+                    "  AND CREDIT_ACC_NAME.OBJECT_ID = CREDIT_ACC_PERSONAL.OBJECT_ID " +
+                    "  AND AMOUNT.OBJECT_ID = CREDIT_OPERATION.OBJECT_ID AND DATES.OBJECT_ID = CREDIT_OPERATION.OBJECT_ID";
 
     String GET_ALL_CREDIT_OPERATIONS_FAMILY =
-            "select credit_acc_family.object_id as credit_id_family, acc_personal.object_id as id_user, \n" +
-            "  credit_acc_name.value as credit_acc_name, credit_operation.object_id as operation_id, \n" +
-            "  credit_operation.name as operation_name, amount.value as amount, dates.date_value as date_value \n" +
-            "from objects credit_acc_family, objects acc_personal, objects credit_operation, attributes credit_acc_name, \n" +
-            "  attributes amount, attributes dates, objreference acc_ref_user, objreference credit_acc_ref_family\n" +
-            "where credit_acc_family.object_id = ? \n" +
-            "  and credit_acc_ref_family.attr_id = 38 and acc_ref_user.attr_id = 39\n" +
-            "  and credit_operation.object_id = credit_acc_ref_family.object_id \n" +
-            "  and credit_acc_family.object_id = credit_acc_ref_family.reference \n" +
-            "  and credit_operation.object_id = acc_ref_user.object_id \n" +
-            "  and acc_personal.object_id = acc_ref_user.reference \n" +
-            "  and credit_acc_name.attr_id = 30 and amount.attr_id = 40 and dates.attr_id = 41 \n" +
-            "  and credit_acc_name.object_id = credit_acc_family.object_id \n" +
-            "  and amount.object_id = credit_operation.object_id and dates.object_id = credit_operation.object_id";
+            "SELECT CREDIT_ACC_FAMILY.OBJECT_ID AS CREDIT_ID_FAMILY, ACC_PERSONAL.OBJECT_ID AS ID_USER, " +
+                    "  CREDIT_ACC_NAME.VALUE AS CREDIT_ACC_NAME, CREDIT_OPERATION.OBJECT_ID AS OPERATION_ID, " +
+                    "  CREDIT_OPERATION.NAME AS OPERATION_NAME, AMOUNT.VALUE AS AMOUNT, DATES.DATE_VALUE AS DATE_VALUE " +
+                    "FROM OBJECTS CREDIT_ACC_FAMILY, OBJECTS ACC_PERSONAL, OBJECTS CREDIT_OPERATION, ATTRIBUTES CREDIT_ACC_NAME, " +
+                    "  ATTRIBUTES AMOUNT, ATTRIBUTES DATES, OBJREFERENCE ACC_REF_USER, OBJREFERENCE CREDIT_ACC_REF_FAMILY " +
+                    "WHERE CREDIT_ACC_FAMILY.OBJECT_ID = ? " +
+                    "  AND CREDIT_ACC_REF_FAMILY.ATTR_ID = 38 AND ACC_REF_USER.ATTR_ID = 39 " +
+                    "  AND CREDIT_OPERATION.OBJECT_ID = CREDIT_ACC_REF_FAMILY.OBJECT_ID " +
+                    "  AND CREDIT_ACC_FAMILY.OBJECT_ID = CREDIT_ACC_REF_FAMILY.REFERENCE " +
+                    "  AND CREDIT_OPERATION.OBJECT_ID = ACC_REF_USER.OBJECT_ID " +
+                    "  AND ACC_PERSONAL.OBJECT_ID = ACC_REF_USER.REFERENCE " +
+                    "  AND CREDIT_ACC_NAME.ATTR_ID = 30 AND AMOUNT.ATTR_ID = 40 AND DATES.ATTR_ID = 41 " +
+                    "  AND CREDIT_ACC_NAME.OBJECT_ID = CREDIT_ACC_FAMILY.OBJECT_ID " +
+                    "  AND AMOUNT.OBJECT_ID = CREDIT_OPERATION.OBJECT_ID AND DATES.OBJECT_ID = CREDIT_OPERATION.OBJECT_ID";
 }
