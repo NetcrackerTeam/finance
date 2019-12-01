@@ -4,10 +4,11 @@ import com.netcracker.models.AbstractAutoOperation;
 import com.netcracker.models.AutoOperationExpense;
 import com.netcracker.models.AutoOperationIncome;
 
+import java.math.BigInteger;
 import java.util.Collection;
 
 public interface AutoOperationDao {
-    AutoOperationIncome getFamilyIncomeAutoOperation(Integer autoOperationId);
+    AutoOperationIncome getFamilyIncomeAutoOperation(BigInteger autoOperationId);
 
     AutoOperationExpense getFamilyExpenseAutoOperation(Integer autoOperationId);
 
@@ -197,24 +198,21 @@ public interface AutoOperationDao {
             "  AND DAY_OF_MONTH.OBJECT_ID = AUTO_OPERATION.OBJECT_ID AND AMOUNT.OBJECT_ID = AUTO_OPERATION.OBJECT_ID " +
             "  AND CATEGORY.OBJECT_ID = AUTO_OPERATION.OBJECT_ID AND DATES.OBJECT_ID = AUTO_OPERATION.OBJECT_ID";
 
-    String GET_FAMILY_INCOME_AO = "SELECT AUTO_OPERATION.OBJECT_ID AS AO_OBJECT_ID, AUTO_OPERATION.NAME, " +
-            "  FAMILY_DEBIT_ACC.OBJECT_ID AS FAMILY_DEBIT_ACC_ID, " +
-            "  USERS.OBJECT_ID AS USER_ID, " +
-            "  EMAIL.VALUE AS EMAIL, USER_NAME.VALUE AS USER_NAME, " +
-            "  DAY_OF_MONTH.VALUE AS DAY_OF_MONTH, AMOUNT.VALUE AS AMOUNT, " +
-            "  CATEGORY.LIST_VALUE_ID AS CATEGORY_ID, DATES.DATE_VALUE AS DATE_OF_CREATION " +
-            "FROM OBJECTS AUTO_OPERATION, OBJECTS FAMILY_DEBIT_ACC, OBJECTS USERS, " +
-            "  ATTRIBUTES AMOUNT, ATTRIBUTES CATEGORY, ATTRIBUTES DATES, ATTRIBUTES DAY_OF_MONTH, ATTRIBUTES EMAIL, " +
-            "  ATTRIBUTES USER_NAME, OBJREFERENCE FAMILY_REF, OBJREFERENCE USERS_REF " +
-            "WHERE FAMILY_REF.ATTR_ID = 65 AND USERS_REF.ATTR_ID = 66 " +
-            "  AND AUTO_OPERATION.OBJECT_ID = ? " +
-            "  AND AUTO_OPERATION.OBJECT_ID = FAMILY_REF.OBJECT_ID AND FAMILY_DEBIT_ACC.OBJECT_ID = FAMILY_REF.REFERENCE " +
-            "  AND AUTO_OPERATION.OBJECT_ID = USERS_REF.OBJECT_ID AND USERS.OBJECT_ID = USERS_REF.REFERENCE " +
-            "  AND DAY_OF_MONTH.ATTR_ID = 68 AND AMOUNT.ATTR_ID = 56 " +
-            "  AND CATEGORY.ATTR_ID = 57 AND DATES.ATTR_ID = 58 " +
-            "  AND EMAIL.ATTR_ID = 3 AND USER_NAME.ATTR_ID = 5 " +
-            "  AND DAY_OF_MONTH.OBJECT_ID = AUTO_OPERATION.OBJECT_ID AND AMOUNT.OBJECT_ID = AUTO_OPERATION.OBJECT_ID " +
-            "  AND CATEGORY.OBJECT_ID = AUTO_OPERATION.OBJECT_ID AND DATES.OBJECT_ID = AUTO_OPERATION.OBJECT_ID " +
-            "  AND EMAIL.OBJECT_ID = USERS.OBJECT_ID AND USER_NAME.OBJECT_ID = USERS.OBJECT_ID";
+    String GET_FAMILY_INCOME_AO = "select auto_operation.object_id as ao_object_id, \n" +
+            "  users.object_id as user_id, category.list_value_id as category_id,\n" +
+            "  amount.value as amount,   dates.date_value as date_of_creation, day_of_month.value as day_of_month\n" +
+            "from objects auto_operation, objects family_debit_acc, objects users,\n" +
+            "  attributes amount, attributes category, attributes dates, attributes day_of_month, attributes email, \n" +
+            "  attributes user_name, objreference family_ref, objreference users_ref \n" +
+            "where family_ref.attr_id = 65  and users_ref.attr_id = 66  \n" +
+            "  and auto_operation.object_id = ?  \n" +
+            "  and auto_operation.object_id = family_ref.object_id and family_debit_acc.object_id = family_ref.reference \n" +
+            "  and auto_operation.object_id = users_ref.object_id and users.object_id = users_ref.reference \n" +
+            "  and day_of_month.attr_id = 68  and amount.attr_id = 56 \n" +
+            "  and category.attr_id = 57 and dates.attr_id = 58 \n" +
+            "  and email.attr_id = 3 and user_name.attr_id = 5\n" +
+            "  and day_of_month.object_id = auto_operation.object_id and amount.object_id = auto_operation.object_id \n" +
+            "  and category.object_id = auto_operation.object_id and dates.object_id = auto_operation.object_id \n" +
+            "  and email.object_id = users.object_id and user_name.object_id = users.object_id";
 
 }

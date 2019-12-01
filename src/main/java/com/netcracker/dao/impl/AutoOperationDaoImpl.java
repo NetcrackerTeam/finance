@@ -11,6 +11,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -24,8 +26,8 @@ public class AutoOperationDaoImpl implements AutoOperationDao {
     }
 
     @Override
-    public AutoOperationIncome getFamilyIncomeAutoOperation(Integer autoOperationId) {
-        return jdbcTemplate.queryForObject(GET_FAMILY_INCOME_AO, new Object[]{autoOperationId}, new AutoOperationIncomeMapper());
+    public AutoOperationIncome getFamilyIncomeAutoOperation(BigInteger autoOperationId) {
+        return this.jdbcTemplate.queryForObject(GET_FAMILY_INCOME_AO, new Object[]{new BigDecimal(autoOperationId)}, new AutoOperationIncomeMapper());
         /*return jdbcTemplate.queryForObject(GET_FAMILY_AO, new Object[]{65, 66, autoOperationId, 68},
                 new AutoOperationIncomeMapper());
         /*return jdbcTemplate.queryForObject(GET_FAMILY_AO, new Object[]{familyIncome_family_ref_attr_id_1,
