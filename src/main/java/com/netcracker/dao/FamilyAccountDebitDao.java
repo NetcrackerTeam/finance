@@ -28,96 +28,96 @@ public interface FamilyAccountDebitDao {
     String ADD_USER_BY_ID = "INSERT INTO OBJREFERENCE (ATTR_ID,OBJECT_ID,REFERENCE) VALUES (8,?,?)";
 
     String FIND_FAMILY_ACCOUNT_BY_ID = "SELECT " +
-            "debit.object_id as debit_id, debit.name as name_debit, attr1.value as amount_debit, attr2.list_value_id as status_debit, "
+            "DEBIT.OBJECT_ID DEBIT_ID, DEBIT.NAME NAME_DEBIT, ATTR1.VALUE AMOUNT_DEBIT, ATTR2.LIST_VALUE_ID STATUS_DEBIT, "
             +
-            "us.object_id as USER_ID, attr1_user.value as NAME, attr2_user.value as EMAIL, attr3_user.value as PASSWORD "
+            "US.OBJECT_ID USER_ID,  ATTR1_USER.VALUE  NAME, ATTR2_USER.VALUE  EMAIL, ATTR3_USER.VALUE  PASSWORD "
             +
-                "from OBJECTS debit, attributes attr1, attributes attr2,  "
+            "FROM OBJECTS DEBIT, ATTRIBUTES ATTR1, ATTRIBUTES ATTR2,  "
             +
-                "objects us, attributes attr1_user, attributes attr2_user, attributes attr3_user, OBJREFERENCE objref "
+            "OBJECTS US, ATTRIBUTES ATTR1_USER, ATTRIBUTES ATTR2_USER, ATTRIBUTES ATTR3_USER, OBJREFERENCE OBJREF "
             +
-                    "where debit.object_type_id = 13 and us.object_type_id = 1 " +
-                    "and debit.object_id = ? " +
-                    "and attr1.object_id = debit.object_id " +
-                    "and attr1.attr_id = 9 " +
-                    "and attr2.object_id = debit.object_id " +
-                    "and attr2.attr_id = 69 " +
-                        "and objref.attr_id = 2 " +
-                        "and objref.reference = debit.object_id " +
-                        "and us.object_id = objref.object_id " +
-                        "and attr1_user.object_id = us.object_id " +
-                        "and attr1_user.attr_id = 5 " +
-                        "and attr2_user.object_id = us.object_id " +
-                        "and attr2_user.attr_id = 3 " +
-                        "and attr3_user.object_id = us.object_id " +
-                        "and attr3_user.attr_id = 4 ";
+            "WHERE DEBIT.OBJECT_TYPE_ID = 13 AND US.OBJECT_TYPE_ID = 1 " +
+            "AND DEBIT.OBJECT_ID = ? " +
+            "AND ATTR1.OBJECT_ID = DEBIT.OBJECT_ID " +
+            "AND ATTR1.ATTR_ID = 9 " +
+            "AND ATTR2.OBJECT_ID = DEBIT.OBJECT_ID " +
+            "AND ATTR2.ATTR_ID = 69 " +
+            "AND OBJREF.ATTR_ID = 2 " +
+            "AND OBJREF.REFERENCE = DEBIT.OBJECT_ID " +
+            "AND US.OBJECT_ID = OBJREF.OBJECT_ID " +
+            "AND ATTR1_USER.OBJECT_ID = US.OBJECT_ID " +
+            "AND ATTR1_USER.ATTR_ID = 5 " +
+            "AND ATTR2_USER.OBJECT_ID = US.OBJECT_ID " +
+            "AND ATTR2_USER.ATTR_ID = 3 " +
+            "AND ATTR3_USER.OBJECT_ID = US.OBJECT_ID " +
+            "AND ATTR3_USER.ATTR_ID = 4 ";
 
     String ADD_NEW_FAMILY_ACCOUNT = "INSERT ALL " +
-            "INTO OBJECTS(OBJECT_ID,OBJECT_TYPE_ID,NAME) VALUES (objects_id_s.nextval, 13, ?) "
+            "INTO OBJECTS(OBJECT_ID,OBJECT_TYPE_ID,NAME) VALUES (OBJECTS_ID_S.NEXTVAL, 13, ?) "
             +
-            "INTO ATTRIBUTES(ATTR_ID, OBJECT_ID, VALUE) VALUES(9, objects_id_s.currval, ?) "
+            "INTO ATTRIBUTES(ATTR_ID, OBJECT_ID, VALUE) VALUES(9, OBJECTS_ID_S.CURRVAL, ?) "
             +
-            "INTO ATTRIBUTES(ATTR_ID, OBJECT_ID, VALUE) VALUES(69, objects_id_s.currval, ?) "
+            "INTO ATTRIBUTES(ATTR_ID, OBJECT_ID, VALUE) VALUES(69, OBJECTS_ID_S.CURRVAL, ?) "
             +
-            "INTO OBJREFERENCE(ATTR_ID,OBJECT_ID,REFERENCE) VALUES (2,?,objects_id_s.currval) "
+            "INTO OBJREFERENCE(ATTR_ID,OBJECT_ID,REFERENCE) VALUES (2,?,OBJECTS_ID_S.CURRVAL) "
             +
-            "INTO OBJREFERENCE(ATTR_ID,OBJECT_ID,REFERENCE) VALUES (8,objects_id_s.currval, ?) "
+            "INTO OBJREFERENCE(ATTR_ID,OBJECT_ID,REFERENCE) VALUES (8,OBJECTS_ID_S.CURRVAL, ?) "
             +
             "SELECT * FROM DUAL";
-    String DELETE_USER_FROM_FAMILY_ACCOUNT = "DELETE FROM OBJREFERENCE WHERE ATTR_ID = 8 and OBJECT_ID = ? and REFERENCE = ?";
+    String DELETE_USER_FROM_FAMILY_ACCOUNT = "DELETE FROM OBJREFERENCE WHERE ATTR_ID = 8 AND OBJECT_ID = ? AND REFERENCE = ?";
 
-    String SET_FAMILY_ACCOUNT_UNACTIVE = "update attributes set list_value_id = 42 where attr_id = 69 and object_id = ?";
+    String SET_FAMILY_ACCOUNT_UNACTIVE = "UPDATE ATTRIBUTES SET LIST_VALUE_ID = 42 WHERE ATTR_ID = 69 AND OBJECT_ID = ?";
 
-    // String CHEK_USER_ACTIVE_AND_REFERENCED = "SELECT reference FROM objreference WHERE attr_id = 8 and object_id = ? and reference = ?";
+    // String CHEK_USER_ACTIVE_AND_REFERENCED = "SELECT REFERENCE FROM OBJREFERENCE WHERE ATTR_ID = 8 AND OBJECT_ID = ? AND REFERENCE = ?";
 
-    String GET_PARTICIPANTS = "SELECT\n" +
-           "\tus_part.object_id as USER_ID, attr1_us_part.value as NAME, attr2_us_part.value as EMAIL, attr3_us_part.value as PASSWORD  \n" +
-           "\t\tfrom OBJECTS debit, objects us_part, attributes attr1_us_part, attributes attr2_us_part, attributes attr3_us_part, OBJREFERENCE objref  \t\t\t\t\t\n" +
-           "\t\t\twhere debit.object_type_id = 13 and us_part.object_type_id = 1\n" +
-           "\t\t\tand debit.object_id = ?\n" +
-           "\t\t\t\tand objref.attr_id = 8\n" +
-           "\t\t\t\tand objref.object_id = debit.object_id\n" +
-           "\t\t\t\tand us_part.object_id = objref.reference\n" +
-           "\t\t\t\tand attr1_us_part.object_id = us_part.object_id\n" +
-           "\t\t\t\tand attr1_us_part.attr_id = 5\n" +
-           "\t\t\t\tand attr2_us_part.object_id = us_part.object_id\n" +
-           "\t\t\t\tand attr2_us_part.attr_id = 3\n" +
-           "\t\t\t\tand attr3_us_part.object_id = us_part.object_id\n" +
-           "\t\t\t\tand attr3_us_part.attr_id = 4";
+    String GET_PARTICIPANTS = "SELECT " +
+            "US_PART.OBJECT_ID USER_ID, ATTR1_US_PART.VALUE NAME, ATTR2_US_PART.VALUE EMAIL, ATTR3_US_PART.VALUE PASSWORD " +
+            "FROM OBJECTS DEBIT, OBJECTS US_PART, ATTRIBUTES ATTR1_US_PART, ATTRIBUTES ATTR2_US_PART, ATTRIBUTES ATTR3_US_PART, OBJREFERENCE OBJREF  " +
+            "WHERE DEBIT.OBJECT_TYPE_ID = 13 AND US_PART.OBJECT_TYPE_ID = 1 " +
+            "AND DEBIT.OBJECT_ID = ? " +
+            "AND OBJREF.ATTR_ID = 8 " +
+            "AND OBJREF.OBJECT_ID = DEBIT.OBJECT_ID " +
+            "AND US_PART.OBJECT_ID = OBJREF.REFERENCE " +
+            "AND ATTR1_US_PART.OBJECT_ID = US_PART.OBJECT_ID " +
+            "AND ATTR1_US_PART.ATTR_ID = 5 " +
+            "AND ATTR2_US_PART.OBJECT_ID = US_PART.OBJECT_ID " +
+            "AND ATTR2_US_PART.ATTR_ID = 3 " +
+            "AND ATTR3_US_PART.OBJECT_ID = US_PART.OBJECT_ID " +
+            "AND ATTR3_US_PART.ATTR_ID = 4";
 
-    String GET_INCOME_LIST = "SELECT \n" +
-            "\tincome.object_id as account_income_id, attr1.value as income_amount, attr2.date_value as date_income, attr3.list_value_id as category, us.object_id as user_id \n" +
-            "    from OBJECTS income,  objects us, attributes attr1, attributes attr2, attributes attr3, objects debit, OBJREFERENCE objref1, OBJREFERENCE objref2 \t\t\t\t\t\n" +
-            "\t\t\twhere debit.object_type_id = 13 and us.object_type_id = 1 and income.object_type_id = 21\n" +
-            "        and debit.object_id = ?\n" +
-            "\t\t\t\tand objref1.attr_id = 54\n" +
-            "\t\t\t\tand objref1.reference = debit.object_id\n" +
-            "\t\t\t\tand income.object_id = objref1.object_id\n" +
-            "        and objref2.attr_id = 55\n" +
-            "\t\t\t\tand objref2.object_id = income.object_id\n" +
-            "\t\t\t\tand us.object_id = objref2.reference\n" +
-            "\t\t\t\tand attr1.object_id = income.object_id\n" +
-            "\t\t\t\tand attr1.attr_id = 56\n" +
-            "\t\t\t\tand attr2.object_id = income.object_id\n" +
-            "\t\t\t\tand attr2.attr_id = 58\n" +
-            "        and attr3.object_id = income.object_id\n" +
-            "\t\t\t\tand attr3.attr_id = 57";
+    String GET_INCOME_LIST = "SELECT " +
+            "INCOME.OBJECT_ID ACCOUNT_INCOME_ID, ATTR1.VALUE INCOME_AMOUNT, ATTR2.DATE_VALUE DATE_INCOME, ATTR3.LIST_VALUE_ID CATEGORY_INCOME, US.OBJECT_ID USER_ID " +
+            "FROM OBJECTS INCOME,  OBJECTS US, ATTRIBUTES ATTR1, ATTRIBUTES ATTR2, ATTRIBUTES ATTR3, OBJECTS DEBIT, OBJREFERENCE OBJREF1, OBJREFERENCE OBJREF2 " +
+            "WHERE DEBIT.OBJECT_TYPE_ID = 13 AND US.OBJECT_TYPE_ID = 1 AND INCOME.OBJECT_TYPE_ID = 21 " +
+            "AND DEBIT.OBJECT_ID = ? " +
+            "AND OBJREF1.ATTR_ID = 54 " +
+            "AND OBJREF1.REFERENCE = DEBIT.OBJECT_ID " +
+            "AND INCOME.OBJECT_ID = OBJREF1.OBJECT_ID " +
+            "AND OBJREF2.ATTR_ID = 55 " +
+            "AND OBJREF2.OBJECT_ID = INCOME.OBJECT_ID " +
+            "AND US.OBJECT_ID = OBJREF2.REFERENCE " +
+            "AND ATTR1.OBJECT_ID = INCOME.OBJECT_ID " +
+            "AND ATTR1.ATTR_ID = 56 " +
+            "AND ATTR2.OBJECT_ID = INCOME.OBJECT_ID " +
+            "AND ATTR2.ATTR_ID = 58 " +
+            "AND ATTR3.OBJECT_ID = INCOME.OBJECT_ID " +
+            "AND ATTR3.ATTR_ID = 57";
 
-    String GET_EXPENSE_LIST = "SELECT \n" +
-            "\texpense.object_id as account_expense_id, attr1.value as expense_amount, attr2.date_value as date_expense, attr3.list_value_id as category, us.object_id as user_id \n" +
-            "    from OBJECTS expense,  objects us, attributes attr1, attributes attr2, attributes attr3, objects debit, OBJREFERENCE objref1, OBJREFERENCE objref2 \t\t\t\t\t\n" +
-            "\t\t\twhere debit.object_type_id = 13 and us.object_type_id = 1 and expense.object_type_id = 20\n" +
-            "        and debit.object_id = ?\n" +
-            "\t\t\t\tand objref1.attr_id = 48\n" +
-            "\t\t\t\tand objref1.reference = debit.object_id\n" +
-            "\t\t\t\tand expense.object_id = objref1.object_id\n" +
-            "        and objref2.attr_id = 49\n" +
-            "\t\t\t\tand objref2.object_id = expense.object_id\n" +
-            "\t\t\t\tand us.object_id = objref2.reference\n" +
-            "\t\t\t\tand attr1.object_id = expense.object_id\n" +
-            "\t\t\t\tand attr1.attr_id = 50\n" +
-            "\t\t\t\tand attr2.object_id = expense.object_id\n" +
-            "\t\t\t\tand attr2.attr_id = 52\n" +
-            "        and attr3.object_id = expense.object_id\n" +
-            "\t\t\t\tand attr3.attr_id = 51";
+    String GET_EXPENSE_LIST = "SELECT " +
+            "EXPENSE.OBJECT_ID ACCOUNT_EXPENSE_ID, ATTR1.VALUE EXPENSE_AMOUNT, ATTR2.DATE_VALUE DATE_EXPENSE, ATTR3.LIST_VALUE_ID CATEGORY_EXPENSE, US.OBJECT_ID USER_ID " +
+            "FROM OBJECTS EXPENSE,  OBJECTS US, ATTRIBUTES ATTR1, ATTRIBUTES ATTR2, ATTRIBUTES ATTR3, OBJECTS DEBIT, OBJREFERENCE OBJREF1, OBJREFERENCE OBJREF2 " +
+            "WHERE DEBIT.OBJECT_TYPE_ID = 13 AND US.OBJECT_TYPE_ID = 1 AND EXPENSE.OBJECT_TYPE_ID = 20 " +
+            "AND DEBIT.OBJECT_ID = ? " +
+            "AND OBJREF1.ATTR_ID = 48 " +
+            "AND OBJREF1.REFERENCE = DEBIT.OBJECT_ID " +
+            "AND EXPENSE.OBJECT_ID = OBJREF1.OBJECT_ID " +
+            "AND OBJREF2.ATTR_ID = 49 " +
+            "AND OBJREF2.OBJECT_ID = EXPENSE.OBJECT_ID " +
+            "AND US.OBJECT_ID = OBJREF2.REFERENCE " +
+            "AND ATTR1.OBJECT_ID = EXPENSE.OBJECT_ID " +
+            "AND ATTR1.ATTR_ID = 50 " +
+            "AND ATTR2.OBJECT_ID = EXPENSE.OBJECT_ID " +
+            "AND ATTR2.ATTR_ID = 52 " +
+            "AND ATTR3.OBJECT_ID = EXPENSE.OBJECT_ID " +
+            "AND ATTR3.ATTR_ID = 51";
 }

@@ -36,10 +36,10 @@ public class FamilyAccountDebitMapper implements RowMapper<FamilyDebitAccount> {
 //        expense.add(expenseMapper.mapRow(rs, i));
 
         return new FamilyDebitAccount.Builder()
-                .debitId(rs.getBigDecimal("debit_id").toBigInteger())
-                .debitObjectName(rs.getString("name_debit"))
-                .debitAmount(Long.valueOf(rs.getString("amount_debit")))
-                .debitFamilyAccountStatus(FamilyAccountStatusActive.getStatusByKey(rs.getBigDecimal("status_debit").toBigInteger()))
+                .debitId(rs.getBigDecimal("DEBIT_ID").toBigInteger())
+                .debitObjectName(rs.getString("NAME_DEBIT"))
+                .debitAmount(Long.valueOf(rs.getString("AMOUNT_DEBIT")))
+                .debitFamilyAccountStatus(FamilyAccountStatusActive.getStatusByKey(rs.getBigDecimal("STATUS_DEBIT").toBigInteger()))
                 .debitOwner(user).build();
                 //.debitAccountIncomesList(income)
                 //.debitAccountExpensesList(expense).build();
