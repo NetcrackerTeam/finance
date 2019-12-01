@@ -1,12 +1,19 @@
 package com.netcracker.dao.impl;
 
-import com.netcracker.models.AutoOperationExpense;
-import com.netcracker.models.AutoOperationIncome;
-import com.netcracker.models.CreditOperation;
+import com.netcracker.models.*;
+import org.apache.log4j.Logger;
+import org.springframework.jdbc.core.JdbcTemplate;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
 public class AssertUtils {
+    private static final Logger logger = Logger.getLogger(AssertUtils.class);
 
     public static void assertAutoOperationIncome(AutoOperationIncome expAO, AutoOperationIncome actualAO) {
         assertEquals(expAO.getId(), actualAO.getId());
@@ -32,4 +39,45 @@ public class AssertUtils {
         assertEquals(expCO.getDate(), actualCO.getDate());
     }
 
+    public static void assertCreditOperationsCollections(List<CreditOperation> expectedCollection,
+                                                   List<CreditOperation> actualCollection) {
+        expectedCollection.sort(Comparator.comparing(CreditOperation::getCreditOperationId));
+        actualCollection.sort(Comparator.comparing(CreditOperation::getCreditOperationId));
+
+        if (expectedCollection.size() == actualCollection.size()) {
+            for (int i = 0; i < expectedCollection.size(); i++) {
+                AssertUtils.assertCreditOperation(expectedCollection.get(i), actualCollection.get(i));
+            }
+        } else logger.error("List sizes are not equal");
+    }
+
+    public static void assertAutoOperationsCollections(List<AbstractAutoOperation> expectedCollection,
+                                                       List<AbstractAutoOperation> actualCollection) {
+        expectedCollection.sort(Comparator.comparing(AbstractAccountOperation::getId));
+        actualCollection.sort(Comparator.comparing(AbstractAccountOperation::getId));
+
+        if (expectedCollection.size() == actualCollection.size()) {
+            for (int i = 0; i < expectedCollection.size(); i ++) {
+                if (expectedCollection.get(i) instanceof AutoOperationIncome) {
+                    AssertUtils.assertAutoOperationIncome((AutoOperationIncome) expectedCollection.get(i),
+                            (AutoOperationIncome) actualCollection.get(i));
+                }
+                if (expectedCollection.get(i) instanceof AutoOperationExpense) {
+                    AssertUtils.assertAutoOperationExpense((AutoOperationExpense) expectedCollection.get(i),
+                            (AutoOperationExpense) actualCollection.get(i));
+                }
+            }
+        } else logger.error("List sizes are not equal");
+    }
+
+    public static Date stringToDate(String stringToParse) throws ParseException {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        return format.parse(stringToParse);
+    }
+
+    public static Integer getCurrentSequenceId(JdbcTemplate jdbcTemplate) {
+        String GET_CURRENT_SEQUENCE_ID = "select last_number from user_sequences where sequence_name = 'OBJECTS_ID_S'";
+        int newId = jdbcTemplate.queryForObject(GET_CURRENT_SEQUENCE_ID, Integer.class);
+        return newId++;
+    }
 }

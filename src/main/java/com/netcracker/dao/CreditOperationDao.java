@@ -2,22 +2,23 @@ package com.netcracker.dao;
 
 import com.netcracker.models.CreditOperation;
 
+import java.math.BigInteger;
 import java.util.Collection;
 
 public interface CreditOperationDao {
-    CreditOperation getCreditOperationPersonal(Integer creditOperationId);
+    CreditOperation getCreditOperationPersonal(BigInteger creditOperationId);
 
-    CreditOperation getCreditOperationFamily(Integer creditOperationId);
+    CreditOperation getCreditOperationFamily(BigInteger creditOperationId);
 
-    CreditOperation createFamilyCreditOperation(CreditOperation creditOperation, Integer creditFamilyAccountId, Integer userId);
+    CreditOperation createFamilyCreditOperation(CreditOperation creditOperation, BigInteger creditFamilyAccountId, BigInteger userId);
 
-    CreditOperation createPersonalCreditOperation(CreditOperation creditOperation, Integer creditPersonalAccountId);
+    CreditOperation createPersonalCreditOperation(CreditOperation creditOperation, BigInteger creditPersonalAccountId);
 
-    Collection<CreditOperation> getAllCreditOperationsByCreditFamilyId(Integer creditFamilyAccountId);
+    Collection<CreditOperation> getAllCreditOperationsByCreditFamilyId(BigInteger creditFamilyAccountId);
 
-    Collection<CreditOperation> getAllCreditOperationsByCreditPersonalId(Integer creditPersonalAccountId);
+    Collection<CreditOperation> getAllCreditOperationsByCreditPersonalId(BigInteger creditPersonalAccountId);
 
-    void deleteCreditOperation(Integer creditOperationId);
+    void deleteCreditOperation(BigInteger creditOperationId);
 
     String CREATE_CREDIT_OPERATION_PERSONAL = "INSERT ALL " +
             "INTO OBJECTS (OBJECT_ID, PARENT_ID, OBJECT_TYPE_ID, NAME, DESCRIPTION) " +

@@ -10,23 +10,23 @@ import java.util.Collection;
 public interface AutoOperationDao {
     AutoOperationIncome getFamilyIncomeAutoOperation(BigInteger autoOperationId);
 
-    AutoOperationExpense getFamilyExpenseAutoOperation(Integer autoOperationId);
+    AutoOperationExpense getFamilyExpenseAutoOperation(BigInteger autoOperationId);
 
-    AutoOperationIncome getPersonalIncomeAutoOperation(Integer autoOperationId);
+    AutoOperationIncome getPersonalIncomeAutoOperation(BigInteger autoOperationId);
 
-    AutoOperationExpense getPersonalExpenseAutoOperation(Integer autoOperationId);
+    AutoOperationExpense getPersonalExpenseAutoOperation(BigInteger autoOperationId);
 
-    AutoOperationIncome createFamilyIncomeAutoOperation(AutoOperationIncome autoOperationIncome);
+    AutoOperationIncome createFamilyIncomeAutoOperation(AutoOperationIncome autoOperationIncome, BigInteger familyDebitAccountId);
 
     AutoOperationIncome createPersonalIncomeAutoOperation(AutoOperationIncome autoOperationIncome);
 
-    AutoOperationExpense createFamilyExpenseAutoOperation(AutoOperationExpense autoOperationExpense);
+    AutoOperationExpense createFamilyExpenseAutoOperation(AutoOperationExpense autoOperationExpense, BigInteger familyDebitAccountId);
 
     AutoOperationExpense createPersonalExpenseAutoOperation(AutoOperationExpense autoOperationExpense);
 
-    void deleteAutoOperation(Integer autoOperationId);
+    void deleteAutoOperation(BigInteger autoOperationId);
 
-    Collection<AbstractAutoOperation> getAllTodayOperations(Integer debitAccountId);
+    Collection<AbstractAutoOperation> getAllTodayOperations(BigInteger debitAccountId);
 
     String CREATE_PERSONAL_INCOME_AO = "INSERT ALL " +
             "INTO OBJECTS (OBJECT_ID, PARENT_ID, OBJECT_TYPE_ID, NAME, DESCRIPTION) " +
@@ -104,6 +104,13 @@ public interface AutoOperationDao {
     int familyIncome_users_ref_attr_id_2 = 66;
     int familyIncome_day_of_month_attr_id_4 = 68;
 
+    int income_amount_attr_id_5 = 56;
+    int income_category_attr_id_6 = 57;
+    int income_dates_attr_id_7 = 58;
+    int expense_amount_attr_id_5 = 50;
+    int expense_category_attr_id_6 = 51;
+    int expense_dates_attr_id_7 = 52;
+
     String GET_PERSONAL_AO = "SELECT AUTO_OPERATION.OBJECT_ID AS AO_OBJECT_ID, AUTO_OPERATION.NAME, " +
             "  USER_DEBIT_ACC.OBJECT_ID AS USER_DEBIT_ACC_ID,  USERS.OBJECT_ID AS USER_ID, " +
             "  EMAIL.VALUE AS EMAIL, USER_NAME.VALUE AS USER_NAME, DAY_OF_MONTH.VALUE AS DAY_OF_MONTH, AMOUNT.VALUE AS AMOUNT, " +
@@ -116,8 +123,8 @@ public interface AutoOperationDao {
             "  AND AUTO_OPERATION.OBJECT_ID = USER_DEBIT_ACC_REF.OBJECT_ID " +
             "  AND USER_DEBIT_ACC.OBJECT_ID = USER_DEBIT_ACC_REF.REFERENCE " +
             "  AND USERS.OBJECT_ID = USERS_REF.OBJECT_ID AND USER_DEBIT_ACC.OBJECT_ID = USERS_REF.REFERENCE " +
-            "  AND DAY_OF_MONTH.ATTR_ID = ? AND AMOUNT.ATTR_ID = 56 " +
-            "  AND CATEGORY.ATTR_ID = 57 AND DATES.ATTR_ID = 58 " +
+            "  AND DAY_OF_MONTH.ATTR_ID = ? AND AMOUNT.ATTR_ID = ? " +
+            "  AND CATEGORY.ATTR_ID = ? AND DATES.ATTR_ID = ? " +
             "  AND EMAIL.ATTR_ID = 3 AND USER_NAME.ATTR_ID = 5 " +
             "  AND CATEGORY.LIST_VALUE_ID = LISTS.LIST_VALUE_ID " +
             "  AND DAY_OF_MONTH.OBJECT_ID = AUTO_OPERATION.OBJECT_ID AND AMOUNT.OBJECT_ID = AUTO_OPERATION.OBJECT_ID " +
@@ -137,82 +144,37 @@ public interface AutoOperationDao {
             "  AND AUTO_OPERATION.OBJECT_ID = ? " +
             "  AND AUTO_OPERATION.OBJECT_ID = FAMILY_REF.OBJECT_ID AND FAMILY_DEBIT_ACC.OBJECT_ID = FAMILY_REF.REFERENCE " +
             "  AND AUTO_OPERATION.OBJECT_ID = USERS_REF.OBJECT_ID AND USERS.OBJECT_ID = USERS_REF.REFERENCE " +
-            "  AND DAY_OF_MONTH.ATTR_ID = ? AND AMOUNT.ATTR_ID = 56 " +
-            "  AND CATEGORY.ATTR_ID = 57 AND DATES.ATTR_ID = 58 " +
+            "  AND DAY_OF_MONTH.ATTR_ID = ? AND AMOUNT.ATTR_ID = ? " +
+            "  AND CATEGORY.ATTR_ID = ? AND DATES.ATTR_ID = ? " +
             "  AND EMAIL.ATTR_ID = 3 AND USER_NAME.ATTR_ID = 5 " +
             "  AND CATEGORY.LIST_VALUE_ID = LISTS.LIST_VALUE_ID " +
             "  AND DAY_OF_MONTH.OBJECT_ID = AUTO_OPERATION.OBJECT_ID AND AMOUNT.OBJECT_ID = AUTO_OPERATION.OBJECT_ID " +
             "  AND CATEGORY.OBJECT_ID = AUTO_OPERATION.OBJECT_ID AND DATES.OBJECT_ID = AUTO_OPERATION.OBJECT_ID " +
             "  AND EMAIL.OBJECT_ID = USERS.OBJECT_ID AND USER_NAME.OBJECT_ID = USERS.OBJECT_ID";
 
-    String GET_ALL_TODAY_AO_INCOME = "SELECT AUTO_OPERATION.OBJECT_ID AS AO_OBJECT_ID, AUTO_OPERATION.NAME, DEBIT_ACCOUNT.OBJECT_ID AS DEBIT_ID, " +
+    String GET_ALL_TODAY_AO_INCOME = "SELECT AUTO_OPERATION.OBJECT_ID AS AO_OBJECT_ID, DEBIT_ACCOUNT.OBJECT_ID AS USER_ID, " +
             "  DAY_OF_MONTH.VALUE AS DAY_OF_MONTH, AMOUNT.VALUE AS AMOUNT, CATEGORY.LIST_VALUE_ID AS CATEGORY_ID, " +
             "  LISTS.VALUE AS CATEGORY, DATES.DATE_VALUE AS DATE_OF_CREATION " +
             "FROM OBJECTS AUTO_OPERATION, OBJECTS DEBIT_ACCOUNT, LISTS, ATTRIBUTES AMOUNT, ATTRIBUTES CATEGORY, ATTRIBUTES DATES, " +
             "  OBJREFERENCE, ATTRIBUTES DAY_OF_MONTH " +
-            "WHERE DEBIT_ACCOUNT.OBJECT_ID = ? AND DAY_OF_MONTH.ATTR_ID = 67 " +
+            "WHERE DEBIT_ACCOUNT.OBJECT_ID = ? AND DAY_OF_MONTH.ATTR_ID IN (67, 68) " +
             "  AND DATES.DATE_VALUE = TRUNC(CURRENT_DATE) " +
             "  AND AUTO_OPERATION.OBJECT_ID = OBJREFERENCE.OBJECT_ID AND DEBIT_ACCOUNT.OBJECT_ID = OBJREFERENCE.REFERENCE " +
             "  AND AMOUNT.ATTR_ID = 56 AND CATEGORY.LIST_VALUE_ID = LISTS.LIST_VALUE_ID " +
-            "  AND CATEGORY.ATTR_ID = 57 AND DATES.ATTR_ID = 67 " +
+            "  AND CATEGORY.ATTR_ID = 57 AND DATES.ATTR_ID = 58 AND OBJREFERENCE.ATTR_ID IN (64, 65)" +
             "  AND DAY_OF_MONTH.OBJECT_ID = AUTO_OPERATION.OBJECT_ID AND AMOUNT.OBJECT_ID = AUTO_OPERATION.OBJECT_ID " +
-            "  AND CATEGORY.OBJECT_ID = AUTO_OPERATION.OBJECT_ID AND DATES.OBJECT_ID = AUTO_OPERATION.OBJECT_ID " +
-            "UNION ALL " +
-            "SELECT AUTO_OPERATION.OBJECT_ID AS AO_OBJECT_ID, AUTO_OPERATION.NAME, DEBIT_ACCOUNT.OBJECT_ID AS DEBIT_ID, " +
+            "  AND CATEGORY.OBJECT_ID = AUTO_OPERATION.OBJECT_ID AND DATES.OBJECT_ID = AUTO_OPERATION.OBJECT_ID ";
+
+    String GET_ALL_TODAY_AO_EXPENSE = "SELECT AUTO_OPERATION.OBJECT_ID AS AO_OBJECT_ID, DEBIT_ACCOUNT.OBJECT_ID AS USER_ID, " +
             "  DAY_OF_MONTH.VALUE AS DAY_OF_MONTH, AMOUNT.VALUE AS AMOUNT, CATEGORY.LIST_VALUE_ID AS CATEGORY_ID, " +
             "  LISTS.VALUE AS CATEGORY, DATES.DATE_VALUE AS DATE_OF_CREATION " +
             "FROM OBJECTS AUTO_OPERATION, OBJECTS DEBIT_ACCOUNT, LISTS, ATTRIBUTES AMOUNT, ATTRIBUTES CATEGORY, ATTRIBUTES DATES, " +
             "  OBJREFERENCE, ATTRIBUTES DAY_OF_MONTH " +
-            "WHERE DEBIT_ACCOUNT.OBJECT_ID = ? AND DAY_OF_MONTH.ATTR_ID = 68 " +
+            "WHERE DEBIT_ACCOUNT.OBJECT_ID = ? AND DAY_OF_MONTH.ATTR_ID IN (62, 63) " +
             "  AND DATES.DATE_VALUE = TRUNC(CURRENT_DATE) " +
             "  AND AUTO_OPERATION.OBJECT_ID = OBJREFERENCE.OBJECT_ID AND DEBIT_ACCOUNT.OBJECT_ID = OBJREFERENCE.REFERENCE " +
-            "  AND AMOUNT.ATTR_ID = 56 AND CATEGORY.LIST_VALUE_ID = LISTS.LIST_VALUE_ID " +
-            "  AND CATEGORY.ATTR_ID = 57 AND DATES.ATTR_ID = 58 " +
+            "  AND AMOUNT.ATTR_ID = 50 AND CATEGORY.LIST_VALUE_ID = LISTS.LIST_VALUE_ID " +
+            "  AND CATEGORY.ATTR_ID = 51 AND DATES.ATTR_ID = 52 AND OBJREFERENCE.ATTR_ID IN (59, 60) " +
             "  AND DAY_OF_MONTH.OBJECT_ID = AUTO_OPERATION.OBJECT_ID AND AMOUNT.OBJECT_ID = AUTO_OPERATION.OBJECT_ID " +
-            "  AND CATEGORY.OBJECT_ID = AUTO_OPERATION.OBJECT_ID AND DATES.OBJECT_ID = AUTO_OPERATION.OBJECT_ID";
-
-
-    String GET_ALL_TODAY_AO_EXPENSE = "SELECT AUTO_OPERATION.OBJECT_ID AS AO_OBJECT_ID, AUTO_OPERATION.NAME, DEBIT_ACCOUNT.OBJECT_ID AS DEBIT_ID, " +
-            "  DAY_OF_MONTH.VALUE AS DAY_OF_MONTH, AMOUNT.VALUE AS AMOUNT, CATEGORY.LIST_VALUE_ID AS CATEGORY_ID, " +
-            "  LISTS.VALUE AS CATEGORY, DATES.DATE_VALUE AS DATE_OF_CREATION" +
-            "FROM OBJECTS AUTO_OPERATION, OBJECTS DEBIT_ACCOUNT, LISTS, ATTRIBUTES AMOUNT, ATTRIBUTES CATEGORY, ATTRIBUTES DATES," +
-            "  OBJREFERENCE, ATTRIBUTES DAY_OF_MONTH " +
-            "WHERE DEBIT_ACCOUNT.OBJECT_ID = ? AND DAY_OF_MONTH.ATTR_ID = 62 " +
-            "  AND DATES.DATE_VALUE = TRUNC(CURRENT_DATE) " +
-            "  AND AUTO_OPERATION.OBJECT_ID = OBJREFERENCE.OBJECT_ID AND DEBIT_ACCOUNT.OBJECT_ID = OBJREFERENCE.REFERENCE " +
-            "  AND AMOUNT.ATTR_ID = 56 AND CATEGORY.LIST_VALUE_ID = LISTS.LIST_VALUE_ID " +
-            "  AND CATEGORY.ATTR_ID = 57 AND DATES.ATTR_ID = 58 " +
-            "  AND DAY_OF_MONTH.OBJECT_ID = AUTO_OPERATION.OBJECT_ID AND AMOUNT.OBJECT_ID = AUTO_OPERATION.OBJECT_ID " +
-            "  AND CATEGORY.OBJECT_ID = AUTO_OPERATION.OBJECT_ID AND DATES.OBJECT_ID = AUTO_OPERATION.OBJECT_ID " +
-            "UNION ALL " +
-            "SELECT AUTO_OPERATION.OBJECT_ID AS AO_OBJECT_ID, AUTO_OPERATION.NAME, DEBIT_ACCOUNT.OBJECT_ID AS DEBIT_ID, " +
-            "  DAY_OF_MONTH.VALUE AS DAY_OF_MONTH, AMOUNT.VALUE AS AMOUNT, CATEGORY.LIST_VALUE_ID AS CATEGORY_ID, " +
-            "  LISTS.VALUE AS CATEGORY, DATES.DATE_VALUE AS DATE_OF_CREATION" +
-            "FROM OBJECTS AUTO_OPERATION, OBJECTS DEBIT_ACCOUNT, LISTS, ATTRIBUTES AMOUNT, ATTRIBUTES CATEGORY, ATTRIBUTES DATES," +
-            "  OBJREFERENCE, ATTRIBUTES DAY_OF_MONTH " +
-            "WHERE DEBIT_ACCOUNT.OBJECT_ID = ? AND DAY_OF_MONTH.ATTR_ID = 63 " +
-            "  AND DATES.DATE_VALUE = TRUNC(CURRENT_DATE) " +
-            "  AND AUTO_OPERATION.OBJECT_ID = OBJREFERENCE.OBJECT_ID AND DEBIT_ACCOUNT.OBJECT_ID = OBJREFERENCE.REFERENCE " +
-            "  AND AMOUNT.ATTR_ID = 56 AND CATEGORY.LIST_VALUE_ID = LISTS.LIST_VALUE_ID " +
-            "  AND CATEGORY.ATTR_ID = 57 AND DATES.ATTR_ID = 58 " +
-            "  AND DAY_OF_MONTH.OBJECT_ID = AUTO_OPERATION.OBJECT_ID AND AMOUNT.OBJECT_ID = AUTO_OPERATION.OBJECT_ID " +
-            "  AND CATEGORY.OBJECT_ID = AUTO_OPERATION.OBJECT_ID AND DATES.OBJECT_ID = AUTO_OPERATION.OBJECT_ID";
-
-    String GET_FAMILY_INCOME_AO = "select auto_operation.object_id as ao_object_id, \n" +
-            "  users.object_id as user_id, category.list_value_id as category_id,\n" +
-            "  amount.value as amount,   dates.date_value as date_of_creation, day_of_month.value as day_of_month\n" +
-            "from objects auto_operation, objects family_debit_acc, objects users,\n" +
-            "  attributes amount, attributes category, attributes dates, attributes day_of_month, attributes email, \n" +
-            "  attributes user_name, objreference family_ref, objreference users_ref \n" +
-            "where family_ref.attr_id = 65  and users_ref.attr_id = 66  \n" +
-            "  and auto_operation.object_id = ?  \n" +
-            "  and auto_operation.object_id = family_ref.object_id and family_debit_acc.object_id = family_ref.reference \n" +
-            "  and auto_operation.object_id = users_ref.object_id and users.object_id = users_ref.reference \n" +
-            "  and day_of_month.attr_id = 68  and amount.attr_id = 56 \n" +
-            "  and category.attr_id = 57 and dates.attr_id = 58 \n" +
-            "  and email.attr_id = 3 and user_name.attr_id = 5\n" +
-            "  and day_of_month.object_id = auto_operation.object_id and amount.object_id = auto_operation.object_id \n" +
-            "  and category.object_id = auto_operation.object_id and dates.object_id = auto_operation.object_id \n" +
-            "  and email.object_id = users.object_id and user_name.object_id = users.object_id";
-
+            "  AND CATEGORY.OBJECT_ID = AUTO_OPERATION.OBJECT_ID AND DATES.OBJECT_ID = AUTO_OPERATION.OBJECT_ID ";
 }

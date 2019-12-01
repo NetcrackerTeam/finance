@@ -2,7 +2,6 @@ package com.netcracker.dao.impl;
 
 import com.netcracker.configs.WebConfig;
 import com.netcracker.dao.CreditOperationDao;
-import com.netcracker.dao.impl.mapper.CurrentSequenceMapper;
 import com.netcracker.models.CreditOperation;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,7 +15,6 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import javax.sql.DataSource;
 import java.math.BigInteger;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 import static org.junit.Assert.assertEquals;
@@ -26,12 +24,15 @@ import static org.junit.Assert.assertEquals;
 @ContextConfiguration(classes = WebConfig.class)
 public class CreditOperationTest {
     protected JdbcTemplate jdbcTemplate;
+    private String dateToday = "2019-12-01";
+    private String GET_COUNT_OF_CO_OBJECTS = "SELECT COUNT(*) FROM OBJECTS WHERE OBJECT_ID = 8010";
+    private String GET_COUNT_OF_CO_ATTRIBUTES = "SELECT COUNT(*) FROM ATTRIBUTES WHERE OBJECT_ID = 8010";
+    private String GET_COUNT_OF_CO_OBJREFERENCE = "SELECT COUNT(*) FROM OBJREFERENCE WHERE OBJECT_ID = 8010";
+
     @Autowired
     private DataSource dataSource;
-
     @Autowired
     private CreditOperationDao creditOperationDao;
-
 
     @Before
     public void setUp() {
@@ -41,18 +42,18 @@ public class CreditOperationTest {
 
     @Test
     public void getCreditOperationPersonal() {
-        CreditOperation creditOperation = creditOperationDao.getCreditOperationPersonal(8001);
+        CreditOperation creditOperation = creditOperationDao.getCreditOperationPersonal(new BigInteger("8001"));
         assertEquals(BigInteger.valueOf(8001), creditOperation.getCreditOperationId());
-        assertEquals("CreditOperation{creditOperationId=8001, amount=2000, date=2019-11-28}",
+        assertEquals("CreditOperation{creditOperationId=8001, amount=2000, date=" + dateToday + "}",
                 "CreditOperation{creditOperationId=" + creditOperation.getCreditOperationId() + ", amount="
         + creditOperation.getAmount() + ", date=" + creditOperation.getDate() + "}");
     }
 
     @Test
     public void getCreditOperationFamily() {
-        CreditOperation creditOperation = creditOperationDao.getCreditOperationFamily(105);
-        assertEquals(BigInteger.valueOf(105), creditOperation.getCreditOperationId());
-        assertEquals("CreditOperation{creditOperationId=105, amount=6666, date=2000-01-01}",
+        CreditOperation creditOperation = creditOperationDao.getCreditOperationFamily(new BigInteger("8002"));
+        assertEquals(BigInteger.valueOf(8002), creditOperation.getCreditOperationId());
+        assertEquals("CreditOperation{creditOperationId=8002, amount=2500, date=" + dateToday + "}",
                 "CreditOperation{creditOperationId=" + creditOperation.getCreditOperationId() + ", amount="
                         + creditOperation.getAmount() + ", date=" + creditOperation.getDate() + "}");
     }
@@ -60,75 +61,64 @@ public class CreditOperationTest {
     @Test
     public void createFamilyCreditOperation() throws ParseException {
         CreditOperation expectedCreditOperation = new CreditOperation(Long.valueOf("6666"),
-                stringToDate("2000-01-01"));
-        expectedCreditOperation.setCreditOperationId(BigInteger.valueOf(getCurrentSequenceId()));
+                AssertUtils.stringToDate("2000-01-01"));
+        expectedCreditOperation.setCreditOperationId(BigInteger.valueOf(AssertUtils.getCurrentSequenceId(jdbcTemplate)));
         CreditOperation actualCreditOperation = creditOperationDao.createFamilyCreditOperation(expectedCreditOperation,
-                84, 74);
+                new BigInteger("84"), new BigInteger("74"));
         AssertUtils.assertCreditOperation(expectedCreditOperation, actualCreditOperation);
     }
 
     @Test
     public void createPersonalCreditOperation() throws ParseException {
         CreditOperation expectedCreditOperation = new CreditOperation(Long.valueOf("1488"),
-                stringToDate("2003-03-03"));
-        expectedCreditOperation.setCreditOperationId(BigInteger.valueOf(getCurrentSequenceId()));
+                AssertUtils.stringToDate("2003-03-03"));
+        expectedCreditOperation.setCreditOperationId(BigInteger.valueOf(AssertUtils.getCurrentSequenceId(jdbcTemplate)));
         CreditOperation actualCreditOperation = creditOperationDao.createPersonalCreditOperation(expectedCreditOperation,
-                60);
+                new BigInteger("60"));
         AssertUtils.assertCreditOperation(expectedCreditOperation, actualCreditOperation);
     }
 
     @Test
     public void getAllCreditOperationsByCreditFamilyId() throws ParseException {
-        Collection<CreditOperation> actualCollection = creditOperationDao.
-                getAllCreditOperationsByCreditFamilyId(84);
-        CreditOperation creditOperation_1 = new CreditOperation(Long.valueOf("6666"), stringToDate("2000-01-01"));
-        creditOperation_1.setCreditOperationId(BigInteger.valueOf(117));
-        CreditOperation creditOperation_2 = new CreditOperation(Long.valueOf("6666"), stringToDate("2000-01-01"));
-        creditOperation_2.setCreditOperationId(BigInteger.valueOf(115));
-        CreditOperation creditOperation_3 = new CreditOperation(Long.valueOf("6666"), stringToDate("2000-01-01"));
-        creditOperation_3.setCreditOperationId(BigInteger.valueOf(113));
-        CreditOperation creditOperation_4 = new CreditOperation(Long.valueOf("6666"), stringToDate("2000-01-01"));
-        creditOperation_4.setCreditOperationId(BigInteger.valueOf(111));
-        CreditOperation creditOperation_5 = new CreditOperation(Long.valueOf("6666"), stringToDate("2000-01-01"));
-        creditOperation_5.setCreditOperationId(BigInteger.valueOf(109));
-        CreditOperation creditOperation_6 = new CreditOperation(Long.valueOf("6666"), stringToDate("2000-01-01"));
-        creditOperation_6.setCreditOperationId(BigInteger.valueOf(107));
-        CreditOperation creditOperation_7 = new CreditOperation(Long.valueOf("6666"), stringToDate("2000-01-01"));
-        creditOperation_7.setCreditOperationId(BigInteger.valueOf(105));
-        Collection<CreditOperation> expectedCollection = new ArrayList<>();
-        expectedCollection.add(creditOperation_1);
-        expectedCollection.add(creditOperation_2);
-        expectedCollection.add(creditOperation_3);
-        expectedCollection.add(creditOperation_4);
-        expectedCollection.add(creditOperation_5);
-        expectedCollection.add(creditOperation_6);
-        expectedCollection.add(creditOperation_7);
-        assertEquals(expectedCollection, actualCollection);
+        List<CreditOperation> actualCollection = (ArrayList) creditOperationDao.getAllCreditOperationsByCreditFamilyId(new BigInteger("11"));
+        List<CreditOperation> expectedCollection = new ArrayList<>();
+        CreditOperation expectedOperation1 = new CreditOperation(Long.valueOf("2500"),
+                AssertUtils.stringToDate(dateToday));
+        expectedOperation1.setCreditOperationId(new BigInteger("8002"));
+        CreditOperation expectedOperation2 = new CreditOperation(Long.valueOf("2000"),
+                AssertUtils.stringToDate(dateToday));
+        expectedOperation2.setCreditOperationId(new BigInteger("13"));
+        expectedCollection.add(expectedOperation1);
+        expectedCollection.add(expectedOperation2);
+
+        AssertUtils.assertCreditOperationsCollections(expectedCollection, actualCollection);
     }
 
     @Test
     public void getAllCreditOperationsByCreditPersonalId() throws ParseException {
-        Collection<CreditOperation> actualCollection = creditOperationDao.
-                getAllCreditOperationsByCreditPersonalId(10);
-        CreditOperation creditOperationFirst = new CreditOperation(Long.valueOf("2000"), stringToDate("2019-11-28"));
-        creditOperationFirst.setCreditOperationId(BigInteger.valueOf(97));
-        CreditOperation creditOperationSecond = new CreditOperation(Long.valueOf("2000"), stringToDate("2019-11-28"));
-        creditOperationSecond.setCreditOperationId(BigInteger.valueOf(8001));
-        Collection<CreditOperation> expectedCollection = new ArrayList<>();
-        expectedCollection.add(creditOperationFirst);
-        expectedCollection.add(creditOperationSecond);
-        assertEquals(expectedCollection, actualCollection);
+        List<CreditOperation> actualCollection = (ArrayList) creditOperationDao.getAllCreditOperationsByCreditPersonalId(new BigInteger("10"));
+        List<CreditOperation> expectedCollection = new ArrayList<>();
+        CreditOperation expectedOperation1 = new CreditOperation(Long.valueOf("2000"),
+                AssertUtils.stringToDate(dateToday));
+        expectedOperation1.setCreditOperationId(new BigInteger("8001"));
+        CreditOperation expectedOperation2 = new CreditOperation(Long.valueOf("1000"),
+                AssertUtils.stringToDate("2001-01-01"));
+        expectedOperation2.setCreditOperationId(new BigInteger("12"));
+        expectedCollection.add(expectedOperation1);
+        expectedCollection.add(expectedOperation2);
+
+        AssertUtils.assertCreditOperationsCollections(expectedCollection, actualCollection);
     }
 
-
-    private Date stringToDate(String stringToParse) throws ParseException {
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        return format.parse(stringToParse);
-    }
-
-    private Integer getCurrentSequenceId() {
-        String GET_CURRENT_SEQUENCE_ID = "select last_number from user_sequences where sequence_name = 'OBJECTS_ID_S'";
-        int newId = jdbcTemplate.queryForObject(GET_CURRENT_SEQUENCE_ID, new CurrentSequenceMapper());
-        return newId++;
+    @Test
+    public void deleteCreditOperation() {
+        int totalCount = 0;
+        creditOperationDao.deleteCreditOperation(new BigInteger("8010"));
+        int countObjects = jdbcTemplate.queryForObject(GET_COUNT_OF_CO_OBJECTS, Integer.class);
+        int countAttributes = jdbcTemplate.queryForObject(GET_COUNT_OF_CO_ATTRIBUTES, Integer.class);
+        int countObjreference = jdbcTemplate.queryForObject(GET_COUNT_OF_CO_OBJREFERENCE, Integer.class);
+        assertEquals(totalCount, countObjects);
+        assertEquals(totalCount, countAttributes);
+        assertEquals(totalCount, countObjreference);
     }
 }
