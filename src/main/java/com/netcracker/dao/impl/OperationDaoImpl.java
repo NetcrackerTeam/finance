@@ -32,44 +32,44 @@ public class OperationDaoImpl implements OperationDao {
 
     @Override
     public void addIncomePersonalByAccId(BigInteger id, BigDecimal income, LocalDate date,  CategoryIncome categoryIncome) {
-        template.update(ADD_INCOME_PERSONAL_BY_ACCOUNT_ID, new Object[]{new BigDecimal(id), income.toString(), date, categoryIncome.getId()});
+        template.update(ADD_INCOME_PERSONAL_BY_ACCOUNT_ID, new Object[]{new BigDecimal(id), income.toString(), date, new BigDecimal(categoryIncome.getId())});
     }
 
     @Override
     public void addExpensePersonaByAccId(BigInteger id, BigDecimal expense, LocalDate date, CategoryExpense categoryExpense) {
-        template.update(ADD_EXPENSE_PERSONAL_BY_ACCOUNT_ID, new Object[]{new BigDecimal(id), expense.toString(), date, categoryExpense.getId() });
+        template.update(ADD_EXPENSE_PERSONAL_BY_ACCOUNT_ID, new Object[]{new BigDecimal(id), expense.toString(), date, new BigDecimal(categoryExpense.getId()) });
     }
 
     @Override
     public void addIncomeFamilyByAccId(BigInteger idUser, BigInteger idFamily, BigDecimal income, LocalDate date,CategoryIncome categoryIncome) {
-        template.update(ADD_INCOME_FAMILY_BY_ACCOUNT_ID, new Object[]{new BigDecimal(idUser), new BigDecimal(idFamily), income.toString(),date, categoryIncome.getId() });
+        template.update(ADD_INCOME_FAMILY_BY_ACCOUNT_ID, new Object[]{new BigDecimal(idUser), new BigDecimal(idFamily), income.toString(),date, new BigDecimal(categoryIncome.getId()) });
     }
 
     @Override
     public void addExpenseFamilyByAccId(BigInteger idUser, BigInteger idFamily, BigDecimal expense, LocalDate date, CategoryExpense categoryExpense ) {
-        template.update(ADD_EXPENSE_FAMILY_BY_ACCOUNT_ID, new Object[]{new BigDecimal(idUser), new BigDecimal(idFamily) , expense.toString(), date, categoryExpense.getId()});
+        template.update(ADD_EXPENSE_FAMILY_BY_ACCOUNT_ID, new Object[]{new BigDecimal(idUser), new BigDecimal(idFamily) , expense.toString(), date, new BigDecimal(categoryExpense.getId())});
     }
 
     @Override
-    public List<AccountIncome> getIncomesPersonalAfterDateByAccountId(BigInteger id, Date date) {
+    public Collection<AccountIncome> getIncomesPersonalAfterDateByAccountId(BigInteger id, Date date) {
         return template.query(GET_INCOMES_PERSONAL_AFTER_DATE_BY_ACCOUNT_ID,
                 new Object[]{new BigDecimal(id), date}, new AccountIncomeMapper());
     }
 
     @Override
-    public List<AccountExpense> getExpensesPersonalAfterDateByAccountId(BigInteger id, Date date) {
+    public Collection<AccountExpense> getExpensesPersonalAfterDateByAccountId(BigInteger id, Date date) {
         return template.query(GET_EXPENSES_PERSONAL_AFTER_DATE_BY_ACCOUNT_ID,
                 new Object[]{new BigDecimal(id), date}, new AccountExpenseMapper());
     }
 
     @Override
-    public List<AccountIncome> getIncomesFamilyAfterDateByAccountId(BigInteger id, Date data) {
+    public Collection<AccountIncome> getIncomesFamilyAfterDateByAccountId(BigInteger id, Date data) {
         return template.query(GET_INCOMES_FAMILY_AFTER_DATE_BY_ACCOUNT_ID,
                 new Object[]{new BigDecimal(id), data}, new AccountIncomeMapper());
     }
 
     @Override
-    public List<AccountExpense> getExpensesFamilyAfterDateByAccountId(BigInteger id, Date data) {
+    public Collection<AccountExpense> getExpensesFamilyAfterDateByAccountId(BigInteger id, Date data) {
         return template.query(GET_EXPENSES_FAMILY_AFTER_DATE_BY_ACCOUNT_ID,
                 new Object[]{new BigDecimal(id), data}, new AccountExpenseMapper());
     }
