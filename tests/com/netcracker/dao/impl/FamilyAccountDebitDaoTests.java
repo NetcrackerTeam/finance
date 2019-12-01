@@ -2,9 +2,6 @@ package com.netcracker.dao.impl;
 
 import com.netcracker.configs.WebConfig;
 import com.netcracker.dao.FamilyAccountDebitDao;
-import com.netcracker.dao.UserDao;
-import com.netcracker.dao.impl.mapper.CurrentSequenceMapper;
-import com.netcracker.dao.impl.mapper.UserDaoMapper;
 import com.netcracker.models.*;
 import com.netcracker.models.enums.FamilyAccountStatusActive;
 import org.junit.Before;
@@ -63,7 +60,7 @@ public class FamilyAccountDebitDaoTests {
 
 
     @Test
-    public void getPersonalAccountById() {
+    public void getFamilyAccountById() {
 
         BigInteger id = BigInteger.valueOf(3);
         FamilyDebitAccount familyDebitAccount = familyAccountDebitDao.getFamilyAccountById(id);
@@ -82,7 +79,7 @@ public class FamilyAccountDebitDaoTests {
     @Test
     public void createFamilyAccount(){
         User owner = new User.Builder()
-                .user_id(BigInteger.valueOf(getCurrentSequenceId()))
+                .user_id(BigInteger.valueOf(AssertUtils.getCurrentSequenceId(template)))
                 .user_name("Eugen9")
                 .user_eMail(email)
                 .user_password(password).build();
@@ -90,7 +87,7 @@ public class FamilyAccountDebitDaoTests {
     //    userDao.createUser(owner);
        template.update(CREATE_USER, new Object[]{owner.getName(), owner.geteMail(), owner.getPassword()});
         FamilyDebitAccount familyDebitAccount = new FamilyDebitAccount.Builder()
-                .debitId(BigInteger.valueOf(getCurrentSequenceId()))
+                .debitId(BigInteger.valueOf(AssertUtils.getCurrentSequenceId(template)))
                .debitObjectName("Name1")
                .debitAmount(6000L)
                .debitFamilyAccountStatus(FamilyAccountStatusActive.YES)
@@ -139,10 +136,5 @@ public class FamilyAccountDebitDaoTests {
     @Test
     public void addUserToFamilyAcc(){
         familyAccountDebitDao.addUserToAccountById(BigInteger.valueOf(3), BigInteger.valueOf(47));
-    }
-    private Integer getCurrentSequenceId() {
-        String GET_CURRENT_SEQUENCE_ID = "select last_number from user_sequences where sequence_name = 'OBJECTS_ID_S'";
-        int newId = template.queryForObject(GET_CURRENT_SEQUENCE_ID, new CurrentSequenceMapper());
-        return newId++;
     }
 }
