@@ -24,13 +24,13 @@ public class PersonalDebitAccountDaoImpl  implements PersonalDebitAccountDao {
 
     @Override
     public PersonalDebitAccount getPersonalAccountById(BigInteger id) {
-        logger.info("Entering insert(getPersonalAccountBy=" + id + ")");
+        logger.debug("Entering insert(getPersonalAccountBy=" + id + ")");
         return this.template.queryForObject(GET_PERSONAL_ACCOUNT_BY_ID, new Object[]{new BigDecimal(id)}, new PersonalDebitAccountMapper());
     }
 
     @Override
     public PersonalDebitAccount createPersonalAccount(PersonalDebitAccount personalDebitAccount) {
-        logger.info("Entering insert(createPersonalAccount=" + personalDebitAccount + ")");
+        logger.debug("Entering insert(createPersonalAccount=" + personalDebitAccount + ")");
         this.template.update(CREATE_PERSONAL_ACCOUNT, new Object[]{
                 personalDebitAccount.getObjectName(),
                 personalDebitAccount.getAmount().toString(),
@@ -42,7 +42,7 @@ public class PersonalDebitAccountDaoImpl  implements PersonalDebitAccountDao {
 
     @Override
     public void deletePersonalAccountById(BigInteger account_id, BigInteger user_id) {
-        logger.info("Entering unactive(deletePersonalAccount=" + account_id + ")");
+        logger.debug("Entering unactive(deletePersonalAccount=" + account_id + ")");
         this.template.update(DELETE_USER_FROM_PERSONAL_ACCOUNT, new Object[]{
                 account_id.toString(),
                 user_id.toString()
@@ -51,7 +51,7 @@ public class PersonalDebitAccountDaoImpl  implements PersonalDebitAccountDao {
 
     @Override
     public void deletePersonalAccountByUserId(BigInteger account_id) {
-        logger.info("Entering unactive(deletePersonalAccountByUser=" + account_id + ")");
+        logger.debug("Entering unactive(deletePersonalAccountByUser=" + account_id + ")");
         this.template.update(UNACTIVE_USER_FROM_PERSONAL_ACCOUNT, new Object[]{
                 account_id.toString(),
         });

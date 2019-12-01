@@ -71,14 +71,4 @@ public class CreditDeptDaoImpl implements CreditDeptDao {
     public void updateFamilyDebtAmount(BigInteger id, long amount) {
         jdbcTemplate.update(UPDATE_DEBT_AMOUNT_QUERY, String.valueOf(amount), new BigDecimal(id));
     }
-
-    @Override
-    public void createPersonalDebtByCreditId(BigInteger id) {
-        jdbcTemplate.update(CREATE_PERSONAL_DEBT_BY_CREDIT_ID, new BigDecimal(id));
-    }
-
-    @Override
-    public void createFamilyDebtByCreditId(BigInteger id) {
-        jdbcTemplate.update(CREATE_FAMILY_DEBT_BY_CREDIT_ID, new BigDecimal(id));
-    }
 }

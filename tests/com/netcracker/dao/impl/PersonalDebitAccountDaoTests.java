@@ -36,7 +36,7 @@ public class PersonalDebitAccountDaoTests {
     private JdbcTemplate template;
     private PersonalDebitAccount personalDebitAccount;
     private static final String  CREATE_USER = "INSERT ALL " +
-            "INTO OBJECTS(OBJECT_ID,OBJECT_TYPE_ID,NAME) VALUES (objects_id_s.nextval, 1, 'user_Tests') "
+            "INTO OBJECTS(OBJECT_ID,OBJECT_TYPE_ID,NAME) VALUES (objects_id_s.nextval, 1, ' ') "
             +
             "INTO ATTRIBUTES(ATTR_ID, OBJECT_ID, VALUE) VALUES(5, objects_id_s.currval, ?) "
             +
@@ -45,7 +45,10 @@ public class PersonalDebitAccountDaoTests {
             "INTO ATTRIBUTES(ATTR_ID, OBJECT_ID, VALUE) VALUES(4, objects_id_s.currval, ?) "
             +
             "SELECT * " +
-                    "FROM Dual";
+                    "FROM DUAL";
+    private static final String DELETE_USER = " DELETE FROM OBJECTS WHERE NAME = 'user_Tests' ";
+
+    private static final String DELETE_ACC = " DELETE FROM OBJECTS WHERE NAME = 'Name1' ";
 
     @Before
     public void setUp() {
@@ -94,6 +97,8 @@ public class PersonalDebitAccountDaoTests {
 
         PersonalDebitAccount personalDebitAccount1 = personalDebitAccountDao.createPersonalAccount(personalDebitAccount);
         assertEquals("PER_DEB_ACC1",personalDebitAccount1.getObjectName());
+        template.update(DELETE_USER);
+        template.update(DELETE_ACC);
     }
 
     @Test
@@ -107,7 +112,7 @@ public class PersonalDebitAccountDaoTests {
     }
 
     private Integer getCurrentSequenceId() {
-        String GET_CURRENT_SEQUENCE_ID = "select last_number from user_sequences where sequence_name = 'OBJECTS_ID_S'";
+        String GET_CURRENT_SEQUENCE_ID = "SELECT last_number FROM user_sequences WHERE sequence_name = 'OBJECTS_ID_S'";
         int newId = template.queryForObject(GET_CURRENT_SEQUENCE_ID, new CurrentSequenceMapper());
         return newId++;
     }

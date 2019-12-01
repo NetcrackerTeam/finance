@@ -3,6 +3,7 @@ package com.netcracker.dao.impl;
 import com.netcracker.dao.CreditAccountDao;
 import com.netcracker.dao.impl.mapper.CreditAccountFamilyMapper;
 import com.netcracker.dao.impl.mapper.CreditAccountPersonalMapper;
+import com.netcracker.models.AbstractCreditAccount;
 import com.netcracker.models.FamilyCreditAccount;
 import com.netcracker.models.PersonalCreditAccount;
 import com.netcracker.models.enums.CreditStatusPaid;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Component;
 import javax.sql.DataSource;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.sql.Date;
 import java.util.List;
 
 @Component
@@ -57,30 +59,12 @@ public class CreditAccountDaoImpl implements CreditAccountDao {
 
     @Override
     public void createPersonalCreditByDebitAccountId(BigInteger id, PersonalCreditAccount creditAccount) {
-        jdbcTemplate.update(CREATE_PERSONAL_CREDIT_QUERY,
-                creditAccount.getDate(),
-                String.valueOf(creditAccount.getName()),
-                String.valueOf(creditAccount.getAmount()),
-                String.valueOf(creditAccount.getPaidAmount()),
-                String.valueOf(creditAccount.getPaidAmount()),
-                String.valueOf(creditAccount.getCreditRate()),
-                creditAccount.getDateTo(),
-                new BigDecimal(creditAccount.isPaid().getId()),
-                new BigDecimal(id));
+        createCredit(id, creditAccount, CREATE_PERSONAL_CREDIT_QUERY, CREATE_PERSONAL_DEBT_BY_CREDIT_ID);
     }
 
     @Override
     public void createFamilyCreditByDebitAccountId(BigInteger id, FamilyCreditAccount creditAccount) {
-        jdbcTemplate.update(CREATE_FAMILY_CREDIT_QUERY,
-                creditAccount.getDate(),
-                String.valueOf(creditAccount.getName()),
-                String.valueOf(creditAccount.getAmount()),
-                String.valueOf(creditAccount.getPaidAmount()),
-                String.valueOf(creditAccount.getPaidAmount()),
-                String.valueOf(creditAccount.getCreditRate()),
-                creditAccount.getDateTo(),
-                new BigDecimal(creditAccount.isPaid().getId()),
-                new BigDecimal(id));
+        createCredit(id, creditAccount, CREATE_FAMILY_CREDIT_QUERY, CREATE_FAMILY_DEBT_BY_CREDIT_ID);
     }
 
     @Override
@@ -91,6 +75,23 @@ public class CreditAccountDaoImpl implements CreditAccountDao {
     @Override
     public void updateIsPaidStatusFamilyCredit(BigInteger id, CreditStatusPaid statusPaid) {
         updatePaidStatus(id, statusPaid);
+    }
+
+    private void createCredit(BigInteger id, AbstractCreditAccount creditAccount, String queryCredit, String queryDebt) {
+        String creditName = id + creditAccount.getName();
+        jdbcTemplate.update(queryCredit,
+                creditName,
+                Date.valueOf(creditAccount.getDate()),
+                creditAccount.getName(),
+                String.valueOf(creditAccount.getAmount()),
+                String.valueOf(creditAccount.getPaidAmount()),
+                String.valueOf(creditAccount.getCreditRate()),
+                Date.valueOf(creditAccount.getDateTo()),
+                new BigDecimal(creditAccount.isPaid().getId()),
+                String.valueOf(creditAccount.getMonthDay()),
+                new BigDecimal(id));
+        BigDecimal accountId = jdbcTemplate.queryForObject(SELECT_CREDIT_ID_BY_NAME, new Object[]{creditName}, BigDecimal.class);
+        jdbcTemplate.update(queryDebt, accountId);
     }
 
     private void addCreditPayment(BigInteger id, long amount) {

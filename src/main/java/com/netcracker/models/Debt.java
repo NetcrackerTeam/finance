@@ -20,7 +20,7 @@ public class Debt {
         }
 
         public Builder debtId(BigInteger id){
-            this.debtId = debtId;
+            this.debtId = id;
             return this;
         }
 
