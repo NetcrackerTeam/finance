@@ -64,7 +64,7 @@ public class AutoOperationDaoImpl implements AutoOperationDao {
     @Override
     public AutoOperationIncome createPersonalIncomeAutoOperation(AutoOperationIncome autoOperationIncome) {
         jdbcTemplate.update(CREATE_PERSONAL_INCOME_AO, autoOperationIncome.getDayOfMonth(), autoOperationIncome.getAmount().toString(),
-                autoOperationIncome.getCategoryIncome().toString(),
+                new BigDecimal(autoOperationIncome.getCategoryIncome().getId()),
                 autoOperationIncome.getUserId().toString());
         return autoOperationIncome;
     }
