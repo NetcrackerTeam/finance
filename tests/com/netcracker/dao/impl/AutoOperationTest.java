@@ -46,7 +46,7 @@ public class AutoOperationTest {
 
     @Test
     public void getFamilyIncomeAutoOperation() {
-        AutoOperationIncome autoOperationIncome = autoOperationDao.getFamilyIncomeAutoOperation(new BigInteger("9004"));
+        AutoOperationIncome autoOperationIncome = autoOperationDao.getFamilyIncomeAutoOperation(BigInteger.valueOf(9004));
         assertEquals(BigInteger.valueOf(9004), autoOperationIncome.getId());
         assertEquals("operationId=9004 userId=1 dayOfMonth=4 amount=3500 categoryId=34 date=2019-11-28",
                 "operationId=" + autoOperationIncome.getId() + " userId=" + autoOperationIncome.getUserId() +

@@ -4,6 +4,7 @@ import com.netcracker.dao.OperationDao;
 import com.netcracker.models.AbstractAccountOperation;
 import com.netcracker.models.AccountIncome;
 import com.netcracker.models.Debt;
+import com.netcracker.models.enums.CategoryIncome;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.math.BigDecimal;
@@ -17,9 +18,9 @@ public class AccountIncomeMapper implements RowMapper<AccountIncome> {
         AbstractAccountOperation accountIncome =
                 new AccountIncome.Builder()
                 .accountId(resultSet.getBigDecimal("account_income_id").toBigInteger())
-                .accountAmount(resultSet.getLong("income_amount"))
+                .accountAmount(Long.valueOf(resultSet.getString("income_amount")))
                 .accountDate(resultSet.getDate("date_income"))
-                .accountUserId(resultSet.getBigDecimal("user_id").toBigInteger())
+                .categoryIncome(CategoryIncome.getNameByKey(resultSet.getBigDecimal("category_income").toBigInteger()))
                 .build();
         return (AccountIncome) accountIncome;
     }
