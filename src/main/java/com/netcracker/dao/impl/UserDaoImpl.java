@@ -17,6 +17,10 @@ public class UserDaoImpl implements UserDao {
     private static final Logger logger = Logger.getLogger(UserDaoImpl.class);
     private JdbcTemplate template;
 
+    public UserDaoImpl(DataSource dataSource) {
+        template = new JdbcTemplate(dataSource);
+    }
+
     @Autowired
     public void setDataSource(DataSource dataSource) {
         template = new JdbcTemplate(dataSource);
