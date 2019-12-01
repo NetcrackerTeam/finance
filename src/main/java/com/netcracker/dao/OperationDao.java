@@ -23,7 +23,7 @@ public interface OperationDao {
 
     void addIncomeFamilyByAccId(BigInteger idUser, BigInteger idFamily, BigDecimal income, Date date, CategoryIncome categoryIncome);
 
-    void addExpenseFamilyByAccId(BigInteger id, BigInteger idFamily, BigDecimal expense, Date date, CategoryExpense categoryExpense);
+    void addExpenseFamilyByAccId(BigInteger idUser, BigInteger idFamily, BigDecimal expense, Date date, CategoryExpense categoryExpense);
 
     Collection<AccountIncome> getIncomesPersonalAfterDateByAccountId(BigInteger id, Date date);
 
@@ -49,20 +49,20 @@ public interface OperationDao {
             " SELECT * FROM DUAL";
 
     String ADD_INCOME_FAMILY_BY_ACCOUNT_ID = "INSERT ALL" +
-            " INTO OBJECTS (OBJECT_ID,PARENT_ID,OBJECT_TYPE_ID,NAME,DESCRIPTION) VALUES (OBJECTS_ID_S.nextval,NULL,10,'ACC_INC_FAM','account income family')" +
-            " INTO OBJREFERENCE (ATTR_ID,OBJECT_ID,REFERENCE) VALUES (55,OBJECTS_ID_S.currval,?) /* family */" +
-            " INTO OBJREFERENCE (ATTR_ID,OBJECT_ID,REFERENCE) VALUES (54,OBJECTS_ID_S.currval,?) /* user */" +
-            " INTO ATTRIBUTES(ATTR_ID, OBJECT_ID, VALUE) VALUES(56, OBJECTS_ID_S.currval, ?) /* amount */" +
-            " INTO ATTRIBUTES(ATTR_ID, OBJECT_ID, DATE_VALUE) VALUES(58, OBJECTS_ID_S.currval, ?) /* date */" +
-            " INTO ATTRIBUTES(ATTR_ID, OBJECT_ID, LIST_VALUE_ID) VALUES(57, OBJECTS_ID_S.currval, ?) /* category */" +
+            " INTO OBJECTS (OBJECT_ID,PARENT_ID,OBJECT_TYPE_ID,NAME,DESCRIPTION) VALUES (OBJECTS_ID_S.NEXTVAL,NULL,21,'ACC_FAM_IN','ACCOUNT INCOME FAMILY')" +
+            " INTO OBJREFERENCE (ATTR_ID,OBJECT_ID,REFERENCE) VALUES (54,OBJECTS_ID_S.CURRVAL,?) /* user */" +
+            " INTO OBJREFERENCE (ATTR_ID,OBJECT_ID,REFERENCE) VALUES (55,OBJECTS_ID_S.CURRVAL,?) /* family*/" +
+            " INTO ATTRIBUTES(ATTR_ID, OBJECT_ID, VALUE) VALUES(56, OBJECTS_ID_S.CURRVAL, ?)/* amount */" +
+            " INTO ATTRIBUTES(ATTR_ID, OBJECT_ID, DATE_VALUE) VALUES(58, OBJECTS_ID_S.CURRVAL, ?)/* date */" +
+            " INTO ATTRIBUTES(ATTR_ID, OBJECT_ID, LIST_VALUE_ID) VALUES(57, OBJECTS_ID_S.CURRVAL, ?)/* category */" +
             " SELECT * FROM DUAL";
     String ADD_EXPENSE_FAMILY_BY_ACCOUNT_ID = "INSERT ALL" +
-            " INTO OBJECTS (OBJECT_ID,PARENT_ID,OBJECT_TYPE_ID,NAME,DESCRIPTION) VALUES (OBJECTS_ID_S.nextval,NULL,20,'account_expense_family','account expense Family1')\n" +
+            " INTO OBJECTS (OBJECT_ID,PARENT_ID,OBJECT_TYPE_ID,NAME,DESCRIPTION) VALUES (OBJECTS_ID_S.nextval,NULL,20,'account_expense_family','account expense Family1')" +
             " INTO OBJREFERENCE (ATTR_ID,OBJECT_ID,REFERENCE) VALUES (49, OBJECTS_ID_S.currval,?) /* reference to user*/" +
             " INTO OBJREFERENCE (ATTR_ID,OBJECT_ID,REFERENCE) VALUES (48,OBJECTS_ID_S.currval,?) /* reference to family*/" +
-            " INTO ATTRIBUTES(ATTR_ID, OBJECT_ID, VALUE) VALUES(50, OBJECTS_ID_S.currval, TO_CHAR(?)) /* amount */" +
+            " INTO ATTRIBUTES(ATTR_ID, OBJECT_ID, VALUE) VALUES(50, OBJECTS_ID_S.currval, ?) /* amount */" +
             " INTO ATTRIBUTES(ATTR_ID, OBJECT_ID, DATE_VALUE) VALUES(52, OBJECTS_ID_S.currval, ?) /* date */" +
-            " INTO ATTRIBUTES(ATTR_ID, OBJECT_ID, LIST_VALUE_ID) VALUES(51, OBJECTS_ID_S.currval, 14) /* category */" +
+            " INTO ATTRIBUTES(ATTR_ID, OBJECT_ID, LIST_VALUE_ID) VALUES(51, OBJECTS_ID_S.currval, ?) /* category */" +
             " SELECT * FROM DUAL";
 
     String GET_INCOMES_PERSONAL_AFTER_DATE_BY_ACCOUNT_ID = "SELECT O.OBJECT_ID AS ACCOUNT_INCOME_ID,  SUMM.VALUE AS INCOME_AMOUNT," +
