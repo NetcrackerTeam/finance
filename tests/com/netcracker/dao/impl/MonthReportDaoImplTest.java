@@ -3,11 +3,8 @@ package com.netcracker.dao.impl;
 import com.netcracker.configs.WebConfig;
 import com.netcracker.dao.MonthReportDao;
 
-import com.netcracker.models.AccountExpense;
 import com.netcracker.models.AccountIncome;
 import com.netcracker.models.MonthReport;
-import com.netcracker.models.enums.CategoryExpense;
-import com.netcracker.models.enums.CategoryIncome;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,12 +15,13 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
+import sun.util.resources.cldr.ig.CurrencyNames_ig;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.sql.Date;
 import java.time.LocalDate;
-
-import static org.junit.Assert.*;
+import java.util.List;
 
 @WebAppConfiguration
 @ContextConfiguration(classes = {WebConfig.class})
@@ -35,7 +33,7 @@ public class MonthReportDaoImplTest {
     private MonthReport expMonthReportFamily;
 
     @Autowired
-    private MonthReportDao operationDao;
+    private MonthReportDao monthReportDao;
 
     @Before
     public void initializeObjects() {
@@ -59,41 +57,31 @@ public class MonthReportDaoImplTest {
     @Rollback
     @Test
     public void createPersonalMonthReport() {
+        monthReportDao.createPersonalMonthReport(expMonthReportPersonal, new BigInteger("2"));
+        List<MonthReport> list = (List<MonthReport>) monthReportDao.getMonthReportsByPersonalAccountId(new BigInteger("2"));
+        int expected = 2;
+        Assert.assertEquals(expected, list.size());
     }
 
     @Rollback
     @Test
     public void createFamilyMonthReport() {
-    }
-
-    @Rollback
-    @Test
-    public void deletePersonalMonthReport() {
-    }
-
-    @Rollback
-    @Test
-    public void deleteFamilyMonthReport() {
+        monthReportDao.createFamilyMonthReport(expMonthReportFamily, new BigInteger("3"));
+        List<MonthReport> list = (List<MonthReport>) monthReportDao.getMonthReportsByFamilyAccountId(new BigInteger("3"));
+        int expected = 2;
+        Assert.assertEquals(expected, list.size());
     }
 
 
     @Test
-    public void getMonthReportByFamilyAccountId() {
-        MonthReport actual =  operationDao.getMonthReportByFamilyAccountId(BigInteger.valueOf(3));
-        Assert.assertEquals(expMonthReportFamily.getBalance(), actual.getBalance());
-        Assert.assertEquals(expMonthReportFamily.getDate_from(), actual.getDate_from());
-        Assert.assertEquals(expMonthReportFamily.getDate_to(), actual.getDate_to());
-        Assert.assertEquals(expMonthReportFamily.getTotalExpense(), actual.getTotalExpense());
-        Assert.assertEquals(expMonthReportFamily.getTotalIncome(), actual.getTotalIncome());
+    public void getMonthReportsByFamilyAccountId() {
+        List<MonthReport> list = (List<MonthReport>)monthReportDao.getMonthReportsByFamilyAccountId(new BigInteger("3"));
+        Assert.assertEquals(1, list.size());
     }
 
     @Test
-    public void getMonthReportByPersonalAccountId() {
-        MonthReport actual =  operationDao.getMonthReportByPersonalAccountId(BigInteger.valueOf(3));
-        Assert.assertEquals(expMonthReportPersonal.getBalance(), actual.getBalance());
-        Assert.assertEquals(expMonthReportPersonal.getDate_from(), actual.getDate_from());
-        Assert.assertEquals(expMonthReportPersonal.getDate_to(), actual.getDate_to());
-        Assert.assertEquals(expMonthReportPersonal.getTotalExpense(), actual.getTotalExpense());
-        Assert.assertEquals(expMonthReportPersonal.getTotalIncome(), actual.getTotalIncome());
+    public void getMonthReportsByPersonalAccountId() {
+        List<MonthReport> list = (List<MonthReport>)monthReportDao.getMonthReportsByPersonalAccountId(new BigInteger("2"));
+        Assert.assertEquals(1, list.size());
     }
 }

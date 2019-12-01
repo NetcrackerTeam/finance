@@ -12,6 +12,9 @@ import org.springframework.stereotype.Component;
 import javax.sql.DataSource;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.sql.Date;
+import java.util.List;
+
 @Component
 public class MonthReportDaoImpl implements MonthReportDao {
 
@@ -23,46 +26,40 @@ public class MonthReportDaoImpl implements MonthReportDao {
     }
 
     @Override
-    public void createPersonalMonthReport(MonthReport monthReport) {
+    public void createPersonalMonthReport(MonthReport monthReport, BigInteger id) {
         template.update(CREATE_PERSONAL_MONTH_REPORT, new Object[]{
-                monthReport.getBalance().toString(),
-                monthReport.getTotalExpense().toString(),
-                monthReport.getTotalIncome().toString(),
-                monthReport.getDate_from(),
-                monthReport.getDate_to()
+                String.valueOf(monthReport.getTotalExpense()),
+                String.valueOf(monthReport.getTotalIncome()),
+                String.valueOf(monthReport.getBalance()),
+                Date.valueOf(monthReport.getDate_from()),
+                Date.valueOf(monthReport.getDate_to()),
+                new BigDecimal(id)
         });
     }
 
     @Override
-    public void createFamilyMonthReport(MonthReport monthReport) {
+    public void createFamilyMonthReport(MonthReport monthReport, BigInteger id) {
         template.update(CREATE_FAMILY_MONTH_REPORT, new Object[]{
-                monthReport.getTotalIncome().toString(),
-                monthReport.getTotalExpense().toString(),
-                monthReport.getBalance().toString(),
-                monthReport.getDate_from(),
-                monthReport.getDate_to()
+                String.valueOf(monthReport.getTotalIncome()),
+                String.valueOf(monthReport.getTotalExpense()),
+                String.valueOf(monthReport.getBalance()),
+                Date.valueOf(monthReport.getDate_from()),
+                Date.valueOf(monthReport.getDate_to()),
+                new BigDecimal(id)
         });
     }
 
-    @Override
-    public void deletePersonalMonthReport(BigInteger id) {
-        template.update(DELETE_PERSONAL_MONTH_REPORT, new Object[]{new BigDecimal(id)});
-    }
+
 
     @Override
-    public void deleteFamilyMonthReport(BigInteger id) {
-        template.update(DELETE_FAMILY_MONTH_REPORT, new Object[]{new BigDecimal(id)});
-    }
-
-    @Override
-    public MonthReport getMonthReportByFamilyAccountId(BigInteger id) {
-        return template.queryForObject(GET_MONTH_REPORT_BY_PERSONAL_ACCOUNT_ID,
+    public List<MonthReport> getMonthReportsByFamilyAccountId(BigInteger id) {
+        return template.query(GET_MONTH_REPORT_BY_FAMILY_ACCOUNT_ID,
                 new Object[]{new BigDecimal(id)}, new MonthReportMapper());
     }
 
     @Override
-    public MonthReport getMonthReportByPersonalAccountId(BigInteger id) {
-        return template.queryForObject(GET_MONTH_REPORT_BY_FAMILY_ACCOUNT_ID,
+    public List<MonthReport> getMonthReportsByPersonalAccountId(BigInteger id) {
+        return template.query(GET_MONTH_REPORT_BY_PERSONAL_ACCOUNT_ID,
                 new Object[]{new BigDecimal(id)}, new MonthReportMapper());
     }
 }

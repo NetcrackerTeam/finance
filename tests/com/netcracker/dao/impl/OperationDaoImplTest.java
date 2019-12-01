@@ -60,7 +60,7 @@ public class OperationDaoImplTest {
     @Test
     public void addIncomePersonalByAccId() {
         operationDao.addIncomePersonalByAccId(BigInteger.valueOf(2), BigDecimal.valueOf(testIncome.getAmount()), testIncome.getDate(), testIncome.getCategoryIncome());
-        int expected = 4;
+        int expected = 2;
         int actual = operationDao.getIncomesPersonalAfterDateByAccountId(BigInteger.valueOf(2),
                 Date.valueOf(LocalDate.of(1990,10,10))).size();
         assertEquals(expected, actual);
@@ -90,7 +90,7 @@ public class OperationDaoImplTest {
     public void addExpenseFamilyByAccId() {
         operationDao.addExpenseFamilyByAccId(BigInteger.valueOf(2),BigInteger.valueOf(3), BigDecimal.valueOf(testExpense.getAmount()),
                 testExpense.getDate(), testExpense.getCategoryExpense());
-        int expected = 3;
+        int expected = 2;
         int actual = operationDao.getExpensesFamilyAfterDateByAccountId(BigInteger.valueOf(3),
                 Date.valueOf(LocalDate.of(1990,10,10))).size();
         assertEquals(expected, actual);
@@ -100,7 +100,7 @@ public class OperationDaoImplTest {
     public void getIncomesPersonalAfterDateByAccountId() {
         List<AccountIncome> list = (List<AccountIncome>) operationDao.getIncomesPersonalAfterDateByAccountId(BigInteger.valueOf(2),
                 Date.valueOf(LocalDate.of(1990, 11, 30)));
-        Assert.assertEquals(3, list.size());
+        Assert.assertEquals(1, list.size());
     }
 
     @Test
@@ -121,6 +121,6 @@ public class OperationDaoImplTest {
     public void getExpensesFamilyAfterDateByAccountId() {
         List<AccountExpense> list = (List<AccountExpense>) operationDao.getExpensesFamilyAfterDateByAccountId(BigInteger.valueOf(3),
                 Date.valueOf(LocalDate.of(1990, 11, 30)));
-        Assert.assertEquals(2, list.size());
+        Assert.assertEquals(1, list.size());
     }
 }
