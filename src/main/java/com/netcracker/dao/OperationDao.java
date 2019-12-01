@@ -10,20 +10,20 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.LocalDate;
 import java.util.Collection;
-import java.sql.Date;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 public interface OperationDao {
 
 
-    void addIncomePersonalByAccId(BigInteger id, BigDecimal income, LocalDate date, CategoryIncome categoryIncome);
+    void addIncomePersonalByAccId(BigInteger id, BigDecimal income, Date date, CategoryIncome categoryIncome);
 
-    void addExpensePersonaByAccId(BigInteger id, BigDecimal expense, LocalDate date, CategoryExpense categoryExpense);
+    void addExpensePersonaByAccId(BigInteger id, BigDecimal expense, Date date, CategoryExpense categoryExpense);
 
-    void addIncomeFamilyByAccId(BigInteger idUser, BigInteger idFamily, BigDecimal income, LocalDate date, CategoryIncome categoryIncome);
+    void addIncomeFamilyByAccId(BigInteger idUser, BigInteger idFamily, BigDecimal income, Date date, CategoryIncome categoryIncome);
 
-    void addExpenseFamilyByAccId(BigInteger id, BigInteger idFamily, BigDecimal expense, LocalDate date, CategoryExpense categoryExpense);
+    void addExpenseFamilyByAccId(BigInteger id, BigInteger idFamily, BigDecimal expense, Date date, CategoryExpense categoryExpense);
 
     Collection<AccountIncome> getIncomesPersonalAfterDateByAccountId(BigInteger id, Date date);
 

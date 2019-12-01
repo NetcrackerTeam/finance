@@ -59,9 +59,7 @@ public class OperationDaoImplTest {
     @Rollback
     @Test
     public void addIncomePersonalByAccId() {
-        operationDao.addIncomePersonalByAccId(BigInteger.valueOf(2),
-                BigDecimal.valueOf(testIncome.getAmount()),
-                testIncome.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate(), testIncome.getCategoryIncome());
+        operationDao.addIncomePersonalByAccId(BigInteger.valueOf(2), BigDecimal.valueOf(testIncome.getAmount()), testIncome.getDate(), testIncome.getCategoryIncome());
         int expected = 2;
         int actual = operationDao.getExpensesPersonalAfterDateByAccountId(BigInteger.valueOf(2),
                 Date.valueOf(LocalDate.of(1990,10,10))).size();
