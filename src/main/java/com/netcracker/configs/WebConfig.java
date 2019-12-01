@@ -2,8 +2,10 @@ package com.netcracker.configs;
 
 import com.netcracker.dao.AutoOperationDao;
 import com.netcracker.dao.CreditOperationDao;
+import com.netcracker.dao.UserDao;
 import com.netcracker.dao.impl.AutoOperationDaoImpl;
 import com.netcracker.dao.impl.CreditOperationDaoImpl;
+import com.netcracker.dao.impl.UserDaoImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -49,6 +51,10 @@ public class WebConfig implements WebMvcConfigurer {
     @Bean
     public PlatformTransactionManager txManager() {
         return new DataSourceTransactionManager(getDataSource());
+    }
+    @Bean(name = "userDao")
+    public UserDao getUserDao() {
+        return new UserDaoImpl(getDataSource());
     }
 
     @Bean(name = "creditOperationDao")

@@ -49,9 +49,11 @@ public class FamilyAccountDebitDaoTests {
             "INTO ATTRIBUTES(ATTR_ID, OBJECT_ID, VALUE) VALUES(4, objects_id_s.currval, ?) "
             +
             "SELECT * FROM DUAL";
-    private static final String DELETE_USER = " delete from objects where name = 'user_new' ";
+    private static final String DELETE_USER = "DELETE FROM OBJECTS WHERE NAME = 'user_new' ";
 
-    private static final String DELETE_ACC = " delete from objects where name = 'Name1' ";
+    private static final String DELETE_ACC = "DELETE FROM OBJECTS WHERE NAME = 'Name1' ";
+    private String email = "mail@gmail.com";
+    private String password = "password";
 
     @Before
     public void setUp() {
@@ -71,18 +73,19 @@ public class FamilyAccountDebitDaoTests {
         assertEquals(name, familyDebitAccount.getObjectName());
         assertEquals(amount, familyDebitAccount.getAmount());
 
+        String username = "Eugen";
         assertEquals(BigInteger.valueOf(1), familyDebitAccount.getOwner().getId());
-        assertEquals("Eugen", familyDebitAccount.getOwner().getName());
-        assertEquals("mail@gmail.com", familyDebitAccount.getOwner().geteMail());
-        assertEquals("password", familyDebitAccount.getOwner().getPassword());
+        assertEquals(username, familyDebitAccount.getOwner().getName());
+        assertEquals(email, familyDebitAccount.getOwner().geteMail());
+        assertEquals(password, familyDebitAccount.getOwner().getPassword());
     }
     @Test
     public void createFamilyAccount(){
         User owner = new User.Builder()
                 .user_id(BigInteger.valueOf(getCurrentSequenceId()))
                 .user_name("Eugen9")
-                .user_eMail("mail@gmail.com")
-                .user_password("password").build();
+                .user_eMail(email)
+                .user_password(password).build();
      //   System.out.println(owner.getId());
     //    userDao.createUser(owner);
        template.update(CREATE_USER, new Object[]{owner.getName(), owner.geteMail(), owner.getPassword()});
