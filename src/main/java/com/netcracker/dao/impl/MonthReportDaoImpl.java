@@ -5,6 +5,7 @@ import com.netcracker.dao.impl.mapper.MonthReportMapper;
 import com.netcracker.models.FamilyDebitAccount;
 import com.netcracker.models.MonthReport;
 import com.netcracker.models.PersonalDebitAccount;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
@@ -16,6 +17,7 @@ public class MonthReportDaoImpl implements MonthReportDao {
 
     protected JdbcTemplate template;
 
+    @Autowired
     public MonthReportDaoImpl(DataSource dataSource) {
         this.template = new JdbcTemplate(dataSource);
     }

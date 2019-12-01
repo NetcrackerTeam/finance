@@ -70,8 +70,15 @@ public class MonthReport {
         }
     }
 
-    public MonthReport(Builder builder) {
-        this.id = builder.id;
+    private MonthReport(Builder builder) {
+        id = builder.id;
+        totalExpense = builder.totalExpense;
+        totalIncome = builder.totalIncome;
+        balance = builder.balance;
+        date_from = builder.date_from;
+        date_to = builder.date_to;
+        categoryExpense = builder.categoryExpense;
+        categoryIncome = builder.categoryIncome;
     }
 
     public BigInteger getId() {
