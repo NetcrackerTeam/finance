@@ -71,10 +71,12 @@ public class FamilyAccountDebitDaoTests {
         assertEquals(amount, familyDebitAccount.getAmount());
 
         String username = "Eugen";
+        String is_active = "YES";
         assertEquals(BigInteger.valueOf(1), familyDebitAccount.getOwner().getId());
         assertEquals(username, familyDebitAccount.getOwner().getName());
         assertEquals(email, familyDebitAccount.getOwner().geteMail());
         assertEquals(password, familyDebitAccount.getOwner().getPassword());
+        assertEquals(is_active, familyDebitAccount.getOwner().getUserStatusActive().toString());
     }
     @Test
     public void createFamilyAccount(){
@@ -109,7 +111,8 @@ public class FamilyAccountDebitDaoTests {
     public void getListParticipants(){
       List<User> users =  familyAccountDebitDao.getParticipantsOfFamilyAccount(BigInteger.valueOf(3));
         for (User expected : users) {
-            System.out.println(expected.getId() + " " + expected.getName() + " " + expected.geteMail() + " " + expected.getPassword());
+            System.out.println(expected.getId() + " " + expected.getName() + " " + expected.geteMail() + " " + expected.getPassword() + " "
+                    + expected.getUserStatusActive().toString() + " " + expected.getPersonalDebitAccount());
         }
     }
     @Test
