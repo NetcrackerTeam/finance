@@ -14,7 +14,6 @@ import org.springframework.test.context.web.WebAppConfiguration;
 
 import javax.sql.DataSource;
 import java.math.BigInteger;
-import java.util.Collection;
 import java.util.Locale;
 
 import static org.junit.Assert.assertEquals;
@@ -51,12 +50,6 @@ public class UserDaoTest {
     @Test
     public  void updateUserPasswordById(){
         userDao.updateUserPasswordById(BigInteger.valueOf(1),"123456789");
-    }
-
-    @Test
-    public void getAllUsersByFamilyAccountId(){
-        Collection<User> result = userDao.getAllUsersByFamilyAccountId(BigInteger.valueOf(1));
-        assertEquals("{USer}", result.toString());
     }
 
 }

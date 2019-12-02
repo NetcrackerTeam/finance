@@ -28,13 +28,14 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public User createUser(User user) {
-        logger.info("Entering insert(user=" + user + ")");
+        logger.debug("Entering insert(user=" + user + ")");
         this.template.update(CREATE_USER, new Object[]{
                 user.getName(),
                 user.geteMail(),
                 user.getPassword(),
                 user.getFamilyDebitAccount(),
-                user.getPersonalDebitAccount()
+                user.getPersonalDebitAccount(),
+                user.getUserStatusActive()
 
         });
         return user;
@@ -42,30 +43,24 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public User getUserById(BigInteger id) {
-        logger.info("Entering getUserByUserId(" + id + ")");
+        logger.debug("Entering getUserByUserId(" + id + ")");
         return template.queryForObject(GET_USER_BY_USER_ID, new Object[]{id},
                 new UserDaoMapper());
     }
 
     @Override
     public User getUserByLogin(String login) {
-        logger.info("Entering getUserByUserLogin(login=" + login + ")");
-        return template.queryForObject(GET_USER_BY_USER_ID, new Object[]{login},
+        logger.debug("Entering getUserByUserLogin(login=" + login + ")");
+        return template.queryForObject(GET_USER_BY_LOGIN, new Object[]{login},
                 new UserDaoMapper());
     }
 
     @Override
     public void updateUserPasswordById(BigInteger id, String newPassword) {
-        logger.info(
+        logger.debug(
                 "Entering updatePassword(id=" + id + "," + " password=" + newPassword
                         + ")");
         template.update(UPDATE_PASSWORD, newPassword, id);
     }
 
-    @Override
-    public Collection<User> getAllUsersByFamilyAccountId( BigInteger familyId) {
-        logger.info("Entering getAllUsers(familyId=" + familyId + ")");
-     //   return template.query(GET_All_USER, new AllUserMapper(), familyId);
-        return null;
-    }
 }
