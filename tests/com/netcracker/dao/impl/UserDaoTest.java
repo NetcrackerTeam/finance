@@ -1,8 +1,13 @@
 package com.netcracker.dao.impl;
 
 import com.netcracker.configs.WebConfig;
+import com.netcracker.dao.FamilyAccountDebitDao;
+import com.netcracker.dao.PersonalDebitAccountDao;
 import com.netcracker.dao.UserDao;
+import com.netcracker.models.FamilyDebitAccount;
+import com.netcracker.models.PersonalDebitAccount;
 import com.netcracker.models.User;
+import com.netcracker.models.enums.UserStatusActive;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,6 +31,10 @@ public class UserDaoTest {
     @Autowired
     private UserDao userDao;
     @Autowired
+    private PersonalDebitAccountDao personalDebitAccountDao;
+    @Autowired
+    private FamilyAccountDebitDao familyAccountDebitDao;
+    @Autowired
     private DataSource dataSource;
 
     @Before
@@ -36,16 +45,39 @@ public class UserDaoTest {
 
 
     @Test
-    public void getUserById(){
-        User user = userDao.getUserById(BigInteger.valueOf(1));
-        assertEquals(BigInteger.valueOf(1),user.getId());
-        assertEquals("User{} ", user.toString());
+    public void insertUser(){
+        PersonalDebitAccount personalDebitAccount = new PersonalDebitAccount();
+        FamilyDebitAccount familyDebitAccount = new FamilyDebitAccount();
+        User user = new User.Builder()
+                .user_name("Eugene")
+                .user_eMail("some@gmail")
+                .user_password("1234")
+                .userActive(UserStatusActive.YES)
+                .build();
+        System.out.println(userDao.createUser(user));
+        jdbcTemplate.update(DELETE_USER);
     }
+    private static final String DELETE_USER = " DELETE FROM OBJECTS WHERE NAME = 'Eugene' ";
+
+    @Test
+    public void getUserById(){
+
+        User user = userDao.getUserById(BigInteger.valueOf(24));
+        assertEquals("user_id=24 ListStatus=YES name=Dimas email=mailDimas@gmail.com password=passwordDima personal_Acc=25 familyAcc=26",
+                "user_id=" + user.getId() + " ListStatus=" + user.getUserStatusActive() +
+                        " name=" + user.getName() + " email=" + user.geteMail() +
+                        " password=" + user.getPassword() + " personal_Acc=" + user.getPersonalDebitAccount() + " familyAcc=" + user.getFamilyDebitAccount());
+    }
+
     @Test
     public void getUserByLogin(){
-        User user = userDao.getUserByLogin("Something");
-        assertEquals(BigInteger.valueOf(1), user.getId());
-        assertEquals("User{}", user.toString());
+        User user = userDao.getUserByLogin("Dimas");
+        assertEquals("user_id=24 ListStatus=YES name=Dimas email=mailDimas@gmail.com password=passwordDima personal_Acc=25 familyAcc=26",
+                "user_id=" + user.getId() + " ListStatus=" + user.getUserStatusActive() +
+                        " name=" + user.getName() + " email=" + user.geteMail() +
+                        " password=" + user.getPassword() + " personal_Acc=" + user.getPersonalDebitAccount() + " familyAcc=" + user.getFamilyDebitAccount());
+
+
     }
     @Test
     public  void updateUserPasswordById(){

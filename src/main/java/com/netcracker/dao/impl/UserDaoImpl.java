@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import javax.sql.DataSource;
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Collection;
 
@@ -30,12 +31,10 @@ public class UserDaoImpl implements UserDao {
     public User createUser(User user) {
         logger.debug("Entering insert(user=" + user + ")");
         this.template.update(CREATE_USER, new Object[]{
-                user.getName(),
                 user.geteMail(),
                 user.getPassword(),
-                user.getFamilyDebitAccount(),
-                user.getPersonalDebitAccount(),
-                user.getUserStatusActive()
+                user.getName(),
+                user.getUserStatusActive().getId().toString()
 
         });
         return user;
@@ -44,7 +43,7 @@ public class UserDaoImpl implements UserDao {
     @Override
     public User getUserById(BigInteger id) {
         logger.debug("Entering getUserByUserId(" + id + ")");
-        return template.queryForObject(GET_USER_BY_USER_ID, new Object[]{id},
+        return template.queryForObject(GET_USER_BY_USER_ID, new Object[]{new BigDecimal(id)},
                 new UserDaoMapper());
     }
 
@@ -60,7 +59,7 @@ public class UserDaoImpl implements UserDao {
         logger.debug(
                 "Entering updatePassword(id=" + id + "," + " password=" + newPassword
                         + ")");
-        template.update(UPDATE_PASSWORD, newPassword, id);
+        template.update(UPDATE_PASSWORD, newPassword, new BigDecimal(id));
     }
 
 }

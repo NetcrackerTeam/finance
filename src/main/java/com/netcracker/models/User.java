@@ -9,8 +9,8 @@ public class User {
     private  String name;
     private  String eMail;
     private String password;
-    private PersonalDebitAccount personalDebitAccount;
-    private FamilyDebitAccount familyDebitAccount;
+    private BigInteger personal_id;
+    private BigInteger family_id;
     private UserStatusActive  userStatusActive;
 
 
@@ -20,8 +20,8 @@ public class User {
         private  String name;
         private  String eMail;
         private String password;
-        private PersonalDebitAccount personalDebitAccount;
-        private FamilyDebitAccount familyDebitAccount;
+        private BigInteger personal_id;
+        private BigInteger family_id;
         private UserStatusActive  userStatusActive;
 
         public Builder() {
@@ -46,13 +46,13 @@ public class User {
         }
 
 
-        public Builder personalDebit(PersonalDebitAccount val) {
-            this.personalDebitAccount = val;
+        public Builder personalDebit(BigInteger val) {
+            this.personal_id = val;
             return this;
         }
 
-        public Builder familyDebit(FamilyDebitAccount val) {
-            this.familyDebitAccount = val;
+        public Builder familyDebit(BigInteger val) {
+            this.family_id = val;
             return this;
         }
 
@@ -72,6 +72,8 @@ public class User {
         this.eMail = builder.eMail;
         this.password = builder.password;
         this.userStatusActive = builder.userStatusActive;
+        this.personal_id = builder.personal_id;
+        this.family_id = builder.family_id;
     }
 
     public BigInteger getId() {
@@ -90,12 +92,12 @@ public class User {
         return password;
     }
 
-    public PersonalDebitAccount getPersonalDebitAccount() {
-        return personalDebitAccount;
+    public BigInteger getPersonalDebitAccount() {
+        return personal_id;
     }
 
-    public FamilyDebitAccount getFamilyDebitAccount() {
-        return familyDebitAccount;
+    public BigInteger getFamilyDebitAccount() {
+        return family_id;
     }
 
     public void setPassword(String password) {

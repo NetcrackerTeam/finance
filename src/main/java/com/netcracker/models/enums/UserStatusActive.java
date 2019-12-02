@@ -14,4 +14,10 @@ public enum UserStatusActive {
     public BigInteger getId() {
         return id;
     }
+    public static UserStatusActive getStatusByKey(BigInteger key) {
+        for (UserStatusActive c : values())
+            if (c.getId().equals(key))
+                return c;
+        throw new IllegalArgumentException();
+    }
 }
