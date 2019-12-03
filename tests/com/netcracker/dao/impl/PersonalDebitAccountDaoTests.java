@@ -2,8 +2,6 @@ package com.netcracker.dao.impl;
 
 import com.netcracker.configs.WebConfig;
 import com.netcracker.dao.PersonalDebitAccountDao;
-import com.netcracker.dao.UserDao;
-import com.netcracker.dao.impl.mapper.CurrentSequenceMapper;
 import com.netcracker.models.PersonalDebitAccount;
 import com.netcracker.models.User;
 import com.netcracker.models.enums.PersonalAccountStatusActive;
@@ -76,7 +74,7 @@ public class PersonalDebitAccountDaoTests {
     @Test
     public void createPersonalAccount(){
         User owner = new User.Builder()
-                .user_id(BigInteger.valueOf(getCurrentSequenceId()))
+                .user_id(BigInteger.valueOf(AssertUtils.getCurrentSequenceId(template)))
                 .user_name("Dimas")
                 .user_eMail("mailDimas@gmail.com")
                 .user_password("passwordDima")
@@ -88,7 +86,7 @@ public class PersonalDebitAccountDaoTests {
         });
 
         PersonalDebitAccount personalDebitAccount = new PersonalDebitAccount.Builder()
-                .debitId(BigInteger.valueOf(getCurrentSequenceId()))
+                .debitId(BigInteger.valueOf(AssertUtils.getCurrentSequenceId(template)))
                 .debitObjectName("PER_DEB_ACC1")
                 .debitAmount(Long.valueOf(1234L))
                 .debitPersonalAccountStatus(PersonalAccountStatusActive.YES)
@@ -109,11 +107,5 @@ public class PersonalDebitAccountDaoTests {
     @Test
     public void deletePersonalAccountByUserId (){
         personalDebitAccountDao.deletePersonalAccountByUserId(BigInteger.valueOf(121));
-    }
-
-    private Integer getCurrentSequenceId() {
-        String GET_CURRENT_SEQUENCE_ID = "SELECT last_number FROM user_sequences WHERE sequence_name = 'OBJECTS_ID_S'";
-        int newId = template.queryForObject(GET_CURRENT_SEQUENCE_ID, new CurrentSequenceMapper());
-        return newId++;
     }
 }

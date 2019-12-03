@@ -3,39 +3,103 @@ package com.netcracker.dao;
 import com.netcracker.models.User;
 
 import java.math.BigInteger;
-import java.util.Collection;
-import java.util.List;
 
 public interface UserDao {
+
+    /**
+     * create new user
+     * @param `user
+     * @return  user
+     */
     public User createUser(User user);
 
+    /**
+     * get user by id from db
+     * @param id
+     * @return user by id
+     */
     public User getUserById(BigInteger id);
 
+    /**
+     * get user by login
+     * @param login
+     * @return user
+     */
     public User getUserByLogin(String login);
+
+    /**
+     * update password
+     * input old id user and new password
+     * update values
+     * @param id
+     * @param newPassword
+     */
 
     public void updateUserPasswordById(BigInteger id, String newPassword);
 
-    public Collection<User> getAllUsersByFamilyAccountId( BigInteger familyId);
+
+    String CREATE_USER = "INSERT ALL  " +
+            "INTO OBJECTS (OBJECT_ID,PARENT_ID,OBJECT_TYPE_ID,NAME,DESCRIPTION) VALUES (objects_id_s.NEXTVAL,NULL,1,'user'||objects_id_s.CURRVAL,NULL) "
+            +
+            "INTO ATTRIBUTES (ATTR_ID,OBJECT_ID,VALUE,DATE_VALUE,LIST_VALUE_ID) VALUES (3,objects_id_s.CURRVAL,?,NULL,NULL) "
+            +
+            "INTO ATTRIBUTES (ATTR_ID,OBJECT_ID,VALUE,DATE_VALUE,LIST_VALUE_ID) VALUES (4,objects_id_s.CURRVAL,?,NULL,NULL) "
+            +
+            "INTO ATTRIBUTES (ATTR_ID,OBJECT_ID,VALUE,DATE_VALUE,LIST_VALUE_ID) VALUES (5,objects_id_s.CURRVAL,?,NULL,NULL) "
+            +
+            "INTO ATTRIBUTES (ATTR_ID,OBJECT_ID,VALUE,DATE_VALUE,LIST_VALUE_ID) VALUES (6,objects_id_s.CURRVAL,NULL,NULL,?) "
+            +
+            "SELECT * " +
+            "FROM Dual";
+
+    String GET_USER_BY_LOGIN =  "SELECT EMP.OBJECT_ID AS USER_ID, EMP_NAME.VALUE AS NAME, EMP_EMAIL.VALUE AS EMAIL, "+
+            "PASSWORD.VALUE AS PASSWORD, EMP_STATUS.LIST_VALUE_ID AS IS_ACTIVE, PER.OBJECT_ID AS PER_DEB_ACC1, FAM.OBJECT_ID AS FAM_DEB_ACC1 "+
+            "FROM  OBJECTS EMP, OBJECTS PER, OBJECTS FAM, "+
+            "ATTRIBUTES EMP_NAME, ATTRIBUTES EMP_EMAIL, ATTRIBUTES PASSWORD, ATTRIBUTES EMP_STATUS, "+
+            "OBJREFERENCE PER_US, OBJREFERENCE FAM_US "
+            +"WHERE  EMP.OBJECT_TYPE_ID = 1 AND PER.OBJECT_TYPE_ID = 2 AND FAM.OBJECT_TYPE_ID = 13 AND " +
+            "EMP_NAME.ATTR_ID = 5 AND " +
+            "EMP_NAME.VALUE = ? AND " +
+            "EMP_NAME.OBJECT_ID = EMP.OBJECT_ID AND " +
+            "EMP_EMAIL.ATTR_ID = 3 AND "+
+            "EMP_EMAIL.OBJECT_ID = EMP.OBJECT_ID AND "+
+            "PASSWORD.ATTR_ID = 4 AND "+
+            "PASSWORD.OBJECT_ID = EMP.OBJECT_ID AND "+
+            "EMP_STATUS.ATTR_ID = 6 AND " +
+            "EMP_STATUS.OBJECT_ID = EMP.OBJECT_ID AND "+
+            "PER_US.ATTR_ID = 1 AND "+
+            "PER_US.OBJECT_ID = EMP.OBJECT_ID AND "+
+            "PER.OBJECT_ID = PER_US.REFERENCE AND "+
+            "FAM_US.ATTR_ID = 2 AND "+
+            "FAM_US.OBJECT_ID = EMP.OBJECT_ID AND " +
+            "FAM.OBJECT_ID = FAM_US.REFERENCE ";
 
 
-
-    String CREATE_USER = "INSERT ALL ";
-
-    String GET_USER_BY_USER_ID = "SELECT  ";
-
-
-    String FIND_USER_BY_LOGIN = "SELECT  ";
+    String GET_USER_BY_USER_ID = "SELECT EMP.OBJECT_ID AS USER_ID, EMP_NAME.VALUE AS NAME, EMP_EMAIL.VALUE AS EMAIL, "+
+            "PASSWORD.VALUE AS PASSWORD, EMP_STATUS.LIST_VALUE_ID AS IS_ACTIVE, PER.OBJECT_ID AS PER_DEB_ACC1, FAM.OBJECT_ID AS FAM_DEB_ACC1 "+
+            "FROM  OBJECTS EMP, OBJECTS PER, OBJECTS FAM, "+
+            "ATTRIBUTES EMP_NAME, ATTRIBUTES EMP_EMAIL, ATTRIBUTES PASSWORD, ATTRIBUTES EMP_STATUS, "+
+            "OBJREFERENCE PER_US, OBJREFERENCE FAM_US "
+            +"WHERE  EMP.OBJECT_TYPE_ID = 1 AND PER.OBJECT_TYPE_ID = 2 AND FAM.OBJECT_TYPE_ID = 13 AND " +
+            "EMP.OBJECT_ID = ? AND " +
+            "EMP_NAME.ATTR_ID = 5 AND " +
+            "EMP_NAME.OBJECT_ID = EMP.OBJECT_ID AND " +
+            "EMP_EMAIL.ATTR_ID = 3 AND "+
+            "EMP_EMAIL.OBJECT_ID = EMP.OBJECT_ID AND "+
+            "PASSWORD.ATTR_ID = 4 AND "+
+            "PASSWORD.OBJECT_ID = EMP.OBJECT_ID AND "+
+            "EMP_STATUS.ATTR_ID = 6 AND " +
+            "EMP_STATUS.OBJECT_ID = EMP.OBJECT_ID AND "+
+            "PER_US.ATTR_ID = 1 AND "+
+            "PER_US.OBJECT_ID = EMP.OBJECT_ID AND "+
+            "PER.OBJECT_ID = PER_US.REFERENCE AND "+
+            "FAM_US.ATTR_ID = 2 AND "+
+            "FAM_US.OBJECT_ID = EMP.OBJECT_ID AND " +
+            "FAM.OBJECT_ID = FAM_US.REFERENCE ";
 
 
     String UPDATE_PASSWORD = "UPDATE ATTRIBUTES " +
-            "SET ATTRIBUTES.VALUE = ? " +
-            "WHERE ATTRIBUTES.OBJECT_ID = ? AND " +
-            "ATTRIBUTES.ATTR_ID = 4";
-
-
-    String GET_ALL_USER_BY_FAMILY_ACC_ID = "";
-
-    String GET_USER_BY_FAMILY_ACC_ID = "";
-
-
+            "SET VALUE = ? " +
+            "WHERE OBJECT_ID = ? AND " +
+            "ATTR_ID = 4";
 }
