@@ -60,14 +60,5 @@ public class WebConfig implements WebMvcConfigurer {
         return new UserDaoImpl(getDataSource());
     }
 
-    @Bean(name = "creditOperationDao")
-    public CreditOperationDao getCreditOperationDao() {
-        return new CreditOperationDaoImpl(getDataSource());
-    }
-
-    @Bean(name = "autoOperationDao")
-    public AutoOperationDao getAutoOperationDao() {
-        return new AutoOperationDaoImpl(getDataSource());
-    }
 
 }

@@ -96,11 +96,11 @@ public class AutoOperationDaoImpl implements AutoOperationDao {
     }
 
     @Override
-    public Collection<AbstractAutoOperation> getAllTodayOperations(BigInteger debitAccountId) {
+    public Collection<AbstractAutoOperation> getAllTodayOperations(BigInteger debitAccountId, int dayOfMonth) {
         Collection<AutoOperationIncome> allIncomes = jdbcTemplate.query(GET_ALL_TODAY_AO_INCOME,
-                new Object[]{new BigDecimal(debitAccountId)}, new AutoOperationIncomeMapper());
+                new Object[]{new BigDecimal(debitAccountId), dayOfMonth}, new AutoOperationIncomeMapper());
         Collection<AutoOperationExpense> allExpenses = jdbcTemplate.query(GET_ALL_TODAY_AO_EXPENSE,
-                new Object[]{new BigDecimal(debitAccountId)}, new AutoOperationExpenseMapper());
+                new Object[]{new BigDecimal(debitAccountId), dayOfMonth}, new AutoOperationExpenseMapper());
         Collection<AbstractAutoOperation> allOperations = new ArrayList<>(allIncomes);
         allOperations.addAll(allExpenses);
         return allOperations;

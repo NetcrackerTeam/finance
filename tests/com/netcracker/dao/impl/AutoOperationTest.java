@@ -152,7 +152,10 @@ public class AutoOperationTest {
         List<AbstractAutoOperation> expectedCollection = new ArrayList<>(expCollectionExpense);
         expectedCollection.addAll(expCollectionIncome);
 
-        List<AbstractAutoOperation> actualCollection = (ArrayList) autoOperationDao.getAllTodayOperations(new BigInteger("52"));
+        List<AbstractAutoOperation> actualCollectionFirst = (ArrayList) autoOperationDao.getAllTodayOperations(new BigInteger("52"), 1);
+        List<AbstractAutoOperation> actualCollectionSecond = (ArrayList) autoOperationDao.getAllTodayOperations(new BigInteger("52"), 7);
+        List<AbstractAutoOperation> actualCollection = new ArrayList<>(actualCollectionFirst);
+        actualCollection.addAll(actualCollectionSecond);
 
         AssertUtils.assertAutoOperationsCollections(expectedCollection, actualCollection);
     }
