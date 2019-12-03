@@ -51,8 +51,10 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Bean
     public PlatformTransactionManager txManager() {
+        Locale.setDefault(Locale.ENGLISH);
         return new DataSourceTransactionManager(getDataSource());
     }
+
     @Bean(name = "userDao")
     public UserDao getUserDao() {
         return new UserDaoImpl(getDataSource());

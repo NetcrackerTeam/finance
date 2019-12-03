@@ -8,9 +8,11 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.sql.DataSource;
 import java.math.BigInteger;
@@ -22,6 +24,7 @@ import static org.junit.Assert.assertEquals;
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
 @ContextConfiguration(classes = WebConfig.class)
+@Transactional
 public class CreditOperationTest {
     protected JdbcTemplate jdbcTemplate;
     private String dateToday = "2019-12-01";
@@ -58,6 +61,7 @@ public class CreditOperationTest {
                         + creditOperation.getAmount() + ", date=" + creditOperation.getDate() + "}");
     }
 
+    @Rollback
     @Test
     public void createFamilyCreditOperation() throws ParseException {
         CreditOperation expectedCreditOperation = new CreditOperation(Long.valueOf("6666"),
@@ -68,6 +72,7 @@ public class CreditOperationTest {
         AssertUtils.assertCreditOperation(expectedCreditOperation, actualCreditOperation);
     }
 
+    @Rollback
     @Test
     public void createPersonalCreditOperation() throws ParseException {
         CreditOperation expectedCreditOperation = new CreditOperation(Long.valueOf("1488"),
@@ -110,6 +115,7 @@ public class CreditOperationTest {
         AssertUtils.assertCreditOperationsCollections(expectedCollection, actualCollection);
     }
 
+    @Rollback
     @Test
     public void deleteCreditOperation() {
         int totalCount = 0;

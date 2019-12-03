@@ -11,9 +11,11 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.sql.DataSource;
 
@@ -26,6 +28,7 @@ import static org.junit.Assert.assertEquals;
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
 @ContextConfiguration(classes = WebConfig.class)
+@Transactional
 public class AutoOperationTest {
     protected JdbcTemplate jdbcTemplate;
     private String dateToday = "2019-12-01";
@@ -84,6 +87,7 @@ public class AutoOperationTest {
                         " category=" + autoOperationExpense.getCategoryExpense() + " date=" + autoOperationExpense.getDate());
     }
 
+    @Rollback
     @Test
     public void createFamilyIncomeAutoOperation() throws ParseException {
         AutoOperationIncome expAutoOperation = new AutoOperationIncome.Builder()
@@ -95,6 +99,7 @@ public class AutoOperationTest {
         AssertUtils.assertAutoOperationIncome(expAutoOperation, actualAutoOperation);
     }
 
+    @Rollback
     @Test
     public void createFamilyExpenseAutoOperation() throws ParseException {
         AutoOperationExpense expAutoOperation = new AutoOperationExpense.Builder()
@@ -106,6 +111,7 @@ public class AutoOperationTest {
         AssertUtils.assertAutoOperationExpense(expAutoOperation, actualAutoOperation);
     }
 
+    @Rollback
     @Test
     public void createPersonalIncomeAutoOperation() throws ParseException {
         AutoOperationIncome expAutoOperation = new AutoOperationIncome.Builder()
@@ -116,6 +122,7 @@ public class AutoOperationTest {
         AssertUtils.assertAutoOperationIncome(expAutoOperation, actualAutoOperation);
     }
 
+    @Rollback
     @Test
     public void createPersonalExpenseAutoOperation() throws ParseException {
         AutoOperationExpense expAutoOperation = new AutoOperationExpense.Builder()
@@ -150,6 +157,7 @@ public class AutoOperationTest {
         AssertUtils.assertAutoOperationsCollections(expectedCollection, actualCollection);
     }
 
+    @Rollback
     @Test
     public void deleteAutoOperation() {
         int totalCount = 0;
