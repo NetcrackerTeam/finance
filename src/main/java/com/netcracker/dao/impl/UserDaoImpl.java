@@ -10,8 +10,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import javax.sql.DataSource;
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.util.Collection;
-
 public class UserDaoImpl implements UserDao {
 
     private static final Logger logger = Logger.getLogger(UserDaoImpl.class);
@@ -61,5 +59,6 @@ public class UserDaoImpl implements UserDao {
                         + ")");
         template.update(UPDATE_PASSWORD, newPassword, new BigDecimal(id));
     }
+
 
 }

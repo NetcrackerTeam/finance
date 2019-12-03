@@ -13,9 +13,11 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.sql.DataSource;
 import java.math.BigInteger;
@@ -25,15 +27,12 @@ import static org.junit.Assert.assertEquals;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
+@Transactional
 @ContextConfiguration(classes = WebConfig.class)
 public class UserDaoTest {
     protected JdbcTemplate jdbcTemplate;
     @Autowired
     private UserDao userDao;
-    @Autowired
-    private PersonalDebitAccountDao personalDebitAccountDao;
-    @Autowired
-    private FamilyAccountDebitDao familyAccountDebitDao;
     @Autowired
     private DataSource dataSource;
 
@@ -43,11 +42,9 @@ public class UserDaoTest {
         jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
-
+    @Rollback
     @Test
     public void insertUser(){
-        PersonalDebitAccount personalDebitAccount = new PersonalDebitAccount();
-        FamilyDebitAccount familyDebitAccount = new FamilyDebitAccount();
         User user = new User.Builder()
                 .user_name("Eugene")
                 .user_eMail("some@gmail")
@@ -79,6 +76,7 @@ public class UserDaoTest {
 
 
     }
+    @Rollback
     @Test
     public  void updateUserPasswordById(){
         userDao.updateUserPasswordById(BigInteger.valueOf(1),"123456789");
