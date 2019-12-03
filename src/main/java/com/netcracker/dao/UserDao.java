@@ -39,7 +39,7 @@ public interface UserDao {
 
 
     String CREATE_USER = "INSERT ALL  " +
-            "INTO OBJECTS (OBJECT_ID,PARENT_ID,OBJECT_TYPE_ID,NAME,DESCRIPTION) VALUES (objects_id_s.NEXTVAL,NULL,1,'Eugene',NULL) "
+            "INTO OBJECTS (OBJECT_ID,PARENT_ID,OBJECT_TYPE_ID,NAME,DESCRIPTION) VALUES (objects_id_s.NEXTVAL,NULL,1,'user'||objects_id_s.CURRVAL,NULL) "
             +
             "INTO ATTRIBUTES (ATTR_ID,OBJECT_ID,VALUE,DATE_VALUE,LIST_VALUE_ID) VALUES (3,objects_id_s.CURRVAL,?,NULL,NULL) "
             +
