@@ -6,6 +6,7 @@ import com.netcracker.models.User;
 
 
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.List;
 
 public interface FamilyAccountDebitDao {
@@ -15,15 +16,15 @@ public interface FamilyAccountDebitDao {
 
     void deleteFamilyAccount(BigInteger id);
 
-    void addUserToAccountById(BigInteger user_id, BigInteger account_id);
+    void addUserToAccountById(BigInteger account_id, BigInteger user_id);
 
     void deleteUserFromAccountById(BigInteger account_id, BigInteger user_id);
 
-    List<User> getParticipantsOfFamilyAccount(BigInteger debit_id);
+    ArrayList<User> getParticipantsOfFamilyAccount(BigInteger debit_id);
 
-    List<AccountIncome> getIncomesOfFamilyAccount(BigInteger debit_id);
+    ArrayList<AccountIncome> getIncomesOfFamilyAccount(BigInteger debit_id);
 
-    List<AccountExpense> getExpensesOfFamilyAccount(BigInteger debit_id);
+    ArrayList<AccountExpense> getExpensesOfFamilyAccount(BigInteger debit_id);
 
     String ADD_USER_BY_ID = "INSERT INTO OBJREFERENCE (ATTR_ID,OBJECT_ID,REFERENCE) VALUES (8,?,?)";
 
