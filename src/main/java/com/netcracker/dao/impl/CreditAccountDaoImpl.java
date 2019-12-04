@@ -9,7 +9,7 @@ import com.netcracker.models.PersonalCreditAccount;
 import com.netcracker.models.enums.CreditStatusPaid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
 import java.math.BigDecimal;
@@ -17,7 +17,7 @@ import java.math.BigInteger;
 import java.sql.Date;
 import java.util.List;
 
-@Component
+@Repository
 public class CreditAccountDaoImpl implements CreditAccountDao {
 
     private JdbcTemplate jdbcTemplate;
