@@ -1,15 +1,20 @@
 package com.netcracker.services;
 
+import com.netcracker.models.PersonalCreditAccount;
+import com.netcracker.models.PersonalDebitAccount;
+
+import java.math.BigInteger;
+import java.util.List;
+
 public interface PersonalDebitService {
 
-    public void createPersonalDebitAccount();
+    PersonalDebitAccount createPersonalDebitAccount(PersonalDebitAccount personalDebitAccount);
 
-    public void deletePersonalDebitAccount();
+    public void deletePersonalDebitAccount(BigInteger account_id, BigInteger user_id);
 
-    public void getPersonalDebitAccount();
+    PersonalDebitAccount getPersonalDebitAccount(BigInteger id);
 
-    public void addCreditAccount();
+    public void addCreditAccount(BigInteger id, PersonalCreditAccount creditAccount);
 
-    // не знаю что возвращать
-    public void getHistory();
+    public List<Object> getHistory(BigInteger personal_account_id);
 }
