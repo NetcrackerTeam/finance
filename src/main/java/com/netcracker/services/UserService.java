@@ -9,7 +9,7 @@ public interface UserService {
     public void changePassword(BigInteger id,  String newPassword);
     public User createUser(User user);
     public PersonalDebitAccount createPersonalDebitAcc(PersonalDebitAccount personalDebitAccount);
-    public boolean isUserActive(User user);
-    public boolean isUserHasFamilyAccount(User user);
+    public boolean isUserActive(BigInteger user_id);
+    public boolean isUserHasFamilyAccount(BigInteger user_id);
 
 }
