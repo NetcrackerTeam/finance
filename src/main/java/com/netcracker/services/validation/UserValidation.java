@@ -1,4 +1,6 @@
 package com.netcracker.services.validation;
+import com.netcracker.services.validation.errorMessage.ErrorMessages;
+
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -6,28 +8,35 @@ import java.util.regex.Pattern;
 public class UserValidation extends AbstractValidation {
 
     public Map<String, String> validateInputId(String id) {
-        validateInputId(id);
+        validateId(id);
         return getErrorMapMessage();
     }
 
 
     public Map<String,String> validationEmail(String email){
         if (!checkEmail(email)){
-            setErrorMapMessage("WRONG_EMAIL_ERROR",
-                    ErrorMassage.WRONG_EMAIL_FORMAT);
+            setErrorToMapMessage("WRONG_EMAIL_ERROR",
+                    ErrorMessages.WRONG_EMAIL_FORMAT);
         }
         return getErrorMapMessage();
     }
 
-    public Map<String, String > validationPassword (String password ){
-        if(password.equals(null)){
-            setErrorMapMessage("PASSWORD NULL ", ErrorMassage.WRONG_PASSWORD);
+    public Map<String, String >  validatePassword(String password) {
+        if (!checkPassword(password)) {
+            setErrorToMapMessage("PASSWORD ERROR FORMAT",
+                    ErrorMessages.PASSWORD_ERROR);
         }
         return getErrorMapMessage();
     }
 
     private boolean checkEmail(String name) {
-        Pattern p = Pattern.compile(RegexPatterns.EMAIL_REGEX_PATTERN);
+        Pattern p = Pattern.compile(RegexPatterns.EMAIL_PATTERN);
+        Matcher m = p.matcher(name);
+        return m.matches();
+    }
+
+    private boolean checkPassword(String name) {
+        Pattern p = Pattern.compile(RegexPatterns.PASSWORD_PATTERN);
         Matcher m = p.matcher(name);
         return m.matches();
     }
