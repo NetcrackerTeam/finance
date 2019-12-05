@@ -8,4 +8,9 @@ public interface ErrorMessages {
     String WRONG_EMAIL_FORMAT = "EMAIL NOT CORRECT FORMAT ";
     String WRONG_PASSWORD = "PASSWORD NULL";
     String PASSWORD_ERROR = "Please type correct password!";
+    String EMPTY_STATUS_ERROR = "";
+    String INCORRECT_STATUS_ERROR = "";
+   String USER_FIRST_OR_LAST_NAME_ERROR = "";
+   String WRONG_START_DATE_FORMAT_ERROR = "";
+   String WRONG_END_DATE_FORMAT_ERROR = "";
 }
