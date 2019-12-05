@@ -13,7 +13,7 @@ public interface CreditDeptDao {
      * @param id personal credit id
      * @return debt object
      */
-    public Debt getPersonalDebtByCreditId(BigInteger id);
+    Debt getPersonalDebtByCreditId(BigInteger id);
 
     /**
      * Get family credit debt by family credit id.
@@ -21,7 +21,7 @@ public interface CreditDeptDao {
      * @param id family credit id
      * @return debt object
      */
-    public Debt getFamilyDebtByCreditId(BigInteger id);
+    Debt getFamilyDebtByCreditId(BigInteger id);
 
     /**
      * Get personal debt by debt id.
@@ -29,7 +29,7 @@ public interface CreditDeptDao {
      * @param id personal debt id
      * @return debt object
      */
-    public Debt getPersonalDebtById(BigInteger id);
+    Debt getPersonalDebtById(BigInteger id);
 
     /**
      * Get family debt by debt id.
@@ -37,7 +37,7 @@ public interface CreditDeptDao {
      * @param id family debt id
      * @return debt object
      */
-    public Debt getFamilyDebtById(BigInteger id);
+    Debt getFamilyDebtById(BigInteger id);
 
     /**
      * Change starting debt date of personal credit.
@@ -45,7 +45,7 @@ public interface CreditDeptDao {
      * @param id   debt id
      * @param date new starting debt date
      */
-    public void updatePersonalDebtDateFrom(BigInteger id, Date date);
+    void updatePersonalDebtDateFrom(BigInteger id, Date date);
 
     /**
      * Change starting debt date of family credit.
@@ -53,7 +53,7 @@ public interface CreditDeptDao {
      * @param id   debt id
      * @param date new starting debt date
      */
-    public void updateFamilyDebtDateFrom(BigInteger id, Date date);
+    void updateFamilyDebtDateFrom(BigInteger id, Date date);
 
     /**
      * Change ending debt date of personal credit.
@@ -61,7 +61,7 @@ public interface CreditDeptDao {
      * @param id   debt id
      * @param date new ending debt date
      */
-    public void updatePersonalDebtDateTo(BigInteger id, Date date);
+    void updatePersonalDebtDateTo(BigInteger id, Date date);
 
     /**
      * Change ending debt date of family credit.
@@ -69,7 +69,7 @@ public interface CreditDeptDao {
      * @param id   debt id
      * @param date new ending debt date
      */
-    public void updateFamilyDebtDateTo(BigInteger id, Date date);
+    void updateFamilyDebtDateTo(BigInteger id, Date date);
 
     /**
      * Change debt total amount of personal credit.
@@ -77,7 +77,7 @@ public interface CreditDeptDao {
      * @param id     debt id
      * @param amount new debt amount
      */
-    public void updatePersonalDebtAmount(BigInteger id, long amount);
+    void updatePersonalDebtAmount(BigInteger id, long amount);
 
     /**
      * Change debt total amount of family credit.
@@ -85,45 +85,54 @@ public interface CreditDeptDao {
      * @param id     debt id
      * @param amount new debt amount
      */
-    public void updateFamilyDebtAmount(BigInteger id, long amount);
+    void updateFamilyDebtAmount(BigInteger id, long amount);
 
     String SELECT_PERSONAL_DEBT_BY_CREDIT_ID_QUERY = "SELECT DEBT_DATE_FROM_AT.DATE_VALUE DEBT_FROM, DEBT_DATE_TO_AT.DATE_VALUE DEBT_TO,\n" +
-            "  DEBT_AMOUNT_AT.VALUE DEBT_AMOUNT, DEBT.OBJECT_ID DEBT_ID\n" +
-            "  FROM OBJECTS DEBT\n" +
-            "    INNER JOIN OBJREFERENCE DEBT_REF ON DEBT.OBJECT_ID = DEBT_REF.OBJECT_ID\n" +
-            "    INNER JOIN OBJECTS DEBT ON DEBT_REF.OBJECT_ID = DEBT.OBJECT_ID\n" +
-            "    INNER JOIN ATTRIBUTES DEBT_DATE_FROM_AT ON DEBT.OBJECT_ID = DEBT_DATE_FROM_AT.OBJECT_ID\n" +
-            "    INNER JOIN ATTRIBUTES DEBT_DATE_TO_AT ON DEBT.OBJECT_ID = DEBT_DATE_TO_AT.OBJECT_ID\n" +
-            "    INNER JOIN ATTRIBUTES DEBT_AMOUNT_AT ON DEBT.OBJECT_ID = DEBT_AMOUNT_AT.OBJECT_ID\n" +
-            "  WHERE DEBT_REF.REFERENCE = ? /*CREDIT ACCOUNT ID*/\n" +
-            "    AND DEBT_REF.ATTR_ID = 42 /*REFERENCE ATTR BETWEEN DEBT AND CREDIT*/\n" +
-            "    AND DEBT.OBJECT_TYPE_ID = 8 /*PERSONAL DEBT OBJECT TYPE ID*/\n" +
-            "    AND DEBT_DATE_FROM_AT.ATTR_ID = 44 /*DEBT DATE FROM ATTRIBUTE*/\n" +
-            "    AND DEBT_DATE_TO_AT.ATTR_ID = 45 /*DEBT DATE TO ATTRIBUTE*/\n" +
-            "    AND DEBT_AMOUNT_AT.ATTR_ID = 46 /*DEBT AMOUNT ATTRIBUTE*/";
+            " DEBT_AMOUNT_AT.VALUE DEBT_AMOUNT, DEBT.OBJECT_ID DEBT_ID\n" +
+            "     FROM OBJECTS DEBT,\n" +
+            "       OBJREFERENCE DEBT_REF,\n" +
+            "       ATTRIBUTES DEBT_DATE_FROM_AT,\n" +
+            "       ATTRIBUTES DEBT_DATE_TO_AT,\n" +
+            "       ATTRIBUTES DEBT_AMOUNT_AT\n" +
+            "     WHERE DEBT_REF.REFERENCE = ? /*CREDIT ACCOUNT ID*/\n" +
+            "       AND DEBT_REF.OBJECT_ID = DEBT.OBJECT_ID\n" +
+            "       AND DEBT.OBJECT_ID = DEBT_DATE_FROM_AT.OBJECT_ID\n" +
+            "       AND DEBT.OBJECT_ID = DEBT_DATE_TO_AT.OBJECT_ID\n" +
+            "       AND DEBT.OBJECT_ID = DEBT_AMOUNT_AT.OBJECT_ID\n" +
+            "       AND DEBT_REF.ATTR_ID = 42 /*REFERENCE ATTR BETWEEN DEBT AND CREDIT*/\n" +
+            "       AND DEBT.OBJECT_TYPE_ID = 8 /*PERSONAL DEBT OBJECT TYPE ID*/\n" +
+            "       AND DEBT_DATE_FROM_AT.ATTR_ID = 44 /*DEBT DATE FROM ATTRIBUTE*/\n" +
+            "       AND DEBT_DATE_TO_AT.ATTR_ID = 45 /*DEBT DATE TO ATTRIBUTE*/\n" +
+            "       AND DEBT_AMOUNT_AT.ATTR_ID = 46 /*DEBT AMOUNT ATTRIBUTE*/";
 
     String SELECT_FAMILY_DEBT_BY_CREDIT_ID_QUERY = "SELECT DEBT_DATE_FROM_AT.DATE_VALUE DEBT_FROM, DEBT_DATE_TO_AT.DATE_VALUE DEBT_TO,\n" +
             "  DEBT_AMOUNT_AT.VALUE DEBT_AMOUNT, DEBT.OBJECT_ID DEBT_ID\n" +
-            "  FROM OBJECTS DEBT\n" +
-            "    INNER JOIN OBJREFERENCE DEBT_REF ON DEBT.OBJECT_ID = DEBT_REF.OBJECT_ID\n" +
-            "    INNER JOIN OBJECTS DEBT ON DEBT_REF.OBJECT_ID = DEBT.OBJECT_ID\n" +
-            "    INNER JOIN ATTRIBUTES DEBT_DATE_FROM_AT ON DEBT.OBJECT_ID = DEBT_DATE_FROM_AT.OBJECT_ID\n" +
-            "    INNER JOIN ATTRIBUTES DEBT_DATE_TO_AT ON DEBT.OBJECT_ID = DEBT_DATE_TO_AT.OBJECT_ID\n" +
-            "    INNER JOIN ATTRIBUTES DEBT_AMOUNT_AT ON DEBT.OBJECT_ID = DEBT_AMOUNT_AT.OBJECT_ID\n" +
-            "  WHERE DEBT_REF.REFERENCE = ?/*CREDIT ACCOUNT ID*/\n" +
-            "    AND DEBT_REF.ATTR_ID = 43 /*REFERENCE ATTR BETWEEN DEBT AND CREDIT*/\n" +
-            "    AND DEBT.OBJECT_TYPE_ID = 19 /*PERSONAL DEBT OBJECT TYPE ID*/\n" +
-            "    AND DEBT_DATE_FROM_AT.ATTR_ID = 44 /*DEBT DATE FROM ATTRIBUTE*/\n" +
-            "    AND DEBT_DATE_TO_AT.ATTR_ID = 45 /*DEBT DATE TO ATTRIBUTE*/\n" +
-            "    AND DEBT_AMOUNT_AT.ATTR_ID = 46 /*DEBT AMOUNT ATTRIBUTE*/";
+            "     FROM OBJECTS DEBT,\n" +
+            "       OBJREFERENCE DEBT_REF,\n" +
+            "       ATTRIBUTES DEBT_DATE_FROM_AT,\n" +
+            "       ATTRIBUTES DEBT_DATE_TO_AT,\n" +
+            "       ATTRIBUTES DEBT_AMOUNT_AT\n" +
+            "     WHERE DEBT_REF.REFERENCE = ? /*CREDIT ACCOUNT ID*/\n" +
+            "       AND DEBT_REF.OBJECT_ID = DEBT.OBJECT_ID\n" +
+            "       AND DEBT.OBJECT_ID = DEBT_DATE_FROM_AT.OBJECT_ID\n" +
+            "       AND DEBT.OBJECT_ID = DEBT_DATE_TO_AT.OBJECT_ID\n" +
+            "       AND DEBT.OBJECT_ID = DEBT_AMOUNT_AT.OBJECT_ID\n" +
+            "       AND DEBT_REF.ATTR_ID = 43 /*REFERENCE ATTR BETWEEN DEBT AND CREDIT*/\n" +
+            "       AND DEBT.OBJECT_TYPE_ID = 19 /*PERSONAL DEBT OBJECT TYPE ID*/\n" +
+            "       AND DEBT_DATE_FROM_AT.ATTR_ID = 44 /*DEBT DATE FROM ATTRIBUTE*/\n" +
+            "       AND DEBT_DATE_TO_AT.ATTR_ID = 45 /*DEBT DATE TO ATTRIBUTE*/\n" +
+            "       AND DEBT_AMOUNT_AT.ATTR_ID = 46 /*DEBT AMOUNT ATTRIBUTE*/";
 
     String SELECT_DEBT_BY_ID_QUERY = "SELECT DEBT_DATE_FROM_AT.DATE_VALUE DEBT_FROM, DEBT_DATE_TO_AT.DATE_VALUE DEBT_TO,\n" +
             "  DEBT_AMOUNT_AT.VALUE DEBT_AMOUNT, DEBT.OBJECT_ID DEBT_ID\n" +
-            "  FROM OBJECTS DEBT\n" +
-            "    LEFT JOIN ATTRIBUTES DEBT_DATE_FROM_AT ON DEBT.OBJECT_ID = DEBT_DATE_FROM_AT.OBJECT_ID\n" +
-            "    LEFT JOIN ATTRIBUTES DEBT_DATE_TO_AT ON DEBT.OBJECT_ID = DEBT_DATE_TO_AT.OBJECT_ID\n" +
-            "    LEFT JOIN ATTRIBUTES DEBT_AMOUNT_AT ON DEBT.OBJECT_ID = DEBT_AMOUNT_AT.OBJECT_ID\n" +
+            "  FROM OBJECTS DEBT,\n" +
+            "    ATTRIBUTES DEBT_DATE_FROM_AT,\n" +
+            "    ATTRIBUTES DEBT_DATE_TO_AT,\n" +
+            "    ATTRIBUTES DEBT_AMOUNT_AT\n" +
             "  WHERE DEBT.OBJECT_ID = ? /*DEBT ID*/\n" +
+            "    AND DEBT.OBJECT_ID = DEBT_DATE_FROM_AT.OBJECT_ID\n" +
+            "    AND DEBT.OBJECT_ID = DEBT_DATE_TO_AT.OBJECT_ID\n" +
+            "    AND DEBT.OBJECT_ID = DEBT_AMOUNT_AT.OBJECT_ID\n" +
             "    AND DEBT_DATE_FROM_AT.ATTR_ID = 44 /*DEBT DATE FROM ATTRIBUTE*/\n" +
             "    AND DEBT_DATE_TO_AT.ATTR_ID = 45 /*DEBT DATE TO ATTRIBUTE*/\n" +
             "    AND DEBT_AMOUNT_AT.ATTR_ID = 46 /*DEBT AMOUNT ATTRIBUTE*/";
