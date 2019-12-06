@@ -2,10 +2,6 @@ package com.netcracker.configs;
 
 import com.netcracker.dao.UserDao;
 import com.netcracker.dao.impl.UserDaoImpl;
-import com.netcracker.services.FamilyCreditDebtService;
-import com.netcracker.services.PersonalCreditDebtService;
-import com.netcracker.services.impl.FamilyCreditDebtServiceImpl;
-import com.netcracker.services.impl.PersonalCreditDebtServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -80,16 +76,4 @@ public class WebConfig implements WebMvcConfigurer {
     public UserDao getUserDao() {
         return new UserDaoImpl(getDataSource());
     }
-
-
-    @Bean(name = "personalCreditDebt")
-    public PersonalCreditDebtService getPersonalCreditDebtService() {
-        return new PersonalCreditDebtServiceImpl();
-    }
-
-    @Bean(name = "familyCreditDebt")
-    public FamilyCreditDebtService getFamilyCreditDebtService() {
-        return new FamilyCreditDebtServiceImpl();
-    }
-
 }

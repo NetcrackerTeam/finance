@@ -27,7 +27,7 @@ import java.util.List;
 @ContextConfiguration(classes = {WebConfig.class})
 @RunWith(SpringJUnit4ClassRunner.class)
 @Transactional
-public class MonthReportDaoImplTest {
+public class MonthReportDaoTest {
 
     private MonthReport expMonthReportPersonal;
     private MonthReport expMonthReportFamily;

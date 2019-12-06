@@ -21,7 +21,7 @@ public interface PersonalCreditService {
 
     Collection<CreditOperation> getAllPersonalCreditOperations(BigInteger id);
 
-    PersonalCreditAccount getPersonalCreditAcount(BigInteger id);
+    PersonalCreditAccount getPersonalCreditAccount(BigInteger id);
 
     long getMonthPaymentAmount(PersonalCreditAccount creditAccount);
 }

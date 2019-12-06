@@ -14,11 +14,9 @@ public interface FamilyCreditService {
 
     void deleteFamilyCredit(BigInteger id);
 
-    void addFamilyPayment(BigInteger id, long amount, Date date);
+    void addFamilyCreditPayment(BigInteger id, long amount, Date date);
 
-    void increaseDebt(BigInteger id, long amount);
-
-    void decreaseDebt(BigInteger id, long amount);
+    void addPersonalCreditPaymentAuto(BigInteger idAccount, BigInteger idCredit, long amount);
 
     Collection<FamilyCreditAccount> getFamilyCredits(BigInteger id);
 

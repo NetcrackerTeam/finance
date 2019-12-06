@@ -29,7 +29,7 @@ import static org.junit.Assert.assertEquals;
 @ContextConfiguration(classes = {WebConfig.class})
 @RunWith(SpringJUnit4ClassRunner.class)
 @Transactional
-public class CreditAccountDaoImplTest {
+public class CreditAccountDaoTest {
 
     private AbstractCreditAccount personalCreditAccountOne;
     private AbstractCreditAccount familyCreditAccountOne;

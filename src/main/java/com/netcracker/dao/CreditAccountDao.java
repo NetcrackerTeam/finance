@@ -100,19 +100,9 @@ public interface CreditAccountDao {
             "  DATE_TO_AT.DATE_VALUE DATE_TO, MONTH_DAY_AT.VALUE MONTH_DAY, IS_PAID_AT.LIST_VALUE_ID IS_PAID,\n" +
             "  DEBT_DATE_FROM_AT.DATE_VALUE DEBT_FROM, DEBT_DATE_TO_AT.DATE_VALUE DEBT_TO,\n" +
             "  DEBT_AMOUNT_AT.VALUE DEBT_AMOUNT, DEBT.OBJECT_ID DEBT_ID\n" +
-            "    FROM OBJECTS CRED,\n" +
-            "        ATTRIBUTES NAME_AT,\n" +
-            "        ATTRIBUTES AMOUNT_AT,\n" +
-            "        ATTRIBUTES PAID_AT,\n" +
-            "        ATTRIBUTES DATE_AT,\n" +
-            "        ATTRIBUTES RATE_AT,\n" +
-            "        ATTRIBUTES DATE_TO_AT,\n" +
-            "        ATTRIBUTES MONTH_DAY_AT,\n" +
-            "        ATTRIBUTES IS_PAID_AT,\n" +
-            "        OBJREFERENCE DEBT_REF,\n" +
-            "        OBJECTS DEBT,\n" +
-            "        ATTRIBUTES DEBT_DATE_FROM_AT,\n" +
-            "        ATTRIBUTES DEBT_DATE_TO_AT,\n" +
+            "    FROM OBJECTS CRED, ATTRIBUTES NAME_AT, ATTRIBUTES AMOUNT_AT, ATTRIBUTES PAID_AT, ATTRIBUTES DATE_AT,\n" +
+            "        ATTRIBUTES RATE_AT, ATTRIBUTES DATE_TO_AT, ATTRIBUTES MONTH_DAY_AT, ATTRIBUTES IS_PAID_AT,\n" +
+            "        OBJREFERENCE DEBT_REF, OBJECTS DEBT, ATTRIBUTES DEBT_DATE_FROM_AT, ATTRIBUTES DEBT_DATE_TO_AT,\n" +
             "        ATTRIBUTES DEBT_AMOUNT_AT\n" +
             "    WHERE CRED.OBJECT_ID = NAME_AT.OBJECT_ID" +
             "        AND CRED.OBJECT_ID = AMOUNT_AT.OBJECT_ID\n" +
@@ -146,19 +136,9 @@ public interface CreditAccountDao {
             "  DATE_TO_AT.DATE_VALUE DATE_TO, MONTH_DAY_AT.VALUE MONTH_DAY, IS_PAID_AT.LIST_VALUE_ID IS_PAID,\n" +
             "  DEBT_DATE_FROM_AT.DATE_VALUE DEBT_FROM, DEBT_DATE_TO_AT.DATE_VALUE DEBT_TO,\n" +
             "  DEBT_AMOUNT_AT.VALUE DEBT_AMOUNT, DEBT.OBJECT_ID DEBT_ID\n" +
-            "    FROM OBJECTS CRED,\n" +
-            "        ATTRIBUTES NAME_AT,\n" +
-            "        ATTRIBUTES AMOUNT_AT,\n" +
-            "        ATTRIBUTES PAID_AT,\n" +
-            "        ATTRIBUTES DATE_AT,\n" +
-            "        ATTRIBUTES RATE_AT,\n" +
-            "        ATTRIBUTES DATE_TO_AT,\n" +
-            "        ATTRIBUTES MONTH_DAY_AT,\n" +
-            "        ATTRIBUTES IS_PAID_AT,\n" +
-            "        OBJREFERENCE DEBT_REF,\n" +
-            "        OBJECTS DEBT,\n" +
-            "        ATTRIBUTES DEBT_DATE_FROM_AT,\n" +
-            "        ATTRIBUTES DEBT_DATE_TO_AT,\n" +
+            "    FROM OBJECTS CRED,  ATTRIBUTES NAME_AT, ATTRIBUTES AMOUNT_AT, ATTRIBUTES PAID_AT, ATTRIBUTES DATE_AT,\n" +
+            "        ATTRIBUTES RATE_AT, ATTRIBUTES DATE_TO_AT, ATTRIBUTES MONTH_DAY_AT,  ATTRIBUTES IS_PAID_AT,\n" +
+            "        OBJREFERENCE DEBT_REF, OBJECTS DEBT, ATTRIBUTES DEBT_DATE_FROM_AT, ATTRIBUTES DEBT_DATE_TO_AT,\n" +
             "        ATTRIBUTES DEBT_AMOUNT_AT\n" +
             "    WHERE CRED.OBJECT_ID = NAME_AT.OBJECT_ID" +
             "        AND CRED.OBJECT_ID = AMOUNT_AT.OBJECT_ID\n" +
@@ -192,22 +172,10 @@ public interface CreditAccountDao {
             "  DATE_TO_AT.DATE_VALUE DATE_TO, MONTH_DAY_AT.VALUE MONTH_DAY, IS_PAID_AT.LIST_VALUE_ID IS_PAID,\n" +
             "  DEBT_DATE_FROM_AT.DATE_VALUE DEBT_FROM, DEBT_DATE_TO_AT.DATE_VALUE DEBT_TO,\n" +
             "  DEBT_AMOUNT_AT.VALUE DEBT_AMOUNT, DEBT.OBJECT_ID DEBT_ID\n" +
-            "    FROM OBJECTS CRED,\n" +
-            "         OBJREFERENCE REFER_ACC,\n" +
-            "         OBJECTS ACC_OBJ,\n" +
-            "         ATTRIBUTES NAME_AT,\n" +
-            "         ATTRIBUTES AMOUNT_AT,\n" +
-            "         ATTRIBUTES PAID_AT,\n" +
-            "         ATTRIBUTES DATE_AT,\n" +
-            "         ATTRIBUTES RATE_AT,\n" +
-            "         ATTRIBUTES DATE_TO_AT,\n" +
-            "         ATTRIBUTES MONTH_DAY_AT,\n" +
-            "         ATTRIBUTES IS_PAID_AT,\n" +
-            "         OBJREFERENCE DEBT_REF,\n" +
-            "         OBJECTS DEBT,\n" +
-            "         ATTRIBUTES DEBT_DATE_FROM_AT,\n" +
-            "         ATTRIBUTES DEBT_DATE_TO_AT,\n" +
-            "         ATTRIBUTES DEBT_AMOUNT_AT\n" +
+            "    FROM OBJECTS CRED, OBJREFERENCE REFER_ACC, OBJECTS ACC_OBJ, ATTRIBUTES NAME_AT, ATTRIBUTES AMOUNT_AT,\n" +
+            "         ATTRIBUTES PAID_AT, ATTRIBUTES DATE_AT, ATTRIBUTES RATE_AT, ATTRIBUTES DATE_TO_AT,  ATTRIBUTES MONTH_DAY_AT,\n" +
+            "         ATTRIBUTES IS_PAID_AT, OBJREFERENCE DEBT_REF, OBJECTS DEBT, ATTRIBUTES DEBT_DATE_FROM_AT,\n" +
+            "         ATTRIBUTES DEBT_DATE_TO_AT, ATTRIBUTES DEBT_AMOUNT_AT\n" +
             "     WHERE REFER_ACC.REFERENCE = ?/*FAMILY DEBIT ACCOUNT ID*/\n" +
             "        AND CRED.OBJECT_ID = REFER_ACC.OBJECT_ID\n" +
             "        AND REFER_ACC.REFERENCE = ACC_OBJ.OBJECT_ID\n" +
@@ -237,29 +205,18 @@ public interface CreditAccountDao {
             "        AND MONTH_DAY_AT.ATTR_ID = 36/*PAYMENT CREDIT DAY OF MONTH ATTRIBUTE*/\n" +
             "        AND DEBT_DATE_FROM_AT.ATTR_ID = 44/*DEBT DATE FROM ATTRIBUTE*/\n" +
             "        AND DEBT_DATE_TO_AT.ATTR_ID = 45/*DEBT DATE TO ATTRIBUTE*/\n" +
-            "        AND DEBT_AMOUNT_AT.ATTR_ID = 46/*DEBT AMOUNT ATTRIBUTE*/";
+            "        AND DEBT_AMOUNT_AT.ATTR_ID = 46/*DEBT AMOUNT ATTRIBUTE*/" +
+            "   ORDER BY DATE_CR";
 
     String SELECT_FAMILY_CREDITS_BY_ACCOUNT_QUERY = "SELECT CRED.OBJECT_ID CREDIT_ID, NAME_AT.VALUE NAME, AMOUNT_AT.VALUE AMOUNT,\n" +
             " PAID_AT.VALUE PAID, DATE_AT.DATE_VALUE DATE_CR,  RATE_AT.VALUE CREDIT_RATE,\n" +
             " DATE_TO_AT.DATE_VALUE DATE_TO, MONTH_DAY_AT.VALUE MONTH_DAY, IS_PAID_AT.LIST_VALUE_ID IS_PAID,\n" +
             " DEBT_DATE_FROM_AT.DATE_VALUE DEBT_FROM, DEBT_DATE_TO_AT.DATE_VALUE DEBT_TO,\n" +
             " DEBT_AMOUNT_AT.VALUE DEBT_AMOUNT, DEBT.OBJECT_ID DEBT_ID\n" +
-            "   FROM OBJECTS CRED,\n" +
-            "       OBJREFERENCE REFER_ACC,\n" +
-            "       OBJECTS ACC_OBJ,\n" +
-            "       ATTRIBUTES NAME_AT,\n" +
-            "       ATTRIBUTES AMOUNT_AT,\n" +
-            "       ATTRIBUTES PAID_AT,\n" +
-            "       ATTRIBUTES DATE_AT,\n" +
-            "       ATTRIBUTES RATE_AT,\n" +
-            "       ATTRIBUTES DATE_TO_AT,\n" +
-            "       ATTRIBUTES MONTH_DAY_AT,\n" +
-            "       ATTRIBUTES IS_PAID_AT,\n" +
-            "       OBJREFERENCE DEBT_REF,\n" +
-            "       OBJECTS DEBT,\n" +
-            "       ATTRIBUTES DEBT_DATE_FROM_AT,\n" +
-            "       ATTRIBUTES DEBT_DATE_TO_AT,\n" +
-            "       ATTRIBUTES DEBT_AMOUNT_AT\n" +
+            "   FROM OBJECTS CRED, OBJREFERENCE REFER_ACC, OBJECTS ACC_OBJ, ATTRIBUTES NAME_AT, ATTRIBUTES AMOUNT_AT,\n" +
+            "       ATTRIBUTES PAID_AT, ATTRIBUTES DATE_AT, ATTRIBUTES RATE_AT, ATTRIBUTES DATE_TO_AT,\n" +
+            "       ATTRIBUTES MONTH_DAY_AT, ATTRIBUTES IS_PAID_AT, OBJREFERENCE DEBT_REF, OBJECTS DEBT,\n" +
+            "       ATTRIBUTES DEBT_DATE_FROM_AT, ATTRIBUTES DEBT_DATE_TO_AT, ATTRIBUTES DEBT_AMOUNT_AT\n" +
             "   WHERE REFER_ACC.REFERENCE = ?/*FAMILY DEBIT ACCOUNT ID*/\n" +
             "       AND CRED.OBJECT_ID = REFER_ACC.OBJECT_ID\n" +
             "       AND REFER_ACC.REFERENCE = ACC_OBJ.OBJECT_ID\n" +
@@ -289,7 +246,8 @@ public interface CreditAccountDao {
             "       AND MONTH_DAY_AT.ATTR_ID = 36/*PAYMENT CREDIT DAY OF MONTH ATTRIBUTE*/\n" +
             "       AND DEBT_DATE_FROM_AT.ATTR_ID = 44/*DEBT DATE FROM ATTRIBUTE*/\n" +
             "       AND DEBT_DATE_TO_AT.ATTR_ID = 45/*DEBT DATE TO ATTRIBUTE*/\n" +
-            "       AND DEBT_AMOUNT_AT.ATTR_ID = 46/*DEBT AMOUNT ATTRIBUTE*/";
+            "       AND DEBT_AMOUNT_AT.ATTR_ID = 46/*DEBT AMOUNT ATTRIBUTE*/" +
+            "   ORDER BY DATE_CR";
 
     String UPDATE_CREDIT_PAYMENT_QUERY = "UPDATE ATTRIBUTES\n" +
             "    SET VALUE = ?/*NEW CREDIT PAYED AMOUNT */\n" +

@@ -33,7 +33,7 @@ import static org.junit.Assert.*;
 @ContextConfiguration(classes = {WebConfig.class})
 @RunWith(SpringJUnit4ClassRunner.class)
 @Transactional
-public class OperationDaoImplTest {
+public class OperationDaoTest {
 
     private AccountIncome testIncome;
     private AccountExpense testExpense;

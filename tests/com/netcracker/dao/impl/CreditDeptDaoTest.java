@@ -23,7 +23,7 @@ import static org.junit.Assert.assertEquals;
 @ContextConfiguration(classes = {WebConfig.class})
 @RunWith(SpringJUnit4ClassRunner.class)
 @Transactional
-public class CreditDeptDaoImplTest {
+public class CreditDeptDaoTest {
 
     private Debt personalDebtOne;
     private Debt familyDebtOne;
