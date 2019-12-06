@@ -2,6 +2,8 @@ package com.netcracker.dao.impl;
 
 import com.netcracker.configs.WebConfig;
 import com.netcracker.dao.PersonalDebitAccountDao;
+import com.netcracker.models.AccountExpense;
+import com.netcracker.models.AccountIncome;
 import com.netcracker.models.PersonalDebitAccount;
 import com.netcracker.models.User;
 import com.netcracker.models.enums.PersonalAccountStatusActive;
@@ -17,10 +19,10 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.sql.DataSource;
 import java.math.BigInteger;
+import java.util.List;
 import java.util.Locale;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
@@ -43,7 +45,7 @@ public class PersonalDebitAccountDaoTests {
             "INTO ATTRIBUTES(ATTR_ID, OBJECT_ID, VALUE) VALUES(4, objects_id_s.currval, ?) "
             +
             "SELECT * " +
-                    "FROM DUAL";
+            "FROM DUAL";
     private static final String DELETE_USER = " DELETE FROM OBJECTS WHERE NAME = 'user_Tests' ";
 
     private static final String DELETE_ACC = " DELETE FROM OBJECTS WHERE NAME = 'Name1' ";
@@ -57,19 +59,20 @@ public class PersonalDebitAccountDaoTests {
     @Test
     public void getPersonalAccountById() {
         BigInteger id = BigInteger.valueOf(25);
-        PersonalDebitAccount personalDebitAccount =
-                personalDebitAccountDao.getPersonalAccountById(id);
-        BigInteger ex_id = id;
+        PersonalDebitAccount personalDebitAccount = personalDebitAccountDao.getPersonalAccountById(id);
         String name = "PER_DEB_ACC2";
         Long amount = 10000L;
-        assertEquals(ex_id,personalDebitAccount.getId());
+        assertEquals(id,personalDebitAccount.getId());
         assertEquals(name, personalDebitAccount.getObjectName());
         assertEquals(amount, personalDebitAccount.getAmount());
 
+        String usname = "Dimas";
+        String status = "YES";
         assertEquals(BigInteger.valueOf(24), personalDebitAccount.getOwner().getId());
-        assertEquals("Dimas", personalDebitAccount.getOwner().getName());
+        assertEquals(usname, personalDebitAccount.getOwner().getName());
         assertEquals("mailDimas@gmail.com", personalDebitAccount.getOwner().geteMail());
         assertEquals("passwordDima", personalDebitAccount.getOwner().getPassword());
+        assertEquals(status, personalDebitAccount.getOwner().getUserStatusActive().toString());
     }
     @Test
     public void createPersonalAccount(){
@@ -107,5 +110,19 @@ public class PersonalDebitAccountDaoTests {
     @Test
     public void deletePersonalAccountByUserId (){
         personalDebitAccountDao.deletePersonalAccountByUserId(BigInteger.valueOf(121));
+    }
+    @Test
+    public  void getListIncome(){
+        List<AccountIncome> incomes = personalDebitAccountDao.getIncomesOfPersonalAccount(BigInteger.valueOf(3));
+        for (AccountIncome expected : incomes) {
+            System.out.println(expected.getId() + " " + expected.getCategoryIncome() + " " + expected.getAmount() + " " + expected.getDate());
+        }
+    }
+    @Test
+    public  void getListExpense(){
+        List<AccountExpense> expenses = personalDebitAccountDao.getExpensesOfPersonalAccount(BigInteger.valueOf(3));
+        for (AccountExpense expected : expenses) {
+            System.out.println(expected.getId() + " " + expected.getCategoryExpense() + " " + expected.getAmount() + " " + expected.getDate());
+        }
     }
 }
