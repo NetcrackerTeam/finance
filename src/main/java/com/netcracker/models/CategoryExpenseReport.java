@@ -10,11 +10,17 @@ public class CategoryExpenseReport {
     private BigInteger idExpenseReport;
     private BigDecimal amount;
     private CategoryExpense expense;
+    private BigInteger userReference;
+    private BigInteger personalReference;
+    private BigInteger familyReference;
 
     public static class Builder {
         private  BigInteger idExpenseReport;
         private BigDecimal amount;
         private CategoryExpense expense;
+        private BigInteger userReference;
+        private BigInteger personalReference;
+        private BigInteger familyReference;
 
         public Builder() {
         }
@@ -34,6 +40,19 @@ public class CategoryExpenseReport {
             return this;
         }
 
+        public Builder userReference(BigInteger userReference) {
+            this.userReference = userReference;
+            return this;
+        }
+        public Builder familyReference(BigInteger familyReference) {
+            this.familyReference = familyReference;
+            return this;
+        }
+        public Builder personalReference(BigInteger personalReference) {
+            this.personalReference = personalReference;
+            return this;
+        }
+
         public CategoryExpenseReport build(){
             return new CategoryExpenseReport(this);
         }
@@ -43,6 +62,9 @@ public class CategoryExpenseReport {
         idExpenseReport = builder.idExpenseReport;
         amount = builder.amount;
         expense = builder.expense;
+        userReference = builder.userReference;
+        familyReference = builder.familyReference;
+        personalReference = builder.personalReference;
     }
 
     public BigInteger getIdExpenseReport() {

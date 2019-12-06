@@ -10,11 +10,16 @@ public class CategoryIncomeReport {
     private BigInteger idIncomeReport;
     private BigDecimal amount;
     private CategoryIncome income;
-
+    private BigInteger userReference;
+    private BigInteger familyReference;
+    private BigInteger personalReference;
     public static class Builder {
         private  BigInteger idIncomeReport;
         private BigDecimal amount;
         private CategoryIncome income;
+        private BigInteger userReference;
+        private BigInteger familyReference;
+        private BigInteger personalReference;
 
         public Builder() {
         }
@@ -33,6 +38,18 @@ public class CategoryIncomeReport {
             this.income = income;
             return this;
         }
+        public Builder userReference(BigInteger userReference) {
+            this.userReference = userReference;
+            return this;
+        }
+        public Builder familyReference(BigInteger familyReference) {
+            this.familyReference = familyReference;
+            return this;
+        }
+        public Builder personalReference(BigInteger personalReference) {
+            this.personalReference = personalReference;
+            return this;
+        }
 
         public CategoryIncomeReport build(){
             return new CategoryIncomeReport(this);
@@ -43,6 +60,9 @@ public class CategoryIncomeReport {
         idIncomeReport = builder.idIncomeReport;
         amount = builder.amount;
         income = builder.income;
+        userReference = builder.userReference;
+        familyReference = builder.familyReference;
+        personalReference = builder.personalReference;
     }
 
     public BigInteger getIdIncomeReport() {

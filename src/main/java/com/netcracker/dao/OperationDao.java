@@ -5,6 +5,7 @@ import com.netcracker.models.AccountIncome;
 import com.netcracker.models.enums.CategoryExpense;
 import com.netcracker.models.enums.CategoryIncome;
 
+
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.LocalDate;
@@ -15,22 +16,83 @@ import java.util.Map;
 
 public interface OperationDao {
 
+    /**
+     *
+     * @param id
+     * @param income
+     * @param date
+     * @param categoryIncome
+     */
 
     void addIncomePersonalByAccId(BigInteger id, BigDecimal income, Date date, CategoryIncome categoryIncome);
 
+    /**
+     *
+     * @param id
+     * @param expense
+     * @param date
+     * @param categoryExpense
+     */
+
     void addExpensePersonaByAccId(BigInteger id, BigDecimal expense, Date date, CategoryExpense categoryExpense);
+
+    /**
+     *
+     * @param idUser
+     * @param idFamily
+     * @param income
+     * @param date
+     * @param categoryIncome
+     */
 
     void addIncomeFamilyByAccId(BigInteger idUser, BigInteger idFamily, BigDecimal income, Date date, CategoryIncome categoryIncome);
 
+    /**
+     *
+     * @param idUser
+     * @param idFamily
+     * @param expense
+     * @param date
+     * @param categoryExpense
+     */
+
     void addExpenseFamilyByAccId(BigInteger idUser, BigInteger idFamily, BigDecimal expense, Date date, CategoryExpense categoryExpense);
 
-    Collection<AccountIncome> getIncomesPersonalAfterDateByAccountId(BigInteger id, Date date);
+    /**
+     *
+     * @param id
+     * @param date
+     * @return
+     */
 
-    Collection<AccountExpense> getExpensesPersonalAfterDateByAccountId(BigInteger id, Date date);
+    List<AccountIncome> getIncomesPersonalAfterDateByAccountId(BigInteger id, Date date);
 
-    Collection<AccountIncome> getIncomesFamilyAfterDateByAccountId(BigInteger id, Date data);
+    /**
+     *
+     * @param id
+     * @param date
+     * @return
+     */
 
-    Collection<AccountExpense> getExpensesFamilyAfterDateByAccountId(BigInteger id, Date data);
+    List<AccountExpense> getExpensesPersonalAfterDateByAccountId(BigInteger id, Date date);
+
+    /**
+     *
+     * @param id
+     * @param data
+     * @return
+     */
+
+    List<AccountIncome> getIncomesFamilyAfterDateByAccountId(BigInteger id, Date data);
+
+    /**
+     *
+     * @param id
+     * @param data
+     * @return
+     */
+
+    List<AccountExpense> getExpensesFamilyAfterDateByAccountId(BigInteger id, Date data);
 
     String ADD_INCOME_PERSONAL_BY_ACCOUNT_ID = "INSERT ALL" +
             " INTO OBJECTS (OBJECT_ID,PARENT_ID,OBJECT_TYPE_ID,NAME,DESCRIPTION) VALUES (objects_id_s.nextval,NULL,10,'ACC_INC_PER1','account income personal1')" +

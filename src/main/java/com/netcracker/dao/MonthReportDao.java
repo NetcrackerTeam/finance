@@ -9,6 +9,7 @@ import java.util.List;
 
 public interface MonthReportDao {
 
+
     void createPersonalMonthReport(MonthReport monthReport, BigInteger id);
 
     void createFamilyMonthReport(MonthReport monthReport, BigInteger id);
@@ -17,6 +18,23 @@ public interface MonthReportDao {
 
     Collection<MonthReport> getMonthReportsByPersonalAccountId(BigInteger id);
 
+
+
+    void createCategoryIncomePersonalReport();
+
+    void createCategoryIncomeFamilyReport();
+
+    void createCategoryExpensePersonalReport();
+
+    void createCategoryExpenseFamilyReport();
+
+    Collection<CategoryIncomeReport> getCategoryIncomePersonalReport(BigInteger id);
+
+    Collection<CategoryIncomeReport> getCategoryIncomeFamilyReport(BigInteger id);
+
+    Collection<CategoryExpenseReport> getCategoryExpensePersonalReport(BigInteger id);
+
+    Collection<CategoryExpenseReport> getCategoryExpenseFamilyReport(BigInteger id);
 
 
 
@@ -64,5 +82,58 @@ public interface MonthReportDao {
             " AND DATE_TO.OBJECT_ID = O.OBJECT_ID AND DATE_TO.ATTR_ID = 16";
 
 
+    String CREATE_CATEGORY_INCOME_PERSONAL_REPORT_BY_ID = "INSERT ALL" +
+            " INTO OBJECTS (OBJECT_ID,PARENT_ID,OBJECT_TYPE_ID,NAME,DESCRIPTION) VALUES (OBJECTS_ID_S.NEXTVAL,NULL,4,'CAT_REP_PER_INC','Category report personal income') " +
+            " INTO OBJREFERENCE (ATTR_ID,OBJECT_ID,REFERENCE) VALUES (17,6,?) /* reference to personal report*/" +
+            " INTO ATTRIBUTES(ATTR_ID, OBJECT_ID, LIST_VALUE_ID) VALUES(20, OBJECTS_ID_S.CURRVAL, ?) /* category */ " +
+            " INTO ATTRIBUTES(ATTR_ID, OBJECT_ID, VALUE) VALUES(21, OBJECTS_ID_S.CURRVAL, ?) /* amount */";
+
+    String CREATE_CATEGORY_INCOME_FAMILY_REPORT_BY_ID = "INSERT ALL" +
+            "  INTO OBJECTS (OBJECT_ID,PARENT_ID,OBJECT_TYPE_ID,NAME,DESCRIPTION) VALUES (OBJECTS_ID_S.NEXTVAL,NULL,15,'CAT_REP_FAM_INC','Catery report family income')" +
+            "  INTO OBJREFERENCE (ATTR_ID,OBJECT_ID,REFERENCE) VALUES (18, OBJECTS_ID_S.CURRVAL,?) /* reference to family report */" +
+            "  INTO OBJREFERENCE (ATTR_ID,OBJECT_ID,REFERENCE) VALUES (19,OBJECTS_ID_S.CURRVAL,?) /* reference to participant in family*/" +
+            "  INTO ATTRIBUTES(ATTR_ID, OBJECT_ID, LIST_VALUE_ID) VALUES(20, OBJECTS_ID_S.CURRVAL, ?) /* category */" +
+            "  INTO ATTRIBUTES(ATTR_ID, OBJECT_ID, VALUE) VALUES(21, OBJECTS_ID_S.CURRVAL, ?) /* amount */" +
+            "  SELECT * FROM DUAL";
+
+    String CREATE_CATEGORY_EXPENSE_PERSONAL_REPORT_BY_ID = "INSERT ALL" +
+            "  INTO OBJECTS (OBJECT_ID,PARENT_ID,OBJECT_TYPE_ID,NAME,DESCRIPTION) VALUES (OBJECTS_ID_S.NEXTVAL,NULL,5,'CAT_REP_PER_EXP','Category report personal expense')" +
+            "  INTO OBJREFERENCE (ATTR_ID,OBJECT_ID,REFERENCE) VALUES (22,OBJECTS_ID_S.CURRVAL,?) /* reference to personal report */" +
+            "  INTO ATTRIBUTES(ATTR_ID, OBJECT_ID, LIST_VALUE_ID) VALUES(25, OBJECTS_ID_S.CURRVAL, ?) /* category */" +
+            "  INTO ATTRIBUTES(ATTR_ID, OBJECT_ID, VALUE) VALUES(26, OBJECTS_ID_S.CURRVAL, ?); /* amount */" +
+            "  SELECT * FROM DUAL";
+
+    String CREATE_CATEGORY_EXPENSE_FAMILY_REPORT_BY_ID = "INSERT ALL" +
+            "  INTO OBJECTS (OBJECT_ID,PARENT_ID,OBJECT_TYPE_ID,NAME,DESCRIPTION) VALUES (OBJECTS_ID_S.NEXTVAL,NULL,16,'CAT_REP_FAM_EXP','Category report family expense')" +
+            "  INTO OBJREFERENCE (ATTR_ID,OBJECT_ID,REFERENCE) VALUES (23,OBJECTS_ID_S.CURRVAL,?) /* reference to family  */" +
+            "  INTO OBJREFERENCE (ATTR_ID,OBJECT_ID,REFERENCE) VALUES (24,OBJECTS_ID_S.CURRVAL,?) /* reference to participant in family */" +
+            "  INTO ATTRIBUTES(ATTR_ID, OBJECT_ID, LIST_VALUE_ID) VALUES(25, OBJECTS_ID_S.CURRVAL, ?) /* category */" +
+            "  INTO ATTRIBUTES(ATTR_ID, OBJECT_ID, VALUE) VALUES(26, OBJECTS_ID_S.CURRVAL, ?); /* amount */" +
+            "  SELECT * FROM DUAL";
+
+
+    String GET_CATEGORY_INCOME_PERSONAL_REPORT_BY_ID = "SELECT O.OBJECT_ID AS CATEGORY_INCOME_REPORT,  SUMM.VALUE AS AMOUNT, CATEGORY.LIST_VALUE_ID AS CATEGORY" +
+            "  FROM ATTRIBUTES SUMM,  ATTRIBUTES CATEGORY, OBJECTS O, OBJREFERENCE REF" +
+            "  WHERE O.OBJECT_TYPE_ID =  4 AND REF.ATTR_ID = 17 AND O.OBJECT_ID = REF.OBJECT_ID AND REF.REFERENCE = ?" +
+            "  AND SUMM.OBJECT_ID = O.OBJECT_ID AND SUMM.ATTR_ID = 21 /* amount*/" +
+            "  AND CATEGORY.OBJECT_ID = O.OBJECT_ID AND CATEGORY.ATTR_ID = 20; /* category*/";
+
+    String GET_CATEGORY_INCOME_FAMILY_REPORT_BY_ID = "SELECT O.OBJECT_ID AS CATEGORY_INCOME_REPORT,  SUMM.VALUE AS AMOUNT, CATEGORY.LIST_VALUE_ID AS CATEGORY" +
+            "   FROM ATTRIBUTES SUMM,  ATTRIBUTES CATEGORY, OBJECTS O, OBJREFERENCE REF" +
+            "   WHERE  AND REF.ATTR_ID = 18 AND O.OBJECT_ID = REF.OBJECT_ID AND REF.REFERENCE = ?" +
+            "   AND SUMM.OBJECT_ID = O.OBJECT_ID AND SUMM.ATTR_ID = 20 /* amount*/" +
+            "   AND CATEGORY.OBJECT_ID = O.OBJECT_ID AND CATEGORY.ATTR_ID = 21;";
+
+    String GET_CATEGORY_EXPENSE_PERSONAL_REPORT_BY_ID = "SELECT O.OBJECT_ID AS CATEGORY_INCOME_REPORT,  SUMM.VALUE AS AMOUNT, CATEGORY.LIST_VALUE_ID AS CATEGORY" +
+            " FROM ATTRIBUTES SUMM,  ATTRIBUTES CATEGORY, OBJECTS O, OBJREFERENCE REF" +
+            " WHERE  AND REF.ATTR_ID = 22 AND O.OBJECT_ID = REF.OBJECT_ID AND REF.REFERENCE = ?" +
+            " AND SUMM.OBJECT_ID = O.OBJECT_ID AND SUMM.ATTR_ID = 26 /* amount*/" +
+            " AND CATEGORY.OBJECT_ID = O.OBJECT_ID AND CATEGORY.ATTR_ID = 25; /* category*/";
+
+    String GET_CATEGORY_EXPENSE_FAMILY_REPORT_BY_ID = "SELECT O.OBJECT_ID AS CATEGORY_INCOME_REPORT,  SUMM.VALUE AS AMOUNT, CATEGORY.LIST_VALUE_ID AS CATEGORY" +
+            "  FROM ATTRIBUTES SUMM,  ATTRIBUTES CATEGORY, OBJECTS O, OBJREFERENCE REF" +
+            "  WHERE  AND REF.ATTR_ID = 23 AND O.OBJECT_ID = REF.OBJECT_ID AND REF.REFERENCE = ?" +
+            "  AND SUMM.OBJECT_ID = O.OBJECT_ID AND SUMM.ATTR_ID = 26 /* amount*/" +
+            "  AND CATEGORY.OBJECT_ID = O.OBJECT_ID AND CATEGORY.ATTR_ID = 25; /* category*/";
 
 }
