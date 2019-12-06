@@ -1,10 +1,10 @@
 package com.netcracker.services;
 
-import com.netcracker.models.PersonalCreditAccount;
 import com.netcracker.models.PersonalDebitAccount;
 
 import java.math.BigInteger;
-import java.util.List;
+import java.util.Collection;
+import java.util.Date;
 
 public interface PersonalDebitService {
 
@@ -14,7 +14,5 @@ public interface PersonalDebitService {
 
     PersonalDebitAccount getPersonalDebitAccount(BigInteger id);
 
-    public void addCreditAccount(BigInteger id, PersonalCreditAccount creditAccount);
-
-    public List<Object> getHistory(BigInteger personal_account_id);
+    public Collection<Object> getHistory(BigInteger personal_account_id, Date date);
 }
