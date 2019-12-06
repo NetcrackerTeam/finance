@@ -1,115 +1,42 @@
 package com.netcracker.services.validation;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementCallback;
+import org.springframework.stereotype.Component;
 
-import com.netcracker.services.validation.errorMessage.ErrorMessages;
-import com.netcracker.models.enums.UserStatusActive;
-import org.springframework.util.StringUtils;
+import javax.sql.DataSource;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
-import java.math.BigInteger;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
+@Component
 abstract  class AbstractValidation {
 
-    private Map<String, String> errorMap;
 
-    AbstractValidation() {
-        errorMap = new HashMap<>();
+    protected JdbcTemplate template;
+
+
+    @Autowired
+    AbstractValidation(DataSource dataSource) {
+        this.template = new JdbcTemplate(dataSource);
     }
 
     void validateId(String id) {
-        if (StringUtils.isEmpty(id)) {
-            errorMap.put("EMPTY_ID_ERROR", ErrorMessages.EMPTY_ID_ERROR);
-            return;
-        }
-
-        if (!checkId(id)) {
-            errorMap
-                    .put("WRONG_ID_FORMAT_ERROR", ErrorMessages.WRONG_ID_FORMAT_ERROR);
-            return;
-        }
-
-        try {
-            BigInteger bigIntegerId = new BigInteger(id);
-        } catch (NumberFormatException ex) {
-            errorMap
-                    .put("WRONG_ID_FORMAT_ERROR", ErrorMessages.WRONG_ID_FORMAT_ERROR);
-        }
-    }
-
-    void validateStatus(String status) {
-        if (StringUtils.isEmpty(status)) {
-            errorMap.put("EMPTY_STATUS_ERROR", ErrorMessages.EMPTY_STATUS_ERROR);
-            return;
-        }
-
-        if (!statusEnumCheck(status)) {
-            errorMap
-                    .put("INCORRECT_STATUS_ERROR", ErrorMessages.INCORRECT_STATUS_ERROR);
-        }
-    }
-
-    void validateName(String name) {
-        if (!checkName(name)) {
-            errorMap.put("USER_FIRST_OR_LAST_NAME_ERROR",
-                    ErrorMessages.USER_FIRST_OR_LAST_NAME_ERROR);
-        }
     }
 
 
-    Map<String, String> getErrorMapMessage() {
-        return this.errorMap;
-    }
+    public Boolean saveNameByPreparedStatement(Object name){
+        String query="INSERT INTO OBJECTS (OBJECT_ID,PARENT_ID,OBJECT_TYPE_ID,NAME,DESCRIPTION) VALUES (objects_id_s.NEXTVAL,NULL,1,?,NULL)";
+        return template.execute(query, new PreparedStatementCallback<Boolean>(){
+            @Override
+            public Boolean doInPreparedStatement(PreparedStatement ps)
+                    throws SQLException, DataAccessException {
 
-    void setErrorToMapMessage(String errorName, String errorDescription) {
-        this.errorMap.put(errorName, errorDescription);
-    }
-
-    private boolean statusEnumCheck(String status) {
-        for (UserStatusActive enumStatus : UserStatusActive.values()) {
-            if (enumStatus.name().equals(status)) {
-                return true;
+                //  ps.setBigDecimal(1, new BigDecimal(user.getId()));
+                ps.setString(1, (String) name);
+                return ps.execute();
             }
-        }
-        return false;
-    }
-
-    private boolean checkStartDate(String startDate) {
-        if (checkDate(startDate)) {
-            errorMap.put("WRONG_START_DATE_FORMAT_ERROR",
-                    ErrorMessages.WRONG_START_DATE_FORMAT_ERROR);
-            return false;
-        }
-
-        return true;
-    }
-
-    private boolean checkEndDate(String endDate) {
-        if (checkDate(endDate)) {
-            errorMap.put("WRONG_END_DATE_FORMAT_ERROR",
-                    ErrorMessages.WRONG_END_DATE_FORMAT_ERROR);
-            return false;
-        }
-
-        return true;
-    }
-
-    private boolean checkId(String id) {
-        Pattern p = Pattern.compile(RegexPatterns.ID_PATTERN);
-        Matcher m = p.matcher(id);
-        return m.matches();
-    }
-
-    private boolean checkDate(String dateString) {
-        Pattern p = Pattern.compile(RegexPatterns.DATE_PATTERN);
-        Matcher m = p.matcher(dateString);
-        return m.matches();
-    }
-
-    private boolean checkName(String name) {
-        Pattern p = Pattern.compile(RegexPatterns.NAME_PATTERN);
-        Matcher m = p.matcher(name);
-        return m.matches();
+        });
     }
 }

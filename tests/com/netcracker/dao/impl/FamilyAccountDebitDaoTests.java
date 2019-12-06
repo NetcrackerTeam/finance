@@ -32,6 +32,7 @@ public class FamilyAccountDebitDaoTests {
 
     @Autowired
     private FamilyAccountDebitDao familyAccountDebitDao;
+    @Autowired
     private UserValidation userValidation;
     @Autowired
     private DataSource dataSource;
@@ -152,8 +153,8 @@ public class FamilyAccountDebitDaoTests {
         familyAccountDebitDao.updateAmountOfFamilyAccount(id, 9000L);
     }
 
-  //  @Test
-//    public void ValidationName() throws SQLException {
-//        userValidation.ValidName("user1");
-//    }
+    @Test
+    public void ValidationName() {
+        System.out.println(userValidation.saveNameByPreparedStatement("54"));
+    }
 }
