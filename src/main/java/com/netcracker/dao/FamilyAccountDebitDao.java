@@ -7,25 +7,79 @@ import com.netcracker.models.User;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Collection;
 
 public interface FamilyAccountDebitDao {
+
+    /**
+     * Get family account debit by family account debit id.
+     *
+     * @param id family account debit id
+     * @return FamilyDebitAccount object
+     */
     FamilyDebitAccount getFamilyAccountById(BigInteger id);
 
+    /**
+     * Create new family account debit to existing user
+     *
+     * @param familyDebitAccount family account debit object
+     */
     FamilyDebitAccount createFamilyAccount(FamilyDebitAccount familyDebitAccount);
 
+    /**
+     * Set unActive family account debit by family account debit id.
+     *
+     * @param id family account debit id
+     */
     void deleteFamilyAccount(BigInteger id);
 
-    void addUserToAccountById(BigInteger account_id, BigInteger user_id);
+    /**
+     * Add user to family account debit by family account debit id and user id.
+     *
+     * @param accountId family account debit id
+     * @param userId user id
+     */
+    void addUserToAccountById(BigInteger accountId, BigInteger userId);
 
-    void deleteUserFromAccountById(BigInteger account_id, BigInteger user_id);
+    /**
+     * Delete user to family account debit by family account debit id and user id.
+     *
+     * @param accountId family account debit id
+     * @param userId user id
+     */
+    void deleteUserFromAccountById(BigInteger accountId, BigInteger userId);
 
-    void updateAmountOfFamilyAccount(BigInteger account_id, Long amount);
+    /**
+     * Update amount of family account debit by family account debit id
+     *
+     * @param accountId family account debit id
+     * @param amount amount of family account debit
+     */
+    void updateAmountOfFamilyAccount(BigInteger accountId, Long amount);
 
-    ArrayList<User> getParticipantsOfFamilyAccount(BigInteger debit_id);
+    /**
+     * Get participants of family account debit by family account debit id.
+     *
+     * @param accountId family account debit id
+     * @return User Collection
+     */
+    Collection<User> getParticipantsOfFamilyAccount(BigInteger accountId);
 
-    ArrayList<AccountIncome> getIncomesOfFamilyAccount(BigInteger debit_id);
+    /**
+     * Get transactions income of family account debit by family account debit id.
+     *
+     * @param accountId family account debit id
+     * @return AccountIncome Collection
+     */
+    Collection<AccountIncome> getIncomesOfFamilyAccount(BigInteger accountId);
 
-    ArrayList<AccountExpense> getExpensesOfFamilyAccount(BigInteger debit_id);
+    /**
+     * Get transactions expense of family account debit by family account debit id.
+     *
+     * @param accountId family account debit id
+     * @return AccountExpense Collection
+     */
+    Collection<AccountExpense> getExpensesOfFamilyAccount(BigInteger accountId);
 
     String ADD_USER_BY_ID = "INSERT INTO OBJREFERENCE (ATTR_ID,OBJECT_ID,REFERENCE) VALUES (8,?,?)";
 

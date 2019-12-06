@@ -19,6 +19,8 @@ import javax.sql.DataSource;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 
@@ -49,11 +51,10 @@ public class FamilyAccountDebitDaoTests {
             +
             "SELECT * FROM DUAL";
     private static final String DELETE_USER = "DELETE FROM OBJECTS WHERE NAME = 'user_new' ";
-
     private static final String DELETE_ACC = "DELETE FROM OBJECTS WHERE NAME = 'Name1' ";
-    private String email = "mail@gmail.com";
-    private String password = "password";
-    private BigInteger id = BigInteger.valueOf(3);
+    private static final String email = "mail@gmail.com";
+    private static final String password = "password";
+    private static final BigInteger id = BigInteger.valueOf(3);
 
     @Before
     public void setUp() {
@@ -111,7 +112,7 @@ public class FamilyAccountDebitDaoTests {
     }
     @Test
     public void getListParticipants(){
-      List<User> users =  familyAccountDebitDao.getParticipantsOfFamilyAccount(id);
+      ArrayList<User> users = (ArrayList<User>) familyAccountDebitDao.getParticipantsOfFamilyAccount(id);
         for (User expected : users) {
             System.out.println(expected.getId() + " " + expected.getName() + " " + expected.geteMail() + " " + expected.getPassword() + " "
                     + expected.getUserStatusActive().toString() + " " + expected.getPersonalDebitAccount() );
@@ -121,28 +122,28 @@ public class FamilyAccountDebitDaoTests {
     }
     @Test
     public  void getListIncome(){
-        List<AccountIncome> incomes = familyAccountDebitDao.getIncomesOfFamilyAccount(BigInteger.valueOf(3));
+        Collection<AccountIncome> incomes = familyAccountDebitDao.getIncomesOfFamilyAccount(id);
         for (AccountIncome expected : incomes) {
             System.out.println(expected.getId() + " " + expected.getCategoryIncome() + " " + expected.getAmount() + " " + expected.getDate());
         }
     }
     @Test
     public  void getListExpense(){
-        List<AccountExpense> expenses = familyAccountDebitDao.getExpensesOfFamilyAccount(BigInteger.valueOf(3));
+        Collection<AccountExpense> expenses = familyAccountDebitDao.getExpensesOfFamilyAccount(id);
         for (AccountExpense expected : expenses) {
             System.out.println(expected.getId() + " " + expected.getCategoryExpense() + " " + expected.getAmount() + " " + expected.getDate());
         }
     }
     @Test
     public void deleteFamilyAcc(){
-        familyAccountDebitDao.deleteFamilyAccount(BigInteger.valueOf(76));
-        assertEquals("NO",familyAccountDebitDao.getFamilyAccountById(BigInteger.valueOf(76)).getStatus().toString());
-        template.update(SQL_ACTIVE, new BigDecimal(76));
-       // System.out.println(familyAccountDebitDao.getFamilyAccountById(BigInteger.valueOf(76)).getStatus());
+        BigInteger id = BigInteger.valueOf(76);
+        familyAccountDebitDao.deleteFamilyAccount(id);
+        assertEquals("NO",familyAccountDebitDao.getFamilyAccountById(id).getStatus().toString());
+        template.update(SQL_ACTIVE, new BigDecimal(id));
     }
     @Test
     public void addUserToFamilyAcc(){
-        familyAccountDebitDao.addUserToAccountById(BigInteger.valueOf(3), BigInteger.valueOf(47));
+        familyAccountDebitDao.addUserToAccountById(id, BigInteger.valueOf(47));
     }
 
     @Test

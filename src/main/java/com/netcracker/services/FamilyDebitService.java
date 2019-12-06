@@ -1,6 +1,6 @@
 package com.netcracker.services;
 
-import com.netcracker.models.FamilyCreditAccount;
+import com.netcracker.models.AbstractAccountOperation;
 import com.netcracker.models.FamilyDebitAccount;
 
 import java.math.BigInteger;
@@ -10,14 +10,14 @@ import java.util.Date;
 public interface FamilyDebitService {
     public FamilyDebitAccount createFamilyDebitAccount(FamilyDebitAccount familyDebitAccount);
 
-    FamilyDebitAccount getFamilyDebitAccount(BigInteger debit_id);
+    FamilyDebitAccount getFamilyDebitAccount(BigInteger debitId);
 
-    public void deleteFamilyDebitAccount(BigInteger debit_id);
+    public void deleteFamilyDebitAccount(BigInteger debitId);
 
-    public void addUserToAccount(BigInteger account_id, BigInteger user_id);
+    public void addUserToAccount(BigInteger accountId, BigInteger userId);
 
-    public void deleteUserFromAccount(BigInteger account_id, BigInteger user_id);
+    public void deleteUserFromAccount(BigInteger accountId, BigInteger userId);
 
     // не знаю что вернуть
-    public Collection<Object> getHistory(BigInteger family_account_id, Date date);
+    public Collection<AbstractAccountOperation> getHistory(BigInteger family_accountId, Date date);
 }
