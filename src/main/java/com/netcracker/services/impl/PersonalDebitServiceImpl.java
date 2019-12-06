@@ -1,10 +1,10 @@
 package com.netcracker.services.impl;
 
 import com.netcracker.dao.CreditAccountDao;
+import com.netcracker.dao.OperationDao;
 import com.netcracker.dao.PersonalDebitAccountDao;
 import com.netcracker.models.AccountExpense;
 import com.netcracker.models.AccountIncome;
-import com.netcracker.models.PersonalCreditAccount;
 import com.netcracker.models.PersonalDebitAccount;
 import com.netcracker.services.PersonalDebitService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +12,8 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
+import java.util.Date;
 import java.util.logging.Logger;
 
 @Service
@@ -22,7 +23,8 @@ public class PersonalDebitServiceImpl implements PersonalDebitService {
     private PersonalDebitAccountDao personalDebitAccountDao;
     @Autowired
     private CreditAccountDao creditAccountDao;
-
+    @Autowired
+    private OperationDao operationDao;
     private static final Logger logger = Logger.getLogger(String.valueOf(PersonalDebitServiceImpl.class));
 
     @Override
@@ -46,23 +48,17 @@ public class PersonalDebitServiceImpl implements PersonalDebitService {
         return personalDebitAccountDao.getPersonalAccountById(id);
     }
 
-    @Override
-    public void addCreditAccount(BigInteger id, PersonalCreditAccount creditAccount) {
-        logger.info(
-                "addCreditAccount() method. projectId = " + id + "creditAccount = " + creditAccount );
-        creditAccountDao.createPersonalCreditByDebitAccountId(id, creditAccount);
-    }
 
     @Override
-    public List<Object> getHistory(BigInteger personal_account_id) {
+    public Collection<Object> getHistory(BigInteger personal_account_id, Date date) {
         logger.info(
                 "getHistory() method. projectId = " + personal_account_id);
-        ArrayList<AccountIncome> result;
-        result = personalDebitAccountDao.getIncomesOfPersonalAccount(personal_account_id);
-        ArrayList<AccountExpense> expenses;
-        expenses = personalDebitAccountDao.getExpensesOfPersonalAccount(personal_account_id);
+        Collection<AccountIncome> incomes;
+        incomes = operationDao.getIncomesPersonalAfterDateByAccountId(personal_account_id, date);
+        Collection<AccountExpense> expenses;
+        expenses = operationDao.getExpensesPersonalAfterDateByAccountId(personal_account_id, date);
         ArrayList<Object> objects = new ArrayList<>();
-        objects.addAll(result);
+        objects.addAll(incomes);
         objects.addAll(expenses);
         return objects;
     }
