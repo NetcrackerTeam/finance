@@ -6,7 +6,6 @@ import com.netcracker.models.PersonalCreditAccount;
 import java.math.BigInteger;
 import java.util.Collection;
 import java.util.Date;
-import java.util.List;
 
 public interface PersonalCreditService {
 
@@ -14,15 +13,15 @@ public interface PersonalCreditService {
 
     void deletePersonalCredit(BigInteger id);
 
-    void addPersonalCreditPayment(BigInteger id, long amount, Date date);
+    void addPersonalCreditPayment(BigInteger idAccount, BigInteger idCredit, long amount);
 
-    void increaseDebt(BigInteger id, long amount);
-
-    void decreaseDebt(BigInteger id, long amount);
+    void addPersonalCreditPaymentAuto(BigInteger idAccount, BigInteger idCredit, long amount);
 
     Collection<PersonalCreditAccount> getPersonalCredits(BigInteger id);
 
     Collection<CreditOperation> getAllPersonalCreditOperations(BigInteger id);
 
     PersonalCreditAccount getPersonalCreditAcount(BigInteger id);
+
+    long getMonthPaymentAmount(PersonalCreditAccount creditAccount);
 }

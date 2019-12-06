@@ -2,8 +2,10 @@ package com.netcracker.services.impl;
 
 import com.netcracker.dao.CreditAccountDao;
 import com.netcracker.dao.CreditOperationDao;
+import com.netcracker.dao.PersonalDebitAccountDao;
 import com.netcracker.models.CreditOperation;
 import com.netcracker.models.PersonalCreditAccount;
+import com.netcracker.models.PersonalDebitAccount;
 import com.netcracker.models.enums.CreditStatusPaid;
 import com.netcracker.services.PersonalCreditDebtService;
 import com.netcracker.services.PersonalCreditService;
@@ -12,6 +14,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.Collection;
 import java.util.Date;
 
@@ -23,6 +27,9 @@ public class PersonalCreditServiceImpl implements PersonalCreditService {
 
     @Autowired
     CreditOperationDao creditOperationDao;
+
+    @Autowired
+    PersonalDebitAccountDao debitAccountDao;
 
     @Autowired
     @Qualifier("personalCreditDebt")
@@ -39,23 +46,28 @@ public class PersonalCreditServiceImpl implements PersonalCreditService {
     }
 
     @Override
-    public void addPersonalCreditPayment(BigInteger id, long amount, Date date) {
-        //ToDo: check with validation amount
-        PersonalCreditAccount creditAccount = getPersonalCreditAcount(id);
-        createCreditOperation(id, amount, date);
-        long updatedAmount = creditAccount.getAmount() + amount;
-        //ToDo: check if has debt
-        creditAccountDao.updatePersonalCreditPayment(id, updatedAmount);
+    public void addPersonalCreditPayment(BigInteger idAccount, BigInteger idCredit, long amount) {
+        PersonalCreditAccount creditAccount = getPersonalCreditAcount(idCredit);
+        addPayment(creditAccount, idAccount, amount);
+        // ToDo: check money in debit
     }
 
     @Override
-    public void increaseDebt(BigInteger id, long amount) {
-
+    public void addPersonalCreditPaymentAuto(BigInteger idAccount, BigInteger idCredit, long amount) {
+        PersonalCreditAccount creditAccount = getPersonalCreditAcount(idCredit);
+        PersonalDebitAccount debitAccount = debitAccountDao.getPersonalAccountById(idAccount);
+        long debitAmount = debitAccount.getAmount();
+        if (debitAmount < amount) {
+            changeDebt(idCredit, amount);
+        } else {
+            addPayment(creditAccount, idAccount, amount);
+        }
     }
 
-    @Override
-    public void decreaseDebt(BigInteger id, long amount) {
-
+    private void changeDebt(BigInteger id, long amount) {
+//        creditDebtService.changeDebtDateFrom();
+//        creditDebtService.changeDebtDateTo();
+//        creditDebtService.changeDebtAmount();
     }
 
     @Override
@@ -73,9 +85,33 @@ public class PersonalCreditServiceImpl implements PersonalCreditService {
         return creditAccountDao.getPersonalCreditById(id);
     }
 
+    @Override
+    public long getMonthPaymentAmount(PersonalCreditAccount personalCreditAccount) {
+        return calculateMonthPayment(personalCreditAccount.getDate(),
+                personalCreditAccount.getDateTo(),
+                personalCreditAccount.getAmount(),
+                personalCreditAccount.getCreditRate());
+    }
+
     private void createCreditOperation(BigInteger id, long amount, Date date) {
         CreditOperation creditOperation = new CreditOperation(amount, date);
         creditOperationDao.createPersonalCreditOperation(creditOperation, id);
     }
+
+    private long calculateMonthPayment(LocalDate dateFrom, LocalDate dateTo, long amount, long rate) {
+        int months = Period.between(dateFrom, dateTo).getMonths();
+        long oneMonthRate = rate / 12;
+        long allowance = (amount / 100) * oneMonthRate;
+        long paymentWithoutRate = amount / months;
+        return paymentWithoutRate + allowance;
+    }
+
+    private void addPayment(PersonalCreditAccount creditAccount, BigInteger accountDebitId, long amount) {
+        creditOperationDao.createPersonalCreditOperation(new CreditOperation(amount, new Date()), creditAccount.getCreditId());
+        // ToDo: decrease money on debit account
+        long updatedAmount = creditAccount.getAmount() + amount;
+        creditAccountDao.updatePersonalCreditPayment(creditAccount.getCreditId(), updatedAmount);
+    }
+
 
 }

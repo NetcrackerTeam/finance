@@ -1,16 +1,30 @@
 package com.netcracker.services;
 
+import com.netcracker.models.CreditOperation;
+import com.netcracker.models.FamilyCreditAccount;
+import com.netcracker.models.PersonalCreditAccount;
+
+import java.math.BigInteger;
+import java.util.Collection;
+import java.util.Date;
+
 public interface FamilyCreditService {
 
-    void createFamilyCredit();
+    void createFamilyCredit(BigInteger id, FamilyCreditAccount creditAccount);
 
-    void deleteFamilyCredit();
+    void deleteFamilyCredit(BigInteger id);
 
-    void addPersonalFamilyPayment();
+    void addFamilyPayment(BigInteger id, long amount, Date date);
 
-    void getFamilyCredits();
+    void increaseDebt(BigInteger id, long amount);
 
-    void changeDebt();
+    void decreaseDebt(BigInteger id, long amount);
 
-    boolean isCommodityCredit();
+    Collection<FamilyCreditAccount> getFamilyCredits(BigInteger id);
+
+    Collection<CreditOperation> getAllFamilyCreditOperations(BigInteger id);
+
+    FamilyCreditAccount getFamilyCreditAcount(BigInteger id);
+
+    long getMonthPaymentAmount(FamilyCreditAccount creditAccount);
 }

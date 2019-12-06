@@ -1,12 +1,13 @@
 package com.netcracker.services;
 
+import java.math.BigInteger;
+import java.util.Date;
+
 public interface PersonalCreditDebtService {
 
-    void createDebt();
+    void changeDebtDateTo(BigInteger id, Date date);
 
-    void changeDebtDateTo();
+    void changeDebtDateFrom(BigInteger id, Date date);
 
-    void changeDebtDateFrom();
-
-    void changeDebtAmount();
+    void changeDebtAmount(BigInteger id, long amount);
 }

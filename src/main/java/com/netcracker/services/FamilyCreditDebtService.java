@@ -1,10 +1,13 @@
 package com.netcracker.services;
 
+import java.math.BigInteger;
+import java.util.Date;
+
 public interface FamilyCreditDebtService {
 
-    void createDebt();
+    void changeDebtDateTo(BigInteger id, Date date);
 
-    void changeDebtDates();
+    void changeDebtDateFrom(BigInteger id, Date date);
 
-    void changeDebtAmount();
+    void changeDebtAmount(BigInteger id, long amount);
 }
