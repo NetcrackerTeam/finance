@@ -3,6 +3,8 @@ package com.netcracker.dao;
 import com.netcracker.models.AbstractAutoOperation;
 import com.netcracker.models.AutoOperationExpense;
 import com.netcracker.models.AutoOperationIncome;
+import com.netcracker.models.enums.CategoryExpense;
+import com.netcracker.models.enums.CategoryIncome;
 
 import java.math.BigInteger;
 import java.util.Collection;
@@ -16,77 +18,85 @@ public interface AutoOperationDao {
 
     AutoOperationExpense getPersonalExpenseAutoOperation(BigInteger autoOperationId);
 
-    AutoOperationIncome createFamilyIncomeAutoOperation(AutoOperationIncome autoOperationIncome, BigInteger familyDebitAccountId);
+    AutoOperationIncome createFamilyIncomeAutoOperation(int dayOfMonth, long amount, CategoryIncome categoryIncome,
+                                                        BigInteger userId, BigInteger familyDebitAccountId);
 
-    AutoOperationIncome createPersonalIncomeAutoOperation(AutoOperationIncome autoOperationIncome);
+    AutoOperationIncome createPersonalIncomeAutoOperation(int dayOfMonth, long amount, CategoryIncome categoryIncome,
+                                                          BigInteger userId, BigInteger personalDebitAccountId);
 
-    AutoOperationExpense createFamilyExpenseAutoOperation(AutoOperationExpense autoOperationExpense, BigInteger familyDebitAccountId);
+    AutoOperationExpense createFamilyExpenseAutoOperation(int dayOfMonth, long amount, CategoryExpense categoryExpense,
+                                                          BigInteger userId, BigInteger familyDebitAccountId);
 
-    AutoOperationExpense createPersonalExpenseAutoOperation(AutoOperationExpense autoOperationExpense);
+    AutoOperationExpense createPersonalExpenseAutoOperation(int dayOfMonth, long amount, CategoryExpense categoryExpense,
+                                                            BigInteger userId, BigInteger personalDebitAccountId);
 
     void deleteAutoOperation(BigInteger autoOperationId);
 
     Collection<AbstractAutoOperation> getAllTodayOperations(BigInteger debitAccountId, int dayOfMonth);
 
+    int personalIncome_object_type_id_1 = 12;
+    String personalIncome_name_2 = "PERSONAL_INCOME_AO";
+    int personalExpense_object_type_id_1 = 11;
+    String personalExpense_name_2 = "PERSONAL_EXPENSE_AO";
+    int familyIncome_object_type_id_1 = 23;
+    String familyIncome_name_2 = "FAMILY_INCOME_AO";
+    int familyExpense_object_type_id_1 = 22;
+    String familyExpense_name_2 = "FAMILY_EXPENSE_AO";
+
+    String CREATE_OBJECT_AUTO_OPERATION = "INSERT INTO OBJECTS (OBJECT_ID, PARENT_ID, OBJECT_TYPE_ID, NAME, DESCRIPTION) " +
+            "VALUES (OBJECTS_ID_S.NEXTVAL, NULL, ?, ?, NULL)";
+
     String CREATE_PERSONAL_INCOME_AO = "INSERT ALL " +
-            "INTO OBJECTS (OBJECT_ID, PARENT_ID, OBJECT_TYPE_ID, NAME, DESCRIPTION) " +
-            "VALUES (OBJECTS_ID_S.NEXTVAL, NULL, 12, 'PERSONAL_INCOME_AO', NULL) " +
             "INTO ATTRIBUTES (ATTR_ID, OBJECT_ID, VALUE, DATE_VALUE, LIST_VALUE_ID) " +
-            "VALUES (67, OBJECTS_ID_S.CURRVAL /*PERSONAL_INCOME*/, ? /*DAY_OF_MONTH*/, NULL, NULL) " +
+            "VALUES (67, ? /*PERSONAL_INCOME*/, ? /*DAY_OF_MONTH*/, NULL, NULL) " +
             "INTO ATTRIBUTES (ATTR_ID, OBJECT_ID, VALUE, DATE_VALUE, LIST_VALUE_ID) " +
-            "VALUES (56 /*AMOUNT*/, OBJECTS_ID_S.CURRVAL, ? /*AMOUNT*/, NULL, NULL) " +
+            "VALUES (56 /*AMOUNT*/, ?, ? /*AMOUNT*/, NULL, NULL) " +
             "INTO ATTRIBUTES (ATTR_ID, OBJECT_ID, VALUE, DATE_VALUE, LIST_VALUE_ID) " +
-            "VALUES (57 /*CATEGORY*/, OBJECTS_ID_S.CURRVAL, NULL, NULL, ? /*32-36*/) " +
+            "VALUES (57 /*CATEGORY*/, ?, NULL, NULL, ? /*32-36*/) " +
             "INTO ATTRIBUTES (ATTR_ID, OBJECT_ID, VALUE, DATE_VALUE, LIST_VALUE_ID) " +
-            "VALUES (58 /*CURRENT_DATE*/, OBJECTS_ID_S.CURRVAL, NULL, TRUNC(CURRENT_DATE), NULL) " +
+            "VALUES (58 /*CURRENT_DATE*/, ?, NULL, TRUNC(CURRENT_DATE), NULL) " +
             "INTO OBJREFERENCE (ATTR_ID, OBJECT_ID, REFERENCE) VALUES " +
-            "(64, OBJECTS_ID_S.CURRVAL /*EXPENSE_OBJECT_ID*/, ? /*PERSONAL_DEBIT_ACC_OBJECT_ID*/) " + "SELECT * FROM DUAL";
+            "(64, ? /*EXPENSE_OBJECT_ID*/, ? /*PERSONAL_DEBIT_ACC_OBJECT_ID*/) " + "SELECT * FROM DUAL";
 
     String CREATE_PERSONAL_EXPENSE_AO = "INSERT ALL " +
-            "INTO OBJECTS (OBJECT_ID, PARENT_ID, OBJECT_TYPE_ID, NAME, DESCRIPTION) " +
-            "VALUES (OBJECTS_ID_S.NEXTVAL, NULL, 11, 'PERSONAL_EXPENSE_AO', NULL) " +
             "INTO ATTRIBUTES (ATTR_ID, OBJECT_ID, VALUE, DATE_VALUE, LIST_VALUE_ID) " +
-            "VALUES (62, OBJECTS_ID_S.CURRVAL /*PERSONAL_EXPENSE*/, ? /*DAY_OF_MONTH*/, NULL, NULL) " +
+            "VALUES (62, ? /*PERSONAL_EXPENSE*/, ? /*DAY_OF_MONTH*/, NULL, NULL) " +
             "INTO ATTRIBUTES (ATTR_ID, OBJECT_ID, VALUE, DATE_VALUE, LIST_VALUE_ID) " +
-            "VALUES (50 /*AMOUNT*/, OBJECTS_ID_S.CURRVAL, ? /*AMOUNT*/, NULL, NULL) " +
+            "VALUES (50 /*AMOUNT*/, ?, ? /*AMOUNT*/, NULL, NULL) " +
             "INTO ATTRIBUTES (ATTR_ID, OBJECT_ID, VALUE, DATE_VALUE, LIST_VALUE_ID) " +
-            "VALUES (51 /*CATEGORY*/, OBJECTS_ID_S.CURRVAL, NULL, NULL, ? /*14-18*/) " +
+            "VALUES (51 /*CATEGORY*/, ?, NULL, NULL, ? /*14-18*/) " +
             "INTO ATTRIBUTES (ATTR_ID, OBJECT_ID, VALUE, DATE_VALUE, LIST_VALUE_ID) " +
-            "VALUES (52 /*CURRENT_DATE*/, OBJECTS_ID_S.CURRVAL, NULL, TRUNC(CURRENT_DATE), NULL) " +
+            "VALUES (52 /*CURRENT_DATE*/, ?, NULL, TRUNC(CURRENT_DATE), NULL) " +
             "INTO OBJREFERENCE (ATTR_ID, OBJECT_ID, REFERENCE) " +
-            "VALUES (59, OBJECTS_ID_S.CURRVAL /*EXPENSE_OBJECT_ID*/, ? /*PERSONAL_DEBIT_ACC_OBJECT_ID*/) " + "SELECT * FROM DUAL";
+            "VALUES (59, ? /*EXPENSE_OBJECT_ID*/, ? /*PERSONAL_DEBIT_ACC_OBJECT_ID*/) " + "SELECT * FROM DUAL";
 
     String CREATE_FAMILY_INCOME_AO = "INSERT ALL " +
-            "INTO OBJECTS (OBJECT_ID, PARENT_ID, OBJECT_TYPE_ID, NAME, DESCRIPTION) " +
-            "VALUES (OBJECTS_ID_S.NEXTVAL, NULL, 23, 'FAMILY_INCOME_AO', NULL) " +
             "INTO ATTRIBUTES (ATTR_ID, OBJECT_ID, VALUE, DATE_VALUE, LIST_VALUE_ID) " +
-            "VALUES (68, OBJECTS_ID_S.CURRVAL /*FAMILY_INCOME*/, ? /*DAY_OF_MONTH*/, NULL, NULL) " +
+            "VALUES (68, ? /*FAMILY_INCOME*/, ? /*DAY_OF_MONTH*/, NULL, NULL) " +
             "INTO ATTRIBUTES (ATTR_ID, OBJECT_ID, VALUE, DATE_VALUE, LIST_VALUE_ID) " +
-            "VALUES (56 /*AMOUNT*/, OBJECTS_ID_S.CURRVAL, ? /*AMOUNT*/, NULL, NULL) " +
+            "VALUES (56 /*AMOUNT*/, ?, ? /*AMOUNT*/, NULL, NULL) " +
             "INTO ATTRIBUTES (ATTR_ID, OBJECT_ID, VALUE, DATE_VALUE, LIST_VALUE_ID) " +
-            "VALUES (57 /*CATEGORY*/, OBJECTS_ID_S.CURRVAL, NULL, NULL, ? /*32-36*/) " +
+            "VALUES (57 /*CATEGORY*/, ?, NULL, NULL, ? /*32-36*/) " +
             "INTO ATTRIBUTES (ATTR_ID, OBJECT_ID, VALUE, DATE_VALUE, LIST_VALUE_ID) " +
-            "VALUES (58 /*CURRENT_DATE*/, OBJECTS_ID_S.CURRVAL, NULL, TRUNC(CURRENT_DATE), NULL) " +
+            "VALUES (58 /*CURRENT_DATE*/, ?, NULL, TRUNC(CURRENT_DATE), NULL) " +
             "INTO OBJREFERENCE (ATTR_ID, OBJECT_ID, REFERENCE) " +
-            "VALUES (65, OBJECTS_ID_S.CURRVAL /*INCOME_OBJECT_ID*/, ? /*FAMILY_DEBIT_ACC_OBJECT_ID*/) " +
+            "VALUES (65, ? /*INCOME_OBJECT_ID*/, ? /*FAMILY_DEBIT_ACC_OBJECT_ID*/) " +
             "INTO OBJREFERENCE (ATTR_ID, OBJECT_ID, REFERENCE) " +
-            "VALUES (66 /*TRANSACTION_AUTO_INCOME*/, OBJECTS_ID_S.CURRVAL, ? /*REFERENCE_TO_USER*/) " + "SELECT * FROM DUAL";
+            "VALUES (66 /*TRANSACTION_AUTO_INCOME*/, ?, ? /*REFERENCE_TO_USER*/) " + "SELECT * FROM DUAL";
 
     String CREATE_FAMILY_EXPENSE_AO = "INSERT ALL " +
-            "INTO OBJECTS (OBJECT_ID, PARENT_ID, OBJECT_TYPE_ID, NAME, DESCRIPTION) " +
-            "VALUES (OBJECTS_ID_S.NEXTVAL, NULL, 22, 'FAMILY_EXPENSE_AO', NULL) " +
             "INTO ATTRIBUTES (ATTR_ID, OBJECT_ID, VALUE, DATE_VALUE, LIST_VALUE_ID) " +
-            "VALUES (63, OBJECTS_ID_S.CURRVAL /*FAMILY_EXPENSE*/, ? /*DAY_OF_MONTH*/, NULL, NULL) " +
+            "VALUES (63, ? /*FAMILY_EXPENSE*/, ? /*DAY_OF_MONTH*/, NULL, NULL) " +
             "INTO ATTRIBUTES (ATTR_ID, OBJECT_ID, VALUE, DATE_VALUE, LIST_VALUE_ID) " +
-            "VALUES (50 /*AMOUNT*/, OBJECTS_ID_S.CURRVAL, ? /*AMOUNT*/, NULL, NULL) " +
+            "VALUES (50 /*AMOUNT*/, ?, ? /*AMOUNT*/, NULL, NULL) " +
             "INTO ATTRIBUTES (ATTR_ID, OBJECT_ID, VALUE, DATE_VALUE, LIST_VALUE_ID) " +
-            "VALUES (51 /*CATEGORY*/, OBJECTS_ID_S.CURRVAL, NULL, NULL, ? /*14-18*/) " +
+            "VALUES (51 /*CATEGORY*/, ?, NULL, NULL, ? /*14-18*/) " +
             "INTO ATTRIBUTES (ATTR_ID, OBJECT_ID, VALUE, DATE_VALUE, LIST_VALUE_ID) " +
-            "VALUES (52 /*CURRENT_DATE*/, OBJECTS_ID_S.CURRVAL, NULL, TRUNC(CURRENT_DATE), NULL) " +
+            "VALUES (52 /*CURRENT_DATE*/, ?, NULL, TRUNC(CURRENT_DATE), NULL) " +
             "INTO OBJREFERENCE (ATTR_ID, OBJECT_ID, REFERENCE) " +
-            "VALUES (60, OBJECTS_ID_S.CURRVAL /*EXPENSE_OBJECT_ID*/, ? /*FAMILY_DEBIT_ACC_OBJECT_ID*/) " +
+            "VALUES (60, ? /*EXPENSE_OBJECT_ID*/, ? /*FAMILY_DEBIT_ACC_OBJECT_ID*/) " +
             "INTO OBJREFERENCE (ATTR_ID, OBJECT_ID, REFERENCE) " +
-            "VALUES (61 /*TRANSACTION_AUTO_EXPENSE*/, OBJECTS_ID_S.CURRVAL, ? /*REFERENCE_TO_USER*/) " + "SELECT * FROM DUAL";
+            "VALUES (61 /*TRANSACTION_AUTO_EXPENSE*/, ?, ? /*REFERENCE_TO_USER*/) " + "SELECT * FROM DUAL";
 
     String DELETE_FROM_OBJECTS = "DELETE FROM OBJECTS WHERE OBJECT_ID = ?";
     String DELETE_FROM_ATTRIBUTES = "DELETE FROM ATTRIBUTES WHERE OBJECT_ID = ?";
