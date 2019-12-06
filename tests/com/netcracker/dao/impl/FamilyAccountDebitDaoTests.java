@@ -4,6 +4,7 @@ import com.netcracker.configs.WebConfig;
 import com.netcracker.dao.FamilyAccountDebitDao;
 import com.netcracker.models.*;
 import com.netcracker.models.enums.FamilyAccountStatusActive;
+import com.netcracker.services.validation.UserValidation;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,6 +18,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import javax.sql.DataSource;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Locale;
 
@@ -30,8 +32,7 @@ public class FamilyAccountDebitDaoTests {
 
     @Autowired
     private FamilyAccountDebitDao familyAccountDebitDao;
-   // @Autowired
-   // private  UserDao userDao;
+    private UserValidation userValidation;
     @Autowired
     private DataSource dataSource;
     private JdbcTemplate template;
@@ -51,6 +52,7 @@ public class FamilyAccountDebitDaoTests {
     private static final String DELETE_ACC = "DELETE FROM OBJECTS WHERE NAME = 'Name1' ";
     private String email = "mail@gmail.com";
     private String password = "password";
+    private BigInteger id = BigInteger.valueOf(3);
 
     @Before
     public void setUp() {
@@ -62,7 +64,6 @@ public class FamilyAccountDebitDaoTests {
     @Test
     public void getFamilyAccountById() {
 
-        BigInteger id = BigInteger.valueOf(3);
         FamilyDebitAccount familyDebitAccount = familyAccountDebitDao.getFamilyAccountById(id);
         String name = "FAM_DEB_ACC1";
         Long amount = 9000L;
@@ -109,11 +110,13 @@ public class FamilyAccountDebitDaoTests {
     }
     @Test
     public void getListParticipants(){
-      List<User> users =  familyAccountDebitDao.getParticipantsOfFamilyAccount(BigInteger.valueOf(3));
+      List<User> users =  familyAccountDebitDao.getParticipantsOfFamilyAccount(id);
         for (User expected : users) {
             System.out.println(expected.getId() + " " + expected.getName() + " " + expected.geteMail() + " " + expected.getPassword() + " "
-                    + expected.getUserStatusActive().toString() + " " + expected.getPersonalDebitAccount());
+                    + expected.getUserStatusActive().toString() + " " + expected.getPersonalDebitAccount() );
         }
+        assertEquals(BigInteger.valueOf(1), users.get(0).getId());
+        assertEquals(BigInteger.valueOf(49), users.get(1).getId());
     }
     @Test
     public  void getListIncome(){
@@ -140,4 +143,17 @@ public class FamilyAccountDebitDaoTests {
     public void addUserToFamilyAcc(){
         familyAccountDebitDao.addUserToAccountById(BigInteger.valueOf(3), BigInteger.valueOf(47));
     }
+
+    @Test
+    public void updateAmount(){
+        familyAccountDebitDao.updateAmountOfFamilyAccount(id,  20000L);
+        Long expected = 20000L;
+        assertEquals(expected, familyAccountDebitDao.getFamilyAccountById(id).getAmount());
+        familyAccountDebitDao.updateAmountOfFamilyAccount(id, 9000L);
+    }
+
+  //  @Test
+//    public void ValidationName() throws SQLException {
+//        userValidation.ValidName("user1");
+//    }
 }

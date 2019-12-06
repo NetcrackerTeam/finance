@@ -15,13 +15,9 @@ public class FamilyDebitServiceImpl implements FamilyDebitService {
     @Autowired
     private FamilyAccountDebitDao familyAccountDebitDao;
     @Autowired
-    private CreditAccountDao creditAccountDao;
-    @Autowired
     private UserDao userDao;
     @Autowired
     private OperationDao operationDao;
-    @Autowired
-    private AutoOperationDao autoOperationDao;
 
     private static final Logger logger = Logger.getLogger(FamilyAccountDebitDaoImpl.class);
 
@@ -38,11 +34,6 @@ public class FamilyDebitServiceImpl implements FamilyDebitService {
     @Override
     public void deleteFamilyDebitAccount(BigInteger id) {
         familyAccountDebitDao.deleteFamilyAccount(id);
-    }
-
-    @Override
-    public void addCreditAccount(BigInteger debit_id,  FamilyCreditAccount creditAccount) {
-        creditAccountDao.createFamilyCreditByDebitAccountId(debit_id, creditAccount);
     }
 
     @Override

@@ -77,6 +77,12 @@ public class FamilyAccountDebitDaoImpl implements FamilyAccountDebitDao {
     }
 
     @Override
+    public void updateAmountOfFamilyAccount(BigInteger account_id, Long amount) {
+        logger.debug("Entering update_amount(deleteFamilyAccount=" + account_id + " " + amount + ")");
+        this.template.update(UPDATE_FALIMY_ACCOUNT_AMOUNT, new Object[]{amount.toString(), new BigDecimal(account_id)});
+    }
+
+    @Override
     public ArrayList<User> getParticipantsOfFamilyAccount(BigInteger debit_id) {
         logger.debug("Entering list(getParticipantsOfFamilyAccount=" + debit_id+ ")");
         return (ArrayList<User>) this.template.query(GET_PARTICIPANTS, new Object[]{new BigDecimal(debit_id)}, new UserDaoMapper());
