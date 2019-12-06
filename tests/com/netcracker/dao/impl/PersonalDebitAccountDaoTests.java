@@ -125,4 +125,12 @@ public class PersonalDebitAccountDaoTests {
             System.out.println(expected.getId() + " " + expected.getCategoryExpense() + " " + expected.getAmount() + " " + expected.getDate());
         }
     }
+    @Test
+    public void updateAmount(){
+        BigInteger id_uA = BigInteger.valueOf(2);
+        personalDebitAccountDao.updateAmountOfPersonalAccount(id_uA,  5000L);
+        Long am = 5000L;
+        assertEquals(am, personalDebitAccountDao.getPersonalAccountById(id_uA).getAmount());
+        personalDebitAccountDao.updateAmountOfPersonalAccount(id_uA, 10000L);
+    }
 }

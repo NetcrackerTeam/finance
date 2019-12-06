@@ -17,6 +17,8 @@ public interface PersonalDebitAccountDao {
 
     void deletePersonalAccountByUserId(BigInteger account_id);
 
+    void updateAmountOfPersonalAccount(BigInteger account_id, Long amount);
+
     ArrayList<AccountIncome> getIncomesOfPersonalAccount(BigInteger debit_id);
 
     ArrayList<AccountExpense> getExpensesOfPersonalAccount(BigInteger debit_id);
@@ -100,4 +102,6 @@ public interface PersonalDebitAccountDao {
 
     String DELETE_USER_FROM_PERSONAL_ACCOUNT = "DELETE FROM OBJREFERENCE WHERE ATTR_ID = 1 AND OBJECT_ID = ? AND REFERENCE = ?";
     String UNACTIVE_USER_FROM_PERSONAL_ACCOUNT = "UPDATE ATTRIBUTES SET LIST_VALUE_ID = 44 WHERE ATTR_ID = 70 AND OBJECT_ID = ?";
+    String UPDATE_PERSONAL_ACCOUNT_AMOUNT = "UPDATE ATTRIBUTES SET VALUE = ? WHERE ATTR_ID = 7 AND OBJECT_ID = ?";
+
 }

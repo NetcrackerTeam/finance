@@ -72,4 +72,9 @@ public class PersonalDebitAccountDaoImpl  implements PersonalDebitAccountDao {
         logger.debug("Entering list(getParticipantsOfPersonalAccount=" + debit_id + ")");
         return (ArrayList<AccountExpense>) this.template.query(GET_EXPENSE_LIST, new Object[]{new BigDecimal(debit_id)},  new AccountExpenseMapper());
     }
+    @Override
+    public void updateAmountOfPersonalAccount(BigInteger account_id, Long amount) {
+        logger.debug("Entering update_amount(deletePersonalAccount=" + account_id + " " + amount + ")");
+        this.template.update(UPDATE_PERSONAL_ACCOUNT_AMOUNT, new Object[]{amount.toString(), new BigDecimal(account_id)});
+    }
 }

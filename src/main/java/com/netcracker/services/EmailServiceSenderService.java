@@ -1,13 +1,18 @@
 package com.netcracker.services;
 
+import com.netcracker.models.AccountExpense;
+import com.netcracker.models.User;
+
+import java.math.BigInteger;
+
 public interface EmailServiceSenderService {
-    public void sendMailBeforeDeactivate();
+    public void sendMailBeforeDeactivate(User user);
 
-    public void sendMailAboutDebt();
+    public void sendMailAboutDebt(String emailAddressTo, String login, String password);
 
-    public void sendMailReminderCredit();
+    public void sendMailReminderCredit(String emailAddressTo, String login, String password);
 
-    public void sendMailReminderExpense();
+    public void sendMailReminderExpense(String emailAddressTo, String login, AccountExpense accountExpense);
 
-    public void sendMailAutoIncome();
+    public void sendMailAutoIncome(String emailAddressTo, String login, String password);
 }
