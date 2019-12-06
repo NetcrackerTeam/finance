@@ -20,13 +20,13 @@ abstract  class AbstractValidation {
 
     void validateId(String id) {
         if (StringUtils.isEmpty(id)) {
-            errorMap.put("EMPTY_ID_ERROR", ErrorMessages.ERROR_ID);
+            errorMap.put("EMPTY_ID_ERROR", ErrorMessages.EMPTY_ID_ERROR);
             return;
         }
 
         if (!checkId(id)) {
             errorMap
-                    .put("WRONG_ID_FORMAT_ERROR", ErrorMessages.WRONG_ID_FORMAT);
+                    .put("WRONG_ID_FORMAT_ERROR", ErrorMessages.WRONG_ID_FORMAT_ERROR);
             return;
         }
 
@@ -34,7 +34,7 @@ abstract  class AbstractValidation {
             BigInteger bigIntegerId = new BigInteger(id);
         } catch (NumberFormatException ex) {
             errorMap
-                    .put("WRONG_ID_FORMAT_ERROR", ErrorMessages.WRONG_ID_FORMAT);
+                    .put("WRONG_ID_FORMAT_ERROR", ErrorMessages.WRONG_ID_FORMAT_ERROR);
         }
     }
 
