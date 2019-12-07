@@ -3,7 +3,7 @@ package com.netcracker.dao;
 import com.netcracker.models.Debt;
 
 import java.math.BigInteger;
-import java.util.Date;
+import java.sql.Date;
 
 public interface CreditDeptDao {
 

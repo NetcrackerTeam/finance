@@ -6,11 +6,13 @@ import com.netcracker.dao.CreditOperationDao;
 import com.netcracker.models.CreditOperation;
 import com.netcracker.models.FamilyCreditAccount;
 import com.netcracker.models.enums.CreditStatusPaid;
+import com.netcracker.services.CreditUtils;
 import com.netcracker.services.FamilyCreditService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Date;
 
@@ -71,12 +73,12 @@ public class FamilyCreditServiceImpl implements FamilyCreditService {
         creditOperationDao.createPersonalCreditOperation(creditOperation, id);
     }
 
-    public void changeDebtDateTo(BigInteger id, Date date) {
-        creditDeptDao.updateFamilyDebtDateTo(id, date);
+    public void changeDebtDateTo(BigInteger id, LocalDate date) {
+        creditDeptDao.updateFamilyDebtDateTo(id, CreditUtils.localDateToSqlDate(date));
     }
 
-    public void changeDebtDateFrom(BigInteger id, Date date) {
-        creditDeptDao.updatePersonalDebtDateFrom(id, date);
+    public void changeDebtDateFrom(BigInteger id, LocalDate date) {
+        creditDeptDao.updatePersonalDebtDateFrom(id, CreditUtils.localDateToSqlDate(date));
     }
 
     public void changeDebtAmount(BigInteger id, long amount) {

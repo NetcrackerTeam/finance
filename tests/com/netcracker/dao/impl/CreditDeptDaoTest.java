@@ -3,6 +3,7 @@ package com.netcracker.dao.impl;
 import com.netcracker.configs.WebConfig;
 import com.netcracker.dao.CreditDeptDao;
 import com.netcracker.models.Debt;
+import com.netcracker.services.CreditUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -27,6 +28,8 @@ public class CreditDeptDaoTest {
 
     private Debt personalDebtOne;
     private Debt familyDebtOne;
+    private Debt emptyDebt;
+    private int month;
 
     @Autowired
     private CreditDeptDao creditDeptDao;
@@ -36,13 +39,19 @@ public class CreditDeptDaoTest {
         personalDebtOne = new Debt.Builder()
                 .debtId(new BigInteger("14"))
                 .amountDebt(0L)
-                .dateFrom(Date.valueOf(LocalDate.of(2019, 11, 30)))
-                .dateTo(Date.valueOf(LocalDate.of(2020, 2, 28)))
+                .dateFrom(LocalDate.of(2019, 11, 30))
+                .dateTo(LocalDate.of(2020, 2, 28))
                 .build();
+
+        emptyDebt = new Debt.Builder()
+                .debtId(new BigInteger("14"))
+                .amountDebt(0L)
+                .build();
+
         familyDebtOne = new Debt.Builder()
                 .amountDebt(0L)
-                .dateFrom(Date.valueOf(LocalDate.of(2019, 11, 30)))
-                .dateTo(Date.valueOf(LocalDate.of(2020, 2, 28)))
+                .dateFrom(LocalDate.of(2019, 11, 30))
+                .dateTo(LocalDate.of(2020, 2, 28))
                 .debtId(new BigInteger("15"))
                 .build();
     }
@@ -73,9 +82,9 @@ public class CreditDeptDaoTest {
     @Test
     public void updatePersonalDebtDateFromTest() {
         BigInteger accId = personalDebtOne.getDebtId();
-        Date newDate = Date.valueOf(LocalDate.of(2019, 11, 30));
+        LocalDate newDate = LocalDate.of(2019, 11, 30);
 
-        creditDeptDao.updatePersonalDebtDateFrom(accId, newDate);
+        creditDeptDao.updatePersonalDebtDateFrom(accId, CreditUtils.localDateToSqlDate(newDate));
 
         assertEquals(newDate, creditDeptDao.getPersonalDebtById(accId).getDateFrom());
     }
@@ -84,9 +93,9 @@ public class CreditDeptDaoTest {
     @Test
     public void updateFamilyDebtDateFromTest() {
         BigInteger accId = familyDebtOne.getDebtId();
-        Date newDate = Date.valueOf(LocalDate.of(2019, 11, 21));
+        LocalDate newDate = LocalDate.of(2019, 11, 21);
 
-        creditDeptDao.updateFamilyDebtDateFrom(accId, newDate);
+        creditDeptDao.updateFamilyDebtDateFrom(accId, CreditUtils.localDateToSqlDate(newDate));
 
         assertEquals(newDate, creditDeptDao.getPersonalDebtById(accId).getDateFrom());
     }
@@ -95,9 +104,9 @@ public class CreditDeptDaoTest {
     @Test
     public void updatePersonalDebtDateToTest() {
         BigInteger accId = personalDebtOne.getDebtId();
-        Date newDate = Date.valueOf(LocalDate.of(2019, 11, 30));
+        LocalDate newDate = LocalDate.of(2019, 11, 30);
 
-        creditDeptDao.updatePersonalDebtDateTo(accId, newDate);
+        creditDeptDao.updatePersonalDebtDateTo(accId, CreditUtils.localDateToSqlDate(newDate));
 
         assertEquals(newDate, creditDeptDao.getPersonalDebtById(accId).getDateTo());
     }
@@ -106,9 +115,9 @@ public class CreditDeptDaoTest {
     @Test
     public void updateFamilyDebtDateToTest() {
         BigInteger accId = familyDebtOne.getDebtId();
-        Date newDate = Date.valueOf(LocalDate.of(2019, 11, 30));
+        LocalDate newDate = LocalDate.of(2019, 11, 30);
 
-        creditDeptDao.updateFamilyDebtDateTo(accId, newDate);
+        creditDeptDao.updateFamilyDebtDateTo(accId, CreditUtils.localDateToSqlDate(newDate));
 
         assertEquals(newDate, creditDeptDao.getFamilyDebtById(accId).getDateTo());
     }
@@ -134,6 +143,32 @@ public class CreditDeptDaoTest {
 
         assertEquals(familyDebtOne.getAmountDebt(), creditDeptDao.getFamilyDebtById(accId).getAmountDebt());
 
+    }
+
+    @Rollback
+    @Test
+    public void updateToEmptyPersonalDebt() {
+        BigInteger accId = personalDebtOne.getDebtId();
+
+        creditDeptDao.updatePersonalDebtAmount(accId, 0L);
+        creditDeptDao.updatePersonalDebtDateFrom(accId, null);
+        creditDeptDao.updatePersonalDebtDateTo(accId, null);
+
+        Debt result = creditDeptDao.getPersonalDebtById(accId);
+        checkEqualsDebt(emptyDebt, result);
+    }
+
+    @Rollback
+    @Test
+    public void updateToEmptyFamilyDebt() {
+        BigInteger accId = personalDebtOne.getDebtId();
+
+        creditDeptDao.updateFamilyDebtAmount(accId, 0L);
+        creditDeptDao.updateFamilyDebtDateFrom(accId, null);
+        creditDeptDao.updateFamilyDebtDateTo(accId, null);
+
+        Debt result = creditDeptDao.getPersonalDebtById(accId);
+        checkEqualsDebt(emptyDebt, result);
     }
 
     private void checkEqualsDebt(Debt debtOne, Debt debtTwo) {

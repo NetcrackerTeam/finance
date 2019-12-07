@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 import javax.sql.DataSource;
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.util.Date;
+import java.sql.Date;
 
 @Repository
 public class CreditDeptDaoImpl implements CreditDeptDao {

@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Date;
 
@@ -65,17 +66,17 @@ public class PersonalCreditServiceImpl implements PersonalCreditService {
 
     private void increaseDebt(Debt debt, long amount) {
         if (debt.getDateFrom() == null) {
-            debt.setDateFrom(new Date());
+            debt.setDateFrom(LocalDate.now());
             changeDebtDateFrom(debt.getDebtId(), debt.getDateFrom());
             changeDebtAmount(debt.getDebtId(), amount);
         }
-        Date newDateTo = CreditUtils.addMonthsToDate(debt.getDateTo(), 1);
+        LocalDate newDateTo = CreditUtils.addMonthsToDate(debt.getDateTo(), 1);
         changeDebtDateTo(debt.getDebtId(), newDateTo);
         changeDebtAmount(debt.getDebtId(), debt.getAmountDebt() + amount);
     }
 
     private void decreaseDebt(Debt debt, long amount) {
-        Date newDateFrom = CreditUtils.addMonthsToDate(debt.getDateTo(), 1);
+        LocalDate newDateFrom = CreditUtils.addMonthsToDate(debt.getDateTo(), 1);
         if (newDateFrom.equals(debt.getDateTo())) {
             changeDebtDateFrom(debt.getDebtId(), null);
             changeDebtDateTo(debt.getDebtId(), null);
@@ -110,18 +111,23 @@ public class PersonalCreditServiceImpl implements PersonalCreditService {
     }
 
     private void addPayment(PersonalCreditAccount creditAccount, BigInteger accountDebitId, long amount) {
+        PersonalDebitAccount debitAccount = debitAccountDao.getPersonalAccountById(accountDebitId);
+        long actualDebitAmount = debitAccount.getAmount();
+        debitAccountDao.updateAmountOfPersonalAccount(accountDebitId, actualDebitAmount - amount);
         creditOperationDao.createPersonalCreditOperation(new CreditOperation(amount, new Date()), creditAccount.getCreditId());
-        // ToDo: decrease money on debit account
         long updatedAmount = creditAccount.getAmount() + amount;
         creditAccountDao.updatePersonalCreditPayment(creditAccount.getCreditId(), updatedAmount);
+        if (creditAccount.getAmount() + amount == updatedAmount) {
+            creditAccountDao.updateIsPaidStatusFamilyCredit(creditAccount.getCreditId(), CreditStatusPaid.YES);
+        }
     }
 
-    public void changeDebtDateTo(BigInteger id, Date date) {
-        creditDeptDao.updateFamilyDebtDateTo(id, date);
+    public void changeDebtDateTo(BigInteger id, LocalDate date) {
+        creditDeptDao.updateFamilyDebtDateTo(id, CreditUtils.localDateToSqlDate(date));
     }
 
-    public void changeDebtDateFrom(BigInteger id, Date date) {
-        creditDeptDao.updatePersonalDebtDateFrom(id, date);
+    public void changeDebtDateFrom(BigInteger id, LocalDate date) {
+        creditDeptDao.updatePersonalDebtDateFrom(id, CreditUtils.localDateToSqlDate(date));
     }
 
     public void changeDebtAmount(BigInteger id, long amount) {

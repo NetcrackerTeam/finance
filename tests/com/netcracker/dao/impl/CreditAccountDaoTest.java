@@ -2,15 +2,13 @@ package com.netcracker.dao.impl;
 
 import com.netcracker.configs.WebConfig;
 import com.netcracker.dao.CreditAccountDao;
-import com.netcracker.models.AbstractCreditAccount;
-import com.netcracker.models.Debt;
-import com.netcracker.models.FamilyCreditAccount;
-import com.netcracker.models.PersonalCreditAccount;
+import com.netcracker.models.*;
 import com.netcracker.models.enums.CreditStatusPaid;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.core.Local;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -22,6 +20,7 @@ import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
 
@@ -33,6 +32,8 @@ public class CreditAccountDaoTest {
 
     private AbstractCreditAccount personalCreditAccountOne;
     private AbstractCreditAccount familyCreditAccountOne;
+    private AbstractCreditAccount personalCreditAccountEmpty;
+    private AbstractCreditAccount familyCreditAccountEmpty;
     private List<AbstractCreditAccount> personalListCredits;
     private List<AbstractCreditAccount> familyListCredits;
 
@@ -45,16 +46,16 @@ public class CreditAccountDaoTest {
         familyListCredits = new ArrayList<>();
         Debt famDebtOne = new Debt.Builder()
                 .amountDebt(0L)
-                .dateFrom(Date.valueOf(LocalDate.of(2019, 11, 30)))
-                .dateTo(Date.valueOf(LocalDate.of(2020, 2, 28)))
+                .dateFrom(LocalDate.of(2019, 11, 30))
+                .dateTo(LocalDate.of(2020, 2, 28))
                 .debtId(new BigInteger("15"))
                 .build();
 
         Debt perDebtOne = new Debt.Builder()
                 .debtId(new BigInteger("14"))
                 .amountDebt(0L)
-                .dateFrom(Date.valueOf(LocalDate.of(2019, 11, 30)))
-                .dateTo(Date.valueOf(LocalDate.of(2020, 2, 28)))
+                .dateFrom(LocalDate.of(2019, 11, 30))
+                .dateTo(LocalDate.of(2020, 2, 28))
                 .build();
 
         familyCreditAccountOne =
@@ -83,6 +84,32 @@ public class CreditAccountDaoTest {
                         .monthDay(1)
                         .isPaid(CreditStatusPaid.getStatusByKey(new BigInteger("38")))
                         .debtCredit(perDebtOne)
+                        .build();
+
+        personalCreditAccountEmpty =
+                new PersonalCreditAccount.Builder()
+                        .name("Credit_Money")
+                        .amount(20000L)
+                        .paidAmount(0L)
+                        .date(LocalDate.now())
+                        .creditRate(10L)
+                        .dateTo(LocalDate.of(2020, 5, 7))
+                        .monthDay(3)
+                        .isPaid(CreditStatusPaid.getStatusByKey(new BigInteger("38")))
+                        .debtCredit(new Debt.Builder().amountDebt(0L).build())
+                        .build();
+
+        familyCreditAccountEmpty =
+                new FamilyCreditAccount.Builder()
+                        .name("Credit_Money")
+                        .amount(1000L)
+                        .paidAmount(0L)
+                        .date(LocalDate.now())
+                        .creditRate(12L)
+                        .dateTo(LocalDate.of(2020, 6, 7))
+                        .monthDay(3)
+                        .isPaid(CreditStatusPaid.getStatusByKey(new BigInteger("38")))
+                        .debtCredit(new Debt.Builder().amountDebt(0L).build())
                         .build();
 
         personalListCredits.add(personalCreditAccountOne);
@@ -168,8 +195,10 @@ public class CreditAccountDaoTest {
     public void createPersonalDebtByCreditIdTest() {
         BigInteger debitId = new BigInteger("2");
         int actualSize = creditAccountDao.getAllPersonalCreditsByAccountId(debitId).size();
-        creditAccountDao.createPersonalCreditByDebitAccountId(debitId, (PersonalCreditAccount) personalCreditAccountOne);
+        creditAccountDao.createPersonalCreditByDebitAccountId(debitId, (PersonalCreditAccount) personalCreditAccountEmpty);
         List<PersonalCreditAccount> result = creditAccountDao.getAllPersonalCreditsByAccountId(debitId);
+        PersonalCreditAccount resultAccount = result.get(result.size() - 1);
+        checkEqualsCredit(personalCreditAccountEmpty, resultAccount);
         assertEquals(actualSize + 1, result.size());
     }
 
@@ -178,13 +207,24 @@ public class CreditAccountDaoTest {
     public void createFamilyDebtByCreditIdTest() {
         BigInteger debitId = new BigInteger("3");
         int actualSize = creditAccountDao.getAllFamilyCreditsByAccountId(debitId).size();
-        creditAccountDao.createFamilyCreditByDebitAccountId(debitId, (FamilyCreditAccount) familyCreditAccountOne);
+        creditAccountDao.createFamilyCreditByDebitAccountId(debitId, (FamilyCreditAccount) familyCreditAccountEmpty);
         List<FamilyCreditAccount> result = creditAccountDao.getAllFamilyCreditsByAccountId(debitId);
+        FamilyCreditAccount resultAccount = result.get(result.size() - 1);
+        checkEqualsCredit(familyCreditAccountEmpty, resultAccount);
         assertEquals(actualSize + 1, result.size());
     }
+//
+//    @Rollback
+//    @Test
+//    public void createNewCreditPersonal() {
+//        BigInteger debitId = new BigInteger("2");
+//        creditAccountDao.createPersonalCreditByDebitAccountId(debitId, (PersonalCreditAccount) personalCreditAccountEmpty);
+//        List<PersonalCreditAccount> result = creditAccountDao.getAllPersonalCreditsByAccountId(debitId);
+//        PersonalCreditAccount resultAccount = result.get(result.size() - 1);
+//        checkEqualsCredit(personalCreditAccountEmpty, resultAccount);
+//    }
 
     private void checkEqualsCredit(AbstractCreditAccount creditOne, AbstractCreditAccount creditTwo) {
-        assertEquals(creditOne.getCreditId(), creditTwo.getCreditId());
         assertEquals(creditOne.getName(), creditTwo.getName());
         assertEquals(creditOne.getAmount(), creditTwo.getAmount());
         assertEquals(creditOne.getPaidAmount(), creditTwo.getPaidAmount());
@@ -197,7 +237,6 @@ public class CreditAccountDaoTest {
     }
 
     private void checkEqualsDebt(Debt debtOne, Debt debtTwo) {
-        assertEquals(debtOne.getDebtId(), debtTwo.getDebtId());
         assertEquals(debtOne.getDateFrom(), debtTwo.getDateFrom());
         assertEquals(debtOne.getDateTo(), debtTwo.getDateTo());
         assertEquals(debtOne.getAmountDebt(), debtTwo.getAmountDebt());

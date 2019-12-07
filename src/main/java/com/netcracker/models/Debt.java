@@ -1,35 +1,35 @@
 package com.netcracker.models;
 
 import java.math.BigInteger;
-import java.util.Date;
+import java.time.LocalDate;
 
 public class Debt {
-    private  BigInteger debtId;
-    private Date dateFrom;
-    private Date dateTo;
+    private BigInteger debtId;
+    private LocalDate dateFrom;
+    private LocalDate dateTo;
     private Long amountDebt;
 
 
     public static class Builder {
-        private  BigInteger debtId;
-        private Date dateFrom;
-        private Date dateTo;
+        private BigInteger debtId;
+        private LocalDate dateFrom;
+        private LocalDate dateTo;
         private Long amountDebt;
 
         public Builder() {
         }
 
-        public Builder debtId(BigInteger id){
+        public Builder debtId(BigInteger id) {
             this.debtId = id;
             return this;
         }
 
-        public Builder dateFrom(Date date) {
+        public Builder dateFrom(LocalDate date) {
             this.dateFrom = date;
             return this;
         }
 
-        public Builder dateTo(Date date) {
+        public Builder dateTo(LocalDate date) {
             this.dateTo = date;
             return this;
         }
@@ -38,7 +38,8 @@ public class Debt {
             this.amountDebt = date;
             return this;
         }
-        public Debt build(){
+
+        public Debt build() {
             return new Debt(this);
         }
     }
@@ -54,11 +55,11 @@ public class Debt {
         return debtId;
     }
 
-    public Date getDateFrom() {
+    public LocalDate getDateFrom() {
         return dateFrom;
     }
 
-    public Date getDateTo() {
+    public LocalDate getDateTo() {
         return dateTo;
     }
 
@@ -66,11 +67,11 @@ public class Debt {
         return amountDebt;
     }
 
-    public void setDateFrom(Date dateFrom) {
+    public void setDateFrom(LocalDate dateFrom) {
         this.dateFrom = dateFrom;
     }
 
-    public void setDateTo(Date dateTo) {
+    public void setDateTo(LocalDate dateTo) {
         this.dateTo = dateTo;
     }
 
