@@ -46,11 +46,11 @@ public class PersonalDebitAccountDaoImpl  implements PersonalDebitAccountDao {
     }
 
     @Override
-    public void deletePersonalAccountById(BigInteger account_id, BigInteger user_id) {
-        logger.debug("Entering unactive(deletePersonalAccount=" + account_id + ")");
+    public void deletePersonalAccountById(BigInteger accountId, BigInteger userId) {
+        logger.debug("Entering unactive(deletePersonalAccount=" + accountId + ")");
         this.template.update(DELETE_USER_FROM_PERSONAL_ACCOUNT, new Object[]{
-                account_id.toString(),
-                user_id.toString()
+                accountId.toString(),
+                userId.toString()
         });
     }
 
@@ -62,19 +62,19 @@ public class PersonalDebitAccountDaoImpl  implements PersonalDebitAccountDao {
         });
     }
     @Override
-    public ArrayList<AccountIncome> getIncomesOfPersonalAccount(BigInteger debit_id) {
-        logger.debug("Entering list(getParticipantsOfPersonalAccount=" + debit_id + ")");
-        return (ArrayList<AccountIncome>) this.template.query(GET_INCOME_LIST, new Object[]{new BigDecimal(debit_id)}, new AccountIncomeMapper());
+    public ArrayList<AccountIncome> getIncomesOfPersonalAccount(BigInteger debitId) {
+        logger.debug("Entering list(getParticipantsOfPersonalAccount=" + debitId + ")");
+        return (ArrayList<AccountIncome>) this.template.query(GET_INCOME_LIST, new Object[]{new BigDecimal(debitId)}, new AccountIncomeMapper());
     }
 
     @Override
-    public ArrayList<AccountExpense> getExpensesOfPersonalAccount(BigInteger debit_id) {
-        logger.debug("Entering list(getParticipantsOfPersonalAccount=" + debit_id + ")");
-        return (ArrayList<AccountExpense>) this.template.query(GET_EXPENSE_LIST, new Object[]{new BigDecimal(debit_id)},  new AccountExpenseMapper());
+    public ArrayList<AccountExpense> getExpensesOfPersonalAccount(BigInteger debitId) {
+        logger.debug("Entering list(getParticipantsOfPersonalAccount=" + debitId + ")");
+        return (ArrayList<AccountExpense>) this.template.query(GET_EXPENSE_LIST, new Object[]{new BigDecimal(debitId)},  new AccountExpenseMapper());
     }
     @Override
-    public void updateAmountOfPersonalAccount(BigInteger account_id, Long amount) {
-        logger.debug("Entering update_amount(deletePersonalAccount=" + account_id + " " + amount + ")");
-        this.template.update(UPDATE_PERSONAL_ACCOUNT_AMOUNT, new Object[]{amount.toString(), new BigDecimal(account_id)});
+    public void updateAmountOfPersonalAccount(BigInteger accountId, Long amount) {
+        logger.debug("Entering update_amount(deletePersonalAccount=" + accountId + " " + amount + ")");
+        this.template.update(UPDATE_PERSONAL_ACCOUNT_AMOUNT, new Object[]{amount.toString(), new BigDecimal(accountId)});
     }
 }

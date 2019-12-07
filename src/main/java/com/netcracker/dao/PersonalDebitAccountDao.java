@@ -13,15 +13,15 @@ public interface PersonalDebitAccountDao {
 
     PersonalDebitAccount createPersonalAccount(PersonalDebitAccount personalDebitAccount);
 
-    void deletePersonalAccountById(BigInteger account_id, BigInteger user_id);
+    void deletePersonalAccountById(BigInteger accountId, BigInteger userId);
 
-    void deletePersonalAccountByUserId(BigInteger account_id);
+    void deletePersonalAccountByUserId(BigInteger accountId);
 
-    void updateAmountOfPersonalAccount(BigInteger account_id, Long amount);
+    void updateAmountOfPersonalAccount(BigInteger accountId, Long amount);
 
-    ArrayList<AccountIncome> getIncomesOfPersonalAccount(BigInteger debit_id);
+    ArrayList<AccountIncome> getIncomesOfPersonalAccount(BigInteger debitId);
 
-    ArrayList<AccountExpense> getExpensesOfPersonalAccount(BigInteger debit_id);
+    ArrayList<AccountExpense> getExpensesOfPersonalAccount(BigInteger debitId);
 
     String GET_PERSONAL_ACCOUNT_BY_ID ="SELECT " +
             "DEBIT.OBJECT_ID PERSONAL_ID, DEBIT.NAME NAME_PERSONAL_DEBIT, ATTR1.VALUE AMOUNT_PERSONAL_DEBIT, ATTR2.LIST_VALUE_ID STATUS_PERSONAL_DEBIT, "

@@ -1,5 +1,6 @@
 package com.netcracker.services;
 
+import com.netcracker.models.AbstractAccountOperation;
 import com.netcracker.models.PersonalDebitAccount;
 
 import java.math.BigInteger;
@@ -10,9 +11,8 @@ public interface PersonalDebitService {
 
     PersonalDebitAccount createPersonalDebitAccount(PersonalDebitAccount personalDebitAccount);
 
-    public void deletePersonalDebitAccount(BigInteger account_id, BigInteger user_id);
+    public void deletePersonalDebitAccount(BigInteger accountId, BigInteger userId);
 
     PersonalDebitAccount getPersonalDebitAccount(BigInteger id);
 
-    public Collection<Object> getHistory(BigInteger personal_account_id, Date date);
-}
+    public Collection<AbstractAccountOperation> getHistory(BigInteger personalAccountId, Date date);}

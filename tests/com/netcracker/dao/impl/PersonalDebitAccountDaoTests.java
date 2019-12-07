@@ -113,14 +113,14 @@ public class PersonalDebitAccountDaoTests {
     }
     @Test
     public  void getListIncome(){
-        List<AccountIncome> incomes = personalDebitAccountDao.getIncomesOfPersonalAccount(BigInteger.valueOf(3));
+        List<AccountIncome> incomes = personalDebitAccountDao.getIncomesOfPersonalAccount(BigInteger.valueOf(2));
         for (AccountIncome expected : incomes) {
             System.out.println(expected.getId() + " " + expected.getCategoryIncome() + " " + expected.getAmount() + " " + expected.getDate());
         }
     }
     @Test
     public  void getListExpense(){
-        List<AccountExpense> expenses = personalDebitAccountDao.getExpensesOfPersonalAccount(BigInteger.valueOf(3));
+        List<AccountExpense> expenses = personalDebitAccountDao.getExpensesOfPersonalAccount(BigInteger.valueOf(2));
         for (AccountExpense expected : expenses) {
             System.out.println(expected.getId() + " " + expected.getCategoryExpense() + " " + expected.getAmount() + " " + expected.getDate());
         }
