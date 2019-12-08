@@ -1,11 +1,8 @@
 package com.netcracker.models;
 
-import com.netcracker.models.enums.CategoryExpense;
-import com.netcracker.models.enums.CategoryIncome;
-import com.sun.xml.internal.rngom.parse.host.Base;
 
-import java.math.BigDecimal;
-import java.math.BigInteger;
+import com.netcracker.models.enums.CategoryIncome;
+
 
 public class CategoryIncomeReport extends AbstractCategoryReport {
     private CategoryIncome categoryIncome;

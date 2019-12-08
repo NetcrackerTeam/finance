@@ -2,9 +2,7 @@ package com.netcracker.models;
 
 import com.netcracker.models.enums.CategoryExpense;
 
-import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.util.Date;
+
 
 public class CategoryExpenseReport extends AbstractCategoryReport {
     private CategoryExpense categoryExpense;
