@@ -65,7 +65,7 @@ public interface OperationDao {
      * @return
      */
 
-    List<AccountIncome> getIncomesPersonalAfterDateByAccountId(BigInteger id, Date date);
+    Collection<AccountIncome> getIncomesPersonalAfterDateByAccountId(BigInteger id, Date date);
 
     /**
      *
@@ -74,7 +74,7 @@ public interface OperationDao {
      * @return
      */
 
-    List<AccountExpense> getExpensesPersonalAfterDateByAccountId(BigInteger id, Date date);
+    Collection<AccountExpense> getExpensesPersonalAfterDateByAccountId(BigInteger id, Date date);
 
     /**
      *
@@ -83,7 +83,7 @@ public interface OperationDao {
      * @return
      */
 
-    List<AccountIncome> getIncomesFamilyAfterDateByAccountId(BigInteger id, Date data);
+    Collection<AccountIncome> getIncomesFamilyAfterDateByAccountId(BigInteger id, Date data);
 
     /**
      *
@@ -92,7 +92,15 @@ public interface OperationDao {
      * @return
      */
 
-    List<AccountExpense> getExpensesFamilyAfterDateByAccountId(BigInteger id, Date data);
+    Collection<AccountExpense> getExpensesFamilyAfterDateByAccountId(BigInteger id, Date data);
+
+    Collection<AccountExpense> getExpensesPersonalGroupByCategories(BigInteger id, Date date);
+
+    Collection<AccountExpense> getIncomesPersonalGroupByCategories(BigInteger id, Date date);
+
+    Collection<AccountExpense> getExpensesFamilyGroupByCategories(BigInteger id, Date date);
+
+    Collection<AccountExpense> getIncomesFamilyGroupByCategories(BigInteger id, Date date);
 
     String ADD_INCOME_PERSONAL_BY_ACCOUNT_ID = "INSERT ALL" +
             " INTO OBJECTS (OBJECT_ID,PARENT_ID,OBJECT_TYPE_ID,NAME,DESCRIPTION) VALUES (objects_id_s.nextval,NULL,10,'ACC_INC_PER1','account income personal1')" +
@@ -160,5 +168,23 @@ public interface OperationDao {
             " AND CATEGORY.OBJECT_ID = O.OBJECT_ID AND CATEGORY.ATTR_ID = 51 /* category*/" +
             " AND DATE_OF.OBJECT_ID = O.OBJECT_ID AND DATE_OF.ATTR_ID = 52/* date*/" +
             " AND DATE_OF.DATE_VALUE > ?";
+
+    String GET_EXPENSES_PERSONAL_GROUP_BY_CATEGORIES = "SELECT  SUM(SUMM.VALUE) AS EXPENSE_AMOUNT,  CATEGORY.LIST_VALUE_ID AS CATEGORY_EXPENSE" +
+            " FROM ATTRIBUTES SUMM, ATTRIBUTES DATE_OF, ATTRIBUTES CATEGORY, OBJECTS O, OBJREFERENCE REF" +
+            " WHERE O.OBJECT_TYPE_ID = 9 AND REF.ATTR_ID = 47 AND O.OBJECT_ID = REF.OBJECT_ID AND REF.REFERENCE = ?" +
+            " AND SUMM.OBJECT_ID = O.OBJECT_ID AND SUMM.ATTR_ID = 50 /* amount*/" +
+            " AND CATEGORY.OBJECT_ID = O.OBJECT_ID AND CATEGORY.ATTR_ID = 51 /* category*/" +
+            " AND DATE_OF.OBJECT_ID = O.OBJECT_ID AND DATE_OF.ATTR_ID = 52 /* date*/" +
+            " AND DATE_OF.DATE_VALUE > ?" +
+            " GROUP BY CATEGORY.LIST_VALUE_ID";
+
+    String GET_INCOMES_PERSONAL_GROUP_BY_CATEGORIES = "SELECT SUM(SUMM.VALUE) AS INCOME_AMOUNT, CATEGORY.LIST_VALUE_ID AS CATEGORY_INCOME" +
+            "  FROM ATTRIBUTES SUMM, ATTRIBUTES DATE_OF, ATTRIBUTES CATEGORY, OBJECTS O, OBJREFERENCE REF" +
+            "  WHERE O.OBJECT_TYPE_ID =  10 AND REF.ATTR_ID = 53 AND O.OBJECT_ID = REF.OBJECT_ID AND REF.REFERENCE = ?" +
+            "  AND SUMM.OBJECT_ID = O.OBJECT_ID AND SUMM.ATTR_ID = 56 /* amount*/" +
+            "  AND CATEGORY.OBJECT_ID = O.OBJECT_ID AND CATEGORY.ATTR_ID = 57 /* category*/" +
+            "  AND DATE_OF.OBJECT_ID = O.OBJECT_ID AND DATE_OF.ATTR_ID = 58 /* date*/" +
+            "  AND DATE_OF.DATE_VALUE > ?" +
+            "  GROUP BY CATEGORY.LIST_VALUE_ID";
 
 }
