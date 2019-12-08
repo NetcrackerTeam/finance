@@ -1,8 +1,8 @@
 package com.netcracker.dao.impl;
 
 import com.netcracker.dao.MonthReportDao;
-import com.netcracker.dao.impl.mapper.CategoryExpenseReportMapper;
-import com.netcracker.dao.impl.mapper.CategoryIncomeReportMapper;
+import com.netcracker.dao.impl.mapper.CategoryExpensePersonalReportMapper;
+import com.netcracker.dao.impl.mapper.CategoryIncomePersonalReportMapper;
 import com.netcracker.dao.impl.mapper.MonthReportMapper;
 import com.netcracker.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -85,21 +85,21 @@ public class MonthReportDaoImpl implements MonthReportDao {
 
     @Override
     public Collection<CategoryIncomeReport> getCategoryIncomePersonalReport(BigInteger id) {
-        return template.query(GET_CATEGORY_INCOME_PERSONAL_REPORT_BY_ID, new Object[]{new BigDecimal(id)}, new CategoryIncomeReportMapper());
+        return template.query(GET_CATEGORY_INCOME_PERSONAL_REPORT_BY_ID, new Object[]{new BigDecimal(id)}, new CategoryIncomePersonalReportMapper());
     }
 
     @Override
     public Collection<CategoryIncomeReport> getCategoryIncomeFamilyReport(BigInteger id) {
-        return template.query(GET_CATEGORY_INCOME_FAMILY_REPORT_BY_ID, new Object[]{new BigDecimal(id)}, new CategoryIncomeReportMapper());
+        return template.query(GET_CATEGORY_INCOME_FAMILY_REPORT_BY_ID, new Object[]{new BigDecimal(id)}, new CategoryIncomePersonalReportMapper());
     }
 
     @Override
     public Collection<CategoryExpenseReport> getCategoryExpensePersonalReport(BigInteger id) {
-        return template.query(GET_CATEGORY_EXPENSE_PERSONAL_REPORT_BY_ID, new Object[]{new BigDecimal(id)}, new CategoryExpenseReportMapper());
+        return template.query(GET_CATEGORY_EXPENSE_PERSONAL_REPORT_BY_ID, new Object[]{new BigDecimal(id)}, new CategoryExpensePersonalReportMapper());
     }
 
     @Override
     public Collection<CategoryExpenseReport> getCategoryExpenseFamilyReport(BigInteger id) {
-        return template.query(GET_CATEGORY_EXPENSE_FAMILY_REPORT_BY_ID, new Object[]{new BigDecimal(id)}, new CategoryExpenseReportMapper());
+        return template.query(GET_CATEGORY_EXPENSE_FAMILY_REPORT_BY_ID, new Object[]{new BigDecimal(id)}, new CategoryExpensePersonalReportMapper());
     }
 }

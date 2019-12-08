@@ -1,10 +1,11 @@
 package com.netcracker.dao.impl;
 
 import com.netcracker.dao.OperationDao;
-import com.netcracker.dao.impl.mapper.AccountExpenseMapper;
-import com.netcracker.dao.impl.mapper.AccountIncomeMapper;
+import com.netcracker.dao.impl.mapper.*;
 import com.netcracker.models.AccountExpense;
 import com.netcracker.models.AccountIncome;
+import com.netcracker.models.CategoryExpenseReport;
+import com.netcracker.models.CategoryIncomeReport;
 import com.netcracker.models.enums.CategoryExpense;
 import com.netcracker.models.enums.CategoryIncome;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,34 +64,34 @@ public class OperationDaoImpl implements OperationDao {
     }
 
     @Override
-    public Collection<AccountIncome> getIncomesFamilyAfterDateByAccountId(BigInteger id, Date data) {
+    public Collection<AccountIncome> getIncomesFamilyAfterDateByAccountId(BigInteger id, Date date) {
         return template.query(GET_INCOMES_FAMILY_AFTER_DATE_BY_ACCOUNT_ID,
-                new Object[]{new BigDecimal(id), data}, new AccountIncomeMapper());
+                new Object[]{new BigDecimal(id), date}, new AccountIncomeMapper());
     }
 
     @Override
-    public Collection<AccountExpense> getExpensesFamilyAfterDateByAccountId(BigInteger id, Date data) {
+    public Collection<AccountExpense> getExpensesFamilyAfterDateByAccountId(BigInteger id, Date date) {
         return template.query(GET_EXPENSES_FAMILY_AFTER_DATE_BY_ACCOUNT_ID,
-                new Object[]{new BigDecimal(id), data}, new AccountExpenseMapper());
+                new Object[]{new BigDecimal(id), date}, new AccountExpenseMapper());
     }
 
     @Override
-    public Collection<AccountExpense> getExpensesPersonalGroupByCategories(BigInteger id, Date date) {
-        return null;
+    public Collection<CategoryExpenseReport> getExpensesPersonalGroupByCategories(BigInteger id, Date date) {
+        return template.query(GET_EXPENSES_PERSONAL_GROUP_BY_CATEGORIES, new Object[]{new BigDecimal(id), date}, new CategoryExpensePersonalReportMapper());
     }
 
     @Override
-    public Collection<AccountExpense> getIncomesPersonalGroupByCategories(BigInteger id, Date date) {
-        return null;
+    public Collection<CategoryIncomeReport> getIncomesPersonalGroupByCategories(BigInteger id, Date date) {
+        return template.query(GET_INCOMES_PERSONAL_GROUP_BY_CATEGORIES, new Object[]{new BigDecimal(id), date}, new CategoryIncomePersonalReportMapper());
     }
 
     @Override
-    public Collection<AccountExpense> getExpensesFamilyGroupByCategories(BigInteger id, Date date) {
-        return null;
+    public Collection<CategoryExpenseReport> getExpensesFamilyGroupByCategories(BigInteger id, Date date) {
+        return template.query(GET_EXPENSES_FAMILY_GROUP_BY_CATEGORIES, new Object[]{new BigDecimal(id), date}, new CategoryExpenseFamilyReportMapper());
     }
 
     @Override
-    public Collection<AccountExpense> getIncomesFamilyGroupByCategories(BigInteger id, Date date) {
-        return null;
+    public Collection<CategoryIncomeReport> getIncomesFamilyGroupByCategories(BigInteger id, Date date) {
+        return template.query(GET_INCOMES_FAMILY_GROUP_BY_CATEGORIES, new Object[]{new BigDecimal(id), date}, new CategoryIncomeFamilyReportMapper());
     }
 }
