@@ -22,14 +22,18 @@ public class JobServiceImpl implements JobService {
     @Override
     public void createJob() {
     }
-
     //@Scheduled(cron = "[Seconds] [Minutes] [Hours] [Day of month] [Month] [Day of week] [Year]")
     //Start execute at 10 am
     @Override
     @Scheduled(cron = "* * */10 * * ?")
-    public void executeJob() {
+    public void executeRemindEmailJob() {
 
     }
 
+    @Override
+    @Scheduled(cron = "* * * */1 * ?")
+    public void executeMonthReportOnEmailJob() {
+
+    }
 
 }
