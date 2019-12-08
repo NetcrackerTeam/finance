@@ -5,6 +5,7 @@ import com.netcracker.dao.impl.mapper.CategoryExpensePersonalReportMapper;
 import com.netcracker.dao.impl.mapper.CategoryIncomePersonalReportMapper;
 import com.netcracker.dao.impl.mapper.MonthReportMapper;
 import com.netcracker.models.*;
+import com.netcracker.models.enums.CategoryExpense;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
@@ -64,23 +65,27 @@ public class MonthReportDaoImpl implements MonthReportDao {
     }
 
     @Override
-    public void createCategoryIncomePersonalReport() {
-        template.update(CREATE_CATEGORY_INCOME_PERSONAL_REPORT_BY_ID, new Object[]{});
+    public void createCategoryIncomePersonalReport(BigInteger id, CategoryIncomeReport categoryIncomeReport) {
+        template.update(CREATE_CATEGORY_INCOME_PERSONAL_REPORT_BY_ID, new BigDecimal(id), categoryIncomeReport.getCategoryIncome().getId(),
+                categoryIncomeReport.getAmount());
     }
 
     @Override
-    public void createCategoryIncomeFamilyReport() {
-        template.update(CREATE_CATEGORY_INCOME_FAMILY_REPORT_BY_ID, new Object[]{});
+    public void createCategoryIncomeFamilyReport(BigInteger idReport, BigInteger idUser, CategoryIncomeReport categoryIncomeReport) {
+        template.update(CREATE_CATEGORY_INCOME_FAMILY_REPORT_BY_ID, new BigDecimal(idReport), new BigDecimal(idUser), categoryIncomeReport.getCategoryIncome(),
+                categoryIncomeReport.getAmount(), new BigDecimal(categoryIncomeReport.getUserReference()));
     }
 
     @Override
-    public void createCategoryExpensePersonalReport() {
-        template.update(CREATE_CATEGORY_EXPENSE_PERSONAL_REPORT_BY_ID, new Object[]{});
+    public void createCategoryExpensePersonalReport(BigInteger id, CategoryExpenseReport categoryExpenseReport) {
+        template.update(CREATE_CATEGORY_EXPENSE_PERSONAL_REPORT_BY_ID, new BigDecimal(id), categoryExpenseReport.getCategoryExpense(),
+                categoryExpenseReport.getAmount(), new BigDecimal(categoryExpenseReport.getUserReference()));
     }
 
     @Override
-    public void createCategoryExpenseFamilyReport() {
-        template.update(CREATE_CATEGORY_EXPENSE_FAMILY_REPORT_BY_ID, new Object[]{});
+    public void createCategoryExpenseFamilyReport(BigInteger idReport, BigInteger idUser, CategoryExpenseReport categoryExpenseReport) {
+        template.update(CREATE_CATEGORY_EXPENSE_FAMILY_REPORT_BY_ID, new Object[]{new BigDecimal(idReport), new BigDecimal(idUser),
+        new BigDecimal(categoryExpenseReport.getCategoryExpense().getId()), categoryExpenseReport.getAmount()});
     }
 
     @Override

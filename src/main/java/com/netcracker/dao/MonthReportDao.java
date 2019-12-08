@@ -20,13 +20,13 @@ public interface MonthReportDao {
 
 
 
-    void createCategoryIncomePersonalReport();
+    void createCategoryIncomePersonalReport(BigInteger id, CategoryIncomeReport categoryIncomeReport);
 
-    void createCategoryIncomeFamilyReport();
+    void createCategoryIncomeFamilyReport(BigInteger idReport, BigInteger idUser, CategoryIncomeReport categoryIncomeReport);
 
-    void createCategoryExpensePersonalReport();
+    void createCategoryExpensePersonalReport(BigInteger id, CategoryExpenseReport categoryExpenseReport);
 
-    void createCategoryExpenseFamilyReport();
+    void createCategoryExpenseFamilyReport(BigInteger idReport, BigInteger idUser, CategoryExpenseReport categoryExpenseReport);
 
     Collection<CategoryIncomeReport> getCategoryIncomePersonalReport(BigInteger id);
 
@@ -134,4 +134,6 @@ public interface MonthReportDao {
             "  WHERE  REF.ATTR_ID = 23 AND O.OBJECT_ID = REF.OBJECT_ID AND REF.REFERENCE = ?" +
             "  AND SUMM.OBJECT_ID = O.OBJECT_ID AND SUMM.ATTR_ID = 26 /* amount*/" +
             "  AND CATEGORY.OBJECT_ID = O.OBJECT_ID AND CATEGORY.ATTR_ID = 25; /* category*/";
+
+
 }
