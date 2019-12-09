@@ -124,7 +124,7 @@ public class CreditAccountDaoTest {
 
     @Test
     public void getFamilyCreditByIdTest() {
-        checkEqualsCredit(familyCreditAccountOne, creditAccountDao.getFamilyCreditById(new BigInteger("11")));
+        checkEqualsCredit(familyCreditAccountOne, creditAccountDao.getFamilyCreditById(BigInteger.valueOf(11L)));
     }
 
     @Test

@@ -3,7 +3,7 @@ package com.netcracker.dao.impl;
 import com.netcracker.configs.WebConfig;
 import com.netcracker.dao.CreditDeptDao;
 import com.netcracker.models.Debt;
-import com.netcracker.services.CreditUtils;
+import com.netcracker.services.utils.CreditUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,7 +15,6 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigInteger;
-import java.sql.Date;
 import java.time.LocalDate;
 
 import static org.junit.Assert.assertEquals;

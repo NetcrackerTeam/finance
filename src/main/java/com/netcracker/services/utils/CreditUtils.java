@@ -1,4 +1,4 @@
-package com.netcracker.services;
+package com.netcracker.services.utils;
 
 import java.sql.Date;
 import java.time.LocalDate;

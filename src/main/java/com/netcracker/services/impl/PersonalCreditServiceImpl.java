@@ -9,7 +9,7 @@ import com.netcracker.models.Debt;
 import com.netcracker.models.PersonalCreditAccount;
 import com.netcracker.models.PersonalDebitAccount;
 import com.netcracker.models.enums.CreditStatusPaid;
-import com.netcracker.services.CreditUtils;
+import com.netcracker.services.utils.CreditUtils;
 import com.netcracker.services.PersonalCreditService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -114,7 +114,8 @@ public class PersonalCreditServiceImpl implements PersonalCreditService {
         PersonalDebitAccount debitAccount = debitAccountDao.getPersonalAccountById(accountDebitId);
         long actualDebitAmount = debitAccount.getAmount();
         debitAccountDao.updateAmountOfPersonalAccount(accountDebitId, actualDebitAmount - amount);
-        creditOperationDao.createPersonalCreditOperation(new CreditOperation(amount, new Date()), creditAccount.getCreditId());
+//        creditOperationDao.createPersonalCreditOperation(new CreditOperation(amount, new Date()), creditAccount.getCreditId());
+        creditOperationDao.createPersonalCreditOperation(amount, new Date(), creditAccount.getCreditId());
         long updatedAmount = creditAccount.getAmount() + amount;
         creditAccountDao.updatePersonalCreditPayment(creditAccount.getCreditId(), updatedAmount);
         if (creditAccount.getAmount() + amount == updatedAmount) {
