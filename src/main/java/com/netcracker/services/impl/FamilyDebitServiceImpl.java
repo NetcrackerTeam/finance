@@ -49,10 +49,16 @@ public class FamilyDebitServiceImpl implements FamilyDebitService {
         logger.debug("Entering insert(addUserToAccount=" + accountId + " " + userId + ")");
         try {
             User tempUser = userDao.getUserById(userId);
+            if(tempUser == null){
+                throw new NullPointerException("The user "+ userId + " is NULL");
+            }
             if (tempUser.getUserStatusActive() == UserStatusActive.NO) {
                 logger.error("The user " + userId + " is unActive");
             } else {
                 Collection<User> participants = familyAccountDebitDao.getParticipantsOfFamilyAccount(accountId);
+                if(participants == null){
+                    throw new NullPointerException("the family debit account  " + accountId + " doesn`t exist");
+                }
                 for (User participant : participants) {
                     if (participant.getId().equals(userId)) {
                         logger.error("The user " + participant.getId() + " is has family account");
