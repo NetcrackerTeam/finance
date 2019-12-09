@@ -10,15 +10,15 @@ import com.netcracker.models.PersonalDebitAccount;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
 
-@Component
-public class PersonalDebitAccountDaoImpl  implements PersonalDebitAccountDao {
+@Repository
+public class PersonalDebitAccountDaoImpl implements PersonalDebitAccountDao {
     private static final Logger logger = Logger.getLogger(PersonalDebitAccountDaoImpl.class);
     private JdbcTemplate template;
 
@@ -61,6 +61,7 @@ public class PersonalDebitAccountDaoImpl  implements PersonalDebitAccountDao {
                 account_id.toString(),
         });
     }
+
     @Override
     public ArrayList<AccountIncome> getIncomesOfPersonalAccount(BigInteger debitId) {
         logger.debug("Entering list(getParticipantsOfPersonalAccount=" + debitId + ")");
@@ -70,8 +71,9 @@ public class PersonalDebitAccountDaoImpl  implements PersonalDebitAccountDao {
     @Override
     public ArrayList<AccountExpense> getExpensesOfPersonalAccount(BigInteger debitId) {
         logger.debug("Entering list(getParticipantsOfPersonalAccount=" + debitId + ")");
-        return (ArrayList<AccountExpense>) this.template.query(GET_EXPENSE_LIST, new Object[]{new BigDecimal(debitId)},  new AccountExpenseMapper());
+        return (ArrayList<AccountExpense>) this.template.query(GET_EXPENSE_LIST, new Object[]{new BigDecimal(debitId)}, new AccountExpenseMapper());
     }
+
     @Override
     public void updateAmountOfPersonalAccount(BigInteger accountId, Long amount) {
         logger.debug("Entering update_amount(deletePersonalAccount=" + accountId + " " + amount + ")");

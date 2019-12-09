@@ -28,6 +28,8 @@ BEGIN
   'Dear {}, you have been added to a family account');
   INSERT INTO template values(8,'Deleted from a family account',
   'Dear {}, you have been deleted from a family account');
+  INSERT INTO TEMPLATE VALUES (9,'Account is deactivate',
+   'Hi dear {}. We see you will deactivate your account, and its very bad for us. We want to see you again. your Finance Team');
   commit;
 END;
 /

@@ -23,7 +23,7 @@ public interface PersonalDebitAccountDao {
 
     ArrayList<AccountExpense> getExpensesOfPersonalAccount(BigInteger debitId);
 
-    String GET_PERSONAL_ACCOUNT_BY_ID ="SELECT " +
+    String GET_PERSONAL_ACCOUNT_BY_ID = "SELECT " +
             "DEBIT.OBJECT_ID PERSONAL_ID, DEBIT.NAME NAME_PERSONAL_DEBIT, ATTR1.VALUE AMOUNT_PERSONAL_DEBIT, ATTR2.LIST_VALUE_ID STATUS_PERSONAL_DEBIT, "
             +
             "US.OBJECT_ID USER_ID,  ATTR1_USER.VALUE  NAME, ATTR2_USER.VALUE  EMAIL, ATTR3_USER.VALUE  PASSWORD, "

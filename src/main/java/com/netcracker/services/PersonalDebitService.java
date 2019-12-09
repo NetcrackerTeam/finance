@@ -15,4 +15,5 @@ public interface PersonalDebitService {
 
     PersonalDebitAccount getPersonalDebitAccount(BigInteger id);
 
-    public Collection<AbstractAccountOperation> getHistory(BigInteger personalAccountId, Date date);}
+    public Collection<AbstractAccountOperation> getHistory(BigInteger personalAccountId, Date date);
+}

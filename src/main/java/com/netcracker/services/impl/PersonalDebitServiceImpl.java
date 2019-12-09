@@ -1,6 +1,5 @@
 package com.netcracker.services.impl;
 
-import com.netcracker.dao.CreditAccountDao;
 import com.netcracker.dao.OperationDao;
 import com.netcracker.dao.PersonalDebitAccountDao;
 import com.netcracker.models.AbstractAccountOperation;
