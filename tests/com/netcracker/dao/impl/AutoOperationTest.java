@@ -30,11 +30,9 @@ import static org.junit.Assert.assertEquals;
 @ContextConfiguration(classes = WebConfig.class)
 @Transactional
 public class AutoOperationTest {
-    protected JdbcTemplate jdbcTemplate;
+    private JdbcTemplate jdbcTemplate;
     private String dateToday = "2019-12-06";
     private String GET_COUNT_OF_AO_OBJECTS = "SELECT COUNT(*) FROM OBJECTS WHERE OBJECT_ID = 9111";
-    private String GET_COUNT_OF_AO_ATTRIBUTES = "SELECT COUNT(*) FROM ATTRIBUTES WHERE OBJECT_ID = 9111";
-    private String GET_COUNT_OF_AO_OBJREFERENCE = "SELECT COUNT(*) FROM OBJREFERENCE WHERE OBJECT_ID = 9111";
 
     @Autowired
     private DataSource dataSource;
@@ -172,10 +170,6 @@ public class AutoOperationTest {
         int totalCount = 0;
         autoOperationDao.deleteAutoOperation(new BigInteger("9111"));
         int countObjects = jdbcTemplate.queryForObject(GET_COUNT_OF_AO_OBJECTS, Integer.class);
-        int countAttributes = jdbcTemplate.queryForObject(GET_COUNT_OF_AO_ATTRIBUTES, Integer.class);
-        int countObjreference = jdbcTemplate.queryForObject(GET_COUNT_OF_AO_OBJREFERENCE, Integer.class);
         assertEquals(totalCount, countObjects);
-        assertEquals(totalCount, countAttributes);
-        assertEquals(totalCount, countObjreference);
     }
 }

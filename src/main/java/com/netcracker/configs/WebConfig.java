@@ -1,7 +1,5 @@
 package com.netcracker.configs;
 
-import com.netcracker.dao.UserDao;
-import com.netcracker.dao.impl.UserDaoImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;

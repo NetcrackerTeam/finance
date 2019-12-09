@@ -26,11 +26,9 @@ import static org.junit.Assert.assertEquals;
 @ContextConfiguration(classes = WebConfig.class)
 @Transactional
 public class CreditOperationTest {
-    protected JdbcTemplate jdbcTemplate;
+    private JdbcTemplate jdbcTemplate;
     private String dateToday = "2019-12-01";
     private String GET_COUNT_OF_CO_OBJECTS = "SELECT COUNT(*) FROM OBJECTS WHERE OBJECT_ID = 8010";
-    private String GET_COUNT_OF_CO_ATTRIBUTES = "SELECT COUNT(*) FROM ATTRIBUTES WHERE OBJECT_ID = 8010";
-    private String GET_COUNT_OF_CO_OBJREFERENCE = "SELECT COUNT(*) FROM OBJREFERENCE WHERE OBJECT_ID = 8010";
 
     @Autowired
     private DataSource dataSource;
@@ -67,8 +65,8 @@ public class CreditOperationTest {
         CreditOperation expectedCreditOperation = new CreditOperation(Long.valueOf("6666"),
                 AssertUtils.stringToDate("2000-01-01"));
         expectedCreditOperation.setCreditOperationId(BigInteger.valueOf(AssertUtils.getCurrentSequenceId(jdbcTemplate)));
-        CreditOperation actualCreditOperation = creditOperationDao.createFamilyCreditOperation(expectedCreditOperation,
-                new BigInteger("84"), new BigInteger("74"));
+        CreditOperation actualCreditOperation = creditOperationDao.createFamilyCreditOperation(Long.valueOf("6666"),
+                AssertUtils.stringToDate("2000-01-01"), new BigInteger("84"), new BigInteger("74"));
         AssertUtils.assertCreditOperation(expectedCreditOperation, actualCreditOperation);
     }
 
@@ -78,8 +76,8 @@ public class CreditOperationTest {
         CreditOperation expectedCreditOperation = new CreditOperation(Long.valueOf("1488"),
                 AssertUtils.stringToDate("2003-03-03"));
         expectedCreditOperation.setCreditOperationId(BigInteger.valueOf(AssertUtils.getCurrentSequenceId(jdbcTemplate)));
-        CreditOperation actualCreditOperation = creditOperationDao.createPersonalCreditOperation(expectedCreditOperation,
-                new BigInteger("60"));
+        CreditOperation actualCreditOperation = creditOperationDao.createPersonalCreditOperation(Long.valueOf("1488"),
+                AssertUtils.stringToDate("2003-03-03"), new BigInteger("60"));
         AssertUtils.assertCreditOperation(expectedCreditOperation, actualCreditOperation);
     }
 
@@ -121,10 +119,6 @@ public class CreditOperationTest {
         int totalCount = 0;
         creditOperationDao.deleteCreditOperation(new BigInteger("8010"));
         int countObjects = jdbcTemplate.queryForObject(GET_COUNT_OF_CO_OBJECTS, Integer.class);
-        int countAttributes = jdbcTemplate.queryForObject(GET_COUNT_OF_CO_ATTRIBUTES, Integer.class);
-        int countObjreference = jdbcTemplate.queryForObject(GET_COUNT_OF_CO_OBJREFERENCE, Integer.class);
         assertEquals(totalCount, countObjects);
-        assertEquals(totalCount, countAttributes);
-        assertEquals(totalCount, countObjreference);
     }
 }

@@ -2,10 +2,10 @@ package com.netcracker.dao.impl;
 
 import com.netcracker.configs.WebConfig;
 import com.netcracker.dao.OperationDao;
-import com.netcracker.models.*;
+import com.netcracker.models.AccountExpense;
+import com.netcracker.models.AccountIncome;
 import com.netcracker.models.enums.CategoryExpense;
 import com.netcracker.models.enums.CategoryIncome;
-import com.netcracker.models.enums.CreditStatusPaid;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -19,15 +19,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-
 import java.sql.Date;
-import java.time.ZoneId;
+import java.time.LocalDate;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 @WebAppConfiguration
 @ContextConfiguration(classes = {WebConfig.class})
