@@ -99,8 +99,6 @@ public interface AutoOperationDao {
             "VALUES (61 /*TRANSACTION_AUTO_EXPENSE*/, ?, ? /*REFERENCE_TO_USER*/) " + "SELECT * FROM DUAL";
 
     String DELETE_FROM_OBJECTS = "DELETE FROM OBJECTS WHERE OBJECT_ID = ?";
-    String DELETE_FROM_ATTRIBUTES = "DELETE FROM ATTRIBUTES WHERE OBJECT_ID = ?";
-    String DELETE_FROM_OBJREFERENCE = "DELETE FROM OBJREFERENCE WHERE OBJECT_ID = ?";
 
     int personalExpense_user_debit_acc_ref_attr_id_1 = 59;
     int personalExpense_day_of_month_attr_id_3 = 62;

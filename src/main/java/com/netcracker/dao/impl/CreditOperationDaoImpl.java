@@ -3,19 +3,21 @@ package com.netcracker.dao.impl;
 import com.netcracker.dao.CreditOperationDao;
 import com.netcracker.dao.impl.mapper.CreditOperationMapper;
 import com.netcracker.models.CreditOperation;
+import com.netcracker.utils.ObjectsCreator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Collection;
+import java.util.Date;
 
-@Component
+@Repository
 public class CreditOperationDaoImpl implements CreditOperationDao {
-    protected JdbcTemplate jdbcTemplate;
-
+    private JdbcTemplate jdbcTemplate;
 
     @Autowired
     public CreditOperationDaoImpl (DataSource dataSource) {
@@ -35,18 +37,28 @@ public class CreditOperationDaoImpl implements CreditOperationDao {
     }
 
     @Override
-    public CreditOperation createFamilyCreditOperation(CreditOperation creditOperation, BigInteger creditFamilyAccountId,
+    public CreditOperation createFamilyCreditOperation(long amount, Date date, BigInteger creditFamilyAccountId,
                                                        BigInteger userId) {
-        jdbcTemplate.update(CREATE_CREDIT_OPERATION_FAMILY, creditOperation.getAmount().toString(), creditOperation.getDate(),
-                new BigDecimal(creditFamilyAccountId), new BigDecimal(userId));
-        return creditOperation;
+        BigInteger objectIdInteger = ObjectsCreator.createObject(family_object_type_id_1, family_name_2,
+                jdbcTemplate, CREATE_OBJECT_CREDIT_OPERATION);
+        BigDecimal objectId = new BigDecimal(objectIdInteger);
+
+        jdbcTemplate.update(CREATE_CREDIT_OPERATION_FAMILY, objectId, amount, objectId, date, objectId,
+                new BigDecimal(creditFamilyAccountId), objectId, new BigDecimal(userId));
+
+        return getCreditOperationFamily(objectIdInteger);
     }
 
     @Override
-    public CreditOperation createPersonalCreditOperation(CreditOperation creditOperation, BigInteger creditPersonalAccountId) {
-        jdbcTemplate.update(CREATE_CREDIT_OPERATION_PERSONAL, creditOperation.getAmount().toString(),
-                creditOperation.getDate(), new BigDecimal(creditPersonalAccountId));
-        return creditOperation;
+    public CreditOperation createPersonalCreditOperation(long amount, Date date, BigInteger creditPersonalAccountId) {
+        BigInteger objectIdInteger = ObjectsCreator.createObject(personal_object_type_id_1, personal_name_2,
+                jdbcTemplate, CREATE_OBJECT_CREDIT_OPERATION);
+        BigDecimal objectId = new BigDecimal(objectIdInteger);
+
+        jdbcTemplate.update(CREATE_CREDIT_OPERATION_PERSONAL, objectId, amount, objectId, date, objectId,
+                new BigDecimal(creditPersonalAccountId));
+
+        return getCreditOperationPersonal(objectIdInteger);
     }
 
     @Override
@@ -64,7 +76,6 @@ public class CreditOperationDaoImpl implements CreditOperationDao {
     @Override
     public void deleteCreditOperation(BigInteger creditOperationId) {
         jdbcTemplate.update(DELETE_FROM_OBJECTS, new BigDecimal(creditOperationId));
-        jdbcTemplate.update(DELETE_FROM_ATTRIBUTES, new BigDecimal(creditOperationId));
-        jdbcTemplate.update(DELETE_FROM_OBJREFERENCE, new BigDecimal(creditOperationId));
     }
+
 }

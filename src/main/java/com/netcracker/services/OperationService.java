@@ -1,22 +1,33 @@
 package com.netcracker.services;
 
-import com.netcracker.models.FamilyDebitAccount;
-import com.netcracker.models.PersonalDebitAccount;
+import com.netcracker.models.*;
+import com.netcracker.models.enums.CategoryExpense;
+import com.netcracker.models.enums.CategoryIncome;
 
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.util.Date;
 import java.util.List;
 
 public interface OperationService {
-    public void getAllFamilyOperations(List<FamilyDebitAccount> accounts);
+    List<AbstractAccountOperation> getAllFamilyOperations(List<FamilyDebitAccount> accounts);
 
-    public void getAllPersonOperations(List<PersonalDebitAccount> accounts);
+    List<AbstractAccountOperation> getAllPersonalOperations(List<PersonalDebitAccount> accounts);
 
-    public void getFamilyOperation();
+    AccountIncome getFamilyOperationIncome(BigInteger operationId);
 
-    public void getPersonOperation();
+    AccountExpense getFamilyOperationExpense(BigInteger operationId);
 
-    public void addFamilyOperation();
+    AccountIncome getPersonalOperationIncome(BigInteger operationId);
 
-    public void addPersonOperation();
+    AccountExpense getPersonalOperationExpense(BigInteger operationId);
 
+    void createFamilyOperationIncome(BigInteger idUser, BigInteger idFamily, BigDecimal income, Date date, CategoryIncome categoryIncome);
+
+    void createFamilyOperationExpense(BigInteger idUser, BigInteger idFamily, BigDecimal expense, Date date, CategoryExpense categoryExpense);
+
+    void createPersonalOperationIncome(BigInteger id, BigDecimal income, Date date, CategoryIncome categoryIncome);
+
+    void createPersonalOperationExpense(BigInteger id, BigDecimal expense, Date date, CategoryExpense categoryExpense);
 }

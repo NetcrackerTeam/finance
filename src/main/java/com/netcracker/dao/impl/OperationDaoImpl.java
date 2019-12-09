@@ -15,12 +15,8 @@ import org.springframework.stereotype.Component;
 import javax.sql.DataSource;
 import java.math.BigDecimal;
 import java.math.BigInteger;
-
-import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Date;
-import java.util.List;
-import java.util.Map;
 @Component
 public class OperationDaoImpl implements OperationDao {
 
@@ -32,22 +28,22 @@ public class OperationDaoImpl implements OperationDao {
     }
 
     @Override
-    public void addIncomePersonalByAccId(BigInteger id, BigDecimal income, Date date,  CategoryIncome categoryIncome) {
+    public void createIncomePersonalByAccId(BigInteger id, BigDecimal income, Date date,  CategoryIncome categoryIncome) {
         template.update(ADD_INCOME_PERSONAL_BY_ACCOUNT_ID, new Object[]{new BigDecimal(id), income.toString(), date, new BigDecimal(categoryIncome.getId())});
     }
 
     @Override
-    public void addExpensePersonaByAccId(BigInteger id, BigDecimal expense, Date date, CategoryExpense categoryExpense) {
+    public void createExpensePersonaByAccId(BigInteger id, BigDecimal expense, Date date, CategoryExpense categoryExpense) {
         template.update(ADD_EXPENSE_PERSONAL_BY_ACCOUNT_ID, new Object[]{new BigDecimal(id), expense.toString(), date, new BigDecimal(categoryExpense.getId()) });
     }
 
     @Override
-    public void addIncomeFamilyByAccId(BigInteger idUser, BigInteger idFamily, BigDecimal income, Date date,CategoryIncome categoryIncome) {
+    public void createIncomeFamilyByAccId(BigInteger idUser, BigInteger idFamily, BigDecimal income, Date date,CategoryIncome categoryIncome) {
         template.update(ADD_INCOME_FAMILY_BY_ACCOUNT_ID, new Object[]{new BigDecimal(idUser), new BigDecimal(idFamily), income.toString(),date, new BigDecimal(categoryIncome.getId()) });
     }
 
     @Override
-    public void addExpenseFamilyByAccId(BigInteger idUser, BigInteger idFamily, BigDecimal expense, Date date, CategoryExpense categoryExpense ) {
+    public void createExpenseFamilyByAccId(BigInteger idUser, BigInteger idFamily, BigDecimal expense, Date date, CategoryExpense categoryExpense ) {
         template.update(ADD_EXPENSE_FAMILY_BY_ACCOUNT_ID, new Object[]{ new BigDecimal(idUser), new BigDecimal(idFamily) , expense.toString(), date, new BigDecimal(categoryExpense.getId())});
     }
 

@@ -4,15 +4,16 @@ import com.netcracker.models.CreditOperation;
 
 import java.math.BigInteger;
 import java.util.Collection;
+import java.util.Date;
 
 public interface CreditOperationDao {
     CreditOperation getCreditOperationPersonal(BigInteger creditOperationId);
 
     CreditOperation getCreditOperationFamily(BigInteger creditOperationId);
 
-    CreditOperation createFamilyCreditOperation(CreditOperation creditOperation, BigInteger creditFamilyAccountId, BigInteger userId);
+    CreditOperation createFamilyCreditOperation(long amount, Date date, BigInteger creditFamilyAccountId, BigInteger userId);
 
-    CreditOperation createPersonalCreditOperation(CreditOperation creditOperation, BigInteger creditPersonalAccountId);
+    CreditOperation createPersonalCreditOperation(long amount, Date date, BigInteger creditPersonalAccountId);
 
     Collection<CreditOperation> getAllCreditOperationsByCreditFamilyId(BigInteger creditFamilyAccountId);
 
@@ -20,27 +21,31 @@ public interface CreditOperationDao {
 
     void deleteCreditOperation(BigInteger creditOperationId);
 
+    int personal_object_type_id_1 = 7;
+    String personal_name_2 = "CREDIT_OPERATION_PERSONAL";
+    int family_object_type_id_1 = 18;
+    String family_name_2 = "CREDIT_OPERATION_FAMILY";
+
+    String CREATE_OBJECT_CREDIT_OPERATION = "INSERT INTO OBJECTS (OBJECT_ID, PARENT_ID, OBJECT_TYPE_ID, NAME, DESCRIPTION) " +
+            "VALUES (OBJECTS_ID_S.NEXTVAL, NULL, ?, ?, NULL)";
+
     String CREATE_CREDIT_OPERATION_PERSONAL = "INSERT ALL " +
-            "INTO OBJECTS (OBJECT_ID, PARENT_ID, OBJECT_TYPE_ID, NAME, DESCRIPTION) " +
-            "VALUES (OBJECTS_ID_S.NEXTVAL, NULL, 7, 'CREDIT_OPERATION_PERSONAL', NULL) " +
             "INTO ATTRIBUTES (ATTR_ID, OBJECT_ID, VALUE, DATE_VALUE, LIST_VALUE_ID) " +
-            "VALUES (40 /*AMOUNT*/, OBJECTS_ID_S.CURRVAL, ? /*AMOUNT*/, NULL, NULL) " +
+            "VALUES (40 /*AMOUNT*/, ?, ? /*AMOUNT*/, NULL, NULL) " +
             "INTO ATTRIBUTES (ATTR_ID, OBJECT_ID, VALUE, DATE_VALUE, LIST_VALUE_ID) " +
-            "VALUES (41 /*DATE*/, OBJECTS_ID_S.CURRVAL, NULL, ?, NULL) " +
+            "VALUES (41 /*DATE*/, ?, NULL, ?, NULL) " +
             "INTO OBJREFERENCE (ATTR_ID, OBJECT_ID, REFERENCE) " +
-            "VALUES (37, OBJECTS_ID_S.CURRVAL, ? /*REFERENCE TO CREDIT_ACC_PERSONAL*/) " + "SELECT * FROM DUAL";
+            "VALUES (37, ?, ? /*REFERENCE TO CREDIT_ACC_PERSONAL*/) " + "SELECT * FROM DUAL";
 
     String CREATE_CREDIT_OPERATION_FAMILY = "INSERT ALL " +
-            "INTO OBJECTS (OBJECT_ID, PARENT_ID, OBJECT_TYPE_ID, NAME, DESCRIPTION) " +
-            "VALUES (OBJECTS_ID_S.NEXTVAL, NULL, 18, 'CREDIT_OPERATION_FAMILY', NULL) " +
             "INTO ATTRIBUTES (ATTR_ID, OBJECT_ID, VALUE, DATE_VALUE, LIST_VALUE_ID) " +
-            "VALUES (40 /*AMOUNT*/, OBJECTS_ID_S.CURRVAL, ? /*AMOUNT*/, NULL, NULL) " +
+            "VALUES (40 /*AMOUNT*/, ?, ? /*AMOUNT*/, NULL, NULL) " +
             "INTO ATTRIBUTES (ATTR_ID, OBJECT_ID, VALUE, DATE_VALUE, LIST_VALUE_ID) " +
-            "VALUES (41 /*DATE*/, OBJECTS_ID_S.CURRVAL, NULL, ?, NULL) " +
+            "VALUES (41 /*DATE*/, ?, NULL, ?, NULL) " +
             "INTO OBJREFERENCE (ATTR_ID, OBJECT_ID, REFERENCE) " +
-            "VALUES (38, OBJECTS_ID_S.CURRVAL, ? /*REFERENCE TO CREDIT_ACC_FAMILY*/) " +
+            "VALUES (38, ?, ? /*REFERENCE TO CREDIT_ACC_FAMILY*/) " +
             "INTO OBJREFERENCE (ATTR_ID, OBJECT_ID, REFERENCE) " +
-            "VALUES (39, OBJECTS_ID_S.CURRVAL, ? /*REFERENCE TO USER*/) " + "SELECT * FROM DUAL";
+            "VALUES (39, ?, ? /*REFERENCE TO USER*/) " + "SELECT * FROM DUAL";
 
     String GET_CREDIT_OPERATION_PERSONAL =
             "SELECT CREDIT_ACC_PERSONAL.OBJECT_ID AS CREDIT_ACC_PERSONAL_ID, CREDIT_ACC_NAME.VALUE AS CREDIT_ACC_NAME, " +
@@ -72,8 +77,6 @@ public interface CreditOperationDao {
                     "  AND AMOUNT.OBJECT_ID = CREDIT_OPERATION.OBJECT_ID AND DATES.OBJECT_ID = CREDIT_OPERATION.OBJECT_ID";
 
     String DELETE_FROM_OBJECTS = "DELETE FROM OBJECTS WHERE OBJECT_ID = ?";
-    String DELETE_FROM_ATTRIBUTES = "DELETE FROM ATTRIBUTES WHERE OBJECT_ID = ?";
-    String DELETE_FROM_OBJREFERENCE = "DELETE FROM OBJREFERENCE WHERE OBJECT_ID = ?";
 
     String GET_ALL_CREDIT_OPERATIONS_PERSONAL =
             "SELECT CREDIT_ACC_PERSONAL.OBJECT_ID AS CREDIT_ACC_PERSONAL_ID, CREDIT_ACC_NAME.VALUE AS CREDIT_ACC_NAME, " +

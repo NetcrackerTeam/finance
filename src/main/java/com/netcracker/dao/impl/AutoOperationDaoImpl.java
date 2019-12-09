@@ -8,22 +8,20 @@ import com.netcracker.models.AutoOperationExpense;
 import com.netcracker.models.AutoOperationIncome;
 import com.netcracker.models.enums.CategoryExpense;
 import com.netcracker.models.enums.CategoryIncome;
+import com.netcracker.utils.ObjectsCreator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import java.util.Collection;
 
-@Component
+@Repository
 public class AutoOperationDaoImpl implements AutoOperationDao {
-    protected JdbcTemplate jdbcTemplate;
+    private JdbcTemplate jdbcTemplate;
 
     @Autowired
     public AutoOperationDaoImpl(DataSource dataSource){
@@ -63,11 +61,12 @@ public class AutoOperationDaoImpl implements AutoOperationDao {
     @Override
     public AutoOperationIncome createFamilyIncomeAutoOperation(int dayOfMonth, long amount, CategoryIncome categoryIncome,
                                                                BigInteger userId, BigInteger familyDebitAccountId) {
-        BigInteger objectIdInteger = createObjectAutoOperation(familyIncome_object_type_id_1, familyIncome_name_2);
+        BigInteger objectIdInteger = ObjectsCreator.createObject(familyIncome_object_type_id_1, familyIncome_name_2,
+                jdbcTemplate, CREATE_OBJECT_AUTO_OPERATION);
         BigDecimal objectId = new BigDecimal(objectIdInteger);
 
         jdbcTemplate.update(CREATE_FAMILY_INCOME_AO, objectId, dayOfMonth, objectId, amount, objectId,
-                new BigDecimal(categoryIncome.getId()),  objectId, new BigDecimal(familyDebitAccountId),
+                new BigDecimal(categoryIncome.getId()), objectId, objectId, new BigDecimal(familyDebitAccountId),
                 objectId, new BigDecimal(userId));
 
         return getFamilyIncomeAutoOperation(objectIdInteger);
@@ -76,11 +75,12 @@ public class AutoOperationDaoImpl implements AutoOperationDao {
     @Override
     public AutoOperationIncome createPersonalIncomeAutoOperation(int dayOfMonth, long amount, CategoryIncome categoryIncome,
                                                                  BigInteger userId, BigInteger personalDebitAccountId) {
-        BigInteger objectIdInteger = createObjectAutoOperation(personalIncome_object_type_id_1, personalIncome_name_2);
+        BigInteger objectIdInteger = ObjectsCreator.createObject(personalIncome_object_type_id_1, personalIncome_name_2,
+                jdbcTemplate, CREATE_OBJECT_AUTO_OPERATION);
         BigDecimal objectId = new BigDecimal(objectIdInteger);
 
         jdbcTemplate.update(CREATE_PERSONAL_INCOME_AO, objectId, dayOfMonth, objectId, amount, objectId,
-                new BigDecimal(categoryIncome.getId()), objectId, new BigDecimal(personalDebitAccountId));
+                new BigDecimal(categoryIncome.getId()), objectId, objectId, new BigDecimal(personalDebitAccountId));
 
         return getPersonalIncomeAutoOperation(objectIdInteger);
     }
@@ -88,11 +88,12 @@ public class AutoOperationDaoImpl implements AutoOperationDao {
     @Override
     public AutoOperationExpense createFamilyExpenseAutoOperation(int dayOfMonth, long amount, CategoryExpense categoryExpense,
                                                                  BigInteger userId, BigInteger familyDebitAccountId) {
-        BigInteger objectIdInteger = createObjectAutoOperation(familyExpense_object_type_id_1, familyExpense_name_2);
+        BigInteger objectIdInteger = ObjectsCreator.createObject(familyExpense_object_type_id_1, familyExpense_name_2,
+                jdbcTemplate, CREATE_OBJECT_AUTO_OPERATION);
         BigDecimal objectId = new BigDecimal(objectIdInteger);
 
         jdbcTemplate.update(CREATE_FAMILY_EXPENSE_AO, objectId, dayOfMonth, objectId, amount, objectId,
-                new BigDecimal(categoryExpense.getId()), objectId, new BigDecimal(familyDebitAccountId),
+                new BigDecimal(categoryExpense.getId()), objectId, objectId, new BigDecimal(familyDebitAccountId),
                 objectId, new BigDecimal(userId));
 
         return getFamilyExpenseAutoOperation(objectIdInteger);
@@ -101,7 +102,8 @@ public class AutoOperationDaoImpl implements AutoOperationDao {
     @Override
     public AutoOperationExpense createPersonalExpenseAutoOperation(int dayOfMonth, long amount, CategoryExpense categoryExpense,
                                                                    BigInteger userId, BigInteger personalDebitAccountId) {
-        BigInteger objectIdInteger = createObjectAutoOperation(personalExpense_object_type_id_1, personalExpense_name_2);
+        BigInteger objectIdInteger = ObjectsCreator.createObject(personalExpense_object_type_id_1, personalExpense_name_2,
+                jdbcTemplate, CREATE_OBJECT_AUTO_OPERATION);
         BigDecimal objectId = new BigDecimal(objectIdInteger);
 
         jdbcTemplate.update(CREATE_PERSONAL_EXPENSE_AO, objectId, dayOfMonth, objectId, amount, objectId,
@@ -113,8 +115,6 @@ public class AutoOperationDaoImpl implements AutoOperationDao {
     @Override
     public void deleteAutoOperation(BigInteger autoOperationId) {
         jdbcTemplate.update(DELETE_FROM_OBJECTS, new BigDecimal(autoOperationId));
-        jdbcTemplate.update(DELETE_FROM_ATTRIBUTES, new BigDecimal(autoOperationId));
-        jdbcTemplate.update(DELETE_FROM_OBJREFERENCE, new BigDecimal(autoOperationId));
     }
 
     @Override
@@ -126,19 +126,6 @@ public class AutoOperationDaoImpl implements AutoOperationDao {
         Collection<AbstractAutoOperation> allOperations = new ArrayList<>(allIncomes);
         allOperations.addAll(allExpenses);
         return allOperations;
-    }
-
-    private BigInteger createObjectAutoOperation(int firstParameter, String secondParameter) {
-        final String generatedColumns[] = { "OBJECT_ID" };
-        KeyHolder keyHolder = new GeneratedKeyHolder();
-        jdbcTemplate.update(connection -> {
-            PreparedStatement ps = connection.prepareStatement(CREATE_OBJECT_AUTO_OPERATION, generatedColumns);
-            ps.setInt(1, firstParameter);
-            ps.setString(2, secondParameter);
-            return ps;
-        }, keyHolder);
-
-        return new BigInteger(keyHolder.getKey().toString());
     }
 
 }

@@ -26,7 +26,7 @@ public interface OperationDao {
      * @param categoryIncome
      */
 
-    void addIncomePersonalByAccId(BigInteger id, BigDecimal income, Date date, CategoryIncome categoryIncome);
+    void createIncomePersonalByAccId(BigInteger id, BigDecimal income, Date date, CategoryIncome categoryIncome);
 
     /**
      *
@@ -36,7 +36,7 @@ public interface OperationDao {
      * @param categoryExpense
      */
 
-    void addExpensePersonaByAccId(BigInteger id, BigDecimal expense, Date date, CategoryExpense categoryExpense);
+    void createExpensePersonaByAccId(BigInteger id, BigDecimal expense, Date date, CategoryExpense categoryExpense);
 
     /**
      *
@@ -47,7 +47,7 @@ public interface OperationDao {
      * @param categoryIncome
      */
 
-    void addIncomeFamilyByAccId(BigInteger idUser, BigInteger idFamily, BigDecimal income, Date date, CategoryIncome categoryIncome);
+    void createIncomeFamilyByAccId(BigInteger idUser, BigInteger idFamily, BigDecimal income, Date date, CategoryIncome categoryIncome);
 
     /**
      *
@@ -58,7 +58,7 @@ public interface OperationDao {
      * @param categoryExpense
      */
 
-    void addExpenseFamilyByAccId(BigInteger idUser, BigInteger idFamily, BigDecimal expense, Date date, CategoryExpense categoryExpense);
+    void createExpenseFamilyByAccId(BigInteger idUser, BigInteger idFamily, BigDecimal expense, Date date, CategoryExpense categoryExpense);
 
     /**
      *
