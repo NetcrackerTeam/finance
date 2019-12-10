@@ -1,8 +1,8 @@
 package com.netcracker.services.utils;
 
-import java.sql.Date;
 import java.time.LocalDate;
-import java.time.Period;
+
+import static com.netcracker.services.utils.DateUtils.getMonthAmountBetweenDates;
 
 public final class CreditUtils {
 
@@ -28,15 +28,5 @@ public final class CreditUtils {
         return getMonthAmountBetweenDates(dateFrom, dateTo) * calculateMonthPayment(dateFrom, dateTo, amount, rate);
     }
 
-    public static int getMonthAmountBetweenDates(LocalDate dateFrom, LocalDate dateTo) {
-        return Period.between(dateFrom, dateTo).getMonths();
-    }
 
-    public static LocalDate getMonthAmountBetweenDates(LocalDate dateFrom, int month) {
-        return dateFrom.plus(Period.ofMonths(month));
-    }
-
-    public static Date localDateToSqlDate(LocalDate date) {
-        return date == null ? null : Date.valueOf(date);
-    }
 }

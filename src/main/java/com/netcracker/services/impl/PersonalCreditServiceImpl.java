@@ -11,6 +11,7 @@ import com.netcracker.models.PersonalDebitAccount;
 import com.netcracker.models.enums.CreditStatusPaid;
 import com.netcracker.services.utils.CreditUtils;
 import com.netcracker.services.PersonalCreditService;
+import com.netcracker.services.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -124,11 +125,11 @@ public class PersonalCreditServiceImpl implements PersonalCreditService {
     }
 
     public void changeDebtDateTo(BigInteger id, LocalDate date) {
-        creditDeptDao.updateFamilyDebtDateTo(id, CreditUtils.localDateToSqlDate(date));
+        creditDeptDao.updateFamilyDebtDateTo(id, DateUtils.localDateToDate(date));
     }
 
     public void changeDebtDateFrom(BigInteger id, LocalDate date) {
-        creditDeptDao.updatePersonalDebtDateFrom(id, CreditUtils.localDateToSqlDate(date));
+        creditDeptDao.updatePersonalDebtDateFrom(id, DateUtils.localDateToDate(date));
     }
 
     public void changeDebtAmount(BigInteger id, long amount) {

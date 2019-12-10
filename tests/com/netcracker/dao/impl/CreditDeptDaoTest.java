@@ -3,7 +3,7 @@ package com.netcracker.dao.impl;
 import com.netcracker.configs.WebConfig;
 import com.netcracker.dao.CreditDeptDao;
 import com.netcracker.models.Debt;
-import com.netcracker.services.utils.CreditUtils;
+import com.netcracker.services.utils.DateUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -83,7 +83,7 @@ public class CreditDeptDaoTest {
         BigInteger accId = personalDebtOne.getDebtId();
         LocalDate newDate = LocalDate.of(2019, 11, 30);
 
-        creditDeptDao.updatePersonalDebtDateFrom(accId, CreditUtils.localDateToSqlDate(newDate));
+        creditDeptDao.updatePersonalDebtDateFrom(accId, DateUtils.localDateToDate(newDate));
 
         assertEquals(newDate, creditDeptDao.getPersonalDebtById(accId).getDateFrom());
     }
@@ -94,7 +94,7 @@ public class CreditDeptDaoTest {
         BigInteger accId = familyDebtOne.getDebtId();
         LocalDate newDate = LocalDate.of(2019, 11, 21);
 
-        creditDeptDao.updateFamilyDebtDateFrom(accId, CreditUtils.localDateToSqlDate(newDate));
+        creditDeptDao.updateFamilyDebtDateFrom(accId, DateUtils.localDateToDate(newDate));
 
         assertEquals(newDate, creditDeptDao.getPersonalDebtById(accId).getDateFrom());
     }
@@ -105,7 +105,7 @@ public class CreditDeptDaoTest {
         BigInteger accId = personalDebtOne.getDebtId();
         LocalDate newDate = LocalDate.of(2019, 11, 30);
 
-        creditDeptDao.updatePersonalDebtDateTo(accId, CreditUtils.localDateToSqlDate(newDate));
+        creditDeptDao.updatePersonalDebtDateTo(accId, DateUtils.localDateToDate(newDate));
 
         assertEquals(newDate, creditDeptDao.getPersonalDebtById(accId).getDateTo());
     }
@@ -116,7 +116,7 @@ public class CreditDeptDaoTest {
         BigInteger accId = familyDebtOne.getDebtId();
         LocalDate newDate = LocalDate.of(2019, 11, 30);
 
-        creditDeptDao.updateFamilyDebtDateTo(accId, CreditUtils.localDateToSqlDate(newDate));
+        creditDeptDao.updateFamilyDebtDateTo(accId, DateUtils.localDateToDate(newDate));
 
         assertEquals(newDate, creditDeptDao.getFamilyDebtById(accId).getDateTo());
     }

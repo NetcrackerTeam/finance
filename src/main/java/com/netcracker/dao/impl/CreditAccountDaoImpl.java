@@ -29,22 +29,22 @@ public class CreditAccountDaoImpl implements CreditAccountDao {
 
     @Override
     public PersonalCreditAccount getPersonalCreditById(BigInteger id) {
-        return jdbcTemplate.queryForObject(SELECT_PERSONAL_CREDIT_QUERY, new Object[]{new BigDecimal(id)}, new CreditAccountPersonalMapper());
+        return jdbcTemplate.queryForObject(SELECT_PERSONAL_CREDIT_QUERY, new Object[]{id}, new CreditAccountPersonalMapper());
     }
 
     @Override
     public FamilyCreditAccount getFamilyCreditById(BigInteger id) {
-        return jdbcTemplate.queryForObject(SELECT_FAMILY_CREDIT_QUERY, new Object[]{new BigDecimal(id)}, new CreditAccountFamilyMapper());
+        return jdbcTemplate.queryForObject(SELECT_FAMILY_CREDIT_QUERY, new Object[]{id}, new CreditAccountFamilyMapper());
     }
 
     @Override
     public List<PersonalCreditAccount> getAllPersonalCreditsByAccountId(BigInteger id) {
-        return jdbcTemplate.query(SELECT_PERSONAL_CREDITS_BY_ACCOUNT_QUERY, new Object[]{new BigDecimal(id)}, new CreditAccountPersonalMapper());
+        return jdbcTemplate.query(SELECT_PERSONAL_CREDITS_BY_ACCOUNT_QUERY, new Object[]{id}, new CreditAccountPersonalMapper());
     }
 
     @Override
     public List<FamilyCreditAccount> getAllFamilyCreditsByAccountId(BigInteger id) {
-        return jdbcTemplate.query(SELECT_FAMILY_CREDITS_BY_ACCOUNT_QUERY, new Object[]{new BigDecimal(id)}, new CreditAccountFamilyMapper());
+        return jdbcTemplate.query(SELECT_FAMILY_CREDITS_BY_ACCOUNT_QUERY, new Object[]{id}, new CreditAccountFamilyMapper());
     }
 
     @Override
@@ -89,16 +89,16 @@ public class CreditAccountDaoImpl implements CreditAccountDao {
                 Date.valueOf(creditAccount.getDateTo()),
                 new BigDecimal(creditAccount.isPaid().getId()),
                 String.valueOf(creditAccount.getMonthDay()),
-                new BigDecimal(id));
+                id);
         BigDecimal accountId = jdbcTemplate.queryForObject(SELECT_CREDIT_ID_BY_NAME, new Object[]{creditName}, BigDecimal.class);
         jdbcTemplate.update(queryDebt, accountId);
     }
 
     private void addCreditPayment(BigInteger id, long amount) {
-        jdbcTemplate.update(UPDATE_CREDIT_PAYMENT_QUERY, String.valueOf(amount), new BigDecimal(id));
+        jdbcTemplate.update(UPDATE_CREDIT_PAYMENT_QUERY, String.valueOf(amount), id);
     }
 
     private void updatePaidStatus(BigInteger id, CreditStatusPaid statusPaid) {
-        jdbcTemplate.update(UPDATE_ISPAID_STATUS_CREDIT_QUERY, String.valueOf(statusPaid.getId()), new BigDecimal(id));
+        jdbcTemplate.update(UPDATE_ISPAID_STATUS_CREDIT_QUERY, String.valueOf(statusPaid.getId()), id);
     }
 }
