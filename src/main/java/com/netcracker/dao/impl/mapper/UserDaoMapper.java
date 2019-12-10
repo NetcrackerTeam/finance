@@ -10,13 +10,13 @@ public class UserDaoMapper implements RowMapper<User> {
     @Override
     public User mapRow(ResultSet resultSet, int i) throws SQLException {
         return new User.Builder()
-                .user_id(resultSet.getBigDecimal("USER_ID").toBigInteger())
-                .user_name(resultSet.getString("NAME"))
-                .user_eMail(resultSet.getString("EMAIL"))
-                .user_password(resultSet.getString("PASSWORD"))
-                .userActive(UserStatusActive.getStatusByKey( resultSet.getBigDecimal("IS_ACTIVE").toBigInteger()))
-                .personalDebit(resultSet.getBigDecimal("PER_DEB_ACC1").toBigInteger())
-                .familyDebit(resultSet.getBigDecimal("FAM_DEB_ACC1").toBigInteger())
+                .user_id(resultSet.getBigDecimal("user_id").toBigInteger())
+                .user_name(resultSet.getString("name"))
+                .user_eMail(resultSet.getString("email"))
+                .user_password(resultSet.getString("password"))
+                .userActive(UserStatusActive.getStatusByKey( resultSet.getBigDecimal("is_active").toBigInteger()))
+                .personalDebit(resultSet.getBigDecimal("per_deb_acc1").toBigInteger())
+                .familyDebit(resultSet.getBigDecimal("fam_deb_acc1").toBigInteger())
                 .build();
     }
 }

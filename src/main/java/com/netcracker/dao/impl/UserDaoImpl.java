@@ -6,12 +6,10 @@ import com.netcracker.models.User;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Component;
-
+import org.springframework.stereotype.Repository;
 import javax.sql.DataSource;
-import java.math.BigDecimal;
 import java.math.BigInteger;
-@Component
+@Repository
 public class UserDaoImpl implements UserDao {
 
     private static final Logger logger = Logger.getLogger(UserDaoImpl.class);
@@ -43,7 +41,7 @@ public class UserDaoImpl implements UserDao {
     @Override
     public User getUserById(BigInteger id) {
         logger.debug("Entering getUserByUserId(" + id + ")");
-        return template.queryForObject(GET_USER_BY_USER_ID, new Object[]{new BigDecimal(id)},
+        return template.queryForObject(GET_USER_BY_USER_ID, new Object[]{id},
                 new UserDaoMapper());
     }
 
@@ -59,7 +57,7 @@ public class UserDaoImpl implements UserDao {
         logger.debug(
                 "Entering updatePassword(id=" + id + "," + " password=" + newPassword
                         + ")");
-        template.update(UPDATE_PASSWORD, newPassword, new BigDecimal(id));
+        template.update(UPDATE_PASSWORD, newPassword,  (id));
     }
 
 
