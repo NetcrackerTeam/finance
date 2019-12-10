@@ -91,17 +91,17 @@ public class FamilyAccountDebitDaoImpl implements FamilyAccountDebitDao {
 
     @Override
     public Collection<AccountIncome> getIncomesOfFamilyAccount(BigInteger accountId) {
-        logger.debug("Entering list(getParticipantsOfFamilyAccount=" + accountId + ")");
+        logger.debug("Entering list(getIncomesOfFamilyAccount=" + accountId + ")");
         Collection<AccountIncome> incomes = this.template.query(GET_INCOME_LIST, new Object[]{accountId}, new AccountIncomeMapper());
-        logger.debug("Entering list succsess(getParticipantsOfFamilyAccount=" + accountId + ")");
+        logger.debug("Entering list succsess(getIncomesOfFamilyAccount=" + accountId + ")");
         return incomes;
     }
 
     @Override
     public Collection<AccountExpense> getExpensesOfFamilyAccount(BigInteger accountId) {
-        logger.debug("Entering list(getParticipantsOfFamilyAccount=" + accountId+ ")");
+        logger.debug("Entering list(getExpensesOfFamilyAccount=" + accountId+ ")");
         Collection<AccountExpense> expenses = this.template.query(GET_EXPENSE_LIST, new Object[]{accountId},  new AccountExpenseMapper());
-        logger.debug("Entering list success(getParticipantsOfFamilyAccount=" + accountId + ")");
+        logger.debug("Entering list success(getExpensesOfFamilyAccount=" + accountId + ")");
         return expenses;
     }
 }
