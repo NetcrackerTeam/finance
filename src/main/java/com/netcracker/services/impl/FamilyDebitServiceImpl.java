@@ -26,7 +26,7 @@ public class FamilyDebitServiceImpl implements FamilyDebitService {
     @Autowired
     private OperationDao operationDao;
 
-    private static final Logger logger = Logger.getLogger(FamilyAccountDebitDaoImpl.class);
+    private static final Logger logger = Logger.getLogger(FamilyDebitServiceImpl.class);
 
     @Override
     public FamilyDebitAccount createFamilyDebitAccount(FamilyDebitAccount familyDebitAccount) {
@@ -53,25 +53,28 @@ public class FamilyDebitServiceImpl implements FamilyDebitService {
             if(tempUser == null){
                 logger.debug("The user " + userId + " is NULL");
                 throw new UserException("The user is doesn`t exist");
-            }
-            if (tempUser.getUserStatusActive().equals(UserStatusActive.NO)) {
-                logger.debug("The user " + userId + " is unActive");
-                throw new UserException("The user is unactive", tempUser);
             } else {
-                Collection<User> participants = familyAccountDebitDao.getParticipantsOfFamilyAccount(accountId);
-                if(participants == null){
-                    logger.debug("the family debit account  " + accountId + " doesn`t exist");
-                    throw new FamilyDebitAccountException("the family debit account doesn`t exist");
-                }
-                for (User participant : participants) {
-                    if (participant.getId().equals(userId)) {
-                        logger.debug("The user " + participant.getId() + " is has family account");
-                        throw new UserException("The user has family debit account", participant);
+                UserStatusActive statusUser = tempUser.getUserStatusActive();
+                UserStatusActive statusEnum = UserStatusActive.NO;
+                if (statusUser.equals(statusEnum)) {
+                    logger.debug("The user " + userId + " is unActive");
+                    throw new UserException("The user is unactive", tempUser);
+                } else {
+                    Collection<User> participants = familyAccountDebitDao.getParticipantsOfFamilyAccount(accountId);
+                    if (participants == null) {
+                        logger.debug("the family debit account  " + accountId + " doesn`t exist");
+                        throw new FamilyDebitAccountException("the family debit account doesn`t exist");
                     }
+                    for (User participant : participants) {
+                        if (participant.getId().equals(userId)) {
+                            logger.debug("The user " + participant.getId() + " is has family account");
+                            throw new UserException("The user has family debit account", participant);
+                        }
+                    }
+                    familyAccountDebitDao.addUserToAccountById(accountId, userId);
+                    logger.debug("Entering insert success(addUserToAccount=" + accountId + " " + userId + ")");
+                    return true;
                 }
-                familyAccountDebitDao.addUserToAccountById(accountId, userId);
-                logger.debug("Entering insert success(addUserToAccount=" + accountId + " " + userId + ")");
-                return  true;
             }
     }
 
