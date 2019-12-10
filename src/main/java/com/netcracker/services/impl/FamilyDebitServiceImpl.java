@@ -56,7 +56,10 @@ public class FamilyDebitServiceImpl implements FamilyDebitService {
             } else {
                 UserStatusActive statusUser = tempUser.getUserStatusActive();
                 UserStatusActive statusEnum = UserStatusActive.NO;
-                if (statusUser.equals(statusEnum)) {
+                if (statusUser == null){
+                    logger.debug("The user status " + userId + " is NULL");
+                    throw new UserException("The userId is doesn`t exist", tempUser);
+                } else if (statusUser.equals(statusEnum)) {
                     logger.debug("The user " + userId + " is unActive");
                     throw new UserException("The user is unactive", tempUser);
                 } else {
@@ -66,7 +69,10 @@ public class FamilyDebitServiceImpl implements FamilyDebitService {
                         throw new FamilyDebitAccountException("the family debit account doesn`t exist");
                     }
                     for (User participant : participants) {
-                        if (participant.getId().equals(userId)) {
+                        if(participant.getId() == null) {
+                            logger.debug("The userId " + userId + " is NULL");
+                            throw new UserException("The userId is doesn`t exist", participant);
+                        } else if (participant.getId().equals(userId)) {
                             logger.debug("The user " + participant.getId() + " is has family account");
                             throw new UserException("The user has family debit account", participant);
                         }
