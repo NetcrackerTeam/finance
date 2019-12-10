@@ -5,6 +5,6 @@ public interface PredictionService {
 
     public void predictMonthIncome();
 
-    public void predictMonthExpence();
+    public void predictMonthExpense();
 
 }

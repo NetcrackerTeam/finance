@@ -4,20 +4,22 @@ import com.netcracker.dao.MonthReportDao;
 import com.netcracker.models.MonthReport;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.io.FileOutputStream;
 import java.math.BigInteger;
 import java.time.LocalDate;
+import java.util.Date;
 
 public interface MonthReportService {
 
 
-    void formMonthPersonalReportFromDb(BigInteger id, LocalDate date);
+    void formMonthPersonalReportFromDb(BigInteger id, Date date);
 
-    void formMonthFamilyReportFromDb(BigInteger id, LocalDate date);
+    void formMonthFamilyReportFromDb(BigInteger id, Date date);
 
-    void convertToTxt();
+    FileOutputStream convertToTxt(MonthReport monthReport);
 
-    MonthReport getMonthPersonalReport(LocalDate date_from, LocalDate date_to);
+    MonthReport getMonthPersonalReport(BigInteger id, Date dateFrom, Date dateTo);
 
-    MonthReport getMonthFamilyReport(LocalDate date_from, LocalDate date_to);
+    MonthReport getMonthFamilyReport(BigInteger id, Date dateFrom, Date dateTo);
 
 }

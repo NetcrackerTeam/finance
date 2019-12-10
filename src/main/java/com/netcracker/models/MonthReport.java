@@ -1,12 +1,9 @@
 package com.netcracker.models;
 
-import com.netcracker.models.enums.CategoryExpense;
-import com.netcracker.models.enums.CategoryIncome;
-
 import java.math.BigInteger;
 import java.time.LocalDate;
+import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 public class MonthReport {
 
@@ -14,20 +11,20 @@ public class MonthReport {
     private Long totalIncome;
     private Long totalExpense;
     private Long balance;
-    private LocalDate date_from;
-    private LocalDate date_to;
-    private List<CategoryExpenseReport> categoryExpense;
-    private List<CategoryIncomeReport> categoryIncome;
+    private LocalDate dateFrom;
+    private LocalDate dateTo;
+    private Collection<CategoryExpenseReport> categoryExpense;
+    private Collection<CategoryIncomeReport> categoryIncome;
     public static  class Builder {
         private BigInteger id;
         private Long totalIncome;
         private Long totalExpense;
         private Long balance;
-        private LocalDate date_from;
-        private LocalDate date_to;
+        private LocalDate dateFrom;
+        private LocalDate dateTo;
 
-        private List<CategoryExpenseReport> categoryExpense;
-        private List<CategoryIncomeReport>  categoryIncome;
+        private Collection<CategoryExpenseReport> categoryExpense;
+        private Collection<CategoryIncomeReport>  categoryIncome;
 
         public Builder() {
         }
@@ -48,19 +45,19 @@ public class MonthReport {
             this.balance = val;
             return this;
         }
-        public Builder date_from( LocalDate val) {
-            this.date_from = val;
+        public Builder dateFrom( LocalDate val) {
+            this.dateFrom = val;
             return this;
         }
-        public Builder date_to( LocalDate val) {
-            this.date_to = val;
+        public Builder dateTo( LocalDate val) {
+            this.dateTo = val;
             return this;
         }
-        public Builder categoryExpense(List<CategoryExpenseReport> val) {
+        public Builder categoryExpense(Collection<CategoryExpenseReport> val) {
             this.categoryExpense = val;
             return this;
         }
-        public Builder categoryIncome( List<CategoryIncomeReport> val) {
+        public Builder categoryIncome(Collection<CategoryIncomeReport> val) {
             this.categoryIncome = val;
             return this;
         }
@@ -75,8 +72,8 @@ public class MonthReport {
         totalExpense = builder.totalExpense;
         totalIncome = builder.totalIncome;
         balance = builder.balance;
-        date_from = builder.date_from;
-        date_to = builder.date_to;
+        dateFrom = builder.dateFrom;
+        dateTo = builder.dateTo;
         categoryExpense = builder.categoryExpense;
         categoryIncome = builder.categoryIncome;
     }
@@ -97,27 +94,27 @@ public class MonthReport {
         return balance;
     }
 
-    public LocalDate getDate_from() {
-        return date_from;
+    public LocalDate getDateFrom() {
+        return dateFrom;
     }
 
-    public void setDate_from(LocalDate date_from) {
-        this.date_from = date_from;
+    public void setDateFrom(LocalDate dateFrom) {
+        this.dateFrom = dateFrom;
     }
 
-    public LocalDate getDate_to() {
-        return date_to;
+    public LocalDate getDateTo() {
+        return dateTo;
     }
 
-    public void setDate_to(LocalDate date_to) {
-        this.date_to = date_to;
+    public void setDateTo(LocalDate dateTo) {
+        this.dateTo = dateTo;
     }
 
-    public List<CategoryExpenseReport> getCategoryExpense() {
+    public Collection<CategoryExpenseReport> getCategoryExpense() {
         return categoryExpense;
     }
 
-    public List<CategoryIncomeReport> getCategoryIncome() {
+    public Collection<CategoryIncomeReport> getCategoryIncome() {
         return categoryIncome;
     }
 
@@ -135,11 +132,11 @@ public class MonthReport {
 
 
 
-    public void setCategoryExpense(List<CategoryExpenseReport> categoryExpense) {
+    public void setCategoryExpense(Collection<CategoryExpenseReport> categoryExpense) {
         this.categoryExpense = categoryExpense;
     }
 
-    public void setCategoryIncome(List<CategoryIncomeReport> categoryIncome) {
+    public void setCategoryIncome(Collection<CategoryIncomeReport> categoryIncome) {
         this.categoryIncome = categoryIncome;
     }
 }

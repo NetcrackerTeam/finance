@@ -15,8 +15,8 @@ public class MonthReportMapper implements RowMapper<MonthReport> {
                 .totalIncome(Long.valueOf(resultSet.getString("income")))
                 .totalExpense(Long.valueOf(resultSet.getString("expense")))
                 .balance(Long.valueOf(resultSet.getString("balance")))
-                .date_from(resultSet.getDate("date_to").toLocalDate())
-                .date_to(resultSet.getDate("date_from").toLocalDate())
+                .dateFrom(resultSet.getDate("date_to").toLocalDate())
+                .dateTo(resultSet.getDate("date_from").toLocalDate())
                 .build();
         return monthReport;
     }
