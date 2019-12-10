@@ -18,4 +18,8 @@ public final class DateUtils {
     public static Date localDateToDate(LocalDate date) {
         return date == null ? null : Date.from(date.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
     }
+
+    public static LocalDate dateToLocalDate(Date date) {
+        return date == null ? null : date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+    }
 }
