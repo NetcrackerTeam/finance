@@ -111,20 +111,7 @@ public class PersonalDebitAccountDaoTests {
     public void deletePersonalAccountByUserId (){
         personalDebitAccountDao.deletePersonalAccountByUserId(BigInteger.valueOf(121));
     }
-    @Test
-    public  void getListIncome(){
-        List<AccountIncome> incomes = personalDebitAccountDao.getIncomesOfPersonalAccount(BigInteger.valueOf(2));
-        for (AccountIncome expected : incomes) {
-            System.out.println(expected.getId() + " " + expected.getCategoryIncome() + " " + expected.getAmount() + " " + expected.getDate());
-        }
-    }
-    @Test
-    public  void getListExpense(){
-        List<AccountExpense> expenses = personalDebitAccountDao.getExpensesOfPersonalAccount(BigInteger.valueOf(2));
-        for (AccountExpense expected : expenses) {
-            System.out.println(expected.getId() + " " + expected.getCategoryExpense() + " " + expected.getAmount() + " " + expected.getDate());
-        }
-    }
+
     @Test
     public void updateAmount(){
         BigInteger id_uA = BigInteger.valueOf(2);

@@ -1,11 +1,7 @@
 package com.netcracker.dao.impl;
 
 import com.netcracker.dao.PersonalDebitAccountDao;
-import com.netcracker.dao.impl.mapper.AccountExpenseMapper;
-import com.netcracker.dao.impl.mapper.AccountIncomeMapper;
 import com.netcracker.dao.impl.mapper.PersonalDebitAccountMapper;
-import com.netcracker.models.AccountExpense;
-import com.netcracker.models.AccountIncome;
 import com.netcracker.models.PersonalDebitAccount;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,9 +9,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
-import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.util.ArrayList;
 
 @Repository
 public class PersonalDebitAccountDaoImpl implements PersonalDebitAccountDao {
@@ -30,7 +24,7 @@ public class PersonalDebitAccountDaoImpl implements PersonalDebitAccountDao {
     @Override
     public PersonalDebitAccount getPersonalAccountById(BigInteger id) {
         logger.debug("Entering insert(getPersonalAccountBy=" + id + ")");
-        return this.template.queryForObject(GET_PERSONAL_ACCOUNT_BY_ID, new Object[]{new BigDecimal(id)}, new PersonalDebitAccountMapper());
+        return this.template.queryForObject(GET_PERSONAL_ACCOUNT_BY_ID, new Object[]{(id)}, new PersonalDebitAccountMapper());
     }
 
     @Override
@@ -40,7 +34,7 @@ public class PersonalDebitAccountDaoImpl implements PersonalDebitAccountDao {
                 personalDebitAccount.getObjectName(),
                 personalDebitAccount.getAmount().toString(),
                 personalDebitAccount.getStatus().getId().toString(),
-                new BigDecimal(personalDebitAccount.getOwner().getId())
+                personalDebitAccount.getOwner().getId()
         });
         return personalDebitAccount;
     }
@@ -63,20 +57,8 @@ public class PersonalDebitAccountDaoImpl implements PersonalDebitAccountDao {
     }
 
     @Override
-    public ArrayList<AccountIncome> getIncomesOfPersonalAccount(BigInteger debitId) {
-        logger.debug("Entering list(getParticipantsOfPersonalAccount=" + debitId + ")");
-        return (ArrayList<AccountIncome>) this.template.query(GET_INCOME_LIST, new Object[]{new BigDecimal(debitId)}, new AccountIncomeMapper());
-    }
-
-    @Override
-    public ArrayList<AccountExpense> getExpensesOfPersonalAccount(BigInteger debitId) {
-        logger.debug("Entering list(getParticipantsOfPersonalAccount=" + debitId + ")");
-        return (ArrayList<AccountExpense>) this.template.query(GET_EXPENSE_LIST, new Object[]{new BigDecimal(debitId)}, new AccountExpenseMapper());
-    }
-
-    @Override
     public void updateAmountOfPersonalAccount(BigInteger accountId, Long amount) {
         logger.debug("Entering update_amount(deletePersonalAccount=" + accountId + " " + amount + ")");
-        this.template.update(UPDATE_PERSONAL_ACCOUNT_AMOUNT, new Object[]{amount.toString(), new BigDecimal(accountId)});
+        this.template.update(UPDATE_PERSONAL_ACCOUNT_AMOUNT, new Object[]{amount.toString(), accountId});
     }
 }

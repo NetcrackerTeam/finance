@@ -1,104 +1,82 @@
 package com.netcracker.dao;
 
-import com.netcracker.models.AccountExpense;
-import com.netcracker.models.AccountIncome;
 import com.netcracker.models.PersonalDebitAccount;
 
 import java.math.BigInteger;
-import java.util.ArrayList;
 
 public interface PersonalDebitAccountDao {
 
+    /**
+     * Get personal account debit by personal account debit id.
+     *
+     * @param id personal account debit id
+     * @return PersonalDebitAccount object
+     */
     PersonalDebitAccount getPersonalAccountById(BigInteger id);
 
+    /**
+     * Create new personal account debit.
+     *
+     * @param personalDebitAccount personal account debit object
+     */
     PersonalDebitAccount createPersonalAccount(PersonalDebitAccount personalDebitAccount);
 
+    /**
+     * Delete personal account debit.
+     *
+     * @param userId    user id
+     * @param accountId personal account debit id
+     */
     void deletePersonalAccountById(BigInteger accountId, BigInteger userId);
 
+    /**
+     * Set unActive personal account debit by personal account debit id.
+     *
+     * @param accountId personal account debit id
+     */
     void deletePersonalAccountByUserId(BigInteger accountId);
 
+    /**
+     * Update amount of personal account debit by personal account debit id
+     *
+     * @param accountId perosnal account debit id
+     * @param amount    amount of persoanl account debit
+     */
     void updateAmountOfPersonalAccount(BigInteger accountId, Long amount);
 
-    ArrayList<AccountIncome> getIncomesOfPersonalAccount(BigInteger debitId);
-
-    ArrayList<AccountExpense> getExpensesOfPersonalAccount(BigInteger debitId);
-
-    String GET_PERSONAL_ACCOUNT_BY_ID = "SELECT " +
-            "DEBIT.OBJECT_ID PERSONAL_ID, DEBIT.NAME NAME_PERSONAL_DEBIT, ATTR1.VALUE AMOUNT_PERSONAL_DEBIT, ATTR2.LIST_VALUE_ID STATUS_PERSONAL_DEBIT, "
-            +
-            "US.OBJECT_ID USER_ID,  ATTR1_USER.VALUE  NAME, ATTR2_USER.VALUE  EMAIL, ATTR3_USER.VALUE  PASSWORD, "
-            +
-            "ATTR4_USER.LIST_VALUE_ID IS_ACTIVE, PER_DEBIT.OBJECT_ID PER_DEB_ACC1, DEBIT.OBJECT_ID FAM_DEB_ACC1 "
-            +
-            "FROM OBJECTS DEBIT, ATTRIBUTES ATTR1, ATTRIBUTES ATTR2,  "
-            +
-            "OBJECTS US, ATTRIBUTES ATTR1_USER, ATTRIBUTES ATTR2_USER, ATTRIBUTES ATTR3_USER, "
-            +
-            "ATTRIBUTES ATTR4_USER, OBJECTS PER_DEBIT, OBJREFERENCE OBJREF1, OBJREFERENCE OBJREF2  "
-            +
-            "WHERE DEBIT.OBJECT_TYPE_ID = 2 AND US.OBJECT_TYPE_ID = 1 AND PER_DEBIT.OBJECT_TYPE_ID = 2 " +
-            "AND DEBIT.OBJECT_ID = ? " +
-            "AND ATTR1.OBJECT_ID = DEBIT.OBJECT_ID " +
-            "AND ATTR1.ATTR_ID = 7 " +
-            "AND ATTR2.OBJECT_ID = DEBIT.OBJECT_ID " +
-            "AND ATTR2.ATTR_ID = 70 " +
-            "AND OBJREF1.ATTR_ID = 1 " +
-            "AND OBJREF1.REFERENCE = DEBIT.OBJECT_ID " +
-            "AND US.OBJECT_ID = OBJREF1.OBJECT_ID " +
-            "AND ATTR1_USER.OBJECT_ID = US.OBJECT_ID " +
-            "AND ATTR1_USER.ATTR_ID = 5 " +
-            "AND ATTR2_USER.OBJECT_ID = US.OBJECT_ID " +
-            "AND ATTR2_USER.ATTR_ID = 3 " +
-            "AND ATTR3_USER.OBJECT_ID = US.OBJECT_ID " +
-            "AND ATTR3_USER.ATTR_ID = 4 " +
-            "AND ATTR4_USER.OBJECT_ID = US.OBJECT_ID " +
-            "AND ATTR4_USER.ATTR_ID = 6 " +
-            "AND OBJREF2.ATTR_ID = 1 " +
-            "AND OBJREF2.OBJECT_ID = US.OBJECT_ID " +
-            "AND PER_DEBIT.OBJECT_ID = OBJREF2.REFERENCE ";
+    String GET_PERSONAL_ACCOUNT_BY_ID ="SELECT " +
+            "PERSONAL_DEBIT.OBJECT_ID PERSONAL_DEBIT_ID, PERSONAL_DEBIT.NAME NAME_PERSONAL_DEBIT, AMOUNT.VALUE AMOUNT_PERSONAL_DEBIT, STATUS_PERSONAL_DEBIT.LIST_VALUE_ID STATUS_PERSONAL_DEBIT, " +
+            "USER_ID.OBJECT_ID USER_ID, NAME_USER.VALUE NAME, EMAIL_USER.VALUE EMAIL, PASSWORD_USER.VALUE PASSWORD, " +
+            "STATUS_USER.LIST_VALUE_ID IS_ACTIVE, USER_TO_PERSONAL.REFERENCE PER_DEB_ACC1, PERSONAL_DEBIT.OBJECT_ID FAM_DEB_ACC1 " +
+            "FROM OBJECTS PERSONAL_DEBIT, ATTRIBUTES AMOUNT, ATTRIBUTES STATUS_PERSONAL_DEBIT, " +
+            "OBJECTS USER_ID, ATTRIBUTES NAME_USER, ATTRIBUTES EMAIL_USER, ATTRIBUTES PASSWORD_USER, " +
+            "ATTRIBUTES STATUS_USER, OBJREFERENCE USER_TO_PERSONAL_DEBIT, OBJREFERENCE USER_TO_PERSONAL  " +
+            "WHERE PERSONAL_DEBIT.OBJECT_ID = ? " +
+            "AND AMOUNT.OBJECT_ID = PERSONAL_DEBIT.OBJECT_ID " +
+            "AND AMOUNT.ATTR_ID = 7 /* ATTRIBUTE ID AMOUNT OF PERSONAL ACCOUNT*/" +
+            "AND STATUS_PERSONAL_DEBIT.OBJECT_ID = PERSONAL_DEBIT.OBJECT_ID " +
+            "AND STATUS_PERSONAL_DEBIT.ATTR_ID = 70 /* ATTRIBUTE ID STATUS OF PERSONAL ACCOUNT */" +
+            "AND USER_TO_PERSONAL_DEBIT.ATTR_ID = 1 /*  REFERENCE USER TO FAM ACCOUNT  */" +
+            "AND USER_TO_PERSONAL_DEBIT.REFERENCE = PERSONAL_DEBIT.OBJECT_ID " +
+            "AND USER_ID.OBJECT_ID = USER_TO_PERSONAL_DEBIT.OBJECT_ID " +
+            "AND NAME_USER.OBJECT_ID = USER_ID.OBJECT_ID " +
+            "AND NAME_USER.ATTR_ID = 5 /* ATTRIBUTE ID NAME OF USER */" +
+            "AND EMAIL_USER.OBJECT_ID = USER_ID.OBJECT_ID " +
+            "AND EMAIL_USER.ATTR_ID = 3 /* ATTRIBUTE ID EMAIL OF USER */" +
+            "AND PASSWORD_USER.OBJECT_ID = USER_ID.OBJECT_ID " +
+            "AND PASSWORD_USER.ATTR_ID = 4 /* ATTRIBUTE ID PASSWORD OF USER */" +
+            "AND STATUS_USER.OBJECT_ID = USER_ID.OBJECT_ID " +
+            "AND STATUS_USER.ATTR_ID = 6 /* ATTRIBUTE ID STATUS OF USER */" +
+            "AND USER_TO_PERSONAL.ATTR_ID = 1 /*  REFERENCE USER TO PERSONAL ACCOUNT  */" +
+            "AND USER_TO_PERSONAL.OBJECT_ID = USER_ID.OBJECT_ID ";
 
     String CREATE_PERSONAL_ACCOUNT = "INSERT ALL " +
-            "INTO OBJECTS (OBJECT_ID,OBJECT_TYPE_ID,NAME) VALUES (OBJECTS_ID_S.NEXTVAL, 2, ?) " +
-            "INTO ATTRIBUTES (ATTR_ID, OBJECT_ID, VALUE) VALUES(7, OBJECTS_ID_S.CURRVAL, ?) " +
-            "INTO ATTRIBUTES (ATTR_ID, OBJECT_ID, LIST_VALUE_ID) VALUES(70, OBJECTS_ID_S.CURRVAL, ?) " +
-            "INTO OBJREFERENCE (ATTR_ID,OBJECT_ID,REFERENCE) VALUES (1,OBJECTS_ID_S.CURRVAL,?) " +
+            "INTO OBJECTS (OBJECT_ID,OBJECT_TYPE_ID,NAME) VALUES (OBJECTS_ID_S.NEXTVAL, 2, ? ) /* NAME PERSONAL DEBIT ACCOUNT */" +
+            "INTO ATTRIBUTES (ATTR_ID, OBJECT_ID, VALUE) VALUES(7, OBJECTS_ID_S.CURRVAL, ?) /* AMOUNT*/" +
+            "INTO ATTRIBUTES (ATTR_ID, OBJECT_ID, LIST_VALUE_ID) VALUES(70, OBJECTS_ID_S.CURRVAL, ?) /* STATUS */" +
+            "INTO OBJREFERENCE (ATTR_ID,OBJECT_ID,REFERENCE) VALUES (1,OBJECTS_ID_S.CURRVAL,?) /* REFERENCE USER TO PERSONAL ACCOUNT */" +
             "SELECT * " +
             "FROM DUAL";
-    String GET_INCOME_LIST = "SELECT " +
-            "INCOME.OBJECT_ID ACCOUNT_INCOME_ID, ATTR1.VALUE INCOME_AMOUNT, ATTR2.DATE_VALUE DATE_INCOME, ATTR3.LIST_VALUE_ID CATEGORY_INCOME, US.OBJECT_ID USER_ID " +
-            "FROM OBJECTS INCOME,  OBJECTS US, ATTRIBUTES ATTR1, ATTRIBUTES ATTR2, ATTRIBUTES ATTR3, OBJECTS DEBIT, OBJREFERENCE OBJREF1, OBJREFERENCE OBJREF2 " +
-            "WHERE DEBIT.OBJECT_TYPE_ID = 2 AND US.OBJECT_TYPE_ID = 1 AND INCOME.OBJECT_TYPE_ID = 10 " +
-            "AND DEBIT.OBJECT_ID = ? " +
-            "AND OBJREF1.ATTR_ID = 53 " +
-            "AND OBJREF1.REFERENCE = DEBIT.OBJECT_ID " +
-            "AND INCOME.OBJECT_ID = OBJREF1.OBJECT_ID " +
-            "AND OBJREF2.ATTR_ID = 1 " +
-            "AND OBJREF2.REFERENCE = DEBIT.OBJECT_ID " +
-            "AND US.OBJECT_ID = OBJREF2.REFERENCE " +
-            "AND ATTR1.OBJECT_ID = INCOME.OBJECT_ID " +
-            "AND ATTR1.ATTR_ID = 56 " +
-            "AND ATTR2.OBJECT_ID = INCOME.OBJECT_ID " +
-            "AND ATTR2.ATTR_ID = 58 " +
-            "AND ATTR3.OBJECT_ID = INCOME.OBJECT_ID " +
-            "AND ATTR3.ATTR_ID = 57";
-
-    String GET_EXPENSE_LIST = "SELECT " +
-            "EXPENSE.OBJECT_ID ACCOUNT_EXPENSE_ID, ATTR1.VALUE EXPENSE_AMOUNT, ATTR2.DATE_VALUE DATE_EXPENSE, ATTR3.LIST_VALUE_ID CATEGORY_EXPENSE, US.OBJECT_ID USER_ID " +
-            "FROM OBJECTS EXPENSE,  OBJECTS US, ATTRIBUTES ATTR1, ATTRIBUTES ATTR2, ATTRIBUTES ATTR3, OBJECTS DEBIT, OBJREFERENCE OBJREF1, OBJREFERENCE OBJREF2 " +
-            "WHERE DEBIT.OBJECT_TYPE_ID = 2 AND US.OBJECT_TYPE_ID = 1 AND EXPENSE.OBJECT_TYPE_ID = 9 " +
-            "AND DEBIT.OBJECT_ID = ? " +
-            "AND OBJREF1.ATTR_ID = 47 " +
-            "AND OBJREF1.REFERENCE = DEBIT.OBJECT_ID " +
-            "AND EXPENSE.OBJECT_ID = OBJREF1.OBJECT_ID " +
-            "AND OBJREF2.ATTR_ID = 1 " +
-            "AND OBJREF2.REFERENCE = DEBIT.OBJECT_ID " +
-            "AND US.OBJECT_ID = OBJREF2.REFERENCE " +
-            "AND ATTR1.OBJECT_ID = EXPENSE.OBJECT_ID " +
-            "AND ATTR1.ATTR_ID = 50 " +
-            "AND ATTR2.OBJECT_ID = EXPENSE.OBJECT_ID " +
-            "AND ATTR2.ATTR_ID = 52 " +
-            "AND ATTR3.OBJECT_ID = EXPENSE.OBJECT_ID " +
-            "AND ATTR3.ATTR_ID = 51";
 
     String DELETE_USER_FROM_PERSONAL_ACCOUNT = "DELETE FROM OBJREFERENCE WHERE ATTR_ID = 1 AND OBJECT_ID = ? AND REFERENCE = ?";
     String UNACTIVE_USER_FROM_PERSONAL_ACCOUNT = "UPDATE ATTRIBUTES SET LIST_VALUE_ID = 44 WHERE ATTR_ID = 70 AND OBJECT_ID = ?";
