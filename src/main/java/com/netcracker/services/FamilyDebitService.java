@@ -14,7 +14,7 @@ public interface FamilyDebitService {
 
     public void deleteFamilyDebitAccount(BigInteger debitId);
 
-    public void addUserToAccount(BigInteger accountId, BigInteger userId);
+    public boolean addUserToAccount(BigInteger accountId, BigInteger userId);
 
     public void deleteUserFromAccount(BigInteger accountId, BigInteger userId);
 

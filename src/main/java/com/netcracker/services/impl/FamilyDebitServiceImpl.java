@@ -4,6 +4,8 @@ import com.netcracker.dao.FamilyAccountDebitDao;
 import com.netcracker.dao.OperationDao;
 import com.netcracker.dao.UserDao;
 import com.netcracker.dao.impl.FamilyAccountDebitDaoImpl;
+import com.netcracker.exception.FamilyDebitAccountException;
+import com.netcracker.exception.UserException;
 import com.netcracker.models.*;
 import com.netcracker.models.enums.UserStatusActive;
 import com.netcracker.services.FamilyDebitService;
@@ -45,31 +47,32 @@ public class FamilyDebitServiceImpl implements FamilyDebitService {
     }
 
     @Override
-    public void addUserToAccount(BigInteger accountId, BigInteger userId) {
+    public boolean addUserToAccount(BigInteger accountId, BigInteger userId) {
         logger.debug("Entering insert(addUserToAccount=" + accountId + " " + userId + ")");
-        try {
             User tempUser = userDao.getUserById(userId);
             if(tempUser == null){
-                throw new NullPointerException("The user "+ userId + " is NULL");
+                logger.debug("The user " + userId + " is NULL");
+                throw new UserException("The user is doesn`t exist");
             }
-            if (tempUser.getUserStatusActive() == UserStatusActive.NO) {
-                logger.error("The user " + userId + " is unActive");
+            if (tempUser.getUserStatusActive().equals(UserStatusActive.NO)) {
+                logger.debug("The user " + userId + " is unActive");
+                throw new UserException("The user is unactive", tempUser);
             } else {
                 Collection<User> participants = familyAccountDebitDao.getParticipantsOfFamilyAccount(accountId);
                 if(participants == null){
-                    throw new NullPointerException("the family debit account  " + accountId + " doesn`t exist");
+                    logger.debug("the family debit account  " + accountId + " doesn`t exist");
+                    throw new FamilyDebitAccountException("the family debit account doesn`t exist");
                 }
                 for (User participant : participants) {
                     if (participant.getId().equals(userId)) {
-                        logger.error("The user " + participant.getId() + " is has family account");
+                        logger.debug("The user " + participant.getId() + " is has family account");
+                        throw new UserException("The user has family debit account", participant);
                     }
                 }
                 familyAccountDebitDao.addUserToAccountById(accountId, userId);
                 logger.debug("Entering insert success(addUserToAccount=" + accountId + " " + userId + ")");
+                return  true;
             }
-        } catch (NullPointerException e) {
-            logger.error(e.getMessage(), e);
-        }
     }
 
     @Override
@@ -81,12 +84,12 @@ public class FamilyDebitServiceImpl implements FamilyDebitService {
     @Override
     public Collection<AbstractAccountOperation> getHistory(BigInteger familyAccountId, Date date) {
         logger.debug("Entering select(getHistory=" + familyAccountId + " " + date + ")");
-        Collection<AbstractAccountOperation> objects = new ArrayList<>();
+        Collection<AbstractAccountOperation> transactions = new ArrayList<>();
         Collection<AccountIncome> incomes = operationDao.getIncomesFamilyAfterDateByAccountId(familyAccountId, date);
         Collection<AccountExpense> expenses = operationDao.getExpensesFamilyAfterDateByAccountId(familyAccountId, date);
-        objects.addAll(incomes);
-        objects.addAll(expenses);
+        transactions.addAll(incomes);
+        transactions.addAll(expenses);
         logger.debug("Entering select success(getHistory=" + familyAccountId + " " + date + ")");
-        return objects;
+        return transactions;
     }
 }
