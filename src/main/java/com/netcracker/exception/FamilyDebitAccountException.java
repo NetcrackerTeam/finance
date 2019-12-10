@@ -13,12 +13,12 @@ public class FamilyDebitAccountException extends RuntimeException {
         super();
     }
 
-    public FamilyDebitAccountException(String operation) {
-        super(operation);
+    public FamilyDebitAccountException(String message) {
+        super(message);
     }
 
-    public FamilyDebitAccountException(String operation, FamilyDebitAccount familyDebitAccount) {
-        this(operation);
+    public FamilyDebitAccountException(String message, FamilyDebitAccount familyDebitAccount) {
+        this(message);
         this.familyDebitAccount = familyDebitAccount;
     }
 }

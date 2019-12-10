@@ -13,12 +13,12 @@ public class UserException extends RuntimeException {
         super();
     }
 
-    public UserException(String operation) {
-        super(operation);
+    public UserException(String message) {
+        super(message);
     }
 
-    public UserException(String operation, User user) {
-        this(operation);
+    public UserException(String message, User user) {
+        this(message);
         this.user = user;
     }
 }
