@@ -22,30 +22,26 @@ public class AccountAutoOperationServiceImpl implements AccountAutoOperationServ
 
     @Override
     public AutoOperationIncome createFamilyIncomeAutoOperation(BigInteger familyDebitAccountId, BigInteger userId,
-                                                               int dayOfMonth, long amount, CategoryIncome categoryIncome) {
-        return autoOperationDao.createFamilyIncomeAutoOperation(dayOfMonth, amount,
-                categoryIncome, userId, familyDebitAccountId);
+                                                           int dayOfMonth, long amount, CategoryIncome categoryIncome) {
+       return autoOperationDao.createFamilyIncomeAutoOperation(dayOfMonth, amount, categoryIncome, userId, familyDebitAccountId);
     }
 
     @Override
     public AutoOperationIncome createPersonalIncomeAutoOperation(BigInteger personalDebitAccountId, BigInteger userId,
                                                                  int dayOfMonth, long amount, CategoryIncome categoryIncome) {
-        return autoOperationDao.createPersonalIncomeAutoOperation(dayOfMonth, amount,
-                categoryIncome, userId, personalDebitAccountId);
+        return autoOperationDao.createPersonalIncomeAutoOperation(dayOfMonth, amount, categoryIncome, userId, personalDebitAccountId);
     }
 
     @Override
     public AutoOperationExpense createFamilyExpenseAutoOperation(BigInteger familyDebitAccountId, BigInteger userId,
                                                                  int dayOfMonth, long amount, CategoryExpense categoryExpense) {
-        return autoOperationDao.createFamilyExpenseAutoOperation(dayOfMonth, amount,
-                categoryExpense, userId, familyDebitAccountId);
+        return autoOperationDao.createFamilyExpenseAutoOperation(dayOfMonth, amount, categoryExpense, userId, familyDebitAccountId);
     }
 
     @Override
     public AutoOperationExpense createPersonalExpenseAutoOperation(BigInteger personalDebitAccountId, BigInteger userId,
                                                                    int dayOfMonth, long amount, CategoryExpense categoryExpense) {
-        return autoOperationDao.createPersonalExpenseAutoOperation(dayOfMonth,
-                amount, categoryExpense, userId, personalDebitAccountId);
+        return autoOperationDao.createPersonalExpenseAutoOperation(dayOfMonth, amount, categoryExpense, userId, personalDebitAccountId);
     }
 
     @Override
@@ -74,8 +70,15 @@ public class AccountAutoOperationServiceImpl implements AccountAutoOperationServ
     }
 
     @Override
-    public List<AbstractAutoOperation> getAllTodayOperations(BigInteger debitAccountId, int dayOfMonth) {
-        List<AbstractAutoOperation> allTodayOperations = new ArrayList<>(autoOperationDao.getAllTodayOperations(debitAccountId, dayOfMonth));
+    public List<AbstractAutoOperation> getAllTodayOperationsPersonal(BigInteger debitAccountId, int dayOfMonth) {
+        List<AbstractAutoOperation> allTodayOperations = new ArrayList<>(autoOperationDao.getAllTodayOperationsPersonal(debitAccountId, dayOfMonth));
+        allTodayOperations.sort(Comparator.comparing(AbstractAutoOperation::getId));
+        return allTodayOperations;
+    }
+
+    @Override
+    public List<AbstractAutoOperation> getAllTodayOperationsFamily(BigInteger debitAccountId, int dayOfMonth) {
+        List<AbstractAutoOperation> allTodayOperations = new ArrayList<>(autoOperationDao.getAllTodayOperationsFamily(debitAccountId, dayOfMonth));
         allTodayOperations.sort(Comparator.comparing(AbstractAutoOperation::getId));
         return allTodayOperations;
     }

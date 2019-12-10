@@ -65,8 +65,9 @@ public class CreditOperationTest {
         CreditOperation expectedCreditOperation = new CreditOperation(Long.valueOf("6666"),
                 AssertUtils.stringToDate("2000-01-01"));
         expectedCreditOperation.setCreditOperationId(BigInteger.valueOf(AssertUtils.getCurrentSequenceId(jdbcTemplate)));
-        CreditOperation actualCreditOperation = creditOperationDao.createFamilyCreditOperation(Long.valueOf("6666"),
-                AssertUtils.stringToDate("2000-01-01"), new BigInteger("84"), new BigInteger("74"));
+        creditOperationDao.createFamilyCreditOperation(Long.valueOf("6666"), AssertUtils.stringToDate("2000-01-01"),
+                new BigInteger("84"), new BigInteger("74"));
+        CreditOperation actualCreditOperation = creditOperationDao.getCreditOperationFamily(BigInteger.valueOf(AssertUtils.getCurrentSequenceId(jdbcTemplate)));
         AssertUtils.assertCreditOperation(expectedCreditOperation, actualCreditOperation);
     }
 
@@ -76,8 +77,9 @@ public class CreditOperationTest {
         CreditOperation expectedCreditOperation = new CreditOperation(Long.valueOf("1488"),
                 AssertUtils.stringToDate("2003-03-03"));
         expectedCreditOperation.setCreditOperationId(BigInteger.valueOf(AssertUtils.getCurrentSequenceId(jdbcTemplate)));
-        CreditOperation actualCreditOperation = creditOperationDao.createPersonalCreditOperation(Long.valueOf("1488"),
-                AssertUtils.stringToDate("2003-03-03"), new BigInteger("60"));
+        creditOperationDao.createPersonalCreditOperation(Long.valueOf("1488"), AssertUtils.stringToDate("2003-03-03"),
+                new BigInteger("60"));
+        CreditOperation actualCreditOperation = creditOperationDao.getCreditOperationPersonal(BigInteger.valueOf(AssertUtils.getCurrentSequenceId(jdbcTemplate)));
         AssertUtils.assertCreditOperation(expectedCreditOperation, actualCreditOperation);
     }
 

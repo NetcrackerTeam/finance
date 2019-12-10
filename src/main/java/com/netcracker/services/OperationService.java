@@ -11,17 +11,9 @@ import java.util.Date;
 import java.util.List;
 
 public interface OperationService {
-    List<AbstractAccountOperation> getAllFamilyOperations(List<FamilyDebitAccount> accounts);
+    List<AbstractAccountOperation> getAllFamilyOperations(BigInteger accountId, Date afterDate);
 
-    List<AbstractAccountOperation> getAllPersonalOperations(List<PersonalDebitAccount> accounts);
-
-    AccountIncome getFamilyOperationIncome(BigInteger operationId);
-
-    AccountExpense getFamilyOperationExpense(BigInteger operationId);
-
-    AccountIncome getPersonalOperationIncome(BigInteger operationId);
-
-    AccountExpense getPersonalOperationExpense(BigInteger operationId);
+    List<AbstractAccountOperation> getAllPersonalOperations(BigInteger accountId, Date afterDate);
 
     void createFamilyOperationIncome(BigInteger idUser, BigInteger idFamily, BigDecimal income, Date date, CategoryIncome categoryIncome);
 
