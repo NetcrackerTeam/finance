@@ -18,81 +18,28 @@ import java.util.Map;
 
 public interface OperationDao {
 
-    /**
-     *
-     * @param id
-     * @param income
-     * @param date
-     * @param categoryIncome
-     */
+
 
     void createIncomePersonalByAccId(BigInteger id, BigDecimal income, Date date, CategoryIncome categoryIncome);
 
-    /**
-     *
-     * @param id
-     * @param expense
-     * @param date
-     * @param categoryExpense
-     */
 
     void createExpensePersonaByAccId(BigInteger id, BigDecimal expense, Date date, CategoryExpense categoryExpense);
 
-    /**
-     *
-     * @param idUser
-     * @param idFamily
-     * @param income
-     * @param date
-     * @param categoryIncome
-     */
-
     void createIncomeFamilyByAccId(BigInteger idUser, BigInteger idFamily, BigDecimal income, Date date, CategoryIncome categoryIncome);
 
-    /**
-     *
-     * @param idUser
-     * @param idFamily
-     * @param expense
-     * @param date
-     * @param categoryExpense
-     */
 
     void createExpenseFamilyByAccId(BigInteger idUser, BigInteger idFamily, BigDecimal expense, Date date, CategoryExpense categoryExpense);
 
-    /**
-     *
-     * @param id
-     * @param date
-     * @return
-     */
 
     Collection<AccountIncome> getIncomesPersonalAfterDateByAccountId(BigInteger id, Date date);
 
-    /**
-     *
-     * @param id
-     * @param date
-     * @return
-     */
 
     Collection<AccountExpense> getExpensesPersonalAfterDateByAccountId(BigInteger id, Date date);
 
-    /**
-     *
-     * @param id
-     * @param data
-     * @return
-     */
 
     Collection<AccountIncome> getIncomesFamilyAfterDateByAccountId(BigInteger id, Date data);
 
-    /**
-     *
-     * @param id
-     * @param data
-     * @return
-     */
+
 
     Collection<AccountExpense> getExpensesFamilyAfterDateByAccountId(BigInteger id, Date data);
 

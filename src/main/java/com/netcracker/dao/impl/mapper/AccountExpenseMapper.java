@@ -2,9 +2,7 @@ package com.netcracker.dao.impl.mapper;
 
 import com.netcracker.models.AbstractAccountOperation;
 import com.netcracker.models.AccountExpense;
-import com.netcracker.models.AccountIncome;
 import com.netcracker.models.enums.CategoryExpense;
-import com.netcracker.models.enums.CategoryIncome;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;

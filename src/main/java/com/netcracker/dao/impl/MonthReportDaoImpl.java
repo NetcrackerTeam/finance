@@ -70,7 +70,7 @@ public class MonthReportDaoImpl implements MonthReportDao {
 
     @Override
     public void createCategoryIncomeFamilyReport(BigInteger idReport, BigInteger idUser, CategoryIncomeReport categoryIncomeReport) {
-        template.update(CREATE_CATEGORY_INCOME_FAMILY_REPORT_BY_ID, new BigDecimal(idReport), new BigDecimal(idUser), categoryIncomeReport.getCategoryIncome().getId(),
+        template.update(CREATE_CATEGORY_INCOME_FAMILY_REPORT_BY_ID, idReport, idUser, categoryIncomeReport.getCategoryIncome().getId(),
                 categoryIncomeReport.getAmount(), new BigDecimal(categoryIncomeReport.getUserReference()));
     }
 
@@ -82,7 +82,7 @@ public class MonthReportDaoImpl implements MonthReportDao {
 
     @Override
     public void createCategoryExpenseFamilyReport(BigInteger idReport, BigInteger idUser, CategoryExpenseReport categoryExpenseReport) {
-        template.update(CREATE_CATEGORY_EXPENSE_FAMILY_REPORT_BY_ID, new BigDecimal(idReport), new BigDecimal(idUser),
+        template.update(CREATE_CATEGORY_EXPENSE_FAMILY_REPORT_BY_ID, idReport, idUser,
         new BigDecimal(categoryExpenseReport.getCategoryExpense().getId()), categoryExpenseReport.getAmount());
     }
 

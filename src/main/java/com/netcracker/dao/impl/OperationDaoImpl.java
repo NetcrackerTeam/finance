@@ -29,22 +29,22 @@ public class OperationDaoImpl implements OperationDao {
 
     @Override
     public void createIncomePersonalByAccId(BigInteger id, BigDecimal income, Date date,  CategoryIncome categoryIncome) {
-        template.update(ADD_INCOME_PERSONAL_BY_ACCOUNT_ID, id, income.toString(), date, new BigDecimal(categoryIncome.getId()));
+        template.update(ADD_INCOME_PERSONAL_BY_ACCOUNT_ID, id, income.toString(), date, categoryIncome.getId());
     }
 
     @Override
     public void createExpensePersonaByAccId(BigInteger id, BigDecimal expense, Date date, CategoryExpense categoryExpense) {
-        template.update(ADD_EXPENSE_PERSONAL_BY_ACCOUNT_ID, id, expense.toString(), date, new BigDecimal(categoryExpense.getId()));
+        template.update(ADD_EXPENSE_PERSONAL_BY_ACCOUNT_ID, id, expense.toString(), date, categoryExpense.getId());
     }
 
     @Override
     public void createIncomeFamilyByAccId(BigInteger idUser, BigInteger idFamily, BigDecimal income, Date date,CategoryIncome categoryIncome) {
-        template.update(ADD_INCOME_FAMILY_BY_ACCOUNT_ID, new BigDecimal(idUser), new BigDecimal(idFamily), income.toString(),date, new BigDecimal(categoryIncome.getId()));
+        template.update(ADD_INCOME_FAMILY_BY_ACCOUNT_ID, idUser, idFamily, income.toString(),date, categoryIncome.getId());
     }
 
     @Override
     public void createExpenseFamilyByAccId(BigInteger idUser, BigInteger idFamily, BigDecimal expense, Date date, CategoryExpense categoryExpense ) {
-        template.update(ADD_EXPENSE_FAMILY_BY_ACCOUNT_ID, new BigDecimal(idUser), new BigDecimal(idFamily), expense.toString(), date, new BigDecimal(categoryExpense.getId()));
+        template.update(ADD_EXPENSE_FAMILY_BY_ACCOUNT_ID, idUser, idFamily, expense.toString(), date, categoryExpense.getId());
     }
 
     @Override

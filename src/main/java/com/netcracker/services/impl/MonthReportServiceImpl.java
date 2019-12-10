@@ -4,7 +4,7 @@ import com.netcracker.dao.FamilyAccountDebitDao;
 import com.netcracker.dao.MonthReportDao;
 import com.netcracker.dao.OperationDao;
 import com.netcracker.dao.PersonalDebitAccountDao;
-import com.netcracker.dao.impl.FamilyAccountDebitDaoImpl;
+
 import com.netcracker.models.AbstractCategoryReport;
 import com.netcracker.models.CategoryExpenseReport;
 import com.netcracker.models.CategoryIncomeReport;
@@ -41,6 +41,8 @@ public class MonthReportServiceImpl implements MonthReportService {
 
     @Override
     public void formMonthFamilyReportFromDb(BigInteger id, Date date) {
+        logger.debug("Insert formFamilyReportFromDb " + id + " " + date );
+
 
         Collection<CategoryExpenseReport> expenseReports = operationDao.getExpensesFamilyGroupByCategories(id, date);
         Collection<CategoryIncomeReport> incomeReports = operationDao.getIncomesFamilyGroupByCategories(id, date);
@@ -76,6 +78,8 @@ public class MonthReportServiceImpl implements MonthReportService {
     @Override
     public void formMonthPersonalReportFromDb(BigInteger id, Date date) {
 
+        logger.debug("Insert formFamilyReportFromDb " + id + " " + date );
+
         Collection<CategoryExpenseReport> expenseReports = operationDao.getExpensesPersonalGroupByCategories(id, date);
         Collection<CategoryIncomeReport> incomeReports = operationDao.getIncomesPersonalGroupByCategories(id, date);
 
@@ -106,6 +110,9 @@ public class MonthReportServiceImpl implements MonthReportService {
 
     @Override
     public FileOutputStream convertToTxt(MonthReport monthReport) {
+
+        logger.debug("Insert formFamilyReportFromDb " + monthReport);
+
         FileOutputStream fileOut = null;
         try {
             fileOut = new FileOutputStream("report.txt");

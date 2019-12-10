@@ -1,14 +1,13 @@
 package com.netcracker.dao.impl.mapper;
 
-import com.netcracker.dao.OperationDao;
+
 import com.netcracker.models.AbstractAccountOperation;
 import com.netcracker.models.AccountIncome;
-import com.netcracker.models.Debt;
+
 import com.netcracker.models.enums.CategoryIncome;
 import org.springframework.jdbc.core.RowMapper;
 
-import java.math.BigDecimal;
-import java.math.BigInteger;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
