@@ -1,7 +1,6 @@
 package com.netcracker.dao.impl;
 
 import com.netcracker.dao.FamilyAccountDebitDao;
-import com.netcracker.dao.UserDao;
 import com.netcracker.dao.impl.mapper.AccountExpenseMapper;
 import com.netcracker.dao.impl.mapper.AccountIncomeMapper;
 import com.netcracker.dao.impl.mapper.FamilyAccountDebitMapper;
@@ -13,16 +12,13 @@ import com.netcracker.models.User;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
-import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
-@Component
+@Repository
 public class FamilyAccountDebitDaoImpl implements FamilyAccountDebitDao {
 
     private static final Logger logger = Logger.getLogger(FamilyAccountDebitDaoImpl.class);

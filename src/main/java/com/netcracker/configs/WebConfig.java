@@ -1,5 +1,7 @@
 package com.netcracker.configs;
 
+import com.netcracker.services.UserService;
+import com.netcracker.services.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -68,5 +70,10 @@ public class WebConfig implements WebMvcConfigurer {
     public PlatformTransactionManager txManager() {
         Locale.setDefault(Locale.ENGLISH);
         return new DataSourceTransactionManager(getDataSource());
+    }
+
+    @Bean(name = "userService")
+    public UserService getUserService() {
+        return new UserServiceImpl();
     }
 }
