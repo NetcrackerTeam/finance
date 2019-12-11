@@ -53,7 +53,7 @@ public class FamilyDebitServiceImpl implements FamilyDebitService {
     public boolean addUserToAccount(BigInteger accountId, BigInteger userId) {
         logger.debug("Entering insert(addUserToAccount=" + accountId + " " + userId + ")");
         User tempUser = userDao.getUserById(userId);
-        if(tempUser == null || userId == null){
+        if(tempUser == null){
             logger.debug("The user " + userId + " is NULL");
             throw new UserException("The user is doesn`t exist");
         } else {
@@ -63,7 +63,7 @@ public class FamilyDebitServiceImpl implements FamilyDebitService {
                 throw new UserException("The user is unactive", tempUser);
             } else {
                 Collection<User> participants = familyAccountDebitDao.getParticipantsOfFamilyAccount(accountId);
-                if (participants == null || accountId == null) {
+                if (participants == null) {
                     logger.debug("the family debit account  " + accountId + " doesn`t exist");
                     throw new FamilyDebitAccountException("the family debit account doesn`t exist");
                 }
