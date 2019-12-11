@@ -12,7 +12,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
-import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.sql.Date;
 import java.util.List;
@@ -83,22 +82,22 @@ public class CreditAccountDaoImpl implements CreditAccountDao {
                 creditName,
                 Date.valueOf(creditAccount.getDate()),
                 creditAccount.getName(),
-                String.valueOf(creditAccount.getAmount()),
-                String.valueOf(creditAccount.getPaidAmount()),
-                String.valueOf(creditAccount.getCreditRate()),
+                creditAccount.getAmount(),
+                creditAccount.getPaidAmount(),
+                creditAccount.getCreditRate(),
                 Date.valueOf(creditAccount.getDateTo()),
-                new BigDecimal(creditAccount.isPaid().getId()),
-                String.valueOf(creditAccount.getMonthDay()),
+                creditAccount.isPaid().getId(),
+                creditAccount.getMonthDay(),
                 id);
-        BigDecimal accountId = jdbcTemplate.queryForObject(SELECT_CREDIT_ID_BY_NAME, new Object[]{creditName}, BigDecimal.class);
+        BigInteger accountId = jdbcTemplate.queryForObject(SELECT_CREDIT_ID_BY_NAME, new Object[]{creditName}, BigInteger.class);
         jdbcTemplate.update(queryDebt, accountId);
     }
 
     private void addCreditPayment(BigInteger id, long amount) {
-        jdbcTemplate.update(UPDATE_CREDIT_PAYMENT_QUERY, String.valueOf(amount), id);
+        jdbcTemplate.update(UPDATE_CREDIT_PAYMENT_QUERY, amount, id);
     }
 
     private void updatePaidStatus(BigInteger id, CreditStatusPaid statusPaid) {
-        jdbcTemplate.update(UPDATE_ISPAID_STATUS_CREDIT_QUERY, String.valueOf(statusPaid.getId()), id);
+        jdbcTemplate.update(UPDATE_ISPAID_STATUS_CREDIT_QUERY, statusPaid.getId(), id);
     }
 }

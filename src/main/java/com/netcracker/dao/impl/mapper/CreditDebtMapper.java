@@ -16,7 +16,7 @@ public class CreditDebtMapper implements RowMapper<Debt> {
                 .debtId(resultSet.getBigDecimal("debt_id").toBigInteger())
                 .dateFrom(checkNullDate(resultSet.getDate("debt_from")))
                 .dateTo(checkNullDate(resultSet.getDate("debt_to")))
-                .amountDebt(Long.valueOf(resultSet.getString("debt_amount")))
+                .amountDebt(resultSet.getLong("debt_amount"))
                 .build();
     }
 
