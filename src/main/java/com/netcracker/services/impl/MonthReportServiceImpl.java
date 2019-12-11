@@ -10,10 +10,10 @@ import com.netcracker.models.CategoryExpenseReport;
 import com.netcracker.models.CategoryIncomeReport;
 import com.netcracker.models.MonthReport;
 import com.netcracker.services.MonthReportService;
-import com.netcracker.services.utils.CreditUtils;
 import com.netcracker.services.utils.DateUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.io.FileOutputStream;
 import java.io.ObjectOutputStream;
@@ -23,6 +23,7 @@ import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Date;
 
+@Service
 public class MonthReportServiceImpl implements MonthReportService {
 
     private static final Logger logger = Logger.getLogger(MonthReportServiceImpl.class);
@@ -61,7 +62,7 @@ public class MonthReportServiceImpl implements MonthReportService {
 
 
 
-        LocalDate dateTo = CreditUtils.addMonthsToDate(DateUtils.dateToLocalDate(date), -1);
+        LocalDate dateTo = DateUtils.addMonthsToDate(DateUtils.dateToLocalDate(date), -1);
         BigInteger idOfRecentMonth = monthReportDao.getMonthReportByFamilyAccountId(id, date,
                 DateUtils.localDateToDate(dateTo)).getId();
 
@@ -95,7 +96,7 @@ public class MonthReportServiceImpl implements MonthReportService {
 
         monthReportDao.createPersonalMonthReport(monthReport, id);
 
-        LocalDate dateTo = CreditUtils.addMonthsToDate(DateUtils.dateToLocalDate(date), -1);
+        LocalDate dateTo = DateUtils.addMonthsToDate(DateUtils.dateToLocalDate(date), -1);
         BigInteger idOfRecentMonth = monthReportDao.getMonthReportByPersonalAccountId(id, date,
                 DateUtils.localDateToDate(dateTo)).getId();
 

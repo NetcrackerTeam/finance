@@ -9,8 +9,8 @@ import com.netcracker.models.Debt;
 import com.netcracker.models.PersonalCreditAccount;
 import com.netcracker.models.PersonalDebitAccount;
 import com.netcracker.models.enums.CreditStatusPaid;
-import com.netcracker.services.utils.CreditUtils;
 import com.netcracker.services.PersonalCreditService;
+import com.netcracker.services.utils.CreditUtils;
 import com.netcracker.services.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,7 +18,6 @@ import org.springframework.stereotype.Service;
 import java.math.BigInteger;
 import java.time.LocalDate;
 import java.util.Collection;
-import java.util.Date;
 
 @Service
 public class PersonalCreditServiceImpl implements PersonalCreditService {
@@ -66,18 +65,22 @@ public class PersonalCreditServiceImpl implements PersonalCreditService {
     }
 
     private void increaseDebt(Debt debt, long amount) {
+        LocalDate newDateTo;
         if (debt.getDateFrom() == null) {
             debt.setDateFrom(LocalDate.now());
             changeDebtDateFrom(debt.getDebtId(), debt.getDateFrom());
             changeDebtAmount(debt.getDebtId(), amount);
+            newDateTo = DateUtils.addMonthsToDate(LocalDate.now(), 1);
+        } else {
+            newDateTo = DateUtils.addMonthsToDate(debt.getDateTo(), 1);
+
+            changeDebtAmount(debt.getDebtId(), debt.getAmountDebt() + amount);
         }
-        LocalDate newDateTo = CreditUtils.addMonthsToDate(debt.getDateTo(), 1);
         changeDebtDateTo(debt.getDebtId(), newDateTo);
-        changeDebtAmount(debt.getDebtId(), debt.getAmountDebt() + amount);
     }
 
     private void decreaseDebt(Debt debt, long amount) {
-        LocalDate newDateFrom = CreditUtils.addMonthsToDate(debt.getDateTo(), 1);
+        LocalDate newDateFrom = DateUtils.addMonthsToDate(debt.getDateTo(), 1);
         if (newDateFrom.equals(debt.getDateTo())) {
             changeDebtDateFrom(debt.getDebtId(), null);
             changeDebtDateTo(debt.getDebtId(), null);
@@ -115,9 +118,8 @@ public class PersonalCreditServiceImpl implements PersonalCreditService {
         PersonalDebitAccount debitAccount = debitAccountDao.getPersonalAccountById(accountDebitId);
         long actualDebitAmount = debitAccount.getAmount();
         debitAccountDao.updateAmountOfPersonalAccount(accountDebitId, actualDebitAmount - amount);
-//        creditOperationDao.createPersonalCreditOperation(new CreditOperation(amount, new Date()), creditAccount.getCreditId());
-        creditOperationDao.createPersonalCreditOperation(amount, new Date(), creditAccount.getCreditId());
-        long updatedAmount = creditAccount.getAmount() + amount;
+        creditOperationDao.createPersonalCreditOperation(amount, DateUtils.localDateToDate(LocalDate.now()), creditAccount.getCreditId());
+        long updatedAmount = creditAccount.getPaidAmount() + amount;
         creditAccountDao.updatePersonalCreditPayment(creditAccount.getCreditId(), updatedAmount);
         if (creditAccount.getAmount() + amount == updatedAmount) {
             creditAccountDao.updateIsPaidStatusFamilyCredit(creditAccount.getCreditId(), CreditStatusPaid.YES);
@@ -125,7 +127,7 @@ public class PersonalCreditServiceImpl implements PersonalCreditService {
     }
 
     public void changeDebtDateTo(BigInteger id, LocalDate date) {
-        creditDeptDao.updateFamilyDebtDateTo(id, DateUtils.localDateToDate(date));
+        creditDeptDao.updatePersonalDebtDateTo(id, DateUtils.localDateToDate(date));
     }
 
     public void changeDebtDateFrom(BigInteger id, LocalDate date) {

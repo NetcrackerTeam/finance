@@ -22,4 +22,8 @@ public final class DateUtils {
     public static LocalDate dateToLocalDate(Date date) {
         return date == null ? null : date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
     }
+
+    public static LocalDate addMonthsToDate(LocalDate date, int amount) {
+        return date.plusMonths(amount);
+    }
 }

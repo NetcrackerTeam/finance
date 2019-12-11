@@ -7,14 +7,14 @@ public class Debt {
     private BigInteger debtId;
     private LocalDate dateFrom;
     private LocalDate dateTo;
-    private Long amountDebt;
+    private long amountDebt;
 
 
     public static class Builder {
         private BigInteger debtId;
         private LocalDate dateFrom;
         private LocalDate dateTo;
-        private Long amountDebt;
+        private long amountDebt;
 
         public Builder() {
         }
@@ -34,8 +34,8 @@ public class Debt {
             return this;
         }
 
-        public Builder amountDebt(Long date) {
-            this.amountDebt = date;
+        public Builder amountDebt(long amountDebt) {
+            this.amountDebt = amountDebt;
             return this;
         }
 
@@ -63,7 +63,7 @@ public class Debt {
         return dateTo;
     }
 
-    public Long getAmountDebt() {
+    public long getAmountDebt() {
         return amountDebt;
     }
 
@@ -75,7 +75,7 @@ public class Debt {
         this.dateTo = dateTo;
     }
 
-    public void setAmountDebt(Long amountDebt) {
+    public void setAmountDebt(long amountDebt) {
         this.amountDebt = amountDebt;
     }
 }

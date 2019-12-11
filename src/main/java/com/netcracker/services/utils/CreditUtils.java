@@ -13,10 +13,6 @@ public final class CreditUtils {
         throw new UnsupportedOperationException();
     }
 
-    public static LocalDate addMonthsToDate(LocalDate date, int amount) {
-        return date.plusMonths(amount);
-    }
-
     public static long calculateMonthPayment(LocalDate dateFrom, LocalDate dateTo, long amount, long rate) {
         long oneMonthRate = rate / MONTH_IN_YEAR;
         long allowance = (amount / PERCENT_CALC) * oneMonthRate;

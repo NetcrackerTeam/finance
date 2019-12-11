@@ -8,6 +8,7 @@ import com.netcracker.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
 import java.math.BigDecimal;
@@ -16,10 +17,10 @@ import java.util.Date;
 
 import java.util.Collection;
 
-@Component
+@Repository
 public class MonthReportDaoImpl implements MonthReportDao {
 
-    protected JdbcTemplate template;
+    private JdbcTemplate template;
 
     @Autowired
     public MonthReportDaoImpl(DataSource dataSource) {
