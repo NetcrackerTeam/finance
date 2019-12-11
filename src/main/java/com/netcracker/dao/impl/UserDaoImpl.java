@@ -46,7 +46,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public User getUserByLogin(String login) {
+    public User getUserByEmail(String login) {
         logger.debug("Entering getUserByUserLogin(login=" + login + ")");
         return template.queryForObject(GET_USER_BY_LOGIN, new Object[]{login},
                 new UserDaoMapper());

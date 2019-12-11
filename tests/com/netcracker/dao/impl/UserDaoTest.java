@@ -1,11 +1,7 @@
 package com.netcracker.dao.impl;
 
 import com.netcracker.configs.WebConfig;
-import com.netcracker.dao.FamilyAccountDebitDao;
-import com.netcracker.dao.PersonalDebitAccountDao;
 import com.netcracker.dao.UserDao;
-import com.netcracker.models.FamilyDebitAccount;
-import com.netcracker.models.PersonalDebitAccount;
 import com.netcracker.models.User;
 import com.netcracker.models.enums.UserStatusActive;
 import org.junit.Before;
@@ -68,7 +64,7 @@ public class UserDaoTest {
 
     @Test
     public void getUserByLogin(){
-        User user = userDao.getUserByLogin("Dimas");
+        User user = userDao.getUserByEmail("Dimas");
         assertEquals("user_id=24 ListStatus=YES name=Dimas email=mailDimas@gmail.com password=passwordDima personal_Acc=25 familyAcc=26",
                 "user_id=" + user.getId() + " ListStatus=" + user.getUserStatusActive() +
                         " name=" + user.getName() + " email=" + user.geteMail() +
