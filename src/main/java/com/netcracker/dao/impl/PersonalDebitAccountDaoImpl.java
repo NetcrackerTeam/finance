@@ -32,8 +32,8 @@ public class PersonalDebitAccountDaoImpl implements PersonalDebitAccountDao {
         logger.debug("Entering insert(createPersonalAccount=" + personalDebitAccount + ")");
         this.template.update(CREATE_PERSONAL_ACCOUNT, new Object[]{
                 personalDebitAccount.getObjectName(),
-                personalDebitAccount.getAmount().toString(),
-                personalDebitAccount.getStatus().getId().toString(),
+                personalDebitAccount.getAmount(),
+                personalDebitAccount.getStatus().getId(),
                 personalDebitAccount.getOwner().getId()
         });
         return personalDebitAccount;
@@ -43,8 +43,8 @@ public class PersonalDebitAccountDaoImpl implements PersonalDebitAccountDao {
     public void deletePersonalAccountById(BigInteger accountId, BigInteger userId) {
         logger.debug("Entering unactive(deletePersonalAccount=" + accountId + ")");
         this.template.update(DELETE_USER_FROM_PERSONAL_ACCOUNT, new Object[]{
-                accountId.toString(),
-                userId.toString()
+                accountId,
+                userId
         });
     }
 
@@ -52,13 +52,13 @@ public class PersonalDebitAccountDaoImpl implements PersonalDebitAccountDao {
     public void deletePersonalAccountByUserId(BigInteger account_id) {
         logger.debug("Entering unactive(deletePersonalAccountByUser=" + account_id + ")");
         this.template.update(UNACTIVE_USER_FROM_PERSONAL_ACCOUNT, new Object[]{
-                account_id.toString(),
+                account_id,
         });
     }
 
     @Override
     public void updateAmountOfPersonalAccount(BigInteger accountId, Long amount) {
         logger.debug("Entering update_amount(deletePersonalAccount=" + accountId + " " + amount + ")");
-        this.template.update(UPDATE_PERSONAL_ACCOUNT_AMOUNT, new Object[]{amount.toString(), accountId});
+        this.template.update(UPDATE_PERSONAL_ACCOUNT_AMOUNT, new Object[]{amount, accountId});
     }
 }

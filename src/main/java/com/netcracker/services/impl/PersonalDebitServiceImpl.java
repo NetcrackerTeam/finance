@@ -50,11 +50,13 @@ public class PersonalDebitServiceImpl implements PersonalDebitService {
 
     @Override
     public Collection<AbstractAccountOperation> getHistory(BigInteger personalAccountId, Date date) {
-        Collection<AbstractAccountOperation> objects = new ArrayList<>();
+        logger.debug(
+                "getHistory() method. projectId = " + personalAccountId + " " + date);
+        Collection<AbstractAccountOperation> trans = new ArrayList<>();
         Collection<AccountIncome> incomes = operationDao.getIncomesPersonalAfterDateByAccountId(personalAccountId, date);
         Collection<AccountExpense> expenses = operationDao.getExpensesPersonalAfterDateByAccountId(personalAccountId, date);
-        objects.addAll(incomes);
-        objects.addAll(expenses);
-        return objects;
+        trans.addAll(incomes);
+        trans.addAll(expenses);
+        return trans;
     }
 }

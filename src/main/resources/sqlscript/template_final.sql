@@ -30,6 +30,10 @@ BEGIN
   'Dear {}, you have been deleted from a family account');
   INSERT INTO TEMPLATE VALUES (9,'Account is deactivate',
    'Hi dear {}. We see you will deactivate your account, and its very bad for us. We want to see you again. your Finance Team');
+   INSERT INTO TEMPLATE VALUES (10,'Personal debit',
+   'Hi dear {}. Its your personal debit {}');
+      INSERT INTO TEMPLATE VALUES (11,'family debit',
+   'Hi dear {}. Its your family debit {}');
   commit;
 END;
 /
