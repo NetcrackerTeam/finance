@@ -53,12 +53,12 @@ public class FamilyDebitServiceImpl implements FamilyDebitService {
     public boolean addUserToAccount(BigInteger accountId, BigInteger userId) {
         logger.debug("Entering insert(addUserToAccount=" + accountId + " " + userId + ")");
         User tempUser = userDao.getUserById(userId);
-        if(tempUser == null){
+        if (tempUser == null) {
             logger.debug("The user " + userId + " is NULL");
             throw new UserException("The user is doesn`t exist");
         } else {
             boolean statusUser = userService.isUserActive(userId);
-            if (!statusUser){
+            if (!statusUser) {
                 logger.debug("The user " + userId + " is unActive");
                 throw new UserException("The user is unactive", tempUser);
             } else {
@@ -66,19 +66,20 @@ public class FamilyDebitServiceImpl implements FamilyDebitService {
                 if (participants == null) {
                     logger.debug("the family debit account  " + accountId + " doesn`t exist");
                     throw new FamilyDebitAccountException("the family debit account doesn`t exist");
-                }
-                for (User participant : participants) {
-                    if(participant.getId() == null) {
-                        logger.debug("The userId " + userId + " is NULL");
-                        throw new UserException("The userId is doesn`t exist", participant);
-                    } else if (userId.equals(participant.getId())) {
-                        logger.debug("The user " + participant.getId() + " is has family account");
-                        throw new UserException("The user has family debit account", participant);
+                } else {
+                    for (User participant : participants) {
+                        if (participant.getId() == null) {
+                            logger.debug("The userId " + userId + " is NULL");
+                            throw new UserException("The userId is doesn`t exist", participant);
+                        } else if (userId.equals(participant.getId())) {
+                            logger.debug("The user " + participant.getId() + " is has family account");
+                            throw new UserException("The user has family debit account", participant);
+                        }
                     }
+                    familyAccountDebitDao.addUserToAccountById(accountId, userId);
+                    logger.debug("Entering insert success(addUserToAccount=" + accountId + " " + userId + ")");
+                    return true;
                 }
-                familyAccountDebitDao.addUserToAccountById(accountId, userId);
-                logger.debug("Entering insert success(addUserToAccount=" + accountId + " " + userId + ")");
-                return true;
             }
         }
     }
