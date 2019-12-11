@@ -8,27 +8,23 @@ import com.netcracker.models.enums.CategoryExpense;
 import com.netcracker.models.enums.CategoryIncome;
 
 
-import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Date;
-import java.util.List;
-import java.util.Map;
+
 
 public interface OperationDao {
 
 
 
-    void createIncomePersonalByAccId(BigInteger id, BigDecimal income, Date date, CategoryIncome categoryIncome);
+    void createIncomePersonalByAccId(BigInteger id, long income, Date date, CategoryIncome categoryIncome);
+
+    void createExpensePersonaByAccId(BigInteger id, long expense, Date date, CategoryExpense categoryExpense);
+
+    void createIncomeFamilyByAccId(BigInteger idUser, BigInteger idFamily, long income, Date date, CategoryIncome categoryIncome);
 
 
-    void createExpensePersonaByAccId(BigInteger id, BigDecimal expense, Date date, CategoryExpense categoryExpense);
-
-    void createIncomeFamilyByAccId(BigInteger idUser, BigInteger idFamily, BigDecimal income, Date date, CategoryIncome categoryIncome);
-
-
-    void createExpenseFamilyByAccId(BigInteger idUser, BigInteger idFamily, BigDecimal expense, Date date, CategoryExpense categoryExpense);
+    void createExpenseFamilyByAccId(BigInteger idUser, BigInteger idFamily, long expense, Date date, CategoryExpense categoryExpense);
 
 
     Collection<AccountIncome> getIncomesPersonalAfterDateByAccountId(BigInteger id, Date date);

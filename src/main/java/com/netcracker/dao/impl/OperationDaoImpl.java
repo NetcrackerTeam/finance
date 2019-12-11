@@ -13,7 +13,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
-import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Collection;
 import java.util.Date;
@@ -28,23 +27,23 @@ public class OperationDaoImpl implements OperationDao {
     }
 
     @Override
-    public void createIncomePersonalByAccId(BigInteger id, BigDecimal income, Date date,  CategoryIncome categoryIncome) {
-        template.update(ADD_INCOME_PERSONAL_BY_ACCOUNT_ID, id, income.toString(), date, categoryIncome.getId());
+    public void createIncomePersonalByAccId(BigInteger id, long income, Date date,  CategoryIncome categoryIncome) {
+        template.update(ADD_INCOME_PERSONAL_BY_ACCOUNT_ID, id, income, date, categoryIncome.getId());
     }
 
     @Override
-    public void createExpensePersonaByAccId(BigInteger id, BigDecimal expense, Date date, CategoryExpense categoryExpense) {
-        template.update(ADD_EXPENSE_PERSONAL_BY_ACCOUNT_ID, id, expense.toString(), date, categoryExpense.getId());
+    public void createExpensePersonaByAccId(BigInteger id, long expense, Date date, CategoryExpense categoryExpense) {
+        template.update(ADD_EXPENSE_PERSONAL_BY_ACCOUNT_ID, id, expense, date, categoryExpense.getId());
     }
 
     @Override
-    public void createIncomeFamilyByAccId(BigInteger idUser, BigInteger idFamily, BigDecimal income, Date date,CategoryIncome categoryIncome) {
-        template.update(ADD_INCOME_FAMILY_BY_ACCOUNT_ID, idUser, idFamily, income.toString(),date, categoryIncome.getId());
+    public void createIncomeFamilyByAccId(BigInteger idUser, BigInteger idFamily, long income, Date date,CategoryIncome categoryIncome) {
+        template.update(ADD_INCOME_FAMILY_BY_ACCOUNT_ID, idUser, idFamily, income,date, categoryIncome.getId());
     }
 
     @Override
-    public void createExpenseFamilyByAccId(BigInteger idUser, BigInteger idFamily, BigDecimal expense, Date date, CategoryExpense categoryExpense ) {
-        template.update(ADD_EXPENSE_FAMILY_BY_ACCOUNT_ID, idUser, idFamily, expense.toString(), date, categoryExpense.getId());
+    public void createExpenseFamilyByAccId(BigInteger idUser, BigInteger idFamily, long expense, Date date, CategoryExpense categoryExpense ) {
+        template.update(ADD_EXPENSE_FAMILY_BY_ACCOUNT_ID, idUser, idFamily, expense, date, categoryExpense.getId());
     }
 
     @Override

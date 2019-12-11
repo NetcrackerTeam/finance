@@ -55,7 +55,7 @@ public class OperationDaoTest {
     @Rollback
     @Test
     public void addIncomePersonalByAccId() {
-        operationDao.createIncomePersonalByAccId(BigInteger.valueOf(2), BigDecimal.valueOf(testIncome.getAmount()), testIncome.getDate(), testIncome.getCategoryIncome());
+        operationDao.createIncomePersonalByAccId(BigInteger.valueOf(2), testIncome.getAmount(), testIncome.getDate(), testIncome.getCategoryIncome());
         int expected = 2;
         int actual = operationDao.getIncomesPersonalAfterDateByAccountId(BigInteger.valueOf(2),
                 Date.valueOf(LocalDate.of(1990,10,10))).size();
@@ -64,7 +64,7 @@ public class OperationDaoTest {
     @Rollback
     @Test
     public void addExpensePersonaByAccId() {
-        operationDao.createExpensePersonaByAccId(BigInteger.valueOf(2), BigDecimal.valueOf(testExpense.getAmount()),
+        operationDao.createExpensePersonaByAccId(BigInteger.valueOf(2), testExpense.getAmount(),
                 testExpense.getDate(), testExpense.getCategoryExpense());
         int expected = 2;
         int actual = operationDao.getExpensesPersonalAfterDateByAccountId(BigInteger.valueOf(2),
@@ -74,7 +74,7 @@ public class OperationDaoTest {
     @Rollback
     @Test
     public void addIncomeFamilyByAccId() {
-        operationDao.createIncomeFamilyByAccId(BigInteger.valueOf(3),BigInteger.valueOf(2), BigDecimal.valueOf(testIncome.getAmount()),
+        operationDao.createIncomeFamilyByAccId(BigInteger.valueOf(3),BigInteger.valueOf(2), testIncome.getAmount(),
                 testIncome.getDate(), testIncome.getCategoryIncome());
         int expected = 2;
         int actual = operationDao.getIncomesFamilyAfterDateByAccountId(BigInteger.valueOf(3),
@@ -84,7 +84,7 @@ public class OperationDaoTest {
     @Rollback
     @Test
     public void addExpenseFamilyByAccId() {
-        operationDao.createExpenseFamilyByAccId(BigInteger.valueOf(2),BigInteger.valueOf(3), BigDecimal.valueOf(testExpense.getAmount()),
+        operationDao.createExpenseFamilyByAccId(BigInteger.valueOf(2),BigInteger.valueOf(3), testExpense.getAmount(),
                 testExpense.getDate(), testExpense.getCategoryExpense());
         int expected = 2;
         int actual = operationDao.getExpensesFamilyAfterDateByAccountId(BigInteger.valueOf(3),

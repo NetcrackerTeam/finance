@@ -1,9 +1,6 @@
 package com.netcracker.services.impl;
 
-import com.netcracker.dao.FamilyAccountDebitDao;
-import com.netcracker.dao.MonthReportDao;
-import com.netcracker.dao.OperationDao;
-import com.netcracker.dao.PersonalDebitAccountDao;
+import com.netcracker.dao.*;
 
 import com.netcracker.models.AbstractCategoryReport;
 import com.netcracker.models.CategoryExpenseReport;
@@ -39,6 +36,9 @@ public class MonthReportServiceImpl implements MonthReportService {
 
     @Autowired
     PersonalDebitAccountDao personalDebitAccountDao;
+
+    @Autowired
+    UserDao userDao;
 
     @Override
     public void formMonthFamilyReportFromDb(BigInteger id, Date date) {
@@ -79,7 +79,7 @@ public class MonthReportServiceImpl implements MonthReportService {
     @Override
     public void formMonthPersonalReportFromDb(BigInteger id, Date date) {
 
-        logger.debug("Insert formFamilyReportFromDb " + id + " " + date );
+        logger.debug("Insert formPersonalReportFromDb " + id + " " + date );
 
         Collection<CategoryExpenseReport> expenseReports = operationDao.getExpensesPersonalGroupByCategories(id, date);
         Collection<CategoryIncomeReport> incomeReports = operationDao.getIncomesPersonalGroupByCategories(id, date);
@@ -100,27 +100,44 @@ public class MonthReportServiceImpl implements MonthReportService {
         BigInteger idOfRecentMonth = monthReportDao.getMonthReportByPersonalAccountId(id, date,
                 DateUtils.localDateToDate(dateTo)).getId();
 
-        for (CategoryExpenseReport i : expenseReports) {
-            monthReportDao.createCategoryExpensePersonalReport(idOfRecentMonth, i);
+        for (CategoryExpenseReport report : expenseReports) {
+            monthReportDao.createCategoryExpensePersonalReport(idOfRecentMonth, report);
         }
 
-        for (CategoryIncomeReport i : incomeReports) {
-            monthReportDao.createCategoryIncomePersonalReport(idOfRecentMonth, i);
+        for (CategoryIncomeReport report : incomeReports) {
+            monthReportDao.createCategoryIncomePersonalReport(idOfRecentMonth, report);
         }
     }
 
     @Override
     public FileOutputStream convertToTxt(MonthReport monthReport) {
 
-        logger.debug("Insert formFamilyReportFromDb " + monthReport);
+        logger.debug("Convertation " + monthReport);
 
         FileOutputStream fileOut = null;
         try {
             fileOut = new FileOutputStream("report.txt");
             ObjectOutputStream objectOut = new ObjectOutputStream(fileOut);
-            objectOut.writeObject(monthReport);
+            objectOut.writeObject(monthReport.getBalance());
+            objectOut.writeObject(monthReport.getTotalExpense());
+            objectOut.writeObject(monthReport.getTotalIncome());
+            objectOut.writeObject(monthReport.getDateFrom());
+            objectOut.writeObject(monthReport.getDateTo());
+
+            for (CategoryIncomeReport report: monthReport.getCategoryIncome()) {
+                objectOut.writeObject(userDao.getUserById(report.getUserReference()).getName());
+                objectOut.writeObject(report.getCategoryIncome());
+                objectOut.writeObject(report.getAmount());
+            }
+
+            for (CategoryExpenseReport report: monthReport.getCategoryExpense()) {
+                objectOut.writeObject(userDao.getUserById(report.getUserReference()).getName());
+                objectOut.writeObject(report.getCategoryExpense());
+                objectOut.writeObject(report.getAmount());
+            }
+
             objectOut.close();
-            System.out.println("The Object was succesfully written to a file");
+            logger.debug("The Object was succesfully written to a file");
 
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -129,6 +146,7 @@ public class MonthReportServiceImpl implements MonthReportService {
     }
     @Override
     public MonthReport getMonthPersonalReport(BigInteger id, Date dateFrom, Date dateTo) {
+        logger.debug("Id " + id + " dateFrom " + dateFrom + " dateTo " + dateTo );
         MonthReport monthReport = monthReportDao.getMonthReportByPersonalAccountId(id, dateFrom, dateTo);
         Collection<CategoryExpenseReport> expenseReports = monthReportDao.getCategoryExpensePersonalReport(monthReport.getId());
         Collection<CategoryIncomeReport> incomeReports = monthReportDao.getCategoryIncomePersonalReport(monthReport.getId());

@@ -5,7 +5,6 @@ import com.netcracker.dao.OperationDao;
 import com.netcracker.models.*;
 import com.netcracker.models.enums.CategoryExpense;
 import com.netcracker.models.enums.CategoryIncome;
-import com.netcracker.models.enums.CreditStatusPaid;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -19,12 +18,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 
 import java.sql.Date;
-import java.time.ZoneId;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -59,7 +55,7 @@ public class OperationDaoImplTest {
     @Rollback
     @Test
     public void createIncomePersonalByAccId() {
-        operationDao.createIncomePersonalByAccId(BigInteger.valueOf(2), BigDecimal.valueOf(testIncome.getAmount()), testIncome.getDate(), testIncome.getCategoryIncome());
+        operationDao.createIncomePersonalByAccId(BigInteger.valueOf(2), testIncome.getAmount(), testIncome.getDate(), testIncome.getCategoryIncome());
         int expected = 2;
         int actual = operationDao.getIncomesPersonalAfterDateByAccountId(BigInteger.valueOf(2),
                 Date.valueOf(LocalDate.of(1990,10,10))).size();
@@ -68,7 +64,7 @@ public class OperationDaoImplTest {
     @Rollback
     @Test
     public void createExpensePersonaByAccId() {
-        operationDao.createExpensePersonaByAccId(BigInteger.valueOf(2), BigDecimal.valueOf(testExpense.getAmount()),
+        operationDao.createExpensePersonaByAccId(BigInteger.valueOf(2), testExpense.getAmount(),
                 testExpense.getDate(), testExpense.getCategoryExpense());
         int expected = 2;
         int actual = operationDao.getExpensesPersonalAfterDateByAccountId(BigInteger.valueOf(2),
@@ -78,7 +74,7 @@ public class OperationDaoImplTest {
     @Rollback
     @Test
     public void createIncomeFamilyByAccId() {
-        operationDao.createIncomeFamilyByAccId(BigInteger.valueOf(3),BigInteger.valueOf(2), BigDecimal.valueOf(testIncome.getAmount()),
+        operationDao.createIncomeFamilyByAccId(BigInteger.valueOf(3),BigInteger.valueOf(2), testIncome.getAmount(),
                 testIncome.getDate(), testIncome.getCategoryIncome());
         int expected = 2;
         int actual = operationDao.getIncomesFamilyAfterDateByAccountId(BigInteger.valueOf(3),
@@ -88,7 +84,7 @@ public class OperationDaoImplTest {
     @Rollback
     @Test
     public void createExpenseFamilyByAccId() {
-        operationDao.createExpenseFamilyByAccId(BigInteger.valueOf(2),BigInteger.valueOf(3), BigDecimal.valueOf(testExpense.getAmount()),
+        operationDao.createExpenseFamilyByAccId(BigInteger.valueOf(2),BigInteger.valueOf(3), testExpense.getAmount(),
                 testExpense.getDate(), testExpense.getCategoryExpense());
         int expected = 2;
         int actual = operationDao.getExpensesFamilyAfterDateByAccountId(BigInteger.valueOf(3),

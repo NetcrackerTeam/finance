@@ -41,22 +41,22 @@ public class OperationServiceImpl implements OperationService {
     }
 
     @Override
-    public void createFamilyOperationIncome(BigInteger idUser, BigInteger idFamily, BigDecimal income, Date date, CategoryIncome categoryIncome) {
+    public void createFamilyOperationIncome(BigInteger idUser, BigInteger idFamily, long income, Date date, CategoryIncome categoryIncome) {
         operationDao.createIncomeFamilyByAccId(idUser, idFamily, income, date, categoryIncome);
     }
 
     @Override
-    public void createFamilyOperationExpense(BigInteger idUser, BigInteger idFamily, BigDecimal expense, Date date, CategoryExpense categoryExpense) {
+    public void createFamilyOperationExpense(BigInteger idUser, BigInteger idFamily, long expense, Date date, CategoryExpense categoryExpense) {
         operationDao.createExpenseFamilyByAccId(idUser, idFamily, expense, date, categoryExpense);
     }
 
     @Override
-    public void createPersonalOperationIncome(BigInteger id, BigDecimal income, Date date, CategoryIncome categoryIncome) {
+    public void createPersonalOperationIncome(BigInteger id, long income, Date date, CategoryIncome categoryIncome) {
         operationDao.createIncomePersonalByAccId(id, income, date, categoryIncome);
     }
 
     @Override
-    public void createPersonalOperationExpense(BigInteger id, BigDecimal expense, Date date, CategoryExpense categoryExpense) {
+    public void createPersonalOperationExpense(BigInteger id, long expense, Date date, CategoryExpense categoryExpense) {
         operationDao.createExpensePersonaByAccId(id, expense, date, categoryExpense);
     }
 
