@@ -80,14 +80,14 @@ public class PersonalCreditServiceImpl implements PersonalCreditService {
     }
 
     private void decreaseDebt(Debt debt, long amount) {
-        LocalDate newDateFrom = DateUtils.addMonthsToDate(debt.getDateTo(), 1);
+        LocalDate newDateFrom = DateUtils.addMonthsToDate(debt.getDateFrom(), 1);
         if (newDateFrom.equals(debt.getDateTo())) {
             changeDebtDateFrom(debt.getDebtId(), null);
             changeDebtDateTo(debt.getDebtId(), null);
             changeDebtAmount(debt.getDebtId(), 0);
         } else {
             changeDebtDateFrom(debt.getDebtId(), newDateFrom);
-            changeDebtAmount(debt.getDebtId(), debt.getAmountDebt() + amount);
+            changeDebtAmount(debt.getDebtId(), debt.getAmountDebt() - amount);
         }
     }
 
@@ -121,8 +121,10 @@ public class PersonalCreditServiceImpl implements PersonalCreditService {
         creditOperationDao.createPersonalCreditOperation(amount, DateUtils.localDateToDate(LocalDate.now()), creditAccount.getCreditId());
         long updatedAmount = creditAccount.getPaidAmount() + amount;
         creditAccountDao.updatePersonalCreditPayment(creditAccount.getCreditId(), updatedAmount);
-        if (creditAccount.getAmount() + amount == updatedAmount) {
-            creditAccountDao.updateIsPaidStatusFamilyCredit(creditAccount.getCreditId(), CreditStatusPaid.YES);
+        long monthPayment = CreditUtils.getTotalCreditPayment(creditAccount.getDate(), creditAccount.getDateTo(),
+                creditAccount.getAmount(), creditAccount.getCreditRate());
+        if (monthPayment == updatedAmount) {
+            creditAccountDao.updateIsPaidStatusPersonalCredit(creditAccount.getCreditId(), CreditStatusPaid.YES);
         }
     }
 
