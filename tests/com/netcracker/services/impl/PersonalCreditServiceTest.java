@@ -9,7 +9,6 @@ import com.netcracker.models.Debt;
 import com.netcracker.models.PersonalCreditAccount;
 import com.netcracker.models.PersonalDebitAccount;
 import com.netcracker.models.enums.CreditStatusPaid;
-import com.netcracker.services.utils.CreditUtils;
 import com.netcracker.services.utils.DateUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -21,6 +20,8 @@ import java.math.BigInteger;
 import java.time.LocalDate;
 import java.util.Date;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.*;
 
 public class PersonalCreditServiceTest {
@@ -49,7 +50,7 @@ public class PersonalCreditServiceTest {
     private AbstractCreditAccount persCrAc;
     private AbstractCreditAccount persCrAcWithDebtTwoMonth;
     private AbstractCreditAccount persCrAcWithDebtOneMonth;
-    private AbstractCreditAccount persCrAcToPay;
+    private AbstractCreditAccount persCrAcLastPay;
 
     private PersonalDebitAccount personalDebitAccount;
     private PersonalDebitAccount personalDebitAccountNoEnoughMoney;
@@ -115,7 +116,7 @@ public class PersonalCreditServiceTest {
                 .debtCredit(debtNotEmptyTwoMonth)
                 .build();
 
-        persCrAcToPay = new PersonalCreditAccount.Builder()
+        persCrAcLastPay = new PersonalCreditAccount.Builder()
                 .creditId(testIdCredit)
                 .isPaid(CreditStatusPaid.NO)
                 .date(date)
@@ -128,9 +129,11 @@ public class PersonalCreditServiceTest {
 
         personalDebitAccount = new PersonalDebitAccount.Builder()
                 .debitAmount(6000L)
+                .debitId(testIdAcc)
                 .build();
         personalDebitAccountNoEnoughMoney = new PersonalDebitAccount.Builder()
                 .debitAmount(1000L)
+                .debitId(testIdAcc)
                 .build();
     }
 
@@ -139,9 +142,7 @@ public class PersonalCreditServiceTest {
         when(creditAccountDao.getPersonalCreditById(testIdCredit)).thenReturn((PersonalCreditAccount) persCrAc);
         when(personalDebitAccountDao.getPersonalAccountById(testIdAcc)).thenReturn(personalDebitAccount);
 
-        creditService.addPersonalCreditPaymentAuto(testIdAcc, testIdCredit,
-                CreditUtils.calculateMonthPayment(persCrAc.getDate(), persCrAc.getDateTo(),
-                        persCrAc.getAmount(), persCrAc.getCreditRate()));
+        assertTrue(creditService.addPersonalCreditPaymentAuto(testIdAcc, testIdCredit, monthPayment));
 
         verify(creditAccountDao, times(1))
                 .updatePersonalCreditPayment(testIdCredit, persCrAc.getPaidAmount() + monthPayment);
@@ -153,74 +154,52 @@ public class PersonalCreditServiceTest {
                 .updateAmountOfPersonalAccount(testIdAcc, personalDebitAccount.getAmount() - monthPayment);
     }
 
+
     @Test
-    public void addPersonalCreditPaymentAutoNoEnoughMoneyEmptyDebtTest() {
+    public void addPersonalCreditPaymentAutoNoEnoughMoney() {
         when(creditAccountDao.getPersonalCreditById(testIdCredit)).thenReturn((PersonalCreditAccount) persCrAc);
         when(personalDebitAccountDao.getPersonalAccountById(testIdAcc)).thenReturn(personalDebitAccountNoEnoughMoney);
 
-        creditService.addPersonalCreditPaymentAuto(testIdAcc, testIdCredit,
-                CreditUtils.calculateMonthPayment(persCrAc.getDate(), persCrAc.getDateTo(),
-                        persCrAc.getAmount(), persCrAc.getCreditRate()));
-
-        verify(creditAccountDao, times(0))
-                .updatePersonalCreditPayment(testIdCredit, persCrAc.getPaidAmount() + monthPayment);
-
-        verify(creditOperationDao, times(0))
-                .createPersonalCreditOperation(monthPayment, today, testIdCredit);
-
-        verify(personalDebitAccountDao, times(0))
-                .updateAmountOfPersonalAccount(testIdAcc, personalDebitAccountNoEnoughMoney.getAmount() - monthPayment);
-
-        verify(creditDeptDao, times(1))
-                .updatePersonalDebtDateFrom(testIdDebt, today);
-
-        verify(creditDeptDao, times(1))
-                .updatePersonalDebtDateTo(testIdDebt, DateUtils.localDateToDate(DateUtils.addMonthsToDate(LocalDate.now(), 1)));
-
-        verify(creditDeptDao, times(1))
-                .updatePersonalDebtAmount(testIdDebt, monthPayment);
+        assertFalse(creditService.addPersonalCreditPaymentAuto(testIdAcc, testIdCredit, monthPayment));
     }
 
     @Test
-    public void addPersonalCreditPaymentAutoNoEnoughMoneyWithDebtTest() {
+    public void increaseDebtWhenHasTest() {
         when(creditAccountDao.getPersonalCreditById(testIdCredit)).thenReturn((PersonalCreditAccount) persCrAcWithDebtTwoMonth);
-        when(personalDebitAccountDao.getPersonalAccountById(testIdAcc)).thenReturn(personalDebitAccountNoEnoughMoney);
 
-        creditService.addPersonalCreditPaymentAuto(testIdAcc, testIdCredit,
-                CreditUtils.calculateMonthPayment(persCrAcWithDebtTwoMonth.getDate(), persCrAcWithDebtTwoMonth.getDateTo(),
-                        persCrAcWithDebtTwoMonth.getAmount(), persCrAcWithDebtTwoMonth.getCreditRate()
-                ));
-
-        verify(creditAccountDao, times(0))
-                .updatePersonalCreditPayment(testIdCredit, persCrAcWithDebtTwoMonth.getPaidAmount() + monthPayment);
-
-        verify(creditOperationDao, times(0))
-                .createPersonalCreditOperation(monthPayment, today, testIdCredit);
-
-        verify(personalDebitAccountDao, times(0))
-                .updateAmountOfPersonalAccount(testIdAcc, personalDebitAccountNoEnoughMoney.getAmount() - monthPayment);
-
-        verify(creditDeptDao, times(0))
-                .updatePersonalDebtDateFrom(testIdDebt,
-                DateUtils.localDateToDate(DateUtils.addMonthsToDate(debtNotEmptyTwoMonth.getDateTo(), 1)));
+        creditService.increaseDebt(testIdCredit, monthPayment);
 
         verify(creditDeptDao, times(1))
                 .updatePersonalDebtDateTo(testIdDebt,
-                DateUtils.localDateToDate(DateUtils.addMonthsToDate(debtNotEmptyTwoMonth.getDateTo(), 1)));
+                        DateUtils.localDateToDate(DateUtils.addMonthsToDate(debtNotEmptyTwoMonth.getDateTo(), 1)));
 
         verify(creditDeptDao, times(1))
                 .updatePersonalDebtAmount(testIdDebt, debtNotEmptyTwoMonth.getAmountDebt() + monthPayment);
     }
 
     @Test
-    public void addPersonalCreditPaymentAutoDebtRepaymentTest() {
+    public void increaseDebtWithoutPrevTest() {
+        when(creditAccountDao.getPersonalCreditById(testIdCredit)).thenReturn((PersonalCreditAccount) persCrAc);
+
+        creditService.increaseDebt(testIdCredit, monthPayment);
+
+        verify(creditDeptDao, times(1))
+                .updatePersonalDebtDateFrom(testIdDebt, DateUtils.localDateToDate(LocalDate.now()));
+
+        verify(creditDeptDao, times(1))
+                .updatePersonalDebtDateTo(testIdDebt,
+                        DateUtils.localDateToDate(DateUtils.addMonthsToDate(LocalDate.now(), 1)));
+
+        verify(creditDeptDao, times(1))
+                .updatePersonalDebtAmount(testIdDebt, monthPayment);
+    }
+
+    @Test
+    public void addAutoDebtRepaymentTest() {
         when(creditAccountDao.getPersonalCreditById(testIdCredit)).thenReturn((PersonalCreditAccount) persCrAcWithDebtTwoMonth);
         when(personalDebitAccountDao.getPersonalAccountById(testIdAcc)).thenReturn(personalDebitAccount);
 
-        creditService.addPersonalCreditPaymentAuto(testIdAcc, testIdCredit,
-                CreditUtils.calculateMonthPayment(persCrAcWithDebtTwoMonth.getDate(), persCrAcWithDebtTwoMonth.getDateTo(),
-                        persCrAcWithDebtTwoMonth.getAmount(), persCrAcWithDebtTwoMonth.getCreditRate()
-                ));
+        creditService.addAutoDebtRepayment(testIdAcc, testIdCredit, monthPayment);
 
         verify(creditAccountDao, times(1))
                 .updatePersonalCreditPayment(testIdCredit, persCrAcWithDebtTwoMonth.getPaidAmount() + monthPayment);
@@ -235,24 +214,17 @@ public class PersonalCreditServiceTest {
                 .updatePersonalDebtDateFrom(testIdDebt,
                         DateUtils.localDateToDate(DateUtils.addMonthsToDate(debtNotEmptyTwoMonth.getDateFrom(), 1)));
 
-        verify(creditDeptDao, times(0))
-                .updatePersonalDebtDateTo(testIdDebt,
-                        DateUtils.localDateToDate(DateUtils.addMonthsToDate(debtNotEmptyTwoMonth.getDateTo(), 1)));
-
         verify(creditDeptDao, times(1))
                 .updatePersonalDebtAmount(testIdDebt, debtNotEmptyTwoMonth.getAmountDebt() - monthPayment);
 
     }
 
     @Test
-    public void addPersonalCreditPaymentAutoDebtRepaymentCloseDebtTest() {
+    public void addAutoDebtRepaymentCloseDebtTest() {
         when(creditAccountDao.getPersonalCreditById(testIdCredit)).thenReturn((PersonalCreditAccount) persCrAcWithDebtOneMonth);
         when(personalDebitAccountDao.getPersonalAccountById(testIdAcc)).thenReturn(personalDebitAccount);
 
-        creditService.addPersonalCreditPaymentAuto(testIdAcc, testIdCredit,
-                CreditUtils.calculateMonthPayment(persCrAcWithDebtOneMonth.getDate(), persCrAcWithDebtOneMonth.getDateTo(),
-                        persCrAcWithDebtOneMonth.getAmount(), persCrAcWithDebtOneMonth.getCreditRate()
-                ));
+        creditService.addAutoDebtRepayment(testIdAcc, testIdCredit, monthPayment);
 
         verify(creditAccountDao, times(1))
                 .updatePersonalCreditPayment(testIdCredit, persCrAcWithDebtOneMonth.getPaidAmount() + monthPayment);
@@ -274,16 +246,14 @@ public class PersonalCreditServiceTest {
     }
 
     @Test
-    public void addPersonalCreditPaymentAutoDebtRepaymentCloseCreditTest() {
-        when(creditAccountDao.getPersonalCreditById(testIdCredit)).thenReturn((PersonalCreditAccount) persCrAcToPay);
+    public void addAutoDebtRepaymentCloseCreditTest() {
+        when(creditAccountDao.getPersonalCreditById(testIdCredit)).thenReturn((PersonalCreditAccount) persCrAcLastPay);
         when(personalDebitAccountDao.getPersonalAccountById(testIdAcc)).thenReturn(personalDebitAccount);
 
-        creditService.addPersonalCreditPaymentAuto(testIdAcc, testIdCredit,
-                CreditUtils.calculateMonthPayment(persCrAcToPay.getDate(), persCrAcToPay.getDateTo(),
-                        persCrAcToPay.getAmount(), persCrAcToPay.getCreditRate()
-                ));
+        creditService.addAutoDebtRepayment(testIdAcc, testIdCredit, monthPayment);
+
         verify(creditAccountDao, times(1))
-                .updatePersonalCreditPayment(testIdCredit, persCrAcToPay.getPaidAmount() + monthPayment);
+                .updatePersonalCreditPayment(testIdCredit, persCrAcLastPay.getPaidAmount() + monthPayment);
 
         verify(creditOperationDao, times(1))
                 .createPersonalCreditOperation(monthPayment, today, testIdCredit);
@@ -303,5 +273,4 @@ public class PersonalCreditServiceTest {
         verify(creditAccountDao, times(1))
                 .updateIsPaidStatusPersonalCredit(testIdCredit, CreditStatusPaid.YES);
     }
-
 }

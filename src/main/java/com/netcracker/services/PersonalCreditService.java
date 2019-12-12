@@ -15,7 +15,11 @@ public interface PersonalCreditService {
 
     void addPersonalCreditPayment(BigInteger idAccount, BigInteger idCredit, long amount);
 
-    void addPersonalCreditPaymentAuto(BigInteger idAccount, BigInteger idCredit, long amount);
+    boolean addPersonalCreditPaymentAuto(BigInteger idAccount, BigInteger idCredit, long amount);
+
+    void increaseDebt(BigInteger idCredit, long amount);
+
+    void addAutoDebtRepayment(BigInteger idAccount, BigInteger idCredit, long amount);
 
     Collection<PersonalCreditAccount> getPersonalCredits(BigInteger id);
 

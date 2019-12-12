@@ -45,38 +45,45 @@ public class PersonalCreditServiceImpl implements PersonalCreditService {
     }
 
     @Override
-    public void addPersonalCreditPayment(BigInteger idAccount, BigInteger idCredit, long amount) {
+    public void addPersonalCreditPayment(BigInteger idDebitAccount, BigInteger idCredit, long amount) {
         PersonalCreditAccount creditAccount = getPersonalCreditAccount(idCredit);
-        addPayment(creditAccount, idAccount, amount);
+        PersonalDebitAccount debitAccount = debitAccountDao.getPersonalAccountById(idDebitAccount);
+        addPayment(creditAccount, debitAccount, amount);
     }
 
     @Override
-    public void addPersonalCreditPaymentAuto(BigInteger idAccount, BigInteger idCredit, long amount) {
+    public boolean addPersonalCreditPaymentAuto(BigInteger idDebitAccount, BigInteger idCredit, long amount) {
         PersonalCreditAccount creditAccount = getPersonalCreditAccount(idCredit);
-        PersonalDebitAccount debitAccount = debitAccountDao.getPersonalAccountById(idAccount);
+        PersonalDebitAccount debitAccount = debitAccountDao.getPersonalAccountById(idDebitAccount);
         if (debitAccount.getAmount() < amount) {
-            increaseDebt(creditAccount.getDebt(), amount);
-        } else {
-            if (creditAccount.getDebt().getDateFrom() != null) {
-                decreaseDebt(creditAccount.getDebt(), amount);
-            }
-            addPayment(creditAccount, idAccount, amount);
-        }
+            return false;
+        } else
+            addPayment(creditAccount, debitAccount, amount);
+        return true;
     }
 
-    private void increaseDebt(Debt debt, long amount) {
+    @Override
+    public void increaseDebt(BigInteger idCredit, long amount) {
+        Debt debt = creditAccountDao.getPersonalCreditById(idCredit).getDebt();
         LocalDate newDateTo;
-        if (debt.getDateFrom() == null) {
+        if (debt.getAmountDebt() == 0) {
             debt.setDateFrom(LocalDate.now());
             changeDebtDateFrom(debt.getDebtId(), debt.getDateFrom());
             changeDebtAmount(debt.getDebtId(), amount);
             newDateTo = DateUtils.addMonthsToDate(LocalDate.now(), 1);
         } else {
             newDateTo = DateUtils.addMonthsToDate(debt.getDateTo(), 1);
-
             changeDebtAmount(debt.getDebtId(), debt.getAmountDebt() + amount);
         }
         changeDebtDateTo(debt.getDebtId(), newDateTo);
+    }
+
+    @Override
+    public void addAutoDebtRepayment(BigInteger idAccount, BigInteger idCredit, long amount) {
+        PersonalCreditAccount creditAccount = getPersonalCreditAccount(idCredit);
+        PersonalDebitAccount debitAccount = debitAccountDao.getPersonalAccountById(idAccount);
+        decreaseDebt(creditAccount.getDebt(), amount);
+        addPayment(creditAccount, debitAccount, amount);
     }
 
     private void decreaseDebt(Debt debt, long amount) {
@@ -114,10 +121,9 @@ public class PersonalCreditServiceImpl implements PersonalCreditService {
                 personalCreditAccount.getCreditRate());
     }
 
-    private void addPayment(PersonalCreditAccount creditAccount, BigInteger accountDebitId, long amount) {
-        PersonalDebitAccount debitAccount = debitAccountDao.getPersonalAccountById(accountDebitId);
+    private void addPayment(PersonalCreditAccount creditAccount, PersonalDebitAccount debitAccount, long amount) {
         long actualDebitAmount = debitAccount.getAmount();
-        debitAccountDao.updateAmountOfPersonalAccount(accountDebitId, actualDebitAmount - amount);
+        debitAccountDao.updateAmountOfPersonalAccount(debitAccount.getId(), actualDebitAmount - amount);
         creditOperationDao.createPersonalCreditOperation(amount, DateUtils.localDateToDate(LocalDate.now()), creditAccount.getCreditId());
         long updatedAmount = creditAccount.getPaidAmount() + amount;
         creditAccountDao.updatePersonalCreditPayment(creditAccount.getCreditId(), updatedAmount);
