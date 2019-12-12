@@ -1,6 +1,5 @@
 package com.netcracker.services.impl;
 
-import com.netcracker.configs.WebConfig;
 import com.netcracker.dao.*;
 import com.netcracker.dao.impl.TemplatesDaoImpl;
 import com.netcracker.exception.UserException;
@@ -10,13 +9,10 @@ import com.netcracker.services.EmailServiceSender;
 import com.netcracker.services.UserService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.ImportResource;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.web.WebAppConfiguration;
 
 import java.math.BigInteger;
 import java.text.MessageFormat;
