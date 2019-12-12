@@ -2,9 +2,11 @@ package com.netcracker.dao.impl;
 
 import com.netcracker.configs.WebConfig;
 import com.netcracker.dao.FamilyAccountDebitDao;
-import com.netcracker.models.*;
+import com.netcracker.models.AccountExpense;
+import com.netcracker.models.AccountIncome;
+import com.netcracker.models.FamilyDebitAccount;
+import com.netcracker.models.User;
 import com.netcracker.models.enums.FamilyAccountStatusActive;
-import com.netcracker.services.validation.UserValidation;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -14,18 +16,14 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
-
 import javax.sql.DataSource;
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.Locale;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
@@ -34,8 +32,7 @@ public class FamilyAccountDebitDaoTests {
 
     @Autowired
     private FamilyAccountDebitDao familyAccountDebitDao;
-    @Autowired
-    private UserValidation userValidation;
+
     @Autowired
     private DataSource dataSource;
     private JdbcTemplate template;
@@ -90,7 +87,7 @@ public class FamilyAccountDebitDaoTests {
                 .user_password(password).build();
      //   System.out.println(owner.getId());
     //    userDao.createUser(owner);
-       template.update(CREATE_USER, new Object[]{owner.getName(), owner.geteMail(), owner.getPassword()});
+       template.update(CREATE_USER, owner.getName(), owner.geteMail(), owner.getPassword());
         FamilyDebitAccount familyDebitAccount = new FamilyDebitAccount.Builder()
                 .debitId(BigInteger.valueOf(AssertUtils.getCurrentSequenceId(template)))
                .debitObjectName("Name1")
@@ -152,10 +149,5 @@ public class FamilyAccountDebitDaoTests {
         Long expected = 20000L;
         assertEquals(expected, familyAccountDebitDao.getFamilyAccountById(id).getAmount());
         familyAccountDebitDao.updateAmountOfFamilyAccount(id, 9000L);
-    }
-
-    @Test
-    public void ValidationName() {
-        System.out.println(userValidation.saveNameByPreparedStatement("54"));
     }
 }
