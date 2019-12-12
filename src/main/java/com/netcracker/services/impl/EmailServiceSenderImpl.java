@@ -57,7 +57,7 @@ public class EmailServiceSenderImpl implements EmailServiceSender {
         if (userId == null || userName == null || emailTo == null) {
             logger.debug("The user " + userId + " is NULL");
             throw new UserException("The user is doesn`t exist");
-        }   else if(true) {
+        }   else if( userDao.getUserById(userId).getUserStatusActive() == UserStatusActive.NO) {
             String deac = MessageFormat.format(templatesDao.sendMassageById(BigInteger.valueOf(19)), userName);
             SimpleMailMessage message = new SimpleMailMessage();
             message.setTo("<" + emailTo + ">");
@@ -72,9 +72,9 @@ public class EmailServiceSenderImpl implements EmailServiceSender {
     }
 
     @Override
-    public void sendMailAboutPersonalDebt(String emailTo, String userName,String perName, BigInteger userId) {
+    public void sendMailAboutPersonalDebt(String emailTo, String userName,String perName, Long amount, BigInteger userId) {
         SimpleMailMessage message = new SimpleMailMessage();
-        String debitPersonal = MessageFormat.format(templatesDao.sendMassageById(BigInteger.valueOf(9)),userId);
+        String debitPersonal = MessageFormat.format(templatesDao.sendMassageById(BigInteger.valueOf(12)), userName, perName, amount);
         message.setTo("<" + emailTo + ">");
         message.setFrom(mail);
         message.setText(debitPersonal);
@@ -82,7 +82,7 @@ public class EmailServiceSenderImpl implements EmailServiceSender {
     }
 
     @Override
-    public void sendMailAboutFamilyDebt(String emailTo, String userName,String famName, BigInteger userId) {
+    public void sendMailAboutFamilyDebt(String emailTo, String userName,String famName, BigInteger amount,BigInteger userId) {
         SimpleMailMessage message = new SimpleMailMessage();
         String debitPersonal = MessageFormat.format(templatesDao.sendMassageById(BigInteger.valueOf(9)),userId);
         message.setTo("<" + emailTo + ">");
