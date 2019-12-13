@@ -15,7 +15,9 @@ public interface MonthReportService {
 
     void formMonthFamilyReportFromDb(BigInteger id, Date date);
 
-    FileOutputStream convertToTxt(MonthReport monthReport);
+    FileOutputStream convertFamilyToTxt(MonthReport monthReport);
+
+    FileOutputStream convertPersonalToTxt(MonthReport monthReport);
 
     MonthReport getMonthPersonalReport(BigInteger id, Date dateFrom, Date dateTo);
 
