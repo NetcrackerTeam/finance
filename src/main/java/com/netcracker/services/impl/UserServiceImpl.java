@@ -1,8 +1,8 @@
 package com.netcracker.services.impl;
 
 import com.netcracker.dao.UserDao;
+import com.netcracker.exception.UserException;
 import com.netcracker.models.User;
-import com.netcracker.models.enums.FamilyAccountStatusActive;
 import com.netcracker.models.enums.UserStatusActive;
 import com.netcracker.services.UserService;
 import org.apache.log4j.Logger;
@@ -20,7 +20,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean isUserActive(BigInteger userId) {
         User userTemp = userDao.getUserById(userId);
-        boolean isActiveUser = UserStatusActive.NO.equals(userTemp.getUserStatusActive());
+        boolean isActiveUser = UserStatusActive.YES.equals(userTemp.getUserStatusActive());
+        if (userTemp == null) {
+            logger.debug("The user " + userId + " is NULL");
+            throw new UserException("The user is doesn`t exist in dao ");
+        } else
         if (isActiveUser) {
             logger.debug("User  active by user id " + userId);
             return true;
@@ -32,7 +36,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean isUserHasFamilyAccount(BigInteger userId) {
         User userTemp = userDao.getUserById(userId);
-        boolean isUserHasFamilyAccount =(new BigInteger(String.valueOf(0)).equals(userTemp.getFamilyDebitAccount())) ;
+        boolean isUserHasFamilyAccount = BigInteger.ZERO.equals(userTemp.getFamilyDebitAccount()) ;
+        if (userTemp == null) {
+            logger.debug("The user " + userId + " is NULL");
+            throw new UserException("The user is doesn`t exist");
+        } else
         if (!isUserHasFamilyAccount) {
             logger.debug("User  have family Account with id " + userId);
             return true;

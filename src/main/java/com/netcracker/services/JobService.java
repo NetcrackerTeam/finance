@@ -1,9 +1,9 @@
 package com.netcracker.services;
 
 public interface JobService {
-    public void createJob();
-
-    public void executeMonthReportOnEmailJob();
-    public void executeRemindEmailJob();
+    public void executeMonthPersonalReportOnEmailJob();
+    public void executeMonthFamilyReportOnEmailJob();
+    public void executeRemindAutoExpensePersonalEmailJob();
+    public void executeRemindAutoExpenseFamilyEmailJob();
 
 }
