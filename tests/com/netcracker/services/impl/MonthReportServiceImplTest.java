@@ -119,7 +119,7 @@ public class MonthReportServiceImplTest {
 
     @Test
     public void convertToTxt() {
-        monthReportService.convertToTxt(monthReport);
+        monthReportService.convertFamilyToTxt(monthReport);
     }
 
 }

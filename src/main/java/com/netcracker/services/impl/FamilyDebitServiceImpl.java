@@ -75,7 +75,7 @@ public class FamilyDebitServiceImpl implements FamilyDebitService {
         FamilyAccountStatusActive statusFamily = familyDebitAccount.getStatus();
         User tempUser = userDao.getUserById(userId);
         boolean statusUser = userService.isUserActive(userId);
-        boolean userFamilyAccount = userService.isUserHasFamilyAccount(accountId);
+        boolean userFamilyAccount = userService.isUserHaveFamilyAccount(accountId);
         if (!statusUser) {
             logger.error("The user " + userId + " is unActive");
             throw new UserException(UserException.getErrorMessageUserStatus(), tempUser);
