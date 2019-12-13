@@ -11,7 +11,6 @@ import com.netcracker.models.PersonalCreditAccount;
 import com.netcracker.models.PersonalDebitAccount;
 import com.netcracker.models.enums.CreditStatusPaid;
 import com.netcracker.services.PersonalCreditService;
-import com.netcracker.services.utils.CreditUtils;
 import com.netcracker.services.utils.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,7 +57,7 @@ public class PersonalCreditServiceImpl implements PersonalCreditService {
                 PersonalDebitAccount debitAccount = debitAccountDao.getPersonalAccountById(idDebitAccount);
                 if (debitAccount != null) {
                     if (creditAccount != null) {
-                        if (debitAccount.getAmount() < amount){
+                        if (debitAccount.getAmount() < amount) {
                             long remainToPay = getTotalCreditPayment(creditAccount.getDate(), creditAccount.getDateTo(),
                                     creditAccount.getAmount(), creditAccount.getCreditRate()) - creditAccount.getPaidAmount();
                             if (remainToPay > amount)
@@ -223,14 +222,6 @@ public class PersonalCreditServiceImpl implements PersonalCreditService {
     @Override
     public PersonalCreditAccount getPersonalCreditAccount(BigInteger id) {
         return creditAccountDao.getPersonalCreditById(id);
-    }
-
-    @Override
-    public long getMonthPaymentAmount(PersonalCreditAccount personalCreditAccount) {
-        return CreditUtils.calculateMonthPayment(personalCreditAccount.getDate(),
-                personalCreditAccount.getDateTo(),
-                personalCreditAccount.getAmount(),
-                personalCreditAccount.getCreditRate());
     }
 
     private void addPayment(PersonalCreditAccount creditAccount, PersonalDebitAccount debitAccount, long amount) {
