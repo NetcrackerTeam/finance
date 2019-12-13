@@ -20,33 +20,35 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean isUserActive(BigInteger userId) {
-        try {
-            User userTemp = userDao.getUserById(userId);
-            boolean isActiveUser = UserStatusActive.YES.equals(userTemp.getUserStatusActive());
-            if (isActiveUser) {
-                logger.debug("User  active by user id " + userId);
-                return true;
-            } else
-                logger.debug("User not active by user id " + userId);
-            return false;
-        } catch (EmptyResultDataAccessException EmptyResultDataAccessException) {
-            throw new UserException("User didnt have in dao EmptyResultDataAccessException in method isUserActive ");
-        }
+        User userTemp = getUserById(userId);
+        boolean isActiveUser = UserStatusActive.YES.equals(userTemp.getUserStatusActive());
+        if (isActiveUser) {
+            logger.debug("User  active by user id " + userId);
+            return true;
+        } else
+            logger.debug("User not active by user id " + userId);
+        return false;
     }
 
     @Override
-    public boolean isUserHasFamilyAccount(BigInteger userId) {
+    public boolean isUserHaveFamilyAccount(BigInteger userId) {
+        User userTemp = getUserById(userId);
+        boolean isUserHasFamilyAccount = BigInteger.ZERO.equals(userTemp.getFamilyDebitAccount());
+        if (!isUserHasFamilyAccount) {
+            logger.debug("User  have family Account with id " + userId);
+            return true;
+        }
+        logger.debug("User didnt have family Account with id " + userId);
+        return false;
+    }
+
+    @Override
+    public User getUserById(BigInteger userId) {
         try {
             User userTemp = userDao.getUserById(userId);
-            boolean isUserHasFamilyAccount = BigInteger.ZERO.equals(userTemp.getFamilyDebitAccount());
-            if (!isUserHasFamilyAccount) {
-                logger.debug("User  have family Account with id " + userId);
-                return true;
-            }
-            logger.debug("User didnt have family Account with id " + userId);
-            return false;
-        }catch (EmptyResultDataAccessException EmptyResultDataAccessException){
-            throw new UserException("User didnt have in dao EmptyResultDataAccessException in method isUserHasFamilyAccount");
+            return userTemp;
+        } catch (EmptyResultDataAccessException EmptyResultDataAccessException) {
+            throw new UserException(UserException.getErrorMessageUser());
         }
     }
 }
