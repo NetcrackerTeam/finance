@@ -12,6 +12,7 @@ import com.netcracker.models.PersonalDebitAccount;
 import com.netcracker.models.enums.CreditStatusPaid;
 import com.netcracker.services.PersonalCreditService;
 import com.netcracker.services.utils.DateUtils;
+import com.netcracker.services.utils.ObjectsCheckUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,161 +52,104 @@ public class PersonalCreditServiceImpl implements PersonalCreditService {
 
     @Override
     public void addPersonalCreditPayment(BigInteger idDebitAccount, BigInteger idCredit, long amount) {
-        if (idDebitAccount != null) {
-            if (idCredit != null) {
-                PersonalCreditAccount creditAccount = getPersonalCreditAccount(idCredit);
-                PersonalDebitAccount debitAccount = debitAccountDao.getPersonalAccountById(idDebitAccount);
-                if (debitAccount != null) {
-                    if (creditAccount != null) {
-                        if (debitAccount.getAmount() < amount) {
-                            long remainToPay = getTotalCreditPayment(creditAccount.getDate(), creditAccount.getDateTo(),
-                                    creditAccount.getAmount(), creditAccount.getCreditRate()) - creditAccount.getPaidAmount();
-                            if (remainToPay > amount)
-                                addPayment(creditAccount, debitAccount, amount);
-                            else {
-                                logger.error("Remain to pay for credit {}. Wanted {}", remainToPay, amount);
-                                throw new CreditAccountException("Left to pay less, then wanted", creditAccount);
-                            }
-                        } else {
-                            logger.error("Not enough money on debit account by id = {}", idDebitAccount);
-                            throw new CreditAccountException("Not enough money on debit account", creditAccount);
-                        }
-                    } else {
-                        logger.error("Personal credit account is null by id = {}", idCredit);
-                        throw new CreditAccountException("Personal credit account is null");
-                    }
-                } else {
-                    logger.error("Personal debit account is null by id = {}", idDebitAccount);
-                    //ToDo: throw new Personal debit exception
-                }
-            } else {
-                logger.error("Variable idCredit is null");
-                throw new IllegalArgumentException("Wrong input parameters");
+        ObjectsCheckUtils.isNotNull(idDebitAccount, idCredit);
+
+        PersonalCreditAccount creditAccount = getPersonalCreditAccount(idCredit);
+        PersonalDebitAccount debitAccount = debitAccountDao.getPersonalAccountById(idDebitAccount);
+
+        ObjectsCheckUtils.isNotNull(creditAccount, debitAccount);
+
+        if (debitAccount.getAmount() < amount) {
+            long remainToPay = getTotalCreditPayment(creditAccount.getDate(), creditAccount.getDateTo(),
+                    creditAccount.getAmount(), creditAccount.getCreditRate()) - creditAccount.getPaidAmount();
+            if (remainToPay > amount)
+                addPayment(creditAccount, debitAccount, amount);
+            else {
+                logger.error("Remain to pay for credit {}. Wanted {}", remainToPay, amount);
+                throw new CreditAccountException(String.format("Left to pay only %d", remainToPay), creditAccount);
             }
         } else {
-            logger.error("Variable idDebitAccount is null");
-            throw new IllegalArgumentException("Wrong input parameters");
+            logger.error("Not enough money on debit account by id = {}", idDebitAccount);
+            throw new CreditAccountException("Not enough money on debit account", creditAccount);
         }
     }
 
+
     @Override
     public boolean addPersonalCreditPaymentAuto(BigInteger idDebitAccount, BigInteger idCredit, long amount) {
-        if (idDebitAccount != null) {
-            if (idCredit != null) {
-                PersonalCreditAccount creditAccount = getPersonalCreditAccount(idCredit);
-                PersonalDebitAccount debitAccount = debitAccountDao.getPersonalAccountById(idDebitAccount);
-                if (debitAccount != null) {
-                    if (creditAccount != null) {
-                        if (creditAccount.getDate() != null && creditAccount.getDateTo() != null) {
-                            long remainToPay = getTotalCreditPayment(creditAccount.getDate(), creditAccount.getDateTo(),
-                                    creditAccount.getAmount(), creditAccount.getCreditRate()) - creditAccount.getPaidAmount();
-                            if (remainToPay < amount)
-                                amount = remainToPay;
-                            if (debitAccount.getAmount() < amount) {
-                                logger.debug("Not enough money on debit account by id = {}. Needed more then {}", idDebitAccount, amount);
-                                return false;
-                            }
-                            addPayment(creditAccount, debitAccount, amount);
-                            logger.debug("Payment was completed successfully");
-                            return true;
-                        } else {
-                            logger.error("Null field in personal credit account by id = {}", idCredit);
-                            throw new CreditAccountException("Account is not valid for operation", creditAccount);
-                        }
-                    } else {
-                        logger.error("Personal credit account is null by id = {}", idCredit);
-                        throw new CreditAccountException("Personal credit account is null");
-                    }
-                } else {
-                    logger.error("Personal debit account is null by id = {}", idDebitAccount);
-                    //ToDo: throw new Personal debit exception
-                }
-            } else {
-                logger.error("Variable idCredit is null");
-                throw new IllegalArgumentException("Wrong input parameters");
-            }
+        ObjectsCheckUtils.isNotNull(idDebitAccount, idCredit);
+
+        PersonalCreditAccount creditAccount = getPersonalCreditAccount(idCredit);
+        PersonalDebitAccount debitAccount = debitAccountDao.getPersonalAccountById(idDebitAccount);
+
+        ObjectsCheckUtils.isNotNull(creditAccount, debitAccount);
+        ObjectsCheckUtils.isNotNull(creditAccount.getDate(), creditAccount.getDateTo());
+
+        long remainToPay = getTotalCreditPayment(creditAccount.getDate(), creditAccount.getDateTo(),
+                creditAccount.getAmount(), creditAccount.getCreditRate()) - creditAccount.getPaidAmount();
+        if (remainToPay < amount)
+            amount = remainToPay;
+        if (debitAccount.getAmount() < amount) {
+            logger.debug("Not enough money on debit account by id = {}. Needed more then {}", idDebitAccount, amount);
+            return false;
         }
-        logger.error("Variable idDebitAccount is null");
-        throw new IllegalArgumentException("Wrong input parameters");
+        addPayment(creditAccount, debitAccount, amount);
+        logger.debug("Payment was completed successfully");
+        return true;
     }
 
 
     @Override
     public void increaseDebt(BigInteger idCredit, long amount) {
-        if (idCredit != null) {
-            PersonalCreditAccount creditAccount = creditAccountDao.getPersonalCreditById(idCredit);
-            if (creditAccount != null) {
-                Debt debt = creditAccount.getDebt();
-                LocalDate newDateTo;
-                if (debt != null) {
-                    if (debt.getDebtId() != null) {
-                        if (debt.getAmountDebt() == 0) {
-                            debt.setDateFrom(LocalDate.now());
-                            changeDebtDateFrom(debt.getDebtId(), debt.getDateFrom());
-                            changeDebtAmount(debt.getDebtId(), amount);
-                            newDateTo = DateUtils.addMonthsToDate(LocalDate.now(), 1);
-                        } else {
-                            newDateTo = DateUtils.addMonthsToDate(debt.getDateTo(), 1);
-                            changeDebtAmount(debt.getDebtId(), debt.getAmountDebt() + amount);
-                        }
-                        changeDebtDateTo(debt.getDebtId(), newDateTo);
-                        logger.debug("Debt increase was completed successfully");
-                    } else {
-                        logger.error("Debt id is null in credit account by id = {}", idCredit);
-                        throw new CreditAccountException("Debt is not valid for operation", creditAccount);
-                    }
-                } else {
-                    logger.error("Debt is null in personal credit account by id = {}", idCredit);
-                    throw new CreditAccountException("Account  is not valid for operation");
-                }
-            } else {
-                logger.error("Personal credit account is null by id = {}", idCredit);
-                throw new CreditAccountException("Account is not valid for operation");
-            }
+        ObjectsCheckUtils.isNotNull(idCredit);
+        PersonalCreditAccount creditAccount = creditAccountDao.getPersonalCreditById(idCredit);
+
+        ObjectsCheckUtils.isNotNull(creditAccount);
+        Debt debt = creditAccount.getDebt();
+
+        LocalDate newDateTo;
+        ObjectsCheckUtils.isNotNull(debt);
+        ObjectsCheckUtils.isNotNull(debt.getDebtId());
+
+        if (debt.getAmountDebt() == 0) {
+            debt.setDateFrom(LocalDate.now());
+            changeDebtDateFrom(debt.getDebtId(), debt.getDateFrom());
+            changeDebtAmount(debt.getDebtId(), amount);
+            newDateTo = DateUtils.addMonthsToDate(LocalDate.now(), 1);
         } else {
-            logger.error("Variable idCredit is null");
-            throw new IllegalArgumentException("Wrong input parameters");
+            newDateTo = DateUtils.addMonthsToDate(debt.getDateTo(), 1);
+            changeDebtAmount(debt.getDebtId(), debt.getAmountDebt() + amount);
         }
+        changeDebtDateTo(debt.getDebtId(), newDateTo);
+        logger.debug("Debt increase was completed successfully");
     }
 
     @Override
     public void addAutoDebtRepayment(BigInteger idDebitAccount, BigInteger idCredit, long amount) {
-        if (idDebitAccount != null) {
-            if (idCredit != null) {
-                PersonalCreditAccount creditAccount = getPersonalCreditAccount(idCredit);
-                PersonalDebitAccount debitAccount = debitAccountDao.getPersonalAccountById(idDebitAccount);
-                decreaseDebt(creditAccount.getDebt(), amount);
-                addPayment(creditAccount, debitAccount, amount);
-                logger.debug("Repayment was completed successfully");
-            } else {
-                logger.error("Variable idCredit is null");
-                throw new IllegalArgumentException("Wrong input parameters");
-            }
-        } else {
-            logger.error("Variable idDebitAccount is null");
-            throw new IllegalArgumentException("Wrong input parameters");
-        }
+        ObjectsCheckUtils.isNotNull(idDebitAccount, idCredit);
+
+        PersonalCreditAccount creditAccount = getPersonalCreditAccount(idCredit);
+        PersonalDebitAccount debitAccount = debitAccountDao.getPersonalAccountById(idDebitAccount);
+
+        ObjectsCheckUtils.isNotNull(creditAccount, debitAccount);
+        ObjectsCheckUtils.isNotNull(creditAccount.getDebt());
+        decreaseDebt(creditAccount.getDebt(), amount);
+        addPayment(creditAccount, debitAccount, amount);
+        logger.debug("Repayment was completed successfully");
     }
 
     private void decreaseDebt(Debt debt, long amount) {
-        if (debt != null) {
-            if (debt.getDebtId() != null) {
-                LocalDate newDateFrom = DateUtils.addMonthsToDate(debt.getDateFrom(), 1);
-                if (newDateFrom.equals(debt.getDateTo())) {
-                    changeDebtDateFrom(debt.getDebtId(), null);
-                    changeDebtDateTo(debt.getDebtId(), null);
-                    changeDebtAmount(debt.getDebtId(), 0);
-                } else {
-                    changeDebtDateFrom(debt.getDebtId(), newDateFrom);
-                    changeDebtAmount(debt.getDebtId(), debt.getAmountDebt() - amount);
-                }
-            } else {
-                logger.error("Null id in income debt");
-                throw new CreditAccountException("Debt is not valid for operation");
-            }
+        ObjectsCheckUtils.isNotNull(debt);
+        ObjectsCheckUtils.isNotNull(debt.getDebtId());
+
+        LocalDate newDateFrom = DateUtils.addMonthsToDate(debt.getDateFrom(), 1);
+        if (newDateFrom.equals(debt.getDateTo())) {
+            changeDebtDateFrom(debt.getDebtId(), null);
+            changeDebtDateTo(debt.getDebtId(), null);
+            changeDebtAmount(debt.getDebtId(), 0);
         } else {
-            logger.error("Variable debt is null");
-            throw new IllegalArgumentException("Wrong input parameters");
+            changeDebtDateFrom(debt.getDebtId(), newDateFrom);
+            changeDebtAmount(debt.getDebtId(), debt.getAmountDebt() - amount);
         }
     }
 
