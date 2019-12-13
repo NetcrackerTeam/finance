@@ -1,9 +1,8 @@
 package com.netcracker.dao.impl;
 
+import com.netcracker.AssertUtils;
 import com.netcracker.configs.WebConfig;
 import com.netcracker.dao.PersonalDebitAccountDao;
-import com.netcracker.models.AccountExpense;
-import com.netcracker.models.AccountIncome;
 import com.netcracker.models.PersonalDebitAccount;
 import com.netcracker.models.User;
 import com.netcracker.models.enums.PersonalAccountStatusActive;
@@ -19,7 +18,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.sql.DataSource;
 import java.math.BigInteger;
-import java.util.List;
 import java.util.Locale;
 
 import static org.junit.Assert.assertEquals;

@@ -1,4 +1,4 @@
-package com.netcracker.dao.impl;
+package com.netcracker;
 
 import com.netcracker.models.*;
 import org.apache.log4j.Logger;
@@ -37,6 +37,41 @@ public class AssertUtils {
         assertEquals(expCO.getCreditOperationId(), actualCO.getCreditOperationId());
         assertEquals(expCO.getAmount(), actualCO.getAmount());
         assertEquals(expCO.getDate(), actualCO.getDate());
+    }
+
+    public static void assertOperationIncome(AccountIncome expOperation, AccountIncome actualOperation) {
+        assertEquals(expOperation.getId(), actualOperation.getId());
+        assertEquals(expOperation.getUserId(), actualOperation.getUserId());
+        assertEquals(expOperation.getCategoryIncome(), actualOperation.getCategoryIncome());
+        assertEquals(expOperation.getAmount(), actualOperation.getAmount());
+        assertEquals(expOperation.getDate(), actualOperation.getDate());
+    }
+
+    public static void assertOperationExpense(AccountExpense expOperation, AccountExpense actualOperation) {
+        assertEquals(expOperation.getId(), actualOperation.getId());
+        assertEquals(expOperation.getUserId(), actualOperation.getUserId());
+        assertEquals(expOperation.getCategoryExpense(), actualOperation.getCategoryExpense());
+        assertEquals(expOperation.getAmount(), actualOperation.getAmount());
+        assertEquals(expOperation.getDate(), actualOperation.getDate());
+    }
+
+    public static void assertOperationsCollections(List<AbstractAccountOperation> expectedCollection,
+                                                   List<AbstractAccountOperation> actualCollection) {
+        expectedCollection.sort(Comparator.comparing(AbstractAccountOperation::getId));
+        actualCollection.sort(Comparator.comparing(AbstractAccountOperation::getId));
+
+        if (expectedCollection.size() == actualCollection.size()) {
+            for (int i = 0; i < expectedCollection.size(); i ++) {
+                if (expectedCollection.get(i) instanceof AccountIncome) {
+                    AssertUtils.assertOperationIncome((AccountIncome) expectedCollection.get(i),
+                            (AccountIncome) actualCollection.get(i));
+                }
+                if (expectedCollection.get(i) instanceof AccountExpense) {
+                    AssertUtils.assertOperationExpense((AccountExpense) expectedCollection.get(i),
+                            (AccountExpense) actualCollection.get(i));
+                }
+            }
+        } else logger.error("List sizes are not equal");
     }
 
     public static void assertCreditOperationsCollections(List<CreditOperation> expectedCollection,

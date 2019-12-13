@@ -1,4 +1,5 @@
 package com.netcracker.dao.impl;
+import com.netcracker.AssertUtils;
 import com.netcracker.configs.WebConfig;
 import com.netcracker.dao.AutoOperationDao;
 import com.netcracker.models.AbstractAutoOperation;

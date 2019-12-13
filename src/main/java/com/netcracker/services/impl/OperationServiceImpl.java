@@ -85,11 +85,13 @@ public class OperationServiceImpl implements OperationService {
                 + idFamily + "], [income = " + income + "], [date = " + date + "], [categoryIncome = " + categoryIncome + "]");
 
         boolean idFamilyIsNull = bigIntegerIsNull(idFamily);
-        boolean categoryIncomeDefault = CategoryIncome.DEFAULT.equals(categoryIncome);
+        boolean categoryIncomeIsDefault = CategoryIncome.DEFAULT.equals(categoryIncome);
+        boolean categoryIncomeIsNull = categoryIncome == null;
         boolean parametersNull = parametersIsNull(idUser, income, date);
 
-        if (idFamilyIsNull || categoryIncomeDefault || parametersNull) throw new OperationException("[createFamilyOperationIncome]" + exceptionMessageNull);
-        else operationDao.createIncomeFamilyByAccId(idUser, idFamily, income, date, categoryIncome);
+        if (idFamilyIsNull || categoryIncomeIsDefault || categoryIncomeIsNull || parametersNull) {
+            throw new OperationException("[createFamilyOperationIncome]" + exceptionMessageNull);
+        } else operationDao.createIncomeFamilyByAccId(idUser, idFamily, income, date, categoryIncome);
     }
 
     @Override
@@ -98,11 +100,13 @@ public class OperationServiceImpl implements OperationService {
                 + idFamily + "], [expense = " + expense + "], [date = " + date + "], [categoryExpense = " + categoryExpense + "]");
 
         boolean idFamilyIsNull = bigIntegerIsNull(idFamily);
-        boolean categoryExpenseDefault = CategoryExpense.DEFAULT.equals(categoryExpense);
+        boolean categoryExpenseIsDefault = CategoryExpense.DEFAULT.equals(categoryExpense);
+        boolean categoryExpenseIsNull = categoryExpense == null;
         boolean parametersNull = parametersIsNull(idUser, expense, date);
 
-        if (idFamilyIsNull || categoryExpenseDefault || parametersNull) throw new OperationException("[createFamilyOperationExpense]" + exceptionMessageNull);
-        else operationDao.createExpenseFamilyByAccId(idUser, idFamily, expense, date, categoryExpense);
+        if (idFamilyIsNull || categoryExpenseIsDefault || categoryExpenseIsNull || parametersNull) {
+            throw new OperationException("[createFamilyOperationExpense]" + exceptionMessageNull);
+        } else operationDao.createExpenseFamilyByAccId(idUser, idFamily, expense, date, categoryExpense);
     }
 
     @Override
@@ -110,11 +114,13 @@ public class OperationServiceImpl implements OperationService {
         logger.debug("[createPersonalOperationIncome]" + debugStartMessage + "[id = " + id + "], [income = " + income +
                 "], [date = " + date + "], [categoryIncome = " + categoryIncome + "]");
 
-        boolean categoryIncomeDefault = CategoryIncome.DEFAULT.equals(categoryIncome);
+        boolean categoryIncomeIsDefault = CategoryIncome.DEFAULT.equals(categoryIncome);
+        boolean categoryIncomeIsNull = categoryIncome == null;
         boolean parametersNull = parametersIsNull(id, income, date);
 
-        if (categoryIncomeDefault || parametersNull) throw new OperationException("[createPersonalOperationIncome]" + exceptionMessageNull);
-        else operationDao.createIncomePersonalByAccId(id, income, date, categoryIncome);
+        if (categoryIncomeIsDefault || categoryIncomeIsNull || parametersNull) {
+            throw new OperationException("[createPersonalOperationIncome]" + exceptionMessageNull);
+        } else operationDao.createIncomePersonalByAccId(id, income, date, categoryIncome);
     }
 
     @Override
@@ -122,11 +128,13 @@ public class OperationServiceImpl implements OperationService {
         logger.debug("[createPersonalOperationExpense]" + debugStartMessage + "[id = " + id + "], [expense = " + expense +
                 "], [date = " + date + "], [categoryExpense = " + categoryExpense + "]");
 
-        boolean categoryExpenseDefault = CategoryExpense.DEFAULT.equals(categoryExpense);
+        boolean categoryExpenseIsDefault = CategoryExpense.DEFAULT.equals(categoryExpense);
+        boolean categoryExpenseIsNull = categoryExpense == null;
         boolean parametersNull = parametersIsNull(id, expense, date);
 
-        if (categoryExpenseDefault || parametersNull) throw new OperationException("[createPersonalOperationExpense]" + exceptionMessageNull);
-        else operationDao.createExpensePersonaByAccId(id, expense, date, categoryExpense);
+        if (categoryExpenseIsDefault || categoryExpenseIsNull || parametersNull) {
+            throw new OperationException("[createPersonalOperationExpense]" + exceptionMessageNull);
+        } else operationDao.createExpensePersonaByAccId(id, expense, date, categoryExpense);
     }
 
     private boolean parametersIsNull(BigInteger idUser, long amount, Date date) {

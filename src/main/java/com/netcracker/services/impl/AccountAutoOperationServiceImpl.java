@@ -35,11 +35,13 @@ public class AccountAutoOperationServiceImpl implements AccountAutoOperationServ
                 "], [userId = " + userId + "], [dayOfMonth = " + dayOfMonth + "], [amount = " + amount + "], [categoryIncome = " +
                 categoryIncome + "]");
 
-        boolean categoryIncomeDefault = CategoryIncome.DEFAULT.equals(categoryIncome);
+        boolean categoryIncomeIsDefault = CategoryIncome.DEFAULT.equals(categoryIncome);
+        boolean categoryIncomeIsNull = categoryIncome == null;
         boolean parametersNull = parametersIsNull(familyDebitAccountId, userId, dayOfMonth, amount);
 
-        if (categoryIncomeDefault || parametersNull) throw new OperationException("[createFamilyIncomeAutoOperation]" + exceptionMessageNull);
-        else return autoOperationDao.createFamilyIncomeAutoOperation(dayOfMonth, amount, categoryIncome, userId, familyDebitAccountId);
+        if (categoryIncomeIsDefault || categoryIncomeIsNull || parametersNull) {
+            throw new OperationException("[createFamilyIncomeAutoOperation]" + exceptionMessageNull);
+        } else return autoOperationDao.createFamilyIncomeAutoOperation(dayOfMonth, amount, categoryIncome, userId, familyDebitAccountId);
     }
 
     @Override
@@ -49,11 +51,13 @@ public class AccountAutoOperationServiceImpl implements AccountAutoOperationServ
                 "], [userId = " + userId + "], [dayOfMonth = " + dayOfMonth + "], [amount = " + amount + "], [categoryIncome = " +
                 categoryIncome + "]");
 
-        boolean categoryIncomeDefault = CategoryIncome.DEFAULT.equals(categoryIncome);
+        boolean categoryIncomeIsDefault = CategoryIncome.DEFAULT.equals(categoryIncome);
+        boolean categoryIncomeIsNull = categoryIncome == null;
         boolean parametersNull = parametersIsNull(personalDebitAccountId, userId, dayOfMonth, amount);
 
-        if (categoryIncomeDefault || parametersNull) throw new OperationException("[createPersonalIncomeAutoOperation]" + exceptionMessageNull);
-        else return autoOperationDao.createPersonalIncomeAutoOperation(dayOfMonth, amount, categoryIncome, userId, personalDebitAccountId);
+        if (categoryIncomeIsDefault || categoryIncomeIsNull || parametersNull) {
+            throw new OperationException("[createPersonalIncomeAutoOperation]" + exceptionMessageNull);
+        } else return autoOperationDao.createPersonalIncomeAutoOperation(dayOfMonth, amount, categoryIncome, userId, personalDebitAccountId);
     }
 
     @Override
@@ -63,11 +67,13 @@ public class AccountAutoOperationServiceImpl implements AccountAutoOperationServ
                 "], [userId = " + userId + "], [dayOfMonth = " + dayOfMonth + "], [amount = " + amount + "], [categoryExpense = " +
                 categoryExpense + "]");
 
-        boolean categoryExpenseDefault = CategoryExpense.DEFAULT.equals(categoryExpense);
+        boolean categoryExpenseIsDefault = CategoryExpense.DEFAULT.equals(categoryExpense);
+        boolean categoryExpenseIsNull = categoryExpense == null;
         boolean parametersNull = parametersIsNull(familyDebitAccountId, userId, dayOfMonth, amount);
 
-        if (categoryExpenseDefault || parametersNull) throw new OperationException("[createFamilyExpenseAutoOperation]" + exceptionMessageNull);
-        else return autoOperationDao.createFamilyExpenseAutoOperation(dayOfMonth, amount, categoryExpense, userId, familyDebitAccountId);
+        if (categoryExpenseIsDefault || categoryExpenseIsNull || parametersNull) {
+            throw new OperationException("[createFamilyExpenseAutoOperation]" + exceptionMessageNull);
+        } else return autoOperationDao.createFamilyExpenseAutoOperation(dayOfMonth, amount, categoryExpense, userId, familyDebitAccountId);
     }
 
     @Override
@@ -77,11 +83,13 @@ public class AccountAutoOperationServiceImpl implements AccountAutoOperationServ
                 "], [userId = " + userId + "], [dayOfMonth = " + dayOfMonth + "], [amount = " + amount + "], [categoryExpense = " +
                 categoryExpense + "]");
 
-        boolean categoryExpenseDefault = CategoryExpense.DEFAULT.equals(categoryExpense);
+        boolean categoryExpenseIsDefault = CategoryExpense.DEFAULT.equals(categoryExpense);
+        boolean categoryExpenseIsNull = categoryExpense == null;
         boolean parametersNull = parametersIsNull(personalDebitAccountId, userId, dayOfMonth, amount);
 
-        if (categoryExpenseDefault || parametersNull) throw new OperationException("[createPersonalExpenseAutoOperation]" + exceptionMessageNull);
-        else return autoOperationDao.createPersonalExpenseAutoOperation(dayOfMonth, amount, categoryExpense, userId, personalDebitAccountId);
+        if (categoryExpenseIsDefault || categoryExpenseIsNull || parametersNull) {
+            throw new OperationException("[createPersonalExpenseAutoOperation]" + exceptionMessageNull);
+        } else return autoOperationDao.createPersonalExpenseAutoOperation(dayOfMonth, amount, categoryExpense, userId, personalDebitAccountId);
     }
 
     private boolean parametersIsNull(BigInteger debitAccountId, BigInteger userId, int dayOfMonth, long amount) {

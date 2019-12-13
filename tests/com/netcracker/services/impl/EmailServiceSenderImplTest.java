@@ -4,7 +4,7 @@ import com.netcracker.configs.WebConfig;
 import com.netcracker.dao.FamilyAccountDebitDao;
 import com.netcracker.dao.PersonalDebitAccountDao;
 import com.netcracker.dao.UserDao;
-import com.netcracker.dao.impl.AssertUtils;
+import com.netcracker.AssertUtils;
 import com.netcracker.models.*;
 import com.netcracker.models.enums.CreditStatusPaid;
 import com.netcracker.models.enums.FamilyAccountStatusActive;
