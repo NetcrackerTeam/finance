@@ -44,13 +44,13 @@ public class FamilyDebitServiceImpl implements FamilyDebitService {
     public FamilyDebitAccount getFamilyDebitAccount(BigInteger id) {
         logger.debug("Entering select(getFamilyDebitAccount=" + id + ")");
         if (id == null) {
-            logger.debug("the family debit account  " + id + " is null");
+            logger.error("the family debit account  " + id + " is null");
             throw new FamilyDebitAccountException(FamilyDebitAccountException.getErrorMessageFamily());
         } else {
             try {
                 return familyAccountDebitDao.getFamilyAccountById(id);
             } catch (EmptyResultDataAccessException ex) {
-                logger.debug("the family debit account  " + id + " is null");
+                logger.error("the family debit account  " + id + " is null");
                 throw new FamilyDebitAccountException(FamilyDebitAccountException.getErrorMessageFamily());
             }
         }
@@ -58,12 +58,12 @@ public class FamilyDebitServiceImpl implements FamilyDebitService {
 
     @Override
     public void deleteFamilyDebitAccount(BigInteger id) {
-        ArrayList<User> participants = (ArrayList<User>) this.getParticipantsOfFamilyAccount(id);
+        Collection<User> participants = this.getParticipantsOfFamilyAccount(id);
         if (participants.size() == 1) {
             logger.debug("Entering update(deleteFamilyDebitAccount=" + id + ")");
             familyAccountDebitDao.deleteFamilyAccount(id);
         } else {
-            logger.debug("the family debit account " + id + " has participants");
+            logger.error("the family debit account " + id + " has participants");
             throw new FamilyDebitAccountException(FamilyDebitAccountException.getErrorMessageFamilyParticipants());
         }
     }
@@ -75,20 +75,24 @@ public class FamilyDebitServiceImpl implements FamilyDebitService {
         FamilyAccountStatusActive statusFamily = familyDebitAccount.getStatus();
         User tempUser = userDao.getUserById(userId);
         boolean statusUser = userService.isUserActive(userId);
+        boolean userFamilyAccount = userService.isUserHasFamilyAccount(accountId);
         if (!statusUser) {
-            logger.debug("The user " + userId + " is unActive");
+            logger.error("The user " + userId + " is unActive");
             throw new UserException(UserException.getErrorMessageUserStatus(), tempUser);
         } else if (FamilyAccountStatusActive.NO.equals(statusFamily)) {
-            logger.debug("The family account " + accountId + " is unActive");
+            logger.error("The family account " + accountId + " is unActive");
             throw new FamilyDebitAccountException(FamilyDebitAccountException.getErrorMessageFamilyStatus(), familyDebitAccount);
+        } else if (!userFamilyAccount) {
+            logger.error("The user " + tempUser + " own family account");
+            throw new UserException(UserException.getErrorMessageUserExistFamily(),tempUser);
         } else {
             Collection<User> participants = this.getParticipantsOfFamilyAccount(accountId);
             for (User participant : participants) {
                 if (participant.getId() == null) {
-                    logger.debug("The userId " + userId + " is NULL");
+                    logger.error("The userId " + userId + " is NULL");
                     throw new UserException(UserException.getErrorMessageUser(), participant);
                 } else if (userId.equals(participant.getId())) {
-                    logger.debug("The user " + participant.getId() + " is has family account");
+                    logger.error("The user " + participant.getId() + " is has family account");
                     throw new UserException(UserException.getErrorMessageUserExistFamily(), participant);
                 }
             }
@@ -102,10 +106,10 @@ public class FamilyDebitServiceImpl implements FamilyDebitService {
     public void deleteUserFromAccount(BigInteger accountId, BigInteger userId) {
         if (accountId == null || userId == null) {
             if (accountId == null) {
-                logger.debug("the family debit account  " + accountId + "  is null");
+                logger.error("the family debit account  " + accountId + "  is null");
                 throw new FamilyDebitAccountException(FamilyDebitAccountException.getErrorMessageFamily());
             } else {
-                logger.debug("The userId " + userId + " is NULL");
+                logger.error("The userId " + userId + " is NULL");
                 throw new UserException(UserException.getErrorMessageUser());
             }
         } else {
@@ -117,10 +121,10 @@ public class FamilyDebitServiceImpl implements FamilyDebitService {
     @Override
     public Collection<AbstractAccountOperation> getHistory(BigInteger familyAccountId, Date date) {
         if (familyAccountId == null) {
-            logger.debug("the family debit account  " + familyAccountId + "  is null");
+            logger.error("the family debit account  " + familyAccountId + "  is null");
             throw new FamilyDebitAccountException(FamilyDebitAccountException.getErrorMessageFamily());
         } else if (date == null) {
-            logger.debug("The transactions " + date + " is NULL");
+            logger.error("The transactions " + date + " is NULL");
             throw new OperationException("The transactions is doesn`t exist");
         } else {
             logger.debug("Entering select(getHistory=" + familyAccountId + " " + date + ")");
@@ -133,7 +137,7 @@ public class FamilyDebitServiceImpl implements FamilyDebitService {
                 logger.debug("Entering select success(getHistory=" + familyAccountId + " " + date + ")");
                 return transactions;
             } catch (EmptyResultDataAccessException ex) {
-                logger.debug("The transactions " + date + " " + familyAccountId + " is NULL");
+                logger.error("The transactions " + date + " " + familyAccountId + " is NULL");
                 throw new OperationException("The transactions is doesn`t exist");
             }
         }
@@ -143,14 +147,14 @@ public class FamilyDebitServiceImpl implements FamilyDebitService {
     @Override
     public Collection<User> getParticipantsOfFamilyAccount(BigInteger accountId) {
         if (accountId == null) {
-            logger.debug("the family debit account  " + accountId + "  is null");
+            logger.error("the family debit account  " + accountId + "  is null");
             throw new FamilyDebitAccountException(FamilyDebitAccountException.getErrorMessageFamily());
         } else {
             logger.debug("Entering list(getParticipantsOfFamilyAccount=" + accountId + ")");
             try {
                 return familyAccountDebitDao.getParticipantsOfFamilyAccount(accountId);
             } catch (EmptyResultDataAccessException ex) {
-                logger.debug("the family debit account  " + accountId + " doesn`t exist");
+                logger.error("the family debit account  " + accountId + " doesn`t exist");
                 throw new FamilyDebitAccountException(FamilyDebitAccountException.getErrorMessageFamily());
             }
         }
