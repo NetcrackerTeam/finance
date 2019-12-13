@@ -45,6 +45,8 @@ public class MonthReportServiceImpl implements MonthReportService {
         logger.debug("Insert formFamilyReportFromDb " + id + " " + date );
 
 
+
+
         Collection<CategoryExpenseReport> expenseReports = operationDao.getExpensesFamilyGroupByCategories(id, date);
         Collection<CategoryIncomeReport> incomeReports = operationDao.getIncomesFamilyGroupByCategories(id, date);
 
@@ -125,13 +127,13 @@ public class MonthReportServiceImpl implements MonthReportService {
             objectOut.writeObject(monthReport.getDateTo());
 
             for (CategoryIncomeReport report: monthReport.getCategoryIncome()) {
-                objectOut.writeObject(userDao.getUserById(report.getUserReference()).getName());
+              //  objectOut.writeObject(userDao.getUserById(report.getUserReference()).getName());
                 objectOut.writeObject(report.getCategoryIncome());
                 objectOut.writeObject(report.getAmount());
             }
 
             for (CategoryExpenseReport report: monthReport.getCategoryExpense()) {
-                objectOut.writeObject(userDao.getUserById(report.getUserReference()).getName());
+             //   objectOut.writeObject(userDao.getUserById(report.getUserReference()).getName());
                 objectOut.writeObject(report.getCategoryExpense());
                 objectOut.writeObject(report.getAmount());
             }

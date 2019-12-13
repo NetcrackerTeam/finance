@@ -14,7 +14,7 @@ public class CategoryExpenseFamilyReportMapper implements RowMapper<CategoryExpe
 
         AbstractCategoryReport categoryExpenseReport =
                 new CategoryExpenseReport.Builder()
-                        .amount(Long.valueOf(resultSet.getString("amount")))
+                        .amount(resultSet.getLong("amount"))
                         .categoryExpense(CategoryExpense.getNameByKey(resultSet.getBigDecimal("category").toBigInteger()))
                         .userReference(resultSet.getBigDecimal("user_id").toBigInteger())
                         .build();

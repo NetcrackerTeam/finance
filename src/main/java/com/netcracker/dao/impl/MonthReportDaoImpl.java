@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
-import java.math.BigDecimal;
+
 import java.math.BigInteger;
 import java.util.Date;
 
@@ -30,9 +30,9 @@ public class MonthReportDaoImpl implements MonthReportDao {
     @Override
     public void createPersonalMonthReport(MonthReport monthReport, BigInteger id) {
         template.update(CREATE_PERSONAL_MONTH_REPORT,
-                String.valueOf(monthReport.getTotalIncome()),
-                String.valueOf(monthReport.getTotalExpense()),
-                String.valueOf(monthReport.getBalance()),
+                monthReport.getTotalIncome(),
+                monthReport.getTotalExpense(),
+                monthReport.getBalance(),
                 monthReport.getDateFrom(),
                 monthReport.getDateTo(),
                 id);
@@ -41,9 +41,9 @@ public class MonthReportDaoImpl implements MonthReportDao {
     @Override
     public void createFamilyMonthReport(MonthReport monthReport, BigInteger id) {
         template.update(CREATE_FAMILY_MONTH_REPORT,
-                String.valueOf(monthReport.getTotalIncome()),
-                String.valueOf(monthReport.getTotalExpense()),
-                String.valueOf(monthReport.getBalance()),
+                monthReport.getTotalIncome(),
+                monthReport.getTotalExpense(),
+                monthReport.getBalance(),
                 monthReport.getDateFrom(),
                 monthReport.getDateTo(),
                 id);
@@ -72,19 +72,19 @@ public class MonthReportDaoImpl implements MonthReportDao {
     @Override
     public void createCategoryIncomeFamilyReport(BigInteger idReport, BigInteger idUser, CategoryIncomeReport categoryIncomeReport) {
         template.update(CREATE_CATEGORY_INCOME_FAMILY_REPORT_BY_ID, idReport, idUser, categoryIncomeReport.getCategoryIncome().getId(),
-                categoryIncomeReport.getAmount(), new BigDecimal(categoryIncomeReport.getUserReference()));
+                categoryIncomeReport.getAmount(), categoryIncomeReport.getUserReference());
     }
 
     @Override
     public void createCategoryExpensePersonalReport(BigInteger id, CategoryExpenseReport categoryExpenseReport) {
         template.update(CREATE_CATEGORY_EXPENSE_PERSONAL_REPORT_BY_ID, id, categoryExpenseReport.getCategoryExpense().getId(),
-                categoryExpenseReport.getAmount(), new BigDecimal(categoryExpenseReport.getUserReference()));
+                categoryExpenseReport.getAmount(), categoryExpenseReport.getUserReference());
     }
 
     @Override
     public void createCategoryExpenseFamilyReport(BigInteger idReport, BigInteger idUser, CategoryExpenseReport categoryExpenseReport) {
         template.update(CREATE_CATEGORY_EXPENSE_FAMILY_REPORT_BY_ID, idReport, idUser,
-        new BigDecimal(categoryExpenseReport.getCategoryExpense().getId()), categoryExpenseReport.getAmount());
+        categoryExpenseReport.getCategoryExpense().getId(), categoryExpenseReport.getAmount());
     }
 
     @Override

@@ -12,9 +12,9 @@ public class MonthReportMapper implements RowMapper<MonthReport> {
         MonthReport monthReport =
                 new MonthReport.Builder()
                 .id(resultSet.getBigDecimal("month_report_id").toBigInteger())
-                .totalIncome(Long.valueOf(resultSet.getString("income")))
-                .totalExpense(Long.valueOf(resultSet.getString("expense")))
-                .balance(Long.valueOf(resultSet.getString("balance")))
+                .totalIncome(resultSet.getLong("income"))
+                .totalExpense(resultSet.getLong("expense"))
+                .balance(resultSet.getLong("balance"))
                 .dateFrom(resultSet.getDate("date_to").toLocalDate())
                 .dateTo(resultSet.getDate("date_from").toLocalDate())
                 .build();
