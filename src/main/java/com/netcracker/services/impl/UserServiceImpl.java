@@ -7,6 +7,7 @@ import com.netcracker.models.enums.UserStatusActive;
 import com.netcracker.services.UserService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
@@ -19,33 +20,33 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean isUserActive(BigInteger userId) {
-        User userTemp = userDao.getUserById(userId);
-        boolean isActiveUser = UserStatusActive.YES.equals(userTemp.getUserStatusActive());
-        if (userTemp == null) {
-            logger.debug("The user " + userId + " is NULL");
-            throw new UserException("The user is doesn`t exist in dao ");
-        } else
-        if (isActiveUser) {
-            logger.debug("User  active by user id " + userId);
-            return true;
-        } else
-            logger.debug("User not active by user id " + userId);
-        return false;
+        try {
+            User userTemp = userDao.getUserById(userId);
+            boolean isActiveUser = UserStatusActive.YES.equals(userTemp.getUserStatusActive());
+            if (isActiveUser) {
+                logger.debug("User  active by user id " + userId);
+                return true;
+            } else
+                logger.debug("User not active by user id " + userId);
+            return false;
+        } catch (EmptyResultDataAccessException EmptyResultDataAccessException) {
+            throw new UserException("User didnt have in dao EmptyResultDataAccessException in method isUserActive ");
+        }
     }
 
     @Override
     public boolean isUserHasFamilyAccount(BigInteger userId) {
-        User userTemp = userDao.getUserById(userId);
-        boolean isUserHasFamilyAccount = BigInteger.ZERO.equals(userTemp.getFamilyDebitAccount()) ;
-        if (userTemp == null) {
-            logger.debug("The user " + userId + " is NULL");
-            throw new UserException("The user is doesn`t exist");
-        } else
-        if (!isUserHasFamilyAccount) {
-            logger.debug("User  have family Account with id " + userId);
-            return true;
+        try {
+            User userTemp = userDao.getUserById(userId);
+            boolean isUserHasFamilyAccount = BigInteger.ZERO.equals(userTemp.getFamilyDebitAccount());
+            if (!isUserHasFamilyAccount) {
+                logger.debug("User  have family Account with id " + userId);
+                return true;
+            }
+            logger.debug("User didnt have family Account with id " + userId);
+            return false;
+        }catch (EmptyResultDataAccessException EmptyResultDataAccessException){
+            throw new UserException("User didnt have in dao EmptyResultDataAccessException in method isUserHasFamilyAccount");
         }
-        logger.debug("User didnt have family Account with id " + userId);
-        return false;
     }
 }
