@@ -7,12 +7,13 @@ import com.netcracker.services.PredictionService;
 import com.netcracker.services.utils.DateUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
 
 @Service
 public class PredictionServiceImpl implements PredictionService {
@@ -63,7 +64,7 @@ public class PredictionServiceImpl implements PredictionService {
         Collection<MonthReport> reports = new ArrayList<>();
 
         for (int i = 0; i < 6; i++) {
-            MonthReport reportTest = monthReportDao.getMonthReportByPersonalAccountId(id, dateFrom, dateTo);
+            MonthReport reportTest = monthReportDao.getMonthReportByPersonalAccountId(id, dateStart, dateEnd);
             if(reportTest == null) {
                 logger.debug("There is no report");
                 throw new PredictionException("Not enough reports");
@@ -95,7 +96,7 @@ public class PredictionServiceImpl implements PredictionService {
         Collection<MonthReport> reports = new ArrayList<>();
 
         for (int i = 0; i < 6; i++) {
-            MonthReport reportTest = monthReportDao.getMonthReportByPersonalAccountId(id, dateFrom, dateTo);
+            MonthReport reportTest = monthReportDao.getMonthReportByPersonalAccountId(id, dateStart, dateEnd);
             if(reportTest == null) {
                 logger.debug("There is no report");
                 throw new PredictionException("Not enough reports");

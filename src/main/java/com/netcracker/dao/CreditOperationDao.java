@@ -3,17 +3,17 @@ package com.netcracker.dao;
 import com.netcracker.models.CreditOperation;
 
 import java.math.BigInteger;
+import java.time.LocalDate;
 import java.util.Collection;
-import java.util.Date;
 
 public interface CreditOperationDao {
     CreditOperation getCreditOperationPersonal(BigInteger creditOperationId);
 
     CreditOperation getCreditOperationFamily(BigInteger creditOperationId);
 
-    void createFamilyCreditOperation(long amount, Date date, BigInteger creditFamilyAccountId, BigInteger userId);
+    void createFamilyCreditOperation(long amount, LocalDate date, BigInteger creditFamilyAccountId, BigInteger userId);
 
-    void createPersonalCreditOperation(long amount, Date date, BigInteger creditPersonalAccountId);
+    void createPersonalCreditOperation(long amount, LocalDate date, BigInteger creditPersonalAccountId);
 
     Collection<CreditOperation> getAllCreditOperationsByCreditFamilyId(BigInteger creditFamilyAccountId);
 

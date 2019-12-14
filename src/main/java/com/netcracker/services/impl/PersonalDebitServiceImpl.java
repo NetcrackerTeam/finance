@@ -12,9 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 
 @Service
 public class PersonalDebitServiceImpl implements PersonalDebitService {
@@ -49,7 +49,7 @@ public class PersonalDebitServiceImpl implements PersonalDebitService {
 
 
     @Override
-    public Collection<AbstractAccountOperation> getHistory(BigInteger personalAccountId, Date date) {
+    public Collection<AbstractAccountOperation> getHistory(BigInteger personalAccountId, LocalDate date) {
         logger.debug(
                 "getHistory() method. projectId = " + personalAccountId + " " + date);
         Collection<AbstractAccountOperation> trans = new ArrayList<>();

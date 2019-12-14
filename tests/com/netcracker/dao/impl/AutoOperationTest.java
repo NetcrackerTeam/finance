@@ -1,4 +1,5 @@
 package com.netcracker.dao.impl;
+
 import com.netcracker.AssertUtils;
 import com.netcracker.configs.WebConfig;
 import com.netcracker.dao.AutoOperationDao;
@@ -19,10 +20,11 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.sql.DataSource;
-
 import java.math.BigInteger;
-import java.text.ParseException;
-import java.util.*;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 import static org.junit.Assert.assertEquals;
 
@@ -45,8 +47,8 @@ public class AutoOperationTest {
     private AutoOperationIncome autoOperationIncomeFamilyExpected;
     private AutoOperationExpense autoOperationExpenseFamilyExpected;
 
-    private String dateTodayString = "2019-12-14";
-    private Date dateToday = AssertUtils.stringToDate(dateTodayString);
+    private String dateTodayString = "2019-12-15";
+    private LocalDate dateToday = LocalDate.parse(dateTodayString);
     private String GET_COUNT_OF_AO_OBJECTS = "SELECT COUNT(*) FROM OBJECTS WHERE OBJECT_ID = 96";
 
     private BigInteger familyIncomeObjectIdAO = BigInteger.valueOf(96);
@@ -59,7 +61,7 @@ public class AutoOperationTest {
     private BigInteger familyDebitId = BigInteger.valueOf(76);
     private BigInteger personalDebitId = BigInteger.valueOf(75);
 
-    public AutoOperationTest() throws ParseException {
+    public AutoOperationTest() {
 
     }
 
@@ -70,22 +72,22 @@ public class AutoOperationTest {
     }
 
     @Before
-    public void initializeObjects() throws ParseException {
+    public void initializeObjects() {
         autoOperationIncomePersonalExpected = new AutoOperationIncome.Builder().accountId(personalIncomeObjectIdAO)
                 .accountUserId(userId).dayOfMonth(dayOfMonth).accountAmount(13000L).categoryIncome(CategoryIncome.AWARD)
-                .accountDate(AssertUtils.stringToDate("2019-12-20")).build();
+                .accountDate(LocalDate.parse("2019-12-20")).build();
 
         autoOperationExpensePersonalExpected = new AutoOperationExpense.Builder().accountId(personalExpenseObjectIdAO)
                 .accountUserId(userId).dayOfMonth(dayOfMonth).accountAmount(17000L).categoryExpense(CategoryExpense.FOOD)
-                .accountDate(AssertUtils.stringToDate("2019-12-02")).build();
+                .accountDate(LocalDate.parse("2019-12-02")).build();
 
         autoOperationIncomeFamilyExpected = new AutoOperationIncome.Builder().accountId(familyIncomeObjectIdAO)
                 .accountUserId(userId).dayOfMonth(dayOfMonth).accountAmount(12000L).categoryIncome(CategoryIncome.AWARD)
-                .accountDate(AssertUtils.stringToDate("2019-12-15")).build();
+                .accountDate(LocalDate.parse("2019-12-15")).build();
 
         autoOperationExpenseFamilyExpected = new AutoOperationExpense.Builder().accountId(familyExpenseObjectIdAO)
                 .accountUserId(userId).dayOfMonth(dayOfMonth).accountAmount(16000L).categoryExpense(CategoryExpense.FOOD)
-                .accountDate(AssertUtils.stringToDate("2019-12-03")).build();
+                .accountDate(LocalDate.parse("2019-12-03")).build();
     }
 
     @Test
@@ -130,7 +132,7 @@ public class AutoOperationTest {
         AssertUtils.assertAutoOperationExpense(autoOperationExpenseFamilyExpected, autoOperationExpenseFamilyActual);
     }
 
-    private void setDateAndId(AbstractAutoOperation autoOperation, BigInteger newId, Date newDate) {
+    private void setDateAndId(AbstractAutoOperation autoOperation, BigInteger newId, LocalDate newDate) {
         autoOperation.setId(newId);
         autoOperation.setDate(newDate);
     }

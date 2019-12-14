@@ -16,9 +16,9 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 
 @Service
 public class FamilyDebitServiceImpl implements FamilyDebitService {
@@ -119,7 +119,7 @@ public class FamilyDebitServiceImpl implements FamilyDebitService {
     }
 
     @Override
-    public Collection<AbstractAccountOperation> getHistory(BigInteger familyAccountId, Date date) {
+    public Collection<AbstractAccountOperation> getHistory(BigInteger familyAccountId, LocalDate date) {
         if (familyAccountId == null) {
             logger.error("the family debit account  " + familyAccountId + "  is null");
             throw new FamilyDebitAccountException(FamilyDebitAccountException.getErrorMessageFamily());

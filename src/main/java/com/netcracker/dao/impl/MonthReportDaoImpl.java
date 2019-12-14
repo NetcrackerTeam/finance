@@ -4,17 +4,16 @@ import com.netcracker.dao.MonthReportDao;
 import com.netcracker.dao.impl.mapper.CategoryExpensePersonalReportMapper;
 import com.netcracker.dao.impl.mapper.CategoryIncomePersonalReportMapper;
 import com.netcracker.dao.impl.mapper.MonthReportMapper;
-import com.netcracker.models.*;
+import com.netcracker.models.CategoryExpenseReport;
+import com.netcracker.models.CategoryIncomeReport;
+import com.netcracker.models.MonthReport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
-
 import java.math.BigInteger;
-import java.util.Date;
-
+import java.time.LocalDate;
 import java.util.Collection;
 
 @Repository
@@ -52,13 +51,13 @@ public class MonthReportDaoImpl implements MonthReportDao {
 
 
     @Override
-    public MonthReport getMonthReportByFamilyAccountId(BigInteger id, Date dateFrom, Date dateTo) {
+    public MonthReport getMonthReportByFamilyAccountId(BigInteger id, LocalDate dateFrom, LocalDate dateTo) {
         return template.queryForObject(GET_MONTH_REPORT_BY_FAMILY_ACCOUNT_ID,
                 new Object[]{id, dateFrom, dateTo }, new MonthReportMapper());
     }
 
     @Override
-    public MonthReport getMonthReportByPersonalAccountId(BigInteger id, Date dateFrom, Date dateTo) {
+    public MonthReport getMonthReportByPersonalAccountId(BigInteger id, LocalDate dateFrom, LocalDate dateTo) {
         return template.queryForObject(GET_MONTH_REPORT_BY_PERSONAL_ACCOUNT_ID,
                 new Object[]{id, dateFrom, dateTo}, new MonthReportMapper());
     }

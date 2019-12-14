@@ -30,40 +30,28 @@ public class AccountAutoOperationServiceImpl implements AccountAutoOperationServ
 
     @Override
     public AutoOperationIncome createFamilyIncomeAutoOperation(AutoOperationIncome autoOperationIncome, BigInteger userId, BigInteger familyDebitAccountId) {
-        logger.debug("[createFamilyIncomeAutoOperation]" + debugStartMessage + "[familyDebitAccountId = " + familyDebitAccountId +
-                "], [userId = " + userId + "], [dayOfMonth = " + autoOperationIncome.getDayOfMonth() + "], [amount = " + autoOperationIncome.getAmount() + "], [categoryIncome = " +
-                autoOperationIncome.getCategoryIncome() + "]");
-
         CategoryIncome categoryIncome = autoOperationIncome.getCategoryIncome();
         int dayOfMonth = autoOperationIncome.getDayOfMonth();
         long amount = autoOperationIncome.getAmount();
 
-        boolean categoryIncomeIsDefault = CategoryIncome.DEFAULT.equals(categoryIncome);
-        boolean categoryIncomeIsNull = categoryIncome == null;
-        boolean parametersNull = parametersIsNull(familyDebitAccountId, userId, dayOfMonth, amount);
+        logger.debug("[createFamilyIncomeAutoOperation]" + debugStartMessage + "[familyDebitAccountId = " + familyDebitAccountId +
+                "], [userId = " + userId + "], [dayOfMonth = " + dayOfMonth + "], [amount = " + amount + "], [categoryIncome = " +
+                categoryIncome + "]");
 
-        /*if (categoryIncomeIsDefault || categoryIncomeIsNull || parametersNull) {
-            throw new OperationException("[createFamilyIncomeAutoOperation]" + exceptionMessageNull);
-        } else*/ return autoOperationDao.createFamilyIncomeAutoOperation(autoOperationIncome, userId, familyDebitAccountId);
+        return autoOperationDao.createFamilyIncomeAutoOperation(autoOperationIncome, userId, familyDebitAccountId);
     }
 
     @Override
     public AutoOperationIncome createPersonalIncomeAutoOperation(AutoOperationIncome autoOperationIncome, BigInteger personalDebitAccountId) {
-        logger.debug("[createPersonalIncomeAutoOperation]" + debugStartMessage + "[personalDebitAccountId = " + personalDebitAccountId +
-                "], [dayOfMonth = " + autoOperationIncome.getDayOfMonth() + "], [amount = " + autoOperationIncome.getAmount() + "], [categoryIncome = " +
-                autoOperationIncome.getCategoryIncome() + "]");
-
         CategoryIncome categoryIncome = autoOperationIncome.getCategoryIncome();
         int dayOfMonth = autoOperationIncome.getDayOfMonth();
         long amount = autoOperationIncome.getAmount();
 
-        boolean categoryIncomeIsDefault = CategoryIncome.DEFAULT.equals(categoryIncome);
-        boolean categoryIncomeIsNull = categoryIncome == null;
-        boolean parametersNull = parametersIsNull(personalDebitAccountId, personalDebitAccountId, dayOfMonth, amount);
+        logger.debug("[createPersonalIncomeAutoOperation]" + debugStartMessage + "[personalDebitAccountId = " + personalDebitAccountId +
+                "], [dayOfMonth = " + dayOfMonth + "], [amount = " + amount + "], [categoryIncome = " + categoryIncome + "]");
 
-        /*if (categoryIncomeIsDefault || categoryIncomeIsNull || parametersNull) {
-            throw new OperationException("[createPersonalIncomeAutoOperation]" + exceptionMessageNull);
-        } else*/ return autoOperationDao.createPersonalIncomeAutoOperation(autoOperationIncome, personalDebitAccountId);
+        boolean categoryIncomeIsDefault = CategoryIncome.DEFAULT.equals(categoryIncome);
+        return autoOperationDao.createPersonalIncomeAutoOperation(autoOperationIncome, personalDebitAccountId);
     }
 
     @Override
@@ -76,13 +64,7 @@ public class AccountAutoOperationServiceImpl implements AccountAutoOperationServ
                 "], [userId = " + userId + "], [dayOfMonth = " + dayOfMonth + "], [amount = " + amount + "], [categoryExpense = " +
                 categoryExpense + "]");
 
-        boolean categoryExpenseIsDefault = CategoryExpense.DEFAULT.equals(categoryExpense);
-        boolean categoryExpenseIsNull = categoryExpense == null;
-        boolean parametersNull = parametersIsNull(familyDebitAccountId, userId, dayOfMonth, amount);
-
-        /*if (categoryExpenseIsDefault || categoryExpenseIsNull || parametersNull) {
-            throw new OperationException("[createFamilyExpenseAutoOperation]" + exceptionMessageNull);
-        } else*/ return autoOperationDao.createFamilyExpenseAutoOperation(autoOperationExpense, userId, familyDebitAccountId);
+        return autoOperationDao.createFamilyExpenseAutoOperation(autoOperationExpense, userId, familyDebitAccountId);
     }
 
     @Override
@@ -95,13 +77,7 @@ public class AccountAutoOperationServiceImpl implements AccountAutoOperationServ
                 "], [dayOfMonth = " + dayOfMonth + "], [amount = " + amount + "], [categoryExpense = " +
                 categoryExpense + "]");
 
-        boolean categoryExpenseIsDefault = CategoryExpense.DEFAULT.equals(categoryExpense);
-        boolean categoryExpenseIsNull = categoryExpense == null;
-        boolean parametersNull = parametersIsNull(personalDebitAccountId, personalDebitAccountId, dayOfMonth, amount);
-
-        /*if (categoryExpenseIsDefault || categoryExpenseIsNull || parametersNull) {
-            throw new OperationException("[createPersonalExpenseAutoOperation]" + exceptionMessageNull);
-        }else*/return autoOperationDao.createPersonalExpenseAutoOperation(autoOperationExpense, personalDebitAccountId);
+        return autoOperationDao.createPersonalExpenseAutoOperation(autoOperationExpense, personalDebitAccountId);
     }
 
     private boolean parametersIsNull(BigInteger debitAccountId, BigInteger userId, int dayOfMonth, long amount) {
@@ -124,40 +100,35 @@ public class AccountAutoOperationServiceImpl implements AccountAutoOperationServ
     public AutoOperationIncome getFamilyIncomeAutoOperation(BigInteger autoOperationId) {
         logger.debug("[getFamilyIncomeAutoOperation]" + debugStartMessage + "[autoOperationId = " + autoOperationId + "]");
 
-        /*if (bigIntegerIsNull(autoOperationId)) throw new OperationException("[getFamilyIncomeAutoOperation]" + exceptionMessageNull);
-        else*/ return autoOperationDao.getFamilyIncomeAutoOperation(autoOperationId);
+        return autoOperationDao.getFamilyIncomeAutoOperation(autoOperationId);
     }
 
     @Override
     public AutoOperationExpense getFamilyExpenseAutoOperation(BigInteger autoOperationId) {
         logger.debug("[getFamilyExpenseAutoOperation]" + debugStartMessage + "[autoOperationId = " + autoOperationId + "]");
 
-        /*if (bigIntegerIsNull(autoOperationId)) throw new OperationException("[getFamilyExpenseAutoOperation]" + exceptionMessageNull);
-        else*/ return autoOperationDao.getFamilyExpenseAutoOperation(autoOperationId);
+        return autoOperationDao.getFamilyExpenseAutoOperation(autoOperationId);
     }
 
     @Override
     public AutoOperationIncome getPersonalIncomeAutoOperation(BigInteger autoOperationId) {
         logger.debug("[getPersonalIncomeAutoOperation]" + debugStartMessage + "[autoOperationId = " + autoOperationId + "]");
 
-        /*if (bigIntegerIsNull(autoOperationId)) throw new OperationException("[getPersonalIncomeAutoOperation]" + exceptionMessageNull);
-        else*/ return autoOperationDao.getPersonalIncomeAutoOperation(autoOperationId);
+        return autoOperationDao.getPersonalIncomeAutoOperation(autoOperationId);
     }
 
     @Override
     public AutoOperationExpense getPersonalExpenseAutoOperation(BigInteger autoOperationId) {
         logger.debug("[getPersonalExpenseAutoOperation]" + debugStartMessage + "[autoOperationId = " + autoOperationId + "]");
 
-        /*if (bigIntegerIsNull(autoOperationId)) throw new OperationException("[getPersonalExpenseAutoOperation]" + exceptionMessageNull);
-        else*/ return autoOperationDao.getPersonalExpenseAutoOperation(autoOperationId);
+        return autoOperationDao.getPersonalExpenseAutoOperation(autoOperationId);
     }
 
     @Override
     public void deleteAutoOperation(BigInteger autoOperationId) {
         logger.debug("[deleteAutoOperation]" + debugStartMessage + "[autoOperationId = " + autoOperationId + "]");
 
-        /*if (bigIntegerIsNull(autoOperationId)) throw new OperationException("[deleteAutoOperation]" + exceptionMessageNull);
-        else*/ autoOperationDao.deleteAutoOperation(autoOperationId);
+        autoOperationDao.deleteAutoOperation(autoOperationId);
     }
 
     @Override

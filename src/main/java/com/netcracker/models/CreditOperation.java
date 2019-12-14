@@ -1,14 +1,14 @@
 package com.netcracker.models;
 
 import java.math.BigInteger;
-import java.util.Date;
+import java.time.LocalDate;
 
 public class CreditOperation {
     private BigInteger creditOperationId;
     private Long amount;
-    private Date date;
+    private LocalDate date;
 
-    public CreditOperation(Long amount, Date date) {
+    public CreditOperation(Long amount, LocalDate date) {
         this.amount = amount;
         this.date = date;
     }
@@ -29,11 +29,11 @@ public class CreditOperation {
         this.amount = amount;
     }
 
-    public Date getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 }

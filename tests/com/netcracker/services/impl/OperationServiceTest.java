@@ -20,8 +20,8 @@ import org.springframework.test.context.web.WebAppConfiguration;
 
 import java.math.BigInteger;
 import java.text.ParseException;
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -35,13 +35,13 @@ public class OperationServiceTest {
     private OperationDao operationDao;
 
     private String dateString = "1990-10-10";
-    private Date date = AssertUtils.stringToDate(dateString);
+    private LocalDate date = LocalDate.parse(dateString);
 
     private String dateIncomeString = "2019-12-10";
-    private Date dateIncome = AssertUtils.stringToDate(dateIncomeString);
+    private LocalDate dateIncome = LocalDate.parse(dateIncomeString);
 
     private String dateExpenseString = "2019-11-10";
-    private Date dateExpense = AssertUtils.stringToDate(dateExpenseString);
+    private LocalDate dateExpense = LocalDate.parse(dateExpenseString);
 
     private BigInteger debitIdFamily = BigInteger.valueOf(3);
     private BigInteger debitIdPersonal = BigInteger.valueOf(2);

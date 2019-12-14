@@ -10,7 +10,7 @@ public class CreditOperationMapper implements RowMapper<CreditOperation> {
     @Override
     public CreditOperation mapRow(ResultSet resultSet, int i) throws SQLException {
         CreditOperation creditOperation = new CreditOperation(resultSet.getLong("amount"),
-                resultSet.getDate("date_value"));
+                resultSet.getDate("date_value").toLocalDate());
         creditOperation.setCreditOperationId(resultSet.getBigDecimal("operation_id").toBigInteger());
         return creditOperation;
     }

@@ -10,8 +10,8 @@ import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
 import java.math.BigInteger;
+import java.time.LocalDate;
 import java.util.Collection;
-import java.util.Date;
 
 @Repository
 public class CreditOperationDaoImpl implements CreditOperationDao {
@@ -33,8 +33,8 @@ public class CreditOperationDaoImpl implements CreditOperationDao {
     }
 
     @Override
-    public void createFamilyCreditOperation(long amount, Date date, BigInteger creditFamilyAccountId,
-                                                       BigInteger userId) {
+    public void createFamilyCreditOperation(long amount, LocalDate date, BigInteger creditFamilyAccountId,
+                                            BigInteger userId) {
         BigInteger objectId = ObjectsCreator.createObject(family_object_type_id_1, family_name_2,
                 jdbcTemplate, CREATE_OBJECT_CREDIT_OPERATION);
 
@@ -43,7 +43,7 @@ public class CreditOperationDaoImpl implements CreditOperationDao {
     }
 
     @Override
-    public void createPersonalCreditOperation(long amount, Date date, BigInteger creditPersonalAccountId) {
+    public void createPersonalCreditOperation(long amount, LocalDate date, BigInteger creditPersonalAccountId) {
         BigInteger objectId = ObjectsCreator.createObject(personal_object_type_id_1, personal_name_2,
                 jdbcTemplate, CREATE_OBJECT_CREDIT_OPERATION);
 

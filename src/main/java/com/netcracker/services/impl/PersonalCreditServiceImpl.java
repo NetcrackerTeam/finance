@@ -196,7 +196,7 @@ public class PersonalCreditServiceImpl implements PersonalCreditService {
     private void addPayment(AbstractCreditAccount creditAccount, AbstractDebitAccount debitAccount, long amount) {
         long actualDebitAmount = debitAccount.getAmount();
         debitAccountDao.updateAmountOfPersonalAccount(debitAccount.getId(), actualDebitAmount - amount);
-        creditOperationDao.createPersonalCreditOperation(amount, DateUtils.localDateToDate(LocalDate.now()), creditAccount.getCreditId());
+        creditOperationDao.createPersonalCreditOperation(amount, LocalDate.now(), creditAccount.getCreditId());
         long updatedAmount = creditAccount.getPaidAmount() + amount;
         creditAccountDao.updatePersonalCreditPayment(creditAccount.getCreditId(), updatedAmount);
         long monthPayment = getTotalCreditPayment(creditAccount.getDate(), creditAccount.getDateTo(),

@@ -4,10 +4,7 @@ import com.netcracker.models.*;
 import org.apache.log4j.Logger;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -103,11 +100,6 @@ public class AssertUtils {
                 }
             }
         } else logger.error("List sizes are not equal");
-    }
-
-    public static Date stringToDate(String stringToParse) throws ParseException {
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        return format.parse(stringToParse);
     }
 
     public static Integer getCurrentSequenceId(JdbcTemplate jdbcTemplate) {

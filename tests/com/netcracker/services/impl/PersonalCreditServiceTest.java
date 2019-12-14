@@ -18,7 +18,6 @@ import org.mockito.MockitoAnnotations;
 
 import java.math.BigInteger;
 import java.time.LocalDate;
-import java.util.Date;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -45,7 +44,7 @@ public class PersonalCreditServiceTest {
     private BigInteger testIdAcc;
     private BigInteger testIdDebt;
     private long monthPayment;
-    private Date today;
+    private LocalDate today;
 
     private AbstractCreditAccount persCrAc;
     private AbstractCreditAccount persCrAcWithDebtTwoMonth;
@@ -67,7 +66,7 @@ public class PersonalCreditServiceTest {
         testIdAcc = BigInteger.valueOf(2L);
         testIdDebt = BigInteger.valueOf(3L);
         monthPayment = 1050;
-        today = DateUtils.localDateToDate(LocalDate.now());
+        today = LocalDate.now();
 
         debtEmpty = new Debt.Builder().debtId(testIdDebt).build();
         debtNotEmptyTwoMonth = new Debt.Builder()

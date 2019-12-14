@@ -17,8 +17,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.sql.DataSource;
 import java.math.BigInteger;
-import java.text.ParseException;
-import java.util.*;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 import static org.junit.Assert.assertEquals;
 
@@ -62,11 +64,11 @@ public class CreditOperationTest {
 
     @Rollback
     @Test
-    public void createFamilyCreditOperation() throws ParseException {
+    public void createFamilyCreditOperation() {
         CreditOperation expectedCreditOperation = new CreditOperation(Long.valueOf("6666"),
-                AssertUtils.stringToDate("2000-01-01"));
+                LocalDate.parse("2000-01-01"));
         expectedCreditOperation.setCreditOperationId(BigInteger.valueOf(AssertUtils.getCurrentSequenceId(jdbcTemplate)));
-        creditOperationDao.createFamilyCreditOperation(Long.valueOf("6666"), AssertUtils.stringToDate("2000-01-01"),
+        creditOperationDao.createFamilyCreditOperation(Long.valueOf("6666"), LocalDate.parse("2000-01-01"),
                 new BigInteger("84"), new BigInteger("74"));
         CreditOperation actualCreditOperation = creditOperationDao.getCreditOperationFamily(BigInteger.valueOf(AssertUtils.getCurrentSequenceId(jdbcTemplate)));
         AssertUtils.assertCreditOperation(expectedCreditOperation, actualCreditOperation);
@@ -74,25 +76,25 @@ public class CreditOperationTest {
 
     @Rollback
     @Test
-    public void createPersonalCreditOperation() throws ParseException {
+    public void createPersonalCreditOperation() {
         CreditOperation expectedCreditOperation = new CreditOperation(Long.valueOf("1488"),
-                AssertUtils.stringToDate("2003-03-03"));
+                LocalDate.parse("2003-03-03"));
         expectedCreditOperation.setCreditOperationId(BigInteger.valueOf(AssertUtils.getCurrentSequenceId(jdbcTemplate)));
-        creditOperationDao.createPersonalCreditOperation(Long.valueOf("1488"), AssertUtils.stringToDate("2003-03-03"),
+        creditOperationDao.createPersonalCreditOperation(Long.valueOf("1488"), LocalDate.parse("2003-03-03"),
                 new BigInteger("60"));
         CreditOperation actualCreditOperation = creditOperationDao.getCreditOperationPersonal(BigInteger.valueOf(AssertUtils.getCurrentSequenceId(jdbcTemplate)));
         AssertUtils.assertCreditOperation(expectedCreditOperation, actualCreditOperation);
     }
 
     @Test
-    public void getAllCreditOperationsByCreditFamilyId() throws ParseException {
+    public void getAllCreditOperationsByCreditFamilyId() {
         List<CreditOperation> actualCollection = (ArrayList) creditOperationDao.getAllCreditOperationsByCreditFamilyId(new BigInteger("11"));
         List<CreditOperation> expectedCollection = new ArrayList<>();
         CreditOperation expectedOperation1 = new CreditOperation(Long.valueOf("2500"),
-                AssertUtils.stringToDate(dateToday));
+                LocalDate.parse(dateToday));
         expectedOperation1.setCreditOperationId(new BigInteger("8002"));
         CreditOperation expectedOperation2 = new CreditOperation(Long.valueOf("2000"),
-                AssertUtils.stringToDate(dateToday));
+                LocalDate.parse(dateToday));
         expectedOperation2.setCreditOperationId(new BigInteger("13"));
         expectedCollection.add(expectedOperation1);
         expectedCollection.add(expectedOperation2);
@@ -101,14 +103,14 @@ public class CreditOperationTest {
     }
 
     @Test
-    public void getAllCreditOperationsByCreditPersonalId() throws ParseException {
+    public void getAllCreditOperationsByCreditPersonalId() {
         List<CreditOperation> actualCollection = (ArrayList) creditOperationDao.getAllCreditOperationsByCreditPersonalId(new BigInteger("10"));
         List<CreditOperation> expectedCollection = new ArrayList<>();
         CreditOperation expectedOperation1 = new CreditOperation(Long.valueOf("2000"),
-                AssertUtils.stringToDate(dateToday));
+                LocalDate.parse(dateToday));
         expectedOperation1.setCreditOperationId(new BigInteger("8001"));
         CreditOperation expectedOperation2 = new CreditOperation(Long.valueOf("1000"),
-                AssertUtils.stringToDate("2001-01-01"));
+                LocalDate.parse("2001-01-01"));
         expectedOperation2.setCreditOperationId(new BigInteger("12"));
         expectedCollection.add(expectedOperation1);
         expectedCollection.add(expectedOperation2);

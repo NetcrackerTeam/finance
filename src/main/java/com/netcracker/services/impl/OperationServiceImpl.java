@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import java.math.BigInteger;
+import java.time.LocalDate;
 import java.util.*;
 
 @Service
@@ -26,7 +27,7 @@ public class OperationServiceImpl implements OperationService {
     private static final String debugStartMessage = " method start with parameters: ";
 
     @Override
-    public List<AbstractAccountOperation> getAllFamilyOperations(BigInteger accountId, Date afterDate) {
+    public List<AbstractAccountOperation> getAllFamilyOperations(BigInteger accountId, LocalDate afterDate) {
         logger.debug("[getAllFamilyOperations]" + debugStartMessage + "[accountId = " + accountId + "], [afterDate = " + afterDate + "]");
 
         boolean accountIdIsNull = bigIntegerIsNull(accountId);
@@ -48,7 +49,7 @@ public class OperationServiceImpl implements OperationService {
     }
 
     @Override
-    public List<AbstractAccountOperation> getAllPersonalOperations(BigInteger accountId, Date afterDate) {
+    public List<AbstractAccountOperation> getAllPersonalOperations(BigInteger accountId, LocalDate afterDate) {
         logger.debug("[getAllPersonalOperations]" + debugStartMessage + "[accountId = " + accountId + "], [afterDate = " + afterDate + "]");
 
         boolean accountIdIsNull = bigIntegerIsNull(accountId);
@@ -80,7 +81,7 @@ public class OperationServiceImpl implements OperationService {
     }
 
     @Override
-    public void createFamilyOperationIncome(BigInteger idUser, BigInteger idFamily, long income, Date date, CategoryIncome categoryIncome) {
+    public void createFamilyOperationIncome(BigInteger idUser, BigInteger idFamily, long income, LocalDate date, CategoryIncome categoryIncome) {
         logger.debug("[createFamilyOperationIncome]" + debugStartMessage + "[idUser = " + idUser + "], [idFamily = "
                 + idFamily + "], [income = " + income + "], [date = " + date + "], [categoryIncome = " + categoryIncome + "]");
 
@@ -95,7 +96,7 @@ public class OperationServiceImpl implements OperationService {
     }
 
     @Override
-    public void createFamilyOperationExpense(BigInteger idUser, BigInteger idFamily, long expense, Date date, CategoryExpense categoryExpense) {
+    public void createFamilyOperationExpense(BigInteger idUser, BigInteger idFamily, long expense, LocalDate date, CategoryExpense categoryExpense) {
         logger.debug("[createFamilyOperationExpense]" + debugStartMessage + "[idUser = " + idUser + "], [idFamily = "
                 + idFamily + "], [expense = " + expense + "], [date = " + date + "], [categoryExpense = " + categoryExpense + "]");
 
@@ -110,7 +111,7 @@ public class OperationServiceImpl implements OperationService {
     }
 
     @Override
-    public void createPersonalOperationIncome(BigInteger id, long income, Date date, CategoryIncome categoryIncome) {
+    public void createPersonalOperationIncome(BigInteger id, long income, LocalDate date, CategoryIncome categoryIncome) {
         logger.debug("[createPersonalOperationIncome]" + debugStartMessage + "[id = " + id + "], [income = " + income +
                 "], [date = " + date + "], [categoryIncome = " + categoryIncome + "]");
 
@@ -124,7 +125,7 @@ public class OperationServiceImpl implements OperationService {
     }
 
     @Override
-    public void createPersonalOperationExpense(BigInteger id, long expense, Date date, CategoryExpense categoryExpense) {
+    public void createPersonalOperationExpense(BigInteger id, long expense, LocalDate date, CategoryExpense categoryExpense) {
         logger.debug("[createPersonalOperationExpense]" + debugStartMessage + "[id = " + id + "], [expense = " + expense +
                 "], [date = " + date + "], [categoryExpense = " + categoryExpense + "]");
 
@@ -137,7 +138,7 @@ public class OperationServiceImpl implements OperationService {
         } else operationDao.createExpensePersonaByAccId(id, expense, date, categoryExpense);
     }
 
-    private boolean parametersIsNull(BigInteger idUser, long amount, Date date) {
+    private boolean parametersIsNull(BigInteger idUser, long amount, LocalDate date) {
         boolean idUserIsNull = bigIntegerIsNull(idUser);
         boolean amountIsNull = amount == 0;
         boolean dateIsNull = date == null;

@@ -18,7 +18,7 @@ public class AccountIncomeMapper implements RowMapper<AccountIncome> {
                 new AccountIncome.Builder()
                 .accountId(resultSet.getBigDecimal("account_income_id").toBigInteger())
                 .accountAmount(resultSet.getLong("income_amount"))
-                .accountDate(resultSet.getDate("date_income"))
+                .accountDate(resultSet.getDate("date_income").toLocalDate())
                 .categoryIncome(CategoryIncome.getNameByKey(resultSet.getBigDecimal("category_income").toBigInteger()))
                 .build();
         return (AccountIncome) accountIncome;

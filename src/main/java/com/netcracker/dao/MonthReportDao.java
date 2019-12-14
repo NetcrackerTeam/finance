@@ -1,12 +1,12 @@
 package com.netcracker.dao;
 
-import com.netcracker.models.*;
+import com.netcracker.models.CategoryExpenseReport;
+import com.netcracker.models.CategoryIncomeReport;
+import com.netcracker.models.MonthReport;
 
 import java.math.BigInteger;
 import java.time.LocalDate;
 import java.util.Collection;
-import java.util.Date;
-import java.util.List;
 
 public interface MonthReportDao {
 
@@ -15,9 +15,9 @@ public interface MonthReportDao {
 
     void createFamilyMonthReport(MonthReport monthReport, BigInteger id);
 
-    MonthReport getMonthReportByFamilyAccountId(BigInteger id, Date dateFrom, Date dateTo);
+    MonthReport getMonthReportByFamilyAccountId(BigInteger id, LocalDate dateFrom, LocalDate dateTo);
 
-    MonthReport getMonthReportByPersonalAccountId(BigInteger id, Date dateFrom, Date dateTo);
+    MonthReport getMonthReportByPersonalAccountId(BigInteger id, LocalDate dateFrom, LocalDate dateTo);
 
 
 

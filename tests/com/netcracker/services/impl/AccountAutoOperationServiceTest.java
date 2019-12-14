@@ -22,8 +22,8 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.sql.DataSource;
 import java.math.BigInteger;
 import java.text.ParseException;
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -47,8 +47,8 @@ public class AccountAutoOperationServiceTest {
     private BigInteger familyDebitId = BigInteger.valueOf(76);
     private BigInteger personalDebitId = BigInteger.valueOf(75);
 
-    private String dateTodayString = "2019-12-14";
-    private Date dateToday = AssertUtils.stringToDate(dateTodayString);
+    private String dateTodayString = "2019-12-15";
+    private LocalDate dateToday = LocalDate.parse(dateTodayString);
     private int dayOfMonth = 1;
     private List<AbstractAutoOperation> expectedList = new ArrayList<>();
 
@@ -78,19 +78,19 @@ public class AccountAutoOperationServiceTest {
     public void initializeObjects() throws ParseException {
         autoOperationIncomePersonalExpected = new AutoOperationIncome.Builder().accountId(personalIncomeObjectIdAO)
                 .accountUserId(userId).dayOfMonth(dayOfMonth).accountAmount(13000L).categoryIncome(CategoryIncome.AWARD)
-                .accountDate(AssertUtils.stringToDate("2019-12-20")).build();
+                .accountDate(LocalDate.parse("2019-12-20")).build();
 
         autoOperationExpensePersonalExpected = new AutoOperationExpense.Builder().accountId(personalExpenseObjectIdAO)
                 .accountUserId(userId).dayOfMonth(dayOfMonth).accountAmount(17000L).categoryExpense(CategoryExpense.FOOD)
-                .accountDate(AssertUtils.stringToDate("2019-12-02")).build();
+                .accountDate(LocalDate.parse("2019-12-02")).build();
 
         autoOperationIncomeFamilyExpected = new AutoOperationIncome.Builder().accountId(familyIncomeObjectIdAO)
                 .accountUserId(userId).dayOfMonth(dayOfMonth).accountAmount(12000L).categoryIncome(CategoryIncome.AWARD)
-                .accountDate(AssertUtils.stringToDate("2019-12-15")).build();
+                .accountDate(LocalDate.parse("2019-12-15")).build();
 
         autoOperationExpenseFamilyExpected = new AutoOperationExpense.Builder().accountId(familyExpenseObjectIdAO)
                 .accountUserId(userId).dayOfMonth(dayOfMonth).accountAmount(16000L).categoryExpense(CategoryExpense.FOOD)
-                .accountDate(AssertUtils.stringToDate("2019-12-03")).build();
+                .accountDate(LocalDate.parse("2019-12-03")).build();
     }
 
     @Test
@@ -144,7 +144,7 @@ public class AccountAutoOperationServiceTest {
         AssertUtils.assertAutoOperationExpense(autoOperationExpenseFamilyExpected, autoOperationExpenseFamilyActual);
     }
 
-    private void setDateAndId(AbstractAutoOperation autoOperation, BigInteger newId, Date newDate) {
+    private void setDateAndId(AbstractAutoOperation autoOperation, BigInteger newId, LocalDate newDate) {
         autoOperation.setId(newId);
         autoOperation.setDate(newDate);
     }
