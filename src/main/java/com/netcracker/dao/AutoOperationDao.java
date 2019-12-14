@@ -3,8 +3,6 @@ package com.netcracker.dao;
 import com.netcracker.models.AbstractAutoOperation;
 import com.netcracker.models.AutoOperationExpense;
 import com.netcracker.models.AutoOperationIncome;
-import com.netcracker.models.enums.CategoryExpense;
-import com.netcracker.models.enums.CategoryIncome;
 
 import java.math.BigInteger;
 import java.util.Collection;
@@ -18,17 +16,13 @@ public interface AutoOperationDao {
 
     AutoOperationExpense getPersonalExpenseAutoOperation(BigInteger autoOperationId);
 
-    AutoOperationIncome createFamilyIncomeAutoOperation(int dayOfMonth, long amount, CategoryIncome categoryIncome,
-                                                        BigInteger userId, BigInteger familyDebitAccountId);
+    AutoOperationIncome createFamilyIncomeAutoOperation(AutoOperationIncome autoOperationIncome, BigInteger userId, BigInteger familyDebitAccountId);
 
-    AutoOperationIncome createPersonalIncomeAutoOperation(int dayOfMonth, long amount, CategoryIncome categoryIncome,
-                                                          BigInteger userId, BigInteger personalDebitAccountId);
+    AutoOperationIncome createPersonalIncomeAutoOperation(AutoOperationIncome autoOperationIncome, BigInteger personalDebitAccountId);
 
-    AutoOperationExpense createFamilyExpenseAutoOperation(int dayOfMonth, long amount, CategoryExpense categoryExpense,
-                                                          BigInteger userId, BigInteger familyDebitAccountId);
+    AutoOperationExpense createFamilyExpenseAutoOperation(AutoOperationExpense autoOperationExpense, BigInteger userId, BigInteger familyDebitAccountId);
 
-    AutoOperationExpense createPersonalExpenseAutoOperation(int dayOfMonth, long amount, CategoryExpense categoryExpense,
-                                                            BigInteger userId, BigInteger personalDebitAccountId);
+    AutoOperationExpense createPersonalExpenseAutoOperation(AutoOperationExpense autoOperationExpense, BigInteger personalDebitAccountId);
 
     void deleteAutoOperation(BigInteger autoOperationId);
 

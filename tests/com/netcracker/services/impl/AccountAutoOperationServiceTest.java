@@ -2,7 +2,7 @@ package com.netcracker.services.impl;
 
 import com.netcracker.AssertUtils;
 import com.netcracker.configs.WebConfig;
-import com.netcracker.exception.OperationException;
+import com.netcracker.dao.AutoOperationDao;
 import com.netcracker.models.AbstractAutoOperation;
 import com.netcracker.models.AutoOperationExpense;
 import com.netcracker.models.AutoOperationIncome;
@@ -23,6 +23,7 @@ import javax.sql.DataSource;
 import java.math.BigInteger;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -36,16 +37,18 @@ public class AccountAutoOperationServiceTest {
     @Autowired
     private AccountAutoOperationServiceImpl autoOperationService;
     @Autowired
+    private AutoOperationDao autoOperationDao;
+    @Autowired
     private DataSource dataSource;
     private JdbcTemplate jdbcTemplate;
 
     private BigInteger userId = BigInteger.valueOf(74);
-    private BigInteger valueZero = BigInteger.valueOf(0);
-    private BigInteger currentId = BigInteger.valueOf(97);
+    private BigInteger currentId;
     private BigInteger familyDebitId = BigInteger.valueOf(76);
     private BigInteger personalDebitId = BigInteger.valueOf(75);
 
-    private String dayToday = "2019-12-13";
+    private String dateTodayString = "2019-12-14";
+    private Date dateToday = AssertUtils.stringToDate(dateTodayString);
     private int dayOfMonth = 1;
     private List<AbstractAutoOperation> expectedList = new ArrayList<>();
 
@@ -54,7 +57,16 @@ public class AccountAutoOperationServiceTest {
     private AutoOperationIncome autoOperationIncomeFamilyExpected;
     private AutoOperationExpense autoOperationExpenseFamilyExpected;
 
-    private String GET_COUNT_OF_AO_OBJECTS = "SELECT COUNT(*) FROM OBJECTS WHERE OBJECT_ID = 95";
+    private BigInteger familyIncomeObjectIdAO = BigInteger.valueOf(96);
+    private BigInteger familyExpenseObjectIdAO = BigInteger.valueOf(94);
+    private BigInteger personalIncomeObjectIdAO = BigInteger.valueOf(95);
+    private BigInteger personalExpenseObjectIdAO = BigInteger.valueOf(93);
+
+    private String GET_COUNT_OF_AO_OBJECTS = "SELECT COUNT(*) FROM OBJECTS WHERE OBJECT_ID = 96";
+
+    public AccountAutoOperationServiceTest() throws ParseException {
+
+    }
 
     @Before
     public void setUp() {
@@ -64,76 +76,99 @@ public class AccountAutoOperationServiceTest {
 
     @Before
     public void initializeObjects() throws ParseException {
-        autoOperationIncomePersonalExpected = new AutoOperationIncome.Builder().accountId(BigInteger.valueOf(95))
+        autoOperationIncomePersonalExpected = new AutoOperationIncome.Builder().accountId(personalIncomeObjectIdAO)
                 .accountUserId(userId).dayOfMonth(dayOfMonth).accountAmount(13000L).categoryIncome(CategoryIncome.AWARD)
                 .accountDate(AssertUtils.stringToDate("2019-12-20")).build();
 
-        autoOperationExpensePersonalExpected = new AutoOperationExpense.Builder().accountId(BigInteger.valueOf(93))
+        autoOperationExpensePersonalExpected = new AutoOperationExpense.Builder().accountId(personalExpenseObjectIdAO)
                 .accountUserId(userId).dayOfMonth(dayOfMonth).accountAmount(17000L).categoryExpense(CategoryExpense.FOOD)
                 .accountDate(AssertUtils.stringToDate("2019-12-02")).build();
 
-        autoOperationIncomeFamilyExpected = new AutoOperationIncome.Builder().accountId(BigInteger.valueOf(96))
+        autoOperationIncomeFamilyExpected = new AutoOperationIncome.Builder().accountId(familyIncomeObjectIdAO)
                 .accountUserId(userId).dayOfMonth(dayOfMonth).accountAmount(12000L).categoryIncome(CategoryIncome.AWARD)
                 .accountDate(AssertUtils.stringToDate("2019-12-15")).build();
 
-        autoOperationExpenseFamilyExpected = new AutoOperationExpense.Builder().accountId(BigInteger.valueOf(94))
+        autoOperationExpenseFamilyExpected = new AutoOperationExpense.Builder().accountId(familyExpenseObjectIdAO)
                 .accountUserId(userId).dayOfMonth(dayOfMonth).accountAmount(16000L).categoryExpense(CategoryExpense.FOOD)
                 .accountDate(AssertUtils.stringToDate("2019-12-03")).build();
     }
 
-    @Test(expected = OperationException.class)
+    @Test
     public void getFamilyIncomeAutoOperation() {
-        autoOperationService.getFamilyIncomeAutoOperation(null);
-        autoOperationService.getFamilyIncomeAutoOperation(valueZero);
-
-        AutoOperationIncome autoOperationIncomeFamilyActual = autoOperationService.getFamilyIncomeAutoOperation(BigInteger.valueOf(96));
+        AutoOperationIncome autoOperationIncomeFamilyActual = autoOperationService.getFamilyIncomeAutoOperation(familyIncomeObjectIdAO);
         AssertUtils.assertAutoOperationIncome(autoOperationIncomeFamilyExpected, autoOperationIncomeFamilyActual);
     }
 
-    @Test(expected = OperationException.class)
+    @Test
     public void getFamilyExpenseAutoOperation() {
-        autoOperationService.getFamilyExpenseAutoOperation(null);
-        autoOperationService.getFamilyExpenseAutoOperation(valueZero);
-
-        AutoOperationExpense autoOperationExpenseFamilyActual = autoOperationService.getFamilyExpenseAutoOperation(BigInteger.valueOf(94));
+        AutoOperationExpense autoOperationExpenseFamilyActual = autoOperationService.getFamilyExpenseAutoOperation(familyExpenseObjectIdAO);
         AssertUtils.assertAutoOperationExpense(autoOperationExpenseFamilyExpected, autoOperationExpenseFamilyActual);
     }
 
-    @Test(expected = OperationException.class)
+    @Test
     public void getPersonalIncomeAutoOperation() {
-        autoOperationService.getPersonalIncomeAutoOperation(null);
-        autoOperationService.getPersonalIncomeAutoOperation(valueZero);
-
-        AutoOperationIncome autoOperationIncomePersonalActual = autoOperationService.getPersonalIncomeAutoOperation(BigInteger.valueOf(95));
+        AutoOperationIncome autoOperationIncomePersonalActual = autoOperationService.getPersonalIncomeAutoOperation(personalIncomeObjectIdAO);
         AssertUtils.assertAutoOperationIncome(autoOperationIncomePersonalExpected, autoOperationIncomePersonalActual);
     }
 
-    @Test(expected = OperationException.class)
+    @Test
     public void getPersonalExpenseAutoOperation() {
-        autoOperationService.getPersonalExpenseAutoOperation(null);
-        autoOperationService.getPersonalExpenseAutoOperation(valueZero);
-
-        AutoOperationExpense autoOperationExpensePersonalActual = autoOperationService.getPersonalExpenseAutoOperation(BigInteger.valueOf(93));
+        AutoOperationExpense autoOperationExpensePersonalActual = autoOperationService.getPersonalExpenseAutoOperation(personalExpenseObjectIdAO);
         AssertUtils.assertAutoOperationExpense(autoOperationExpensePersonalExpected, autoOperationExpensePersonalActual);
     }
 
     @Rollback
-    @Test(expected = OperationException.class)
+    @Test
     public void deleteAutoOperation() {
-        autoOperationService.deleteAutoOperation(null);
-        autoOperationService.deleteAutoOperation(valueZero);
-
         int totalCount = 0;
-        autoOperationService.deleteAutoOperation(BigInteger.valueOf(95));
+        autoOperationService.deleteAutoOperation(familyIncomeObjectIdAO);
         int countObjects = jdbcTemplate.queryForObject(GET_COUNT_OF_AO_OBJECTS, Integer.class);
         assertEquals(totalCount, countObjects);
     }
 
-    @Test(expected = OperationException.class)
-    public void getAllTodayOperationsPersonal() {
-        autoOperationService.getAllTodayOperationsPersonal(null, 0);
-        autoOperationService.getAllTodayOperationsPersonal(valueZero, 0);
+    @Rollback
+    @Test
+    public void createFamilyIncomeAutoOperation() {
+        AutoOperationIncome autoOperationIncomeFamilyActual = autoOperationService.createFamilyIncomeAutoOperation(autoOperationIncomeFamilyExpected, userId, familyDebitId);
+        currentId = autoOperationIncomeFamilyActual.getId();
+        setDateAndId(autoOperationIncomeFamilyExpected, currentId, dateToday);
+        AssertUtils.assertAutoOperationIncome(autoOperationIncomeFamilyExpected, autoOperationIncomeFamilyActual);
+    }
 
+    @Rollback
+    @Test
+    public void createFamilyExpenseAutoOperation() {
+        AutoOperationExpense autoOperationExpenseFamilyActual = autoOperationService.createFamilyExpenseAutoOperation(autoOperationExpenseFamilyExpected, userId, familyDebitId);
+        currentId = autoOperationExpenseFamilyActual.getId();
+        setDateAndId(autoOperationExpenseFamilyExpected, currentId, dateToday);
+        AssertUtils.assertAutoOperationExpense(autoOperationExpenseFamilyExpected, autoOperationExpenseFamilyActual);
+    }
+
+    private void setDateAndId(AbstractAutoOperation autoOperation, BigInteger newId, Date newDate) {
+        autoOperation.setId(newId);
+        autoOperation.setDate(newDate);
+    }
+
+    @Rollback
+    @Test
+    public void createPersonalIncomeAutoOperation() {
+        AutoOperationIncome autoOperationIncomePersonalActual = autoOperationService.createPersonalIncomeAutoOperation(autoOperationIncomePersonalExpected, personalDebitId);
+        currentId = autoOperationIncomePersonalActual.getId();
+        setDateAndId(autoOperationIncomePersonalExpected, currentId, dateToday);
+        AssertUtils.assertAutoOperationIncome(autoOperationIncomePersonalExpected, autoOperationIncomePersonalActual);
+    }
+
+    @Rollback
+    @Test
+    public void createPersonalExpenseAutoOperation() {
+        AutoOperationExpense autoOperationExpensePersonalActual = autoOperationService.createPersonalExpenseAutoOperation(autoOperationExpensePersonalExpected, personalDebitId);
+        currentId = autoOperationExpensePersonalActual.getId();
+        setDateAndId(autoOperationExpensePersonalExpected, currentId, dateToday);
+        AssertUtils.assertAutoOperationExpense(autoOperationExpensePersonalExpected, autoOperationExpensePersonalActual);
+    }
+
+    @Test
+    public void getAllTodayOperationsPersonal() {
         expectedList.add(autoOperationExpensePersonalExpected);
         expectedList.add(autoOperationIncomePersonalExpected);
 
@@ -141,85 +176,13 @@ public class AccountAutoOperationServiceTest {
         AssertUtils.assertAutoOperationsCollections(expectedList, actualList);
     }
 
-    @Test(expected = OperationException.class)
+    @Test
     public void getAllTodayOperationsFamily() {
-        autoOperationService.getAllTodayOperationsFamily(null, 0);
-        autoOperationService.getAllTodayOperationsFamily(valueZero, 0);
-
         expectedList.add(autoOperationExpenseFamilyExpected);
         expectedList.add(autoOperationIncomeFamilyExpected);
 
         List<AbstractAutoOperation> actualList = new ArrayList<>(autoOperationService.getAllTodayOperationsFamily(familyDebitId, dayOfMonth));
         AssertUtils.assertAutoOperationsCollections(expectedList, actualList);
-    }
-
-    @Rollback
-    @Test(expected = OperationException.class)
-    public void createFamilyIncomeAutoOperation() throws ParseException {
-        autoOperationService.createFamilyIncomeAutoOperation(null, null, 0,
-                0, null);
-        autoOperationService.createFamilyIncomeAutoOperation(valueZero, valueZero, 0,
-                0, CategoryIncome.DEFAULT);
-
-        autoOperationIncomeFamilyExpected.setId(currentId);
-        autoOperationIncomeFamilyExpected.setDate(AssertUtils.stringToDate(dayToday));
-
-        AutoOperationIncome autoOperationIncomeFamilyActual = autoOperationService.createFamilyIncomeAutoOperation(familyDebitId,
-                autoOperationIncomeFamilyExpected.getUserId(), autoOperationIncomeFamilyExpected.getDayOfMonth(),
-                autoOperationIncomeFamilyExpected.getAmount(), autoOperationIncomeFamilyExpected.getCategoryIncome());
-        AssertUtils.assertAutoOperationIncome(autoOperationIncomeFamilyExpected, autoOperationIncomeFamilyActual);
-    }
-
-    @Rollback
-    @Test(expected = OperationException.class)
-    public void createPersonalIncomeAutoOperation() throws ParseException {
-        autoOperationService.createPersonalIncomeAutoOperation(null, null, 0,
-                0, null);
-        autoOperationService.createPersonalIncomeAutoOperation(valueZero, valueZero, 0,
-                0, CategoryIncome.DEFAULT);
-
-        autoOperationIncomePersonalExpected.setId(currentId);
-        autoOperationIncomePersonalExpected.setDate(AssertUtils.stringToDate(dayToday));
-
-        AutoOperationIncome autoOperationIncomePersonalActual = autoOperationService.createPersonalIncomeAutoOperation(personalDebitId,
-                autoOperationIncomePersonalExpected.getUserId(), autoOperationIncomePersonalExpected.getDayOfMonth(),
-                autoOperationIncomePersonalExpected.getAmount(), autoOperationIncomePersonalExpected.getCategoryIncome());
-        AssertUtils.assertAutoOperationIncome(autoOperationIncomePersonalExpected, autoOperationIncomePersonalActual);
-
-    }
-
-    @Rollback
-    @Test(expected = OperationException.class)
-    public void createFamilyExpenseAutoOperation() throws ParseException {
-        autoOperationService.createFamilyExpenseAutoOperation(null, null, 0,
-                0, null);
-        autoOperationService.createFamilyExpenseAutoOperation(valueZero, valueZero, 0,
-                0, CategoryExpense.DEFAULT);
-
-        autoOperationExpenseFamilyExpected.setId(currentId);
-        autoOperationExpenseFamilyExpected.setDate(AssertUtils.stringToDate(dayToday));
-
-        AutoOperationExpense autoOperationExpenseFamilyActual = autoOperationService.createFamilyExpenseAutoOperation(familyDebitId,
-                autoOperationExpenseFamilyExpected.getUserId(), autoOperationExpenseFamilyExpected.getDayOfMonth(),
-                autoOperationExpenseFamilyExpected.getAmount(), autoOperationExpenseFamilyExpected.getCategoryExpense());
-        AssertUtils.assertAutoOperationExpense(autoOperationExpenseFamilyExpected, autoOperationExpenseFamilyActual);
-    }
-
-    @Rollback
-    @Test(expected = OperationException.class)
-    public void createPersonalExpenseAutoOperation() throws ParseException {
-        autoOperationService.createPersonalExpenseAutoOperation(null, null, 0,
-                0, null);
-        autoOperationService.createPersonalExpenseAutoOperation(valueZero, valueZero, 0,
-                0, CategoryExpense.DEFAULT);
-
-        autoOperationExpensePersonalExpected.setId(currentId);
-        autoOperationExpensePersonalExpected.setDate(AssertUtils.stringToDate(dayToday));
-
-        AutoOperationExpense autoOperationExpensePersonalActual = autoOperationService.createPersonalExpenseAutoOperation(personalDebitId,
-                autoOperationExpensePersonalExpected.getUserId(), autoOperationExpensePersonalExpected.getDayOfMonth(),
-                autoOperationExpensePersonalExpected.getAmount(), autoOperationExpensePersonalExpected.getCategoryExpense());
-        AssertUtils.assertAutoOperationExpense(autoOperationExpensePersonalExpected, autoOperationExpensePersonalActual);
     }
 
 }

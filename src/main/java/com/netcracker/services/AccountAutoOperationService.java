@@ -1,24 +1,20 @@
 package com.netcracker.services;
 
-import com.netcracker.models.*;
-import com.netcracker.models.enums.CategoryExpense;
-import com.netcracker.models.enums.CategoryIncome;
+import com.netcracker.models.AbstractAutoOperation;
+import com.netcracker.models.AutoOperationExpense;
+import com.netcracker.models.AutoOperationIncome;
 
 import java.math.BigInteger;
 import java.util.List;
 
 public interface AccountAutoOperationService {
-    AutoOperationIncome createFamilyIncomeAutoOperation(BigInteger familyDebitAccountId, BigInteger userId,
-                                                  int dayOfMonth, long amount, CategoryIncome categoryIncome);
+    AutoOperationIncome createFamilyIncomeAutoOperation(AutoOperationIncome autoOperationIncome, BigInteger userId, BigInteger familyDebitAccountId);
 
-    AutoOperationIncome createPersonalIncomeAutoOperation(BigInteger personalDebitAccountId, BigInteger userId,
-                                                          int dayOfMonth, long amount, CategoryIncome categoryIncome);
+    AutoOperationIncome createPersonalIncomeAutoOperation(AutoOperationIncome autoOperationIncome, BigInteger personalDebitAccountId);
 
-    AutoOperationExpense createFamilyExpenseAutoOperation(BigInteger familyDebitAccountId, BigInteger userId,
-                                                    int dayOfMonth, long amount, CategoryExpense categoryExpense);
+    AutoOperationExpense createFamilyExpenseAutoOperation(AutoOperationExpense autoOperationExpense, BigInteger userId, BigInteger familyDebitAccountId);
 
-    AutoOperationExpense createPersonalExpenseAutoOperation(BigInteger personalDebitAccountId, BigInteger userId,
-                                                            int dayOfMonth, long amount, CategoryExpense categoryExpense);
+    AutoOperationExpense createPersonalExpenseAutoOperation(AutoOperationExpense autoOperationExpense, BigInteger personalDebitAccountId);
 
     AutoOperationIncome getFamilyIncomeAutoOperation(BigInteger autoOperationId);
 

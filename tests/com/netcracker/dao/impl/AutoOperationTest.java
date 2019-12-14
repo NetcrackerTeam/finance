@@ -32,13 +32,36 @@ import static org.junit.Assert.assertEquals;
 @Transactional
 public class AutoOperationTest {
     private JdbcTemplate jdbcTemplate;
-    private String dateToday = "2019-12-06";
-    private String GET_COUNT_OF_AO_OBJECTS = "SELECT COUNT(*) FROM OBJECTS WHERE OBJECT_ID = 9111";
-
     @Autowired
     private DataSource dataSource;
     @Autowired
     private AutoOperationDao autoOperationDao;
+
+    private int dayOfMonth = 1;
+    private List<AbstractAutoOperation> expectedList = new ArrayList<>();
+
+    private AutoOperationIncome autoOperationIncomePersonalExpected;
+    private AutoOperationExpense autoOperationExpensePersonalExpected;
+    private AutoOperationIncome autoOperationIncomeFamilyExpected;
+    private AutoOperationExpense autoOperationExpenseFamilyExpected;
+
+    private String dateTodayString = "2019-12-14";
+    private Date dateToday = AssertUtils.stringToDate(dateTodayString);
+    private String GET_COUNT_OF_AO_OBJECTS = "SELECT COUNT(*) FROM OBJECTS WHERE OBJECT_ID = 96";
+
+    private BigInteger familyIncomeObjectIdAO = BigInteger.valueOf(96);
+    private BigInteger familyExpenseObjectIdAO = BigInteger.valueOf(94);
+    private BigInteger personalIncomeObjectIdAO = BigInteger.valueOf(95);
+    private BigInteger personalExpenseObjectIdAO = BigInteger.valueOf(93);
+
+    private BigInteger userId = BigInteger.valueOf(74);
+    private BigInteger currentId;
+    private BigInteger familyDebitId = BigInteger.valueOf(76);
+    private BigInteger personalDebitId = BigInteger.valueOf(75);
+
+    public AutoOperationTest() throws ParseException {
+
+    }
 
     @Before
     public void setUp() {
@@ -46,125 +69,113 @@ public class AutoOperationTest {
         jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
+    @Before
+    public void initializeObjects() throws ParseException {
+        autoOperationIncomePersonalExpected = new AutoOperationIncome.Builder().accountId(personalIncomeObjectIdAO)
+                .accountUserId(userId).dayOfMonth(dayOfMonth).accountAmount(13000L).categoryIncome(CategoryIncome.AWARD)
+                .accountDate(AssertUtils.stringToDate("2019-12-20")).build();
+
+        autoOperationExpensePersonalExpected = new AutoOperationExpense.Builder().accountId(personalExpenseObjectIdAO)
+                .accountUserId(userId).dayOfMonth(dayOfMonth).accountAmount(17000L).categoryExpense(CategoryExpense.FOOD)
+                .accountDate(AssertUtils.stringToDate("2019-12-02")).build();
+
+        autoOperationIncomeFamilyExpected = new AutoOperationIncome.Builder().accountId(familyIncomeObjectIdAO)
+                .accountUserId(userId).dayOfMonth(dayOfMonth).accountAmount(12000L).categoryIncome(CategoryIncome.AWARD)
+                .accountDate(AssertUtils.stringToDate("2019-12-15")).build();
+
+        autoOperationExpenseFamilyExpected = new AutoOperationExpense.Builder().accountId(familyExpenseObjectIdAO)
+                .accountUserId(userId).dayOfMonth(dayOfMonth).accountAmount(16000L).categoryExpense(CategoryExpense.FOOD)
+                .accountDate(AssertUtils.stringToDate("2019-12-03")).build();
+    }
+
     @Test
     public void getFamilyIncomeAutoOperation() {
-        AutoOperationIncome autoOperationIncome = autoOperationDao.getFamilyIncomeAutoOperation(BigInteger.valueOf(9004));
-        assertEquals(BigInteger.valueOf(9004), autoOperationIncome.getId());
-        assertEquals("operationId=9004 userId=1 dayOfMonth=4 amount=3500 category=PRESENTS date=" + dateToday,
-                "operationId=" + autoOperationIncome.getId() + " userId=" + autoOperationIncome.getUserId() +
-                        " dayOfMonth=" + autoOperationIncome.getDayOfMonth() + " amount=" + autoOperationIncome.getAmount() +
-                        " category=" + autoOperationIncome.getCategoryIncome() + " date=" + autoOperationIncome.getDate());
+        AutoOperationIncome autoOperationIncomeFamilyActual = autoOperationDao.getFamilyIncomeAutoOperation(familyIncomeObjectIdAO);
+        AssertUtils.assertAutoOperationIncome(autoOperationIncomeFamilyExpected, autoOperationIncomeFamilyActual);
     }
 
     @Test
     public void getFamilyExpenseAutoOperation() {
-        AutoOperationExpense autoOperationExpense = autoOperationDao.getFamilyExpenseAutoOperation(new BigInteger("9003"));
-        assertEquals(BigInteger.valueOf(9003), autoOperationExpense.getId());
-        assertEquals("operationId=9003 userId=1 dayOfMonth=3 amount=3000 category=RESIDENTIAL date=" + dateToday,
-                "operationId=" + autoOperationExpense.getId() + " userId=" + autoOperationExpense.getUserId() +
-                        " dayOfMonth=" + autoOperationExpense.getDayOfMonth() + " amount=" + autoOperationExpense.getAmount() +
-                        " category=" + autoOperationExpense.getCategoryExpense() + " date=" + autoOperationExpense.getDate());
+        AutoOperationExpense autoOperationExpenseFamilyActual = autoOperationDao.getFamilyExpenseAutoOperation(familyExpenseObjectIdAO);
+        AssertUtils.assertAutoOperationExpense(autoOperationExpenseFamilyExpected, autoOperationExpenseFamilyActual);
     }
 
     @Test
     public void getPersonalIncomeAutoOperation() {
-        AutoOperationIncome autoOperationIncome = autoOperationDao.getPersonalIncomeAutoOperation(new BigInteger("9002"));
-        assertEquals(BigInteger.valueOf(9002), autoOperationIncome.getId());
-        assertEquals("operationId=9002 userId=1 dayOfMonth=2 amount=2500 category=SALARY date=" + dateToday,
-                "operationId=" + autoOperationIncome.getId() + " userId=" + autoOperationIncome.getUserId() +
-                        " dayOfMonth=" + autoOperationIncome.getDayOfMonth() + " amount=" + autoOperationIncome.getAmount() +
-                        " category=" + autoOperationIncome.getCategoryIncome() + " date=" + autoOperationIncome.getDate());
+        AutoOperationIncome autoOperationIncomePersonalActual = autoOperationDao.getPersonalIncomeAutoOperation(personalIncomeObjectIdAO);
+        AssertUtils.assertAutoOperationIncome(autoOperationIncomePersonalExpected, autoOperationIncomePersonalActual);
     }
 
     @Test
     public void getPersonalExpenseAutoOperation() {
-        AutoOperationExpense autoOperationExpense = autoOperationDao.getPersonalExpenseAutoOperation(new BigInteger("9001"));
-        assertEquals(BigInteger.valueOf(9001), autoOperationExpense.getId());
-        assertEquals("operationId=9001 userId=1 dayOfMonth=1 amount=2000 category=FOOD date=" + dateToday,
-                "operationId=" + autoOperationExpense.getId() + " userId=" + autoOperationExpense.getUserId() +
-                        " dayOfMonth=" + autoOperationExpense.getDayOfMonth() + " amount=" + autoOperationExpense.getAmount() +
-                        " category=" + autoOperationExpense.getCategoryExpense() + " date=" + autoOperationExpense.getDate());
+        AutoOperationExpense autoOperationExpensePersonalActual = autoOperationDao.getPersonalExpenseAutoOperation(personalExpenseObjectIdAO);
+        AssertUtils.assertAutoOperationExpense(autoOperationExpensePersonalExpected, autoOperationExpensePersonalActual);
     }
 
     @Rollback
     @Test
-    public void createFamilyIncomeAutoOperation() throws ParseException {
-        AutoOperationIncome expAutoOperation = new AutoOperationIncome.Builder()
-                .accountId(BigInteger.valueOf(AssertUtils.getCurrentSequenceId(jdbcTemplate)))
-                .accountUserId(BigInteger.valueOf(1)).categoryIncome(CategoryIncome.PRESENTS).accountAmount(Long.valueOf("150"))
-                .dayOfMonth(2).accountDate(AssertUtils.stringToDate(dateToday)).build();
-        AutoOperationIncome actualAutoOperation = autoOperationDao.createFamilyIncomeAutoOperation(1, Long.valueOf("150"),
-                CategoryIncome.PRESENTS, new BigInteger("1"), new BigInteger("3"));
-        AssertUtils.assertAutoOperationIncome(expAutoOperation, actualAutoOperation);
+    public void createFamilyIncomeAutoOperation() {
+        AutoOperationIncome autoOperationIncomeFamilyActual = autoOperationDao.createFamilyIncomeAutoOperation(autoOperationIncomeFamilyExpected, userId, familyDebitId);
+        currentId = autoOperationIncomeFamilyActual.getId();
+        setDateAndId(autoOperationIncomeFamilyExpected, currentId, dateToday);
+        AssertUtils.assertAutoOperationIncome(autoOperationIncomeFamilyExpected, autoOperationIncomeFamilyActual);
     }
 
     @Rollback
     @Test
-    public void createFamilyExpenseAutoOperation() throws ParseException {
-        AutoOperationExpense expAutoOperation = new AutoOperationExpense.Builder()
-                .accountId(BigInteger.valueOf(AssertUtils.getCurrentSequenceId(jdbcTemplate)))
-                .accountUserId(BigInteger.valueOf(1)).categoryExpense(CategoryExpense.CHILDREN).accountAmount(Long.valueOf("228"))
-                .dayOfMonth(30).accountDate(AssertUtils.stringToDate(dateToday)).build();
-        AutoOperationExpense actualAutoOperation = autoOperationDao.createFamilyExpenseAutoOperation(30, Long.valueOf("228"),
-                CategoryExpense.CHILDREN, new BigInteger("1"), new BigInteger("3"));
-        AssertUtils.assertAutoOperationExpense(expAutoOperation, actualAutoOperation);
+    public void createFamilyExpenseAutoOperation() {
+        AutoOperationExpense autoOperationExpenseFamilyActual = autoOperationDao.createFamilyExpenseAutoOperation(autoOperationExpenseFamilyExpected, userId, familyDebitId);
+        currentId = autoOperationExpenseFamilyActual.getId();
+        setDateAndId(autoOperationExpenseFamilyExpected, currentId, dateToday);
+        AssertUtils.assertAutoOperationExpense(autoOperationExpenseFamilyExpected, autoOperationExpenseFamilyActual);
+    }
+
+    private void setDateAndId(AbstractAutoOperation autoOperation, BigInteger newId, Date newDate) {
+        autoOperation.setId(newId);
+        autoOperation.setDate(newDate);
     }
 
     @Rollback
     @Test
-    public void createPersonalIncomeAutoOperation() throws ParseException {
-        AutoOperationIncome expAutoOperation = new AutoOperationIncome.Builder()
-                .accountId(BigInteger.valueOf(AssertUtils.getCurrentSequenceId(jdbcTemplate)))
-                .accountUserId(BigInteger.valueOf(1)).categoryIncome(CategoryIncome.SALARY).accountAmount(Long.valueOf("1000"))
-                .dayOfMonth(5).accountDate(AssertUtils.stringToDate(dateToday)).build();
-        AutoOperationIncome actualAutoOperation = autoOperationDao.createPersonalIncomeAutoOperation(5, Long.valueOf("1000"),
-                CategoryIncome.SALARY, new BigInteger("1"), new BigInteger("2"));
-        AssertUtils.assertAutoOperationIncome(expAutoOperation, actualAutoOperation);
+    public void createPersonalIncomeAutoOperation() {
+        AutoOperationIncome autoOperationIncomePersonalActual = autoOperationDao.createPersonalIncomeAutoOperation(autoOperationIncomePersonalExpected, personalDebitId);
+        currentId = autoOperationIncomePersonalActual.getId();
+        setDateAndId(autoOperationIncomePersonalExpected, currentId, dateToday);
+        AssertUtils.assertAutoOperationIncome(autoOperationIncomePersonalExpected, autoOperationIncomePersonalActual);
     }
 
     @Rollback
     @Test
-    public void createPersonalExpenseAutoOperation() throws ParseException {
-        AutoOperationExpense expAutoOperation = new AutoOperationExpense.Builder().accountId(new BigInteger("102"))
-                .accountUserId(new BigInteger("1")).categoryExpense(CategoryExpense.CHILDREN).accountAmount(Long.valueOf("5050"))
-                .dayOfMonth(4).accountDate(AssertUtils.stringToDate(dateToday)).build();
-        AutoOperationExpense actualAutoOperation = autoOperationDao.createPersonalExpenseAutoOperation(4, Long.valueOf("5050"),
-                CategoryExpense.CHILDREN, new BigInteger("1"), new BigInteger("2"));
-        AssertUtils.assertAutoOperationExpense(expAutoOperation, actualAutoOperation);
+    public void createPersonalExpenseAutoOperation() {
+        AutoOperationExpense autoOperationExpensePersonalActual = autoOperationDao.createPersonalExpenseAutoOperation(autoOperationExpensePersonalExpected, personalDebitId);
+        currentId = autoOperationExpensePersonalActual.getId();
+        setDateAndId(autoOperationExpensePersonalExpected, currentId, dateToday);
+        AssertUtils.assertAutoOperationExpense(autoOperationExpensePersonalExpected, autoOperationExpensePersonalActual);
     }
 
     @Test
-    public void getAllTodayOperations() throws ParseException {
-        AutoOperationExpense expAutoOperationExpense = new AutoOperationExpense.Builder()
-                .accountId(new BigInteger("70")).accountUserId(new BigInteger("52"))
-                .categoryExpense(CategoryExpense.CLOTHES).accountAmount(Long.valueOf("16000"))
-                .dayOfMonth(1).accountDate(AssertUtils.stringToDate(dateToday)).build();
-        List<AbstractAutoOperation> expCollectionExpense = new ArrayList<>();
-        expCollectionExpense.add(expAutoOperationExpense);
+    public void getAllTodayOperationsPersonal() {
+        expectedList.add(autoOperationExpensePersonalExpected);
+        expectedList.add(autoOperationIncomePersonalExpected);
 
-        AutoOperationIncome expAutoOperationIncome = new AutoOperationIncome.Builder()
-                .accountId(new BigInteger("9010")).accountUserId(new BigInteger("52"))
-                .categoryIncome(CategoryIncome.OTHER).accountAmount(Long.valueOf("2500"))
-                .dayOfMonth(7).accountDate(AssertUtils.stringToDate(dateToday)).build();
-        List<AbstractAutoOperation> expCollectionIncome = new ArrayList<>();
-        expCollectionIncome.add(expAutoOperationIncome);
+        List<AbstractAutoOperation> actualList = new ArrayList<>(autoOperationDao.getAllTodayOperationsPersonal(personalDebitId, dayOfMonth));
+        AssertUtils.assertAutoOperationsCollections(expectedList, actualList);
+    }
 
-        List<AbstractAutoOperation> expectedCollection = new ArrayList<>(expCollectionExpense);
-        expectedCollection.addAll(expCollectionIncome);
+    @Test
+    public void getAllTodayOperationsFamily() {
+        expectedList.add(autoOperationExpenseFamilyExpected);
+        expectedList.add(autoOperationIncomeFamilyExpected);
 
-        List<AbstractAutoOperation> actualCollectionFirst = (ArrayList) autoOperationDao.getAllTodayOperationsPersonal(new BigInteger("52"), 1);
-        List<AbstractAutoOperation> actualCollectionSecond = (ArrayList) autoOperationDao.getAllTodayOperationsPersonal(new BigInteger("52"), 7);
-        List<AbstractAutoOperation> actualCollection = new ArrayList<>(actualCollectionFirst);
-        actualCollection.addAll(actualCollectionSecond);
-
-        AssertUtils.assertAutoOperationsCollections(expectedCollection, actualCollection);
+        List<AbstractAutoOperation> actualList = new ArrayList<>(autoOperationDao.getAllTodayOperationsFamily(familyDebitId, dayOfMonth));
+        AssertUtils.assertAutoOperationsCollections(expectedList, actualList);
     }
 
     @Rollback
     @Test
     public void deleteAutoOperation() {
         int totalCount = 0;
-        autoOperationDao.deleteAutoOperation(new BigInteger("9111"));
+        autoOperationDao.deleteAutoOperation(familyIncomeObjectIdAO);
         int countObjects = jdbcTemplate.queryForObject(GET_COUNT_OF_AO_OBJECTS, Integer.class);
         assertEquals(totalCount, countObjects);
     }

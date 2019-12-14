@@ -7,8 +7,6 @@ import com.netcracker.dao.utils.ObjectsCreator;
 import com.netcracker.models.AbstractAutoOperation;
 import com.netcracker.models.AutoOperationExpense;
 import com.netcracker.models.AutoOperationIncome;
-import com.netcracker.models.enums.CategoryExpense;
-import com.netcracker.models.enums.CategoryIncome;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -58,51 +56,47 @@ public class AutoOperationDaoImpl implements AutoOperationDao {
     }
 
     @Override
-    public AutoOperationIncome createFamilyIncomeAutoOperation(int dayOfMonth, long amount, CategoryIncome categoryIncome,
-                                                               BigInteger userId, BigInteger familyDebitAccountId) {
+    public AutoOperationIncome createFamilyIncomeAutoOperation(AutoOperationIncome autoOperationIncome, BigInteger userId, BigInteger familyDebitAccountId) {
         BigInteger objectId = ObjectsCreator.createObject(familyIncome_object_type_id_1, familyIncome_name_2,
                 jdbcTemplate, CREATE_OBJECT_AUTO_OPERATION);
 
-        jdbcTemplate.update(CREATE_FAMILY_INCOME_AO, objectId, dayOfMonth, objectId, amount, objectId,
-                categoryIncome.getId(), objectId, objectId, familyDebitAccountId, objectId, userId);
+        jdbcTemplate.update(CREATE_FAMILY_INCOME_AO, objectId, autoOperationIncome.getDayOfMonth(), objectId, autoOperationIncome.getAmount(), objectId,
+                autoOperationIncome.getCategoryIncome().getId(), objectId, objectId, familyDebitAccountId, objectId, userId);
 
         return getFamilyIncomeAutoOperation(objectId);
     }
 
     @Override
-    public AutoOperationIncome createPersonalIncomeAutoOperation(int dayOfMonth, long amount, CategoryIncome categoryIncome,
-                                                                 BigInteger userId, BigInteger personalDebitAccountId) {
-        BigInteger objectId= ObjectsCreator.createObject(personalIncome_object_type_id_1, personalIncome_name_2,
+    public AutoOperationIncome createPersonalIncomeAutoOperation(AutoOperationIncome autoOperationIncome, BigInteger personalDebitAccountId) {
+        BigInteger objectId = ObjectsCreator.createObject(personalIncome_object_type_id_1, personalIncome_name_2,
                 jdbcTemplate, CREATE_OBJECT_AUTO_OPERATION);
 
-        jdbcTemplate.update(CREATE_PERSONAL_INCOME_AO, objectId, dayOfMonth, objectId, amount, objectId,
-                categoryIncome.getId(), objectId, objectId, personalDebitAccountId);
+        jdbcTemplate.update(CREATE_PERSONAL_INCOME_AO, objectId, autoOperationIncome.getDayOfMonth(), objectId, autoOperationIncome.getAmount(), objectId,
+                autoOperationIncome.getCategoryIncome().getId(), objectId, objectId, personalDebitAccountId);
 
         return getPersonalIncomeAutoOperation(objectId);
     }
 
     @Override
-    public AutoOperationExpense createFamilyExpenseAutoOperation(int dayOfMonth, long amount, CategoryExpense categoryExpense,
-                                                                 BigInteger userId, BigInteger familyDebitAccountId) {
+    public AutoOperationExpense createFamilyExpenseAutoOperation(AutoOperationExpense autoOperationExpense, BigInteger userId, BigInteger familyDebitAccountId) {
         BigInteger objectId = ObjectsCreator.createObject(familyExpense_object_type_id_1, familyExpense_name_2,
                 jdbcTemplate, CREATE_OBJECT_AUTO_OPERATION);
 
-        jdbcTemplate.update(CREATE_FAMILY_EXPENSE_AO, objectId, dayOfMonth, objectId, amount, objectId,
-                categoryExpense.getId(), objectId, objectId, familyDebitAccountId, objectId, userId);
+        jdbcTemplate.update(CREATE_FAMILY_EXPENSE_AO, objectId, autoOperationExpense.getDayOfMonth(), objectId, autoOperationExpense.getAmount(), objectId,
+                autoOperationExpense.getCategoryExpense().getId(), objectId, objectId, familyDebitAccountId, objectId, userId);
 
         return getFamilyExpenseAutoOperation(objectId);
     }
 
     @Override
-    public AutoOperationExpense createPersonalExpenseAutoOperation(int dayOfMonth, long amount, CategoryExpense categoryExpense,
-                                                                   BigInteger userId, BigInteger personalDebitAccountId) {
+    public AutoOperationExpense createPersonalExpenseAutoOperation(AutoOperationExpense autoOperationExpense, BigInteger personalDebitAccountId) {
         BigInteger objectId = ObjectsCreator.createObject(personalExpense_object_type_id_1, personalExpense_name_2,
                 jdbcTemplate, CREATE_OBJECT_AUTO_OPERATION);
 
-        jdbcTemplate.update(CREATE_PERSONAL_EXPENSE_AO, objectId, dayOfMonth, objectId, amount, objectId,
-                categoryExpense.getId(), objectId, objectId, personalDebitAccountId);
+        jdbcTemplate.update(CREATE_PERSONAL_EXPENSE_AO, objectId, autoOperationExpense.getDayOfMonth(), objectId, autoOperationExpense.getAmount(), objectId,
+                autoOperationExpense.getCategoryExpense().getId(), objectId, objectId, personalDebitAccountId);
 
-        return  getPersonalExpenseAutoOperation(objectId);
+        return getPersonalExpenseAutoOperation(objectId);
     }
 
     @Override
