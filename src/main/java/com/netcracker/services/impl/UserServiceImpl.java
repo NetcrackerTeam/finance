@@ -48,7 +48,7 @@ public class UserServiceImpl implements UserService {
             User userTemp = userDao.getUserById(userId);
             return userTemp;
         } catch (EmptyResultDataAccessException EmptyResultDataAccessException) {
-            throw new UserException(UserException.getErrorMessageUser());
+            throw new UserException(UserException.ERROR_MESSAGE_USER);
         }
     }
 }

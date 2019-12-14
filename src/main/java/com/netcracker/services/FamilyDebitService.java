@@ -13,7 +13,7 @@ public interface FamilyDebitService {
 
     FamilyDebitAccount getFamilyDebitAccount(BigInteger debitId);
 
-    void deleteFamilyDebitAccount(BigInteger debitId);
+    void deleteFamilyDebitAccount(BigInteger debitId, BigInteger userId);
 
     boolean addUserToAccount(BigInteger accountId, BigInteger userId);
 

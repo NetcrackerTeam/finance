@@ -1,16 +1,14 @@
 package com.netcracker.dao.impl;
 
 import com.netcracker.dao.FamilyAccountDebitDao;
-import com.netcracker.dao.impl.mapper.AccountExpenseMapper;
-import com.netcracker.dao.impl.mapper.AccountIncomeMapper;
 import com.netcracker.dao.impl.mapper.FamilyAccountDebitMapper;
 import com.netcracker.dao.impl.mapper.UserDaoMapper;
-import com.netcracker.models.AccountExpense;
-import com.netcracker.models.AccountIncome;
+import com.netcracker.exception.FamilyDebitAccountException;
 import com.netcracker.models.FamilyDebitAccount;
 import com.netcracker.models.User;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -32,9 +30,14 @@ public class FamilyAccountDebitDaoImpl implements FamilyAccountDebitDao {
     @Override
     public FamilyDebitAccount getFamilyAccountById(BigInteger id) {
         logger.debug("Entering select(getFamilyAccountById=" + id + ")");
-        FamilyDebitAccount  familyDebitAccount = this.template.queryForObject(FIND_FAMILY_ACCOUNT_BY_ID, new Object[]{id}, new FamilyAccountDebitMapper());
-        logger.debug("Entering select success(getFamilyAccountById=" + id + ")");
-        return familyDebitAccount;
+        try {
+            FamilyDebitAccount familyDebitAccount = this.template.queryForObject(FIND_FAMILY_ACCOUNT_BY_ID, new Object[]{id}, new FamilyAccountDebitMapper());
+            logger.debug("Entering select success(getFamilyAccountById=" + id + ")");
+            return familyDebitAccount;
+        } catch (EmptyResultDataAccessException ex) {
+            logger.error("the family debit account  id = " + id + " is wrong");
+            throw new FamilyDebitAccountException(FamilyDebitAccountException.ERROR_MESSAGE_FAMILY);
+        }
     }
 
     @Override
@@ -50,16 +53,19 @@ public class FamilyAccountDebitDaoImpl implements FamilyAccountDebitDao {
     }
 
     @Override
-    public void deleteFamilyAccount(BigInteger id) {
-        logger.debug("Entering unactive(deleteFamilyAccount=" + id + ")");
-        this.template.update(SET_FAMILY_ACCOUNT_UNACTIVE, id);
-        logger.debug("Entering unactive success(deleteFamilyAccount=" + id + ")");
+    public void deleteFamilyAccount(BigInteger accountId, BigInteger userId) {
+        logger.debug("Entering unactive(deleteFamilyAccount=" + accountId + ")");
+        this.template.update(SET_FAMILY_ACCOUNT_UNACTIVE, accountId);
+        logger.debug("Entering unactive success(deleteFamilyAccount=" + accountId + ")");
+        logger.debug("Entering delete reference user(deleteFamilyAccount=" + userId + ")");
+        this.template.update(DELETE_REFERENCE_FROM_USER_TO_ACCOUNT, userId, accountId);
+        logger.debug("Entering delete success(deleteFamilyAccount=" + userId + ")");
     }
 
     @Override
     public void addUserToAccountById(BigInteger accountId, BigInteger userId) {
         logger.debug("Entering insert(addUserToAccountById=" + accountId + " " + userId + ")");
-        this.template.update(ADD_USER_BY_ID, accountId,  userId);
+        this.template.update(ADD_USER_BY_ID, accountId, userId);
         logger.debug("Entering insert success(addUserToAccountById=" + accountId + " " + userId + ")");
     }
 
@@ -80,24 +86,13 @@ public class FamilyAccountDebitDaoImpl implements FamilyAccountDebitDao {
     @Override
     public Collection<User> getParticipantsOfFamilyAccount(BigInteger accountId) {
         logger.debug("Entering list(getParticipantsOfFamilyAccount=" + accountId + ")");
-        Collection<User> users =  this.template.query(GET_PARTICIPANTS, new Object[]{accountId}, new UserDaoMapper());
-        logger.debug("Entering list success(getParticipantsOfFamilyAccount=" + accountId + ")");
-        return users;
-    }
-
-    @Override
-    public Collection<AccountIncome> getIncomesOfFamilyAccount(BigInteger accountId) {
-        logger.debug("Entering list(getIncomesOfFamilyAccount=" + accountId + ")");
-        Collection<AccountIncome> incomes = this.template.query(GET_INCOME_LIST, new Object[]{accountId}, new AccountIncomeMapper());
-        logger.debug("Entering list succsess(getIncomesOfFamilyAccount=" + accountId + ")");
-        return incomes;
-    }
-
-    @Override
-    public Collection<AccountExpense> getExpensesOfFamilyAccount(BigInteger accountId) {
-        logger.debug("Entering list(getExpensesOfFamilyAccount=" + accountId+ ")");
-        Collection<AccountExpense> expenses = this.template.query(GET_EXPENSE_LIST, new Object[]{accountId},  new AccountExpenseMapper());
-        logger.debug("Entering list success(getExpensesOfFamilyAccount=" + accountId + ")");
-        return expenses;
+        try {
+            Collection<User> users = this.template.query(GET_PARTICIPANTS, new Object[]{accountId}, new UserDaoMapper());
+            logger.debug("Entering list success(getParticipantsOfFamilyAccount=" + accountId + ")");
+            return users;
+        } catch (EmptyResultDataAccessException ex) {
+            logger.error("the family debit account  " + accountId + " doesn`t exist");
+            throw new FamilyDebitAccountException(FamilyDebitAccountException.ERROR_MESSAGE_FAMILY);
+        }
     }
 }

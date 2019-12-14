@@ -1,12 +1,9 @@
 package com.netcracker.dao;
-import com.netcracker.models.AccountExpense;
-import com.netcracker.models.AccountIncome;
+
 import com.netcracker.models.FamilyDebitAccount;
 import com.netcracker.models.User;
 
-
 import java.math.BigInteger;
-import java.util.ArrayList;
 import java.util.Collection;
 
 public interface FamilyAccountDebitDao {
@@ -29,15 +26,16 @@ public interface FamilyAccountDebitDao {
     /**
      * Set unActive family account debit by family account debit id.
      *
-     * @param id family account debit id
+     * @param accountId family account debit id
+     * @param userId    family account debit id
      */
-    void deleteFamilyAccount(BigInteger id);
+    void deleteFamilyAccount(BigInteger accountId, BigInteger userId);
 
     /**
      * Add user to family account debit by family account debit id and user id.
      *
      * @param accountId family account debit id
-     * @param userId user id
+     * @param userId    user id
      */
     void addUserToAccountById(BigInteger accountId, BigInteger userId);
 
@@ -45,7 +43,7 @@ public interface FamilyAccountDebitDao {
      * Delete user to family account debit by family account debit id and user id.
      *
      * @param accountId family account debit id
-     * @param userId user id
+     * @param userId    user id
      */
     void deleteUserFromAccountById(BigInteger accountId, BigInteger userId);
 
@@ -53,7 +51,7 @@ public interface FamilyAccountDebitDao {
      * Update amount of family account debit by family account debit id
      *
      * @param accountId family account debit id
-     * @param amount amount of family account debit
+     * @param amount    amount of family account debit
      */
     void updateAmountOfFamilyAccount(BigInteger accountId, Long amount);
 
@@ -64,22 +62,6 @@ public interface FamilyAccountDebitDao {
      * @return User Collection
      */
     Collection<User> getParticipantsOfFamilyAccount(BigInteger accountId);
-
-    /**
-     * Get transactions income of family account debit by family account debit id.
-     *
-     * @param accountId family account debit id
-     * @return AccountIncome Collection
-     */
-    Collection<AccountIncome> getIncomesOfFamilyAccount(BigInteger accountId);
-
-    /**
-     * Get transactions expense of family account debit by family account debit id.
-     *
-     * @param accountId family account debit id
-     * @return AccountExpense Collection
-     */
-    Collection<AccountExpense> getExpensesOfFamilyAccount(BigInteger accountId);
 
     String ADD_USER_BY_ID = "INSERT INTO OBJREFERENCE (ATTR_ID,OBJECT_ID,REFERENCE) VALUES (8,?,?)";
 
@@ -131,6 +113,8 @@ public interface FamilyAccountDebitDao {
 
     String SET_FAMILY_ACCOUNT_UNACTIVE = "UPDATE ATTRIBUTES SET LIST_VALUE_ID = 42 WHERE ATTR_ID = 69 AND OBJECT_ID = ?";
 
+    String DELETE_REFERENCE_FROM_USER_TO_ACCOUNT = "DELETE FROM OBJREFERENCE WHERE ATTR_ID = 2 AND OBJECT_ID = ? AND REFERENCE = ?";
+
     String UPDATE_FALIMY_ACCOUNT_AMOUNT = "UPDATE ATTRIBUTES SET VALUE = ? WHERE ATTR_ID = 9 AND OBJECT_ID = ?";
 
     String GET_PARTICIPANTS = "SELECT "
@@ -156,39 +140,4 @@ public interface FamilyAccountDebitDao {
             "AND STATUS_USER.ATTR_ID = 6 /* ATTRIBUTE ID STATUS OF USER */" +
             "AND USER_TO_PERSONAL_DEBIT.ATTR_ID = 1 /*  REFERENCE USER TO PERSONAL ACCOUNT  */" +
             "AND USER_TO_PERSONAL_DEBIT.OBJECT_ID = USER_ID.OBJECT_ID ";
-
-
-    String GET_INCOME_LIST = "SELECT " +
-            "INCOME.OBJECT_ID ACCOUNT_INCOME_ID, AMOUNT.VALUE INCOME_AMOUNT, DATE_TRANSACTION.DATE_VALUE DATE_INCOME, CATEGORY.LIST_VALUE_ID CATEGORY_INCOME, INCOME_TO_USER.REFERENCE USER_ID " +
-            "FROM OBJECTS INCOME, ATTRIBUTES AMOUNT, ATTRIBUTES DATE_TRANSACTION, ATTRIBUTES CATEGORY, OBJECTS DEBIT, OBJREFERENCE INCOME_TO_DEBIT, OBJREFERENCE INCOME_TO_USER " +
-            "WHERE INCOME.OBJECT_TYPE_ID = 21 /* TYPE OBJECT OF INCOME*/" +
-            "AND DEBIT.OBJECT_ID = ? " +
-            "AND INCOME_TO_DEBIT.ATTR_ID = 54 /* REFERENCE INCOME TO FAMILY ACCOUNT */" +
-            "AND INCOME_TO_DEBIT.REFERENCE = DEBIT.OBJECT_ID " +
-            "AND INCOME.OBJECT_ID = INCOME_TO_DEBIT.OBJECT_ID " +
-            "AND INCOME_TO_USER.ATTR_ID = 55 /* REFERENCE INCOME TO USER */" +
-            "AND INCOME_TO_USER.OBJECT_ID = INCOME.OBJECT_ID " +
-            "AND AMOUNT.OBJECT_ID = INCOME.OBJECT_ID " +
-            "AND AMOUNT.ATTR_ID = 56 /* ATTRIBUTE ID AMOUNT OF INCOME */" +
-            "AND DATE_TRANSACTION.OBJECT_ID = INCOME.OBJECT_ID " +
-            "AND DATE_TRANSACTION.ATTR_ID = 58 /* ATTRIBUTE ID DATE TRANSACTION OF INCOME */" +
-            "AND CATEGORY.OBJECT_ID = INCOME.OBJECT_ID " +
-            "AND CATEGORY.ATTR_ID = 57 /* ATTRIBUTE ID CATEGORY OF INCOME */";
-
-    String GET_EXPENSE_LIST = "SELECT " +
-            "EXPENSE.OBJECT_ID ACCOUNT_EXPENSE_ID, AMOUNT.VALUE EXPENSE_AMOUNT, DATE_TRANSACTION.DATE_VALUE DATE_EXPENSE, CATEGORY.LIST_VALUE_ID CATEGORY_EXPENSE, EXPENSE_TO_USER.REFERENCE USER_ID " +
-            "FROM OBJECTS EXPENSE, ATTRIBUTES AMOUNT, ATTRIBUTES DATE_TRANSACTION, ATTRIBUTES CATEGORY, OBJECTS DEBIT, OBJREFERENCE EXPENSE_TO_DEBIT, OBJREFERENCE EXPENSE_TO_USER " +
-            "WHERE EXPENSE.OBJECT_TYPE_ID = 20 /* TYPE OBJECT OF EXPENSE*/" +
-            "AND DEBIT.OBJECT_ID = ? " +
-            "AND EXPENSE_TO_DEBIT.ATTR_ID = 48 /* REFERENCE EXPENSE TO FAMILY ACCOUNT */" +
-            "AND EXPENSE_TO_DEBIT.REFERENCE = DEBIT.OBJECT_ID " +
-            "AND EXPENSE.OBJECT_ID = EXPENSE_TO_DEBIT.OBJECT_ID " +
-            "AND EXPENSE_TO_USER.ATTR_ID = 49 /* REFERENCE EXPENSE TO USER */" +
-            "AND EXPENSE_TO_USER.OBJECT_ID = EXPENSE.OBJECT_ID " +
-            "AND AMOUNT.OBJECT_ID = EXPENSE.OBJECT_ID " +
-            "AND AMOUNT.ATTR_ID = 50 /* ATTRIBUTE ID AMOUNT OF EXPENSE */" +
-            "AND DATE_TRANSACTION.OBJECT_ID = EXPENSE.OBJECT_ID " +
-            "AND DATE_TRANSACTION.ATTR_ID = 52 /* ATTRIBUTE ID DATE TRANSACTION OF EXPENSE */" +
-            "AND CATEGORY.OBJECT_ID = EXPENSE.OBJECT_ID " +
-            "AND CATEGORY.ATTR_ID = 51 /* ATTRIBUTE ID CATEGORY OF EXPENSE */";
 }
