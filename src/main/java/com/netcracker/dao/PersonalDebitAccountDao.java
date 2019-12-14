@@ -34,7 +34,7 @@ public interface PersonalDebitAccountDao {
      *
      * @param accountId personal account debit id
      */
-    void deletePersonalAccountByUserId(BigInteger accountId);
+    void deletePersonalAccountByUserId(BigInteger accountId, BigInteger userId);
 
     /**
      * Update amount of personal account debit by personal account debit id
@@ -44,7 +44,7 @@ public interface PersonalDebitAccountDao {
      */
     void updateAmountOfPersonalAccount(BigInteger accountId, Long amount);
 
-    String GET_PERSONAL_ACCOUNT_BY_ID ="SELECT " +
+    String GET_PERSONAL_ACCOUNT_BY_ID = "SELECT " +
             "PERSONAL_DEBIT.OBJECT_ID PERSONAL_DEBIT_ID, PERSONAL_DEBIT.NAME NAME_PERSONAL_DEBIT, AMOUNT.VALUE AMOUNT_PERSONAL_DEBIT, STATUS_PERSONAL_DEBIT.LIST_VALUE_ID STATUS_PERSONAL_DEBIT, " +
             "USER_ID.OBJECT_ID USER_ID, NAME_USER.VALUE NAME, EMAIL_USER.VALUE EMAIL, PASSWORD_USER.VALUE PASSWORD, " +
             "STATUS_USER.LIST_VALUE_ID IS_ACTIVE, USER_TO_PERSONAL.REFERENCE PER_DEB_ACC1, PERSONAL_DEBIT.OBJECT_ID FAM_DEB_ACC1 " +
@@ -78,8 +78,9 @@ public interface PersonalDebitAccountDao {
             "SELECT * " +
             "FROM DUAL";
 
-    String DELETE_USER_FROM_PERSONAL_ACCOUNT = "DELETE FROM OBJREFERENCE WHERE ATTR_ID = 1 AND OBJECT_ID = ? AND REFERENCE = ?";
-    String UNACTIVE_USER_FROM_PERSONAL_ACCOUNT = "UPDATE ATTRIBUTES SET LIST_VALUE_ID = 44 WHERE ATTR_ID = 70 AND OBJECT_ID = ?";
+    String PERSONAL_ACCOUNT_IS_UNACTIVE = "UPDATE ATTRIBUTES SET LIST_VALUE_ID = 42 WHERE ATTR_ID = 69 AND OBJECT_ID = ?";
+    String DELETE_PERSONAL_ACCOUNT = "DELETE FROM OBJREFERENCE WHERE ATTR_ID = 1 AND OBJECT_ID = ? AND REFERENCE = ?";
+    String UNACTIVE_USER_FROM_PERSONAL_ACCOUNT = "DELETE FROM OBJREFERENCE WHERE ATTR_ID = 1 AND OBJECT_ID = ? AND REFERENCE = ?";
     String UPDATE_PERSONAL_ACCOUNT_AMOUNT = "UPDATE ATTRIBUTES SET VALUE = ? WHERE ATTR_ID = 7 AND OBJECT_ID = ?";
 
 }

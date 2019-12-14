@@ -1,12 +1,12 @@
 package com.netcracker.services.impl;
 
-import com.netcracker.dao.*;
+import com.netcracker.dao.UserDao;
 import com.netcracker.dao.impl.TemplatesDaoImpl;
 import com.netcracker.exception.UserException;
-import com.netcracker.models.User;
 import com.netcracker.models.enums.UserStatusActive;
 import com.netcracker.services.EmailServiceSender;
 import com.netcracker.services.UserService;
+import com.netcracker.services.utils.ObjectsCheckUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
@@ -22,22 +22,12 @@ import java.io.File;
 import java.math.BigInteger;
 import java.text.MessageFormat;
 import java.time.LocalDate;
-import java.util.Collection;
-import java.util.Date;
 
 @Service
 public class EmailServiceSenderImpl implements EmailServiceSender {
 
     @Autowired
     private UserDao userDao;
-    @Autowired
-    private PersonalDebitAccountDao personalDebitAccountDao;
-    @Autowired
-    private FamilyAccountDebitDao familyAccountDebitDao;
-    @Autowired
-    private CreditAccountDao creditAccountDao;
-    @Autowired
-    private OperationDao operationDao;
     @Autowired
     TemplatesDaoImpl templatesDao;
     @Autowired
@@ -55,26 +45,26 @@ public class EmailServiceSenderImpl implements EmailServiceSender {
 
     @Override
     public void sendMailBeforeDeactivate(String emailTo, String userName, BigInteger userId) {
-        //User userTemp = userDao.getUserById(userId);
-        if (userId == null || userName == null || emailTo == null) {
-            logger.debug("The user " + userId + " is NULL");
-            throw new UserException("The user is doesn`t exist");
-        } else if (userDao.getUserById(userId).getUserStatusActive() == UserStatusActive.NO) {
-            String deac = MessageFormat.format(templatesDao.sendMassageById(BigInteger.valueOf(9)), userName);
+        ObjectsCheckUtils.isNotNull(emailTo, userName, userId);
+
+        if (userDao.getUserById(userId).getUserStatusActive() == UserStatusActive.NO) {
+            String userIsDeactivate = MessageFormat.format(templatesDao.sendMassageById(BigInteger.valueOf(9)), userName);
             SimpleMailMessage message = new SimpleMailMessage();
             message.setTo("<" + emailTo + ">");
             message.setFrom(mail);
-            message.setText(deac);
-            this.mailSender.send(message);
+            message.setText(userIsDeactivate);
+            mailSender.send(message);
+            logger.debug("Mail sending is success" + userId);
         } else {
-            logger.debug("The user " + userId + " is unActive");
-            throw new UserException("The user is unactive");
+            logger.debug("The user " + userId + " is Active");
+            throw new UserException("The user is active");
         }
-        logger.debug("Mail sending is success(sendTo=" + userId);
     }
 
     @Override
     public void sendMailAboutPersonalDebt(String emailTo, String userName, String perName, Long amount, BigInteger userId) {
+        ObjectsCheckUtils.isNotNull(emailTo, userName, perName, userId);
+
         SimpleMailMessage message = new SimpleMailMessage();
         String debitPersonal = MessageFormat.format(templatesDao.sendMassageById(BigInteger.valueOf(10)), userName, perName, amount);
         message.setTo("<" + emailTo + ">");
@@ -85,35 +75,36 @@ public class EmailServiceSenderImpl implements EmailServiceSender {
 
     @Override
     public void sendMailAboutFamilyDebt(String emailTo, String userName, String famName, Long amount, BigInteger userId) {
+        ObjectsCheckUtils.isNotNull(emailTo, userName, famName, userId);
+
         SimpleMailMessage message = new SimpleMailMessage();
-        String debitPersonal = MessageFormat.format(templatesDao.sendMassageById(BigInteger.valueOf(11)), userId);
+        String debitFamily = MessageFormat.format(templatesDao.sendMassageById(BigInteger.valueOf(11)), userId);
         message.setTo("<" + emailTo + ">");
         message.setFrom(mail);
-        message.setText(debitPersonal);
+        message.setText(debitFamily);
         mailSender.send(message);
     }
 
     @Override
-    public void sendText(String emailTo, BigInteger userId) throws MessagingException {
+    public void monthReport(String emailTo, BigInteger userId) throws MessagingException {
+        ObjectsCheckUtils.isNotNull(emailTo, userId);
+
         MimeMessage message = mailSender.createMimeMessage();
         boolean multipart = true;
         MimeMessageHelper helper = new MimeMessageHelper(message, multipart);
-
         helper.setTo("<" + emailTo + ">");
         helper.setSubject("Test email with attachments");
         helper.setText("Hello, Im testing email with attachments!");
-
         String path1 = "D:/test.txt";
-
-        // Attachment 1
         FileSystemResource file1 = new FileSystemResource(new File(path1));
         helper.addAttachment("Txt.txt", file1);
-
         mailSender.send(message);
     }
 
     @Override
     public void sendMailReminderPersonalCredit(String emailTo, String userName, Long amountPaid, String credName, BigInteger userId, LocalDate date) {
+        ObjectsCheckUtils.isNotNull(emailTo, userName, credName, userId, date);
+
         SimpleMailMessage message = new SimpleMailMessage();
         String creditPersonal = MessageFormat.format(templatesDao.sendMassageById(BigInteger.valueOf(4)), userName, amountPaid, credName, date);
         message.setTo("<" + emailTo + ">");
@@ -124,6 +115,8 @@ public class EmailServiceSenderImpl implements EmailServiceSender {
 
     @Override
     public void sendMailReminderFamilyCredit(String emailTo, String userName, Long amountPaid, String credName, BigInteger userId, LocalDate date) {
+        ObjectsCheckUtils.isNotNull(emailTo, userName, credName, userId, date);
+
         SimpleMailMessage message = new SimpleMailMessage();
         String creditFamily = MessageFormat.format(templatesDao.sendMassageById(BigInteger.valueOf(4)), userName, amountPaid, credName, date);
         message.setTo("<" + emailTo + ">");
@@ -133,52 +126,51 @@ public class EmailServiceSenderImpl implements EmailServiceSender {
     }
 
     @Override
-    public void sendMailReminderPersonalExpense(User user, BigInteger id, BigInteger userId, Date date) {
-//        String userName = userDao.getUserById(userId).getName();
-//        Collection persEx = operationDao.getExpensesPersonalAfterDateByAccountId(id, date);
-//        SimpleMailMessage message = new SimpleMailMessage();
-//        String debitPersonal = MessageFormat.format(userName, persEx);
-//        message.setTo("<" + user.geteMail() + ">");
-//        message.setFrom(mail);
-//        message.setText(debitPersonal);
-//        mailSender.send(message);
+    public void sendMailAutoPersonalExpense(String emailTo, String userName, Long amountPaid, String credName, BigInteger userId) {
+        ObjectsCheckUtils.isNotNull(emailTo, userName, credName, userId);
+
+        SimpleMailMessage message = new SimpleMailMessage();
+        String personalAutoExpense = MessageFormat.format(templatesDao.sendMassageById(BigInteger.valueOf(6)), userName, amountPaid, credName);
+        message.setTo("<" + emailTo + ">");
+        message.setFrom(mail);
+        message.setText(personalAutoExpense);
+        mailSender.send(message);
     }
 
     @Override
-    public void sendMailAutoPersonalIncome(User user, BigInteger id, BigInteger userId, Date date) {
-//        //name us name personal
-//        String userName = userDao.getUserById(userId).getName();
-//        Collection persInc = operationDao.getIncomesPersonalAfterDateByAccountId(id, date);
-//        SimpleMailMessage message = new SimpleMailMessage();
-//        String debitPersonal = MessageFormat.format(userName, persInc);
-//        message.setTo("<" + user.geteMail() + ">");
-//        message.setFrom(mail);
-//        message.setText(debitPersonal);
-//        mailSender.send(message);
+    public void sendMailAutoPersonalIncome(String emailTo, String userName, Long amountPaid, String credName, BigInteger userId) {
+        ObjectsCheckUtils.isNotNull(emailTo, userName, credName, userId);
+
+        SimpleMailMessage message = new SimpleMailMessage();
+        String personalAutoInc = MessageFormat.format(templatesDao.sendMassageById(BigInteger.valueOf(5)), userName, amountPaid, credName);
+        message.setTo("<" + emailTo + ">");
+        message.setFrom(mail);
+        message.setText(personalAutoInc);
+        mailSender.send(message);
     }
 
     @Override
-    public void sendMailReminderFamilyExpense(User user, BigInteger id, BigInteger userId, Date date) {
-//        String userName = userDao.getUserById(userId).getName();
-//        Collection famEx = operationDao.getExpensesFamilyAfterDateByAccountId(id, date);
-//        SimpleMailMessage message = new SimpleMailMessage();
-//        String debitPersonal = MessageFormat.format(userName, famEx);
-//        message.setTo("<" + user.geteMail() + ">");
-//        message.setFrom(mail);
-//        message.setText(debitPersonal);
-//        mailSender.send(message);
+    public void sendMailAutoFamilyExpense(String emailTo, String userName, Long amountPaid, String credName, BigInteger userId) {
+        ObjectsCheckUtils.isNotNull(emailTo, userName, credName, userId);
+
+        SimpleMailMessage message = new SimpleMailMessage();
+        String familyAutoExpense = MessageFormat.format(templatesDao.sendMassageById(BigInteger.valueOf(6)), userName, amountPaid, credName);
+        message.setTo("<" + emailTo + ">");
+        message.setFrom(mail);
+        message.setText(familyAutoExpense);
+        mailSender.send(message);
     }
 
     @Override
-    public void sendMailAutoFamilyIncome(User user, BigInteger id, BigInteger userId, Date date) {
-//        String userName = userDao.getUserById(userId).getName();
-//        Collection famInc = operationDao.getIncomesFamilyAfterDateByAccountId(id, date);
-//        SimpleMailMessage message = new SimpleMailMessage();
-//        String debitPersonal = MessageFormat.format(userName, famInc);
-//        message.setTo("<" + user.geteMail() + ">");
-//        message.setFrom(mail);
-//        message.setText(debitPersonal);
-//        mailSender.send(message);
+    public void sendMailAutoFamilyIncome(String emailTo, String userName, Long amountPaid, String credName, BigInteger userId) {
+        ObjectsCheckUtils.isNotNull(emailTo, userName, credName, userId);
+
+        SimpleMailMessage message = new SimpleMailMessage();
+        String familyAutoInc = MessageFormat.format(templatesDao.sendMassageById(BigInteger.valueOf(5)), userName, amountPaid, credName);
+        message.setTo("<" + emailTo + ">");
+        message.setFrom(mail);
+        message.setText(familyAutoInc);
+        mailSender.send(message);
     }
 
 
