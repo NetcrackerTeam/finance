@@ -5,11 +5,9 @@ import com.netcracker.dao.CreditDeptDao;
 import com.netcracker.dao.CreditOperationDao;
 import com.netcracker.dao.PersonalDebitAccountDao;
 import com.netcracker.exception.CreditAccountException;
-import com.netcracker.models.CreditOperation;
-import com.netcracker.models.Debt;
-import com.netcracker.models.PersonalCreditAccount;
-import com.netcracker.models.PersonalDebitAccount;
+import com.netcracker.models.*;
 import com.netcracker.models.enums.CreditStatusPaid;
+import com.netcracker.models.enums.ErrorVisibility;
 import com.netcracker.services.PersonalCreditService;
 import com.netcracker.services.utils.DateUtils;
 import com.netcracker.services.utils.ObjectsCheckUtils;
@@ -29,16 +27,16 @@ public class PersonalCreditServiceImpl implements PersonalCreditService {
     private static final Logger logger = LoggerFactory.getLogger(PersonalCreditServiceImpl.class);
 
     @Autowired
-    CreditAccountDao creditAccountDao;
+    private CreditAccountDao creditAccountDao;
 
     @Autowired
-    CreditOperationDao creditOperationDao;
+    private CreditOperationDao creditOperationDao;
 
     @Autowired
-    PersonalDebitAccountDao debitAccountDao;
+    private PersonalDebitAccountDao debitAccountDao;
 
     @Autowired
-    CreditDeptDao creditDeptDao;
+    private CreditDeptDao creditDeptDao;
 
     @Override
     public void createPersonalCredit(BigInteger id, PersonalCreditAccount creditAccount) {
@@ -59,21 +57,22 @@ public class PersonalCreditServiceImpl implements PersonalCreditService {
 
         ObjectsCheckUtils.isNotNull(creditAccount, debitAccount);
 
-        if (debitAccount.getAmount() < amount) {
-            long remainToPay = getTotalCreditPayment(creditAccount.getDate(), creditAccount.getDateTo(),
-                    creditAccount.getAmount(), creditAccount.getCreditRate()) - creditAccount.getPaidAmount();
-            if (remainToPay > amount)
-                addPayment(creditAccount, debitAccount, amount);
-            else {
-                logger.error("Remain to pay for credit {}. Wanted {}", remainToPay, amount);
-                throw new CreditAccountException(String.format("Left to pay only %d", remainToPay), creditAccount);
-            }
-        } else {
-            logger.error("Not enough money on debit account by id = {}", idDebitAccount);
-            throw new CreditAccountException("Not enough money on debit account", creditAccount);
-        }
+        makeUserPayment(debitAccount, creditAccount, amount);
+        addPayment(creditAccount, debitAccount, amount);
     }
 
+    void makeUserPayment(AbstractDebitAccount debitAccount, AbstractCreditAccount creditAccount, long amount) {
+        if (debitAccount.getAmount() > amount) {
+            logger.error("Not enough money on debit account by id = {}", debitAccount.getId());
+            throw new CreditAccountException("Not enough money on debit account", creditAccount, ErrorVisibility.VISIBLE);
+        }
+        long remainToPay = getTotalCreditPayment(creditAccount.getDate(), creditAccount.getDateTo(),
+                creditAccount.getAmount(), creditAccount.getCreditRate()) - creditAccount.getPaidAmount();
+        if (remainToPay < amount) {
+            logger.error("Remain to pay for credit {}. Wanted {}", remainToPay, amount);
+            throw new CreditAccountException(String.format("Left to pay only %d", remainToPay), creditAccount, ErrorVisibility.VISIBLE);
+        }
+    }
 
     @Override
     public boolean addPersonalCreditPaymentAuto(BigInteger idDebitAccount, BigInteger idCredit, long amount) {
@@ -85,16 +84,23 @@ public class PersonalCreditServiceImpl implements PersonalCreditService {
         ObjectsCheckUtils.isNotNull(creditAccount, debitAccount);
         ObjectsCheckUtils.isNotNull(creditAccount.getDate(), creditAccount.getDateTo());
 
+        boolean isSuccess = makeAutoPayment(debitAccount, creditAccount, amount);
+        if (!isSuccess)
+            return false;
+        addPayment(creditAccount, debitAccount, amount);
+        logger.debug("Payment was completed successfully");
+        return true;
+    }
+
+    boolean makeAutoPayment(AbstractDebitAccount debitAccount, AbstractCreditAccount creditAccount, long amount) {
         long remainToPay = getTotalCreditPayment(creditAccount.getDate(), creditAccount.getDateTo(),
                 creditAccount.getAmount(), creditAccount.getCreditRate()) - creditAccount.getPaidAmount();
         if (remainToPay < amount)
             amount = remainToPay;
         if (debitAccount.getAmount() < amount) {
-            logger.debug("Not enough money on debit account by id = {}. Needed more then {}", idDebitAccount, amount);
+            logger.debug("Not enough money on debit account by id = {}. Needed more then {}", debitAccount.getId(), amount);
             return false;
         }
-        addPayment(creditAccount, debitAccount, amount);
-        logger.debug("Payment was completed successfully");
         return true;
     }
 
@@ -107,22 +113,31 @@ public class PersonalCreditServiceImpl implements PersonalCreditService {
         ObjectsCheckUtils.isNotNull(creditAccount);
         Debt debt = creditAccount.getDebt();
 
-        LocalDate newDateTo;
+
         ObjectsCheckUtils.isNotNull(debt);
         ObjectsCheckUtils.isNotNull(debt.getDebtId());
 
+        Debt changedDebt = makeDebtIncrease(debt, amount);
+
+        changeDebt(changedDebt);
+    }
+
+    Debt makeDebtIncrease (Debt debt, long amount) {
+        LocalDate newDateTo;
         if (debt.getAmountDebt() == 0) {
             debt.setDateFrom(LocalDate.now());
-            changeDebtDateFrom(debt.getDebtId(), debt.getDateFrom());
-            changeDebtAmount(debt.getDebtId(), amount);
+            debt.setAmountDebt(amount);
             newDateTo = DateUtils.addMonthsToDate(LocalDate.now(), 1);
         } else {
             newDateTo = DateUtils.addMonthsToDate(debt.getDateTo(), 1);
-            changeDebtAmount(debt.getDebtId(), debt.getAmountDebt() + amount);
+            long newAmount = debt.getAmountDebt() + amount;
+            debt.setAmountDebt(newAmount);
         }
-        changeDebtDateTo(debt.getDebtId(), newDateTo);
-        logger.debug("Debt increase was completed successfully");
+        debt.setDateTo(newDateTo);
+        return debt;
     }
+
+
 
     @Override
     public void addAutoDebtRepayment(BigInteger idDebitAccount, BigInteger idCredit, long amount) {
@@ -142,15 +157,25 @@ public class PersonalCreditServiceImpl implements PersonalCreditService {
         ObjectsCheckUtils.isNotNull(debt);
         ObjectsCheckUtils.isNotNull(debt.getDebtId());
 
-        LocalDate newDateFrom = DateUtils.addMonthsToDate(debt.getDateFrom(), 1);
-        if (newDateFrom.equals(debt.getDateTo())) {
-            changeDebtDateFrom(debt.getDebtId(), null);
-            changeDebtDateTo(debt.getDebtId(), null);
-            changeDebtAmount(debt.getDebtId(), 0);
+        Debt changedDebt = makeDebtDecrease(debt, amount);
+        changeDebt(changedDebt);
+    }
+
+    Debt makeDebtDecrease (Debt debt, long amount) {
+
+        Debt changedDebt = debt;
+
+        LocalDate newDateFrom = DateUtils.addMonthsToDate(changedDebt.getDateFrom(), 1);
+        if (newDateFrom.equals(changedDebt.getDateTo())) {
+            changedDebt.setAmountDebt(0);
+            changedDebt.setDateFrom(null);
+            changedDebt.setDateTo(null);
         } else {
-            changeDebtDateFrom(debt.getDebtId(), newDateFrom);
-            changeDebtAmount(debt.getDebtId(), debt.getAmountDebt() - amount);
+            changedDebt.setDateFrom(newDateFrom);
+            long newAmount = changedDebt.getAmountDebt() - amount;
+            changedDebt.setAmountDebt(newAmount);
         }
+        return changedDebt;
     }
 
     @Override
@@ -168,7 +193,7 @@ public class PersonalCreditServiceImpl implements PersonalCreditService {
         return creditAccountDao.getPersonalCreditById(id);
     }
 
-    private void addPayment(PersonalCreditAccount creditAccount, PersonalDebitAccount debitAccount, long amount) {
+    private void addPayment(AbstractCreditAccount creditAccount, AbstractDebitAccount debitAccount, long amount) {
         long actualDebitAmount = debitAccount.getAmount();
         debitAccountDao.updateAmountOfPersonalAccount(debitAccount.getId(), actualDebitAmount - amount);
         creditOperationDao.createPersonalCreditOperation(amount, DateUtils.localDateToDate(LocalDate.now()), creditAccount.getCreditId());
@@ -181,15 +206,21 @@ public class PersonalCreditServiceImpl implements PersonalCreditService {
         }
     }
 
-    public void changeDebtDateTo(BigInteger id, LocalDate date) {
+    private void changeDebt(Debt debt) {
+        changeDebtDateTo(debt.getDebtId(), debt.getDateTo());
+        changeDebtDateFrom(debt.getDebtId(), debt.getDateFrom());
+        changeDebtAmount(debt.getDebtId(), debt.getAmountDebt());
+    }
+
+    private void changeDebtDateTo(BigInteger id, LocalDate date) {
         creditDeptDao.updatePersonalDebtDateTo(id, DateUtils.localDateToDate(date));
     }
 
-    public void changeDebtDateFrom(BigInteger id, LocalDate date) {
+    private void changeDebtDateFrom(BigInteger id, LocalDate date) {
         creditDeptDao.updatePersonalDebtDateFrom(id, DateUtils.localDateToDate(date));
     }
 
-    public void changeDebtAmount(BigInteger id, long amount) {
+    private void changeDebtAmount(BigInteger id, long amount) {
         creditDeptDao.updatePersonalDebtAmount(id, amount);
     }
 

@@ -171,10 +171,10 @@ public class PersonalCreditServiceTest {
 
         verify(creditDeptDao, times(1))
                 .updatePersonalDebtDateTo(testIdDebt,
-                        DateUtils.localDateToDate(DateUtils.addMonthsToDate(debtNotEmptyTwoMonth.getDateTo(), 1)));
+                        DateUtils.localDateToDate(LocalDate.of(2018, 4, 2)));
 
         verify(creditDeptDao, times(1))
-                .updatePersonalDebtAmount(testIdDebt, debtNotEmptyTwoMonth.getAmountDebt() + monthPayment);
+                .updatePersonalDebtAmount(testIdDebt, 3150);
     }
 
     @Test
@@ -211,11 +211,10 @@ public class PersonalCreditServiceTest {
                 .updateAmountOfPersonalAccount(testIdAcc, personalDebitAccount.getAmount() - monthPayment);
 
         verify(creditDeptDao, times(1))
-                .updatePersonalDebtDateFrom(testIdDebt,
-                        DateUtils.localDateToDate(DateUtils.addMonthsToDate(debtNotEmptyTwoMonth.getDateFrom(), 1)));
+                .updatePersonalDebtDateFrom(testIdDebt, DateUtils.localDateToDate(LocalDate.of(2018, 2, 2)));
 
         verify(creditDeptDao, times(1))
-                .updatePersonalDebtAmount(testIdDebt, debtNotEmptyTwoMonth.getAmountDebt() - monthPayment);
+                .updatePersonalDebtAmount(testIdDebt, 1050);
 
     }
 
