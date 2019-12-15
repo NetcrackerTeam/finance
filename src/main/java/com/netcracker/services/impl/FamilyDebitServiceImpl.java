@@ -9,6 +9,7 @@ import com.netcracker.models.*;
 import com.netcracker.models.enums.FamilyAccountStatusActive;
 import com.netcracker.services.FamilyDebitService;
 import com.netcracker.services.UserService;
+import com.netcracker.services.utils.ExceptionMessages;
 import com.netcracker.services.utils.ObjectsCheckUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,7 +55,7 @@ public class FamilyDebitServiceImpl implements FamilyDebitService {
             familyAccountDebitDao.deleteFamilyAccount(accountId, userId);
         } else {
             logger.error("the family debit account " + accountId + " has participants");
-            throw new FamilyDebitAccountException(FamilyDebitAccountException.ERROR_MESSAGE_FAMILY_PARTICIPANTS);
+            throw new FamilyDebitAccountException(ExceptionMessages.ERROR_MESSAGE_FAMILY_PARTICIPANTS);
         }
     }
 
@@ -68,22 +69,22 @@ public class FamilyDebitServiceImpl implements FamilyDebitService {
         boolean userFamilyAccount = userService.isUserHaveFamilyAccount(userId);
         if (!statusUser) {
             logger.error("The user " + userId + " is unActive");
-            throw new UserException(UserException.ERROR_MESSAGE_USER_STATUS, tempUser);
+            throw new UserException(ExceptionMessages.ERROR_MESSAGE_USER_STATUS, tempUser);
         } else if (FamilyAccountStatusActive.NO.equals(statusFamily)) {
             logger.error("The family account " + accountId + " is unActive");
-            throw new FamilyDebitAccountException(FamilyDebitAccountException.ERROR_MESSAGE_FAMILY_STATUS, familyDebitAccount);
-        } else if (!userFamilyAccount) {
+            throw new FamilyDebitAccountException(ExceptionMessages.ERROR_MESSAGE_FAMILY_STATUS, familyDebitAccount);
+        } else if (userFamilyAccount) {
             logger.error("The user " + tempUser + " own family account");
-            throw new UserException(UserException.ERROR_MESSAGE_USER_EXIST_FAMILY, tempUser);
+            throw new UserException(ExceptionMessages.ERROR_MESSAGE_USER_EXIST_FAMILY, tempUser);
         } else {
             Collection<User> participants = this.getParticipantsOfFamilyAccount(accountId);
             for (User participant : participants) {
                 if (participant.getId() == null) {
                     logger.error("The userId " + userId + " is NULL");
-                    throw new UserException(UserException.ERROR_MESSAGE_USER, participant);
+                    throw new UserException(ExceptionMessages.ERROR_MESSAGE_USER, participant);
                 } else if (userId.equals(participant.getId())) {
                     logger.error("The user " + participant.getId() + " is has family account");
-                    throw new UserException(UserException.ERROR_MESSAGE_USER_EXIST_FAMILY, participant);
+                    throw new UserException(ExceptionMessages.ERROR_MESSAGE_USER_EXIST_FAMILY, participant);
                 }
             }
             familyAccountDebitDao.addUserToAccountById(accountId, userId);
@@ -101,7 +102,7 @@ public class FamilyDebitServiceImpl implements FamilyDebitService {
             familyAccountDebitDao.deleteUserFromAccountById(accountId, userId);
         } else {
             logger.error("The user " + userId + "is owner of family account " + accountId);
-            throw new UserException(UserException.ERROR_MESSAGE_OWNER);
+            throw new UserException(ExceptionMessages.ERROR_MESSAGE_OWNER);
         }
     }
 

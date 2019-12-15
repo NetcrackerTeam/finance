@@ -6,6 +6,7 @@ import com.netcracker.dao.impl.mapper.UserDaoMapper;
 import com.netcracker.exception.FamilyDebitAccountException;
 import com.netcracker.models.FamilyDebitAccount;
 import com.netcracker.models.User;
+import com.netcracker.services.utils.ExceptionMessages;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -36,7 +37,7 @@ public class FamilyAccountDebitDaoImpl implements FamilyAccountDebitDao {
             return familyDebitAccount;
         } catch (EmptyResultDataAccessException ex) {
             logger.error("the family debit account  id = " + id + " is wrong");
-            throw new FamilyDebitAccountException(FamilyDebitAccountException.ERROR_MESSAGE_FAMILY);
+            throw new FamilyDebitAccountException(ExceptionMessages.ERROR_MESSAGE_FAMILY);
         }
     }
 
@@ -92,7 +93,7 @@ public class FamilyAccountDebitDaoImpl implements FamilyAccountDebitDao {
             return users;
         } catch (EmptyResultDataAccessException ex) {
             logger.error("the family debit account  " + accountId + " doesn`t exist");
-            throw new FamilyDebitAccountException(FamilyDebitAccountException.ERROR_MESSAGE_FAMILY);
+            throw new FamilyDebitAccountException(ExceptionMessages.ERROR_MESSAGE_FAMILY);
         }
     }
 }
