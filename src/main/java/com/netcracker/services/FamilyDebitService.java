@@ -20,7 +20,7 @@ public interface FamilyDebitService {
 
     void deleteUserFromAccount(BigInteger accountId, BigInteger userId);
 
-    List<AbstractAccountOperation> getHistory(BigInteger family_accountId, LocalDate date);
+    List<AbstractAccountOperation> getHistory(BigInteger familyAccountId, LocalDate date);
 
     Collection<User> getParticipantsOfFamilyAccount(BigInteger accountId);
 
