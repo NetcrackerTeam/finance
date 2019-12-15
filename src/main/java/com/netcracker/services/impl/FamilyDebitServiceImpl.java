@@ -8,6 +8,7 @@ import com.netcracker.exception.UserException;
 import com.netcracker.models.*;
 import com.netcracker.models.enums.FamilyAccountStatusActive;
 import com.netcracker.services.FamilyDebitService;
+import com.netcracker.services.OperationService;
 import com.netcracker.services.UserService;
 import com.netcracker.services.utils.ExceptionMessages;
 import com.netcracker.services.utils.ObjectsCheckUtils;
@@ -19,6 +20,7 @@ import java.math.BigInteger;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 @Service
 public class FamilyDebitServiceImpl implements FamilyDebitService {
@@ -28,7 +30,7 @@ public class FamilyDebitServiceImpl implements FamilyDebitService {
     @Autowired
     private UserDao userDao;
     @Autowired
-    private OperationDao operationDao;
+    private OperationService operationService;
     @Autowired
     private UserService userService;
 
@@ -76,17 +78,9 @@ public class FamilyDebitServiceImpl implements FamilyDebitService {
         } else if (userFamilyAccount) {
             logger.error("The user " + tempUser + " own family account");
             throw new UserException(ExceptionMessages.ERROR_MESSAGE_USER_EXIST_FAMILY, tempUser);
+        } else if (this.isUserParticipant(userId)) {
+            throw new UserException(ExceptionMessages.ERROR_MESSAGE_USER_EXIST_FAMILY, tempUser);
         } else {
-            Collection<User> participants = this.getAllParticipantsOfFamilyAccounts();
-            for (User participant : participants) {
-                if (participant.getId() == null) {
-                    logger.error("The userId " + userId + " is NULL");
-                    throw new UserException(ExceptionMessages.ERROR_MESSAGE_USER, participant);
-                } else if (userId.equals(participant.getId())) {
-                    logger.error("The user " + participant.getId() + " is has family account");
-                    throw new UserException(ExceptionMessages.ERROR_MESSAGE_USER_EXIST_FAMILY, participant);
-                }
-            }
             familyAccountDebitDao.addUserToAccountById(accountId, userId);
             logger.debug("Entering insert success(addUserToAccount=" + accountId + " " + userId + ")");
             return true;
@@ -107,17 +101,9 @@ public class FamilyDebitServiceImpl implements FamilyDebitService {
     }
 
     @Override
-    public Collection<AbstractAccountOperation> getHistory(BigInteger familyAccountId, LocalDate date) {
+    public List<AbstractAccountOperation> getHistory(BigInteger familyAccountId, LocalDate date) {
         logger.debug("Entering select(getHistory=" + familyAccountId + " " + date + ")");
-        ObjectsCheckUtils.isNotNull(familyAccountId, date);
-        Collection<AbstractAccountOperation> transactions = new ArrayList<>();
-        Collection<AccountIncome> incomes = operationDao.getIncomesFamilyAfterDateByAccountId(familyAccountId, date);
-        Collection<AccountExpense> expenses = operationDao.getExpensesFamilyAfterDateByAccountId(familyAccountId, date);
-        transactions.addAll(incomes);
-        transactions.addAll(expenses);
-        logger.debug("Entering select success(getHistory=" + familyAccountId + " " + date + ")");
-        return transactions;
-
+        return operationService.getAllFamilyOperations(familyAccountId, date);
     }
 
     @Override
@@ -126,9 +112,20 @@ public class FamilyDebitServiceImpl implements FamilyDebitService {
         logger.debug("Entering list(getParticipantsOfFamilyAccount=" + accountId + ")");
         return familyAccountDebitDao.getParticipantsOfFamilyAccount(accountId);
     }
+
     @Override
-    public Collection<User> getAllParticipantsOfFamilyAccounts() {
-        logger.debug("Entering list(getAllParticipantsOfFamilyAccount)");
-        return familyAccountDebitDao.getAllParticipantsOfFamilyAccounts();
+    public boolean isUserParticipant(BigInteger userId) {
+        logger.debug("Entering user is participant(isUserParticipant " + userId + ")");
+        Collection<User> participants = familyAccountDebitDao.getAllParticipantsOfFamilyAccounts();
+        for (User participant : participants) {
+            if (participant.getId() == null) {
+                logger.error("The userId " + userId + " is NULL");
+                throw new UserException(ExceptionMessages.ERROR_MESSAGE_USER, participant);
+            } else if (userId.equals(participant.getId())) {
+                logger.error("The user " + participant.getId() + " is has family account");
+                return true;
+            }
+        }
+        return false;
     }
 }

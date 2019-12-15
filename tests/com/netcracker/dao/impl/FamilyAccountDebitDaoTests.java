@@ -146,7 +146,7 @@ public class FamilyAccountDebitDaoTests {
 
     @Test
     public void getListAllParticipants() {
-        ArrayList<User> users = (ArrayList<User>) familyAccountDebitDao.getAllParticipantsOfFamilyAccount();
+        ArrayList<User> users = (ArrayList<User>) familyAccountDebitDao.getAllParticipantsOfFamilyAccounts();
         for (User expected : users) {
             System.out.println(expected.getId() + " " + expected.getName() + " " + expected.geteMail() + " " + expected.getPassword() + " "
                     + expected.getUserStatusActive().toString() + " " + expected.getPersonalDebitAccount());
