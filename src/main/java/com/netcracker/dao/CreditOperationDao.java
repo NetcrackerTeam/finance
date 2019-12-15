@@ -11,9 +11,9 @@ public interface CreditOperationDao {
 
     CreditOperation getCreditOperationFamily(BigInteger creditOperationId);
 
-    CreditOperation createFamilyCreditOperation(long amount, LocalDate date, BigInteger creditFamilyAccountId, BigInteger userId);
+    CreditOperation createFamilyCreditOperation(double amount, LocalDate date, BigInteger creditFamilyAccountId, BigInteger userId);
 
-    CreditOperation createPersonalCreditOperation(long amount, LocalDate date, BigInteger creditPersonalAccountId);
+    CreditOperation createPersonalCreditOperation(double amount, LocalDate date, BigInteger creditPersonalAccountId);
 
     List<CreditOperation> getAllCreditOperationsByCreditFamilyId(BigInteger creditFamilyAccountId);
 

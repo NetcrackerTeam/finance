@@ -63,10 +63,10 @@ public class CreditOperationTest {
 
     @Before
     public void initializeObjects() {
-        creditOperationPersonalExpected = new CreditOperation(1000L, date);
+        creditOperationPersonalExpected = new CreditOperation(1000.00, date);
         creditOperationPersonalExpected.setCreditOperationId(operationIdPersonal);
 
-        creditOperationFamilyExpected = new CreditOperation(2000L, date);
+        creditOperationFamilyExpected = new CreditOperation(2000.00, date);
         creditOperationFamilyExpected.setCreditOperationId(operationIdFamily);
     }
 

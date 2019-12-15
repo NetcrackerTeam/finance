@@ -34,7 +34,7 @@ public class CreditOperationDaoImpl implements CreditOperationDao {
     }
 
     @Override
-    public CreditOperation createFamilyCreditOperation(long amount, LocalDate date, BigInteger creditFamilyAccountId,
+    public CreditOperation createFamilyCreditOperation(double amount, LocalDate date, BigInteger creditFamilyAccountId,
                                                        BigInteger userId) {
         BigInteger objectId = ObjectsCreator.createObject(family_object_type_id_1, family_name_2,
                 jdbcTemplate, CREATE_OBJECT_CREDIT_OPERATION);
@@ -46,7 +46,7 @@ public class CreditOperationDaoImpl implements CreditOperationDao {
     }
 
     @Override
-    public CreditOperation createPersonalCreditOperation(long amount, LocalDate date, BigInteger creditPersonalAccountId) {
+    public CreditOperation createPersonalCreditOperation(double amount, LocalDate date, BigInteger creditPersonalAccountId) {
         BigInteger objectId = ObjectsCreator.createObject(personal_object_type_id_1, personal_name_2,
                 jdbcTemplate, CREATE_OBJECT_CREDIT_OPERATION);
 

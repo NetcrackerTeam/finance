@@ -74,19 +74,19 @@ public class AutoOperationTest {
     @Before
     public void initializeObjects() {
         autoOperationIncomePersonalExpected = new AutoOperationIncome.Builder().accountId(personalIncomeObjectIdAO)
-                .accountUserId(userId).dayOfMonth(dayOfMonth).accountAmount(13000L).categoryIncome(CategoryIncome.AWARD)
+                .accountUserId(userId).dayOfMonth(dayOfMonth).accountAmount(13000.00).categoryIncome(CategoryIncome.AWARD)
                 .accountDate(LocalDate.parse("2019-12-20")).build();
 
         autoOperationExpensePersonalExpected = new AutoOperationExpense.Builder().accountId(personalExpenseObjectIdAO)
-                .accountUserId(userId).dayOfMonth(dayOfMonth).accountAmount(17000L).categoryExpense(CategoryExpense.FOOD)
+                .accountUserId(userId).dayOfMonth(dayOfMonth).accountAmount(17000.00).categoryExpense(CategoryExpense.FOOD)
                 .accountDate(LocalDate.parse("2019-12-02")).build();
 
         autoOperationIncomeFamilyExpected = new AutoOperationIncome.Builder().accountId(familyIncomeObjectIdAO)
-                .accountUserId(userId).dayOfMonth(dayOfMonth).accountAmount(12000L).categoryIncome(CategoryIncome.AWARD)
+                .accountUserId(userId).dayOfMonth(dayOfMonth).accountAmount(12000.00).categoryIncome(CategoryIncome.AWARD)
                 .accountDate(LocalDate.parse("2019-12-15")).build();
 
         autoOperationExpenseFamilyExpected = new AutoOperationExpense.Builder().accountId(familyExpenseObjectIdAO)
-                .accountUserId(userId).dayOfMonth(dayOfMonth).accountAmount(16000L).categoryExpense(CategoryExpense.FOOD)
+                .accountUserId(userId).dayOfMonth(dayOfMonth).accountAmount(16000.00).categoryExpense(CategoryExpense.FOOD)
                 .accountDate(LocalDate.parse("2019-12-03")).build();
     }
 

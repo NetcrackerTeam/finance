@@ -11,12 +11,13 @@ import static org.junit.Assert.assertEquals;
 
 public class AssertUtils {
     private static final Logger logger = Logger.getLogger(AssertUtils.class);
+    private static final double delta = 1E-15;
 
     public static void assertAutoOperationIncome(AutoOperationIncome expAO, AutoOperationIncome actualAO) {
         assertEquals(expAO.getId(), actualAO.getId());
         assertEquals(expAO.getUserId(), actualAO.getUserId());
         assertEquals(expAO.getCategoryIncome(), actualAO.getCategoryIncome());
-        assertEquals(expAO.getAmount(), actualAO.getAmount(), 2);
+        assertEquals(expAO.getAmount(), actualAO.getAmount(), delta);
         assertEquals(expAO.getDate(), actualAO.getDate());
         assertEquals(expAO.getDayOfMonth(), actualAO.getDayOfMonth());
     }
@@ -25,14 +26,14 @@ public class AssertUtils {
         assertEquals(expAO.getId(), actualAO.getId());
         assertEquals(expAO.getUserId(), actualAO.getUserId());
         assertEquals(expAO.getCategoryExpense(), actualAO.getCategoryExpense());
-        assertEquals(expAO.getAmount(), actualAO.getAmount(), 2);
+        assertEquals(expAO.getAmount(), actualAO.getAmount(), delta);
         assertEquals(expAO.getDate(), actualAO.getDate());
         assertEquals(expAO.getDayOfMonth(), actualAO.getDayOfMonth());
     }
 
     public static void assertCreditOperation(CreditOperation expCO, CreditOperation actualCO) {
         assertEquals(expCO.getCreditOperationId(), actualCO.getCreditOperationId());
-        assertEquals(expCO.getAmount(), actualCO.getAmount());
+        assertEquals(expCO.getAmount(), actualCO.getAmount(), delta);
         assertEquals(expCO.getDate(), actualCO.getDate());
     }
 
@@ -40,7 +41,7 @@ public class AssertUtils {
         assertEquals(expOperation.getId(), actualOperation.getId());
         assertEquals(expOperation.getUserId(), actualOperation.getUserId());
         assertEquals(expOperation.getCategoryIncome(), actualOperation.getCategoryIncome());
-        assertEquals(expOperation.getAmount(), actualOperation.getAmount(), 2);
+        assertEquals(expOperation.getAmount(), actualOperation.getAmount(), delta);
         assertEquals(expOperation.getDate(), actualOperation.getDate());
     }
 
@@ -48,7 +49,7 @@ public class AssertUtils {
         assertEquals(expOperation.getId(), actualOperation.getId());
         assertEquals(expOperation.getUserId(), actualOperation.getUserId());
         assertEquals(expOperation.getCategoryExpense(), actualOperation.getCategoryExpense());
-        assertEquals(expOperation.getAmount(), actualOperation.getAmount(), 2);
+        assertEquals(expOperation.getAmount(), actualOperation.getAmount(), delta);
         assertEquals(expOperation.getDate(), actualOperation.getDate());
     }
 

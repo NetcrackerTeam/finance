@@ -9,7 +9,7 @@ import java.sql.SQLException;
 public class CreditOperationMapper implements RowMapper<CreditOperation> {
     @Override
     public CreditOperation mapRow(ResultSet resultSet, int i) throws SQLException {
-        CreditOperation creditOperation = new CreditOperation(resultSet.getLong("amount"),
+        CreditOperation creditOperation = new CreditOperation(resultSet.getDouble("amount"),
                 resultSet.getDate("date_value").toLocalDate());
         creditOperation.setCreditOperationId(resultSet.getBigDecimal("operation_id").toBigInteger());
         return creditOperation;

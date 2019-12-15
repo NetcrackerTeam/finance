@@ -15,7 +15,7 @@ public class AutoOperationIncomeMapper implements RowMapper<AutoOperationIncome>
                 .accountId(resultSet.getBigDecimal("ao_object_id").toBigInteger())
                 .accountUserId(resultSet.getBigDecimal("user_id").toBigInteger())
                 .categoryIncome(CategoryIncome.getNameByKey(resultSet.getBigDecimal("category_id").toBigInteger()))
-                .accountAmount(resultSet.getLong("amount"))
+                .accountAmount(resultSet.getDouble("amount"))
                 .accountDate(resultSet.getDate("date_of_creation").toLocalDate())
                 .dayOfMonth(resultSet.getInt("day_of_month"))
                 .build();

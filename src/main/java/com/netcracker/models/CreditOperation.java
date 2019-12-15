@@ -5,10 +5,10 @@ import java.time.LocalDate;
 
 public class CreditOperation {
     private BigInteger creditOperationId;
-    private Long amount;
+    private double amount;
     private LocalDate date;
 
-    public CreditOperation(Long amount, LocalDate date) {
+    public CreditOperation(double amount, LocalDate date) {
         this.amount = amount;
         this.date = date;
     }
@@ -21,7 +21,7 @@ public class CreditOperation {
         this.creditOperationId = creditOperationId;
     }
 
-    public Long getAmount() {
+    public double getAmount() {
         return amount;
     }
 
