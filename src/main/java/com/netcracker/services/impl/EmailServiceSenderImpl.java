@@ -43,20 +43,29 @@ public class EmailServiceSenderImpl implements EmailServiceSender {
         this.mailSender = (JavaMailSender) mailSender;
     }
 
-    private String messageAboutDebt(BigInteger id, String userName, String debtName, double amount){
+    private void sendMail(String emailTo, String mess) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo("<" + emailTo + ">");
+        message.setFrom(mail);
+        message.setText(mess);
+        mailSender.send(message);
+    }
+
+    private String messageAboutDebt(String userName, String debtName, double amount, BigInteger id) {
         String debit = MessageFormat.format(templatesDao.sendMassageById(id), userName, debtName, amount);
         return debit;
     }
 
-    private String messageReminderCredit(BigInteger id, String userName, double amountPaid, String credName, LocalDate date){
+    private String messageReminderCredit(BigInteger id, String userName, double amountPaid, String credName, LocalDate date) {
         String credit = MessageFormat.format(templatesDao.sendMassageById(id), userName, amountPaid, credName, date);
         return credit;
     }
 
-    private String messageAutoInEx(BigInteger id,String userName, double amountPaid, String credName){
+    private String messageAutoInEx(BigInteger id, String userName, double amountPaid, String credName) {
         String autoInEx = MessageFormat.format(templatesDao.sendMassageById(id), userName, amountPaid, credName);
-        return  autoInEx;
+        return autoInEx;
     }
+
     @Override
     public void sendMailBeforeDeactivate(String emailTo, String userName, BigInteger userId) {
         ObjectsCheckUtils.isNotNull(emailTo, userName, userId);
@@ -79,22 +88,14 @@ public class EmailServiceSenderImpl implements EmailServiceSender {
     public void sendMailAboutPersonalDebt(String emailTo, String userName, String debtName, double amount, BigInteger userId) {
         ObjectsCheckUtils.isNotNull(emailTo, userName, debtName, userId);
 
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo("<" + emailTo + ">");
-        message.setFrom(mail);
-        message.setText(messageAboutDebt(BigInteger.valueOf(10), userName, debtName, amount));
-        mailSender.send(message);
+        sendMail(emailTo, messageAboutDebt(userName, debtName, amount, BigInteger.valueOf(10)));
     }
 
     @Override
     public void sendMailAboutFamilyDebt(String emailTo, String userName, String debtName, double amount, BigInteger userId) {
         ObjectsCheckUtils.isNotNull(emailTo, userName, debtName, userId);
 
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo("<" + emailTo + ">");
-        message.setFrom(mail);
-        message.setText(messageAboutDebt(BigInteger.valueOf(11), userName, debtName, amount));
-        mailSender.send(message);
+        sendMail(emailTo, messageAboutDebt(userName, debtName, amount, BigInteger.valueOf(11)));
     }
 
     @Override
@@ -117,67 +118,41 @@ public class EmailServiceSenderImpl implements EmailServiceSender {
     public void sendMailReminderPersonalCredit(String emailTo, String userName, double amountPaid, String credName, BigInteger userId, LocalDate date) {
         ObjectsCheckUtils.isNotNull(emailTo, userName, credName, userId, date);
 
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo("<" + emailTo + ">");
-        message.setFrom(mail);
-        message.setText(messageReminderCredit(BigInteger.valueOf(4), userName, amountPaid, credName, date));
-        mailSender.send(message);
+        sendMail(emailTo, messageReminderCredit(BigInteger.valueOf(4), userName, amountPaid, credName, date));
     }
 
     @Override
     public void sendMailReminderFamilyCredit(String emailTo, String userName, double amountPaid, String credName, BigInteger userId, LocalDate date) {
         ObjectsCheckUtils.isNotNull(emailTo, userName, credName, userId, date);
 
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo("<" + emailTo + ">");
-        message.setFrom(mail);
-        message.setText(messageReminderCredit(BigInteger.valueOf(5), userName, amountPaid, credName, date));
-        mailSender.send(message);
+        sendMail(emailTo, messageReminderCredit(BigInteger.valueOf(5), userName, amountPaid, credName, date));
     }
 
     @Override
     public void sendMailAutoPersonalExpense(String emailTo, String userName, double amountPaid, String credName, BigInteger userId) {
         ObjectsCheckUtils.isNotNull(emailTo, userName, credName, userId);
 
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo("<" + emailTo + ">");
-        message.setFrom(mail);
-        message.setText(messageAutoInEx(BigInteger.valueOf(6), userName, amountPaid, credName));
-        mailSender.send(message);
+        sendMail(emailTo, messageAutoInEx(BigInteger.valueOf(6), userName, amountPaid, credName));
     }
 
     @Override
     public void sendMailAutoPersonalIncome(String emailTo, String userName, double amountPaid, String credName, BigInteger userId) {
         ObjectsCheckUtils.isNotNull(emailTo, userName, credName, userId);
 
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo("<" + emailTo + ">");
-        message.setFrom(mail);
-        message.setText(messageAutoInEx(BigInteger.valueOf(7), userName, amountPaid, credName));
-        mailSender.send(message);
+        sendMail(emailTo, messageAutoInEx(BigInteger.valueOf(7), userName, amountPaid, credName));
     }
 
     @Override
     public void sendMailAutoFamilyExpense(String emailTo, String userName, double amountPaid, String credName, BigInteger userId) {
         ObjectsCheckUtils.isNotNull(emailTo, userName, credName, userId);
 
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo("<" + emailTo + ">");
-        message.setFrom(mail);
-        message.setText(messageAutoInEx(BigInteger.valueOf(8), userName, amountPaid, credName));
-        mailSender.send(message);
+        sendMail(emailTo, messageAutoInEx(BigInteger.valueOf(8), userName, amountPaid, credName));
     }
 
     @Override
     public void sendMailAutoFamilyIncome(String emailTo, String userName, double amountPaid, String credName, BigInteger userId) {
         ObjectsCheckUtils.isNotNull(emailTo, userName, credName, userId);
 
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo("<" + emailTo + ">");
-        message.setFrom(mail);
-        message.setText(messageAutoInEx(BigInteger.valueOf(5), userName, amountPaid, credName));
-        mailSender.send(message);
+        sendMail(emailTo, messageAutoInEx(BigInteger.valueOf(5), userName, amountPaid, credName));
     }
-
-
 }
