@@ -103,8 +103,6 @@ public class FamilyDebitServiceImpl implements FamilyDebitService {
     @Override
     public List<AbstractAccountOperation> getHistory(BigInteger familyAccountId, LocalDate date) {
         logger.debug("Entering select(getHistory=" + familyAccountId + " " + date + ")");
-        ObjectsCheckUtils.isNotNull(familyAccountId, date);
-        logger.debug("Entering select success(getHistory=" + familyAccountId + " " + date + ")");
         return operationService.getAllFamilyOperations(familyAccountId, date);
     }
 
