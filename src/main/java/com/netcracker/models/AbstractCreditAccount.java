@@ -6,21 +6,23 @@ import java.math.BigInteger;
 import java.time.LocalDate;
 
 public abstract class AbstractCreditAccount {
-    private BigInteger creditId ;
+    private BigInteger creditId;
     private String name;
-    private Long amount;
-    private Long paidAmount;
+    private double amount;
+    private double paidAmount;
     private LocalDate date;
-    private Long creditRate;
+    private double creditRate;
     private LocalDate dateTo;
     private int monthDay;
     private Debt debt;
     private CreditStatusPaid isPaid;
 
-    protected static abstract class BaseBuilder <T extends AbstractCreditAccount, B extends BaseBuilder> {
+    protected static abstract class BaseBuilder<T extends AbstractCreditAccount, B extends BaseBuilder> {
         protected T actualClass;
         protected B actualClassBuilder;
+
         protected abstract T getActual();
+
         protected abstract B getActualBuilder();
 
         protected BaseBuilder() {
@@ -38,12 +40,12 @@ public abstract class AbstractCreditAccount {
             return actualClassBuilder;
         }
 
-        public B amount(Long amount) {
+        public B amount(double amount) {
             actualClass.setAmount(amount);
             return actualClassBuilder;
         }
 
-        public B paidAmount(Long paidAmount) {
+        public B paidAmount(double paidAmount) {
             actualClass.setPaidAmount(paidAmount);
             return actualClassBuilder;
         }
@@ -53,7 +55,7 @@ public abstract class AbstractCreditAccount {
             return actualClassBuilder;
         }
 
-        public B creditRate(Long creditRate) {
+        public B creditRate(double creditRate) {
             actualClass.setCreditRate(creditRate);
             return actualClassBuilder;
         }
@@ -67,6 +69,7 @@ public abstract class AbstractCreditAccount {
             actualClass.setMonthDay(monthDay);
             return actualClassBuilder;
         }
+
         public B debtCredit(Debt debt) {
             actualClass.setDebt(debt);
             return actualClassBuilder;
@@ -90,11 +93,11 @@ public abstract class AbstractCreditAccount {
         this.creditId = creditId;
     }
 
-    protected void setAmount(Long amount) {
+    protected void setAmount(double amount) {
         this.amount = amount;
     }
 
-    protected void setPaidAmount(Long paidAmount) {
+    protected void setPaidAmount(double paidAmount) {
         this.paidAmount = paidAmount;
     }
 
@@ -102,7 +105,7 @@ public abstract class AbstractCreditAccount {
         this.date = date;
     }
 
-    protected void setCreditRate(Long creditRate) {
+    protected void setCreditRate(double creditRate) {
         this.creditRate = creditRate;
     }
 
@@ -114,13 +117,17 @@ public abstract class AbstractCreditAccount {
         this.monthDay = monthDay;
     }
 
-    protected void setPaid (CreditStatusPaid isPaid) {
+    protected void setPaid(CreditStatusPaid isPaid) {
         this.isPaid = isPaid;
     }
 
-    public Debt getDebt() { return debt; }
+    public Debt getDebt() {
+        return debt;
+    }
 
-    public void setDebt(Debt debt) { this.debt = debt; }
+    public void setDebt(Debt debt) {
+        this.debt = debt;
+    }
 
     public BigInteger getCreditId() {
         return creditId;
@@ -130,11 +137,11 @@ public abstract class AbstractCreditAccount {
         return name;
     }
 
-    public Long getAmount() {
+    public double getAmount() {
         return amount;
     }
 
-    public Long getPaidAmount() {
+    public double getPaidAmount() {
         return paidAmount;
     }
 
@@ -142,7 +149,7 @@ public abstract class AbstractCreditAccount {
         return date;
     }
 
-    public Long getCreditRate() {
+    public double getCreditRate() {
         return creditRate;
     }
 

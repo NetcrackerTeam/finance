@@ -102,7 +102,7 @@ public class EmailServiceSenderImpl implements EmailServiceSender {
     }
 
     @Override
-    public void sendMailReminderPersonalCredit(String emailTo, String userName, Long amountPaid, String credName, BigInteger userId, LocalDate date) {
+    public void sendMailReminderPersonalCredit(String emailTo, String userName, double amountPaid, String credName, BigInteger userId, LocalDate date) {
         ObjectsCheckUtils.isNotNull(emailTo, userName, credName, userId, date);
 
         SimpleMailMessage message = new SimpleMailMessage();
@@ -114,7 +114,7 @@ public class EmailServiceSenderImpl implements EmailServiceSender {
     }
 
     @Override
-    public void sendMailReminderFamilyCredit(String emailTo, String userName, Long amountPaid, String credName, BigInteger userId, LocalDate date) {
+    public void sendMailReminderFamilyCredit(String emailTo, String userName, double amountPaid, String credName, BigInteger userId, LocalDate date) {
         ObjectsCheckUtils.isNotNull(emailTo, userName, credName, userId, date);
 
         SimpleMailMessage message = new SimpleMailMessage();

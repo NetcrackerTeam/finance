@@ -49,7 +49,7 @@ public interface CreditAccountDao {
      * @param id     personal credit account id
      * @param amount new payed amount
      */
-    void updatePersonalCreditPayment(BigInteger id, long amount);
+    void updatePersonalCreditPayment(BigInteger id, double amount);
 
     /**
      * Change family credit payed money to new value.
@@ -57,7 +57,7 @@ public interface CreditAccountDao {
      * @param id     family credit account id
      * @param amount new payed amount
      */
-    void updateFamilyCreditPayment(BigInteger id, long amount);
+    void updateFamilyCreditPayment(BigInteger id, double amount);
 
     /**
      * Create new personal credit account to existing personal

@@ -13,14 +13,15 @@ public final class CreditUtils {
         throw new UnsupportedOperationException();
     }
 
-    public static long calculateMonthPayment(LocalDate dateFrom, LocalDate dateTo, long amount, long rate) {
-        long oneMonthRate = rate / MONTH_IN_YEAR;
-        long allowance = (amount / PERCENT_CALC) * oneMonthRate;
-        long paymentWithoutRate = amount / getMonthAmountBetweenDates(dateFrom, dateTo);
-        return paymentWithoutRate + allowance;
+    public static double calculateMonthPayment(LocalDate dateFrom, LocalDate dateTo, double amount, double rate) {
+        double oneMonthRate = rate / MONTH_IN_YEAR;
+        double allowance = (amount / PERCENT_CALC) * oneMonthRate;
+        double paymentWithoutRate = amount / getMonthAmountBetweenDates(dateFrom, dateTo);
+        double result = paymentWithoutRate + allowance;
+        return Math.round(result * 100.0) / 100.0;
     }
 
-    public static long getTotalCreditPayment(LocalDate dateFrom, LocalDate dateTo, long amount, long rate) {
+    public static double getTotalCreditPayment(LocalDate dateFrom, LocalDate dateTo, double amount, double rate) {
         return getMonthAmountBetweenDates(dateFrom, dateTo) * calculateMonthPayment(dateFrom, dateTo, amount, rate);
     }
 

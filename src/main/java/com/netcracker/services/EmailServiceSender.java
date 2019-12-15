@@ -15,9 +15,9 @@ public interface EmailServiceSender {
 
     public void monthReport(String emailTo, BigInteger userId) throws MessagingException;
 
-    public void sendMailReminderPersonalCredit(String emailTo, String userName, Long amountPaid, String credName, BigInteger userId, LocalDate date);
+    public void sendMailReminderPersonalCredit(String emailTo, String userName, double amountPaid, String credName, BigInteger userId, LocalDate date);
 
-    public void sendMailReminderFamilyCredit(String emailTo, String userName, Long amountPaid, String credName, BigInteger userId, LocalDate date);
+    public void sendMailReminderFamilyCredit(String emailTo, String userName, double amountPaid, String credName, BigInteger userId, LocalDate date);
 
     public void sendMailAutoPersonalExpense(String emailTo, String userName, Long amountPaid, String credName, BigInteger userId);
 

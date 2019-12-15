@@ -77,7 +77,7 @@ public interface CreditDeptDao {
      * @param id     debt id
      * @param amount new debt amount
      */
-    void updatePersonalDebtAmount(BigInteger id, long amount);
+    void updatePersonalDebtAmount(BigInteger id, double amount);
 
     /**
      * Change debt total amount of family credit.
@@ -85,7 +85,7 @@ public interface CreditDeptDao {
      * @param id     debt id
      * @param amount new debt amount
      */
-    void updateFamilyDebtAmount(BigInteger id, long amount);
+    void updateFamilyDebtAmount(BigInteger id, double amount);
 
     String SELECT_PERSONAL_DEBT_BY_CREDIT_ID_QUERY = "SELECT DEBT_DATE_FROM_AT.DATE_VALUE DEBT_FROM, DEBT_DATE_TO_AT.DATE_VALUE DEBT_TO,\n" +
             " DEBT_AMOUNT_AT.VALUE DEBT_AMOUNT, DEBT.OBJECT_ID DEBT_ID\n" +

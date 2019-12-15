@@ -47,12 +47,12 @@ public class CreditAccountDaoImpl implements CreditAccountDao {
     }
 
     @Override
-    public void updatePersonalCreditPayment(BigInteger id, long amount) {
+    public void updatePersonalCreditPayment(BigInteger id, double amount) {
         addCreditPayment(id, amount);
     }
 
     @Override
-    public void updateFamilyCreditPayment(BigInteger id, long amount) {
+    public void updateFamilyCreditPayment(BigInteger id, double amount) {
         addCreditPayment(id, amount);
     }
 
@@ -93,7 +93,7 @@ public class CreditAccountDaoImpl implements CreditAccountDao {
         jdbcTemplate.update(queryDebt, accountId);
     }
 
-    private void addCreditPayment(BigInteger id, long amount) {
+    private void addCreditPayment(BigInteger id, double amount) {
         jdbcTemplate.update(UPDATE_CREDIT_PAYMENT_QUERY, amount, id);
     }
 

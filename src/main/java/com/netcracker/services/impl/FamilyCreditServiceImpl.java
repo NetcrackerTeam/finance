@@ -154,7 +154,7 @@ public class FamilyCreditServiceImpl implements FamilyCreditService {
         creditDeptDao.updatePersonalDebtDateFrom(id, DateUtils.localDateToDate(date));
     }
 
-    private void changeDebtAmount(BigInteger id, long amount) {
+    private void changeDebtAmount(BigInteger id, double amount) {
         creditDeptDao.updatePersonalDebtAmount(id, amount);
     }
 
@@ -162,9 +162,9 @@ public class FamilyCreditServiceImpl implements FamilyCreditService {
         long actualDebitAmount = debitAccount.getAmount();
         debitAccountDao.updateAmountOfFamilyAccount(debitAccount.getId(), actualDebitAmount - amount);
         creditOperationDao.createFamilyCreditOperation(amount, LocalDate.now(), creditAccount.getCreditId(), idUser);
-        long updatedAmount = creditAccount.getPaidAmount() + amount;
+        double updatedAmount = creditAccount.getPaidAmount() + amount;
         creditAccountDao.updateFamilyCreditPayment(creditAccount.getCreditId(), updatedAmount);
-        long monthPayment = getTotalCreditPayment(creditAccount.getDate(), creditAccount.getDateTo(),
+        double monthPayment = getTotalCreditPayment(creditAccount.getDate(), creditAccount.getDateTo(),
                 creditAccount.getAmount(), creditAccount.getCreditRate());
         if (monthPayment == updatedAmount) {
             creditAccountDao.updateIsPaidStatusFamilyCredit(creditAccount.getCreditId(), CreditStatusPaid.YES);

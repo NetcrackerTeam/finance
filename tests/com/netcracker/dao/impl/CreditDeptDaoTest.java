@@ -125,22 +125,22 @@ public class CreditDeptDaoTest {
     @Test
     public void updatePersonalDebtAmountTest() {
         BigInteger accId = personalDebtOne.getDebtId();
-        long newAmount = personalDebtOne.getAmountDebt();
+        double newAmount = personalDebtOne.getAmountDebt();
 
         creditDeptDao.updatePersonalDebtAmount(accId, newAmount);
 
-        assertEquals(personalDebtOne.getAmountDebt(), creditDeptDao.getPersonalDebtById(accId).getAmountDebt());
+        assertEquals(personalDebtOne.getAmountDebt(), creditDeptDao.getPersonalDebtById(accId).getAmountDebt(), 2);
     }
 
     @Rollback
     @Test
     public void updateFamilyDebtAmountTest() {
         BigInteger accId = familyDebtOne.getDebtId();
-        long newAmount = familyDebtOne.getAmountDebt();
+        double newAmount = familyDebtOne.getAmountDebt();
 
         creditDeptDao.updateFamilyDebtAmount(accId, newAmount);
 
-        assertEquals(familyDebtOne.getAmountDebt(), creditDeptDao.getFamilyDebtById(accId).getAmountDebt());
+        assertEquals(familyDebtOne.getAmountDebt(), creditDeptDao.getFamilyDebtById(accId).getAmountDebt(), 2);
 
     }
 
@@ -174,6 +174,6 @@ public class CreditDeptDaoTest {
         assertEquals(debtOne.getDebtId(), debtTwo.getDebtId());
         assertEquals(debtOne.getDateFrom(), debtTwo.getDateFrom());
         assertEquals(debtOne.getDateTo(), debtTwo.getDateTo());
-        assertEquals(debtOne.getAmountDebt(), debtTwo.getAmountDebt());
+        assertEquals(debtOne.getAmountDebt(), debtTwo.getAmountDebt(), 2);
     }
 }

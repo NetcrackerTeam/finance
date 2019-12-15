@@ -8,7 +8,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cglib.core.Local;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -16,11 +15,9 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigInteger;
-import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
 
@@ -147,7 +144,7 @@ public class CreditAccountDaoTest {
     @Rollback
     @Test
     public void updatePersonalCreditPaymentTest() {
-        long newAmount = personalCreditAccountOne.getPaidAmount();
+        double newAmount = personalCreditAccountOne.getPaidAmount();
         BigInteger accId = personalCreditAccountOne.getCreditId();
 
         creditAccountDao.updatePersonalCreditPayment(accId, newAmount);
@@ -158,7 +155,7 @@ public class CreditAccountDaoTest {
     @Rollback
     @Test
     public void updateFamilyCreditPayment() {
-        long newAmount = familyCreditAccountOne.getPaidAmount();
+        double newAmount = familyCreditAccountOne.getPaidAmount();
         BigInteger accId = familyCreditAccountOne.getCreditId();
 
         creditAccountDao.updateFamilyCreditPayment(accId, newAmount);
