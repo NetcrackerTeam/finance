@@ -6,6 +6,7 @@ import com.netcracker.models.AbstractAccountOperation;
 import com.netcracker.models.AccountExpense;
 import com.netcracker.models.AccountIncome;
 import com.netcracker.models.PersonalDebitAccount;
+import com.netcracker.services.OperationService;
 import com.netcracker.services.PersonalDebitService;
 import com.netcracker.services.utils.ObjectsCheckUtils;
 import org.apache.log4j.Logger;
@@ -16,6 +17,7 @@ import java.math.BigInteger;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 @Service
 public class PersonalDebitServiceImpl implements PersonalDebitService {
@@ -23,7 +25,7 @@ public class PersonalDebitServiceImpl implements PersonalDebitService {
     @Autowired
     private PersonalDebitAccountDao personalDebitAccountDao;
     @Autowired
-    private OperationDao operationDao;
+    private OperationService operationService;
 
     private static final Logger logger = Logger.getLogger(PersonalDebitServiceImpl.class);
 
@@ -48,16 +50,9 @@ public class PersonalDebitServiceImpl implements PersonalDebitService {
     }
 
 
-    @Override
-    public Collection<AbstractAccountOperation> getHistory(BigInteger personalAccountId, LocalDate date) {
-        logger.debug("Entering select(getHistory=" + personalAccountId + " " + date + ")");
-        ObjectsCheckUtils.isNotNull(personalAccountId, date);
-        Collection<AbstractAccountOperation> trans = new ArrayList<>();
-        Collection<AccountIncome> incomes = operationDao.getIncomesPersonalAfterDateByAccountId(personalAccountId, date);
-        Collection<AccountExpense> expenses = operationDao.getExpensesPersonalAfterDateByAccountId(personalAccountId, date);
-        trans.addAll(incomes);
-        trans.addAll(expenses);
-        logger.debug("Entering select success(getHistory=" + personalAccountId + " " + date + ")");
-        return trans;
+    public List<AbstractAccountOperation> getHistory(BigInteger accountId, LocalDate date) {
+        logger.debug("Entering select(getHistory=" + accountId + " date :" + date + ")");
+        return operationService.getAllPersonalOperations(accountId, date);
     }
+
 }
