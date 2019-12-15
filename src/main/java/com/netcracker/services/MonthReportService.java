@@ -32,5 +32,7 @@ public interface MonthReportService {
     String TAB_AND_LINE = " \t|\n";
     String DOUBLE_DOTS = ": ";
     String SPACE = " ";
+    String UNDERLINE = "_";
+    String TXT_FORMAT = ".txt";
 
 }

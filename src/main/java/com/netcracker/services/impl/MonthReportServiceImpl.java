@@ -64,14 +64,12 @@ public class MonthReportServiceImpl implements MonthReportService {
         BigInteger idOfRecentMonth = monthReportDao.getMonthReportByFamilyAccountId(id, date,
                 dateTo).getId();
 
-        for (CategoryExpenseReport i : expenseReports) {
-            monthReportDao.createCategoryExpenseFamilyReport(idOfRecentMonth, i.getUserReference(), i);
-        }
-
-        for (CategoryIncomeReport i : incomeReports) {
-            monthReportDao.createCategoryIncomeFamilyReport(idOfRecentMonth, i.getUserReference(), i);
-        }
-
+        expenseReports.forEach(exp -> {
+            monthReportDao.createCategoryExpenseFamilyReport(idOfRecentMonth, exp.getUserReference(), exp);
+        });
+        incomeReports.forEach(inc -> {
+            monthReportDao.createCategoryIncomeFamilyReport(idOfRecentMonth, inc.getUserReference(), inc);
+        });
     }
 
     @Override
@@ -125,7 +123,7 @@ public class MonthReportServiceImpl implements MonthReportService {
             throw new MonthReportException("Incorrect month report");
         }
 
-        Path path = Paths.get("report.txt");
+        Path path = Paths.get(monthReport.getDateFrom() + UNDERLINE + monthReport.getDateTo() + TXT_FORMAT);
 
         try (BufferedWriter writer = Files.newBufferedWriter(path)) {
             writer.write(MONTH_REPORT_FROM + monthReport.getDateFrom());
@@ -135,13 +133,13 @@ public class MonthReportServiceImpl implements MonthReportService {
             writer.write(TOTAL_EXPENSE + monthReport.getTotalExpense() + TAB_AND_LINE);
             writer.write(TOTAL_INCOME + monthReport.getTotalIncome() + TAB_AND_LINE);
 
-            writer.write(EXPENSES_BY_CATEGORIES);
+            writer.write(NEW_LINE + EXPENSES_BY_CATEGORIES);
             writer.write(DOTTED_LINE);
             for (CategoryExpenseReport exp :
                     monthReport.getCategoryExpense()) {
 
                 String name = userDao.getUserById(exp.getUserReference()).getName();
-                if(name != null) {
+                if (name != null) {
                     writer.write(name + SPACE);
                 }
                 writer.write(exp.getCategoryExpense().toString() + DOUBLE_DOTS + exp.getAmount() + NEW_LINE);
@@ -152,7 +150,7 @@ public class MonthReportServiceImpl implements MonthReportService {
             for (CategoryIncomeReport inc :
                     monthReport.getCategoryIncome()) {
                 String name = userDao.getUserById(inc.getUserReference()).getName();
-                if(name != null) {
+                if (name != null) {
                     writer.write(name + SPACE);
                 }
                 writer.write(inc.getCategoryIncome().toString() + DOUBLE_DOTS + inc.getAmount() + NEW_LINE);
