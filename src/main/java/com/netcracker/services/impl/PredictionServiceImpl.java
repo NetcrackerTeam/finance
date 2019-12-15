@@ -4,6 +4,7 @@ import com.netcracker.dao.MonthReportDao;
 import com.netcracker.exception.PredictionException;
 import com.netcracker.models.MonthReport;
 import com.netcracker.services.PredictionService;
+import com.netcracker.services.utils.DateUtils;
 import com.netcracker.services.utils.ExceptionMessages;
 import com.netcracker.services.utils.ObjectsCheckUtils;
 import org.apache.log4j.Logger;
@@ -102,8 +103,6 @@ public class PredictionServiceImpl implements PredictionService {
         LocalDate dateFrom = LocalDate.of(LocalDate.now().getYear(), LocalDate.now().getMonth().getValue() - 1, 1);
         LocalDate dateTo = LocalDate.of(LocalDate.now().getYear(), LocalDate.now().getMonth().getValue(), 1);
 
-        int monthReports = 6;
-
 
         for (int i = 0; i < monthReports; i++) {
             MonthReport reportTest = monthReportDao.getMonthReportByPersonalAccountId(id, dateFrom, dateTo);
@@ -112,6 +111,8 @@ public class PredictionServiceImpl implements PredictionService {
                 throw new PredictionException(ExceptionMessages.ERROR_MESSAGE_PREDICTION);
             }
             reports.add(reportTest);
+            dateFrom = DateUtils.addMonthsToDate(dateFrom, -1);
+            dateTo = DateUtils.addMonthsToDate(dateTo, -1);
         }
         return reports;
     }
@@ -123,8 +124,6 @@ public class PredictionServiceImpl implements PredictionService {
         LocalDate dateFrom = LocalDate.of(LocalDate.now().getYear(), LocalDate.now().getMonth().getValue() - 1, 1);
         LocalDate dateTo = LocalDate.of(LocalDate.now().getYear(), LocalDate.now().getMonth().getValue(), 1);
 
-        int monthReports = 6;
-
         for (int i = 0; i < monthReports; i++) {
             MonthReport reportTest = monthReportDao.getMonthReportByFamilyAccountId(id, dateFrom, dateTo);
             if (reportTest == null) {
@@ -132,6 +131,8 @@ public class PredictionServiceImpl implements PredictionService {
                 throw new PredictionException(ExceptionMessages.ERROR_MESSAGE_PREDICTION);
             }
             reports.add(reportTest);
+            dateFrom = DateUtils.addMonthsToDate(dateFrom, -1);
+            dateTo = DateUtils.addMonthsToDate(dateTo, -1);
         }
         return reports;
     }
