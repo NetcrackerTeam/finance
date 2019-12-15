@@ -2,13 +2,17 @@ package com.netcracker.dao.impl;
 
 import com.netcracker.dao.UserDao;
 import com.netcracker.dao.impl.mapper.UserDaoMapper;
+import com.netcracker.exception.UserException;
 import com.netcracker.models.User;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+
 import javax.sql.DataSource;
 import java.math.BigInteger;
+
 @Repository
 public class UserDaoImpl implements UserDao {
 
@@ -40,16 +44,28 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public User getUserById(BigInteger id) {
-        logger.debug("Entering getUserByUserId(" + id + ")");
-        return template.queryForObject(GET_USER_BY_USER_ID, new Object[]{id},
-                new UserDaoMapper());
+        try {
+            logger.debug("Entering getUserByUserId(" + id + ")");
+            return template.queryForObject(GET_USER_BY_USER_ID, new Object[]{id},
+                    new UserDaoMapper());
+        } catch (
+                EmptyResultDataAccessException EmptyResultDataAccessException) {
+            throw new UserException(UserException.ERROR_MESSAGE_USER);
+        }
+
     }
 
     @Override
     public User getUserByEmail(String login) {
-        logger.debug("Entering getUserByUserLogin(login=" + login + ")");
-        return template.queryForObject(GET_USER_BY_LOGIN, new Object[]{login},
-                new UserDaoMapper());
+        try {
+            logger.debug("Entering getUserByUserLogin(login=" + login + ")");
+            return template.queryForObject(GET_USER_BY_LOGIN, new Object[]{login},
+                    new UserDaoMapper());
+        } catch (
+                EmptyResultDataAccessException EmptyResultDataAccessException) {
+            throw new UserException(UserException.ERROR_MESSAGE_USER);
+        }
+
     }
 
     @Override
@@ -57,7 +73,7 @@ public class UserDaoImpl implements UserDao {
         logger.debug(
                 "Entering updatePassword(id=" + id + "," + " password=" + newPassword
                         + ")");
-        template.update(UPDATE_PASSWORD, newPassword,  (id));
+        template.update(UPDATE_PASSWORD, newPassword, (id));
     }
 
 

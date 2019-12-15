@@ -1,14 +1,11 @@
 package com.netcracker.services.impl;
 
 import com.netcracker.dao.UserDao;
-import com.netcracker.exception.UserException;
 import com.netcracker.models.User;
 import com.netcracker.models.enums.UserStatusActive;
 import com.netcracker.services.UserService;
-import com.netcracker.services.utils.ExceptionMessages;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
@@ -45,11 +42,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUserById(BigInteger userId) {
-        try {
-            User userTemp = userDao.getUserById(userId);
-            return userTemp;
-        } catch (EmptyResultDataAccessException EmptyResultDataAccessException) {
-            throw new UserException(ExceptionMessages.ERROR_MESSAGE_USER);
-        }
+       return  userDao.getUserById(userId);
     }
 }
