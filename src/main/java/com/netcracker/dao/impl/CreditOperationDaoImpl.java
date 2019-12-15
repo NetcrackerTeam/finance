@@ -10,8 +10,9 @@ import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
 import java.math.BigInteger;
+import java.sql.Date;
 import java.time.LocalDate;
-import java.util.Collection;
+import java.util.List;
 
 @Repository
 public class CreditOperationDaoImpl implements CreditOperationDao {
@@ -33,31 +34,35 @@ public class CreditOperationDaoImpl implements CreditOperationDao {
     }
 
     @Override
-    public void createFamilyCreditOperation(long amount, LocalDate date, BigInteger creditFamilyAccountId,
-                                            BigInteger userId) {
+    public CreditOperation createFamilyCreditOperation(long amount, LocalDate date, BigInteger creditFamilyAccountId,
+                                                       BigInteger userId) {
         BigInteger objectId = ObjectsCreator.createObject(family_object_type_id_1, family_name_2,
                 jdbcTemplate, CREATE_OBJECT_CREDIT_OPERATION);
 
-        jdbcTemplate.update(CREATE_CREDIT_OPERATION_FAMILY, objectId, amount, objectId, date, objectId,
+        jdbcTemplate.update(CREATE_CREDIT_OPERATION_FAMILY, objectId, amount, objectId, Date.valueOf(date), objectId,
                 creditFamilyAccountId, objectId, userId);
+
+        return getCreditOperationFamily(objectId);
     }
 
     @Override
-    public void createPersonalCreditOperation(long amount, LocalDate date, BigInteger creditPersonalAccountId) {
+    public CreditOperation createPersonalCreditOperation(long amount, LocalDate date, BigInteger creditPersonalAccountId) {
         BigInteger objectId = ObjectsCreator.createObject(personal_object_type_id_1, personal_name_2,
                 jdbcTemplate, CREATE_OBJECT_CREDIT_OPERATION);
 
-        jdbcTemplate.update(CREATE_CREDIT_OPERATION_PERSONAL, objectId, amount, objectId, date, objectId,
+        jdbcTemplate.update(CREATE_CREDIT_OPERATION_PERSONAL, objectId, amount, objectId, Date.valueOf(date), objectId,
                 creditPersonalAccountId);
+
+        return getCreditOperationPersonal(objectId);
     }
 
     @Override
-    public Collection<CreditOperation> getAllCreditOperationsByCreditFamilyId(BigInteger creditFamilyAccountId) {
+    public List<CreditOperation> getAllCreditOperationsByCreditFamilyId(BigInteger creditFamilyAccountId) {
         return jdbcTemplate.query(GET_ALL_CREDIT_OPERATIONS_FAMILY, new Object[]{creditFamilyAccountId}, new CreditOperationMapper());
     }
 
     @Override
-    public Collection<CreditOperation> getAllCreditOperationsByCreditPersonalId(BigInteger creditPersonalAccountId) {
+    public List<CreditOperation> getAllCreditOperationsByCreditPersonalId(BigInteger creditPersonalAccountId) {
         return jdbcTemplate.query(GET_ALL_CREDIT_OPERATIONS_PERSONAL, new Object[]{creditPersonalAccountId}, new CreditOperationMapper());
     }
 

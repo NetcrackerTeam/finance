@@ -9,7 +9,7 @@ import com.netcracker.models.enums.CategoryIncome;
 
 import java.math.BigInteger;
 import java.time.LocalDate;
-import java.util.Collection;
+import java.util.List;
 
 public interface OperationDao {
 
@@ -21,21 +21,21 @@ public interface OperationDao {
 
     void createExpenseFamilyByAccId(BigInteger idUser, BigInteger idFamily, long expense, LocalDate date, CategoryExpense categoryExpense);
 
-    Collection<AccountIncome> getIncomesPersonalAfterDateByAccountId(BigInteger id, LocalDate date);
+    List<AccountIncome> getIncomesPersonalAfterDateByAccountId(BigInteger id, LocalDate date);
 
-    Collection<AccountExpense> getExpensesPersonalAfterDateByAccountId(BigInteger id, LocalDate date);
+    List<AccountExpense> getExpensesPersonalAfterDateByAccountId(BigInteger id, LocalDate date);
 
-    Collection<AccountIncome> getIncomesFamilyAfterDateByAccountId(BigInteger id, LocalDate data);
+    List<AccountIncome> getIncomesFamilyAfterDateByAccountId(BigInteger id, LocalDate data);
 
-    Collection<AccountExpense> getExpensesFamilyAfterDateByAccountId(BigInteger id, LocalDate data);
+    List<AccountExpense> getExpensesFamilyAfterDateByAccountId(BigInteger id, LocalDate data);
 
-    Collection<CategoryExpenseReport> getExpensesPersonalGroupByCategories(BigInteger id, LocalDate date);
+    List<CategoryExpenseReport> getExpensesPersonalGroupByCategories(BigInteger id, LocalDate date);
 
-    Collection<CategoryIncomeReport> getIncomesPersonalGroupByCategories(BigInteger id, LocalDate date);
+    List<CategoryIncomeReport> getIncomesPersonalGroupByCategories(BigInteger id, LocalDate date);
 
-    Collection<CategoryExpenseReport> getExpensesFamilyGroupByCategories(BigInteger id, LocalDate date);
+    List<CategoryExpenseReport> getExpensesFamilyGroupByCategories(BigInteger id, LocalDate date);
 
-    Collection<CategoryIncomeReport> getIncomesFamilyGroupByCategories(BigInteger id, LocalDate date);
+    List<CategoryIncomeReport> getIncomesFamilyGroupByCategories(BigInteger id, LocalDate date);
 
     String ADD_INCOME_PERSONAL_BY_ACCOUNT_ID = "INSERT ALL" +
             " INTO OBJECTS (OBJECT_ID,PARENT_ID,OBJECT_TYPE_ID,NAME,DESCRIPTION) VALUES (objects_id_s.nextval,NULL,10,'ACC_INC_PER1','account income personal1')" +

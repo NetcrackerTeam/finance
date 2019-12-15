@@ -3,7 +3,6 @@ package com.netcracker.services.impl;
 import com.netcracker.AssertUtils;
 import com.netcracker.configs.WebConfig;
 import com.netcracker.dao.OperationDao;
-import com.netcracker.exception.OperationException;
 import com.netcracker.models.AbstractAccountOperation;
 import com.netcracker.models.AccountExpense;
 import com.netcracker.models.AccountIncome;
@@ -19,9 +18,9 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import java.math.BigInteger;
-import java.text.ParseException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
@@ -46,6 +45,7 @@ public class OperationServiceTest {
     private BigInteger debitIdFamily = BigInteger.valueOf(3);
     private BigInteger debitIdPersonal = BigInteger.valueOf(2);
     private BigInteger currentId = BigInteger.valueOf(97);
+    private BigInteger nonexistentId = BigInteger.valueOf(1001);
 
     private AccountIncome personalIncomeExpected;
     private AccountExpense personalExpenseExpected;
@@ -53,9 +53,6 @@ public class OperationServiceTest {
     private AccountExpense familyExpenseExpected;
 
     private List<AbstractAccountOperation> expectedList = new ArrayList<>();
-
-    public OperationServiceTest() throws ParseException {
-    }
 
     @Before
     public void setUp() {
@@ -77,11 +74,8 @@ public class OperationServiceTest {
                 .accountAmount(2000L).accountDate(dateExpense).categoryExpense(CategoryExpense.FOOD).build();
     }
 
-    @Test(expected = OperationException.class)
+    @Test
     public void getAllFamilyOperations() {
-        operationService.getAllFamilyOperations(null, null);
-        operationService.getAllFamilyOperations(BigInteger.valueOf(0), null);
-
         expectedList.add(familyIncomeExpected);
         expectedList.add(familyExpenseExpected);
 
@@ -89,11 +83,19 @@ public class OperationServiceTest {
         AssertUtils.assertOperationsCollections(expectedList, actualList);
     }
 
-    @Test(expected = OperationException.class)
-    public void getAllPersonalOperations() {
-        operationService.getAllPersonalOperations(null, null);
-        operationService.getAllPersonalOperations(BigInteger.valueOf(0), null);
+    @Test(expected = RuntimeException.class)
+    public void getAllFamilyOperationsCheckNull() {
+        operationService.getAllFamilyOperations(null, null);
+    }
 
+    @Test
+    public void getAllFamilyOperationsEmptyList() {
+        List<AbstractAccountOperation> actualList = new ArrayList<>(operationService.getAllFamilyOperations(nonexistentId, date));
+        AssertUtils.assertOperationsCollections(Collections.emptyList(), actualList);
+    }
+
+    @Test
+    public void getAllPersonalOperations() {
         expectedList.add(personalIncomeExpected);
         expectedList.add(personalExpenseExpected);
 
@@ -101,70 +103,87 @@ public class OperationServiceTest {
         AssertUtils.assertOperationsCollections(expectedList, actualList);
     }
 
-    @Rollback
-    @Test(expected = OperationException.class)
-    public void createFamilyOperationIncome() {
-        operationService.createFamilyOperationIncome(null, null, 0, null, null);
-        operationService.createFamilyOperationIncome(BigInteger.valueOf(0), BigInteger.valueOf(0), 0, null,
-                CategoryIncome.DEFAULT);
+    @Test(expected = RuntimeException.class)
+    public void getAllPersonalOperationsCheckNull() {
+        operationService.getAllPersonalOperations(null, null);
+    }
 
+    @Test
+    public void getAllPersonalOperationsEmptyList() {
+        List<AbstractAccountOperation> actualList = new ArrayList<>(operationService.getAllPersonalOperations(nonexistentId, date));
+        AssertUtils.assertOperationsCollections(Collections.emptyList(), actualList);
+    }
+
+    @Rollback
+    @Test
+    public void createFamilyOperationIncome() {
         familyIncomeExpected.setId(currentId);
         operationService.createFamilyOperationIncome(debitIdPersonal, debitIdFamily, familyIncomeExpected.getAmount(),
                 familyIncomeExpected.getDate(), familyIncomeExpected.getCategoryIncome());
 
         expectedList.add(familyIncomeExpected);
-        List<AccountIncome> familyIncomeActual = (ArrayList<AccountIncome>) operationDao.getIncomesFamilyAfterDateByAccountId(debitIdFamily, dateIncome);
+        List<AccountIncome> familyIncomeActual = operationDao.getIncomesFamilyAfterDateByAccountId(debitIdFamily, dateIncome);
         List<AbstractAccountOperation> actualList = new ArrayList<>(familyIncomeActual);
         AssertUtils.assertOperationsCollections(expectedList, actualList);
     }
 
-    @Rollback
-    @Test(expected = OperationException.class)
-    public void createFamilyOperationExpense() {
-        operationService.createFamilyOperationExpense(null, null, 0, null, null);
-        operationService.createFamilyOperationExpense(BigInteger.valueOf(0), BigInteger.valueOf(0), 0, null,
-                CategoryExpense.DEFAULT);
+    @Test(expected = RuntimeException.class)
+    public void createFamilyOperationIncomeCheckNull(){
+        operationService.createFamilyOperationIncome(null, null, 0, null, null);
+    }
 
+    @Rollback
+    @Test
+    public void createFamilyOperationExpense() {
         familyExpenseExpected.setId(currentId);
         operationService.createFamilyOperationExpense(debitIdPersonal, debitIdFamily, familyExpenseExpected.getAmount(),
                 familyExpenseExpected.getDate(), familyExpenseExpected.getCategoryExpense());
 
         expectedList.add(familyExpenseExpected);
-        List<AccountExpense> familyExpenseActual = (ArrayList<AccountExpense>) operationDao.getExpensesFamilyAfterDateByAccountId(debitIdFamily, dateExpense);
+        List<AccountExpense> familyExpenseActual = operationDao.getExpensesFamilyAfterDateByAccountId(debitIdFamily, dateExpense);
         List<AbstractAccountOperation> actualList = new ArrayList<>(familyExpenseActual);
         AssertUtils.assertOperationsCollections(expectedList, actualList);
     }
 
-    @Rollback
-    @Test(expected = OperationException.class)
-    public void createPersonalOperationIncome() {
-        operationService.createPersonalOperationIncome(null, 0, null, null);
-        operationService.createPersonalOperationIncome(BigInteger.valueOf(0), 0, null, CategoryIncome.DEFAULT);
+    @Test(expected = RuntimeException.class)
+    public void createFamilyOperationExpenseCheckNull() {
+        operationService.createFamilyOperationExpense(null, null, 0, null, null);
+    }
 
+    @Rollback
+    @Test
+    public void createPersonalOperationIncome() {
         personalIncomeExpected.setId(currentId);
         operationService.createPersonalOperationIncome(debitIdPersonal, personalIncomeExpected.getAmount(),
                 personalIncomeExpected.getDate(), personalIncomeExpected.getCategoryIncome());
 
         expectedList.add(personalIncomeExpected);
-        List<AccountIncome> personalIncomeActual = (ArrayList<AccountIncome>) operationDao.getIncomesFamilyAfterDateByAccountId(debitIdPersonal, dateIncome);
+        List<AccountIncome> personalIncomeActual = operationDao.getIncomesFamilyAfterDateByAccountId(debitIdPersonal, dateIncome);
         List<AbstractAccountOperation> actualList = new ArrayList<>(personalIncomeActual);
         AssertUtils.assertOperationsCollections(expectedList, actualList);
     }
 
-    @Rollback
-    @Test(expected = OperationException.class)
-    public void createPersonalOperationExpense() {
-        operationService.createPersonalOperationExpense(null, 0, null, null);
-        operationService.createPersonalOperationExpense(BigInteger.valueOf(0), 0, null, CategoryExpense.DEFAULT);
+    @Test(expected = RuntimeException.class)
+    public void createPersonalOperationIncomeCheckNull() {
+        operationService.createPersonalOperationIncome(null, 0, null, null);
+    }
 
+    @Rollback
+    @Test
+    public void createPersonalOperationExpense() {
         personalExpenseExpected.setId(currentId);
         operationService.createPersonalOperationExpense(debitIdPersonal, personalExpenseExpected.getAmount(),
                 personalExpenseExpected.getDate(), personalExpenseExpected.getCategoryExpense());
 
         expectedList.add(personalExpenseExpected);
-        List<AccountExpense> personalExpenseActual = (ArrayList<AccountExpense>) operationDao.getExpensesPersonalAfterDateByAccountId(debitIdPersonal, dateExpense);
+        List<AccountExpense> personalExpenseActual = operationDao.getExpensesPersonalAfterDateByAccountId(debitIdPersonal, dateExpense);
         List<AbstractAccountOperation> actualList = new ArrayList<>(personalExpenseActual);
         AssertUtils.assertOperationsCollections(expectedList, actualList);
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void createPersonalOperationExpenseCheckNull() {
+        operationService.createPersonalOperationExpense(null, 0, null, null);
     }
 
 }

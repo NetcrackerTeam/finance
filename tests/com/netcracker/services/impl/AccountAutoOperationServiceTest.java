@@ -2,7 +2,6 @@ package com.netcracker.services.impl;
 
 import com.netcracker.AssertUtils;
 import com.netcracker.configs.WebConfig;
-import com.netcracker.dao.AutoOperationDao;
 import com.netcracker.models.AbstractAutoOperation;
 import com.netcracker.models.AutoOperationExpense;
 import com.netcracker.models.AutoOperationIncome;
@@ -21,9 +20,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.sql.DataSource;
 import java.math.BigInteger;
-import java.text.ParseException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
@@ -36,8 +35,6 @@ import static org.junit.Assert.assertEquals;
 public class AccountAutoOperationServiceTest {
     @Autowired
     private AccountAutoOperationServiceImpl autoOperationService;
-    @Autowired
-    private AutoOperationDao autoOperationDao;
     @Autowired
     private DataSource dataSource;
     private JdbcTemplate jdbcTemplate;
@@ -64,10 +61,6 @@ public class AccountAutoOperationServiceTest {
 
     private String GET_COUNT_OF_AO_OBJECTS = "SELECT COUNT(*) FROM OBJECTS WHERE OBJECT_ID = 96";
 
-    public AccountAutoOperationServiceTest() throws ParseException {
-
-    }
-
     @Before
     public void setUp() {
         Locale.setDefault(Locale.ENGLISH);
@@ -75,7 +68,7 @@ public class AccountAutoOperationServiceTest {
     }
 
     @Before
-    public void initializeObjects() throws ParseException {
+    public void initializeObjects() {
         autoOperationIncomePersonalExpected = new AutoOperationIncome.Builder().accountId(personalIncomeObjectIdAO)
                 .accountUserId(userId).dayOfMonth(dayOfMonth).accountAmount(13000L).categoryIncome(CategoryIncome.AWARD)
                 .accountDate(LocalDate.parse("2019-12-20")).build();
@@ -93,10 +86,20 @@ public class AccountAutoOperationServiceTest {
                 .accountDate(LocalDate.parse("2019-12-03")).build();
     }
 
+    @Test(expected = RuntimeException.class)
+    public void getFamilyIncomeAutoOperationCheckNull(){
+        autoOperationService.getFamilyIncomeAutoOperation(null);
+    }
+
     @Test
     public void getFamilyIncomeAutoOperation() {
         AutoOperationIncome autoOperationIncomeFamilyActual = autoOperationService.getFamilyIncomeAutoOperation(familyIncomeObjectIdAO);
         AssertUtils.assertAutoOperationIncome(autoOperationIncomeFamilyExpected, autoOperationIncomeFamilyActual);
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void getFamilyExpenseAutoOperationCheckNull(){
+        autoOperationService.getFamilyExpenseAutoOperation(null);
     }
 
     @Test
@@ -105,16 +108,31 @@ public class AccountAutoOperationServiceTest {
         AssertUtils.assertAutoOperationExpense(autoOperationExpenseFamilyExpected, autoOperationExpenseFamilyActual);
     }
 
+    @Test(expected = RuntimeException.class)
+    public void getPersonalIncomeAutoOperationCheckNull(){
+        autoOperationService.getPersonalIncomeAutoOperation(null);
+    }
+
     @Test
     public void getPersonalIncomeAutoOperation() {
         AutoOperationIncome autoOperationIncomePersonalActual = autoOperationService.getPersonalIncomeAutoOperation(personalIncomeObjectIdAO);
         AssertUtils.assertAutoOperationIncome(autoOperationIncomePersonalExpected, autoOperationIncomePersonalActual);
     }
 
+    @Test(expected = RuntimeException.class)
+    public void getPersonalExpenseAutoOperationCheckNull(){
+        autoOperationService.getPersonalExpenseAutoOperation(null);
+    }
+
     @Test
     public void getPersonalExpenseAutoOperation() {
         AutoOperationExpense autoOperationExpensePersonalActual = autoOperationService.getPersonalExpenseAutoOperation(personalExpenseObjectIdAO);
         AssertUtils.assertAutoOperationExpense(autoOperationExpensePersonalExpected, autoOperationExpensePersonalActual);
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void deleteAutoOperationCheckNull() {
+        autoOperationService.deleteAutoOperation(null);
     }
 
     @Rollback
@@ -126,6 +144,11 @@ public class AccountAutoOperationServiceTest {
         assertEquals(totalCount, countObjects);
     }
 
+    @Test(expected = RuntimeException.class)
+    public void createFamilyIncomeAutoOperationCheckNull() {
+        autoOperationService.createFamilyIncomeAutoOperation(autoOperationIncomeFamilyExpected, null, null);
+    }
+
     @Rollback
     @Test
     public void createFamilyIncomeAutoOperation() {
@@ -133,6 +156,11 @@ public class AccountAutoOperationServiceTest {
         currentId = autoOperationIncomeFamilyActual.getId();
         setDateAndId(autoOperationIncomeFamilyExpected, currentId, dateToday);
         AssertUtils.assertAutoOperationIncome(autoOperationIncomeFamilyExpected, autoOperationIncomeFamilyActual);
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void createFamilyExpenseAutoOperationCheckNull() {
+        autoOperationService.createFamilyExpenseAutoOperation(autoOperationExpenseFamilyExpected, null, null);
     }
 
     @Rollback
@@ -149,6 +177,11 @@ public class AccountAutoOperationServiceTest {
         autoOperation.setDate(newDate);
     }
 
+    @Test(expected = RuntimeException.class)
+    public void createPersonalIncomeAutoOperationCheckNull() {
+        autoOperationService.createPersonalIncomeAutoOperation(autoOperationIncomePersonalExpected, null);
+    }
+
     @Rollback
     @Test
     public void createPersonalIncomeAutoOperation() {
@@ -156,6 +189,11 @@ public class AccountAutoOperationServiceTest {
         currentId = autoOperationIncomePersonalActual.getId();
         setDateAndId(autoOperationIncomePersonalExpected, currentId, dateToday);
         AssertUtils.assertAutoOperationIncome(autoOperationIncomePersonalExpected, autoOperationIncomePersonalActual);
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void createPersonalExpenseAutoOperationCheckNull() {
+        autoOperationService.createPersonalExpenseAutoOperation(autoOperationExpensePersonalExpected, null);
     }
 
     @Rollback
@@ -177,12 +215,34 @@ public class AccountAutoOperationServiceTest {
     }
 
     @Test
+    public void getAllTodayOperationsPersonalEmptyList() {
+        List<AbstractAutoOperation> actualList = new ArrayList<>(autoOperationService.getAllTodayOperationsPersonal(personalDebitId, 2));
+        AssertUtils.assertAutoOperationsCollections(Collections.emptyList(), actualList);
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void getAllTodayOperationsPersonalCheckNull() {
+        autoOperationService.getAllTodayOperationsPersonal(null, 0);
+    }
+
+    @Test
     public void getAllTodayOperationsFamily() {
         expectedList.add(autoOperationExpenseFamilyExpected);
         expectedList.add(autoOperationIncomeFamilyExpected);
 
         List<AbstractAutoOperation> actualList = new ArrayList<>(autoOperationService.getAllTodayOperationsFamily(familyDebitId, dayOfMonth));
         AssertUtils.assertAutoOperationsCollections(expectedList, actualList);
+    }
+
+    @Test
+    public void getAllTodayOperationsFamilyEmptyList() {
+        List<AbstractAutoOperation> actualList = new ArrayList<>(autoOperationService.getAllTodayOperationsFamily(familyDebitId, 2));
+        AssertUtils.assertAutoOperationsCollections(Collections.emptyList(), actualList);
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void getAllTodayOperationsFamilyCheckNull() {
+        autoOperationService.getAllTodayOperationsFamily(null, 0);
     }
 
 }

@@ -30,13 +30,30 @@ import static org.junit.Assert.assertEquals;
 @Transactional
 public class CreditOperationTest {
     private JdbcTemplate jdbcTemplate;
-    private String dateToday = "2019-12-01";
-    private String GET_COUNT_OF_CO_OBJECTS = "SELECT COUNT(*) FROM OBJECTS WHERE OBJECT_ID = 8010";
+    private String GET_COUNT_OF_CO_OBJECTS = "SELECT COUNT(*) FROM OBJECTS WHERE OBJECT_ID = 12";
 
     @Autowired
     private DataSource dataSource;
     @Autowired
     private CreditOperationDao creditOperationDao;
+
+    private CreditOperation creditOperationPersonalExpected;
+    private CreditOperation creditOperationFamilyExpected;
+
+    private String dateString = "2019-12-13";
+    private LocalDate date = LocalDate.parse(dateString);
+
+    private String dateTodayString = "2019-12-15";
+    private LocalDate dateToday = LocalDate.parse(dateTodayString);
+
+    private BigInteger operationIdPersonal = BigInteger.valueOf(12);
+    private BigInteger creditAccountPersonalId = BigInteger.valueOf(10);
+
+    private BigInteger userId = BigInteger.valueOf(1);
+    private BigInteger operationIdFamily = BigInteger.valueOf(13);
+    private BigInteger creditAccountFamilyId = BigInteger.valueOf(11);
+
+    private List<CreditOperation> expectedCollection = new ArrayList<>();
 
     @Before
     public void setUp() {
@@ -44,76 +61,61 @@ public class CreditOperationTest {
         jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
+    @Before
+    public void initializeObjects() {
+        creditOperationPersonalExpected = new CreditOperation(1000L, date);
+        creditOperationPersonalExpected.setCreditOperationId(operationIdPersonal);
+
+        creditOperationFamilyExpected = new CreditOperation(2000L, date);
+        creditOperationFamilyExpected.setCreditOperationId(operationIdFamily);
+    }
+
     @Test
     public void getCreditOperationPersonal() {
-        CreditOperation creditOperation = creditOperationDao.getCreditOperationPersonal(new BigInteger("8001"));
-        assertEquals(BigInteger.valueOf(8001), creditOperation.getCreditOperationId());
-        assertEquals("CreditOperation{creditOperationId=8001, amount=2000, date=" + dateToday + "}",
-                "CreditOperation{creditOperationId=" + creditOperation.getCreditOperationId() + ", amount="
-        + creditOperation.getAmount() + ", date=" + creditOperation.getDate() + "}");
+        CreditOperation creditOperationActual = creditOperationDao.getCreditOperationPersonal(operationIdPersonal);
+        AssertUtils.assertCreditOperation(creditOperationPersonalExpected, creditOperationActual);
     }
 
     @Test
     public void getCreditOperationFamily() {
-        CreditOperation creditOperation = creditOperationDao.getCreditOperationFamily(new BigInteger("8002"));
-        assertEquals(BigInteger.valueOf(8002), creditOperation.getCreditOperationId());
-        assertEquals("CreditOperation{creditOperationId=8002, amount=2500, date=" + dateToday + "}",
-                "CreditOperation{creditOperationId=" + creditOperation.getCreditOperationId() + ", amount="
-                        + creditOperation.getAmount() + ", date=" + creditOperation.getDate() + "}");
+        CreditOperation creditOperationActual = creditOperationDao.getCreditOperationFamily(operationIdFamily);
+        AssertUtils.assertCreditOperation(creditOperationFamilyExpected, creditOperationActual);
     }
 
     @Rollback
     @Test
     public void createFamilyCreditOperation() {
-        CreditOperation expectedCreditOperation = new CreditOperation(Long.valueOf("6666"),
-                LocalDate.parse("2000-01-01"));
-        expectedCreditOperation.setCreditOperationId(BigInteger.valueOf(AssertUtils.getCurrentSequenceId(jdbcTemplate)));
-        creditOperationDao.createFamilyCreditOperation(Long.valueOf("6666"), LocalDate.parse("2000-01-01"),
-                new BigInteger("84"), new BigInteger("74"));
-        CreditOperation actualCreditOperation = creditOperationDao.getCreditOperationFamily(BigInteger.valueOf(AssertUtils.getCurrentSequenceId(jdbcTemplate)));
-        AssertUtils.assertCreditOperation(expectedCreditOperation, actualCreditOperation);
+        creditOperationFamilyExpected.setDate(dateToday);
+        CreditOperation creditOperationActual = creditOperationDao.createFamilyCreditOperation(creditOperationFamilyExpected.getAmount(),
+                creditOperationFamilyExpected.getDate(), creditAccountFamilyId, userId);
+        creditOperationFamilyExpected.setCreditOperationId(creditOperationActual.getCreditOperationId());
+        AssertUtils.assertCreditOperation(creditOperationFamilyExpected, creditOperationActual);
     }
 
     @Rollback
     @Test
     public void createPersonalCreditOperation() {
-        CreditOperation expectedCreditOperation = new CreditOperation(Long.valueOf("1488"),
-                LocalDate.parse("2003-03-03"));
-        expectedCreditOperation.setCreditOperationId(BigInteger.valueOf(AssertUtils.getCurrentSequenceId(jdbcTemplate)));
-        creditOperationDao.createPersonalCreditOperation(Long.valueOf("1488"), LocalDate.parse("2003-03-03"),
-                new BigInteger("60"));
-        CreditOperation actualCreditOperation = creditOperationDao.getCreditOperationPersonal(BigInteger.valueOf(AssertUtils.getCurrentSequenceId(jdbcTemplate)));
-        AssertUtils.assertCreditOperation(expectedCreditOperation, actualCreditOperation);
+        creditOperationPersonalExpected.setDate(dateToday);
+        CreditOperation creditOperationActual = creditOperationDao.createPersonalCreditOperation(creditOperationPersonalExpected.getAmount(),
+                creditOperationPersonalExpected.getDate(), creditAccountPersonalId);
+        creditOperationPersonalExpected.setCreditOperationId(creditOperationActual.getCreditOperationId());
+        AssertUtils.assertCreditOperation(creditOperationPersonalExpected, creditOperationActual);
     }
 
+    @Rollback
     @Test
     public void getAllCreditOperationsByCreditFamilyId() {
-        List<CreditOperation> actualCollection = (ArrayList) creditOperationDao.getAllCreditOperationsByCreditFamilyId(new BigInteger("11"));
-        List<CreditOperation> expectedCollection = new ArrayList<>();
-        CreditOperation expectedOperation1 = new CreditOperation(Long.valueOf("2500"),
-                LocalDate.parse(dateToday));
-        expectedOperation1.setCreditOperationId(new BigInteger("8002"));
-        CreditOperation expectedOperation2 = new CreditOperation(Long.valueOf("2000"),
-                LocalDate.parse(dateToday));
-        expectedOperation2.setCreditOperationId(new BigInteger("13"));
-        expectedCollection.add(expectedOperation1);
-        expectedCollection.add(expectedOperation2);
+        List<CreditOperation> actualCollection = creditOperationDao.getAllCreditOperationsByCreditFamilyId(creditAccountFamilyId);
+        expectedCollection.add(creditOperationFamilyExpected);
 
         AssertUtils.assertCreditOperationsCollections(expectedCollection, actualCollection);
     }
 
+    @Rollback
     @Test
     public void getAllCreditOperationsByCreditPersonalId() {
-        List<CreditOperation> actualCollection = (ArrayList) creditOperationDao.getAllCreditOperationsByCreditPersonalId(new BigInteger("10"));
-        List<CreditOperation> expectedCollection = new ArrayList<>();
-        CreditOperation expectedOperation1 = new CreditOperation(Long.valueOf("2000"),
-                LocalDate.parse(dateToday));
-        expectedOperation1.setCreditOperationId(new BigInteger("8001"));
-        CreditOperation expectedOperation2 = new CreditOperation(Long.valueOf("1000"),
-                LocalDate.parse("2001-01-01"));
-        expectedOperation2.setCreditOperationId(new BigInteger("12"));
-        expectedCollection.add(expectedOperation1);
-        expectedCollection.add(expectedOperation2);
+        List<CreditOperation> actualCollection = creditOperationDao.getAllCreditOperationsByCreditPersonalId(creditAccountPersonalId);
+        expectedCollection.add(creditOperationPersonalExpected);
 
         AssertUtils.assertCreditOperationsCollections(expectedCollection, actualCollection);
     }
@@ -122,7 +124,7 @@ public class CreditOperationTest {
     @Test
     public void deleteCreditOperation() {
         int totalCount = 0;
-        creditOperationDao.deleteCreditOperation(new BigInteger("8010"));
+        creditOperationDao.deleteCreditOperation(operationIdPersonal);
         int countObjects = jdbcTemplate.queryForObject(GET_COUNT_OF_CO_OBJECTS, Integer.class);
         assertEquals(totalCount, countObjects);
     }

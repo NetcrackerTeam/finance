@@ -92,28 +92,28 @@ public class OperationDaoTest {
 
     @Test
     public void getIncomesPersonalAfterDateByAccountId() {
-        List<AccountIncome> list = (List<AccountIncome>) operationDao.getIncomesPersonalAfterDateByAccountId(BigInteger.valueOf(2),
+        List<AccountIncome> list = operationDao.getIncomesPersonalAfterDateByAccountId(BigInteger.valueOf(2),
                 LocalDate.of(1990, 11, 30));
         Assert.assertEquals(1, list.size());
     }
 
     @Test
     public void getExpensesPersonalAfterDateByAccountId() {
-        List<AccountExpense> list = (List<AccountExpense>) operationDao.getExpensesPersonalAfterDateByAccountId(BigInteger.valueOf(2),
+        List<AccountExpense> list = operationDao.getExpensesPersonalAfterDateByAccountId(BigInteger.valueOf(2),
                 LocalDate.of(1990, 11, 30));
         Assert.assertEquals(1, list.size());
     }
 
     @Test
     public void getIncomesFamilyAfterDateByAccountId() {
-        List<AccountIncome> list = (List<AccountIncome>) operationDao.getIncomesFamilyAfterDateByAccountId(BigInteger.valueOf(3),
+        List<AccountIncome> list = operationDao.getIncomesFamilyAfterDateByAccountId(BigInteger.valueOf(3),
                 LocalDate.of(1990, 11, 30));
         Assert.assertEquals(1, list.size());
     }
 
     @Test
     public void getExpensesFamilyAfterDateByAccountId() {
-        List<AccountExpense> list = (List<AccountExpense>) operationDao.getExpensesFamilyAfterDateByAccountId(BigInteger.valueOf(3),
+        List<AccountExpense> list = operationDao.getExpensesFamilyAfterDateByAccountId(BigInteger.valueOf(3),
                 LocalDate.of(1990, 11, 30));
         Assert.assertEquals(1, list.size());
     }

@@ -5,7 +5,7 @@ import com.netcracker.models.AutoOperationExpense;
 import com.netcracker.models.AutoOperationIncome;
 
 import java.math.BigInteger;
-import java.util.Collection;
+import java.util.List;
 
 public interface AutoOperationDao {
     AutoOperationIncome getFamilyIncomeAutoOperation(BigInteger autoOperationId);
@@ -26,9 +26,9 @@ public interface AutoOperationDao {
 
     void deleteAutoOperation(BigInteger autoOperationId);
 
-    Collection<AbstractAutoOperation> getAllTodayOperationsPersonal(BigInteger debitAccountId, int dayOfMonth);
+    List<AbstractAutoOperation> getAllTodayOperationsPersonal(BigInteger debitAccountId, int dayOfMonth);
 
-    Collection<AbstractAutoOperation> getAllTodayOperationsFamily(BigInteger debitAccountId, int dayOfMonth);
+    List<AbstractAutoOperation> getAllTodayOperationsFamily(BigInteger debitAccountId, int dayOfMonth);
 
     int personalIncome_object_type_id_1 = 12;
     String personalIncome_name_2 = "PERSONAL_INCOME_AO";

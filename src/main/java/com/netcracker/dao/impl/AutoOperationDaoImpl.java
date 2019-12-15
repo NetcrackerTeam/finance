@@ -14,7 +14,7 @@ import org.springframework.stereotype.Repository;
 import javax.sql.DataSource;
 import java.math.BigInteger;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 
 @Repository
 public class AutoOperationDaoImpl implements AutoOperationDao {
@@ -105,22 +105,22 @@ public class AutoOperationDaoImpl implements AutoOperationDao {
     }
 
     @Override
-    public Collection<AbstractAutoOperation> getAllTodayOperationsPersonal(BigInteger debitAccountId, int dayOfMonth) {
+    public List<AbstractAutoOperation> getAllTodayOperationsPersonal(BigInteger debitAccountId, int dayOfMonth) {
         return getAllTodayOperations(debitAccountId, dayOfMonth, GET_ALL_TODAY_AO_INCOME_PERSONAL, GET_ALL_TODAY_AO_EXPENSE_PERSONAL);
     }
 
     @Override
-    public Collection<AbstractAutoOperation> getAllTodayOperationsFamily(BigInteger debitAccountId, int dayOfMonth) {
+    public List<AbstractAutoOperation> getAllTodayOperationsFamily(BigInteger debitAccountId, int dayOfMonth) {
         return getAllTodayOperations(debitAccountId, dayOfMonth, GET_ALL_TODAY_AO_INCOME_FAMILY, GET_ALL_TODAY_AO_EXPENSE_FAMILY);
     }
 
-    private Collection<AbstractAutoOperation> getAllTodayOperations(BigInteger debitAccountId, int dayOfMonth,
+    private List<AbstractAutoOperation> getAllTodayOperations(BigInteger debitAccountId, int dayOfMonth,
                                                                     String queryForIncome, String queryForExpense) {
-        Collection<AutoOperationIncome> allIncomes = jdbcTemplate.query(queryForIncome,
+        List<AutoOperationIncome> allIncomes = jdbcTemplate.query(queryForIncome,
                 new Object[]{debitAccountId, dayOfMonth}, new AutoOperationIncomeMapper());
-        Collection<AutoOperationExpense> allExpenses = jdbcTemplate.query(queryForExpense,
+        List<AutoOperationExpense> allExpenses = jdbcTemplate.query(queryForExpense,
                 new Object[]{debitAccountId, dayOfMonth}, new AutoOperationExpenseMapper());
-        Collection<AbstractAutoOperation> allOperations = new ArrayList<>(allIncomes);
+        List<AbstractAutoOperation> allOperations = new ArrayList<>(allIncomes);
         allOperations.addAll(allExpenses);
         return allOperations;
     }
