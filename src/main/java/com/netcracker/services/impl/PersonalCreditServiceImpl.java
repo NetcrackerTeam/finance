@@ -10,6 +10,7 @@ import com.netcracker.models.enums.CreditStatusPaid;
 import com.netcracker.models.enums.ErrorVisibility;
 import com.netcracker.services.PersonalCreditService;
 import com.netcracker.services.utils.DateUtils;
+import com.netcracker.services.utils.ExceptionMessages;
 import com.netcracker.services.utils.ObjectsCheckUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -64,13 +65,13 @@ public class PersonalCreditServiceImpl implements PersonalCreditService {
     void makeUserPayment(AbstractDebitAccount debitAccount, AbstractCreditAccount creditAccount, long amount) {
         if (debitAccount.getAmount() > amount) {
             logger.error("Not enough money on debit account by id = {}", debitAccount.getId());
-            throw new CreditAccountException("Not enough money on debit account", creditAccount, ErrorVisibility.VISIBLE);
+            throw new CreditAccountException(ExceptionMessages.NOT_ENOUGH_MONEY_ERROR, creditAccount, ErrorVisibility.VISIBLE);
         }
         double remainToPay = getTotalCreditPayment(creditAccount.getDate(), creditAccount.getDateTo(),
                 creditAccount.getAmount(), creditAccount.getCreditRate()) - creditAccount.getPaidAmount();
         if (remainToPay < amount) {
             logger.error("Remain to pay for credit {}. Wanted {}", remainToPay, amount);
-            throw new CreditAccountException(String.format("Left to pay only %d", remainToPay), creditAccount, ErrorVisibility.VISIBLE);
+            throw new CreditAccountException(String.format(ExceptionMessages.LEFT_TO_PAY_ERROR, remainToPay), creditAccount, ErrorVisibility.VISIBLE);
         }
     }
 
