@@ -77,7 +77,7 @@ public class FamilyDebitServiceImpl implements FamilyDebitService {
             logger.error("The user " + tempUser + " own family account");
             throw new UserException(ExceptionMessages.ERROR_MESSAGE_USER_EXIST_FAMILY, tempUser);
         } else {
-            Collection<User> participants = this.getParticipantsOfFamilyAccount(accountId);
+            Collection<User> participants = this.getAllParticipantsOfFamilyAccounts();
             for (User participant : participants) {
                 if (participant.getId() == null) {
                     logger.error("The userId " + userId + " is NULL");
@@ -125,5 +125,10 @@ public class FamilyDebitServiceImpl implements FamilyDebitService {
         ObjectsCheckUtils.isNotNull(accountId);
         logger.debug("Entering list(getParticipantsOfFamilyAccount=" + accountId + ")");
         return familyAccountDebitDao.getParticipantsOfFamilyAccount(accountId);
+    }
+    @Override
+    public Collection<User> getAllParticipantsOfFamilyAccounts() {
+        logger.debug("Entering list(getAllParticipantsOfFamilyAccount)");
+        return familyAccountDebitDao.getAllParticipantsOfFamilyAccounts();
     }
 }

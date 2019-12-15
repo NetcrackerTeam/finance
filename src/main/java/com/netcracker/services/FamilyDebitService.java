@@ -22,4 +22,6 @@ public interface FamilyDebitService {
     Collection<AbstractAccountOperation> getHistory(BigInteger family_accountId, LocalDate date);
 
     Collection<User> getParticipantsOfFamilyAccount(BigInteger accountId);
+
+    Collection<User> getAllParticipantsOfFamilyAccounts();
 }
