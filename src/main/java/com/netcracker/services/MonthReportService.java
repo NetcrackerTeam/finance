@@ -10,9 +10,9 @@ import java.time.LocalDate;
 public interface MonthReportService {
 
 
-    void formMonthPersonalReportFromDb(BigInteger id, LocalDate date);
+    void formMonthPersonalReportFromDb(BigInteger id);
 
-    void formMonthFamilyReportFromDb(BigInteger id, LocalDate date);
+    void formMonthFamilyReportFromDb(BigInteger id);
 
     Path convertToTxt(MonthReport monthReport);
 

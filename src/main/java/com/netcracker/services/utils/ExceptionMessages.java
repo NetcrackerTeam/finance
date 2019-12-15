@@ -10,5 +10,5 @@ public interface ExceptionMessages {
     String  ERROR_MESSAGE_USER_STATUS = "The user is unactive";
     String  ERROR_MESSAGE_USER_EXIST_FAMILY ="The user has family debit account";
     String ERROR_MESSAGE_OWNER = "Owner can`t delete yourself, try to delete account";
-
+    String ERROR_MESSAGE_MONTH_REPORT_WRITE = "Month report is null";
 }
