@@ -30,4 +30,10 @@ public class AutoOperationIncome extends AbstractAutoOperation {
     public void setCategoryIncome(CategoryIncome categoryIncome) {
         this.categoryIncome = categoryIncome;
     }
+
+    @Override
+    public String toString() {
+        return "AutoOperationExpense [id=" + this.getId() + ", dayOfMonth=" + this.getDayOfMonth() + ", amount=" + this.getAmount() +
+                ", categoryExpense=" + this.getCategoryIncome() + ", date=" + this.getDate() + "]";
+    }
 }

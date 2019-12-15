@@ -9,6 +9,8 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface OperationService {
+    String debugStartMessage = " method start with parameters: ";
+
     List<AbstractAccountOperation> getAllFamilyOperations(BigInteger accountId, LocalDate afterDate);
 
     List<AbstractAccountOperation> getAllPersonalOperations(BigInteger accountId, LocalDate afterDate);

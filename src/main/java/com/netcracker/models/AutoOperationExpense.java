@@ -23,13 +23,18 @@ public class AutoOperationExpense extends AbstractAutoOperation {
         }
     }
 
-
     public CategoryExpense getCategoryExpense() {
         return categoryExpense;
     }
 
     public void setCategoryExpense(CategoryExpense categoryExpense) {
         this.categoryExpense = categoryExpense;
+    }
+
+    @Override
+    public String toString() {
+        return "AutoOperationExpense [id=" + this.getId() + ", dayOfMonth=" + this.getDayOfMonth() + ", amount=" + this.getAmount() +
+                ", categoryExpense=" + this.getCategoryExpense() + ", date=" + this.getDate() + "]";
     }
 
 }

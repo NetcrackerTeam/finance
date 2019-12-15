@@ -26,7 +26,6 @@ public class OperationServiceImpl implements OperationService {
     private OperationDao operationDao;
 
     private static final Logger logger = Logger.getLogger(OperationServiceImpl.class);
-    private static final String debugStartMessage = " method start with parameters: ";
 
     @Override
     public List<AbstractAccountOperation> getAllFamilyOperations(BigInteger accountId, LocalDate afterDate) {

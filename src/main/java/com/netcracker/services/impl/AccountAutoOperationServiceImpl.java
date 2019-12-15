@@ -23,13 +23,11 @@ public class AccountAutoOperationServiceImpl implements AccountAutoOperationServ
     private AutoOperationDao autoOperationDao;
 
     private static final Logger logger = Logger.getLogger(AccountAutoOperationServiceImpl.class);
-    private static final String debugStartMessage = " method start with parameters: ";
 
     @Override
     public AutoOperationIncome createFamilyIncomeAutoOperation(AutoOperationIncome autoOperationIncome, BigInteger userId, BigInteger familyDebitAccountId) {
-        logger.debug("[createFamilyIncomeAutoOperation]" + debugStartMessage + "[familyDebitAccountId = " + familyDebitAccountId +
-                "], [userId = " + userId + "], [dayOfMonth = " + autoOperationIncome.getDayOfMonth() + "], [amount = " +
-                autoOperationIncome.getAmount() + "], [categoryIncome = " + autoOperationIncome.getCategoryIncome() + "]");
+        logger.debug("[createFamilyIncomeAutoOperation]" + debugStartMessage + "[ familyDebitAccountId = " +
+                familyDebitAccountId + "], [userId = " + userId + "], " + autoOperationIncome.toString());
 
         ObjectsCheckUtils.isNotNull(autoOperationIncome.getDayOfMonth(), autoOperationIncome.getAmount(),
                 autoOperationIncome.getCategoryIncome(), userId, familyDebitAccountId);
@@ -38,9 +36,8 @@ public class AccountAutoOperationServiceImpl implements AccountAutoOperationServ
 
     @Override
     public AutoOperationIncome createPersonalIncomeAutoOperation(AutoOperationIncome autoOperationIncome, BigInteger personalDebitAccountId) {
-        logger.debug("[createPersonalIncomeAutoOperation]" + debugStartMessage + "[personalDebitAccountId = " + personalDebitAccountId +
-                "], [dayOfMonth = " + autoOperationIncome.getDayOfMonth() + "], [amount = " + autoOperationIncome.getAmount() +
-                "], [categoryIncome = " + autoOperationIncome.getCategoryIncome() + "]");
+        logger.debug("[createPersonalIncomeAutoOperation]" + debugStartMessage + "[personalDebitAccountId = " +
+                personalDebitAccountId + "], " + autoOperationIncome.toString());
 
         ObjectsCheckUtils.isNotNull(autoOperationIncome.getDayOfMonth(), autoOperationIncome.getAmount(),
                 autoOperationIncome.getCategoryIncome(), personalDebitAccountId);
@@ -49,9 +46,8 @@ public class AccountAutoOperationServiceImpl implements AccountAutoOperationServ
 
     @Override
     public AutoOperationExpense createFamilyExpenseAutoOperation(AutoOperationExpense autoOperationExpense, BigInteger userId, BigInteger familyDebitAccountId) {
-        logger.debug("[createFamilyExpenseAutoOperation]" + debugStartMessage + "[familyDebitAccountId = " + familyDebitAccountId +
-                "], [userId = " + userId + "], [dayOfMonth = " + autoOperationExpense.getDayOfMonth() + "], [amount = " +
-                autoOperationExpense.getAmount() + "], [categoryExpense = " + autoOperationExpense.getCategoryExpense() + "]");
+        logger.debug("[createFamilyExpenseAutoOperation]" + debugStartMessage + "[familyDebitAccountId = " +
+                familyDebitAccountId + "], [userId = " + userId + "], " + autoOperationExpense.toString());
 
         ObjectsCheckUtils.isNotNull(autoOperationExpense.getDayOfMonth(), autoOperationExpense.getAmount(),
                 autoOperationExpense.getCategoryExpense(), userId, familyDebitAccountId);
@@ -60,9 +56,8 @@ public class AccountAutoOperationServiceImpl implements AccountAutoOperationServ
 
     @Override
     public AutoOperationExpense createPersonalExpenseAutoOperation(AutoOperationExpense autoOperationExpense, BigInteger personalDebitAccountId) {
-        logger.debug("[createPersonalExpenseAutoOperation]" + debugStartMessage + "[personalDebitAccountId = " + personalDebitAccountId +
-                "], [dayOfMonth = " + autoOperationExpense.getDayOfMonth() + "], [amount = " + autoOperationExpense.getAmount() +
-                "], [categoryExpense = " + autoOperationExpense.getCategoryExpense() + "]");
+        logger.debug("[createPersonalExpenseAutoOperation]" + debugStartMessage + "[personalDebitAccountId = " +
+                personalDebitAccountId + "], " + autoOperationExpense.toString());
 
         ObjectsCheckUtils.isNotNull(autoOperationExpense.getDayOfMonth(), autoOperationExpense.getAmount(),
                 autoOperationExpense.getCategoryExpense(), personalDebitAccountId);

@@ -8,13 +8,19 @@ import java.math.BigInteger;
 import java.util.List;
 
 public interface AccountAutoOperationService {
-    AutoOperationIncome createFamilyIncomeAutoOperation(AutoOperationIncome autoOperationIncome, BigInteger userId, BigInteger familyDebitAccountId);
+    String debugStartMessage = " method start with parameters: ";
 
-    AutoOperationIncome createPersonalIncomeAutoOperation(AutoOperationIncome autoOperationIncome, BigInteger personalDebitAccountId);
+    AutoOperationIncome createFamilyIncomeAutoOperation(AutoOperationIncome autoOperationIncome, BigInteger userId,
+                                                        BigInteger familyDebitAccountId);
 
-    AutoOperationExpense createFamilyExpenseAutoOperation(AutoOperationExpense autoOperationExpense, BigInteger userId, BigInteger familyDebitAccountId);
+    AutoOperationIncome createPersonalIncomeAutoOperation(AutoOperationIncome autoOperationIncome,
+                                                          BigInteger personalDebitAccountId);
 
-    AutoOperationExpense createPersonalExpenseAutoOperation(AutoOperationExpense autoOperationExpense, BigInteger personalDebitAccountId);
+    AutoOperationExpense createFamilyExpenseAutoOperation(AutoOperationExpense autoOperationExpense, BigInteger userId,
+                                                          BigInteger familyDebitAccountId);
+
+    AutoOperationExpense createPersonalExpenseAutoOperation(AutoOperationExpense autoOperationExpense,
+                                                            BigInteger personalDebitAccountId);
 
     AutoOperationIncome getFamilyIncomeAutoOperation(BigInteger autoOperationId);
 
