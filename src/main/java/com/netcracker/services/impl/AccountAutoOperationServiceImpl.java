@@ -4,8 +4,6 @@ import com.netcracker.dao.AutoOperationDao;
 import com.netcracker.models.AbstractAutoOperation;
 import com.netcracker.models.AutoOperationExpense;
 import com.netcracker.models.AutoOperationIncome;
-import com.netcracker.models.enums.CategoryExpense;
-import com.netcracker.models.enums.CategoryIncome;
 import com.netcracker.services.AccountAutoOperationService;
 import com.netcracker.services.utils.ObjectsCheckUtils;
 import org.apache.log4j.Logger;
@@ -14,7 +12,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import java.math.BigInteger;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 @Service
 public class AccountAutoOperationServiceImpl implements AccountAutoOperationService {
@@ -24,63 +25,47 @@ public class AccountAutoOperationServiceImpl implements AccountAutoOperationServ
     private static final Logger logger = Logger.getLogger(AccountAutoOperationServiceImpl.class);
     private static final String debugStartMessage = " method start with parameters: ";
 
-    private int dayOfMonth;
-    private long amount;
-    private CategoryExpense categoryExpense;
-    private CategoryIncome categoryIncome;
-
-    private void initializeVariables(AbstractAutoOperation autoOperation) {
-        this.dayOfMonth = autoOperation.getDayOfMonth();
-        this.amount = autoOperation.getAmount();
-
-        if (autoOperation instanceof AutoOperationIncome) this.categoryIncome = ((AutoOperationIncome) autoOperation).getCategoryIncome();
-        if (autoOperation instanceof AutoOperationExpense) this.categoryExpense = ((AutoOperationExpense) autoOperation).getCategoryExpense();
-    }
-
     @Override
     public AutoOperationIncome createFamilyIncomeAutoOperation(AutoOperationIncome autoOperationIncome, BigInteger userId, BigInteger familyDebitAccountId) {
-        initializeVariables(autoOperationIncome);
-
         logger.debug("[createFamilyIncomeAutoOperation]" + debugStartMessage + "[familyDebitAccountId = " + familyDebitAccountId +
-                "], [userId = " + userId + "], [dayOfMonth = " + dayOfMonth + "], [amount = " + amount + "], [categoryIncome = " +
-                categoryIncome + "]");
+                "], [userId = " + userId + "], [dayOfMonth = " + autoOperationIncome.getDayOfMonth() + "], [amount = " +
+                autoOperationIncome.getAmount() + "], [categoryIncome = " + autoOperationIncome.getCategoryIncome() + "]");
 
-        ObjectsCheckUtils.isNotNull(dayOfMonth, amount, categoryIncome, userId, familyDebitAccountId);
+        ObjectsCheckUtils.isNotNull(autoOperationIncome.getDayOfMonth(), autoOperationIncome.getAmount(),
+                autoOperationIncome.getCategoryIncome(), userId, familyDebitAccountId);
         return autoOperationDao.createFamilyIncomeAutoOperation(autoOperationIncome, userId, familyDebitAccountId);
     }
 
     @Override
     public AutoOperationIncome createPersonalIncomeAutoOperation(AutoOperationIncome autoOperationIncome, BigInteger personalDebitAccountId) {
-        initializeVariables(autoOperationIncome);
-
         logger.debug("[createPersonalIncomeAutoOperation]" + debugStartMessage + "[personalDebitAccountId = " + personalDebitAccountId +
-                "], [dayOfMonth = " + dayOfMonth + "], [amount = " + amount + "], [categoryIncome = " + categoryIncome + "]");
+                "], [dayOfMonth = " + autoOperationIncome.getDayOfMonth() + "], [amount = " + autoOperationIncome.getAmount() +
+                "], [categoryIncome = " + autoOperationIncome.getCategoryIncome() + "]");
 
-        ObjectsCheckUtils.isNotNull(dayOfMonth, amount, categoryIncome, personalDebitAccountId);
+        ObjectsCheckUtils.isNotNull(autoOperationIncome.getDayOfMonth(), autoOperationIncome.getAmount(),
+                autoOperationIncome.getCategoryIncome(), personalDebitAccountId);
         return autoOperationDao.createPersonalIncomeAutoOperation(autoOperationIncome, personalDebitAccountId);
     }
 
     @Override
     public AutoOperationExpense createFamilyExpenseAutoOperation(AutoOperationExpense autoOperationExpense, BigInteger userId, BigInteger familyDebitAccountId) {
-        initializeVariables(autoOperationExpense);
-
         logger.debug("[createFamilyExpenseAutoOperation]" + debugStartMessage + "[familyDebitAccountId = " + familyDebitAccountId +
-                "], [userId = " + userId + "], [dayOfMonth = " + dayOfMonth + "], [amount = " + amount + "], [categoryExpense = " +
-                categoryExpense + "]");
+                "], [userId = " + userId + "], [dayOfMonth = " + autoOperationExpense.getDayOfMonth() + "], [amount = " +
+                autoOperationExpense.getAmount() + "], [categoryExpense = " + autoOperationExpense.getCategoryExpense() + "]");
 
-        ObjectsCheckUtils.isNotNull(dayOfMonth, amount, categoryExpense, userId, familyDebitAccountId);
+        ObjectsCheckUtils.isNotNull(autoOperationExpense.getDayOfMonth(), autoOperationExpense.getAmount(),
+                autoOperationExpense.getCategoryExpense(), userId, familyDebitAccountId);
         return autoOperationDao.createFamilyExpenseAutoOperation(autoOperationExpense, userId, familyDebitAccountId);
     }
 
     @Override
     public AutoOperationExpense createPersonalExpenseAutoOperation(AutoOperationExpense autoOperationExpense, BigInteger personalDebitAccountId) {
-        initializeVariables(autoOperationExpense);
-
         logger.debug("[createPersonalExpenseAutoOperation]" + debugStartMessage + "[personalDebitAccountId = " + personalDebitAccountId +
-                "], [dayOfMonth = " + dayOfMonth + "], [amount = " + amount + "], [categoryExpense = " +
-                categoryExpense + "]");
+                "], [dayOfMonth = " + autoOperationExpense.getDayOfMonth() + "], [amount = " + autoOperationExpense.getAmount() +
+                "], [categoryExpense = " + autoOperationExpense.getCategoryExpense() + "]");
 
-        ObjectsCheckUtils.isNotNull(dayOfMonth, amount, categoryExpense, personalDebitAccountId);
+        ObjectsCheckUtils.isNotNull(autoOperationExpense.getDayOfMonth(), autoOperationExpense.getAmount(),
+                autoOperationExpense.getCategoryExpense(), personalDebitAccountId);
         return autoOperationDao.createPersonalExpenseAutoOperation(autoOperationExpense, personalDebitAccountId);
     }
 
