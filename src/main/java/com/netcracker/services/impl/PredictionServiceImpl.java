@@ -72,7 +72,7 @@ public class PredictionServiceImpl implements PredictionService {
            reports.add(reportTest);
         }
 
-        double average = reports.stream().mapToLong(MonthReport::getTotalIncome).average().orElse(Double.NaN);
+        double average = reports.stream().mapToDouble(MonthReport::getTotalIncome).average().orElse(Double.NaN);
 
         return average * duration;
     }
@@ -104,7 +104,7 @@ public class PredictionServiceImpl implements PredictionService {
             reports.add(reportTest);
         }
 
-        double average = reports.stream().mapToLong(MonthReport::getTotalExpense).average().orElse(Double.NaN);
+        double average = reports.stream().mapToDouble(MonthReport::getTotalExpense).average().orElse(Double.NaN);
 
         return average * duration;
     }

@@ -61,7 +61,7 @@ public class OperationServiceImpl implements OperationService {
     }
 
     @Override
-    public void createFamilyOperationIncome(BigInteger idUser, BigInteger idFamily, long income, LocalDate date, CategoryIncome categoryIncome) {
+    public void createFamilyOperationIncome(BigInteger idUser, BigInteger idFamily, double income, LocalDate date, CategoryIncome categoryIncome) {
         logger.debug("[createFamilyOperationIncome]" + debugStartMessage + "[idUser = " + idUser + "], [idFamily = "
                 + idFamily + "], [income = " + income + "], [date = " + date + "], [categoryIncome = " + categoryIncome + "]");
 
@@ -70,7 +70,7 @@ public class OperationServiceImpl implements OperationService {
     }
 
     @Override
-    public void createFamilyOperationExpense(BigInteger idUser, BigInteger idFamily, long expense, LocalDate date, CategoryExpense categoryExpense) {
+    public void createFamilyOperationExpense(BigInteger idUser, BigInteger idFamily, double expense, LocalDate date, CategoryExpense categoryExpense) {
         logger.debug("[createFamilyOperationExpense]" + debugStartMessage + "[idUser = " + idUser + "], [idFamily = "
                 + idFamily + "], [expense = " + expense + "], [date = " + date + "], [categoryExpense = " + categoryExpense + "]");
 
@@ -79,7 +79,7 @@ public class OperationServiceImpl implements OperationService {
     }
 
     @Override
-    public void createPersonalOperationIncome(BigInteger id, long income, LocalDate date, CategoryIncome categoryIncome) {
+    public void createPersonalOperationIncome(BigInteger id, double income, LocalDate date, CategoryIncome categoryIncome) {
         logger.debug("[createPersonalOperationIncome]" + debugStartMessage + "[id = " + id + "], [income = " + income +
                 "], [date = " + date + "], [categoryIncome = " + categoryIncome + "]");
 
@@ -88,7 +88,7 @@ public class OperationServiceImpl implements OperationService {
     }
 
     @Override
-    public void createPersonalOperationExpense(BigInteger id, long expense, LocalDate date, CategoryExpense categoryExpense) {
+    public void createPersonalOperationExpense(BigInteger id, double expense, LocalDate date, CategoryExpense categoryExpense) {
         logger.debug("[createPersonalOperationExpense]" + debugStartMessage + "[id = " + id + "], [expense = " + expense +
                 "], [date = " + date + "], [categoryExpense = " + categoryExpense + "]");
 

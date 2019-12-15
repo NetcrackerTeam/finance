@@ -14,7 +14,7 @@ public class CategoryIncomePersonalReportMapper implements RowMapper<CategoryInc
     public CategoryIncomeReport mapRow(ResultSet resultSet, int i) throws SQLException {
         AbstractCategoryReport categoryIncomeReport =
                 new CategoryIncomeReport.Builder()
-                        .amount(resultSet.getLong("amount"))
+                        .amount(resultSet.getDouble("amount"))
                         .categoryIncome(CategoryIncome.getNameByKey(resultSet.getBigDecimal("category").toBigInteger()))
                         .build();
         return (CategoryIncomeReport) categoryIncomeReport;

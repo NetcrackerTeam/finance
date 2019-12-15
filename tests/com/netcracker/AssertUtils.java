@@ -16,7 +16,7 @@ public class AssertUtils {
         assertEquals(expAO.getId(), actualAO.getId());
         assertEquals(expAO.getUserId(), actualAO.getUserId());
         assertEquals(expAO.getCategoryIncome(), actualAO.getCategoryIncome());
-        assertEquals(expAO.getAmount(), actualAO.getAmount());
+        assertEquals(expAO.getAmount(), actualAO.getAmount(), 2);
         assertEquals(expAO.getDate(), actualAO.getDate());
         assertEquals(expAO.getDayOfMonth(), actualAO.getDayOfMonth());
     }
@@ -25,7 +25,7 @@ public class AssertUtils {
         assertEquals(expAO.getId(), actualAO.getId());
         assertEquals(expAO.getUserId(), actualAO.getUserId());
         assertEquals(expAO.getCategoryExpense(), actualAO.getCategoryExpense());
-        assertEquals(expAO.getAmount(), actualAO.getAmount());
+        assertEquals(expAO.getAmount(), actualAO.getAmount(), 2);
         assertEquals(expAO.getDate(), actualAO.getDate());
         assertEquals(expAO.getDayOfMonth(), actualAO.getDayOfMonth());
     }
@@ -40,7 +40,7 @@ public class AssertUtils {
         assertEquals(expOperation.getId(), actualOperation.getId());
         assertEquals(expOperation.getUserId(), actualOperation.getUserId());
         assertEquals(expOperation.getCategoryIncome(), actualOperation.getCategoryIncome());
-        assertEquals(expOperation.getAmount(), actualOperation.getAmount());
+        assertEquals(expOperation.getAmount(), actualOperation.getAmount(), 2);
         assertEquals(expOperation.getDate(), actualOperation.getDate());
     }
 
@@ -48,7 +48,7 @@ public class AssertUtils {
         assertEquals(expOperation.getId(), actualOperation.getId());
         assertEquals(expOperation.getUserId(), actualOperation.getUserId());
         assertEquals(expOperation.getCategoryExpense(), actualOperation.getCategoryExpense());
-        assertEquals(expOperation.getAmount(), actualOperation.getAmount());
+        assertEquals(expOperation.getAmount(), actualOperation.getAmount(), 2);
         assertEquals(expOperation.getDate(), actualOperation.getDate());
     }
 

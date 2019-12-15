@@ -15,11 +15,11 @@ public interface OperationService {
 
     List<AbstractAccountOperation> getAllPersonalOperations(BigInteger accountId, LocalDate afterDate);
 
-    void createFamilyOperationIncome(BigInteger idUser, BigInteger idFamily, long income, LocalDate date, CategoryIncome categoryIncome);
+    void createFamilyOperationIncome(BigInteger idUser, BigInteger idFamily, double income, LocalDate date, CategoryIncome categoryIncome);
 
-    void createFamilyOperationExpense(BigInteger idUser, BigInteger idFamily, long expense, LocalDate date, CategoryExpense categoryExpense);
+    void createFamilyOperationExpense(BigInteger idUser, BigInteger idFamily, double expense, LocalDate date, CategoryExpense categoryExpense);
 
-    void createPersonalOperationIncome(BigInteger id, long income, LocalDate date, CategoryIncome categoryIncome);
+    void createPersonalOperationIncome(BigInteger id, double income, LocalDate date, CategoryIncome categoryIncome);
 
-    void createPersonalOperationExpense(BigInteger id, long expense, LocalDate date, CategoryExpense categoryExpense);
+    void createPersonalOperationExpense(BigInteger id, double expense, LocalDate date, CategoryExpense categoryExpense);
 }

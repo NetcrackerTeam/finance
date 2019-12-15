@@ -12,9 +12,12 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.FileOutputStream;
-import java.io.ObjectOutputStream;
+import java.io.BufferedWriter;
+import java.io.IOException;
 import java.math.BigInteger;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.Collection;
 
@@ -40,16 +43,15 @@ public class MonthReportServiceImpl implements MonthReportService {
 
     @Override
     public void formMonthFamilyReportFromDb(BigInteger id, LocalDate date) {
-        logger.debug("Insert formFamilyReportFromDb " + id + " " + date );
+        logger.debug("Insert formFamilyReportFromDb " + id + " " + date);
 
         Collection<CategoryExpenseReport> expenseReports = operationDao.getExpensesFamilyGroupByCategories(id, date);
         Collection<CategoryIncomeReport> incomeReports = operationDao.getIncomesFamilyGroupByCategories(id, date);
 
-        long totalIncome = incomeReports.stream().mapToLong(AbstractCategoryReport::getAmount).sum();
-        long totalExpense = expenseReports.stream().mapToLong(AbstractCategoryReport::getAmount).sum();
+        double totalIncome = incomeReports.stream().mapToDouble(AbstractCategoryReport::getAmount).sum();
+        double totalExpense = expenseReports.stream().mapToDouble(AbstractCategoryReport::getAmount).sum();
 
-        long sum = familyAccountDebitDao.getFamilyAccountById(id).getAmount();
-
+        double sum = familyAccountDebitDao.getFamilyAccountById(id).getAmount();
 
         MonthReport monthReport = new MonthReport.Builder()
                 .balance(sum)
@@ -74,14 +76,14 @@ public class MonthReportServiceImpl implements MonthReportService {
 
     @Override
     public void formMonthPersonalReportFromDb(BigInteger id, LocalDate date) {
-        logger.debug("Insert formPersonalReportFromDb " + id + " " + date );
+        logger.debug("Insert formPersonalReportFromDb " + id + " " + date);
 
-        if(id == null){
+        if (id == null) {
             logger.debug("Id is null");
             throw new IllegalArgumentException();
         }
 
-        if(date == null) {
+        if (date == null) {
             logger.debug("Date if null");
             throw new IllegalArgumentException();
         }
@@ -89,10 +91,10 @@ public class MonthReportServiceImpl implements MonthReportService {
         Collection<CategoryExpenseReport> expenseReports = operationDao.getExpensesPersonalGroupByCategories(id, date);
         Collection<CategoryIncomeReport> incomeReports = operationDao.getIncomesPersonalGroupByCategories(id, date);
 
-        Long totalIncome = expenseReports.stream().mapToLong(AbstractCategoryReport::getAmount).sum();
-        Long totalExpense = expenseReports.stream().mapToLong(AbstractCategoryReport::getAmount).sum();
+        double totalIncome = expenseReports.stream().mapToDouble(AbstractCategoryReport::getAmount).sum();
+        double totalExpense = expenseReports.stream().mapToDouble(AbstractCategoryReport::getAmount).sum();
 
-        long sum = personalDebitAccountDao.getPersonalAccountById(id).getAmount();
+        double sum = personalDebitAccountDao.getPersonalAccountById(id).getAmount();
 
         MonthReport monthReport = new MonthReport.Builder()
                 .balance(sum)
@@ -115,86 +117,56 @@ public class MonthReportServiceImpl implements MonthReportService {
     }
 
     @Override
-    public FileOutputStream convertFamilyToTxt(MonthReport monthReport) {
+    public Path convertToTxt(MonthReport monthReport) {
         logger.debug("Convertation " + monthReport);
 
-        if(monthReport == null) {
+        if (monthReport == null) {
             logger.debug("Undefined report");
-            throw new MonthReportException("Uncorrect monthreport");
+            throw new MonthReportException("Incorrect month report");
         }
 
-        FileOutputStream fileOut = null;
-        try {
-            fileOut = new FileOutputStream("report.txt");
-            ObjectOutputStream objectOut = new ObjectOutputStream(fileOut);
-            objectOut.writeObject(monthReport.getBalance());
-            objectOut.writeObject(monthReport.getTotalExpense());
-            objectOut.writeObject(monthReport.getTotalIncome());
-            objectOut.writeObject(monthReport.getDateFrom());
-            objectOut.writeObject(monthReport.getDateTo());
+        Path path = Paths.get("report.txt");
 
-            for (CategoryIncomeReport report: monthReport.getCategoryIncome()) {
-                objectOut.writeObject(userDao.getUserById(report.getUserReference()).getName());
-                objectOut.writeObject(report.getCategoryIncome());
-                objectOut.writeObject(report.getAmount());
+        try (BufferedWriter writer = Files.newBufferedWriter(path)) {
+            writer.write(MONTH_REPORT_FROM + monthReport.getDateFrom());
+            writer.write(MONTH_REPORT_TO + monthReport.getDateTo() + NEW_LINE);
+            writer.write(DOTTED_LINE);
+            writer.write(ACTUAL_BALANCE + monthReport.getBalance() + TAB_AND_LINE);
+            writer.write(TOTAL_EXPENSE + monthReport.getTotalExpense() + TAB_AND_LINE);
+            writer.write(TOTAL_INCOME + monthReport.getTotalIncome() + TAB_AND_LINE);
+
+            writer.write(EXPENSES_BY_CATEGORIES);
+            writer.write(DOTTED_LINE);
+            for (CategoryExpenseReport exp :
+                    monthReport.getCategoryExpense()) {
+
+                String name = userDao.getUserById(exp.getUserReference()).getName();
+                if(name != null) {
+                    writer.write(name + SPACE);
+                }
+                writer.write(exp.getCategoryExpense().toString() + DOUBLE_DOTS + exp.getAmount() + NEW_LINE);
             }
 
-            for (CategoryExpenseReport report: monthReport.getCategoryExpense()) {
-                objectOut.writeObject(userDao.getUserById(report.getUserReference()).getName());
-                objectOut.writeObject(report.getCategoryExpense());
-                objectOut.writeObject(report.getAmount());
+            writer.write(INCOMES_BY_CATEGORIES);
+            writer.write(DOTTED_LINE);
+            for (CategoryIncomeReport inc :
+                    monthReport.getCategoryIncome()) {
+                String name = userDao.getUserById(inc.getUserReference()).getName();
+                if(name != null) {
+                    writer.write(name + SPACE);
+                }
+                writer.write(inc.getCategoryIncome().toString() + DOUBLE_DOTS + inc.getAmount() + NEW_LINE);
             }
-
-            objectOut.close();
-            logger.debug("The Object was succesfully written to a file");
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
+        } catch (IOException e) {
+            logger.error("Error in writing to file", e);
         }
-        return fileOut;
+        return path;
     }
 
-    @Override
-    public FileOutputStream convertPersonalToTxt(MonthReport monthReport) {
 
-        logger.debug("Convertation " + monthReport);
-
-        if(monthReport == null) {
-            logger.debug("Undefined report");
-            throw new MonthReportException("Uncorrect monthreport");
-        }
-
-        FileOutputStream fileOut = null;
-        try {
-            fileOut = new FileOutputStream("report.txt");
-            ObjectOutputStream objectOut = new ObjectOutputStream(fileOut);
-            objectOut.writeObject(monthReport.getBalance());
-            objectOut.writeObject(monthReport.getTotalExpense());
-            objectOut.writeObject(monthReport.getTotalIncome());
-            objectOut.writeObject(monthReport.getDateFrom());
-            objectOut.writeObject(monthReport.getDateTo());
-
-            for (CategoryIncomeReport report: monthReport.getCategoryIncome()) {
-                objectOut.writeObject(report.getCategoryIncome());
-                objectOut.writeObject(report.getAmount());
-            }
-
-            for (CategoryExpenseReport report: monthReport.getCategoryExpense()) {
-                objectOut.writeObject(report.getCategoryExpense());
-                objectOut.writeObject(report.getAmount());
-            }
-
-            objectOut.close();
-            logger.debug("The Object was succesfully written to a file");
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        return fileOut;
-    }
     @Override
     public MonthReport getMonthPersonalReport(BigInteger id, LocalDate dateFrom, LocalDate dateTo) {
-        logger.debug("Id " + id + " dateFrom " + dateFrom + " dateTo " + dateTo );
+        logger.debug("Id " + id + " dateFrom " + dateFrom + " dateTo " + dateTo);
 
         MonthReport monthReport = monthReportDao.getMonthReportByPersonalAccountId(id, dateFrom, dateTo);
         Collection<CategoryExpenseReport> expenseReports = monthReportDao.getCategoryExpensePersonalReport(monthReport.getId());

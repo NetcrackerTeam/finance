@@ -62,7 +62,7 @@ public class EmailServiceSenderImpl implements EmailServiceSender {
     }
 
     @Override
-    public void sendMailAboutPersonalDebt(String emailTo, String userName, String perName, Long amount, BigInteger userId) {
+    public void sendMailAboutPersonalDebt(String emailTo, String userName, String perName, double amount, BigInteger userId) {
         ObjectsCheckUtils.isNotNull(emailTo, userName, perName, userId);
 
         SimpleMailMessage message = new SimpleMailMessage();
@@ -74,7 +74,7 @@ public class EmailServiceSenderImpl implements EmailServiceSender {
     }
 
     @Override
-    public void sendMailAboutFamilyDebt(String emailTo, String userName, String famName, Long amount, BigInteger userId) {
+    public void sendMailAboutFamilyDebt(String emailTo, String userName, String famName, double amount, BigInteger userId) {
         ObjectsCheckUtils.isNotNull(emailTo, userName, famName, userId);
 
         SimpleMailMessage message = new SimpleMailMessage();
@@ -126,7 +126,7 @@ public class EmailServiceSenderImpl implements EmailServiceSender {
     }
 
     @Override
-    public void sendMailAutoPersonalExpense(String emailTo, String userName, Long amountPaid, String credName, BigInteger userId) {
+    public void sendMailAutoPersonalExpense(String emailTo, String userName, double amountPaid, String credName, BigInteger userId) {
         ObjectsCheckUtils.isNotNull(emailTo, userName, credName, userId);
 
         SimpleMailMessage message = new SimpleMailMessage();
@@ -138,7 +138,7 @@ public class EmailServiceSenderImpl implements EmailServiceSender {
     }
 
     @Override
-    public void sendMailAutoPersonalIncome(String emailTo, String userName, Long amountPaid, String credName, BigInteger userId) {
+    public void sendMailAutoPersonalIncome(String emailTo, String userName, double amountPaid, String credName, BigInteger userId) {
         ObjectsCheckUtils.isNotNull(emailTo, userName, credName, userId);
 
         SimpleMailMessage message = new SimpleMailMessage();
@@ -150,7 +150,7 @@ public class EmailServiceSenderImpl implements EmailServiceSender {
     }
 
     @Override
-    public void sendMailAutoFamilyExpense(String emailTo, String userName, Long amountPaid, String credName, BigInteger userId) {
+    public void sendMailAutoFamilyExpense(String emailTo, String userName, double amountPaid, String credName, BigInteger userId) {
         ObjectsCheckUtils.isNotNull(emailTo, userName, credName, userId);
 
         SimpleMailMessage message = new SimpleMailMessage();
@@ -162,7 +162,7 @@ public class EmailServiceSenderImpl implements EmailServiceSender {
     }
 
     @Override
-    public void sendMailAutoFamilyIncome(String emailTo, String userName, Long amountPaid, String credName, BigInteger userId) {
+    public void sendMailAutoFamilyIncome(String emailTo, String userName, double amountPaid, String credName, BigInteger userId) {
         ObjectsCheckUtils.isNotNull(emailTo, userName, credName, userId);
 
         SimpleMailMessage message = new SimpleMailMessage();

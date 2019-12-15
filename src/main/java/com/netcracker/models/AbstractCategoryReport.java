@@ -10,7 +10,7 @@ import java.time.LocalDate;
 
 public abstract class AbstractCategoryReport {
         private BigInteger abstractCategoryReportId;
-        private Long amount;
+        private double amount;
         private BigInteger userReference;
 
         protected static abstract class BaseBuilder<T extends AbstractCategoryReport, B extends BaseBuilder> {
@@ -36,7 +36,7 @@ public abstract class AbstractCategoryReport {
                 return actualClassBuilder;
             }
 
-            public B amount(Long amount) {
+            public B amount(double amount) {
                 actualClass.setAmount(amount);
                 return actualClassBuilder;
             }
@@ -54,11 +54,11 @@ public abstract class AbstractCategoryReport {
         this.abstractCategoryReportId = abstractCategoryReportId;
     }
 
-    public Long getAmount() {
+    public double getAmount() {
         return amount;
     }
 
-    public void setAmount(Long amount) {
+    public void setAmount(double amount) {
         this.amount = amount;
     }
 
