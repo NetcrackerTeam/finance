@@ -25,7 +25,8 @@ public class AccountAutoOperationServiceImpl implements AccountAutoOperationServ
     private static final Logger logger = Logger.getLogger(AccountAutoOperationServiceImpl.class);
 
     @Override
-    public AutoOperationIncome createFamilyIncomeAutoOperation(AutoOperationIncome autoOperationIncome, BigInteger userId, BigInteger familyDebitAccountId) {
+    public AutoOperationIncome createFamilyIncomeAutoOperation(AutoOperationIncome autoOperationIncome, BigInteger userId,
+                                                               BigInteger familyDebitAccountId) {
         logger.debug("[createFamilyIncomeAutoOperation]" + debugStartMessage + "[ familyDebitAccountId = " +
                 familyDebitAccountId + "], [userId = " + userId + "], " + autoOperationIncome.toString());
 
@@ -35,7 +36,8 @@ public class AccountAutoOperationServiceImpl implements AccountAutoOperationServ
     }
 
     @Override
-    public AutoOperationIncome createPersonalIncomeAutoOperation(AutoOperationIncome autoOperationIncome, BigInteger personalDebitAccountId) {
+    public AutoOperationIncome createPersonalIncomeAutoOperation(AutoOperationIncome autoOperationIncome,
+                                                                 BigInteger personalDebitAccountId) {
         logger.debug("[createPersonalIncomeAutoOperation]" + debugStartMessage + "[personalDebitAccountId = " +
                 personalDebitAccountId + "], " + autoOperationIncome.toString());
 
@@ -45,7 +47,8 @@ public class AccountAutoOperationServiceImpl implements AccountAutoOperationServ
     }
 
     @Override
-    public AutoOperationExpense createFamilyExpenseAutoOperation(AutoOperationExpense autoOperationExpense, BigInteger userId, BigInteger familyDebitAccountId) {
+    public AutoOperationExpense createFamilyExpenseAutoOperation(AutoOperationExpense autoOperationExpense, BigInteger userId,
+                                                                 BigInteger familyDebitAccountId) {
         logger.debug("[createFamilyExpenseAutoOperation]" + debugStartMessage + "[familyDebitAccountId = " +
                 familyDebitAccountId + "], [userId = " + userId + "], " + autoOperationExpense.toString());
 
@@ -55,7 +58,8 @@ public class AccountAutoOperationServiceImpl implements AccountAutoOperationServ
     }
 
     @Override
-    public AutoOperationExpense createPersonalExpenseAutoOperation(AutoOperationExpense autoOperationExpense, BigInteger personalDebitAccountId) {
+    public AutoOperationExpense createPersonalExpenseAutoOperation(AutoOperationExpense autoOperationExpense,
+                                                                   BigInteger personalDebitAccountId) {
         logger.debug("[createPersonalExpenseAutoOperation]" + debugStartMessage + "[personalDebitAccountId = " +
                 personalDebitAccountId + "], " + autoOperationExpense.toString());
 
@@ -110,7 +114,8 @@ public class AccountAutoOperationServiceImpl implements AccountAutoOperationServ
                 "], [dayOfMonth = " + dayOfMonth + "]");
 
         ObjectsCheckUtils.isNotNull(debitAccountId, dayOfMonth);
-        List<AbstractAutoOperation> allTodayOperationsList = autoOperationDao.getAllTodayOperationsPersonal(debitAccountId, dayOfMonth);
+        List<AbstractAutoOperation> allTodayOperationsList = autoOperationDao.getAllTodayOperationsPersonal(debitAccountId,
+                dayOfMonth);
         return createAllTodayOperationsList(allTodayOperationsList);
     }
 
@@ -120,7 +125,8 @@ public class AccountAutoOperationServiceImpl implements AccountAutoOperationServ
                 "], [dayOfMonth = " + dayOfMonth + "]");
 
         ObjectsCheckUtils.isNotNull(debitAccountId, dayOfMonth);
-        List<AbstractAutoOperation> allTodayOperationsList = autoOperationDao.getAllTodayOperationsFamily(debitAccountId, dayOfMonth);
+        List<AbstractAutoOperation> allTodayOperationsList = autoOperationDao.getAllTodayOperationsFamily(debitAccountId,
+                dayOfMonth);
         return createAllTodayOperationsList(allTodayOperationsList);
     }
 
