@@ -7,10 +7,16 @@ import java.util.List;
 
 public interface PredictionService {
 
-    public boolean predictCreditPossibility(BigInteger id, int duration, double amount);
+    public boolean predictPersonalCreditPossibility(BigInteger id, int duration, double amount);
 
-    public double predictMonthIncome(BigInteger id, int duration);
+    public boolean predictFamilyCreditPossibility(BigInteger id, int duration, double amount);
 
-    public double predictMonthExpense(BigInteger id, int duration);
+    public double predictPersonalMonthIncome(BigInteger id, int duration);
+
+    public double predictPersonalMonthExpense(BigInteger id, int duration);
+
+    public double predictFamilyMonthIncome(BigInteger id, int duration);
+
+    public double predictFamilyMonthExpense(BigInteger id, int duration);
 
 }
