@@ -4,6 +4,7 @@ import com.netcracker.dao.UserDao;
 import com.netcracker.dao.impl.mapper.UserDaoMapper;
 import com.netcracker.exception.UserException;
 import com.netcracker.models.User;
+import com.netcracker.services.utils.ExceptionMessages;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -50,7 +51,7 @@ public class UserDaoImpl implements UserDao {
                     new UserDaoMapper());
         } catch (
                 EmptyResultDataAccessException EmptyResultDataAccessException) {
-            throw new UserException(UserException.ERROR_MESSAGE_USER);
+            throw new UserException(ExceptionMessages.ERROR_MESSAGE_USER);
         }
 
     }
@@ -63,7 +64,7 @@ public class UserDaoImpl implements UserDao {
                     new UserDaoMapper());
         } catch (
                 EmptyResultDataAccessException EmptyResultDataAccessException) {
-            throw new UserException(UserException.ERROR_MESSAGE_USER);
+            throw new UserException(ExceptionMessages.ERROR_MESSAGE_USER);
         }
 
     }
