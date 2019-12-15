@@ -3,9 +3,7 @@ package com.netcracker.dao.impl;
 import com.netcracker.configs.WebConfig;
 import com.netcracker.dao.MonthReportDao;
 
-import com.netcracker.models.AccountIncome;
 import com.netcracker.models.MonthReport;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,13 +13,9 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
-import sun.util.resources.cldr.ig.CurrencyNames_ig;
 
-import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.sql.Date;
 import java.time.LocalDate;
-import java.util.List;
 
 @WebAppConfiguration
 @ContextConfiguration(classes = {WebConfig.class})

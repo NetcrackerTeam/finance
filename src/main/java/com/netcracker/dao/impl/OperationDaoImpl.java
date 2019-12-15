@@ -16,6 +16,7 @@ import javax.sql.DataSource;
 import java.math.BigInteger;
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.Collection;
 import java.util.List;
 
 @Component
@@ -29,22 +30,22 @@ public class OperationDaoImpl implements OperationDao {
     }
 
     @Override
-    public void createIncomePersonalByAccId(BigInteger id, long income, LocalDate date,  CategoryIncome categoryIncome) {
+    public void createIncomePersonalByAccId(BigInteger id, double income, LocalDate date, CategoryIncome categoryIncome) {
         template.update(ADD_INCOME_PERSONAL_BY_ACCOUNT_ID, id, income, Date.valueOf(date), categoryIncome.getId());
     }
 
     @Override
-    public void createExpensePersonaByAccId(BigInteger id, long expense, LocalDate date, CategoryExpense categoryExpense) {
+    public void createExpensePersonaByAccId(BigInteger id, double expense, LocalDate date, CategoryExpense categoryExpense) {
         template.update(ADD_EXPENSE_PERSONAL_BY_ACCOUNT_ID, id, expense, Date.valueOf(date), categoryExpense.getId());
     }
 
     @Override
-    public void createIncomeFamilyByAccId(BigInteger idUser, BigInteger idFamily, long income, LocalDate date, CategoryIncome categoryIncome) {
+    public void createIncomeFamilyByAccId(BigInteger idUser, BigInteger idFamily, double income, LocalDate date, CategoryIncome categoryIncome) {
         template.update(ADD_INCOME_FAMILY_BY_ACCOUNT_ID, idUser, idFamily, income, Date.valueOf(date), categoryIncome.getId());
     }
 
     @Override
-    public void createExpenseFamilyByAccId(BigInteger idUser, BigInteger idFamily, long expense, LocalDate date, CategoryExpense categoryExpense ) {
+    public void createExpenseFamilyByAccId(BigInteger idUser, BigInteger idFamily, double expense, LocalDate date, CategoryExpense categoryExpense ) {
         template.update(ADD_EXPENSE_FAMILY_BY_ACCOUNT_ID, idUser, idFamily, expense, Date.valueOf(date), categoryExpense.getId());
     }
 
@@ -73,22 +74,22 @@ public class OperationDaoImpl implements OperationDao {
     }
 
     @Override
-    public List<CategoryExpenseReport> getExpensesPersonalGroupByCategories(BigInteger id, LocalDate date) {
+    public Collection<CategoryExpenseReport> getExpensesPersonalGroupByCategories(BigInteger id, LocalDate date) {
         return template.query(GET_EXPENSES_PERSONAL_GROUP_BY_CATEGORIES, new Object[]{id, Date.valueOf(date)}, new CategoryExpensePersonalReportMapper());
     }
 
     @Override
-    public List<CategoryIncomeReport> getIncomesPersonalGroupByCategories(BigInteger id, LocalDate date) {
+    public Collection<CategoryIncomeReport> getIncomesPersonalGroupByCategories(BigInteger id, LocalDate date) {
         return template.query(GET_INCOMES_PERSONAL_GROUP_BY_CATEGORIES, new Object[]{id, Date.valueOf(date)}, new CategoryIncomePersonalReportMapper());
     }
 
     @Override
-    public List<CategoryExpenseReport> getExpensesFamilyGroupByCategories(BigInteger id, LocalDate date) {
+    public Collection<CategoryExpenseReport> getExpensesFamilyGroupByCategories(BigInteger id, LocalDate date) {
         return template.query(GET_EXPENSES_FAMILY_GROUP_BY_CATEGORIES, new Object[]{id, Date.valueOf(date)}, new CategoryExpenseFamilyReportMapper());
     }
 
     @Override
-    public List<CategoryIncomeReport> getIncomesFamilyGroupByCategories(BigInteger id, LocalDate date) {
+    public Collection<CategoryIncomeReport> getIncomesFamilyGroupByCategories(BigInteger id, LocalDate date) {
         return template.query(GET_INCOMES_FAMILY_GROUP_BY_CATEGORIES, new Object[]{id, Date.valueOf(date)}, new CategoryIncomeFamilyReportMapper());
     }
 }

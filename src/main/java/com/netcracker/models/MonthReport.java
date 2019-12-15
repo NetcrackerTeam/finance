@@ -3,23 +3,22 @@ package com.netcracker.models;
 import java.math.BigInteger;
 import java.time.LocalDate;
 import java.util.Collection;
-import java.util.List;
 
 public class MonthReport {
 
     private final BigInteger id;
-    private Long totalIncome;
-    private Long totalExpense;
-    private Long balance;
+    private double totalIncome;
+    private double totalExpense;
+    private double balance;
     private LocalDate dateFrom;
     private LocalDate dateTo;
     private Collection<CategoryExpenseReport> categoryExpense;
     private Collection<CategoryIncomeReport> categoryIncome;
     public static  class Builder {
         private BigInteger id;
-        private Long totalIncome;
-        private Long totalExpense;
-        private Long balance;
+        private double totalIncome;
+        private double totalExpense;
+        private double balance;
         private LocalDate dateFrom;
         private LocalDate dateTo;
 
@@ -33,15 +32,15 @@ public class MonthReport {
             return this;
         }
 
-        public Builder totalIncome( Long val) {
+        public Builder totalIncome(double val) {
             this.totalIncome = val;
             return this;
         }
-        public Builder totalExpense( Long val) {
+        public Builder totalExpense(double val) {
             this.totalExpense = val;
             return this;
         }
-        public Builder balance( Long val) {
+        public Builder balance(double val) {
             this.balance = val;
             return this;
         }
@@ -82,15 +81,15 @@ public class MonthReport {
         return id;
     }
 
-    public Long getTotalIncome() {
+    public double getTotalIncome() {
         return totalIncome;
     }
 
-    public Long getTotalExpense() {
+    public double getTotalExpense() {
         return totalExpense;
     }
 
-    public Long getBalance() {
+    public double getBalance() {
         return balance;
     }
 
@@ -118,15 +117,15 @@ public class MonthReport {
         return categoryIncome;
     }
 
-    public void setTotalIncome(Long totalIncome) {
+    public void setTotalIncome(double totalIncome) {
         this.totalIncome = totalIncome;
     }
 
-    public void setTotalExpense(Long totalExpense) {
+    public void setTotalExpense(double totalExpense) {
         this.totalExpense = totalExpense;
     }
 
-    public void setBalance(Long balance) {
+    public void setBalance(double balance) {
         this.balance = balance;
     }
 

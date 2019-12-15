@@ -5,7 +5,7 @@ import java.time.LocalDate;
 
 public abstract class AbstractAccountOperation {
     private BigInteger id;
-    private Long amount;
+    private double amount;
     private LocalDate date;
     private Debt debt;
     private BigInteger userId;
@@ -28,7 +28,7 @@ public abstract class AbstractAccountOperation {
             return actualClassBuilder;
         }
 
-        public B accountAmount(Long amount) {
+        public B accountAmount(double amount) {
             actualClass.setAmount(amount);
             return actualClassBuilder;
         }
@@ -58,7 +58,7 @@ public abstract class AbstractAccountOperation {
         return id;
     }
 
-    public Long getAmount() {
+    public double getAmount() {
         return amount;
     }
 
@@ -78,7 +78,7 @@ public abstract class AbstractAccountOperation {
         this.id = id;
     }
 
-    public void setAmount(Long amount) {
+    public void setAmount(double amount) {
         this.amount = amount;
     }
 

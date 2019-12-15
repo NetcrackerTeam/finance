@@ -96,4 +96,16 @@ public class FamilyAccountDebitDaoImpl implements FamilyAccountDebitDao {
             throw new FamilyDebitAccountException(ExceptionMessages.ERROR_MESSAGE_FAMILY);
         }
     }
+    @Override
+    public Collection<User> getAllParticipantsOfFamilyAccounts() {
+        logger.debug("Entering list(getAllParticipantsOfFamilyAccount)");
+        try {
+            Collection<User> users = this.template.query(GET_ALL_PARTICIPANTS, new UserDaoMapper());
+            logger.debug("Entering list success(getAllParticipantsOfFamilyAccount)");
+            return users;
+        } catch (EmptyResultDataAccessException ex) {
+            logger.error("the family debit accounts doesn`t have participants");
+            throw new FamilyDebitAccountException(ExceptionMessages.ERROR_MESSAGE_FAMILY);
+        }
+    }
 }
