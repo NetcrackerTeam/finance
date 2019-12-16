@@ -2,6 +2,7 @@ package com.netcracker.services.impl;
 
 import com.netcracker.dao.CreditAccountDao;
 import com.netcracker.dao.FamilyAccountDebitDao;
+import com.netcracker.dao.PersonalDebitAccountDao;
 import com.netcracker.exception.JobException;
 import com.netcracker.models.*;
 import com.netcracker.services.*;
@@ -53,6 +54,12 @@ public class JobServiceImpl implements JobService {
 
     @Autowired
     private FamilyAccountDebitDao familyAccountDebitDao;
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    PersonalDebitAccountDao personalDebitAccountDao;
 
     private LocalDate localDateTo = LocalDate.now();
     private LocalDate dateFrom = localDateTo.minus(1, ChronoUnit.MONTHS);
@@ -133,28 +140,13 @@ public class JobServiceImpl implements JobService {
                     familyCreditService.addAutoDebtRepayment(debitAccount.getId(), cr.getCreditId(), payForDebt);
                 }
             }
-//            emailServiceSender.sendMailAutoFamilyIncome(debitAccount.getOwner().geteMail(),
-//                    debitAccount.getOwner().getName(), autoIncome.getAmount(), );
-
-        }
-    }
-
-    @Override
-    @Scheduled(cron = CRON_BY_EVERYDAY)
-    public void executeRemindAutoExpenseFamilyJob() {
-        Collection<AutoOperationExpense> autoOperationExpense = accountAutoOperationService.getAllTodayOperationsFamilyExpense(dayNow);
-        for (AutoOperationExpense autoExpense : autoOperationExpense) {
-            operationService.createFamilyOperationExpense(autoExpense.getUserId(), autoExpense.getUserId(), autoExpense.getAmount(), localDateTo, autoExpense.getCategoryExpense());
-        }
-
-    }
-
-    @Override
-    @Scheduled(cron = CRON_BY_EVERYDAY)
-    public void executeRemindAutoExpensePersonalJob() {
-        Collection<AutoOperationExpense> autoOperationExpensePersonal = accountAutoOperationService.getAllTodayOperationsPersonalExpense(dayNow);
-        for (AutoOperationExpense autoExpense : autoOperationExpensePersonal) {
-            operationService.createPersonalOperationExpense(autoExpense.getUserId(), autoExpense.getAmount(), localDateTo, autoExpense.getCategoryExpense());
+            try {
+             //   emailServiceSender.sendMailAutoFamilyIncome(debitAccount.getOwner().geteMail(),
+             //           debitAccount.getOwner().getName(), autoIncome.getAmount(), );
+                logger.debug("Email have been sent with  " + debitAccount.getOwner().getName());
+            } catch (JobException e) {
+                logger.debug("Email can't be sent", e);
+            }
         }
     }
 
@@ -162,11 +154,77 @@ public class JobServiceImpl implements JobService {
     @Scheduled(cron = CRON_BY_EVERYDAY)
     public void executeRemindAutoIncomePersonalJob() {
         Collection<AutoOperationIncome> autoOperationIncomePersonal = accountAutoOperationService.getAllTodayOperationsPersonalIncome(dayNow);
-        for (AutoOperationIncome autoIncome : autoOperationIncomePersonal) {
-            operationService.createPersonalOperationIncome(autoIncome.getUserId(), autoIncome.getAmount(), localDateTo, autoIncome.getCategoryIncome());
+        for (AutoOperationIncome autoOperIncome : autoOperationIncomePersonal) {
+            PersonalDebitAccount personalDebitAccount = personalDebitService.getPersonalDebitAccount(autoOperIncome.getDebitId());
+            operationService.createPersonalOperationIncome(autoOperIncome.getDebitId(), autoOperIncome.getAmount(), localDateTo, autoOperIncome.getCategoryIncome());
+            double newAmount = personalDebitAccount.getAmount() + autoOperIncome.getAmount();
+            Collection<PersonalCreditAccount> creditAccounts = personalCreditService.getPersonalCredits(personalDebitAccount.getId());
+            for (PersonalCreditAccount pc : creditAccounts) {
+                if (pc.getDebt().getAmountDebt() != 0) {
+                    double payForDebt = CreditUtils.calculateMonthPayment(pc.getDate(), pc.getDateTo(), pc.getAmount(), pc.getCreditRate());
+                    personalCreditService.addAutoDebtRepayment(personalDebitAccount.getId(), pc.getCreditId(), payForDebt);
+                }
+                try {
+                  //  emailServiceSender.sendMailAutoFamilyIncome(personalDebitAccount.getOwner().geteMail(),
+                  //          personalDebitAccount.getOwner().getName(), autoOperIncome.getAmount(), );
+                    logger.debug("Email have been sent with  " + personalDebitAccount.getOwner().getName());
+                } catch (JobException e) {
+                    logger.debug("Email can't be sent", e);
+                }
+            }
 
         }
     }
+
+
+    @Override
+    @Scheduled(cron = CRON_BY_EVERYDAY)
+    public void executeRemindAutoExpenseFamilyJob() {
+        Collection<AutoOperationExpense> autoOperationExpenseFamily = accountAutoOperationService.getAllTodayOperationsFamilyExpense(dayNow);
+        for (AutoOperationExpense autoExpense : autoOperationExpenseFamily) {
+            operationService.createFamilyOperationExpense(autoExpense.getUserId(), autoExpense.getDebitId(), autoExpense.getAmount(), localDateTo, autoExpense.getCategoryExpense());
+            BigInteger userId = autoExpense.getUserId();
+            User user = userService.getUserById(userId);
+            FamilyDebitAccount familyDebitAccount = familyAccountDebitDao.getFamilyAccountById(user.getPersonalDebitAccount());
+            if (familyDebitAccount.getAmount() < autoExpense.getAmount()) {
+                try {
+                    emailServiceSender.sendMailAboutPersonalDebt(user.geteMail(), user.getName(), "что за perName", familyDebitAccount.getAmount(), user.getId());
+                    logger.debug("Email have been sent with auto credit . User id: {} " + user.getId());
+                } catch (JobException e) {
+                    logger.debug("Email can't be sent", e);
+                }
+            } else {
+                //он обновит полностью
+                // нужны ли методы в этом дао для конкретно добавление и  списание со счета ? я не до конца понимаю
+                personalDebitAccountDao.updateAmountOfPersonalAccount(autoExpense.getDebitId(), autoExpense.getAmount());
+            }
+        }
+    }
+
+
+    @Override
+    @Scheduled(cron = CRON_BY_EVERYDAY)
+    public void executeRemindAutoExpensePersonalJob() {
+        Collection<AutoOperationExpense> autoOperationExpensePersonal = accountAutoOperationService.getAllTodayOperationsPersonalExpense(dayNow);
+        for (AutoOperationExpense autoExpense : autoOperationExpensePersonal) {
+            operationService.createPersonalOperationExpense(autoExpense.getUserId(), autoExpense.getAmount(), localDateTo, autoExpense.getCategoryExpense());
+            BigInteger userId = autoExpense.getUserId();
+            User user = userService.getUserById(userId);
+            PersonalDebitAccount personalDebitAccount = personalDebitAccountDao.getPersonalAccountById(user.getPersonalDebitAccount());
+            if (personalDebitAccount.getAmount() < autoExpense.getAmount()) {
+                try {
+                    emailServiceSender.sendMailAboutPersonalDebt(user.geteMail(), user.getName(), "что за perName", personalDebitAccount.getAmount(), user.getId());
+                    logger.debug("Email have been sent with auto credit . User id: {} " + user.getId());
+                } catch (JobException e) {
+                    logger.debug("Email can't be sent", e);
+                }
+            } else {
+                //аналогично
+                personalDebitAccountDao.updateAmountOfPersonalAccount(autoExpense.getDebitId(), autoExpense.getAmount());
+            }
+        }
+    }
+
 
     @Override
     @Scheduled(cron = CRON_BY_EVERYDAY)
