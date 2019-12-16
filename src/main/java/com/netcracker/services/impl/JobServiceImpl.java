@@ -72,63 +72,46 @@ public class JobServiceImpl implements JobService {
     @Scheduled(cron = CRON_BY_REPORT)
     public void executeMonthFamilyReportOnEmailJob() {
         Collection<FamilyDebitAccount> familyDebitAccounts = familyDebitService.getAllFamilyAccounts();
-        if (!familyDebitAccounts.isEmpty()) {
-            familyDebitAccounts.forEach(debitAccountFamily -> {
-                userList = debitAccountFamily.getParticipants();
-                for (User user : userList) {
-                    Collection<MonthReport> monthReportsFamily =
-                            (List<MonthReport>) monthReportService.getMonthPersonalReport(user.getFamilyDebitAccount(), dateFrom, localDateTo);
-                    if (!monthReportsFamily.isEmpty()) {
-                        monthReportsFamily.forEach(monthReport -> {
-                            try {
-                                path = monthReportService.convertToTxt(monthReport);
-                                emailServiceSender.monthReport(user.geteMail(), user.getId());// не дописан sender не могу передать путь к файлу
-                                logger.debug("Email have been sent. User id: {}, Date: {}" + user.getId());
-                            } catch (JobException e) {
-                                logger.debug("Email can't be sent", e);
-                            } catch (MessagingException e) {
-                                logger.debug("Email can't be sent, messaging exception", e);
-                            }
-                        });
-                    }
-                }
-            });
-        }
+        if (familyDebitAccounts.isEmpty())
+            return;
+        familyDebitAccounts.forEach(debitAccountFamily -> {
+            monthReportService.formMonthFamilyReportFromDb(debitAccountFamily.getId());
+            MonthReport monthReport = monthReportService.getMonthPersonalReport(debitAccountFamily.getId(), dateFrom, localDateTo);
+            sendReportByMail(monthReport, (AbstractDebitAccount) familyDebitAccounts);
+        });
+
     }
 
     @Override
     @Scheduled(cron = CRON_BY_REPORT)
     public void executeMonthPersonalReportOnEmailJob() {
-        Collection<FamilyDebitAccount> familyDebitAccounts = familyDebitService.getAllFamilyAccounts();
-        if (!familyDebitAccounts.isEmpty()) {
-            familyDebitAccounts.forEach(debitAccountFamily -> {
-                userList = debitAccountFamily.getParticipants();
-                for (User user : userList) {
-                    Collection<MonthReport> monthReportsFamily =
-                            (List<MonthReport>) monthReportService.getMonthFamilyReport(user.getPersonalDebitAccount(), dateFrom, localDateTo);
-                    if (!monthReportsFamily.isEmpty()) {
-                        monthReportsFamily.forEach(monthReport -> {
-                            try {
-                                path = monthReportService.convertToTxt(monthReport);
-                                emailServiceSender.monthReport(user.geteMail(), user.getId());//дописать сендер
-                                logger.debug("Email have been sent. User id: {}" + user.getId());
-                            } catch (JobException e) {
-                                logger.debug("Email can't be sent", e);
-                            } catch (MessagingException e) {
-                                logger.debug("Email can't be sent, messaging exception", e);
+        Collection<PersonalDebitAccount> personalDebitAccounts = personalDebitService.getAllPersonalAccounts();
+        if (personalDebitAccounts.isEmpty())
+            return;
+        personalDebitAccounts.forEach(debitAccountPersonal -> {
+            monthReportService.formMonthPersonalReportFromDb(debitAccountPersonal.getId());
+            MonthReport monthReport = monthReportService.getMonthPersonalReport(debitAccountPersonal.getId(), dateFrom, localDateTo);
+            sendReportByMail(monthReport, (AbstractDebitAccount) personalDebitAccounts);
+        });
+    }
 
-                            }
-                        });
-                    }
-                }
-            });
+    private void sendReportByMail (MonthReport monthReport, AbstractDebitAccount debitAccount) {
+        try {
+            path = monthReportService.convertToTxt(monthReport);
+            emailServiceSender.monthReport(debitAccount.getOwner().geteMail(), debitAccount.getOwner().getId());// не дописан sender не могу передать путь к файлу
+            logger.debug("Email have been sent");
+        } catch (MessagingException e) {
+            logger.error("Email can't be sent, messaging exception", e);
         }
     }
+
 
     @Override
     @Scheduled(cron = CRON_BY_EVERYDAY)
     public void executeRemindAutoIncomeFamilyJob() {
         Collection<AutoOperationIncome> autoOperationIncomesFamily = accountAutoOperationService.getAllTodayOperationsFamilyIncome(dayNow);
+        if (autoOperationIncomesFamily.isEmpty())
+            return;
         for (AutoOperationIncome autoIncome : autoOperationIncomesFamily) {
             FamilyDebitAccount debitAccount = familyDebitService.getFamilyDebitAccount(autoIncome.getDebitId());
             operationService.createFamilyOperationIncome(autoIncome.getUserId(), autoIncome.getDebitId(), autoIncome.getAmount(), localDateTo, autoIncome.getCategoryIncome());

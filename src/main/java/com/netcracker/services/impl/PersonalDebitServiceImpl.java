@@ -55,4 +55,9 @@ public class PersonalDebitServiceImpl implements PersonalDebitService {
         return operationService.getAllPersonalOperations(accountId, date);
     }
 
+    @Override
+    public Collection<PersonalDebitAccount> getAllPersonalAccounts() {
+        return null;
+    }
+
 }
