@@ -11,6 +11,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
+import java.math.BigInteger;
 import java.nio.file.Path;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
@@ -45,6 +46,10 @@ public class JobServiceImpl implements JobService {
 
     @Autowired
     private OperationService operationService;
+
+    @Autowired
+    private PersonalDebitService personalDebitService;
+
 
     private LocalDate localDateTo = LocalDate.now();
     private LocalDate dateFrom = localDateTo.minus(1, ChronoUnit.MONTHS);
@@ -114,8 +119,8 @@ public class JobServiceImpl implements JobService {
     @Scheduled(cron = CRON_BY_EVERYDAY)
     public void executeRemindAutoIncomeFamilyJob() {
         Collection<AutoOperationIncome> autoOperationIncomesFamily = accountAutoOperationService.getAllTodayOperationsFamilyIncome(dayNow);
-        for (AutoOperationIncome autoIncome: autoOperationIncomesFamily) {
-            operationService.createFamilyOperationIncome(autoIncome.getDebitId(),autoIncome.getDebitId(),autoIncome.getAmount() ,localDateTo,autoIncome.getCategoryIncome());
+        for (AutoOperationIncome autoIncome : autoOperationIncomesFamily) {
+            operationService.createFamilyOperationIncome(autoIncome.getDebitId(), autoIncome.getDebitId(), autoIncome.getAmount(), localDateTo, autoIncome.getCategoryIncome());
             familyCreditService.getFamilyCredits(autoIncome.getDebitId());
 
         }
@@ -125,8 +130,8 @@ public class JobServiceImpl implements JobService {
     @Scheduled(cron = CRON_BY_EVERYDAY)
     public void executeRemindAutoExpenseFamilyJob() {
         Collection<AutoOperationExpense> autoOperationExpense = accountAutoOperationService.getAllTodayOperationsFamilyExpense(dayNow);
-        for (AutoOperationExpense autoExpense: autoOperationExpense) {
-            operationService.createFamilyOperationExpense(autoExpense.getId(),autoExpense.getUserId(),autoExpense.getAmount(),localDateTo,autoExpense.getCategoryExpense());
+        for (AutoOperationExpense autoExpense : autoOperationExpense) {
+            operationService.createFamilyOperationExpense(autoExpense.getId(), autoExpense.getUserId(), autoExpense.getAmount(), localDateTo, autoExpense.getCategoryExpense());
             familyCreditService.getFamilyCredits(autoExpense.getId());
         }
 
@@ -136,8 +141,8 @@ public class JobServiceImpl implements JobService {
     @Scheduled(cron = CRON_BY_EVERYDAY)
     public void executeRemindAutoExpensePersonalJob() {
         Collection<AutoOperationExpense> autoOperationExpensePersonal = accountAutoOperationService.getAllTodayOperationsPersonalExpense(dayNow);
-        for (AutoOperationExpense autoExpense: autoOperationExpensePersonal) {
-            operationService.createPersonalOperationExpense(autoExpense.getId(),autoExpense.getAmount(),localDateTo,autoExpense.getCategoryExpense());
+        for (AutoOperationExpense autoExpense : autoOperationExpensePersonal) {
+            operationService.createPersonalOperationExpense(autoExpense.getId(), autoExpense.getAmount(), localDateTo, autoExpense.getCategoryExpense());
             personalCreditService.getPersonalCredits(autoExpense.getId());
         }
     }
@@ -146,8 +151,8 @@ public class JobServiceImpl implements JobService {
     @Scheduled(cron = CRON_BY_EVERYDAY)
     public void executeRemindAutoIncomePersonalJob() {
         Collection<AutoOperationIncome> autoOperationIncomePersonal = accountAutoOperationService.getAllTodayOperationsPersonalIncome(dayNow);
-        for (AutoOperationIncome autoIncome: autoOperationIncomePersonal) {
-            operationService.createPersonalOperationIncome(autoIncome.getDebitId(),autoIncome.getAmount(), localDateTo,autoIncome.getCategoryIncome());
+        for (AutoOperationIncome autoIncome : autoOperationIncomePersonal) {
+            operationService.createPersonalOperationIncome(autoIncome.getDebitId(), autoIncome.getAmount(), localDateTo, autoIncome.getCategoryIncome());
             personalCreditService.getPersonalCredits(autoIncome.getDebitId());
         }
     }
@@ -158,12 +163,15 @@ public class JobServiceImpl implements JobService {
     public void executeAutoCreditExpenseFamily() {
         Collection<FamilyCreditAccount> allFamilyCredit = creditAccountDao.getAllFamilyCreditIdsByMonthDay(dayNow);
         for (FamilyCreditAccount familyCredit : allFamilyCredit) {
+            BigInteger id = creditAccountDao.getFamilyDebitIdByCreditId(familyCredit.getCreditId());
             calculateCredit = CreditUtils.calculateMonthPayment(familyCredit.getDate(), familyCredit.getDateTo(), familyCredit.getPaidAmount(), familyCredit.getCreditRate());
-            boolean paymentAutoFamilyCredit = familyCreditService.addFamilyCreditPaymentAuto(creditAccountDao.getPersonalDebitIdByCreditId(familyCredit.getDebt().getDebtId()),
-                    familyCredit.getCreditId(), calculateCredit);
+            User user = familyDebitService.getFamilyDebitAccount(id).getOwner();
+            boolean paymentAutoFamilyCredit = familyCreditService.addFamilyCreditPaymentAuto(id, familyCredit.getCreditId(), calculateCredit);
             if (!paymentAutoFamilyCredit) {
                 familyCreditService.increaseDebt(familyCredit.getCreditId(), familyCredit.getPaidAmount());
+                emailServiceSender.sendMailAboutFamilyDebt(user.geteMail(),user.getName(), familyCredit.getName(), calculateCredit, user.getId());
             }
+            emailServiceSender.sendMailReminderFamilyCredit(user.geteMail(), user.getName(), calculateCredit, familyCredit.getName(), id, localDateTo);
         }
     }
 
@@ -172,12 +180,14 @@ public class JobServiceImpl implements JobService {
     public void executeAutoCreditExpensePersonal() {
         Collection<PersonalCreditAccount> allPersonalCredit = creditAccountDao.getAllPersonCreditIdsByMonthDay(dayNow);
         for (PersonalCreditAccount personalCredit : allPersonalCredit) {
-            calculateCredit = CreditUtils.calculateMonthPayment(personalCredit.getDateTo(), personalCredit.getDateTo(), personalCredit.getPaidAmount(), personalCredit.getCreditRate());
-            boolean paymentAutoPersonalCredit = personalCreditService.addPersonalCreditPaymentAuto(creditAccountDao.getFamilyDebitIdByCreditId(personalCredit.getDebt().getDebtId()),
-                    personalCredit.getCreditId(), calculateCredit);
+            BigInteger id = creditAccountDao.getPersonalDebitIdByCreditId(personalCredit.getCreditId());
+            calculateCredit = CreditUtils.calculateMonthPayment(personalCredit.getDate(), personalCredit.getDateTo(), personalCredit.getPaidAmount(), personalCredit.getCreditRate());
+            User user = personalDebitService.getPersonalDebitAccount(id).getOwner();
+            boolean paymentAutoPersonalCredit = personalCreditService.addPersonalCreditPaymentAuto(id, personalCredit.getCreditId(), calculateCredit);
             if (!paymentAutoPersonalCredit) {
                 personalCreditService.increaseDebt(personalCredit.getCreditId(), personalCredit.getPaidAmount());
             }
+            emailServiceSender.sendMailReminderPersonalCredit(user.geteMail(), user.getName(), calculateCredit, personalCredit.getName(), id, localDateTo);
         }
     }
 }
