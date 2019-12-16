@@ -158,10 +158,11 @@ public class JobServiceImpl implements JobService {
     public void executeAutoCreditExpenseFamily() {
         Collection<FamilyCreditAccount> allFamilyCredit = creditAccountDao.getAllFamilyCreditIdsByMonthDay(dayNow);
         for (FamilyCreditAccount familyCredit : allFamilyCredit) {
-            calculateCredit = CreditUtils.calculateMonthPayment(dateFrom, localDateTo, familyCredit.getPaidAmount(), familyCredit.getCreditRate());
-            boolean paymentAutoFamilyCredit = personalCreditService.addPersonalCreditPaymentAuto(familyCredit.getDebt().getDebtId(), familyCredit.getCreditId(), calculateCredit);
+            calculateCredit = CreditUtils.calculateMonthPayment(familyCredit.getDate(), familyCredit.getDateTo(), familyCredit.getPaidAmount(), familyCredit.getCreditRate());
+            boolean paymentAutoFamilyCredit = familyCreditService.addFamilyCreditPaymentAuto(creditAccountDao.getPersonalDebitIdByCreditId(familyCredit.getDebt().getDebtId()),
+                    familyCredit.getCreditId(), calculateCredit);
             if (!paymentAutoFamilyCredit) {
-                personalCreditService.increaseDebt(familyCredit.getCreditId(), familyCredit.getPaidAmount());
+                familyCreditService.increaseDebt(familyCredit.getCreditId(), familyCredit.getPaidAmount());
             }
         }
     }
@@ -171,10 +172,11 @@ public class JobServiceImpl implements JobService {
     public void executeAutoCreditExpensePersonal() {
         Collection<PersonalCreditAccount> allPersonalCredit = creditAccountDao.getAllPersonCreditIdsByMonthDay(dayNow);
         for (PersonalCreditAccount personalCredit : allPersonalCredit) {
-            calculateCredit = CreditUtils.calculateMonthPayment(dateFrom, localDateTo, personalCredit.getPaidAmount(), personalCredit.getCreditRate());
-            boolean paymentAutoPersonalCredit = familyCreditService.addFamilyCreditPaymentAuto(personalCredit.getDebt().getDebtId(), personalCredit.getCreditId(), calculateCredit);
+            calculateCredit = CreditUtils.calculateMonthPayment(personalCredit.getDateTo(), personalCredit.getDateTo(), personalCredit.getPaidAmount(), personalCredit.getCreditRate());
+            boolean paymentAutoPersonalCredit = personalCreditService.addPersonalCreditPaymentAuto(creditAccountDao.getFamilyDebitIdByCreditId(personalCredit.getDebt().getDebtId()),
+                    personalCredit.getCreditId(), calculateCredit);
             if (!paymentAutoPersonalCredit) {
-                familyCreditService.increaseDebt(personalCredit.getCreditId(), personalCredit.getPaidAmount());
+                personalCreditService.increaseDebt(personalCredit.getCreditId(), personalCredit.getPaidAmount());
             }
         }
     }
