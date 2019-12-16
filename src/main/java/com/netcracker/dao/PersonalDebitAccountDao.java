@@ -42,7 +42,7 @@ public interface PersonalDebitAccountDao {
      * @param accountId perosnal account debit id
      * @param amount    amount of persoanl account debit
      */
-    void updateAmountOfPersonalAccount(BigInteger accountId, Long amount);
+    void updateAmountOfPersonalAccount(BigInteger accountId, double amount);
 
     String GET_PERSONAL_ACCOUNT_BY_ID = "SELECT " +
             "PERSONAL_DEBIT.OBJECT_ID PERSONAL_DEBIT_ID, PERSONAL_DEBIT.NAME NAME_PERSONAL_DEBIT, AMOUNT.VALUE AMOUNT_PERSONAL_DEBIT, STATUS_PERSONAL_DEBIT.LIST_VALUE_ID STATUS_PERSONAL_DEBIT, " +

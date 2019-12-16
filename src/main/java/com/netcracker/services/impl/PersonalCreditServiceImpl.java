@@ -50,7 +50,7 @@ public class PersonalCreditServiceImpl implements PersonalCreditService {
     }
 
     @Override
-    public void addPersonalCreditPayment(BigInteger idDebitAccount, BigInteger idCredit, long amount) {
+    public void addPersonalCreditPayment(BigInteger idDebitAccount, BigInteger idCredit, double amount) {
         ObjectsCheckUtils.isNotNull(idDebitAccount, idCredit);
 
         PersonalCreditAccount creditAccount = getPersonalCreditAccount(idCredit);
@@ -62,7 +62,7 @@ public class PersonalCreditServiceImpl implements PersonalCreditService {
         addPayment(creditAccount, debitAccount, amount);
     }
 
-    void makeUserPayment(AbstractDebitAccount debitAccount, AbstractCreditAccount creditAccount, long amount) {
+    void makeUserPayment(AbstractDebitAccount debitAccount, AbstractCreditAccount creditAccount, double amount) {
         if (debitAccount.getAmount() > amount) {
             logger.error("Not enough money on debit account by id = {}", debitAccount.getId());
             throw new CreditAccountException(ExceptionMessages.NOT_ENOUGH_MONEY_ERROR, creditAccount, ErrorVisibility.VISIBLE);
@@ -76,7 +76,7 @@ public class PersonalCreditServiceImpl implements PersonalCreditService {
     }
 
     @Override
-    public boolean addPersonalCreditPaymentAuto(BigInteger idDebitAccount, BigInteger idCredit, long amount) {
+    public boolean addPersonalCreditPaymentAuto(BigInteger idDebitAccount, BigInteger idCredit, double amount) {
         ObjectsCheckUtils.isNotNull(idDebitAccount, idCredit);
 
         PersonalCreditAccount creditAccount = getPersonalCreditAccount(idCredit);
@@ -107,7 +107,7 @@ public class PersonalCreditServiceImpl implements PersonalCreditService {
 
 
     @Override
-    public void increaseDebt(BigInteger idCredit, long amount) {
+    public void increaseDebt(BigInteger idCredit, double amount) {
         ObjectsCheckUtils.isNotNull(idCredit);
         PersonalCreditAccount creditAccount = creditAccountDao.getPersonalCreditById(idCredit);
 
@@ -123,7 +123,7 @@ public class PersonalCreditServiceImpl implements PersonalCreditService {
         changeDebt(changedDebt);
     }
 
-    Debt makeDebtIncrease (Debt debt, long amount) {
+    Debt makeDebtIncrease (Debt debt, double amount) {
         LocalDate newDateTo;
         if (debt.getAmountDebt() == 0) {
             debt.setDateFrom(LocalDate.now());
@@ -141,7 +141,7 @@ public class PersonalCreditServiceImpl implements PersonalCreditService {
 
 
     @Override
-    public void addAutoDebtRepayment(BigInteger idDebitAccount, BigInteger idCredit, long amount) {
+    public void addAutoDebtRepayment(BigInteger idDebitAccount, BigInteger idCredit, double amount) {
         ObjectsCheckUtils.isNotNull(idDebitAccount, idCredit);
 
         PersonalCreditAccount creditAccount = getPersonalCreditAccount(idCredit);
@@ -154,7 +154,7 @@ public class PersonalCreditServiceImpl implements PersonalCreditService {
         logger.debug("Repayment was completed successfully");
     }
 
-    private void decreaseDebt(Debt debt, long amount) {
+    private void decreaseDebt(Debt debt, double amount) {
         ObjectsCheckUtils.isNotNull(debt);
         ObjectsCheckUtils.isNotNull(debt.getDebtId());
 
@@ -162,7 +162,7 @@ public class PersonalCreditServiceImpl implements PersonalCreditService {
         changeDebt(changedDebt);
     }
 
-    Debt makeDebtDecrease (Debt debt, long amount) {
+    Debt makeDebtDecrease (Debt debt, double amount) {
 
         Debt changedDebt = debt;
 
@@ -194,7 +194,7 @@ public class PersonalCreditServiceImpl implements PersonalCreditService {
         return creditAccountDao.getPersonalCreditById(id);
     }
 
-    private void addPayment(AbstractCreditAccount creditAccount, AbstractDebitAccount debitAccount, long amount) {
+    private void addPayment(AbstractCreditAccount creditAccount, AbstractDebitAccount debitAccount, double amount) {
         long actualDebitAmount = debitAccount.getAmount();
         debitAccountDao.updateAmountOfPersonalAccount(debitAccount.getId(), actualDebitAmount - amount);
         creditOperationDao.createPersonalCreditOperation(amount, LocalDate.now(), creditAccount.getCreditId());

@@ -54,7 +54,7 @@ public class FamilyCreditServiceImpl implements FamilyCreditService {
     }
 
     @Override
-    public void addFamilyCreditPayment(BigInteger idDebitAccount, BigInteger idCredit, long amount, Date date) {
+    public void addFamilyCreditPayment(BigInteger idDebitAccount, BigInteger idCredit, double amount, Date date) {
         ObjectsCheckUtils.isNotNull(idDebitAccount, idCredit);
 
         FamilyCreditAccount creditAccount = getFamilyCreditAccount(idCredit);
@@ -68,7 +68,7 @@ public class FamilyCreditServiceImpl implements FamilyCreditService {
     }
 
     @Override
-    public boolean addFamilyCreditPaymentAuto(BigInteger idDebitAccount, BigInteger idCredit, long amount) {
+    public boolean addFamilyCreditPaymentAuto(BigInteger idDebitAccount, BigInteger idCredit, double amount) {
         ObjectsCheckUtils.isNotNull(idDebitAccount, idCredit);
 
         FamilyCreditAccount creditAccount = getFamilyCreditAccount(idCredit);
@@ -86,7 +86,7 @@ public class FamilyCreditServiceImpl implements FamilyCreditService {
     }
 
     @Override
-    public void increaseDebt(BigInteger idCredit, long amount) {
+    public void increaseDebt(BigInteger idCredit, double amount) {
         ObjectsCheckUtils.isNotNull(idCredit);
         FamilyCreditAccount creditAccount = creditAccountDao.getFamilyCreditById(idCredit);
 
@@ -103,7 +103,7 @@ public class FamilyCreditServiceImpl implements FamilyCreditService {
 
 
     @Override
-    public void addAutoDebtRepayment(BigInteger idDebitAccount, BigInteger idCredit, long amount) {
+    public void addAutoDebtRepayment(BigInteger idDebitAccount, BigInteger idCredit, double amount) {
         ObjectsCheckUtils.isNotNull(idDebitAccount, idCredit);
 
         FamilyCreditAccount creditAccount = getFamilyCreditAccount(idCredit);
@@ -117,7 +117,7 @@ public class FamilyCreditServiceImpl implements FamilyCreditService {
 
     }
 
-    private void decreaseDebt(Debt debt, long amount) {
+    private void decreaseDebt(Debt debt, double amount) {
         ObjectsCheckUtils.isNotNull(debt);
         ObjectsCheckUtils.isNotNull(debt.getDebtId());
 
@@ -158,7 +158,7 @@ public class FamilyCreditServiceImpl implements FamilyCreditService {
         creditDeptDao.updatePersonalDebtAmount(id, amount);
     }
 
-    private void addPayment(FamilyCreditAccount creditAccount, FamilyDebitAccount debitAccount, long amount, BigInteger idUser) {
+    private void addPayment(FamilyCreditAccount creditAccount, FamilyDebitAccount debitAccount, double amount, BigInteger idUser) {
         long actualDebitAmount = debitAccount.getAmount();
         debitAccountDao.updateAmountOfFamilyAccount(debitAccount.getId(), actualDebitAmount - amount);
         creditOperationDao.createFamilyCreditOperation(amount, LocalDate.now(), creditAccount.getCreditId(), idUser);

@@ -76,7 +76,7 @@ public class PersonalDebitAccountDaoImpl implements PersonalDebitAccountDao {
     }
 
     @Override
-    public void updateAmountOfPersonalAccount(BigInteger accountId, Long amount) {
+    public void updateAmountOfPersonalAccount(BigInteger accountId, double amount) {
         logger.debug("Entering update_amount(updateAmountPersonalAccount=" + accountId + " " + amount + ")");
         this.template.update(UPDATE_PERSONAL_ACCOUNT_AMOUNT, new Object[]{amount, accountId});
         logger.debug("Entering update amount success(updateAmountPersonalAccount=" + accountId + " " + amount + ")");

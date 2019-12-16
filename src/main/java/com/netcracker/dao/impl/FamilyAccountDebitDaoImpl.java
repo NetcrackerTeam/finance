@@ -78,7 +78,7 @@ public class FamilyAccountDebitDaoImpl implements FamilyAccountDebitDao {
     }
 
     @Override
-    public void updateAmountOfFamilyAccount(BigInteger accountId, Long amount) {
+    public void updateAmountOfFamilyAccount(BigInteger accountId, double amount) {
         logger.debug("Entering update amount(deleteFamilyAccount=" + accountId + " " + amount + ")");
         this.template.update(UPDATE_FALIMY_ACCOUNT_AMOUNT, amount, accountId);
         logger.debug("Entering update amount success(deleteFamilyAccount=" + accountId + " " + amount + ")");

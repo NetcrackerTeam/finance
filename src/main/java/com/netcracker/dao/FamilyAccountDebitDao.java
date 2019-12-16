@@ -53,7 +53,7 @@ public interface FamilyAccountDebitDao {
      * @param accountId family account debit id
      * @param amount    amount of family account debit
      */
-    void updateAmountOfFamilyAccount(BigInteger accountId, Long amount);
+    void updateAmountOfFamilyAccount(BigInteger accountId, double amount);
 
     /**
      * Get participants of family account debit by family account debit id.
