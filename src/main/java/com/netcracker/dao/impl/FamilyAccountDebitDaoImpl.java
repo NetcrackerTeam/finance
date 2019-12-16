@@ -108,4 +108,16 @@ public class FamilyAccountDebitDaoImpl implements FamilyAccountDebitDao {
             throw new FamilyDebitAccountException(ExceptionMessages.ERROR_MESSAGE_FAMILY);
         }
     }
+    @Override
+    public Collection<FamilyDebitAccount> getAllFamilyAccounts() {
+        logger.debug("Entering list(getAllFamilyAccounts)");
+        try {
+            Collection<FamilyDebitAccount> accounts = this.template.query(GET_ALL_FAMILY_ACCOUNTS, new FamilyAccountDebitMapper());
+            logger.debug("Entering list success(getAllFamilyAccounts)");
+            return accounts;
+        } catch (EmptyResultDataAccessException ex) {
+            logger.error("the family debit accounts doesn`t exists");
+            throw new FamilyDebitAccountException(ExceptionMessages.ERROR_MESSAGE_FAMILY);
+        }
+    }
 }

@@ -25,4 +25,6 @@ public interface FamilyDebitService {
     Collection<User> getParticipantsOfFamilyAccount(BigInteger accountId);
 
     boolean isUserParticipant(BigInteger userId);
+
+    Collection<FamilyDebitAccount> getAllFamilyAccounts();
 }

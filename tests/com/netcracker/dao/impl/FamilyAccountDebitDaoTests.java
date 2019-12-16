@@ -154,4 +154,13 @@ public class FamilyAccountDebitDaoTests {
         assertEquals(BigInteger.valueOf(1), users.get(0).getId());
         assertEquals(BigInteger.valueOf(24), users.get(1).getId());
     }
+
+    @Test
+    public void getListFamilyAccounts() {
+        ArrayList<FamilyDebitAccount> accounts = (ArrayList<FamilyDebitAccount>) familyAccountDebitDao.getAllFamilyAccounts();
+        for (FamilyDebitAccount expected : accounts) {
+            System.out.println(expected.getId() + " " + expected.getObjectName() + " " + expected.getAmount() + " " + expected.getStatus() + " "
+                    + expected.getOwner().getName() + " " + expected.getOwner().geteMail());
+        }
+    }
 }

@@ -1,11 +1,12 @@
 package com.netcracker.services.impl;
 
 import com.netcracker.dao.FamilyAccountDebitDao;
-import com.netcracker.dao.OperationDao;
 import com.netcracker.dao.UserDao;
 import com.netcracker.exception.FamilyDebitAccountException;
 import com.netcracker.exception.UserException;
-import com.netcracker.models.*;
+import com.netcracker.models.AbstractAccountOperation;
+import com.netcracker.models.FamilyDebitAccount;
+import com.netcracker.models.User;
 import com.netcracker.models.enums.FamilyAccountStatusActive;
 import com.netcracker.services.FamilyDebitService;
 import com.netcracker.services.OperationService;
@@ -18,7 +19,6 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -127,5 +127,10 @@ public class FamilyDebitServiceImpl implements FamilyDebitService {
             }
         }
         return false;
+    }
+
+    @Override
+    public Collection<FamilyDebitAccount> getAllFamilyAccounts() {
+        return familyAccountDebitDao.getAllFamilyAccounts();
     }
 }
