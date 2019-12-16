@@ -89,12 +89,12 @@ public class CreditAccountDaoImpl implements CreditAccountDao {
 
     @Override
     public BigInteger getPersonalDebitIdByCreditId(BigInteger idCreditAccount) {
-        return jdbcTemplate.queryForObject(GET_PERSONAL_DEBIT_ID_BY_CREDIT_ID, BigInteger.class);
+        return jdbcTemplate.queryForObject(GET_PERSONAL_DEBIT_ID_BY_CREDIT_ID, new Object[]{idCreditAccount}, BigInteger.class);
     }
 
     @Override
     public BigInteger getFamilyDebitIdByCreditId(BigInteger idCreditAccount) {
-        return jdbcTemplate.queryForObject(GET_FAMILY_DEBIT_ID_BY_CREDIT_ID, BigInteger.class);
+        return jdbcTemplate.queryForObject(GET_FAMILY_DEBIT_ID_BY_CREDIT_ID, new Object[]{idCreditAccount}, BigInteger.class);
     }
 
     private void createCredit(BigInteger id, AbstractCreditAccount creditAccount, String queryCredit, String queryDebt) {

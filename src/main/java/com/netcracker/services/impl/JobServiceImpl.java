@@ -123,8 +123,18 @@ public class JobServiceImpl implements JobService {
     public void executeRemindAutoIncomeFamilyJob() {
         Collection<AutoOperationIncome> autoOperationIncomesFamily = accountAutoOperationService.getAllTodayOperationsFamilyIncome(dayNow);
         for (AutoOperationIncome autoIncome : autoOperationIncomesFamily) {
+            FamilyDebitAccount debitAccount = familyDebitService.getFamilyDebitAccount(autoIncome.getDebitId());
             operationService.createFamilyOperationIncome(autoIncome.getUserId(), autoIncome.getDebitId(), autoIncome.getAmount(), localDateTo, autoIncome.getCategoryIncome());
-            familyAccountDebitDao.updateAmountOfFamilyAccount(autoIncome.getDebitId(),autoIncome.getAmount());
+            double newAmount = debitAccount.getAmount() + autoIncome.getAmount();
+            Collection<FamilyCreditAccount> credits = familyCreditService.getFamilyCredits(debitAccount.getId());
+            for (FamilyCreditAccount cr : credits) {
+                if (cr.getDebt().getAmountDebt() != 0) {
+                    double payForDebt = CreditUtils.calculateMonthPayment(cr.getDate(), cr.getDateTo(), cr.getAmount(), cr.getCreditRate());
+                    familyCreditService.addAutoDebtRepayment(debitAccount.getId(), cr.getCreditId(), payForDebt);
+                }
+            }
+//            emailServiceSender.sendMailAutoFamilyIncome(debitAccount.getOwner().geteMail(),
+//                    debitAccount.getOwner().getName(), autoIncome.getAmount(), );
 
         }
     }
