@@ -14,6 +14,7 @@ import org.springframework.stereotype.Repository;
 import javax.sql.DataSource;
 import java.math.BigInteger;
 import java.sql.Date;
+import java.util.Collection;
 import java.util.List;
 
 @Repository
@@ -74,6 +75,16 @@ public class CreditAccountDaoImpl implements CreditAccountDao {
     @Override
     public void updateIsPaidStatusFamilyCredit(BigInteger id, CreditStatusPaid statusPaid) {
         updatePaidStatus(id, statusPaid);
+    }
+
+    @Override
+    public Collection<PersonalCreditAccount> getAllPersonCreditIdsByMonthDay(int day) {
+        return jdbcTemplate.query(SELECT_ALL_CREDIT_PERSONAL_ID_BY_MONTH_DAY, new Object[]{day}, new CreditAccountPersonalMapper());
+    }
+
+    @Override
+    public Collection<FamilyCreditAccount> getAllFamilyCreditIdsByMonthDay(int day) {
+        return jdbcTemplate.query(SELECT_ALL_CREDIT_FAMILY_ID_BY_MONTH_DAY, new Object[]{day}, new CreditAccountFamilyMapper());
     }
 
     private void createCredit(BigInteger id, AbstractCreditAccount creditAccount, String queryCredit, String queryDebt) {

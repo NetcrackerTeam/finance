@@ -5,6 +5,7 @@ import com.netcracker.models.PersonalCreditAccount;
 import com.netcracker.models.enums.CreditStatusPaid;
 
 import java.math.BigInteger;
+import java.util.Collection;
 import java.util.List;
 
 public interface CreditAccountDao {
@@ -94,6 +95,10 @@ public interface CreditAccountDao {
      * @param statusPaid enum status value
      */
     void updateIsPaidStatusFamilyCredit(BigInteger id, CreditStatusPaid statusPaid);
+
+    Collection<PersonalCreditAccount> getAllPersonCreditIdsByMonthDay(int day);
+
+    Collection<FamilyCreditAccount> getAllFamilyCreditIdsByMonthDay(int day);
 
     String SELECT_FAMILY_CREDIT_QUERY = "SELECT CRED.OBJECT_ID CREDIT_ID, NAME_AT.VALUE NAME, AMOUNT_AT.VALUE AMOUNT,\n" +
             "  PAID_AT.VALUE PAID, DATE_AT.DATE_VALUE DATE_CR,  RATE_AT.VALUE CREDIT_RATE, \n" +
@@ -302,4 +307,76 @@ public interface CreditAccountDao {
             "    SELECT * FROM DUAL";
 
     String SELECT_CREDIT_ID_BY_NAME = "SELECT OBJECT_ID FROM OBJECTS WHERE NAME = ?";
+
+    String SELECT_ALL_CREDIT_FAMILY_ID_BY_MONTH_DAY = "SELECT CRED.OBJECT_ID CREDIT_ID, NAME_AT.VALUE NAME, AMOUNT_AT.VALUE AMOUNT,\n" +
+            "  PAID_AT.VALUE PAID, DATE_AT.DATE_VALUE DATE_CR,  RATE_AT.VALUE CREDIT_RATE,\n" +
+            "  DATE_TO_AT.DATE_VALUE DATE_TO, MONTH_DAY_AT.VALUE MONTH_DAY, IS_PAID_AT.LIST_VALUE_ID IS_PAID,\n" +
+            "  DEBT_DATE_FROM_AT.DATE_VALUE DEBT_FROM, DEBT_DATE_TO_AT.DATE_VALUE DEBT_TO,\n" +
+            "  DEBT_AMOUNT_AT.VALUE DEBT_AMOUNT, DEBT.OBJECT_ID DEBT_ID\n" +
+            "    FROM OBJECTS CRED, ATTRIBUTES NAME_AT, ATTRIBUTES AMOUNT_AT, ATTRIBUTES PAID_AT, ATTRIBUTES DATE_AT,\n" +
+            "        ATTRIBUTES RATE_AT, ATTRIBUTES DATE_TO_AT, ATTRIBUTES MONTH_DAY_AT, ATTRIBUTES IS_PAID_AT,\n" +
+            "        OBJREFERENCE DEBT_REF, OBJECTS DEBT, ATTRIBUTES DEBT_DATE_FROM_AT, ATTRIBUTES DEBT_DATE_TO_AT,\n" +
+            "        ATTRIBUTES DEBT_AMOUNT_AT\n" +
+            "    WHERE CRED.OBJECT_ID = NAME_AT.OBJECT_ID\n" +
+            "        AND CRED.OBJECT_ID = AMOUNT_AT.OBJECT_ID\n" +
+            "        AND CRED.OBJECT_ID = PAID_AT.OBJECT_ID\n" +
+            "        AND CRED.OBJECT_ID = DATE_AT.OBJECT_ID\n" +
+            "        AND CRED.OBJECT_ID = RATE_AT.OBJECT_ID\n" +
+            "        AND CRED.OBJECT_ID = DATE_TO_AT.OBJECT_ID\n" +
+            "        AND CRED.OBJECT_ID = MONTH_DAY_AT.OBJECT_ID\n" +
+            "        AND CRED.OBJECT_ID = IS_PAID_AT.OBJECT_ID\n" +
+            "        AND CRED.OBJECT_ID = DEBT_REF.REFERENCE\n" +
+            "        AND DEBT_REF.OBJECT_ID = DEBT.OBJECT_ID\n" +
+            "        AND DEBT.OBJECT_ID = DEBT_DATE_FROM_AT.OBJECT_ID\n" +
+            "        AND DEBT.OBJECT_ID = DEBT_DATE_TO_AT.OBJECT_ID\n" +
+            "        AND DEBT.OBJECT_ID = DEBT_AMOUNT_AT.OBJECT_ID\n" +
+            "        AND DEBT.OBJECT_TYPE_ID = 19/*DEBT FAMILY OBJECT TYPE ID*/\n" +
+            "        AND DATE_AT.ATTR_ID = 29/*CREATION DATE ATTRIBUTE*/\n" +
+            "        AND NAME_AT.ATTR_ID = 30/*NAME ATTRIBUTE*/\n" +
+            "        AND AMOUNT_AT.ATTR_ID = 31/*CREDIT AMOUNT ATTRIBUTE*/\n" +
+            "        AND PAID_AT.ATTR_ID = 32/*PAID CREDIT AMOUNT ATTRIBUTE*/\n" +
+            "        AND RATE_AT.ATTR_ID = 33/*CREDIT RATE ATTRIBUTE*/\n" +
+            "        AND DATE_TO_AT.ATTR_ID = 34/*CREDIT DATE TO ATTRIBUTE*/\n" +
+            "        AND IS_PAID_AT.ATTR_ID = 35/*STATUS OF CREDIT ATTRIBUTE*/\n" +
+            "        AND MONTH_DAY_AT.ATTR_ID = 36/*PAYMENT CREDIT DAY OF MONTH ATTRIBUTE*/\n" +
+            "        AND DEBT_DATE_FROM_AT.ATTR_ID = 44/*DEBT DATE FROM ATTRIBUTE*/\n" +
+            "        AND DEBT_DATE_TO_AT.ATTR_ID = 45/*DEBT DATE TO ATTRIBUTE*/\n" +
+            "        AND DEBT_AMOUNT_AT.ATTR_ID = 46/*DEBT AMOUNT ATTRIBUTE*/\n" +
+            "        AND MONTH_DAY_AT.VALUE = ?";
+
+    String SELECT_ALL_CREDIT_PERSONAL_ID_BY_MONTH_DAY = "SELECT CRED.OBJECT_ID CREDIT_ID, NAME_AT.VALUE NAME, AMOUNT_AT.VALUE AMOUNT,\n" +
+            "  PAID_AT.VALUE PAID, DATE_AT.DATE_VALUE DATE_CR,  RATE_AT.VALUE CREDIT_RATE,\n" +
+            "  DATE_TO_AT.DATE_VALUE DATE_TO, MONTH_DAY_AT.VALUE MONTH_DAY, IS_PAID_AT.LIST_VALUE_ID IS_PAID,\n" +
+            "  DEBT_DATE_FROM_AT.DATE_VALUE DEBT_FROM, DEBT_DATE_TO_AT.DATE_VALUE DEBT_TO,\n" +
+            "  DEBT_AMOUNT_AT.VALUE DEBT_AMOUNT, DEBT.OBJECT_ID DEBT_ID\n" +
+            "    FROM OBJECTS CRED,  ATTRIBUTES NAME_AT, ATTRIBUTES AMOUNT_AT, ATTRIBUTES PAID_AT, ATTRIBUTES DATE_AT,\n" +
+            "        ATTRIBUTES RATE_AT, ATTRIBUTES DATE_TO_AT, ATTRIBUTES MONTH_DAY_AT,  ATTRIBUTES IS_PAID_AT,\n" +
+            "        OBJREFERENCE DEBT_REF, OBJECTS DEBT, ATTRIBUTES DEBT_DATE_FROM_AT, ATTRIBUTES DEBT_DATE_TO_AT,\n" +
+            "        ATTRIBUTES DEBT_AMOUNT_AT\n" +
+            "    WHERE CRED.OBJECT_ID = NAME_AT.OBJECT_ID\n" +
+            "        AND CRED.OBJECT_ID = AMOUNT_AT.OBJECT_ID\n" +
+            "        AND CRED.OBJECT_ID = PAID_AT.OBJECT_ID\n" +
+            "        AND CRED.OBJECT_ID = DATE_AT.OBJECT_ID\n" +
+            "        AND CRED.OBJECT_ID = RATE_AT.OBJECT_ID\n" +
+            "        AND CRED.OBJECT_ID = DATE_TO_AT.OBJECT_ID\n" +
+            "        AND CRED.OBJECT_ID = MONTH_DAY_AT.OBJECT_ID\n" +
+            "        AND CRED.OBJECT_ID = IS_PAID_AT.OBJECT_ID\n" +
+            "        AND CRED.OBJECT_ID = DEBT_REF.REFERENCE\n" +
+            "        AND DEBT_REF.OBJECT_ID = DEBT.OBJECT_ID\n" +
+            "        AND DEBT.OBJECT_ID = DEBT_DATE_FROM_AT.OBJECT_ID\n" +
+            "        AND DEBT.OBJECT_ID = DEBT_DATE_TO_AT.OBJECT_ID\n" +
+            "        AND DEBT.OBJECT_ID = DEBT_AMOUNT_AT.OBJECT_ID\n" +
+            "        AND DEBT.OBJECT_TYPE_ID = 8/*DEBT PERSONAL OBJECT TYPE ID*/\n" +
+            "        AND DATE_AT.ATTR_ID = 29/*CREATION DATE ATTRIBUTE*/\n" +
+            "        AND NAME_AT.ATTR_ID = 30/*NAME ATTRIBUTE*/\n" +
+            "        AND AMOUNT_AT.ATTR_ID = 31/*CREDIT AMOUNT ATTRIBUTE*/\n" +
+            "        AND PAID_AT.ATTR_ID = 32/*PAID CREDIT AMOUNT ATTRIBUTE*/\n" +
+            "        AND RATE_AT.ATTR_ID = 33/*CREDIT RATE ATTRIBUTE*/\n" +
+            "        AND DATE_TO_AT.ATTR_ID = 34/*CREDIT DATE TO ATTRIBUTE*/\n" +
+            "        AND IS_PAID_AT.ATTR_ID = 35/*STATUS OF CREDIT ATTRIBUTE*/\n" +
+            "        AND MONTH_DAY_AT.ATTR_ID = 36/*PAYMENT CREDIT DAY OF MONTH ATTRIBUTE*/\n" +
+            "        AND DEBT_DATE_FROM_AT.ATTR_ID = 44/*DEBT DATE FROM ATTRIBUTE*/\n" +
+            "        AND DEBT_DATE_TO_AT.ATTR_ID = 45/*DEBT DATE TO ATTRIBUTE*/\n" +
+            "        AND DEBT_AMOUNT_AT.ATTR_ID = 46/*DEBT AMOUNT ATTRIBUTE*/\n" +
+            "        AND MONTH_DAY_AT.VALUE = ?";
 }

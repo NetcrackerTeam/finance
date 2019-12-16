@@ -15,9 +15,9 @@ public final class ObjectsCheckUtils {
 
         for (final Object obj : objects) {
             if (obj == null) {
-                throw new RuntimeException("Null object was found");
+                throw new RuntimeException(ExceptionMessages.NULL_OBJECT_ERROR);
             }
-            if (obj.equals(0)) throw new RuntimeException("Null object was found");
+            if (obj.equals(0)) throw new RuntimeException(ExceptionMessages.NULL_OBJECT_ERROR);
         }
     }
 }
