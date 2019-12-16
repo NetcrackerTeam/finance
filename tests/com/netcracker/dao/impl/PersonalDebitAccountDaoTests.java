@@ -3,6 +3,7 @@ package com.netcracker.dao.impl;
 import com.netcracker.AssertUtils;
 import com.netcracker.configs.WebConfig;
 import com.netcracker.dao.PersonalDebitAccountDao;
+import com.netcracker.models.FamilyDebitAccount;
 import com.netcracker.models.PersonalDebitAccount;
 import com.netcracker.models.User;
 import com.netcracker.models.enums.PersonalAccountStatusActive;
@@ -17,6 +18,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 
 import javax.sql.DataSource;
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.Locale;
 
 import static org.junit.Assert.assertEquals;
@@ -116,5 +118,13 @@ public class PersonalDebitAccountDaoTests {
         Long am = 5000L;
         assertEquals(am, personalDebitAccountDao.getPersonalAccountById(id).getAmount());
         personalDebitAccountDao.updateAmountOfPersonalAccount(id, 10000L);
+    }
+    @Test
+    public void getListFamilyAccounts() {
+        ArrayList<PersonalDebitAccount> persAccounts = (ArrayList<PersonalDebitAccount>) personalDebitAccountDao.getAllPersonalAccounts();
+        for (PersonalDebitAccount expected : persAccounts) {
+            System.out.println(expected.getId() + " " + expected.getObjectName() + " " + expected.getAmount() + " " + expected.getStatus() + " "
+                    + expected.getOwner().getName() + " " + expected.getOwner().geteMail());
+        }
     }
 }

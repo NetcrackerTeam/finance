@@ -4,6 +4,7 @@ import com.netcracker.dao.PersonalDebitAccountDao;
 import com.netcracker.dao.impl.mapper.PersonalDebitAccountMapper;
 import com.netcracker.exception.PersonalDebitAccountException;
 import com.netcracker.models.PersonalDebitAccount;
+import com.netcracker.services.utils.ExceptionMessages;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
 import java.math.BigInteger;
+import java.util.Collection;
 
 @Repository
 public class PersonalDebitAccountDaoImpl implements PersonalDebitAccountDao {
@@ -30,7 +32,7 @@ public class PersonalDebitAccountDaoImpl implements PersonalDebitAccountDao {
             return this.template.queryForObject(GET_PERSONAL_ACCOUNT_BY_ID, new Object[]{(id)}, new PersonalDebitAccountMapper());
         } catch (EmptyResultDataAccessException ex) {
             logger.error("the Personal debit account  " + id + " is null");
-            throw new PersonalDebitAccountException(PersonalDebitAccountException.getErrorMessagePersonal());
+            throw new PersonalDebitAccountException(ExceptionMessages.ERROR_MESSAGE_PERSONAL_STATUS);
         }
     }
 
@@ -80,5 +82,18 @@ public class PersonalDebitAccountDaoImpl implements PersonalDebitAccountDao {
         logger.debug("Entering update_amount(updateAmountPersonalAccount=" + accountId + " " + amount + ")");
         this.template.update(UPDATE_PERSONAL_ACCOUNT_AMOUNT, new Object[]{amount, accountId});
         logger.debug("Entering update amount success(updateAmountPersonalAccount=" + accountId + " " + amount + ")");
+    }
+
+    @Override
+    public Collection<PersonalDebitAccount> getAllPersonalAccounts() {
+        logger.debug("Entering list(getAllPersonalAccounts)");
+        try {
+            Collection<PersonalDebitAccount> persAccounts = this.template.query(GET_PERSONAL_ACCOUNTS, new PersonalDebitAccountMapper());
+            logger.debug("Entering list success(getAllPersonalAccounts)");
+            return persAccounts;
+        } catch (EmptyResultDataAccessException ex) {
+            logger.error("the personal debit accounts doesn`t exists");
+            throw new PersonalDebitAccountException(ExceptionMessages.ERROR_MESSAGE_PERSONAL);
+        }
     }
 }

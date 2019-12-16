@@ -13,4 +13,6 @@ public interface ExceptionMessages {
     String ERROR_MESSAGE_OWNER = "Owner can`t delete yourself, try to delete account";
     String ERROR_MESSAGE_MONTH_REPORT_WRITE = "Month report is null";
     String ERROR_MESSAGE_PREDICTION = "Not enough reports";
+    String ERROR_MESSAGE_PERSONAL = "the personal debit account doesn`t exist";
+    String ERROR_MESSAGE_PERSONAL_STATUS = "The user is unactive";
 }
