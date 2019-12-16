@@ -1,24 +1,14 @@
 package com.netcracker.services.impl;
 
-import com.netcracker.exception.JobException;
-import com.netcracker.models.AutoOperationExpense;
-import com.netcracker.models.AutoOperationIncome;
-import com.netcracker.models.MonthReport;
-import com.netcracker.models.User;
-import com.netcracker.services.AccountAutoOperationService;
-import com.netcracker.services.EmailServiceSender;
-import com.netcracker.services.JobService;
-import com.netcracker.services.MonthReportService;
+import com.netcracker.services.*;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import java.math.BigInteger;
+
 import java.nio.file.Path;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.Collection;
-import java.util.List;
 
 @Service
 public class JobServiceImpl implements JobService {
@@ -35,85 +25,113 @@ public class JobServiceImpl implements JobService {
     @Autowired
     private EmailServiceSender emailServiceSender;
 
+
+    @Autowired
+    private FamilyCreditService familyCreditService;
+
+    @Autowired
+    private PersonalCreditService personalCreditService;
+
     private Path path;
-    private static final String CRONBYREMIND = "* * */10 * * ?";
-    private static final String CRONBYREPORT = "* * * */1 * ?";
+    private static final String CRON_BY_EVERYDAY = "0 0 8 * * ?";//at 8 am every day
+    private static final String CRON_BY_REPORT = "0 0 18 L * ?";//At 6 pm on the last of every month
     private LocalDate dateTo = LocalDate.now();
     private LocalDate dateFrom = dateTo.minus(1, ChronoUnit.MONTHS);
 
-    //@Scheduled(cron = "[Seconds] [Minutes] [Hours] [Day of month] [Month] [Day of week] [Year]")
-    //Start execute at 10 am
     @Override
-    @Scheduled(cron = CRONBYREMIND)
-    public void executeRemindAutoIncomePersonalEmailJob(BigInteger monthId, User user) {
-          Collection<AutoOperationIncome> operationIncomeList =
-                  (Collection<AutoOperationIncome>) accountAutoOperationService.getFamilyIncomeAutoOperation(monthId);
-          if (!operationIncomeList.isEmpty()){
-              operationIncomeList.forEach(operationIncome->{
-                  try {
-                      emailServiceSender.sendMailAutoFamilyIncome(user.geteMail(),user.getName(),operationIncome.getAmount(),
-                              String.valueOf(operationIncome.getCategoryIncome()),user.getId());
-                      logger.debug("Email have been sent.");
-                  }catch (JobException e){
-                      logger.debug("Email can't be sent", e);
-                  }
-              });
-          }
+    @Scheduled(cron = CRON_BY_EVERYDAY)
+    public void executeRemindAutoIncomePersonalEmailJob() {
+//          Collection<AutoOperationIncome> operationIncomeList =
+//                  (Collection<AutoOperationIncome>) accountAutoOperationService.getFamilyIncomeAutoOperation(monthId);
+//          if (!operationIncomeList.isEmpty()){
+//              operationIncomeList.forEach(operationIncome->{
+//                  try {
+//                      emailServiceSender.sendMailAutoFamilyIncome(user.geteMail(),user.getName(),operationIncome.getAmount(),
+//                              String.valueOf(operationIncome.getCategoryIncome()),user.getId());
+//                      logger.debug("Email have been sent.");
+//                  }catch (JobException e){
+//                      logger.debug("Email can't be sent", e);
+//                  }
+//              });
+//          }
     }
 
     @Override
-    @Scheduled(cron = CRONBYREMIND)
-    public void executeRemindAutoExpenseFamilyEmailJob(BigInteger monthId, User user) {
-        Collection<AutoOperationExpense> operationExpensesList =
-                (Collection<AutoOperationExpense>) accountAutoOperationService.getFamilyExpenseAutoOperation(monthId);
-        if (!operationExpensesList.isEmpty()){
-            operationExpensesList.forEach(operationExpense->{
-                try {
-                    emailServiceSender.sendMailAutoFamilyIncome(user.geteMail(),user.getName(),operationExpense.getAmount(),
-                            String.valueOf(operationExpense.getCategoryExpense()),user.getId());
-                    logger.debug("Email have been sent.");
-                }catch (JobException e){
-                    logger.debug("Email can't be sent", e);
-                }
-            });
-        }
+    @Scheduled(cron = CRON_BY_EVERYDAY)
+    public void executeRemindAutoExpenseFamilyEmailJob() {
+//        Collection<AutoOperationExpense> operationExpensesList =
+//                (Collection<AutoOperationExpense>) accountAutoOperationService.getFamilyExpenseAutoOperation(monthId);
+//        if (!operationExpensesList.isEmpty()){
+//            operationExpensesList.forEach(operationExpense->{
+//                try {
+//                    emailServiceSender.sendMailAutoFamilyIncome(user.geteMail(),user.getName(),operationExpense.getAmount(),
+//                            String.valueOf(operationExpense.getCategoryExpense()),user.getId());
+//                    logger.debug("Email have been sent.");
+//                }catch (JobException e){
+//                    logger.debug("Email can't be sent", e);
+//                }
+//            });
+//        }
     }
 
     @Override
-    @Scheduled(cron = CRONBYREPORT)
-    public void executeMonthFamilyReportOnEmailJob(BigInteger monthId, User user) {
-        Collection<MonthReport> monthReportsFamily =
-                (List<MonthReport>) monthReportService.getMonthPersonalReport(monthId, dateFrom, dateTo);
-        if (!monthReportsFamily.isEmpty()) {
-            monthReportsFamily.forEach(monthReport -> {
-                try {
-                    path = monthReportService.convertToTxt(monthReport);
-                    String message = " " + monthReport.getBalance() + "!";
-                    //  emailServiceSender.sendMailAboutFamilyDebt(path);
-                    logger.debug("Email have been sent. User id: {}, Date: {}"+ user.getId());
-                } catch (JobException e) {
-                    logger.debug("Email can't be sent", e);
-                }
-            });
-        }
+    @Scheduled(cron = CRON_BY_REPORT)
+    public void executeMonthFamilyReportOnEmailJob() {
+//        Collection<MonthReport> monthReportsFamily =
+//                (List<MonthReport>) monthReportService.getMonthPersonalReport(monthId, dateFrom, dateTo);
+//        if (!monthReportsFamily.isEmpty()) {
+//            monthReportsFamily.forEach(monthReport -> {
+//                try {
+//                    path = monthReportService.convertToTxt(monthReport);
+//                    //  emailServiceSender.sendMailAboutFamilyDebt(path);
+//                    logger.debug("Email have been sent. User id: {}, Date: {}"+ user.getId());
+//                } catch (JobException e) {
+//                    logger.debug("Email can't be sent", e);
+//                }
+//            });
+//        }
     }
 
     @Override
-    @Scheduled(cron = CRONBYREPORT)
-    public void executeMonthPersonalReportOnEmailJob(BigInteger monthId, User user) {
-        Collection<MonthReport> monthReportsFamily =
-                (List<MonthReport>) monthReportService.getMonthFamilyReport(monthId, dateFrom, dateTo);
-        if (!monthReportsFamily.isEmpty()) {
-            monthReportsFamily.forEach(monthReport -> {
-                try {
-                    path = monthReportService.convertToTxt(monthReport);
-                    String message = " " + monthReport.getBalance() + "!";
-                   // emailServiceSender.monthReport(path);
-                    logger.debug("Email have been sent. User id: {}" + user.getId());
-                } catch (JobException e) {
-                    logger.debug("Email can't be sent", e);
-                }
-            });
-        }
+    @Scheduled(cron = CRON_BY_REPORT)
+    public void executeMonthPersonalReportOnEmailJob() {
+//        Collection<MonthReport> monthReportsFamily =
+//                (List<MonthReport>) monthReportService.getMonthFamilyReport(monthId, dateFrom, dateTo);
+//        if (!monthReportsFamily.isEmpty()) {
+//            monthReportsFamily.forEach(monthReport -> {
+//                try {
+//                    path = monthReportService.convertToTxt(monthReport);
+//                   // emailServiceSender.monthReport(path);
+//                    logger.debug("Email have been sent. User id: {}" + user.getId());
+//                } catch (JobException e) {
+//                    logger.debug("Email can't be sent", e);
+//                }
+//            });
+//        }
+    }
+
+
+    @Override
+    @Scheduled(cron = CRON_BY_EVERYDAY)
+    public void executeRemindAutoIncomeFamilyEmailJob() {
+
+    }
+
+    @Override
+    @Scheduled(cron = CRON_BY_EVERYDAY)
+    public void executeRemindAutoExpensePersonalEmailJob() {
+
+    }
+
+    @Override
+    @Scheduled(cron = CRON_BY_EVERYDAY)
+    public void executePersonalAutoDebtRepayment() {
+
+    }
+
+    @Override
+    @Scheduled(cron = CRON_BY_EVERYDAY)
+    public void executeFamilyAutoDebtRepayment() {
+
     }
 }

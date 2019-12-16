@@ -3,7 +3,6 @@ package com.netcracker.exception;
 import com.netcracker.services.JobService;
 
 public class JobException extends RuntimeException {
-    private static final String JOB_DEFAULT_MESSAGE = "Operation is not valid: ";
     private JobService jobService;
 
     public JobException() {
