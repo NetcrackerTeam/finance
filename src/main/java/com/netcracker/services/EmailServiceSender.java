@@ -27,5 +27,6 @@ public interface EmailServiceSender {
 
     public void sendMailAutoFamilyIncome(String emailTo, String userName, double amountPaid, String credName, BigInteger userId);
 
+    String MAIL = "<nectrackerteam@gmail.com>";
 
 }
