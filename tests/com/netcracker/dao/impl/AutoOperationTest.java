@@ -22,8 +22,6 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.sql.DataSource;
 import java.math.BigInteger;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 
 import static org.junit.Assert.assertEquals;
@@ -40,7 +38,6 @@ public class AutoOperationTest {
     private AutoOperationDao autoOperationDao;
 
     private int dayOfMonth = 1;
-    private List<AbstractAutoOperation> expectedList = new ArrayList<>();
 
     private AutoOperationIncome autoOperationIncomePersonalExpected;
     private AutoOperationExpense autoOperationExpensePersonalExpected;
@@ -153,24 +150,6 @@ public class AutoOperationTest {
         currentId = autoOperationExpensePersonalActual.getId();
         setDateAndId(autoOperationExpensePersonalExpected, currentId, dateToday);
         AssertUtils.assertAutoOperationExpense(autoOperationExpensePersonalExpected, autoOperationExpensePersonalActual);
-    }
-
-    @Test
-    public void getAllTodayOperationsPersonal() {
-        expectedList.add(autoOperationExpensePersonalExpected);
-        expectedList.add(autoOperationIncomePersonalExpected);
-
-        List<AbstractAutoOperation> actualList = new ArrayList<>(autoOperationDao.getAllTodayOperationsPersonal(personalDebitId, dayOfMonth));
-        AssertUtils.assertAutoOperationsCollections(expectedList, actualList);
-    }
-
-    @Test
-    public void getAllTodayOperationsFamily() {
-        expectedList.add(autoOperationExpenseFamilyExpected);
-        expectedList.add(autoOperationIncomeFamilyExpected);
-
-        List<AbstractAutoOperation> actualList = new ArrayList<>(autoOperationDao.getAllTodayOperationsFamily(familyDebitId, dayOfMonth));
-        AssertUtils.assertAutoOperationsCollections(expectedList, actualList);
     }
 
     @Rollback

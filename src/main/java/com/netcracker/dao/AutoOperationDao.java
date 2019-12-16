@@ -1,6 +1,5 @@
 package com.netcracker.dao;
 
-import com.netcracker.models.AbstractAutoOperation;
 import com.netcracker.models.AutoOperationExpense;
 import com.netcracker.models.AutoOperationIncome;
 
@@ -28,11 +27,10 @@ public interface AutoOperationDao {
 
     void deleteAutoOperation(BigInteger autoOperationId);
 
-    List<AbstractAutoOperation> getAllTodayOperationsPersonal(BigInteger debitAccountId, int dayOfMonth);
-
-    List<AbstractAutoOperation> getAllTodayOperationsFamily(BigInteger debitAccountId, int dayOfMonth);
-
-    List<AbstractAutoOperation> getAllTodayOperations(int dayOfMonth);
+    List<AutoOperationIncome> getAllTodayOperationsPersonalIncome(int dayOfMonth);
+    List<AutoOperationExpense> getAllTodayOperationsPersonalExpense(int dayOfMonth);
+    List<AutoOperationIncome> getAllTodayOperationsFamilyIncome(int dayOfMonth);
+    List<AutoOperationExpense> getAllTodayOperationsFamilyExpense(int dayOfMonth);
 
     int personalIncome_object_type_id_1 = 12;
     String personalIncome_name_2 = "PERSONAL_INCOME_AO";
@@ -183,8 +181,7 @@ public interface AutoOperationDao {
             "   LISTS.VALUE AS CATEGORY, DATES.DATE_VALUE AS DATE_OF_CREATION " +
             "FROM OBJECTS AUTO_OPERATION, OBJECTS DEBIT_ACCOUNT, LISTS, ATTRIBUTES AMOUNT, ATTRIBUTES CATEGORY, ATTRIBUTES DATES, " +
             "   OBJREFERENCE DEBIT_REF, ATTRIBUTES DAY_OF_MONTH, OBJECTS USERS, OBJREFERENCE USER_REF " +
-            "WHERE DEBIT_ACCOUNT.OBJECT_ID = ? " +
-                    "   AND DAY_OF_MONTH.ATTR_ID = 67 /*DAY_OF_MONTH*/" +
+            "WHERE DAY_OF_MONTH.ATTR_ID = 67 /*DAY_OF_MONTH*/" +
                     "   AND DAY_OF_MONTH.VALUE = ? " +
                     "   AND AUTO_OPERATION.OBJECT_ID = DEBIT_REF.OBJECT_ID " +
                     "   AND DEBIT_ACCOUNT.OBJECT_ID = DEBIT_REF.REFERENCE " +
@@ -207,8 +204,7 @@ public interface AutoOperationDao {
             "   LISTS.VALUE AS CATEGORY, DATES.DATE_VALUE AS DATE_OF_CREATION " +
             "FROM OBJECTS AUTO_OPERATION, OBJECTS DEBIT_ACCOUNT, LISTS, ATTRIBUTES AMOUNT, ATTRIBUTES CATEGORY, ATTRIBUTES DATES, " +
             "   OBJREFERENCE DEBIT_REF, ATTRIBUTES DAY_OF_MONTH, OBJECTS USERS, OBJREFERENCE USER_REF " +
-            "WHERE DEBIT_ACCOUNT.OBJECT_ID = ? " +
-                    "   AND DAY_OF_MONTH.ATTR_ID = 68 /*DAY_OF_MONTH*/" +
+            "WHERE DAY_OF_MONTH.ATTR_ID = 68 /*DAY_OF_MONTH*/" +
                     "   AND DAY_OF_MONTH.VALUE = ? " +
                     "   AND AUTO_OPERATION.OBJECT_ID = DEBIT_REF.OBJECT_ID " +
                     "   AND DEBIT_ACCOUNT.OBJECT_ID = DEBIT_REF.REFERENCE " +
@@ -231,8 +227,7 @@ public interface AutoOperationDao {
             "   LISTS.VALUE AS CATEGORY, DATES.DATE_VALUE AS DATE_OF_CREATION " +
             "FROM OBJECTS AUTO_OPERATION, OBJECTS DEBIT_ACCOUNT, LISTS, ATTRIBUTES AMOUNT, ATTRIBUTES CATEGORY, ATTRIBUTES DATES, " +
                 "OBJREFERENCE DEBIT_REF, ATTRIBUTES DAY_OF_MONTH, OBJECTS USERS, OBJREFERENCE USER_REF " +
-            "WHERE DEBIT_ACCOUNT.OBJECT_ID = ? " +
-                    "   AND DAY_OF_MONTH.ATTR_ID = 62 /*DAY_OF_MONTH*/" +
+            "WHERE DAY_OF_MONTH.ATTR_ID = 62 /*DAY_OF_MONTH*/" +
                     "   AND DAY_OF_MONTH.VALUE = ? " +
                     "   AND AUTO_OPERATION.OBJECT_ID = DEBIT_REF.OBJECT_ID " +
                     "   AND DEBIT_ACCOUNT.OBJECT_ID = DEBIT_REF.REFERENCE " +
@@ -255,8 +250,7 @@ public interface AutoOperationDao {
             "   LISTS.VALUE AS CATEGORY, DATES.DATE_VALUE AS DATE_OF_CREATION " +
             "FROM OBJECTS AUTO_OPERATION, OBJECTS DEBIT_ACCOUNT, LISTS, ATTRIBUTES AMOUNT, ATTRIBUTES CATEGORY, ATTRIBUTES DATES, " +
             "   OBJREFERENCE DEBIT_REF, ATTRIBUTES DAY_OF_MONTH, OBJECTS USERS, OBJREFERENCE USER_REF " +
-            "WHERE DEBIT_ACCOUNT.OBJECT_ID = ? " +
-                    "   AND DAY_OF_MONTH.ATTR_ID = 63 /*DAY_OF_MONTH*/" +
+            "WHERE DAY_OF_MONTH.ATTR_ID = 63 /*DAY_OF_MONTH*/" +
                     "   AND DAY_OF_MONTH.VALUE = ? " +
                     "   AND AUTO_OPERATION.OBJECT_ID = DEBIT_REF.OBJECT_ID " +
                     "   AND DEBIT_ACCOUNT.OBJECT_ID = DEBIT_REF.REFERENCE " +

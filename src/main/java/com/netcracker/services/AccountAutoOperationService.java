@@ -1,6 +1,5 @@
 package com.netcracker.services;
 
-import com.netcracker.models.AbstractAutoOperation;
 import com.netcracker.models.AutoOperationExpense;
 import com.netcracker.models.AutoOperationIncome;
 
@@ -32,10 +31,9 @@ public interface AccountAutoOperationService {
 
     void deleteAutoOperation(BigInteger autoOperationId);
 
-    List<AbstractAutoOperation> getAllTodayOperationsPersonal(BigInteger debitAccountId, int dayOfMonth);
-
-    List<AbstractAutoOperation> getAllTodayOperationsFamily(BigInteger debitAccountId, int dayOfMonth);
-
-    List<AbstractAutoOperation> getAllTodayOperations(int dayOfMonth);
+    List getAllTodayOperationsPersonalIncome(int dayOfMonth);
+    List<AutoOperationExpense> getAllTodayOperationsPersonalExpense(int dayOfMonth);
+    List<AutoOperationIncome> getAllTodayOperationsFamilyIncome(int dayOfMonth);
+    List<AutoOperationExpense> getAllTodayOperationsFamilyExpense(int dayOfMonth);
 
 }

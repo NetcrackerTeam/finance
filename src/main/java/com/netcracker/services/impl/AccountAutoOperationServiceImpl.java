@@ -1,7 +1,6 @@
 package com.netcracker.services.impl;
 
 import com.netcracker.dao.AutoOperationDao;
-import com.netcracker.models.AbstractAutoOperation;
 import com.netcracker.models.AutoOperationExpense;
 import com.netcracker.models.AutoOperationIncome;
 import com.netcracker.services.AccountAutoOperationService;
@@ -107,37 +106,42 @@ public class AccountAutoOperationServiceImpl implements AccountAutoOperationServ
     }
 
     @Override
-    public List<AbstractAutoOperation> getAllTodayOperationsPersonal(BigInteger debitAccountId, int dayOfMonth) {
-        logger.debug("[getAllTodayOperationsPersonal]" + debugStartMessage + "[debitAccountId = " + debitAccountId +
-                "], [dayOfMonth = " + dayOfMonth + "]");
-
-        ObjectsCheckUtils.isNotNull(debitAccountId, dayOfMonth);
-        List<AbstractAutoOperation> allTodayOperationsList = autoOperationDao.getAllTodayOperationsPersonal(debitAccountId,
-                dayOfMonth);
-        return createAllTodayOperationsList(allTodayOperationsList);
-    }
-
-    @Override
-    public List<AbstractAutoOperation> getAllTodayOperationsFamily(BigInteger debitAccountId, int dayOfMonth) {
-        logger.debug("[getAllTodayOperationsFamily]" + debugStartMessage + "[debitAccountId = " + debitAccountId +
-                "], [dayOfMonth = " + dayOfMonth + "]");
-
-        ObjectsCheckUtils.isNotNull(debitAccountId, dayOfMonth);
-        List<AbstractAutoOperation> allTodayOperationsList = autoOperationDao.getAllTodayOperationsFamily(debitAccountId,
-                dayOfMonth);
-        return createAllTodayOperationsList(allTodayOperationsList);
-    }
-
-    @Override
-    public List<AbstractAutoOperation> getAllTodayOperations(int dayOfMonth) {
-        logger.debug("[getAllTodayOperationsFamily]" + debugStartMessage + "[dayOfMonth = " + dayOfMonth + "]");
+    public List<AutoOperationIncome> getAllTodayOperationsPersonalIncome(int dayOfMonth) {
+        logger.debug("[getAllTodayOperationsPersonalIncome]" + debugStartMessage + "[dayOfMonth = " + dayOfMonth + "]");
 
         ObjectsCheckUtils.isNotNull(dayOfMonth);
-        List<AbstractAutoOperation> allTodayOperationsList = autoOperationDao.getAllTodayOperations(dayOfMonth);
-        return createAllTodayOperationsList(allTodayOperationsList);
+        List<AutoOperationIncome> autoOperationIncomeList = autoOperationDao.getAllTodayOperationsPersonalIncome(dayOfMonth);
+        return createAllTodayOperationsList(autoOperationIncomeList);
     }
 
-    private List<AbstractAutoOperation> createAllTodayOperationsList(List<AbstractAutoOperation> allTodayOperationsList) {
+    @Override
+    public List<AutoOperationExpense> getAllTodayOperationsPersonalExpense(int dayOfMonth) {
+        logger.debug("[getAllTodayOperationsPersonalExpense]" + debugStartMessage + "[dayOfMonth = " + dayOfMonth + "]");
+
+        ObjectsCheckUtils.isNotNull(dayOfMonth);
+        List<AutoOperationExpense> autoOperationExpenseList = autoOperationDao.getAllTodayOperationsPersonalExpense(dayOfMonth);
+        return createAllTodayOperationsList(autoOperationExpenseList);
+    }
+
+    @Override
+    public List<AutoOperationIncome> getAllTodayOperationsFamilyIncome(int dayOfMonth) {
+        logger.debug("[getAllTodayOperationsFamilyIncome]" + debugStartMessage + "[dayOfMonth = " + dayOfMonth + "]");
+
+        ObjectsCheckUtils.isNotNull(dayOfMonth);
+        List<AutoOperationIncome> autoOperationIncomeList = autoOperationDao.getAllTodayOperationsFamilyIncome(dayOfMonth);
+        return createAllTodayOperationsList(autoOperationIncomeList);
+    }
+
+    @Override
+    public List<AutoOperationExpense> getAllTodayOperationsFamilyExpense(int dayOfMonth) {
+        logger.debug("[getAllTodayOperationsFamilyExpense]" + debugStartMessage + "[dayOfMonth = " + dayOfMonth + "]");
+
+        ObjectsCheckUtils.isNotNull(dayOfMonth);
+        List<AutoOperationExpense> autoOperationExpenseList = autoOperationDao.getAllTodayOperationsFamilyExpense(dayOfMonth);
+        return createAllTodayOperationsList(autoOperationExpenseList);
+    }
+
+    private List createAllTodayOperationsList(List allTodayOperationsList) {
         if (CollectionUtils.isEmpty(allTodayOperationsList)) return Collections.emptyList();
         else return allTodayOperationsList;
     }

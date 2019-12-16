@@ -4,7 +4,6 @@ import com.netcracker.dao.AutoOperationDao;
 import com.netcracker.dao.impl.mapper.AutoOperationExpenseMapper;
 import com.netcracker.dao.impl.mapper.AutoOperationIncomeMapper;
 import com.netcracker.dao.utils.ObjectsCreator;
-import com.netcracker.models.AbstractAutoOperation;
 import com.netcracker.models.AutoOperationExpense;
 import com.netcracker.models.AutoOperationIncome;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +12,6 @@ import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
 import java.math.BigInteger;
-import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -111,34 +109,22 @@ public class AutoOperationDaoImpl implements AutoOperationDao {
     }
 
     @Override
-    public List<AbstractAutoOperation> getAllTodayOperationsPersonal(BigInteger debitAccountId, int dayOfMonth) {
-        return getAllTodayOperations(debitAccountId, dayOfMonth, GET_ALL_TODAY_AO_INCOME_PERSONAL, GET_ALL_TODAY_AO_EXPENSE_PERSONAL);
+    public List<AutoOperationIncome> getAllTodayOperationsPersonalIncome(int dayOfMonth) {
+        return jdbcTemplate.query(GET_ALL_TODAY_AO_INCOME_PERSONAL, new Object[]{dayOfMonth}, new AutoOperationIncomeMapper());
     }
 
     @Override
-    public List<AbstractAutoOperation> getAllTodayOperationsFamily(BigInteger debitAccountId, int dayOfMonth) {
-        return getAllTodayOperations(debitAccountId, dayOfMonth, GET_ALL_TODAY_AO_INCOME_FAMILY, GET_ALL_TODAY_AO_EXPENSE_FAMILY);
+    public List<AutoOperationExpense> getAllTodayOperationsPersonalExpense(int dayOfMonth) {
+        return jdbcTemplate.query(GET_ALL_TODAY_AO_EXPENSE_PERSONAL, new Object[]{dayOfMonth}, new AutoOperationExpenseMapper());
     }
 
     @Override
-    public List<AbstractAutoOperation> getAllTodayOperations(int dayOfMonth) {
-        List<AutoOperationIncome> allIncomes = jdbcTemplate.query(GET_ALL_TODAY_AUTO_OPERATIONS_INCOME,
-                new Object[]{dayOfMonth}, new AutoOperationIncomeMapper());
-        List<AutoOperationExpense> allExpenses = jdbcTemplate.query(GET_ALL_TODAY_AUTO_OPERATIONS_EXPENSE,
-                new Object[]{dayOfMonth}, new AutoOperationExpenseMapper());
-        List<AbstractAutoOperation> allOperations = new ArrayList<>(allIncomes);
-        allOperations.addAll(allExpenses);
-        return allOperations;
+    public List<AutoOperationIncome> getAllTodayOperationsFamilyIncome(int dayOfMonth) {
+        return jdbcTemplate.query(GET_ALL_TODAY_AO_INCOME_FAMILY, new Object[]{dayOfMonth}, new AutoOperationIncomeMapper());
     }
 
-    private List<AbstractAutoOperation> getAllTodayOperations(BigInteger debitAccountId, int dayOfMonth,
-                                                                    String queryForIncome, String queryForExpense) {
-        List<AutoOperationIncome> allIncomes = jdbcTemplate.query(queryForIncome,
-                new Object[]{debitAccountId, dayOfMonth}, new AutoOperationIncomeMapper());
-        List<AutoOperationExpense> allExpenses = jdbcTemplate.query(queryForExpense,
-                new Object[]{debitAccountId, dayOfMonth}, new AutoOperationExpenseMapper());
-        List<AbstractAutoOperation> allOperations = new ArrayList<>(allIncomes);
-        allOperations.addAll(allExpenses);
-        return allOperations;
+    @Override
+    public List<AutoOperationExpense> getAllTodayOperationsFamilyExpense(int dayOfMonth) {
+        return jdbcTemplate.query(GET_ALL_TODAY_AO_EXPENSE_FAMILY, new Object[]{dayOfMonth}, new AutoOperationExpenseMapper());
     }
 }

@@ -17,6 +17,7 @@ public final class ObjectsCheckUtils {
             if (obj == null) {
                 throw new RuntimeException("Null object was found");
             }
+            if (obj.equals(0)) throw new RuntimeException("Null object was found");
         }
     }
 }

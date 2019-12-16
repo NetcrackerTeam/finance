@@ -985,6 +985,20 @@
 	INSERT INTO OBJREFERENCE (ATTR_ID,OBJECT_ID,REFERENCE) VALUES (66,96,74);
 -----------------------------------------------------------------------------
 
+insert into objects (object_id, parent_id, object_type_id, name, description) values (9001, null, 11, 'personal_expense_ao', null);
+insert into attributes (attr_id, object_id, value, date_value, list_value_id) values (62, 9001 /*personal_expense*/, 2 /*day_of_month*/, null, null);
+insert into attributes (attr_id, object_id, value, date_value, list_value_id) values (50 /*amount*/, 9001, '2000', null, null);
+insert into attributes (attr_id, object_id, value, date_value, list_value_id) values (51 /*category*/, 9001, null, null, 1 /*1-13*/);
+insert into attributes (attr_id, object_id, value, date_value, list_value_id) values (52 /*current_date*/, 9001, null, trunc(current_date), null);
+insert into objreference (attr_id, object_id, reference) values (59, 9001 /*expense_object_id*/, 2 /*personal_debit_acc_object_id*/);
+
+insert into objects (object_id, parent_id, object_type_id, name, description) values (9004, null, 23, 'family_income_ao', null);
+insert into attributes (attr_id, object_id, value, date_value, list_value_id) values (68, 9004 /*family_income*/, 2 /*day_of_month*/, null, null);
+insert into attributes (attr_id, object_id, value, date_value, list_value_id) values (56 /*amount*/, 9004, '3500', null, null);
+insert into attributes (attr_id, object_id, value, date_value, list_value_id) values (57 /*category*/, 9004, null, null, 16);
+insert into attributes (attr_id, object_id, value, date_value, list_value_id) values (58 /*current_date*/, 9004, null, trunc(current_date), null);
+insert into objreference (attr_id, object_id, reference) values (65, 9004 /*income_object_id*/, 3 /*family_debit_acc_object_id*/);
+insert into objreference (attr_id, object_id, reference) values (66 /*transaction_auto_income*/, 9004, 1 /*reference_to_user*/);
 
  commit;
 
