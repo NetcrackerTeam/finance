@@ -100,6 +100,10 @@ public interface CreditAccountDao {
 
     Collection<FamilyCreditAccount> getAllFamilyCreditIdsByMonthDay(int day);
 
+    BigInteger getPersonalDebitIdByCreditId(BigInteger idCreditAccount);
+
+    BigInteger getFamilyDebitIdByCreditId(BigInteger idCreditAccount);
+
     String SELECT_FAMILY_CREDIT_QUERY = "SELECT CRED.OBJECT_ID CREDIT_ID, NAME_AT.VALUE NAME, AMOUNT_AT.VALUE AMOUNT,\n" +
             "  PAID_AT.VALUE PAID, DATE_AT.DATE_VALUE DATE_CR,  RATE_AT.VALUE CREDIT_RATE, \n" +
             "  DATE_TO_AT.DATE_VALUE DATE_TO, MONTH_DAY_AT.VALUE MONTH_DAY, IS_PAID_AT.LIST_VALUE_ID IS_PAID,\n" +
@@ -379,4 +383,8 @@ public interface CreditAccountDao {
             "        AND DEBT_DATE_TO_AT.ATTR_ID = 45/*DEBT DATE TO ATTRIBUTE*/\n" +
             "        AND DEBT_AMOUNT_AT.ATTR_ID = 46/*DEBT AMOUNT ATTRIBUTE*/\n" +
             "        AND MONTH_DAY_AT.VALUE = ?";
+
+    String GET_PERSONAL_DEBIT_ID_BY_CREDIT_ID = "SELECT * FROM OBJREFERENCE WHERE OBJECT_ID = ? AND ATTR_ID = 27";
+
+    String GET_FAMILY_DEBIT_ID_BY_CREDIT_ID = "SELECT * FROM OBJREFERENCE WHERE OBJECT_ID = ? AND ATTR_ID = 28";
 }

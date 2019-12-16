@@ -87,6 +87,16 @@ public class CreditAccountDaoImpl implements CreditAccountDao {
         return jdbcTemplate.query(SELECT_ALL_CREDIT_FAMILY_ID_BY_MONTH_DAY, new Object[]{day}, new CreditAccountFamilyMapper());
     }
 
+    @Override
+    public BigInteger getPersonalDebitIdByCreditId(BigInteger idCreditAccount) {
+        return jdbcTemplate.queryForObject(GET_PERSONAL_DEBIT_ID_BY_CREDIT_ID, BigInteger.class);
+    }
+
+    @Override
+    public BigInteger getFamilyDebitIdByCreditId(BigInteger idCreditAccount) {
+        return jdbcTemplate.queryForObject(GET_FAMILY_DEBIT_ID_BY_CREDIT_ID, BigInteger.class);
+    }
+
     private void createCredit(BigInteger id, AbstractCreditAccount creditAccount, String queryCredit, String queryDebt) {
         String creditName = id + creditAccount.getName();
         jdbcTemplate.update(queryCredit,
