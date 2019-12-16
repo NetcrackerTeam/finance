@@ -47,7 +47,7 @@ public class AutoOperationTest {
     private AutoOperationIncome autoOperationIncomeFamilyExpected;
     private AutoOperationExpense autoOperationExpenseFamilyExpected;
 
-    private String dateTodayString = "2019-12-15";
+    private String dateTodayString = "2019-12-16";
     private LocalDate dateToday = LocalDate.parse(dateTodayString);
     private String GET_COUNT_OF_AO_OBJECTS = "SELECT COUNT(*) FROM OBJECTS WHERE OBJECT_ID = 96";
 
@@ -74,19 +74,19 @@ public class AutoOperationTest {
     @Before
     public void initializeObjects() {
         autoOperationIncomePersonalExpected = new AutoOperationIncome.Builder().accountId(personalIncomeObjectIdAO)
-                .accountUserId(userId).dayOfMonth(dayOfMonth).accountAmount(13000.00).categoryIncome(CategoryIncome.AWARD)
+                .dayOfMonth(dayOfMonth).accountAmount(13000.00).categoryIncome(CategoryIncome.AWARD).accountDebitId(personalDebitId)
                 .accountDate(LocalDate.parse("2019-12-20")).build();
 
         autoOperationExpensePersonalExpected = new AutoOperationExpense.Builder().accountId(personalExpenseObjectIdAO)
-                .accountUserId(userId).dayOfMonth(dayOfMonth).accountAmount(17000.00).categoryExpense(CategoryExpense.FOOD)
+                .dayOfMonth(dayOfMonth).accountAmount(17000.00).categoryExpense(CategoryExpense.FOOD).accountDebitId(personalDebitId)
                 .accountDate(LocalDate.parse("2019-12-02")).build();
 
         autoOperationIncomeFamilyExpected = new AutoOperationIncome.Builder().accountId(familyIncomeObjectIdAO)
-                .accountUserId(userId).dayOfMonth(dayOfMonth).accountAmount(12000.00).categoryIncome(CategoryIncome.AWARD)
+                .dayOfMonth(dayOfMonth).accountAmount(12000.00).categoryIncome(CategoryIncome.AWARD).accountDebitId(familyDebitId)
                 .accountDate(LocalDate.parse("2019-12-15")).build();
 
         autoOperationExpenseFamilyExpected = new AutoOperationExpense.Builder().accountId(familyExpenseObjectIdAO)
-                .accountUserId(userId).dayOfMonth(dayOfMonth).accountAmount(16000.00).categoryExpense(CategoryExpense.FOOD)
+                .dayOfMonth(dayOfMonth).accountAmount(16000.00).categoryExpense(CategoryExpense.FOOD).accountDebitId(familyDebitId)
                 .accountDate(LocalDate.parse("2019-12-03")).build();
     }
 

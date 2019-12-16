@@ -13,7 +13,7 @@ public class AutoOperationIncomeMapper implements RowMapper<AutoOperationIncome>
     public AutoOperationIncome mapRow(ResultSet resultSet, int i) throws SQLException {
         return new AutoOperationIncome.Builder()
                 .accountId(resultSet.getBigDecimal("ao_object_id").toBigInteger())
-                .accountUserId(resultSet.getBigDecimal("user_id").toBigInteger())
+                .accountDebitId(resultSet.getBigDecimal("debit_id").toBigInteger())
                 .categoryIncome(CategoryIncome.getNameByKey(resultSet.getBigDecimal("category_id").toBigInteger()))
                 .accountAmount(resultSet.getDouble("amount"))
                 .accountDate(resultSet.getDate("date_of_creation").toLocalDate())

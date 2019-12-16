@@ -9,6 +9,7 @@ public abstract class AbstractAccountOperation {
     private LocalDate date;
     private Debt debt;
     private BigInteger userId;
+    private BigInteger debitId;
 
     protected static abstract class BaseBuilder<T extends AbstractAccountOperation, B extends BaseBuilder> {
         protected T actualClass;
@@ -48,6 +49,11 @@ public abstract class AbstractAccountOperation {
             return actualClassBuilder;
         }
 
+        public B accountDebitId(BigInteger debitId) {
+            actualClass.setDebitId(debitId);
+            return actualClassBuilder;
+        }
+
         public T build() {
             return actualClass;
         }
@@ -74,6 +80,10 @@ public abstract class AbstractAccountOperation {
         return userId;
     }
 
+    public BigInteger getDebitId() {
+        return debitId;
+    }
+
     public void setId(BigInteger id) {
         this.id = id;
     }
@@ -92,5 +102,9 @@ public abstract class AbstractAccountOperation {
 
     public void setUserId(BigInteger userId) {
         this.userId = userId;
+    }
+
+    public void setDebitId(BigInteger debitId) {
+        this.debitId = debitId;
     }
 }

@@ -12,9 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import java.math.BigInteger;
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -130,12 +128,17 @@ public class AccountAutoOperationServiceImpl implements AccountAutoOperationServ
         return createAllTodayOperationsList(allTodayOperationsList);
     }
 
+    @Override
+    public List<AbstractAutoOperation> getAllTodayOperations(int dayOfMonth) {
+        logger.debug("[getAllTodayOperationsFamily]" + debugStartMessage + "[dayOfMonth = " + dayOfMonth + "]");
+
+        ObjectsCheckUtils.isNotNull(dayOfMonth);
+        List<AbstractAutoOperation> allTodayOperationsList = autoOperationDao.getAllTodayOperations(dayOfMonth);
+        return createAllTodayOperationsList(allTodayOperationsList);
+    }
+
     private List<AbstractAutoOperation> createAllTodayOperationsList(List<AbstractAutoOperation> allTodayOperationsList) {
         if (CollectionUtils.isEmpty(allTodayOperationsList)) return Collections.emptyList();
-        else {
-            List<AbstractAutoOperation> allTodayOperations = new ArrayList<>(allTodayOperationsList);
-            allTodayOperations.sort(Comparator.comparing(AbstractAutoOperation::getId));
-            return allTodayOperations;
-        }
+        else return allTodayOperationsList;
     }
 }

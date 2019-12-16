@@ -36,4 +36,6 @@ public interface AccountAutoOperationService {
 
     List<AbstractAutoOperation> getAllTodayOperationsFamily(BigInteger debitAccountId, int dayOfMonth);
 
+    List<AbstractAutoOperation> getAllTodayOperations(int dayOfMonth);
+
 }

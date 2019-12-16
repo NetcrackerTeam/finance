@@ -44,7 +44,7 @@ public class AccountAutoOperationServiceTest {
     private BigInteger familyDebitId = BigInteger.valueOf(76);
     private BigInteger personalDebitId = BigInteger.valueOf(75);
 
-    private String dateTodayString = "2019-12-15";
+    private String dateTodayString = "2019-12-16";
     private LocalDate dateToday = LocalDate.parse(dateTodayString);
     private int dayOfMonth = 1;
     private List<AbstractAutoOperation> expectedList = new ArrayList<>();
@@ -70,19 +70,19 @@ public class AccountAutoOperationServiceTest {
     @Before
     public void initializeObjects() {
         autoOperationIncomePersonalExpected = new AutoOperationIncome.Builder().accountId(personalIncomeObjectIdAO)
-                .accountUserId(userId).dayOfMonth(dayOfMonth).accountAmount(13000.00).categoryIncome(CategoryIncome.AWARD)
+                .dayOfMonth(dayOfMonth).accountAmount(13000.00).categoryIncome(CategoryIncome.AWARD).accountDebitId(personalDebitId)
                 .accountDate(LocalDate.parse("2019-12-20")).build();
 
         autoOperationExpensePersonalExpected = new AutoOperationExpense.Builder().accountId(personalExpenseObjectIdAO)
-                .accountUserId(userId).dayOfMonth(dayOfMonth).accountAmount(17000.00).categoryExpense(CategoryExpense.FOOD)
+                .dayOfMonth(dayOfMonth).accountAmount(17000.00).categoryExpense(CategoryExpense.FOOD).accountDebitId(personalDebitId)
                 .accountDate(LocalDate.parse("2019-12-02")).build();
 
         autoOperationIncomeFamilyExpected = new AutoOperationIncome.Builder().accountId(familyIncomeObjectIdAO)
-                .accountUserId(userId).dayOfMonth(dayOfMonth).accountAmount(12000.00).categoryIncome(CategoryIncome.AWARD)
+                .dayOfMonth(dayOfMonth).accountAmount(12000.00).categoryIncome(CategoryIncome.AWARD).accountDebitId(familyDebitId)
                 .accountDate(LocalDate.parse("2019-12-15")).build();
 
         autoOperationExpenseFamilyExpected = new AutoOperationExpense.Builder().accountId(familyExpenseObjectIdAO)
-                .accountUserId(userId).dayOfMonth(dayOfMonth).accountAmount(16000.00).categoryExpense(CategoryExpense.FOOD)
+                .dayOfMonth(dayOfMonth).accountAmount(16000.00).categoryExpense(CategoryExpense.FOOD).accountDebitId(familyDebitId)
                 .accountDate(LocalDate.parse("2019-12-03")).build();
     }
 
@@ -243,6 +243,24 @@ public class AccountAutoOperationServiceTest {
     @Test(expected = RuntimeException.class)
     public void getAllTodayOperationsFamilyCheckNull() {
         autoOperationService.getAllTodayOperationsFamily(null, 0);
+    }
+
+    @Test
+    public void getAllTodayOperations() {
+        AutoOperationExpense autoOperationExpenseExpected = new AutoOperationExpense.Builder().accountId(BigInteger.valueOf(9001))
+                .dayOfMonth(2).accountAmount(2000.00).categoryExpense(CategoryExpense.FOOD).accountDebitId(BigInteger.valueOf(2))
+                .accountDate(LocalDate.parse("2019-12-16")).build();
+
+        AutoOperationIncome autoOperationIncomeExpected = new AutoOperationIncome.Builder().accountId(BigInteger.valueOf(9004))
+                .dayOfMonth(2).accountAmount(3500.00).categoryIncome(CategoryIncome.PRESENTS).accountDebitId(BigInteger.valueOf(3))
+                .accountDate(LocalDate.parse("2019-12-16")).build();
+
+        List<AbstractAutoOperation> autoOperationsListExpected = new ArrayList<>();
+        autoOperationsListExpected.add(autoOperationExpenseExpected);
+        autoOperationsListExpected.add(autoOperationIncomeExpected);
+
+        List<AbstractAutoOperation> autoOperationListActual = new ArrayList<>(autoOperationService.getAllTodayOperations(2));
+        AssertUtils.assertAutoOperationsCollections(autoOperationsListExpected, autoOperationListActual);
     }
 
 }

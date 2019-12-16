@@ -20,6 +20,7 @@ public class AssertUtils {
         assertEquals(expAO.getAmount(), actualAO.getAmount(), delta);
         assertEquals(expAO.getDate(), actualAO.getDate());
         assertEquals(expAO.getDayOfMonth(), actualAO.getDayOfMonth());
+        assertEquals(expAO.getDebitId(), actualAO.getDebitId());
     }
 
     public static void assertAutoOperationExpense(AutoOperationExpense expAO, AutoOperationExpense actualAO) {
@@ -29,6 +30,7 @@ public class AssertUtils {
         assertEquals(expAO.getAmount(), actualAO.getAmount(), delta);
         assertEquals(expAO.getDate(), actualAO.getDate());
         assertEquals(expAO.getDayOfMonth(), actualAO.getDayOfMonth());
+        assertEquals(expAO.getDebitId(), actualAO.getDebitId());
     }
 
     public static void assertCreditOperation(CreditOperation expCO, CreditOperation actualCO) {
