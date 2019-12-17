@@ -156,8 +156,7 @@ public class EmailServiceSenderImplTest {
                 user.geteMail(),
                 user.getName(),
                 perDA.getObjectName(),
-                perDA.getAmount(),
-                user.getId()
+                perDA.getAmount()
         );
         template.update(DELETE_USER);
     }
@@ -186,8 +185,7 @@ public class EmailServiceSenderImplTest {
                 user.geteMail(),
                 user.getName(),
                 famDA.getObjectName(),
-                famDA.getAmount(),
-                user.getId()
+                famDA.getAmount()
         );
         template.update(DELETE_USER);
         template.update(DELETE_ACC);
@@ -206,7 +204,7 @@ public class EmailServiceSenderImplTest {
         User returnedUser = userDao.createUser(user);
         logger.debug("user is ready " + user.getId());
 
-        emailServiceSender.monthReport(returnedUser.geteMail(), returnedUser.getName(),returnedUser.getId(), path);
+        emailServiceSender.monthReport(returnedUser.geteMail(), returnedUser.getName(), path);
         template.update(DELETE_USER);
         template.update(DELETE_ACC);
     }
@@ -252,7 +250,6 @@ public class EmailServiceSenderImplTest {
                 returnedUser.getName(),
                 personalCredit.getPaidAmount(),
                 personalCredit.getName(),
-                returnedUser.getId(),
                 personalCredit.getDateTo()
         );
         template.update(DELETE_USER);
@@ -301,7 +298,6 @@ public class EmailServiceSenderImplTest {
                 returnedUser.getName(),
                 familyCredit.getPaidAmount(),
                 familyCredit.getName(),
-                returnedUser.getId(),
                 familyCredit.getDateTo()
         );
     }
@@ -323,8 +319,7 @@ public class EmailServiceSenderImplTest {
                 userDao.getUserById(incFamAutoOperation.getUserId()).geteMail(),
                 userDao.getUserById(incFamAutoOperation.getUserId()).getName(),
                 incFamAutoOperation.getAmount(),
-                userDao.getUserById(incFamAutoOperation.getUserId()).getName(),
-                incFamAutoOperation.getUserId()
+                userDao.getUserById(incFamAutoOperation.getUserId()).getName()
         );
 
     }
@@ -346,8 +341,7 @@ public class EmailServiceSenderImplTest {
                 userDao.getUserById(expFamAutoOperation.getUserId()).geteMail(),
                 userDao.getUserById(expFamAutoOperation.getUserId()).getName(),
                 expFamAutoOperation.getAmount(),
-                userDao.getUserById(expFamAutoOperation.getUserId()).getName(),
-                expFamAutoOperation.getUserId()
+                userDao.getUserById(expFamAutoOperation.getUserId()).getName()
         );
     }
 
@@ -368,8 +362,7 @@ public class EmailServiceSenderImplTest {
                 userDao.getUserById(incPersAccount.getUserId()).geteMail(),
                 userDao.getUserById(incPersAccount.getUserId()).getName(),
                 incPersAccount.getAmount(),
-                userDao.getUserById(incPersAccount.getUserId()).getName(),
-                incPersAccount.getUserId()
+                userDao.getUserById(incPersAccount.getUserId()).getName()
         );
     }
 
@@ -390,8 +383,7 @@ public class EmailServiceSenderImplTest {
                 userDao.getUserById(expPersExpense.getUserId()).geteMail(),
                 userDao.getUserById(expPersExpense.getUserId()).getName(),
                 expPersExpense.getAmount(),
-                userDao.getUserById(expPersExpense.getUserId()).getName(),
-                expPersExpense.getUserId()
+                userDao.getUserById(expPersExpense.getUserId()).getName()
         );
     }
 }

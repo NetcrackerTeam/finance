@@ -61,11 +61,13 @@ public class JobServiceImpl implements JobService {
     @Autowired
     PersonalDebitAccountDao personalDebitAccountDao;
 
+    @Autowired
+    FamilyAccountDebitDao familyDebitAccountDao;
+
     private LocalDate localDateTo = LocalDate.now();
     private LocalDate dateFrom = localDateTo.minus(1, ChronoUnit.MONTHS);
     private int dayNow = localDateTo.getDayOfMonth();
-    private Path path;
-    double calculateCredit;
+    private double calculateCredit;
     private List<User> userList;
 
     @Override
@@ -95,10 +97,11 @@ public class JobServiceImpl implements JobService {
         });
     }
 
-    private void sendReportByMail (MonthReport monthReport, AbstractDebitAccount debitAccount) {
+    private void sendReportByMail(MonthReport monthReport, AbstractDebitAccount debitAccount) {
+        Path path;
         try {
             path = monthReportService.convertToTxt(monthReport);
-            emailServiceSender.monthReport(debitAccount.getOwner().geteMail(), debitAccount.getOwner().getName(), debitAccount.getOwner().getId(), path);
+            emailServiceSender.monthReport(debitAccount.getOwner().geteMail(), debitAccount.getOwner().getName(), path);
             logger.debug("Email have been sent");
         } catch (MessagingException e) {
             logger.error("Email can't be sent, messaging exception", e);
@@ -116,20 +119,22 @@ public class JobServiceImpl implements JobService {
             FamilyDebitAccount debitAccount = familyDebitService.getFamilyDebitAccount(autoIncome.getDebitId());
             operationService.createFamilyOperationIncome(autoIncome.getUserId(), autoIncome.getDebitId(), autoIncome.getAmount(), localDateTo, autoIncome.getCategoryIncome());
             double newAmount = debitAccount.getAmount() + autoIncome.getAmount();
+//            debitAccount.setAmount(newAmount);
+            familyDebitAccountDao.updateAmountOfFamilyAccount(debitAccount.getId(), debitAccount.getAmount());
             Collection<FamilyCreditAccount> credits = familyCreditService.getFamilyCredits(debitAccount.getId());
             for (FamilyCreditAccount cr : credits) {
-                if (cr.getDebt().getAmountDebt() != 0) {
-                    double payForDebt = CreditUtils.calculateMonthPayment(cr.getDate(), cr.getDateTo(), cr.getAmount(), cr.getCreditRate());
-                    familyCreditService.addAutoDebtRepayment(debitAccount.getId(), cr.getCreditId(), payForDebt);
+                double payForDebt = CreditUtils.calculateMonthPayment(cr.getDate(), cr.getDateTo(), cr.getAmount(), cr.getCreditRate());
+                while (cr.getDebt().getAmountDebt() != 0) {
+                    if (debitAccount.getAmount() > payForDebt) {
+                        familyCreditService.addAutoDebtRepayment(debitAccount.getId(), cr.getCreditId(), payForDebt);
+//                        debitAccount.setAmount(debitAccount.getAmount() - payForDebt);
+                    } else break;
                 }
             }
-            try {
-             //   emailServiceSender.sendMailAutoFamilyIncome(debitAccount.getOwner().geteMail(),
-             //           debitAccount.getOwner().getName(), autoIncome.getAmount(), );
-                logger.debug("Email have been sent with  " + debitAccount.getOwner().getName());
-            } catch (JobException e) {
-                logger.debug("Email can't be sent", e);
-            }
+//                   emailServiceSender.sendMailAutoFamilyIncome(debitAccount.getOwner().geteMail(),
+//                           debitAccount.getOwner().getName(), autoIncome.getAmount(), );
+            logger.debug("Email have been sent with  " + debitAccount.getOwner().getName());
+
         }
     }
 
@@ -148,8 +153,8 @@ public class JobServiceImpl implements JobService {
                     personalCreditService.addAutoDebtRepayment(personalDebitAccount.getId(), pc.getCreditId(), payForDebt);
                 }
                 try {
-                  //  emailServiceSender.sendMailAutoFamilyIncome(personalDebitAccount.getOwner().geteMail(),
-                  //          personalDebitAccount.getOwner().getName(), autoOperIncome.getAmount(), );
+                    emailServiceSender.sendMailAutoFamilyIncome(personalDebitAccount.getOwner().geteMail(),
+                            personalDebitAccount.getOwner().getName(), autoOperIncome.getAmount(), autoOperIncome.getCategoryIncome().name());
                     logger.debug("Email have been sent with  " + personalDebitAccount.getOwner().getName());
                 } catch (JobException e) {
                     logger.debug("Email can't be sent", e);
@@ -171,7 +176,7 @@ public class JobServiceImpl implements JobService {
             FamilyDebitAccount familyDebitAccount = familyAccountDebitDao.getFamilyAccountById(user.getPersonalDebitAccount());
             if (familyDebitAccount.getAmount() < autoExpense.getAmount()) {
                 try {
-                    emailServiceSender.sendMailAboutPersonalDebt(user.geteMail(), user.getName(), "что за perName", familyDebitAccount.getAmount(), user.getId());
+                    emailServiceSender.sendMailAboutPersonalDebt(user.geteMail(), user.getName(), "что за perName", familyDebitAccount.getAmount());
                     logger.debug("Email have been sent with auto credit . User id: {} " + user.getId());
                 } catch (JobException e) {
                     logger.debug("Email can't be sent", e);
@@ -196,7 +201,7 @@ public class JobServiceImpl implements JobService {
             PersonalDebitAccount personalDebitAccount = personalDebitAccountDao.getPersonalAccountById(user.getPersonalDebitAccount());
             if (personalDebitAccount.getAmount() < autoExpense.getAmount()) {
                 try {
-                    emailServiceSender.sendMailAboutPersonalDebt(user.geteMail(), user.getName(), "что за perName", personalDebitAccount.getAmount(), user.getId());
+                    emailServiceSender.sendMailAboutPersonalDebt(user.geteMail(), user.getName(), "что за perName", personalDebitAccount.getAmount());
                     logger.debug("Email have been sent with auto credit . User id: {} " + user.getId());
                 } catch (JobException e) {
                     logger.debug("Email can't be sent", e);
@@ -207,7 +212,6 @@ public class JobServiceImpl implements JobService {
             }
         }
     }
-
 
     @Override
     @Scheduled(cron = CRON_BY_EVERYDAY)
@@ -220,10 +224,10 @@ public class JobServiceImpl implements JobService {
             boolean paymentAutoFamilyCredit = familyCreditService.addFamilyCreditPaymentAuto(id, familyCredit.getCreditId(), calculateCredit);
             if (!paymentAutoFamilyCredit) {
                 familyCreditService.increaseDebt(familyCredit.getCreditId(), familyCredit.getPaidAmount());
-                emailServiceSender.sendMailAboutFamilyDebt(user.geteMail(), user.getName(), familyCredit.getName(), calculateCredit, user.getId());
+                emailServiceSender.sendMailAboutFamilyDebt(user.geteMail(), user.getName(), familyCredit.getName(), calculateCredit);
             }
             try {
-                emailServiceSender.sendMailReminderFamilyCredit(user.geteMail(), user.getName(), calculateCredit, familyCredit.getName(), id, localDateTo);
+                emailServiceSender.sendMailReminderFamilyCredit(user.geteMail(), user.getName(), calculateCredit, familyCredit.getName(), localDateTo);
                 logger.debug("Email have been sent with auto credit . User id: {} " + user.getId());
             } catch (JobException e) {
                 logger.debug("Email can't be sent", e);
@@ -245,7 +249,7 @@ public class JobServiceImpl implements JobService {
                 personalCreditService.increaseDebt(personalCredit.getCreditId(), personalCredit.getPaidAmount());
             }
             try {
-                emailServiceSender.sendMailReminderPersonalCredit(user.geteMail(), user.getName(), calculateCredit, personalCredit.getName(), id, localDateTo);
+                emailServiceSender.sendMailReminderPersonalCredit(user.geteMail(), user.getName(), calculateCredit, personalCredit.getName(), localDateTo);
                 logger.debug("Email have been sent with auto credit . User id: {} " + user.getId());
             } catch (JobException e) {
                 logger.debug("Email can't be sent", e);
