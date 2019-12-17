@@ -30,4 +30,8 @@ public interface EmailServiceSender {
 
     String MAIL = "<nectrackerteam@gmail.com>";
 
+    String RIGHT_BRACKET = "<";
+
+    String LEFT_BRACKET = ">";
+
 }

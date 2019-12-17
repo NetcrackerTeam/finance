@@ -30,16 +30,16 @@ BEGIN
   'Hi, dear {0}. You have paid an amount {1} for a family credit {2}, last date is {3}');
 
   INSERT INTO TEMPLATE VALUES(6,'New income for personal account',
-  'Hi, dear {0}. You have new auto income operation on personal account is {1}, and is amount: {2}');
+  'Hi, dear {0}. You have new auto income operation {1} on personal account with amount: {2}');
 
   INSERT INTO TEMPLATE VALUES(7,'New expense for personal account',
-  'Hi, dear {0}. You have new auto expense operation on personal account is {1}, and is amount: {2}');
+  'Hi, dear {0}. You have new auto expense operation {1} on personal account with amount: {2}');
 
   INSERT INTO TEMPLATE VALUES(8,'New income for family account',
-  'Hi, dear {0}. You have new auto income operation on family account is {1}, and is amount: {2}');
+  'Hi, dear {0}. You have new auto income operation {1} on family account with amount: {2}');
 
   INSERT INTO TEMPLATE VALUES(9,'New expense for family account',
-  'Hi, dear {0}. You have new auto expense operation on family account is {1}, and is amount: {2}');
+  'Hi, dear {0}. You have new auto expense operation {1} on family account with amount: {2}');
 
   INSERT INTO TEMPLATE VALUES(10,'Month report',
   'Hi, dear {0}. We sent you a monthly report, thanks for using our software product!');
