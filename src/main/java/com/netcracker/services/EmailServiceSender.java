@@ -30,6 +30,8 @@ public interface EmailServiceSender {
 
     String MAIL = "<nectrackerteam@gmail.com>";
 
+    String FILE_NAME = "Month_report.txt";
+
     String RIGHT_BRACKET = "<";
 
     String LEFT_BRACKET = ">";

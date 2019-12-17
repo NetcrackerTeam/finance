@@ -34,8 +34,6 @@ public class EmailServiceSenderImpl implements EmailServiceSender {
     private TemplatesDaoImpl templatesDao;
     @Autowired
     public JavaMailSender mailSender;
-    @Autowired
-    private UserService userService;
 
     private static final Logger logger = Logger.getLogger(EmailServiceSenderImpl.class);
 
@@ -94,7 +92,7 @@ public class EmailServiceSenderImpl implements EmailServiceSender {
         helper.setSubject(templatesDao.sendMassageById(EmailServiceTemplateCategory.MONTH_REPORT.getId()));
         helper.setText(monthReportMess);
         FileSystemResource monthReport = new FileSystemResource(path);
-        helper.addAttachment("Month report.txt", monthReport);
+        helper.addAttachment(FILE_NAME, monthReport);
         mailSender.send(message);
     }
 

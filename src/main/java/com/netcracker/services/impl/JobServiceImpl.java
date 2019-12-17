@@ -7,6 +7,7 @@ import com.netcracker.exception.JobException;
 import com.netcracker.models.*;
 import com.netcracker.services.*;
 import com.netcracker.services.utils.CreditUtils;
+import com.netcracker.services.utils.DateUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -16,7 +17,6 @@ import javax.mail.MessagingException;
 import java.math.BigInteger;
 import java.nio.file.Path;
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 import java.util.Collection;
 import java.util.List;
 
@@ -56,19 +56,14 @@ public class JobServiceImpl implements JobService {
     private FamilyAccountDebitDao familyAccountDebitDao;
 
     @Autowired
-    private UserService userService;
-
-    @Autowired
     PersonalDebitAccountDao personalDebitAccountDao;
 
     @Autowired
     FamilyAccountDebitDao familyDebitAccountDao;
 
-    private LocalDate localDateTo = LocalDate.now();
-    private LocalDate dateFrom = localDateTo.minus(1, ChronoUnit.MONTHS);
-    private int dayNow = localDateTo.getDayOfMonth();
-    private double calculateCredit;
-    private List<User> userList;
+    private LocalDate localDateNow = LocalDate.now();
+    private LocalDate dateFrom = DateUtils.addMonthsToDate(localDateNow, -1);
+    private int dayNow = localDateNow.getDayOfMonth();
 
     @Override
     @Scheduled(cron = CRON_BY_REPORT)
@@ -78,7 +73,7 @@ public class JobServiceImpl implements JobService {
             return;
         familyDebitAccounts.forEach(debitAccountFamily -> {
             monthReportService.formMonthFamilyReportFromDb(debitAccountFamily.getId());
-            MonthReport monthReport = monthReportService.getMonthPersonalReport(debitAccountFamily.getId(), dateFrom, localDateTo);
+            MonthReport monthReport = monthReportService.getMonthPersonalReport(debitAccountFamily.getId(), dateFrom, localDateNow);
             sendReportByMail(monthReport, (AbstractDebitAccount) familyDebitAccounts);
         });
 
@@ -92,7 +87,7 @@ public class JobServiceImpl implements JobService {
             return;
         personalDebitAccounts.forEach(debitAccountPersonal -> {
             monthReportService.formMonthPersonalReportFromDb(debitAccountPersonal.getId());
-            MonthReport monthReport = monthReportService.getMonthPersonalReport(debitAccountPersonal.getId(), dateFrom, localDateTo);
+            MonthReport monthReport = monthReportService.getMonthPersonalReport(debitAccountPersonal.getId(), dateFrom, localDateNow);
             sendReportByMail(monthReport, (AbstractDebitAccount) personalDebitAccounts);
         });
     }
@@ -112,12 +107,12 @@ public class JobServiceImpl implements JobService {
     @Override
     @Scheduled(cron = CRON_BY_EVERYDAY)
     public void executeRemindAutoIncomeFamilyJob() {
-        Collection<AutoOperationIncome> autoOperationIncomesFamily = accountAutoOperationService.getAllTodayOperationsFamilyIncome(dayNow);
+        List<AutoOperationIncome> autoOperationIncomesFamily = accountAutoOperationService.getAllTodayOperationsFamilyIncome(dayNow);
         if (autoOperationIncomesFamily.isEmpty())
             return;
         for (AutoOperationIncome autoIncome : autoOperationIncomesFamily) {
             FamilyDebitAccount debitAccount = familyDebitService.getFamilyDebitAccount(autoIncome.getDebitId());
-            operationService.createFamilyOperationIncome(autoIncome.getUserId(), autoIncome.getDebitId(), autoIncome.getAmount(), localDateTo, autoIncome.getCategoryIncome());
+            operationService.createFamilyOperationIncome(autoIncome.getUserId(), autoIncome.getDebitId(), autoIncome.getAmount(), localDateNow, autoIncome.getCategoryIncome());
             double newAmount = debitAccount.getAmount() + autoIncome.getAmount();
             debitAccount.setAmount(newAmount);
             familyDebitAccountDao.updateAmountOfFamilyAccount(debitAccount.getId(), debitAccount.getAmount());
@@ -135,18 +130,18 @@ public class JobServiceImpl implements JobService {
     @Override
     @Scheduled(cron = CRON_BY_EVERYDAY)
     public void executeRemindAutoIncomePersonalJob() {
-        Collection<AutoOperationIncome> autoOperationIncomePersonal = accountAutoOperationService.getAllTodayOperationsPersonalIncome(dayNow);
+        List<AutoOperationIncome> autoOperationIncomePersonal = accountAutoOperationService.getAllTodayOperationsPersonalIncome(dayNow);
         if (autoOperationIncomePersonal.isEmpty())
             return;
         for (AutoOperationIncome autoIncome : autoOperationIncomePersonal) {
             PersonalDebitAccount debitAccount = personalDebitService.getPersonalDebitAccount(autoIncome.getDebitId());
-            operationService.createPersonalOperationIncome(autoIncome.getDebitId(), autoIncome.getAmount(), localDateTo, autoIncome.getCategoryIncome());
+            operationService.createPersonalOperationIncome(autoIncome.getDebitId(), autoIncome.getAmount(), localDateNow, autoIncome.getCategoryIncome());
             double newAmount = debitAccount.getAmount() + autoIncome.getAmount();
             debitAccount.setAmount(newAmount);
             personalDebitAccountDao.updateAmountOfPersonalAccount(debitAccount.getId(), newAmount);
             Collection<PersonalCreditAccount> creditAccounts = personalCreditService.getPersonalCredits(debitAccount.getId());
             for (PersonalCreditAccount cr : creditAccounts) {
-               checkDebtRepayment(cr, debitAccount);
+                checkDebtRepayment(cr, debitAccount);
             }
             emailServiceSender.sendMailAutoPersonalIncome(debitAccount.getOwner().geteMail(),
                     debitAccount.getOwner().getName(), autoIncome.getAmount(), autoIncome.getCategoryIncome().name());
@@ -155,7 +150,7 @@ public class JobServiceImpl implements JobService {
         }
     }
 
-    void checkDebtRepayment(AbstractCreditAccount cr, AbstractDebitAccount debitAccount) {
+    private void checkDebtRepayment(AbstractCreditAccount cr, AbstractDebitAccount debitAccount) {
         double payForDebt = CreditUtils.calculateMonthPayment(cr.getDate(), cr.getDateTo(), cr.getAmount(), cr.getCreditRate());
         while (cr.getDebt().getAmountDebt() != 0) {
             if (debitAccount.getAmount() > payForDebt) {
@@ -171,7 +166,7 @@ public class JobServiceImpl implements JobService {
     public void executeRemindAutoExpenseFamilyJob() {
         Collection<AutoOperationExpense> autoOperationExpenseFamily = accountAutoOperationService.getAllTodayOperationsFamilyExpense(dayNow);
         for (AutoOperationExpense autoExpense : autoOperationExpenseFamily) {
-            operationService.createFamilyOperationExpense(autoExpense.getUserId(), autoExpense.getDebitId(), autoExpense.getAmount(), localDateTo, autoExpense.getCategoryExpense());
+            operationService.createFamilyOperationExpense(autoExpense.getUserId(), autoExpense.getDebitId(), autoExpense.getAmount(), localDateNow, autoExpense.getCategoryExpense());
             FamilyDebitAccount debitAccount = familyAccountDebitDao.getFamilyAccountById(autoExpense.getId());
             if (debitAccount.getAmount() < autoExpense.getAmount()) {
                 logger.debug("Auto expense cannot be done. Not enough money");
@@ -192,7 +187,7 @@ public class JobServiceImpl implements JobService {
     public void executeRemindAutoExpensePersonalJob() {
         Collection<AutoOperationExpense> autoOperationExpensePersonal = accountAutoOperationService.getAllTodayOperationsPersonalExpense(dayNow);
         for (AutoOperationExpense autoExpense : autoOperationExpensePersonal) {
-            operationService.createPersonalOperationExpense(autoExpense.getUserId(), autoExpense.getAmount(), localDateTo, autoExpense.getCategoryExpense());
+            operationService.createPersonalOperationExpense(autoExpense.getUserId(), autoExpense.getAmount(), localDateNow, autoExpense.getCategoryExpense());
             PersonalDebitAccount debitAccount = personalDebitAccountDao.getPersonalAccountById(autoExpense.getId());
             if (debitAccount.getAmount() < autoExpense.getAmount()) {
                 logger.debug("Auto expense cannot be done. Not enough money");
@@ -210,6 +205,7 @@ public class JobServiceImpl implements JobService {
     @Override
     @Scheduled(cron = CRON_BY_EVERYDAY)
     public void executeAutoCreditExpenseFamily() {
+        double calculateCredit;
         Collection<FamilyCreditAccount> allFamilyCredit = creditAccountDao.getAllFamilyCreditIdsByMonthDay(dayNow);
         for (FamilyCreditAccount familyCredit : allFamilyCredit) {
             BigInteger id = creditAccountDao.getFamilyDebitIdByCreditId(familyCredit.getCreditId());
@@ -221,7 +217,7 @@ public class JobServiceImpl implements JobService {
                 emailServiceSender.sendMailAboutFamilyDebt(user.geteMail(), user.getName(), familyCredit.getName(), calculateCredit);
             }
             try {
-                emailServiceSender.sendMailReminderFamilyCredit(user.geteMail(), user.getName(), calculateCredit, familyCredit.getName(), localDateTo);
+                emailServiceSender.sendMailReminderFamilyCredit(user.geteMail(), user.getName(), calculateCredit, familyCredit.getName(), localDateNow);
                 logger.debug("Email have been sent with auto credit . User id: {} " + user.getId());
             } catch (JobException e) {
                 logger.debug("Email can't be sent", e);
@@ -233,6 +229,7 @@ public class JobServiceImpl implements JobService {
     @Override
     @Scheduled(cron = CRON_BY_EVERYDAY)
     public void executeAutoCreditExpensePersonal() {
+        double calculateCredit;
         Collection<PersonalCreditAccount> allPersonalCredit = creditAccountDao.getAllPersonCreditIdsByMonthDay(dayNow);
         for (PersonalCreditAccount personalCredit : allPersonalCredit) {
             BigInteger id = creditAccountDao.getPersonalDebitIdByCreditId(personalCredit.getCreditId());
@@ -243,7 +240,7 @@ public class JobServiceImpl implements JobService {
                 personalCreditService.increaseDebt(personalCredit.getCreditId(), personalCredit.getPaidAmount());
             }
             try {
-                emailServiceSender.sendMailReminderPersonalCredit(user.geteMail(), user.getName(), calculateCredit, personalCredit.getName(), localDateTo);
+                emailServiceSender.sendMailReminderPersonalCredit(user.geteMail(), user.getName(), calculateCredit, personalCredit.getName(), localDateNow);
                 logger.debug("Email have been sent with auto credit . User id: {} " + user.getId());
             } catch (JobException e) {
                 logger.debug("Email can't be sent", e);
