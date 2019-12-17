@@ -22,6 +22,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import javax.mail.MessagingException;
 import javax.sql.DataSource;
 import java.math.BigInteger;
+import java.nio.file.Path;
 import java.time.LocalDate;
 import java.util.Locale;
 
@@ -59,6 +60,8 @@ public class EmailServiceSenderImplTest {
     private BigInteger userId = BigInteger.valueOf(74);
     private BigInteger familyDebitId = BigInteger.valueOf(76);
     private BigInteger personalDebitId = BigInteger.valueOf(75);
+
+    Path path;
 
     private static final Logger logger = Logger.getLogger(EmailServiceSenderImplTest.class);
     private static final String CREATE_USER = "INSERT ALL " +
@@ -203,7 +206,7 @@ public class EmailServiceSenderImplTest {
         User returnedUser = userDao.createUser(user);
         logger.debug("user is ready " + user.getId());
 
-        emailServiceSender.monthReport(returnedUser.geteMail(), returnedUser.getId());
+        emailServiceSender.monthReport(returnedUser.geteMail(), returnedUser.getName(),returnedUser.getId(), path);
         template.update(DELETE_USER);
         template.update(DELETE_ACC);
     }
@@ -373,8 +376,8 @@ public class EmailServiceSenderImplTest {
     @Test
     public void sendPersAutoExpense() {
         autoOperationExpensePersonalExpected = new AutoOperationExpense.Builder()
-                .accountId(personalExpenseObjectIdAO)
-                .accountUserId(userId)
+                .accountId(BigInteger.valueOf(93))
+                .accountUserId(BigInteger.valueOf(74))
                 .dayOfMonth(5)
                 .accountAmount(17000L)
                 .categoryExpense(CategoryExpense.FOOD)

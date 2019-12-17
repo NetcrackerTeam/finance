@@ -98,7 +98,7 @@ public class JobServiceImpl implements JobService {
     private void sendReportByMail (MonthReport monthReport, AbstractDebitAccount debitAccount) {
         try {
             path = monthReportService.convertToTxt(monthReport);
-            emailServiceSender.monthReport(debitAccount.getOwner().geteMail(), debitAccount.getOwner().getId());// не дописан sender не могу передать путь к файлу
+            emailServiceSender.monthReport(debitAccount.getOwner().geteMail(), debitAccount.getOwner().getName(), debitAccount.getOwner().getId(), path);
             logger.debug("Email have been sent");
         } catch (MessagingException e) {
             logger.error("Email can't be sent, messaging exception", e);

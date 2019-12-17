@@ -24,4 +24,9 @@ public class TemplatesDaoImpl implements TemplatesDao {
     public String sendMassageById(BigInteger id) {
         return template.queryForObject(MESSAGE, new Object[]{id}, String.class);
     }
+
+    @Override
+    public String sendNameMessageById(BigInteger id){
+        return template.queryForObject(MESSAGE_NAME, new Object[]{id}, String.class);
+    }
 }

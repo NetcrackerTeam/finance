@@ -57,7 +57,7 @@ public class PersonalDebitServiceImpl implements PersonalDebitService {
 
     @Override
     public Collection<PersonalDebitAccount> getAllPersonalAccounts() {
-        return null;
+        return personalDebitAccountDao.getAllPersonalAccounts();
     }
 
 }

@@ -2,6 +2,7 @@ package com.netcracker.services;
 
 import javax.mail.MessagingException;
 import java.math.BigInteger;
+import java.nio.file.Path;
 import java.time.LocalDate;
 
 
@@ -13,7 +14,7 @@ public interface EmailServiceSender {
 
     public void sendMailAboutFamilyDebt(String emailTo, String userName, String famName, double amount, BigInteger userId);
 
-    public void monthReport(String emailTo, BigInteger userId) throws MessagingException;
+    public void monthReport(String emailTo, String userName,BigInteger userId, Path path) throws MessagingException;
 
     public void sendMailReminderPersonalCredit(String emailTo, String userName, double amountPaid, String credName, BigInteger userId, LocalDate date);
 
