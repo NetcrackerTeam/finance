@@ -35,6 +35,7 @@ public class PersonalDebitAccountDaoTests {
     private JdbcTemplate template;
     private PersonalDebitAccount personalDebitAccount;
     private BigInteger id = BigInteger.valueOf(25);
+    private static final double delta = 0.1;
     private static final String CREATE_USER = "INSERT ALL " +
             "INTO OBJECTS(OBJECT_ID,OBJECT_TYPE_ID,NAME) VALUES (objects_id_s.nextval, 1, ' ') "
             +
@@ -60,10 +61,10 @@ public class PersonalDebitAccountDaoTests {
     public void getPersonalAccountById() {
         PersonalDebitAccount personalDebitAccount = personalDebitAccountDao.getPersonalAccountById(id);
         String name = "PER_DEB_ACC2";
-        Long amount = 10000L;
+        double amount = 10000;
         assertEquals(id, personalDebitAccount.getId());
         assertEquals(name, personalDebitAccount.getObjectName());
-        assertEquals(amount, personalDebitAccount.getAmount());
+        assertEquals(amount, personalDebitAccount.getAmount(), delta);
 
         String usname = "Dimas";
         String status = "YES";
@@ -115,8 +116,8 @@ public class PersonalDebitAccountDaoTests {
     @Test
     public void updateAmount() {
         personalDebitAccountDao.updateAmountOfPersonalAccount(id, 5000L);
-        Long am = 5000L;
-        assertEquals(am, personalDebitAccountDao.getPersonalAccountById(id).getAmount());
+        double am = 5000;
+        assertEquals(am, personalDebitAccountDao.getPersonalAccountById(id).getAmount(), delta);
         personalDebitAccountDao.updateAmountOfPersonalAccount(id, 10000L);
     }
     @Test

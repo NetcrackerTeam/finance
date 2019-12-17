@@ -159,7 +159,7 @@ public class FamilyCreditServiceImpl implements FamilyCreditService {
     }
 
     private void addPayment(FamilyCreditAccount creditAccount, FamilyDebitAccount debitAccount, double amount, BigInteger idUser) {
-        long actualDebitAmount = debitAccount.getAmount();
+        double actualDebitAmount = debitAccount.getAmount();
         debitAccountDao.updateAmountOfFamilyAccount(debitAccount.getId(), actualDebitAmount - amount);
         creditOperationDao.createFamilyCreditOperation(amount, LocalDate.now(), creditAccount.getCreditId(), idUser);
         double updatedAmount = creditAccount.getPaidAmount() + amount;

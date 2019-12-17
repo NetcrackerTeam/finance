@@ -51,6 +51,7 @@ public class FamilyAccountDebitDaoTests {
     private static final String email = "mail@gmail.com";
     private static final String password = "password";
     private static final BigInteger id = BigInteger.valueOf(3);
+    private static final double delta = 0.1;
 
     @Before
     public void setUp() {
@@ -64,10 +65,10 @@ public class FamilyAccountDebitDaoTests {
 
         FamilyDebitAccount familyDebitAccount = familyAccountDebitDao.getFamilyAccountById(id);
         String name = "FAM_DEB_ACC1";
-        Long amount = 9000L;
+        double amount = 9000;
         assertEquals(id, familyDebitAccount.getId());
         assertEquals(name, familyDebitAccount.getObjectName());
-        assertEquals(amount, familyDebitAccount.getAmount());
+        assertEquals(amount, familyDebitAccount.getAmount(), delta);
 
         String username = "Eugen";
         String is_active = "YES";
@@ -139,8 +140,8 @@ public class FamilyAccountDebitDaoTests {
     @Test
     public void updateAmount() {
         familyAccountDebitDao.updateAmountOfFamilyAccount(id, 20000L);
-        Long expected = 20000L;
-        assertEquals(expected, familyAccountDebitDao.getFamilyAccountById(id).getAmount());
+        double expected = 20000;
+        assertEquals(expected, familyAccountDebitDao.getFamilyAccountById(id).getAmount(), delta);
         familyAccountDebitDao.updateAmountOfFamilyAccount(id, 9000L);
     }
 

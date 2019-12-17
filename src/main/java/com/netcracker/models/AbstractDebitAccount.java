@@ -5,7 +5,7 @@ import java.util.List;
 
 public abstract class AbstractDebitAccount {
     private BigInteger id;
-    private Long amount;
+    private double amount;
     private User owner;
     private String name;
     private List<AccountIncome> accountIncomesList;
@@ -33,7 +33,7 @@ public abstract class AbstractDebitAccount {
             return actualClassBuilder;
         }
 
-        public B debitAmount(Long amount) {
+        public B debitAmount(double amount) {
             actualClass.setAmount(amount);
             return actualClassBuilder;
         }
@@ -68,9 +68,9 @@ public abstract class AbstractDebitAccount {
 
     public void setObjectName(String name) { this.name = name; }
 
-    public Long getAmount() { return amount; }
+    public double getAmount() { return amount; }
 
-    public void setAmount(Long amount) { this.amount = amount; }
+    public void setAmount(double amount) { this.amount = amount; }
 
     public User getOwner() { return owner; }
 

@@ -27,4 +27,6 @@ public interface FamilyDebitService {
     boolean isUserParticipant(BigInteger userId);
 
     Collection<FamilyDebitAccount> getAllFamilyAccounts();
+
+    void updateAmountOfFamilyAccount(BigInteger accountId, double amount);
 }

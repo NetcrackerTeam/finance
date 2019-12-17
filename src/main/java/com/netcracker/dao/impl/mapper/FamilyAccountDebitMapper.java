@@ -20,7 +20,7 @@ public class FamilyAccountDebitMapper implements RowMapper<FamilyDebitAccount> {
         return new FamilyDebitAccount.Builder()
                 .debitId(rs.getBigDecimal("DEBIT_ID").toBigInteger())
                 .debitObjectName(rs.getString("NAME_DEBIT"))
-                .debitAmount(Long.valueOf(rs.getString("AMOUNT_DEBIT")))
+                .debitAmount(rs.getDouble("AMOUNT_DEBIT"))
                 .debitFamilyAccountStatus(FamilyAccountStatusActive.getStatusByKey(rs.getBigDecimal("STATUS_DEBIT").toBigInteger()))
                 .debitOwner(user).build();
     }

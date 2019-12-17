@@ -37,6 +37,9 @@ public class FamilyDebitAccountServiceTest {
     private static final BigInteger ID_ALONE = BigInteger.valueOf(26);
     private static final BigInteger ID_USER_NOT_ALONE = BigInteger.valueOf(47);
     private static final BigInteger ERROR_ID = BigInteger.valueOf(999);
+    private static final double AMOUNT = 20000;
+    private static final double ERROR_AMOUNT = -20000;
+    private static final double delta = 0.1;
     private static final String ERROR_MESSAGE_FAMILY = "the family debit account doesn`t exist";
     private static final String ERROR_MESSAGE_USER = "The user is doesn`t exist";
     private static final String ERROR_MESSAGE_USER_STATUS = "The user is unactive";
@@ -45,6 +48,7 @@ public class FamilyDebitAccountServiceTest {
     private static final String ERROR_MESSAGE_USER_EXIST_FAMILY = "The user has family debit account";
     private final static String NULL_MESSAGE = "Null object was found";
     private static final String ERROR_MESSAGE_OWNER = "Owner can`t delete yourself, try to delete account";
+    private static final String ERROR_MESSAGE_ILLEGAL_AMOUNT = "Amount can`t be negative";
     private static final String CREATE_USER = "INSERT ALL " +
             "INTO OBJECTS(OBJECT_ID,OBJECT_TYPE_ID,NAME) VALUES (objects_id_s.nextval, 1, ' ') "
             +
@@ -215,5 +219,21 @@ public class FamilyDebitAccountServiceTest {
     public void deleteUserFromAccountNotOwner() {
         familyDebitService.deleteUserFromAccount(ID, ID_USER_NOT_ALONE);
         //проблемы у юзера
+    }
+
+    @Test
+    public void updateAmount() {
+        double expected = 20000;
+        familyDebitService.updateAmountOfFamilyAccount(ID, AMOUNT);
+        FamilyDebitAccount familyDebitAccount = familyDebitService.getFamilyDebitAccount(ID);
+        assertEquals(expected, familyDebitAccount.getAmount(), delta);
+    }
+    @Test
+    public void updateIllegalAmount() {
+        try {
+            familyDebitService.updateAmountOfFamilyAccount(ID, ERROR_AMOUNT);
+        } catch (FamilyDebitAccountException ex) {
+            assertEquals(ex.getMessage(), ERROR_MESSAGE_ILLEGAL_AMOUNT);
+        }
     }
 }

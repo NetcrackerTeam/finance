@@ -133,4 +133,15 @@ public class FamilyDebitServiceImpl implements FamilyDebitService {
     public Collection<FamilyDebitAccount> getAllFamilyAccounts() {
         return familyAccountDebitDao.getAllFamilyAccounts();
     }
+
+    @Override
+    public void updateAmountOfFamilyAccount(BigInteger accountId, double amount) {
+        ObjectsCheckUtils.isNotNull(accountId, amount);
+        if (amount < 0){
+            logger.error("The amount of family debit account " + accountId + " less than 0");
+            throw new FamilyDebitAccountException(ExceptionMessages.ERROR_MESSAGE_ILLEGAL_AMOUNT);
+        } else {
+            familyAccountDebitDao.updateAmountOfFamilyAccount(accountId, amount);
+        }
+    }
 }
