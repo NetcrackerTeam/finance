@@ -54,7 +54,7 @@ public class EmailServiceSenderImpl implements EmailServiceSender {
     }
 
     @Override
-    public void sendMailBeforeDeactivate(String emailTo, String userName, BigInteger userId) {
+    public void sendMailBeforeDeactivate(String emailTo, String userName, BigInteger userId){
         ObjectsCheckUtils.isNotNull(emailTo, userName, userId);
 
         if (userDao.getUserById(userId).getUserStatusActive() == UserStatusActive.NO) {
@@ -68,24 +68,24 @@ public class EmailServiceSenderImpl implements EmailServiceSender {
     }
 
     @Override
-    public void sendMailAboutPersonalDebt(String emailTo, String userName, String debtName, double amount, BigInteger userId) {
-        ObjectsCheckUtils.isNotNull(emailTo, userName, debtName, userId);
+    public void sendMailAboutPersonalDebt(String emailTo, String userName, String debtName, double amount){
+        ObjectsCheckUtils.isNotNull(emailTo, userName, debtName);
 
         String personalDebt = MessageFormat.format(templatesDao.sendMassageById(EmailServiceTemplateCategory.PERSONAL_DEBIT.getId()), userName, debtName, amount);
         sendMail(emailTo, personalDebt, EmailServiceTemplateCategory.PERSONAL_DEBIT.getId());
     }
 
     @Override
-    public void sendMailAboutFamilyDebt(String emailTo, String userName, String debtName, double amount, BigInteger userId) {
-        ObjectsCheckUtils.isNotNull(emailTo, userName, debtName, userId);
+    public void sendMailAboutFamilyDebt(String emailTo, String userName, String debtName, double amount){
+        ObjectsCheckUtils.isNotNull(emailTo, userName, debtName);
 
         String familyDebt = MessageFormat.format(templatesDao.sendMassageById(EmailServiceTemplateCategory.FAMILY_DEBIT.getId()), userName, debtName, amount);
         sendMail(emailTo, familyDebt ,EmailServiceTemplateCategory.FAMILY_DEBIT.getId());
     }
 
     @Override
-    public void monthReport(String emailTo, String userName, BigInteger userId, Path path) throws MessagingException {
-        ObjectsCheckUtils.isNotNull(emailTo, userId);
+    public void monthReport(String emailTo, String userName, Path path) throws MessagingException {
+        ObjectsCheckUtils.isNotNull(emailTo);
         String monthReportMess = MessageFormat.format(templatesDao.sendMassageById(EmailServiceTemplateCategory.MONTH_REPORT.getId()), userName);
 
         MimeMessage message = mailSender.createMimeMessage();
@@ -100,48 +100,48 @@ public class EmailServiceSenderImpl implements EmailServiceSender {
     }
 
     @Override
-    public void sendMailReminderPersonalCredit(String emailTo, String userName, double amountPaid, String credName, BigInteger userId, LocalDate date) {
-        ObjectsCheckUtils.isNotNull(emailTo, userName, credName, userId, date);
+    public void sendMailReminderPersonalCredit(String emailTo, String userName, double amountPaid, String credName,LocalDate date) {
+        ObjectsCheckUtils.isNotNull(emailTo, userName, credName, date);
 
         String personalCred = MessageFormat.format(templatesDao.sendMassageById(EmailServiceTemplateCategory.REMINDER_PERSONAL_CREDIT.getId()), userName, amountPaid, credName, date);
         sendMail(emailTo, personalCred, EmailServiceTemplateCategory.REMINDER_PERSONAL_CREDIT.getId());
     }
 
     @Override
-    public void sendMailReminderFamilyCredit(String emailTo, String userName, double amountPaid, String credName, BigInteger userId, LocalDate date) {
-        ObjectsCheckUtils.isNotNull(emailTo, userName, credName, userId, date);
+    public void sendMailReminderFamilyCredit(String emailTo, String userName, double amountPaid, String credName,LocalDate date) {
+        ObjectsCheckUtils.isNotNull(emailTo, userName, credName, date);
 
         String familyCredit = MessageFormat.format(templatesDao.sendMassageById(EmailServiceTemplateCategory.REMINDER_FAMILY_CREDIT.getId()), userName, amountPaid, credName, date);
         sendMail(emailTo, familyCredit, EmailServiceTemplateCategory.REMINDER_FAMILY_CREDIT.getId());
     }
 
     @Override
-    public void sendMailAutoPersonalExpense(String emailTo, String userName, double amountPaid, String expenseName, BigInteger userId) {
-        ObjectsCheckUtils.isNotNull(emailTo, userName, expenseName, userId);
+    public void sendMailAutoPersonalExpense(String emailTo, String userName, double amountPaid, String expenseName){
+        ObjectsCheckUtils.isNotNull(emailTo, userName, expenseName);
 
         String personalExp = MessageFormat.format(templatesDao.sendMassageById(EmailServiceTemplateCategory.AUTO_PERSONAL_EXPENSE.getId()), userName, expenseName, amountPaid);
         sendMail(emailTo, personalExp, EmailServiceTemplateCategory.AUTO_PERSONAL_EXPENSE.getId());
     }
 
     @Override
-    public void sendMailAutoPersonalIncome(String emailTo, String userName, double amountPaid, String incName, BigInteger userId) {
-        ObjectsCheckUtils.isNotNull(emailTo, userName, incName, userId);
+    public void sendMailAutoPersonalIncome(String emailTo, String userName, double amountPaid, String incName){
+        ObjectsCheckUtils.isNotNull(emailTo, userName, incName);
 
         String personalInc = MessageFormat.format(templatesDao.sendMassageById(EmailServiceTemplateCategory.AUTO_PERSONAL_INCOME.getId()), userName, incName, amountPaid);
         sendMail(emailTo, personalInc, EmailServiceTemplateCategory.AUTO_PERSONAL_INCOME.getId());
     }
 
     @Override
-    public void sendMailAutoFamilyExpense(String emailTo, String userName, double amountPaid, String expenseName, BigInteger userId) {
-        ObjectsCheckUtils.isNotNull(emailTo, userName, expenseName, userId);
+    public void sendMailAutoFamilyExpense(String emailTo, String userName, double amountPaid, String expenseName){
+        ObjectsCheckUtils.isNotNull(emailTo, userName, expenseName);
 
         String familyExp = MessageFormat.format(templatesDao.sendMassageById(EmailServiceTemplateCategory.AUTO_FAMILY_EXPENSE.getId()), userName, expenseName, amountPaid);
         sendMail(emailTo, familyExp, EmailServiceTemplateCategory.AUTO_FAMILY_EXPENSE.getId());
     }
 
     @Override
-    public void sendMailAutoFamilyIncome(String emailTo, String userName, double amountPaid, String incName, BigInteger userId) {
-        ObjectsCheckUtils.isNotNull(emailTo, userName, incName, userId);
+    public void sendMailAutoFamilyIncome(String emailTo, String userName, double amountPaid, String incName){
+        ObjectsCheckUtils.isNotNull(emailTo, userName, incName);
 
         String familyInc = MessageFormat.format(templatesDao.sendMassageById(EmailServiceTemplateCategory.AUTO_FAMILY_INCOME.getId()), userName, incName, amountPaid);
         sendMail(emailTo, familyInc, EmailServiceTemplateCategory.AUTO_FAMILY_INCOME.getId());
