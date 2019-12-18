@@ -14,8 +14,10 @@ import com.netcracker.dao.PersonalDebitAccountDao;
 import com.netcracker.exception.UserException;
 import com.netcracker.models.AccountExpense;
 import com.netcracker.models.AutoOperationExpense;
+import com.netcracker.models.AutoOperationIncome;
 import com.netcracker.models.User;
 import com.netcracker.models.enums.CategoryExpense;
+import com.netcracker.models.enums.CategoryIncome;
 import com.netcracker.services.AccountAutoOperationService;
 import com.netcracker.services.OperationService;
 import com.netcracker.services.UserService;
@@ -89,7 +91,7 @@ public class PersonalDebitController {
 
     @RequestMapping(value = "/createAutoIncome", method = RequestMethod.POST )
     public String createAutoIncome(@RequestParam(value = "userId") BigInteger userId,
-                                   @RequestParam(value = "categoryIncome") CategoryExpense categoryIncome,
+                                   @RequestParam(value = "categoryIncome") CategoryIncome categoryIncome,
                                    @RequestParam(value = "incomeAmount") Double incomeAmount,
                                    @RequestParam(value = "dateIncome") LocalDate dateincome,
                                    @RequestParam(value = "dayOfMonth") int dayOfMonth,
@@ -97,15 +99,16 @@ public class PersonalDebitController {
         try {
             User user = userService.getUserById(userId);
             BigInteger personalId = user.getPersonalDebitAccount();
-            AutoOperationExpense autoOperationExpense = new AutoOperationExpense.Builder()
-                    .categoryExpense(categoryIncome)
+            AutoOperationIncome autoOperationIncome = new AutoOperationIncome.Builder()
+                    .categoryIncome(categoryIncome)
                     .accountAmount(incomeAmount)
                     .accountDate(dateincome)
                     .dayOfMonth(dayOfMonth)
                     .build();
-            accountAutoOperationService.createPersonalExpenseAutoOperation(autoOperationExpense, personalId);
+            accountAutoOperationService.createPersonalIncomeAutoOperation(autoOperationIncome, personalId);
             logger.debug("autoIncome is done!");
             return "success/autoIncome";
+
         } catch (UserException ex){
             model.addAttribute("errorMessage", ex);
             return "unsuccess/autoIncome";
