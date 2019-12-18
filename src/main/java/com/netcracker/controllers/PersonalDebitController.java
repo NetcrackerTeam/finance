@@ -98,19 +98,22 @@ public class PersonalDebitController {
             @RequestParam(value = "expenseAmount") Double expenseAmount,
             @RequestParam(value = "dateExpense") LocalDate dateExpense,
             @RequestParam(value = "dayOfMonth") int dayOfMonth
-    ){
-        User user = userService.getUserById(userId);
-        AutoOperationExpense autoOperationExpense = new AutoOperationExpense.Builder()
-                .categoryExpense(categoryExpense)
-                .accountAmount(expenseAmount)
-                .accountDate(dateExpense)
-                .dayOfMonth(dayOfMonth)
-                .build();
-        accountAutoOperationService.createPersonalExpenseAutoOperation(autoOperationExpense, user.getPersonalDebitAccount());
-        logger.debug("expense is done!");
-        return "expensePersonal/ready";
+    ) {
+        try {
+            User user = userService.getUserById(userId);
+            AutoOperationExpense autoOperationExpense = new AutoOperationExpense.Builder()
+                    .categoryExpense(categoryExpense)
+                    .accountAmount(expenseAmount)
+                    .accountDate(dateExpense)
+                    .dayOfMonth(dayOfMonth)
+                    .build();
+            accountAutoOperationService.createPersonalExpenseAutoOperation(autoOperationExpense, user.getPersonalDebitAccount());
+            logger.debug("expense is done!");
+            return "expensePersonal/ready";
+        } catch (UserException ex) {
+            return  ex.getMessage();
+        }
     }
-
 
     @RequestMapping(value = "/deleteAutoIncome", method = RequestMethod.POST )
     public String deleteAutoIncome(){
