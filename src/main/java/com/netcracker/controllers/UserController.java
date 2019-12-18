@@ -41,29 +41,48 @@ public class UserController {
                 //.personalDebit()
                 .build();
         userDao.createUser(user);
-        return "responseStatus/success";
+        return "success";
     }
 
     @RequestMapping(value = "/updatePassword/{userId}/{userLogin}", method = RequestMethod.POST)
     public String updateUserPassword(
             Model model,
             @PathVariable(value = "userId") String id,
-            @PathVariable("userLogin") String login,
+            @PathVariable("userLogin") String email,
             @RequestParam("newPaswword") String password) {
-        logger.debug("updatePasswordByUser in  method updateUserPassword . User id - " + id + " login - " + login);
+        logger.debug("updatePasswordByUser in  method updateUserPassword . User id - " + id + " login - " + email);
         BigInteger userId = new BigInteger(id);
         User user = userDao.getUserById(userId);
         userDao.updateUserPasswordById(user.getId(), password);
-        return "responseStatus/success";
+        return "success";
     }
 
     @RequestMapping(value = "/deactivation", method = RequestMethod.GET)
-    public String deactivateUser(Model model){
+    public String deactivateUser(
+            Model model,
+            @PathVariable(value = "userId") String id,
+            @PathVariable("userLogin") UserStatusActive userStatusActive){
+        logger.debug("updateUserStatus by user id " + id);
         //ToDo: deactivate user with dao
+        BigInteger userId = new BigInteger(id);
+        User user = userDao.getUserById(userId);
+        userDao.updateUserStatus(userId,userStatusActive.getId());
         Gson gson = new Gson();
         Status status = new Status(true, "Deactivated successfully");
         model.addAttribute("json_res", gson.toJson(status));
         return "test";
     }
 
+
+    @RequestMapping(value = "/updateEmail/{userId}/{userEmail}", method = RequestMethod.POST)
+    public String updateEmail(
+            Model model,
+            @PathVariable(value = "userId") String id,
+            @PathVariable("userEmail") String userEmail) {
+        logger.debug("updateEmailByUser in  method updateEmail . User id - " + id);
+        BigInteger userId = new BigInteger(id);
+        User user = userDao.getUserById(userId);
+        userDao.updateEmail(user.getId(), userEmail);
+        return "success";
+    }
 }
