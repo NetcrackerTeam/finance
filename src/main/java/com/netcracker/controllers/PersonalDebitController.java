@@ -59,20 +59,21 @@ public class PersonalDebitController {
         model.addAttribute("json_res", creditAccountDao.getAllFamilyCreditsByAccountId(id));
         return "test";
     }
+
     private static final Logger logger = Logger.getLogger(PersonalDebitController.class);
 
-    @RequestMapping(value = "/addCreditAcc", method = RequestMethod.POST )
-    public String addCreditAccount(){
+    @RequestMapping(value = "/addCreditAcc", method = RequestMethod.POST)
+    public String addCreditAccount() {
         return null;
     }
 
-    @RequestMapping(value = "/addIncomePersonal", method = RequestMethod.POST )
+    @RequestMapping(value = "/addIncomePersonal", method = RequestMethod.POST)
     public String addIncomePersonal(
-    ){
+    ) {
         return null;
     }
 
-    @RequestMapping(value = "/addExpensePersonal", method = RequestMethod.POST )
+    @RequestMapping(value = "/addExpensePersonal", method = RequestMethod.POST)
     public @ResponseBody
     AccountExpense addExpensePersonal(
             @RequestParam(value = "debitId") BigInteger debitId,
@@ -84,30 +85,24 @@ public class PersonalDebitController {
                 .categoryExpense(categoryExpense).build();
     }
 
-    @RequestMapping(value = "/getHistory", method = RequestMethod.GET )
-    public String getHistory(){
+    @RequestMapping(value = "/getHistory", method = RequestMethod.GET)
+    public String getHistory() {
         return null;
     }
 
-    @RequestMapping(value = "{personalId}/createAutoIncome", method = RequestMethod.POST )
+    @RequestMapping(value = "{personalId}/createAutoIncome", method = RequestMethod.POST)
     public String createAutoIncome(@PathVariable("personalId") BigInteger personalId,
-                                   @RequestParam(value = "categoryIncome") CategoryIncome categoryIncome,
-                                   @RequestParam(value = "incomeAmount") Double incomeAmount,
-                                   @RequestParam(value = "dateIncome") LocalDate dateIncome,
-                                   @RequestParam(value = "dayOfMonth") int dayOfMonth,
-                                    Model model){
-            AutoOperationIncome autoOperationIncome = new AutoOperationIncome.Builder()
-                    .categoryIncome(categoryIncome)
-                    .accountAmount(incomeAmount)
-                    .accountDate(dateIncome)
-                    .dayOfMonth(dayOfMonth)
-                    .build();
-            accountAutoOperationService.createPersonalIncomeAutoOperation(autoOperationIncome, personalId);
-            logger.debug("autoIncome is done!");
-            return "success/autoIncome";
+                                   @RequestBody AutoOperationIncome autoOperationIncome,
+                                   Model model) {
+        accountAutoOperationService.createPersonalIncomeAutoOperation(autoOperationIncome, personalId);
+        logger.debug("autoIncome is done!");
+        int dayOfMonth = autoOperationIncome.getDayOfMonth();
+        Gson gson = new Gson();
+        model.addAttribute("autoIncomes", accountAutoOperationService.getAllTodayOperationsPersonalIncome(dayOfMonth));
+        return "success/autoIncome";
     }
 
-    @RequestMapping(value = "/createAutoExpense", method = RequestMethod.POST )
+    @RequestMapping(value = "/createAutoExpense", method = RequestMethod.POST)
     public String createAutoExpense(
             @RequestParam(value = "userId") BigInteger userId,
             @RequestParam(value = "categoryExpense") CategoryExpense categoryExpense,
@@ -127,22 +122,22 @@ public class PersonalDebitController {
             logger.debug("expense is done!");
             return "expensePersonal/ready";
         } catch (UserException ex) {
-            return  ex.getMessage();
+            return ex.getMessage();
         }
     }
 
-    @RequestMapping(value = "/deleteAutoIncome", method = RequestMethod.POST )
-    public String deleteAutoIncome(){
+    @RequestMapping(value = "/deleteAutoIncome", method = RequestMethod.POST)
+    public String deleteAutoIncome() {
         return null;
     }
 
-    @RequestMapping(value = "/deleteAutoExpense", method = RequestMethod.POST )
-    public String deleteAutoExpense(){
+    @RequestMapping(value = "/deleteAutoExpense", method = RequestMethod.POST)
+    public String deleteAutoExpense() {
         return null;
     }
 
-    @RequestMapping(value = "/getReport", method = RequestMethod.POST )
-    public String getReport(){
+    @RequestMapping(value = "/getReport", method = RequestMethod.POST)
+    public String getReport() {
         return null;
     }
 
