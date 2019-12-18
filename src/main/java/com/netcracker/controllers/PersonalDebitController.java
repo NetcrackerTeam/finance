@@ -90,7 +90,7 @@ public class PersonalDebitController {
         return null;
     }
 
-    @RequestMapping(value = "{personalId}/createAutoIncome", method = RequestMethod.POST)
+    @RequestMapping(value = "{personalId}/createAutoIncomePersonal", method = RequestMethod.POST)
     public String createAutoIncome(@PathVariable("personalId") BigInteger personalId,
                                    @RequestBody AutoOperationIncome autoOperationIncome,
                                    Model model) {
@@ -116,9 +116,13 @@ public class PersonalDebitController {
         return "success/autoExpense";
     }
 
-    @RequestMapping(value = "/deleteAutoIncome", method = RequestMethod.POST)
-    public String deleteAutoIncome() {
-        return null;
+    @RequestMapping(value = "/deleteAutoIncomePersonal/{incomeId}", method = RequestMethod.POST)
+    public String deleteAutoIncome(@PathVariable("incomeId") BigInteger incomeId,
+                                   Model model) {
+        logger.debug("delete autoIncomePersonal");
+        accountAutoOperationService.deleteAutoOperation(incomeId);
+        model.addAttribute("incomeId", incomeId);
+        return "deletePersonalAutoIncome";
     }
 
     @RequestMapping(value = "/deleteAutoExpense", method = RequestMethod.POST)
