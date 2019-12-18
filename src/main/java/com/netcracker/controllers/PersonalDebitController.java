@@ -96,7 +96,6 @@ public class PersonalDebitController {
                                    @RequestParam(value = "dateIncome") LocalDate dateIncome,
                                    @RequestParam(value = "dayOfMonth") int dayOfMonth,
                                     Model model){
-        try {
             AutoOperationIncome autoOperationIncome = new AutoOperationIncome.Builder()
                     .categoryIncome(categoryIncome)
                     .accountAmount(incomeAmount)
@@ -106,11 +105,6 @@ public class PersonalDebitController {
             accountAutoOperationService.createPersonalIncomeAutoOperation(autoOperationIncome, personalId);
             logger.debug("autoIncome is done!");
             return "success/autoIncome";
-
-        } catch (UserException ex){
-            model.addAttribute("errorMessage", ex);
-            return "unsuccess/autoIncome";
-        }
     }
 
     @RequestMapping(value = "/createAutoExpense", method = RequestMethod.POST )
