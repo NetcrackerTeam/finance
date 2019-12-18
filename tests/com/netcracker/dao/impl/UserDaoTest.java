@@ -75,7 +75,21 @@ public class UserDaoTest {
     @Rollback
     @Test
     public  void updateUserPasswordById(){
-        userDao.updateUserPasswordById(BigInteger.valueOf(1),"123456789");
+        userDao.updateUserPasswordById(BigInteger.ONE,"123456789");
+    }
+
+
+    @Rollback
+    @Test
+    public  void updateUserStatus(){
+        userDao.updateUserStatus(BigInteger.ONE,UserStatusActive.NO.getId());
+    }
+
+
+    @Rollback
+    @Test
+    public  void  updateEmail(){
+        userDao.updateEmail(BigInteger.ONE,"someemail@gmail.com");
     }
 
 }

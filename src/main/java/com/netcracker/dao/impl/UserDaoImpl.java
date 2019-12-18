@@ -4,6 +4,7 @@ import com.netcracker.dao.UserDao;
 import com.netcracker.dao.impl.mapper.UserDaoMapper;
 import com.netcracker.exception.UserException;
 import com.netcracker.models.User;
+import com.netcracker.models.enums.UserStatusActive;
 import com.netcracker.services.utils.ExceptionMessages;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,5 +78,20 @@ public class UserDaoImpl implements UserDao {
         template.update(UPDATE_PASSWORD, newPassword, (id));
     }
 
+    @Override
+    public void updateUserStatus(BigInteger id, BigInteger newStatus) {
+        logger.debug(
+                "Entering updateStatus(id=" + id + "," + " status=" + newStatus
+                        + ")");
+        template.update(UPDATE_STATUS, newStatus, (id));
+    }
 
+
+    @Override
+    public void updateEmail(BigInteger id, String newEmail) {
+        logger.debug(
+                "Entering updateEmail(id=" + id + "," + " newEmail=" + newEmail
+                        + ")");
+        template.update(UPDATE_EMAIL, newEmail, (id));
+    }
 }

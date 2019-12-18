@@ -28,7 +28,6 @@ public class UserController {
             @RequestParam(value = " name ") String name,
             @RequestParam(value = " eMail ") String eMail,
             @RequestParam(value = " password ") String password,
-            // @RequestParam(value = "userStatusActive", required = true) String status,
             Model model) {
         User user = new User.Builder()
                 .user_name(name)
@@ -39,19 +38,34 @@ public class UserController {
                 //.personalDebit()
                 .build();
         userDao.createUser(user);
-        return "responseStatus/success";
+        return "success";
     }
 
-    @RequestMapping(value = "/updatePassword/{userId}/{userLogin}", method = RequestMethod.POST)
+    @RequestMapping(value = "/updatePassword/{userId}/{userEmail}", method = RequestMethod.POST)
     public String updateUserPassword(
             Model model,
             @PathVariable(value = "userId") String id,
-            @PathVariable("userLogin") String login,
+            @PathVariable("userEmail") String email,
             @RequestParam("newPaswword") String password) {
-        logger.debug("updatePasswordByUser in  method updateUserPassword . User id - " + id + " login - " + login);
+        logger.debug("updatePasswordByUser in  method updateUserPassword . User id - " + id + " login - " + email);
         BigInteger userId = new BigInteger(id);
         User user = userDao.getUserById(userId);
         userDao.updateUserPasswordById(user.getId(), password);
-        return "responseStatus/success";
+        return "success";
     }
+
+
+    @RequestMapping(value = "/updateEmail/{userId}/{userEmail}", method = RequestMethod.POST)
+    public String updateEmail(
+            Model model,
+            @PathVariable(value = "userId") String id,
+            @PathVariable("userEmail") String userEmail) {
+        logger.debug("updateEmailByUser in  method updateEmail . User id - " + id);
+        BigInteger userId = new BigInteger(id);
+        User user = userDao.getUserById(userId);
+        userDao.updateEmail(user.getId(), userEmail);
+        return "success";
+    }
+
+
 }
