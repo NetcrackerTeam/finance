@@ -1,11 +1,34 @@
 package com.netcracker.controllers;
 
+import com.google.gson.Gson;
+import com.netcracker.models.PersonalCreditAccount;
+import com.netcracker.models.Status;
+import com.netcracker.services.PersonalCreditService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
+import java.math.BigInteger;
 
 @Controller
 public class PersonalDebitController {
 
-    public void addCreditAccount() {
+
+    @Autowired
+    PersonalCreditService creditService;
+
+    @RequestMapping(value = "{id}/addCredit", method = RequestMethod.POST)
+    public String addCreditAccount(@RequestBody PersonalCreditAccount creditAccount,
+                                   @PathVariable("id") BigInteger id, Model model) {
+        creditService.createPersonalCredit(id, creditAccount);
+        Gson gson = new Gson();
+        Status status = new Status(true, "Credit account was created in account " + id);
+        model.addAttribute("json_res", gson.toJson(status));
+        return "test";
     }
 
     public void addIncomePersonal() {

@@ -60,15 +60,11 @@ public class UserController {
     @RequestMapping(value = "/deactivation", method = RequestMethod.GET)
     public String deactivateUser(
             Model model,
-            @PathVariable(value = "userId") String id,
-            @PathVariable("userLogin") UserStatusActive userStatusActive){
+            @PathVariable(value = "userId") BigInteger id){
         logger.debug("updateUserStatus by user id " + id);
-        //ToDo: deactivate user with dao
-        BigInteger userId = new BigInteger(id);
-        User user = userDao.getUserById(userId);
-        userDao.updateUserStatus(userId,userStatusActive.getId());
+        userDao.updateUserStatus(id, UserStatusActive.NO.getId());
         Gson gson = new Gson();
-        Status status = new Status(true, "Deactivated successfully");
+        Status status = new Status(true, "Deactivated successfully user " + id);
         model.addAttribute("json_res", gson.toJson(status));
         return "test";
     }
