@@ -72,9 +72,11 @@ public class JobServiceImpl implements JobService {
         if (familyDebitAccounts.isEmpty())
             return;
         familyDebitAccounts.forEach(debitAccountFamily -> {
-            monthReportService.formMonthFamilyReportFromDb(debitAccountFamily.getId());
-            MonthReport monthReport = monthReportService.getMonthPersonalReport(debitAccountFamily.getId(), dateFrom, localDateNow);
-            sendReportByMail(monthReport, (AbstractDebitAccount) familyDebitAccounts);
+            if (debitAccountFamily != null) {
+                monthReportService.formMonthFamilyReportFromDb(debitAccountFamily.getId());
+                MonthReport monthReport = monthReportService.getMonthPersonalReport(debitAccountFamily.getId(), dateFrom, localDateNow);
+                sendReportByMail(monthReport, (AbstractDebitAccount) familyDebitAccounts);
+            } else logger.debug("debit account family = null  " + debitAccountFamily.getId());
         });
 
     }
@@ -86,9 +88,11 @@ public class JobServiceImpl implements JobService {
         if (personalDebitAccounts.isEmpty())
             return;
         personalDebitAccounts.forEach(debitAccountPersonal -> {
-            monthReportService.formMonthPersonalReportFromDb(debitAccountPersonal.getId());
-            MonthReport monthReport = monthReportService.getMonthPersonalReport(debitAccountPersonal.getId(), dateFrom, localDateNow);
-            sendReportByMail(monthReport, (AbstractDebitAccount) personalDebitAccounts);
+            if (debitAccountPersonal != null) {
+                monthReportService.formMonthPersonalReportFromDb(debitAccountPersonal.getId());
+                MonthReport monthReport = monthReportService.getMonthPersonalReport(debitAccountPersonal.getId(), dateFrom, localDateNow);
+                sendReportByMail(monthReport, (AbstractDebitAccount) personalDebitAccounts);
+            } else logger.debug("debit account personal = null  " + debitAccountPersonal.getId());
         });
     }
 
@@ -99,7 +103,7 @@ public class JobServiceImpl implements JobService {
             emailServiceSender.monthReport(debitAccount.getOwner().geteMail(), debitAccount.getOwner().getName(), path);
             logger.debug("Email have been sent");
         } catch (MessagingException e) {
-            logger.error("Email can't be sent, messaging exception", e);
+            logger.debug("Email can't be sent, messaging exception", e);
         }
     }
 
@@ -111,19 +115,20 @@ public class JobServiceImpl implements JobService {
         if (autoOperationIncomesFamily.isEmpty())
             return;
         for (AutoOperationIncome autoIncome : autoOperationIncomesFamily) {
-            FamilyDebitAccount debitAccount = familyDebitService.getFamilyDebitAccount(autoIncome.getDebitId());
-            operationService.createFamilyOperationIncome(autoIncome.getUserId(), autoIncome.getDebitId(), autoIncome.getAmount(), localDateNow, autoIncome.getCategoryIncome());
-            double newAmount = debitAccount.getAmount() + autoIncome.getAmount();
-            debitAccount.setAmount(newAmount);
-            familyDebitAccountDao.updateAmountOfFamilyAccount(debitAccount.getId(), debitAccount.getAmount());
-            Collection<FamilyCreditAccount> credits = familyCreditService.getFamilyCredits(debitAccount.getId());
-            for (FamilyCreditAccount cr : credits) {
-                checkDebtRepayment(cr, debitAccount);
-            }
-            emailServiceSender.sendMailAutoFamilyIncome(debitAccount.getOwner().geteMail(),
-                    debitAccount.getOwner().getName(), autoIncome.getAmount(), autoIncome.getCategoryIncome().name());
-            logger.debug("Email have been sent with  " + debitAccount.getOwner().getName());
-
+            if (autoIncome != null) {
+                FamilyDebitAccount debitAccount = familyDebitService.getFamilyDebitAccount(autoIncome.getDebitId());
+                operationService.createFamilyOperationIncome(autoIncome.getUserId(), autoIncome.getDebitId(), autoIncome.getAmount(), localDateNow, autoIncome.getCategoryIncome());
+                double newAmount = debitAccount.getAmount() + autoIncome.getAmount();
+                debitAccount.setAmount(newAmount);
+                familyDebitAccountDao.updateAmountOfFamilyAccount(debitAccount.getId(), debitAccount.getAmount());
+                Collection<FamilyCreditAccount> credits = familyCreditService.getFamilyCredits(debitAccount.getId());
+                for (FamilyCreditAccount cr : credits) {
+                    checkDebtRepayment(cr, debitAccount);
+                }
+                emailServiceSender.sendMailAutoFamilyIncome(debitAccount.getOwner().geteMail(),
+                        debitAccount.getOwner().getName(), autoIncome.getAmount(), autoIncome.getCategoryIncome().name());
+                logger.debug("Email have been sent with  " + debitAccount.getOwner().getName());
+            } else logger.debug("auto income = null in method executeRemindAutoIncomeFamilyJob ");
         }
     }
 
@@ -134,19 +139,20 @@ public class JobServiceImpl implements JobService {
         if (autoOperationIncomePersonal.isEmpty())
             return;
         for (AutoOperationIncome autoIncome : autoOperationIncomePersonal) {
-            PersonalDebitAccount debitAccount = personalDebitService.getPersonalDebitAccount(autoIncome.getDebitId());
-            operationService.createPersonalOperationIncome(autoIncome.getDebitId(), autoIncome.getAmount(), localDateNow, autoIncome.getCategoryIncome());
-            double newAmount = debitAccount.getAmount() + autoIncome.getAmount();
-            debitAccount.setAmount(newAmount);
-            personalDebitAccountDao.updateAmountOfPersonalAccount(debitAccount.getId(), newAmount);
-            Collection<PersonalCreditAccount> creditAccounts = personalCreditService.getPersonalCredits(debitAccount.getId());
-            for (PersonalCreditAccount cr : creditAccounts) {
-                checkDebtRepayment(cr, debitAccount);
-            }
-            emailServiceSender.sendMailAutoPersonalIncome(debitAccount.getOwner().geteMail(),
-                    debitAccount.getOwner().getName(), autoIncome.getAmount(), autoIncome.getCategoryIncome().name());
-            logger.debug("Email have been sent with  " + debitAccount.getOwner().getName());
-
+            if (autoIncome != null) {
+                PersonalDebitAccount debitAccount = personalDebitService.getPersonalDebitAccount(autoIncome.getDebitId());
+                operationService.createPersonalOperationIncome(autoIncome.getDebitId(), autoIncome.getAmount(), localDateNow, autoIncome.getCategoryIncome());
+                double newAmount = debitAccount.getAmount() + autoIncome.getAmount();
+                debitAccount.setAmount(newAmount);
+                personalDebitAccountDao.updateAmountOfPersonalAccount(debitAccount.getId(), newAmount);
+                Collection<PersonalCreditAccount> creditAccounts = personalCreditService.getPersonalCredits(debitAccount.getId());
+                for (PersonalCreditAccount cr : creditAccounts) {
+                    checkDebtRepayment(cr, debitAccount);
+                }
+                emailServiceSender.sendMailAutoPersonalIncome(debitAccount.getOwner().geteMail(),
+                        debitAccount.getOwner().getName(), autoIncome.getAmount(), autoIncome.getCategoryIncome().name());
+                logger.debug("Email have been sent with  " + debitAccount.getOwner().getName());
+            } else logger.debug("auto income = null in method executeRemindAutoIncomePersonalJob ");
         }
     }
 
@@ -166,18 +172,20 @@ public class JobServiceImpl implements JobService {
     public void executeRemindAutoExpenseFamilyJob() {
         Collection<AutoOperationExpense> autoOperationExpenseFamily = accountAutoOperationService.getAllTodayOperationsFamilyExpense(dayNow);
         for (AutoOperationExpense autoExpense : autoOperationExpenseFamily) {
-            operationService.createFamilyOperationExpense(autoExpense.getUserId(), autoExpense.getDebitId(), autoExpense.getAmount(), localDateNow, autoExpense.getCategoryExpense());
-            FamilyDebitAccount debitAccount = familyAccountDebitDao.getFamilyAccountById(autoExpense.getId());
-            if (debitAccount.getAmount() < autoExpense.getAmount()) {
-                logger.debug("Auto expense cannot be done. Not enough money");
-            } else {
-                double newAmount = debitAccount.getAmount() - autoExpense.getAmount();
-                familyDebitAccountDao.updateAmountOfFamilyAccount(autoExpense.getDebitId(), newAmount);
-                emailServiceSender.sendMailAutoFamilyExpense(debitAccount.getOwner().geteMail(),
-                        debitAccount.getOwner().getName(),
-                        autoExpense.getAmount(),
-                        autoExpense.getCategoryExpense().name());
-            }
+            if (autoExpense != null) {
+                operationService.createFamilyOperationExpense(autoExpense.getUserId(), autoExpense.getDebitId(), autoExpense.getAmount(), localDateNow, autoExpense.getCategoryExpense());
+                FamilyDebitAccount debitAccount = familyAccountDebitDao.getFamilyAccountById(autoExpense.getId());
+                if (debitAccount.getAmount() < autoExpense.getAmount()) {
+                    logger.debug("Auto expense cannot be done. Not enough money");
+                } else {
+                    double newAmount = debitAccount.getAmount() - autoExpense.getAmount();
+                    familyDebitAccountDao.updateAmountOfFamilyAccount(autoExpense.getDebitId(), newAmount);
+                    emailServiceSender.sendMailAutoFamilyExpense(debitAccount.getOwner().geteMail(),
+                            debitAccount.getOwner().getName(),
+                            autoExpense.getAmount(),
+                            autoExpense.getCategoryExpense().name());
+                }
+            } else logger.debug("auto expense = null in method  executeRemindAutoExpenseFamilyJob");
         }
     }
 
@@ -187,18 +195,20 @@ public class JobServiceImpl implements JobService {
     public void executeRemindAutoExpensePersonalJob() {
         Collection<AutoOperationExpense> autoOperationExpensePersonal = accountAutoOperationService.getAllTodayOperationsPersonalExpense(dayNow);
         for (AutoOperationExpense autoExpense : autoOperationExpensePersonal) {
-            operationService.createPersonalOperationExpense(autoExpense.getUserId(), autoExpense.getAmount(), localDateNow, autoExpense.getCategoryExpense());
-            PersonalDebitAccount debitAccount = personalDebitAccountDao.getPersonalAccountById(autoExpense.getId());
-            if (debitAccount.getAmount() < autoExpense.getAmount()) {
-                logger.debug("Auto expense cannot be done. Not enough money");
-            } else {
-                double newAmount = debitAccount.getAmount() - autoExpense.getAmount();
-                personalDebitAccountDao.updateAmountOfPersonalAccount(autoExpense.getDebitId(), newAmount);
-                emailServiceSender.sendMailAutoPersonalExpense(debitAccount.getOwner().geteMail(),
-                        debitAccount.getOwner().getName(),
-                        autoExpense.getAmount(),
-                        autoExpense.getCategoryExpense().name());
-            }
+            if (autoExpense != null) {
+                operationService.createPersonalOperationExpense(autoExpense.getUserId(), autoExpense.getAmount(), localDateNow, autoExpense.getCategoryExpense());
+                PersonalDebitAccount debitAccount = personalDebitAccountDao.getPersonalAccountById(autoExpense.getId());
+                if (debitAccount.getAmount() < autoExpense.getAmount()) {
+                    logger.debug("Auto expense cannot be done. Not enough money");
+                } else {
+                    double newAmount = debitAccount.getAmount() - autoExpense.getAmount();
+                    personalDebitAccountDao.updateAmountOfPersonalAccount(autoExpense.getDebitId(), newAmount);
+                    emailServiceSender.sendMailAutoPersonalExpense(debitAccount.getOwner().geteMail(),
+                            debitAccount.getOwner().getName(),
+                            autoExpense.getAmount(),
+                            autoExpense.getCategoryExpense().name());
+                }
+            } else logger.debug("auto expense = null in method  executeRemindAutoExpensePersonalJob");
         }
     }
 
@@ -208,21 +218,22 @@ public class JobServiceImpl implements JobService {
         double calculateCredit;
         Collection<FamilyCreditAccount> allFamilyCredit = creditAccountDao.getAllFamilyCreditIdsByMonthDay(dayNow);
         for (FamilyCreditAccount familyCredit : allFamilyCredit) {
-            BigInteger id = creditAccountDao.getFamilyDebitIdByCreditId(familyCredit.getCreditId());
-            calculateCredit = CreditUtils.calculateMonthPayment(familyCredit.getDate(), familyCredit.getDateTo(), familyCredit.getPaidAmount(), familyCredit.getCreditRate());
-            User user = familyDebitService.getFamilyDebitAccount(id).getOwner();
-            boolean paymentAutoFamilyCredit = familyCreditService.addFamilyCreditPaymentAuto(id, familyCredit.getCreditId(), calculateCredit);
-            if (!paymentAutoFamilyCredit) {
-                familyCreditService.increaseDebt(familyCredit.getCreditId(), familyCredit.getPaidAmount());
-                emailServiceSender.sendMailAboutFamilyDebt(user.geteMail(), user.getName(), familyCredit.getName(), calculateCredit);
-            }
-            try {
-                emailServiceSender.sendMailReminderFamilyCredit(user.geteMail(), user.getName(), calculateCredit, familyCredit.getName(), localDateNow);
-                logger.debug("Email have been sent with auto credit . User id: {} " + user.getId());
-            } catch (JobException e) {
-                logger.debug("Email can't be sent", e);
-            }
-
+            if (familyCredit != null) {
+                BigInteger id = creditAccountDao.getFamilyDebitIdByCreditId(familyCredit.getCreditId());
+                calculateCredit = CreditUtils.calculateMonthPayment(familyCredit.getDate(), familyCredit.getDateTo(), familyCredit.getPaidAmount(), familyCredit.getCreditRate());
+                User user = familyDebitService.getFamilyDebitAccount(id).getOwner();
+                boolean paymentAutoFamilyCredit = familyCreditService.addFamilyCreditPaymentAuto(id, familyCredit.getCreditId(), calculateCredit);
+                if (!paymentAutoFamilyCredit) {
+                    familyCreditService.increaseDebt(familyCredit.getCreditId(), familyCredit.getPaidAmount());
+                    emailServiceSender.sendMailAboutFamilyDebt(user.geteMail(), user.getName(), familyCredit.getName(), calculateCredit);
+                }
+                try {
+                    emailServiceSender.sendMailReminderFamilyCredit(user.geteMail(), user.getName(), calculateCredit, familyCredit.getName(), localDateNow);
+                    logger.debug("Email have been sent with auto credit . User id: {} " + user.getId());
+                } catch (JobException e) {
+                    logger.debug("Email can't be sent", e);
+                }
+            } else logger.debug("family credit  = null in method  executeAutoCreditExpenseFamily");
         }
     }
 
@@ -232,19 +243,21 @@ public class JobServiceImpl implements JobService {
         double calculateCredit;
         Collection<PersonalCreditAccount> allPersonalCredit = creditAccountDao.getAllPersonCreditIdsByMonthDay(dayNow);
         for (PersonalCreditAccount personalCredit : allPersonalCredit) {
-            BigInteger id = creditAccountDao.getPersonalDebitIdByCreditId(personalCredit.getCreditId());
-            calculateCredit = CreditUtils.calculateMonthPayment(personalCredit.getDate(), personalCredit.getDateTo(), personalCredit.getPaidAmount(), personalCredit.getCreditRate());
-            User user = personalDebitService.getPersonalDebitAccount(id).getOwner();
-            boolean paymentAutoPersonalCredit = personalCreditService.addPersonalCreditPaymentAuto(id, personalCredit.getCreditId(), calculateCredit);
-            if (!paymentAutoPersonalCredit) {
-                personalCreditService.increaseDebt(personalCredit.getCreditId(), personalCredit.getPaidAmount());
-            }
-            try {
-                emailServiceSender.sendMailReminderPersonalCredit(user.geteMail(), user.getName(), calculateCredit, personalCredit.getName(), localDateNow);
-                logger.debug("Email have been sent with auto credit . User id: {} " + user.getId());
-            } catch (JobException e) {
-                logger.debug("Email can't be sent", e);
-            }
+            if (personalCredit != null) {
+                BigInteger id = creditAccountDao.getPersonalDebitIdByCreditId(personalCredit.getCreditId());
+                calculateCredit = CreditUtils.calculateMonthPayment(personalCredit.getDate(), personalCredit.getDateTo(), personalCredit.getPaidAmount(), personalCredit.getCreditRate());
+                User user = personalDebitService.getPersonalDebitAccount(id).getOwner();
+                boolean paymentAutoPersonalCredit = personalCreditService.addPersonalCreditPaymentAuto(id, personalCredit.getCreditId(), calculateCredit);
+                if (!paymentAutoPersonalCredit) {
+                    personalCreditService.increaseDebt(personalCredit.getCreditId(), personalCredit.getPaidAmount());
+                }
+                try {
+                    emailServiceSender.sendMailReminderPersonalCredit(user.geteMail(), user.getName(), calculateCredit, personalCredit.getName(), localDateNow);
+                    logger.debug("Email have been sent with auto credit . User id: {} " + user.getId());
+                } catch (JobException e) {
+                    logger.debug("Email can't be sent", e);
+                }
+            }else logger.debug("family personal  = null in method  executeAutoCreditExpensePersonal");
         }
     }
 }
