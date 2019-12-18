@@ -70,7 +70,7 @@ public class PersonalDebitController {
                     .dayOfMonth(dayOfMonth)
                     .build();
             accountAutoOperationService.createPersonalExpenseAutoOperation(autoOperationExpense, personalId);
-            logger.debug("expense is done!");
+            logger.debug("autoIncome is done!");
             return "success/autoIncome";
     }
 
