@@ -1,6 +1,8 @@
 package com.netcracker.controllers;
 
+import com.google.gson.Gson;
 import com.netcracker.dao.UserDao;
+import com.netcracker.models.Status;
 import com.netcracker.models.User;
 import com.netcracker.models.enums.UserStatusActive;
 import org.apache.log4j.Logger;
@@ -24,7 +26,7 @@ public class UserController {
     private static final Logger logger = Logger.getLogger(UserController.class);
 
     @RequestMapping(value = "/createUser", method = RequestMethod.POST)
-    public String CreateUser(
+    public String createUser(
             @RequestParam(value = " name ") String name,
             @RequestParam(value = " eMail ") String eMail,
             @RequestParam(value = " password ") String password,
@@ -54,4 +56,14 @@ public class UserController {
         userDao.updateUserPasswordById(user.getId(), password);
         return "responseStatus/success";
     }
+
+    @RequestMapping(value = "/deactivation", method = RequestMethod.GET)
+    public String deactivateUser(Model model){
+        //ToDo: deactivate user with dao
+        Gson gson = new Gson();
+        Status status = new Status(true, "Deactivated successfully");
+        model.addAttribute("json_res", gson.toJson(status));
+        return "test";
+    }
+
 }
