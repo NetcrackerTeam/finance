@@ -1,6 +1,8 @@
 package com.netcracker.controllers;
 
+import com.google.gson.Gson;
 import com.netcracker.dao.UserDao;
+import com.netcracker.models.Status;
 import com.netcracker.models.User;
 import com.netcracker.models.enums.UserStatusActive;
 import org.apache.log4j.Logger;
@@ -24,10 +26,11 @@ public class UserController {
     private static final Logger logger = Logger.getLogger(UserController.class);
 
     @RequestMapping(value = "/createUser", method = RequestMethod.POST)
-    public String CreateUser(
+    public String createUser(
             @RequestParam(value = " name ") String name,
             @RequestParam(value = " eMail ") String eMail,
             @RequestParam(value = " password ") String password,
+            // @RequestParam(value = "userStatusActive", required = true) String status,
             Model model) {
         User user = new User.Builder()
                 .user_name(name)
@@ -38,34 +41,29 @@ public class UserController {
                 //.personalDebit()
                 .build();
         userDao.createUser(user);
-        return "success";
+        return "responseStatus/success";
     }
 
-    @RequestMapping(value = "/updatePassword/{userId}/{userEmail}", method = RequestMethod.POST)
+    @RequestMapping(value = "/updatePassword/{userId}/{userLogin}", method = RequestMethod.POST)
     public String updateUserPassword(
             Model model,
             @PathVariable(value = "userId") String id,
-            @PathVariable("userEmail") String email,
+            @PathVariable("userLogin") String login,
             @RequestParam("newPaswword") String password) {
-        logger.debug("updatePasswordByUser in  method updateUserPassword . User id - " + id + " login - " + email);
+        logger.debug("updatePasswordByUser in  method updateUserPassword . User id - " + id + " login - " + login);
         BigInteger userId = new BigInteger(id);
         User user = userDao.getUserById(userId);
         userDao.updateUserPasswordById(user.getId(), password);
-        return "success";
+        return "responseStatus/success";
     }
 
-
-    @RequestMapping(value = "/updateEmail/{userId}/{userEmail}", method = RequestMethod.POST)
-    public String updateEmail(
-            Model model,
-            @PathVariable(value = "userId") String id,
-            @PathVariable("userEmail") String userEmail) {
-        logger.debug("updateEmailByUser in  method updateEmail . User id - " + id);
-        BigInteger userId = new BigInteger(id);
-        User user = userDao.getUserById(userId);
-        userDao.updateEmail(user.getId(), userEmail);
-        return "success";
+    @RequestMapping(value = "/deactivation", method = RequestMethod.GET)
+    public String deactivateUser(Model model){
+        //ToDo: deactivate user with dao
+        Gson gson = new Gson();
+        Status status = new Status(true, "Deactivated successfully");
+        model.addAttribute("json_res", gson.toJson(status));
+        return "test";
     }
-
 
 }
