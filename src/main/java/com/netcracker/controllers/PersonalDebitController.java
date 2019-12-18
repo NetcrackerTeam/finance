@@ -61,7 +61,8 @@ public class PersonalDebitController {
                                    @RequestParam(value = "categoryIncome") CategoryExpense categoryIncome,
                                    @RequestParam(value = "incomeAmount") Double incomeAmount,
                                    @RequestParam(value = "dateIncome") LocalDate dateincome,
-                                   @RequestParam(value = "dayOfMonth") int dayOfMonth){
+                                   @RequestParam(value = "dayOfMonth") int dayOfMonth,
+                                    Model model){
         try {
             User user = userService.getUserById(userId);
             BigInteger personalId = user.getPersonalDebitAccount();
@@ -75,7 +76,8 @@ public class PersonalDebitController {
             logger.debug("autoIncome is done!");
             return "success/autoIncome";
         } catch (UserException ex){
-            return ex.getMessage();
+            model.addAttribute("errorMessage", ex);
+            return "unsuccess/autoIncome";
         }
     }
 
