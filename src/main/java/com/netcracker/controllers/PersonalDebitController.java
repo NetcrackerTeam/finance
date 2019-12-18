@@ -2,6 +2,7 @@ package com.netcracker.controllers;
 
 import com.netcracker.dao.AutoOperationDao;
 import com.netcracker.dao.PersonalDebitAccountDao;
+import com.netcracker.exception.UserException;
 import com.netcracker.models.AccountExpense;
 import com.netcracker.models.AutoOperationExpense;
 import com.netcracker.models.User;
@@ -61,6 +62,7 @@ public class PersonalDebitController {
                                    @RequestParam(value = "incomeAmount") Double incomeAmount,
                                    @RequestParam(value = "dateIncome") LocalDate dateincome,
                                    @RequestParam(value = "dayOfMonth") int dayOfMonth){
+        try {
             User user = userService.getUserById(userId);
             BigInteger personalId = user.getPersonalDebitAccount();
             AutoOperationExpense autoOperationExpense = new AutoOperationExpense.Builder()
@@ -72,6 +74,9 @@ public class PersonalDebitController {
             accountAutoOperationService.createPersonalExpenseAutoOperation(autoOperationExpense, personalId);
             logger.debug("autoIncome is done!");
             return "success/autoIncome";
+        } catch (UserException ex){
+            return ex.getMessage();
+        }
     }
 
     @RequestMapping(value = "/createAutoExpense", method = RequestMethod.POST )
