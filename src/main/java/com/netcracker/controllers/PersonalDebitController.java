@@ -8,6 +8,7 @@ import com.netcracker.models.AutoOperationExpense;
 import com.netcracker.models.User;
 import com.netcracker.models.enums.CategoryExpense;
 import com.netcracker.services.AccountAutoOperationService;
+import com.netcracker.services.OperationService;
 import com.netcracker.services.UserService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.math.BigInteger;
 import java.time.LocalDate;
@@ -32,6 +34,8 @@ public class PersonalDebitController {
     AccountAutoOperationService accountAutoOperationService;
     @Autowired
     UserService userService;
+    @Autowired
+    private OperationService operationService;
 
     private static final Logger logger = Logger.getLogger(PersonalDebitController.class);
 
@@ -47,8 +51,14 @@ public class PersonalDebitController {
     }
 
     @RequestMapping(value = "/addExpensePersonal", method = RequestMethod.POST )
-    public String addExpensePersonal(){
-        return null;
+    public @ResponseBody AccountExpense addExpensePersonal(
+            @RequestParam(value = "debitId") BigInteger debitId,
+            @RequestParam(value = "amount") double amount,
+            @RequestParam(value = "date") LocalDate date,
+            @RequestParam(value = "categoryExpense") CategoryExpense categoryExpense) {
+        operationService.createPersonalOperationExpense(debitId, amount, date, categoryExpense);
+        return new AccountExpense.Builder().accountDebitId(debitId).accountAmount(amount).accountDate(date)
+                .categoryExpense(categoryExpense).build();
     }
 
     @RequestMapping(value = "/getHistory", method = RequestMethod.GET )
