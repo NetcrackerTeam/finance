@@ -89,20 +89,18 @@ public class PersonalDebitController {
         return null;
     }
 
-    @RequestMapping(value = "/createAutoIncome", method = RequestMethod.POST )
-    public String createAutoIncome(@RequestParam(value = "userId") BigInteger userId,
+    @RequestMapping(value = "{personalId}/createAutoIncome", method = RequestMethod.POST )
+    public String createAutoIncome(@PathVariable("personalId") BigInteger personalId,
                                    @RequestParam(value = "categoryIncome") CategoryIncome categoryIncome,
                                    @RequestParam(value = "incomeAmount") Double incomeAmount,
-                                   @RequestParam(value = "dateIncome") LocalDate dateincome,
+                                   @RequestParam(value = "dateIncome") LocalDate dateIncome,
                                    @RequestParam(value = "dayOfMonth") int dayOfMonth,
                                     Model model){
         try {
-            User user = userService.getUserById(userId);
-            BigInteger personalId = user.getPersonalDebitAccount();
             AutoOperationIncome autoOperationIncome = new AutoOperationIncome.Builder()
                     .categoryIncome(categoryIncome)
                     .accountAmount(incomeAmount)
-                    .accountDate(dateincome)
+                    .accountDate(dateIncome)
                     .dayOfMonth(dayOfMonth)
                     .build();
             accountAutoOperationService.createPersonalIncomeAutoOperation(autoOperationIncome, personalId);
