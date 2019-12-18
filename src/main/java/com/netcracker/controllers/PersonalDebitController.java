@@ -102,28 +102,18 @@ public class PersonalDebitController {
         return "success/autoIncome";
     }
 
-    @RequestMapping(value = "/createAutoExpense", method = RequestMethod.POST)
+    @RequestMapping(value = "{personalId}/createAutoExpense", method = RequestMethod.POST)
     public String createAutoExpense(
-            @RequestParam(value = "userId") BigInteger userId,
-            @RequestParam(value = "categoryExpense") CategoryExpense categoryExpense,
-            @RequestParam(value = "expenseAmount") Double expenseAmount,
-            @RequestParam(value = "dateExpense") LocalDate dateExpense,
-            @RequestParam(value = "dayOfMonth") int dayOfMonth
+            @RequestBody AutoOperationExpense autoOperationExpense,
+            @PathVariable("personalId") BigInteger personalId,
+            Model model
     ) {
-        try {
-            User user = userService.getUserById(userId);
-            AutoOperationExpense autoOperationExpense = new AutoOperationExpense.Builder()
-                    .categoryExpense(categoryExpense)
-                    .accountAmount(expenseAmount)
-                    .accountDate(dateExpense)
-                    .dayOfMonth(dayOfMonth)
-                    .build();
-            accountAutoOperationService.createPersonalExpenseAutoOperation(autoOperationExpense, user.getPersonalDebitAccount());
-            logger.debug("expense is done!");
-            return "expensePersonal/ready";
-        } catch (UserException ex) {
-            return ex.getMessage();
-        }
+        accountAutoOperationService.createPersonalExpenseAutoOperation(autoOperationExpense, personalId);
+        logger.debug("expense is done!");
+        int dayOfMonth = autoOperationExpense.getDayOfMonth();
+        Gson gson = new Gson();
+        model.addAttribute("autoExpense", accountAutoOperationService.getAllTodayOperationsPersonalExpense(dayOfMonth));
+        return "success/autoExpense";
     }
 
     @RequestMapping(value = "/deleteAutoIncome", method = RequestMethod.POST)
