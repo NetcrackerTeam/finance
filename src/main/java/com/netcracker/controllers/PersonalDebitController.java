@@ -116,7 +116,7 @@ public class PersonalDebitController {
         return "success/autoExpense";
     }
 
-    @RequestMapping(value = "/deleteAutoIncomePersonal/{incomeId}", method = RequestMethod.POST)
+    @RequestMapping(value = "{incomeId}/deleteAutoIncomePersonal", method = RequestMethod.POST)
     public String deleteAutoIncome(@PathVariable("incomeId") BigInteger incomeId,
                                    Model model) {
         logger.debug("delete autoIncomePersonal");
