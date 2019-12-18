@@ -1,5 +1,14 @@
 package com.netcracker.controllers;
 
+import com.google.gson.Gson;
+import com.netcracker.dao.AutoOperationDao;
+import com.netcracker.dao.CreditAccountDao;
+import com.netcracker.dao.PersonalDebitAccountDao;
+import com.netcracker.models.*;
+import com.netcracker.models.enums.CategoryExpense;
+import com.netcracker.services.AccountAutoOperationService;
+import com.netcracker.services.OperationService;
+import com.netcracker.services.PersonalCreditService;
 import com.netcracker.dao.AutoOperationDao;
 import com.netcracker.dao.PersonalDebitAccountDao;
 import com.netcracker.exception.UserException;
@@ -11,13 +20,11 @@ import com.netcracker.services.AccountAutoOperationService;
 import com.netcracker.services.OperationService;
 import com.netcracker.services.UserService;
 import org.apache.log4j.Logger;
+import com.netcracker.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.math.BigInteger;
 import java.time.LocalDate;
@@ -37,6 +44,19 @@ public class PersonalDebitController {
     @Autowired
     private OperationService operationService;
 
+    @Autowired
+    CreditAccountDao creditAccountDao;
+    @Autowired
+    PersonalCreditService creditService;
+
+    @RequestMapping(value = "{id}/addCredit", method = RequestMethod.POST)
+    public String addCreditAccount(@RequestBody PersonalCreditAccount creditAccount,
+                                   @PathVariable("id") BigInteger id, Model model) {
+        creditService.createPersonalCredit(id, creditAccount);
+        Gson gson = new Gson();
+        model.addAttribute("json_res", creditAccountDao.getAllFamilyCreditsByAccountId(id));
+        return "test";
+    }
     private static final Logger logger = Logger.getLogger(PersonalDebitController.class);
 
     @RequestMapping(value = "/addCreditAcc", method = RequestMethod.POST )
@@ -51,7 +71,8 @@ public class PersonalDebitController {
     }
 
     @RequestMapping(value = "/addExpensePersonal", method = RequestMethod.POST )
-    public @ResponseBody AccountExpense addExpensePersonal(
+    public @ResponseBody
+    AccountExpense addExpensePersonal(
             @RequestParam(value = "debitId") BigInteger debitId,
             @RequestParam(value = "amount") double amount,
             @RequestParam(value = "date") LocalDate date,
