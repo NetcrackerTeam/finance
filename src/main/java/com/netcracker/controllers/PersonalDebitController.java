@@ -6,9 +6,7 @@ import com.netcracker.dao.CreditAccountDao;
 import com.netcracker.dao.PersonalDebitAccountDao;
 import com.netcracker.models.*;
 import com.netcracker.models.enums.CategoryExpense;
-import com.netcracker.services.AccountAutoOperationService;
-import com.netcracker.services.OperationService;
-import com.netcracker.services.PersonalCreditService;
+import com.netcracker.services.*;
 import com.netcracker.dao.AutoOperationDao;
 import com.netcracker.dao.PersonalDebitAccountDao;
 import com.netcracker.exception.UserException;
@@ -20,7 +18,6 @@ import com.netcracker.models.enums.CategoryExpense;
 import com.netcracker.models.enums.CategoryIncome;
 import com.netcracker.services.AccountAutoOperationService;
 import com.netcracker.services.OperationService;
-import com.netcracker.services.UserService;
 import org.apache.log4j.Logger;
 import com.netcracker.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,13 +27,14 @@ import org.springframework.web.bind.annotation.*;
 
 import java.math.BigInteger;
 import java.time.LocalDate;
+import java.util.Collection;
 
 @Controller
 @RequestMapping("/PersonalDebit")
 public class PersonalDebitController {
 
     @Autowired
-    PersonalDebitAccountDao personalDebitAccountDao;
+    PersonalDebitService personalDebitService;
     @Autowired
     AutoOperationDao autoOperationDao;
     @Autowired
@@ -85,9 +83,14 @@ public class PersonalDebitController {
                 .categoryExpense(categoryExpense).build();
     }
 
-    @RequestMapping(value = "/getHistory", method = RequestMethod.GET)
-    public String getHistory() {
-        return null;
+    @RequestMapping(value = "{personalId}/getHistoryPersonal", method = RequestMethod.GET)
+    public String getHistory(@PathVariable("personalId") BigInteger personalId,
+                             @PathVariable("dateFrom") LocalDate date,
+                             Model model) {
+        logger.debug("getHistory Personal");
+        Collection<AbstractAccountOperation> transactions = personalDebitService.getHistory(personalId, date);
+        model.addAttribute("transaction", transactions);
+        return "historyPersonal";
     }
 
     @RequestMapping(value = "{personalId}/createAutoIncomePersonal", method = RequestMethod.POST)
