@@ -43,7 +43,8 @@ public class PersonalDebitController {
     UserService userService;
     @Autowired
     private OperationService operationService;
-
+    @Autowired
+    MonthReportService monthReportService;
     @Autowired
     CreditAccountDao creditAccountDao;
     @Autowired
@@ -128,9 +129,8 @@ public class PersonalDebitController {
         return "deletePersonalAutoIncome";
     }
 
-    @RequestMapping(value = "{expenseId}/deleteAutoExpensePersonal", method = RequestMethod.POST)
+    @RequestMapping(value = "/deleteAutoExpensePersonal/{expenseId}", method = RequestMethod.DELETE)
     public String deleteAutoExpense(
-                @RequestBody AutoOperationExpense autoOperationExpense,
                 @PathVariable("expenseId") BigInteger expenseId,
                 Model model
                                     ) {
