@@ -80,44 +80,34 @@ public class PersonalDebitController {
     }
 
     @RequestMapping(value = "{personalId}/history", method = RequestMethod.GET)
-    public String getHistory(@PathVariable("personalId") BigInteger personalId,
-                             @RequestParam("dateFrom") LocalDate date,
-                             Model model) {
+    public @ResponseBody Collection<AbstractAccountOperation> getHistory(@PathVariable("personalId") BigInteger personalId,
+                             @RequestParam("dateFrom") LocalDate date) {
         logger.debug("getHistory Personal");
-        Collection<AbstractAccountOperation> transactions = personalDebitService.getHistory(personalId, date);
-        model.addAttribute("transaction", transactions);
-        return "personal/historyPersonal";
+        return personalDebitService.getHistory(personalId, date);
     }
 
     @RequestMapping(value = "{personalId}/createAutoIncome", method = RequestMethod.POST)
-    public String createAutoIncome(@PathVariable("personalId") BigInteger personalId,
-                                   @RequestBody AutoOperationIncome autoOperationIncome,
-                                   Model model) {
-        accountAutoOperationService.createPersonalIncomeAutoOperation(autoOperationIncome, personalId);
+    public @ResponseBody AutoOperationIncome createAutoIncome(@PathVariable("personalId") BigInteger personalId,
+                                   @RequestBody AutoOperationIncome autoOperationIncome) {
+        AutoOperationIncome autoIncome = accountAutoOperationService.createPersonalIncomeAutoOperation(autoOperationIncome, personalId);
         logger.debug("autoIncome is done!");
-        int dayOfMonth = autoOperationIncome.getDayOfMonth();
-        Gson gson = new Gson();
-        model.addAttribute("autoIncomes", accountAutoOperationService.getAllTodayOperationsPersonalIncome(dayOfMonth));
-        return "success/autoIncome";
+        return autoIncome;
     }
 
     @RequestMapping(value = "{personalId}/createAutoExpense", method = RequestMethod.POST)
-    public String createAutoExpense(
+    public @ResponseBody AutoOperationExpense createAutoExpense(
             @RequestBody AutoOperationExpense autoOperationExpense,
-            @PathVariable("personalId") BigInteger personalId,
-            Model model
+            @PathVariable("personalId") BigInteger personalId
     ) {
-        accountAutoOperationService.createPersonalExpenseAutoOperation(autoOperationExpense, personalId);
+        AutoOperationExpense autoExpense = accountAutoOperationService.createPersonalExpenseAutoOperation(autoOperationExpense, personalId);
         logger.debug("expense is done!");
-        int dayOfMonth = autoOperationExpense.getDayOfMonth();
-        Gson gson = new Gson();
-        model.addAttribute("autoExpense", accountAutoOperationService.getAllTodayOperationsPersonalExpense(dayOfMonth));
-        return "success/autoExpense";
+        return autoExpense;
     }
 
-    @RequestMapping(value = "/deleteAutoIncome/{incomeId}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/deleteAutoIncome/{incomeId}", method = RequestMethod.GET)
     public String deleteAutoIncome(@PathVariable("incomeId") BigInteger incomeId,
-                                   Model model) {
+                                   Model model
+    ) {
         logger.debug("delete autoIncomePersonal");
         accountAutoOperationService.deleteAutoOperation(incomeId);
         model.addAttribute("incomeId", incomeId);
@@ -128,7 +118,8 @@ public class PersonalDebitController {
     public String deleteAutoExpense(
                 @PathVariable("expenseId") BigInteger expenseId,
                 Model model
-                                    ) {
+    ) {
+        logger.debug("delete autoExpensePersonal");
         accountAutoOperationService.deleteAutoOperation(expenseId);
         model.addAttribute("expenseId", expenseId);
         return "personal/deleteAutoExpensePersonal";
