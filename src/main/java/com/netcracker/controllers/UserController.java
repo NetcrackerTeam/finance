@@ -9,10 +9,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.math.BigInteger;
 
@@ -58,15 +55,12 @@ public class UserController {
     }
 
     @RequestMapping(value = "/deactivation", method = RequestMethod.GET)
-    public String deactivateUser(
-            Model model,
-            @PathVariable(value = "userId") BigInteger id){
+    @ResponseBody
+    public Status deactivateUser(@RequestParam(value = "userId") BigInteger id){
         logger.debug("updateUserStatus by user id " + id);
         userDao.updateUserStatus(id, UserStatusActive.NO.getId());
-        Gson gson = new Gson();
         Status status = new Status(true, "Deactivated successfully user " + id);
-        model.addAttribute("json_res", gson.toJson(status));
-        return "test";
+        return status;
     }
 
 

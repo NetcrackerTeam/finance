@@ -87,7 +87,7 @@ public interface UserDao {
 
 
     String UPDATE_STATUS = "UPDATE ATTRIBUTES " +
-            "SET VALUE = ? " +
+            "SET LIST_VALUE_ID = ? " +
             "WHERE OBJECT_ID = ?  " +
             " AND ATTR_ID = 6 /*IS_ACTIVE */ ";
 

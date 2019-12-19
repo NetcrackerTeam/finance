@@ -28,9 +28,10 @@ import org.springframework.web.bind.annotation.*;
 import java.math.BigInteger;
 import java.time.LocalDate;
 import java.util.Collection;
+import java.util.List;
 
 @Controller
-@RequestMapping("/PersonalDebit")
+@RequestMapping("/personalDebit/{id}")
 public class PersonalDebitController {
 
     @Autowired
@@ -50,20 +51,13 @@ public class PersonalDebitController {
     @Autowired
     PersonalCreditService creditService;
 
-    @RequestMapping(value = "{id}/addCredit", method = RequestMethod.POST)
-    public String addCreditAccount(@RequestBody PersonalCreditAccount creditAccount,
-                                   @PathVariable("id") BigInteger id, Model model) {
-        creditService.createPersonalCredit(id, creditAccount);
-        Gson gson = new Gson();
-        model.addAttribute("json_res", creditAccountDao.getAllFamilyCreditsByAccountId(id));
-        return "test";
-    }
-
     private static final Logger logger = Logger.getLogger(PersonalDebitController.class);
 
-    @RequestMapping(value = "/addCreditAcc", method = RequestMethod.POST)
-    public String addCreditAccount() {
-        return null;
+    @RequestMapping(value = "/addCredit", method = RequestMethod.POST)
+    public List<PersonalCreditAccount> addCreditAccount(@RequestBody PersonalCreditAccount creditAccount,
+                                   @PathVariable("id") BigInteger id) {
+        creditService.createPersonalCredit(id, creditAccount);
+        return creditAccountDao.getAllPersonalCreditsByAccountId(id);
     }
 
     @RequestMapping(value = "/addIncome", method = RequestMethod.POST)
