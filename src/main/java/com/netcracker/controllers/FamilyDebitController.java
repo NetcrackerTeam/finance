@@ -160,7 +160,7 @@ public class FamilyDebitController {
         return "family/deleteFamilyAutoIncome";
     }
 
-    @RequestMapping(value = "/deleteAutoExpense/{expenseId}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/deleteAutoExpense/{expenseId}", method = RequestMethod.GET)
     public String deleteAutoExpense(@PathVariable("expenseId") BigInteger expenseId,
                                     Model model
     ) {
