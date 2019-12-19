@@ -19,7 +19,7 @@ import java.util.Collection;
 import java.util.List;
 
 @Controller
-@RequestMapping("/FamilyDebit/{id}")
+@RequestMapping("/familyDebit/{id}")
 public class FamilyDebitController {
     @Autowired
     FamilyDebitService familyDebitService;
@@ -93,10 +93,10 @@ public class FamilyDebitController {
 
     @RequestMapping(value = "/addCredit", method = RequestMethod.POST)
     @ResponseBody
-    public List<PersonalCreditAccount> addCreditAccount(@RequestBody FamilyCreditAccount creditAccount,
+    public List<FamilyCreditAccount> addCreditAccount(@RequestBody FamilyCreditAccount creditAccount,
                                                         @PathVariable("id") BigInteger id) {
         creditService.createFamilyCredit(id, creditAccount);
-        return creditAccountDao.getAllPersonalCreditsByAccountId(id);
+        return creditAccountDao.getAllFamilyCreditsByAccountId(id);
     }
 
     @RequestMapping(value = "/addIncome", method = RequestMethod.POST)
