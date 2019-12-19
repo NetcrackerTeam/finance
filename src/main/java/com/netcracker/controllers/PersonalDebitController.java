@@ -62,9 +62,10 @@ public class PersonalDebitController {
     }
 
     @RequestMapping(value = "/addIncome", method = RequestMethod.POST)
-    public String addIncomePersonal(
-    ) {
-        return null;
+    public Status addIncomePersonal(@RequestBody AccountIncome income,
+                                    @PathVariable("id") BigInteger id) {
+        operationService.createPersonalOperationIncome(id, income.getAmount(), income.getDate(), income.getCategoryIncome());
+        return new Status(true, "Added new income by account " + id);
     }
 
     @RequestMapping(value = "/addExpense", method = RequestMethod.POST)
