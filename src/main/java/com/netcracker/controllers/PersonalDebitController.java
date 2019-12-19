@@ -88,11 +88,11 @@ public class PersonalDebitController {
     }
 
     @RequestMapping(value = "/createAutoIncome", method = RequestMethod.POST)
-    public @ResponseBody AutoOperationIncome createAutoIncome(@PathVariable("id") BigInteger personalId,
+    public @ResponseBody AutoOperationIncome createAutoIncome(@PathVariable("id") BigInteger id,
                                    @RequestBody AutoOperationIncome autoOperationIncome) {
-        AutoOperationIncome autoIncome = accountAutoOperationService.createPersonalIncomeAutoOperation(autoOperationIncome, personalId);
+        accountAutoOperationService.createPersonalIncomeAutoOperation(autoOperationIncome, id);
         logger.debug("autoIncome is done!");
-        return autoIncome;
+        return accountAutoOperationService.getPersonalIncomeAutoOperation(id);
     }
 
     @RequestMapping(value = "/createAutoExpense", method = RequestMethod.POST)
@@ -100,9 +100,9 @@ public class PersonalDebitController {
             @RequestBody AutoOperationExpense autoOperationExpense,
             @PathVariable("id") BigInteger personalId
     ) {
-        AutoOperationExpense autoExpense = accountAutoOperationService.createPersonalExpenseAutoOperation(autoOperationExpense, personalId);
+        accountAutoOperationService.createPersonalExpenseAutoOperation(autoOperationExpense, personalId);
         logger.debug("expense is done!");
-        return autoExpense;
+        return autoOperationDao.getPersonalExpenseAutoOperation(personalId);
     }
 
     @RequestMapping(value = "/deleteAutoIncome/{incomeId}", method = RequestMethod.GET)
@@ -126,9 +126,16 @@ public class PersonalDebitController {
         return "personal/deleteAutoExpensePersonal";
     }
 
-    @RequestMapping(value = "/getReport", method = RequestMethod.POST)
-    public String getReport() {
-        return null;
+    @RequestMapping(value = "/Report", method = RequestMethod.POST)
+    @ResponseBody
+    public MonthReport getReport(
+            @PathVariable("id") BigInteger personalId,
+            @RequestParam("dateFrom") LocalDate dateFrom,
+            @RequestParam("dateTo") LocalDate dateTo
+            ) {
+       MonthReport monthReport = monthReportService.getMonthPersonalReport(personalId, dateFrom, dateTo);
+        logger.debug("Month report is ready");
+        return monthReport;
     }
 
 }
