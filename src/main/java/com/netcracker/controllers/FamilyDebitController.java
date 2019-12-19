@@ -133,9 +133,10 @@ public class FamilyDebitController {
 
     @RequestMapping(value = "/createAutoIncome", method = RequestMethod.POST)
     @ResponseBody
-    public AutoOperationIncome createAutoIncome(@PathVariable("id") BigInteger personalId,
-                                                @RequestBody AutoOperationIncome autoOperationIncome) {
-        AutoOperationIncome autoIncome = accountAutoOperationService.createPersonalIncomeAutoOperation(autoOperationIncome, personalId);
+    public AutoOperationIncome createAutoIncome(@PathVariable("id") BigInteger familyId,
+                                           @RequestParam(value = "userId") BigInteger userId,
+                                           @RequestBody AutoOperationIncome autoOperationIncome) {
+        AutoOperationIncome autoIncome = accountAutoOperationService.createFamilyIncomeAutoOperation(autoOperationIncome,userId, familyId);
         logger.debug("autoIncome is done!");
         return autoIncome;
     }
@@ -143,9 +144,10 @@ public class FamilyDebitController {
     @RequestMapping(value = "/createAutoExpense", method = RequestMethod.POST)
     @ResponseBody
     public AutoOperationExpense createAutoExpense(@RequestBody AutoOperationExpense autoOperationExpense,
-                                                  @PathVariable("id") BigInteger personalId
+                                                  @RequestParam(value = "userId") BigInteger userId,
+                                                  @PathVariable("id") BigInteger familyId
     ) {
-        AutoOperationExpense autoExpense = accountAutoOperationService.createPersonalExpenseAutoOperation(autoOperationExpense, personalId);
+        AutoOperationExpense autoExpense = accountAutoOperationService.createFamilyExpenseAutoOperation(autoOperationExpense, userId, familyId);
         logger.debug("expense is done!");
         return autoExpense;
     }
