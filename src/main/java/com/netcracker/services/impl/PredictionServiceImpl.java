@@ -104,7 +104,7 @@ public class PredictionServiceImpl implements PredictionService {
         LocalDate dateTo = LocalDate.of(LocalDate.now().getYear(), LocalDate.now().getMonth().getValue(), 1);
 
 
-        for (int i = 0; i < monthReports; i++) {
+        for (int i = 0; i < MONTH_REPORTS; i++) {
             MonthReport reportTest = monthReportDao.getMonthReportByPersonalAccountId(id, dateFrom, dateTo);
             if (reportTest == null) {
                 logger.debug("There is no report");
@@ -124,7 +124,7 @@ public class PredictionServiceImpl implements PredictionService {
         LocalDate dateFrom = LocalDate.of(LocalDate.now().getYear(), LocalDate.now().getMonth().getValue() - 1, 1);
         LocalDate dateTo = LocalDate.of(LocalDate.now().getYear(), LocalDate.now().getMonth().getValue(), 1);
 
-        for (int i = 0; i < monthReports; i++) {
+        for (int i = 0; i < MONTH_REPORTS; i++) {
             MonthReport reportTest = monthReportDao.getMonthReportByFamilyAccountId(id, dateFrom, dateTo);
             if (reportTest == null) {
                 logger.debug("There is no report");
