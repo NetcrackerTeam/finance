@@ -79,25 +79,25 @@ public class PersonalDebitController {
                 .categoryExpense(categoryExpense).build();
     }
 
-    @RequestMapping(value = "{personalId}/history", method = RequestMethod.GET)
-    public @ResponseBody Collection<AbstractAccountOperation> getHistory(@PathVariable("personalId") BigInteger personalId,
+    @RequestMapping(value = "/history", method = RequestMethod.GET)
+    public @ResponseBody Collection<AbstractAccountOperation> getHistory(@PathVariable("id") BigInteger personalId,
                              @RequestParam("dateFrom") LocalDate date) {
         logger.debug("getHistory Personal");
         return personalDebitService.getHistory(personalId, date);
     }
 
-    @RequestMapping(value = "{personalId}/createAutoIncome", method = RequestMethod.POST)
-    public @ResponseBody AutoOperationIncome createAutoIncome(@PathVariable("personalId") BigInteger personalId,
+    @RequestMapping(value = "/createAutoIncome", method = RequestMethod.POST)
+    public @ResponseBody AutoOperationIncome createAutoIncome(@PathVariable("id") BigInteger personalId,
                                    @RequestBody AutoOperationIncome autoOperationIncome) {
         AutoOperationIncome autoIncome = accountAutoOperationService.createPersonalIncomeAutoOperation(autoOperationIncome, personalId);
         logger.debug("autoIncome is done!");
         return autoIncome;
     }
 
-    @RequestMapping(value = "{personalId}/createAutoExpense", method = RequestMethod.POST)
+    @RequestMapping(value = "/createAutoExpense", method = RequestMethod.POST)
     public @ResponseBody AutoOperationExpense createAutoExpense(
             @RequestBody AutoOperationExpense autoOperationExpense,
-            @PathVariable("personalId") BigInteger personalId
+            @PathVariable("id") BigInteger personalId
     ) {
         AutoOperationExpense autoExpense = accountAutoOperationService.createPersonalExpenseAutoOperation(autoOperationExpense, personalId);
         logger.debug("expense is done!");
