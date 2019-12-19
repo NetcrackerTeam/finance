@@ -66,13 +66,13 @@ public class PersonalDebitController {
         return null;
     }
 
-    @RequestMapping(value = "/addIncomePersonal", method = RequestMethod.POST)
+    @RequestMapping(value = "/addIncome", method = RequestMethod.POST)
     public String addIncomePersonal(
     ) {
         return null;
     }
 
-    @RequestMapping(value = "/addExpensePersonal", method = RequestMethod.POST)
+    @RequestMapping(value = "/addExpense", method = RequestMethod.POST)
     public @ResponseBody
     AccountExpense addExpensePersonal(
             @RequestParam(value = "debitId") BigInteger debitId,
@@ -84,17 +84,17 @@ public class PersonalDebitController {
                 .categoryExpense(categoryExpense).build();
     }
 
-    @RequestMapping(value = "{personalId}/getHistoryPersonal", method = RequestMethod.GET)
+    @RequestMapping(value = "{personalId}/history", method = RequestMethod.GET)
     public String getHistory(@PathVariable("personalId") BigInteger personalId,
-                             @PathVariable("dateFrom") LocalDate date,
+                             @RequestParam("dateFrom") LocalDate date,
                              Model model) {
         logger.debug("getHistory Personal");
         Collection<AbstractAccountOperation> transactions = personalDebitService.getHistory(personalId, date);
         model.addAttribute("transaction", transactions);
-        return "historyPersonal";
+        return "personal/historyPersonal";
     }
 
-    @RequestMapping(value = "{personalId}/createAutoIncomePersonal", method = RequestMethod.POST)
+    @RequestMapping(value = "{personalId}/createAutoIncome", method = RequestMethod.POST)
     public String createAutoIncome(@PathVariable("personalId") BigInteger personalId,
                                    @RequestBody AutoOperationIncome autoOperationIncome,
                                    Model model) {
@@ -106,7 +106,7 @@ public class PersonalDebitController {
         return "success/autoIncome";
     }
 
-    @RequestMapping(value = "{personalId}/createAutoExpensePersonal", method = RequestMethod.POST)
+    @RequestMapping(value = "{personalId}/createAutoExpense", method = RequestMethod.POST)
     public String createAutoExpense(
             @RequestBody AutoOperationExpense autoOperationExpense,
             @PathVariable("personalId") BigInteger personalId,
@@ -120,23 +120,23 @@ public class PersonalDebitController {
         return "success/autoExpense";
     }
 
-    @RequestMapping(value = "{incomeId}/deleteAutoIncomePersonal", method = RequestMethod.POST)
+    @RequestMapping(value = "/deleteAutoIncome/{incomeId}", method = RequestMethod.DELETE)
     public String deleteAutoIncome(@PathVariable("incomeId") BigInteger incomeId,
                                    Model model) {
         logger.debug("delete autoIncomePersonal");
         accountAutoOperationService.deleteAutoOperation(incomeId);
         model.addAttribute("incomeId", incomeId);
-        return "deletePersonalAutoIncome";
+        return "personal/deletePersonalAutoIncome";
     }
 
-    @RequestMapping(value = "/deleteAutoExpensePersonal/{expenseId}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/deleteAutoExpense/{expenseId}", method = RequestMethod.DELETE)
     public String deleteAutoExpense(
                 @PathVariable("expenseId") BigInteger expenseId,
                 Model model
                                     ) {
         accountAutoOperationService.deleteAutoOperation(expenseId);
         model.addAttribute("expenseId", expenseId);
-        return "deleteAutoExpensePersonal";
+        return "personal/deleteAutoExpensePersonal";
     }
 
     @RequestMapping(value = "/getReport", method = RequestMethod.POST)
