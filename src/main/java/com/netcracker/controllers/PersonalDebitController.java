@@ -54,6 +54,7 @@ public class PersonalDebitController {
     private static final Logger logger = Logger.getLogger(PersonalDebitController.class);
 
     @RequestMapping(value = "/addCredit", method = RequestMethod.POST)
+    @ResponseBody
     public List<PersonalCreditAccount> addCreditAccount(@RequestBody PersonalCreditAccount creditAccount,
                                    @PathVariable("id") BigInteger id) {
         creditService.createPersonalCredit(id, creditAccount);

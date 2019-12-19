@@ -59,8 +59,7 @@ public class UserController {
     public Status deactivateUser(@RequestParam(value = "userId") BigInteger id){
         logger.debug("updateUserStatus by user id " + id);
         userDao.updateUserStatus(id, UserStatusActive.NO.getId());
-        Status status = new Status(true, "Deactivated successfully user " + id);
-        return status;
+        return new Status(true, "Deactivated successfully user " + id);
     }
 
 
