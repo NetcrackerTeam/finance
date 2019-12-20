@@ -1,25 +1,11 @@
 package com.netcracker.controllers;
 
-import com.google.gson.Gson;
 import com.netcracker.dao.AutoOperationDao;
 import com.netcracker.dao.CreditAccountDao;
 import com.netcracker.dao.PersonalDebitAccountDao;
 import com.netcracker.models.*;
-import com.netcracker.models.enums.CategoryExpense;
 import com.netcracker.services.*;
-import com.netcracker.dao.AutoOperationDao;
-import com.netcracker.dao.PersonalDebitAccountDao;
-import com.netcracker.exception.UserException;
-import com.netcracker.models.AccountExpense;
-import com.netcracker.models.AutoOperationExpense;
-import com.netcracker.models.AutoOperationIncome;
-import com.netcracker.models.User;
-import com.netcracker.models.enums.CategoryExpense;
-import com.netcracker.models.enums.CategoryIncome;
-import com.netcracker.services.AccountAutoOperationService;
-import com.netcracker.services.OperationService;
 import org.apache.log4j.Logger;
-import com.netcracker.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -31,11 +17,11 @@ import java.util.Collection;
 import java.util.List;
 
 @Controller
-@RequestMapping("/personalDebit/{id}")
+@RequestMapping("/PersonalDebit")
 public class PersonalDebitController {
 
     @Autowired
-    PersonalDebitService personalDebitService;
+    PersonalDebitAccountDao personalDebitAccountDao;
     @Autowired
     AutoOperationDao autoOperationDao;
     @Autowired
@@ -43,20 +29,22 @@ public class PersonalDebitController {
     @Autowired
     UserService userService;
     @Autowired
-    private OperationService operationService;
+    OperationService operationService;
     @Autowired
     MonthReportService monthReportService;
     @Autowired
     CreditAccountDao creditAccountDao;
     @Autowired
     PersonalCreditService creditService;
+    @Autowired
+    PersonalDebitService personalDebitService;
 
     private static final Logger logger = Logger.getLogger(PersonalDebitController.class);
 
     @RequestMapping(value = "/addCredit", method = RequestMethod.POST)
     @ResponseBody
     public List<PersonalCreditAccount> addCreditAccount(@RequestBody PersonalCreditAccount creditAccount,
-                                   @PathVariable("id") BigInteger id) {
+                                                        @PathVariable("id") BigInteger id) {
         creditService.createPersonalCredit(id, creditAccount);
         return creditAccountDao.getAllPersonalCreditsByAccountId(id);
     }
@@ -68,21 +56,19 @@ public class PersonalDebitController {
         return new Status(true, "Added new income by account " + id);
     }
 
-    @RequestMapping(value = "/addExpense", method = RequestMethod.POST)
-    public @ResponseBody
-    AccountExpense addExpensePersonal(
-            @RequestParam(value = "debitId") BigInteger debitId,
-            @RequestParam(value = "amount") double amount,
-            @RequestParam(value = "date") LocalDate date,
-            @RequestParam(value = "categoryExpense") CategoryExpense categoryExpense) {
-        operationService.createPersonalOperationExpense(debitId, amount, date, categoryExpense);
-        return new AccountExpense.Builder().accountDebitId(debitId).accountAmount(amount).accountDate(date)
-                .categoryExpense(categoryExpense).build();
+    @RequestMapping(value = "/addExpensePersonal", method = RequestMethod.POST )
+    public @ResponseBody List<AccountExpense> addExpensePersonal(
+            @RequestBody AccountExpense expense,
+            @PathVariable(value = "debitId") BigInteger debitId,
+            @PathVariable(value = "afterDate") LocalDate afterDate) {
+        operationService.createPersonalOperationExpense(debitId, expense.getAmount(), expense.getDate(), expense.getCategoryExpense());
+        return operationService.getExpensesPersonalAfterDateByAccountId(debitId, afterDate);
     }
 
     @RequestMapping(value = "/history", method = RequestMethod.GET)
-    public @ResponseBody Collection<AbstractAccountOperation> getHistory(@PathVariable("id") BigInteger personalId,
-                             @RequestParam("dateFrom") LocalDate date) {
+    public @ResponseBody
+    Collection<AbstractAccountOperation> getHistory(@PathVariable("id") BigInteger personalId,
+                                                    @RequestParam("dateFrom") LocalDate date) {
         logger.debug("getHistory Personal");
         return personalDebitService.getHistory(personalId, date);
     }

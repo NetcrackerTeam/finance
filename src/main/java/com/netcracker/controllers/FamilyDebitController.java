@@ -4,7 +4,6 @@ package com.netcracker.controllers;
 import com.netcracker.dao.AutoOperationDao;
 import com.netcracker.dao.CreditAccountDao;
 import com.netcracker.models.*;
-import com.netcracker.models.enums.CategoryExpense;
 import com.netcracker.models.enums.CategoryIncome;
 import com.netcracker.services.*;
 import org.apache.log4j.Logger;
@@ -111,16 +110,15 @@ public class FamilyDebitController {
                 .categoryIncome(categoryIncome).build();
     }
 
-    @RequestMapping(value = "/addExpense", method = RequestMethod.POST)
+    @RequestMapping(value = "/addExpenseFamily", method = RequestMethod.POST)
     @ResponseBody
-    public AccountExpense addExpenseFamily(@PathVariable(value = "id") BigInteger debitId,
-                                           @RequestParam(value = "userId") BigInteger userId,
-                                           @RequestParam(value = "amount") double amount,
-                                           @RequestParam(value = "date") LocalDate date,
-                                           @RequestParam(value = "categoryExpense") CategoryExpense categoryExpense) {
-        operationService.createFamilyOperationExpense(userId, debitId, amount, date, categoryExpense);
-        return new AccountExpense.Builder().accountDebitId(debitId).accountAmount(amount).accountDate(date)
-                .categoryExpense(categoryExpense).build();
+    public List<AccountExpense> addExpenseFamily(
+            @RequestBody AccountExpense expense,
+            @PathVariable(value = "id") BigInteger debitId,
+            @PathVariable(value = "userId") BigInteger userId,
+            @PathVariable(value = "afterDate") LocalDate afterDate) {
+        operationService.createFamilyOperationExpense(userId, debitId, expense.getAmount(), expense.getDate(), expense.getCategoryExpense());
+        return operationService.getExpensesFamilyAfterDateByAccountId(debitId, afterDate);
     }
 
     @RequestMapping(value = "/history", method = RequestMethod.GET)

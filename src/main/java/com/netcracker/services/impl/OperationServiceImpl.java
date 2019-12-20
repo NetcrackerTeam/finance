@@ -39,6 +39,34 @@ public class OperationServiceImpl implements OperationService {
     }
 
     @Override
+    public List<AccountExpense> getExpensesFamilyAfterDateByAccountId(BigInteger id, LocalDate afterDate) {
+        logger.debug("[getExpensesFamilyAfterDateByAccountId]" + debugStartMessage + "[id = " + id + "], afterDate = " + afterDate + "]");
+        ObjectsCheckUtils.isNotNull(id, afterDate);
+        return operationDao.getExpensesFamilyAfterDateByAccountId(id, afterDate);
+    }
+
+    @Override
+    public List<AccountIncome> getIncomesFamilyAfterDateByAccountId(BigInteger id, LocalDate afterDate) {
+        logger.debug("[getIncomesFamilyAfterDateByAccountId]" + debugStartMessage + "[id = " + id + "], afterDate = " + afterDate + "]");
+        ObjectsCheckUtils.isNotNull(id, afterDate);
+        return operationDao.getIncomesFamilyAfterDateByAccountId(id, afterDate);
+    }
+
+    @Override
+    public List<AccountExpense> getExpensesPersonalAfterDateByAccountId(BigInteger id, LocalDate afterDate) {
+        logger.debug("[getExpensesPersonalAfterDateByAccountId]" + debugStartMessage + "[id = " + id + "], afterDate = " + afterDate + "]");
+        ObjectsCheckUtils.isNotNull(id, afterDate);
+        return operationDao.getExpensesPersonalAfterDateByAccountId(id, afterDate);
+    }
+
+    @Override
+    public List<AccountIncome> getIncomesPersonalAfterDateByAccountId(BigInteger id, LocalDate afterDate) {
+        logger.debug("[getIncomesPersonalAfterDateByAccountId]" + debugStartMessage + "[id = " + id + "], afterDate = " + afterDate + "]");
+        ObjectsCheckUtils.isNotNull(id, afterDate);
+        return operationDao.getIncomesPersonalAfterDateByAccountId(id, afterDate);
+    }
+
+    @Override
     public List<AbstractAccountOperation> getAllPersonalOperations(BigInteger accountId, LocalDate afterDate) {
         logger.debug("[getAllPersonalOperations]" + debugStartMessage + "[accountId = " + accountId + "], [afterDate = " + afterDate + "]");
 

@@ -1,6 +1,8 @@
 package com.netcracker.services;
 
 import com.netcracker.models.AbstractAccountOperation;
+import com.netcracker.models.AccountExpense;
+import com.netcracker.models.AccountIncome;
 import com.netcracker.models.enums.CategoryExpense;
 import com.netcracker.models.enums.CategoryIncome;
 
@@ -12,6 +14,11 @@ public interface OperationService {
     String debugStartMessage = " method start with parameters: ";
 
     List<AbstractAccountOperation> getAllFamilyOperations(BigInteger accountId, LocalDate afterDate);
+
+    List<AccountExpense> getExpensesFamilyAfterDateByAccountId(BigInteger id, LocalDate afterDate);
+    List<AccountIncome> getIncomesFamilyAfterDateByAccountId(BigInteger id, LocalDate afterDate);
+    List<AccountExpense> getExpensesPersonalAfterDateByAccountId(BigInteger id, LocalDate afterDate);
+    List<AccountIncome> getIncomesPersonalAfterDateByAccountId(BigInteger id, LocalDate afterDate);
 
     List<AbstractAccountOperation> getAllPersonalOperations(BigInteger accountId, LocalDate afterDate);
 
