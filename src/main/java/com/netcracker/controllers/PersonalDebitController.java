@@ -7,6 +7,7 @@ import com.netcracker.models.*;
 import com.netcracker.services.*;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -68,7 +69,7 @@ public class PersonalDebitController {
     @RequestMapping(value = "/history", method = RequestMethod.GET)
     public @ResponseBody
     Collection<AbstractAccountOperation> getHistory(@PathVariable("id") BigInteger personalId,
-                                                    @RequestParam("dateFrom") LocalDate date) {
+                                                    @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
         logger.debug("getHistory Personal");
         return personalDebitService.getHistory(personalId, date);
     }
@@ -76,19 +77,19 @@ public class PersonalDebitController {
     @RequestMapping(value = "/createAutoIncome", method = RequestMethod.POST)
     public @ResponseBody AutoOperationIncome createAutoIncome(@PathVariable("id") BigInteger id,
                                    @RequestBody AutoOperationIncome autoOperationIncome) {
-        accountAutoOperationService.createPersonalIncomeAutoOperation(autoOperationIncome, id);
+       AutoOperationIncome autoOperationIncome1 = accountAutoOperationService.createPersonalIncomeAutoOperation(autoOperationIncome, id);
         logger.debug("autoIncome is done!");
-        return accountAutoOperationService.getPersonalIncomeAutoOperation(id);
+        return accountAutoOperationService.getPersonalIncomeAutoOperation(autoOperationIncome1.getId());
     }
 
-    @RequestMapping(value = "/createAutoExpense", method = RequestMethod.POST)
+        @RequestMapping(value = "/createAutoExpense", method = RequestMethod.POST)
     public @ResponseBody AutoOperationExpense createAutoExpense(
             @RequestBody AutoOperationExpense autoOperationExpense,
-            @PathVariable("id") BigInteger personalId
+            @PathVariable("id") BigInteger id
     ) {
-        accountAutoOperationService.createPersonalExpenseAutoOperation(autoOperationExpense, personalId);
+       AutoOperationExpense accountExpense = accountAutoOperationService.createPersonalExpenseAutoOperation(autoOperationExpense, id);
         logger.debug("expense is done!");
-        return autoOperationDao.getPersonalExpenseAutoOperation(personalId);
+        return accountAutoOperationService.getPersonalExpenseAutoOperation(accountExpense.getId());
     }
 
     @RequestMapping(value = "/deleteAutoIncome/{incomeId}", method = RequestMethod.GET)
@@ -112,12 +113,12 @@ public class PersonalDebitController {
         return "personal/deleteAutoExpensePersonal";
     }
 
-    @RequestMapping(value = "/Report", method = RequestMethod.POST)
+    @RequestMapping(value = "/Report", method = RequestMethod.GET)
     @ResponseBody
     public MonthReport getReport(
             @PathVariable("id") BigInteger personalId,
-            @RequestParam("dateFrom") LocalDate dateFrom,
-            @RequestParam("dateTo") LocalDate dateTo
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateFrom,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateTo
             ) {
        MonthReport monthReport = monthReportService.getMonthPersonalReport(personalId, dateFrom, dateTo);
         logger.debug("Month report is ready");
