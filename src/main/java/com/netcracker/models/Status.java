@@ -9,6 +9,9 @@ public class Status {
         this.message = message;
     }
 
+    public Status() {
+    }
+
     public boolean isStatus() {
         return status;
     }

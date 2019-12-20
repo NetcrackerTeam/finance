@@ -1,8 +1,8 @@
 package com.netcracker.services.utils;
 
-public final class ObjectsCheckUtils {
+import com.netcracker.exception.NullObjectException;
 
-    private final static String NULL_MESSAGE = "Null object was found";
+public final class ObjectsCheckUtils {
 
     public ObjectsCheckUtils() {
         throw new UnsupportedOperationException();
@@ -10,14 +10,12 @@ public final class ObjectsCheckUtils {
 
     public static void isNotNull(final Object... objects) {
         if (objects == null) {
-            throw new RuntimeException(NULL_MESSAGE);
+            throw new NullObjectException();
         }
 
         for (final Object obj : objects) {
-            if (obj == null) {
-                throw new RuntimeException(ExceptionMessages.NULL_OBJECT_ERROR);
-            }
-            if (obj.equals(0)) throw new RuntimeException(ExceptionMessages.NULL_OBJECT_ERROR);
+            if (obj == null)
+                throw new NullObjectException();
         }
     }
 }
