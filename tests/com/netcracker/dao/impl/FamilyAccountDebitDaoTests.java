@@ -116,7 +116,7 @@ public class FamilyAccountDebitDaoTests {
                     + expected.getUserStatusActive().toString() + " " + expected.getPersonalDebitAccount());
         }
         assertEquals(BigInteger.valueOf(1), users.get(0).getId());
-        assertEquals(BigInteger.valueOf(24), users.get(1).getId());
+        assertEquals(BigInteger.valueOf(47), users.get(1).getId());
     }
 
     @Test

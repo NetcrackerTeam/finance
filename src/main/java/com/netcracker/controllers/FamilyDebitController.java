@@ -8,6 +8,7 @@ import com.netcracker.models.enums.CategoryIncome;
 import com.netcracker.services.*;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +19,7 @@ import java.util.Collection;
 import java.util.List;
 
 @Controller
-@RequestMapping("/familyDebit/{id}")
+@RequestMapping("/debit/family/{id}")
 public class FamilyDebitController {
     @Autowired
     FamilyDebitService familyDebitService;
@@ -53,11 +54,11 @@ public class FamilyDebitController {
             logger.debug("deactivate family account " + accountId + "user id " + userId);
             familyDebitService.deleteFamilyDebitAccount(accountId, userId);
             logger.debug("success deactivate");
+            return "success";
         } catch (RuntimeException ex) {
             model.addAttribute("errorMessage", ex.getMessage());
             return "unsuccess";
         }
-        return "success";
     }
 
     @RequestMapping(value = "/addUser", method = RequestMethod.GET)
@@ -81,13 +82,13 @@ public class FamilyDebitController {
                                         Model model) {
         try {
             logger.debug("delete user to account " + accountId + "user id " + userId);
-            familyDebitService.deleteFamilyDebitAccount(accountId, userId);
+            familyDebitService.deleteUserFromAccount(accountId, userId);
             logger.debug("success adding user");
+            return "success";
         } catch (RuntimeException ex) {
             model.addAttribute("errorMessage", ex.getMessage());
             return "unsuccess";
         }
-        return "success";
     }
 
     @RequestMapping(value = "/addCredit", method = RequestMethod.POST)
@@ -123,10 +124,10 @@ public class FamilyDebitController {
 
     @RequestMapping(value = "/history", method = RequestMethod.GET)
     @ResponseBody
-    public Collection<AbstractAccountOperation> getHistory(@PathVariable("id") BigInteger personalId,
-                                                           @RequestParam("dateFrom") LocalDate date) {
+    public Collection<AbstractAccountOperation> getHistory(@PathVariable("id") BigInteger familyId,
+                                                           @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
         logger.debug("getHistory Personal");
-        return familyDebitService.getHistory(personalId, date);
+        return familyDebitService.getHistory(familyId, date);
     }
 
     @RequestMapping(value = "/createAutoIncome", method = RequestMethod.POST)
@@ -136,7 +137,7 @@ public class FamilyDebitController {
                                            @RequestBody AutoOperationIncome autoOperationIncome) {
         AutoOperationIncome autoIncome = accountAutoOperationService.createFamilyIncomeAutoOperation(autoOperationIncome,userId, familyId);
         logger.debug("autoIncome is done!");
-        return autoIncome;
+        return accountAutoOperationService.getFamilyIncomeAutoOperation(autoIncome.getId());
     }
 
     @RequestMapping(value = "/createAutoExpense", method = RequestMethod.POST)
@@ -147,7 +148,7 @@ public class FamilyDebitController {
     ) {
         AutoOperationExpense autoExpense = accountAutoOperationService.createFamilyExpenseAutoOperation(autoOperationExpense, userId, familyId);
         logger.debug("expense is done!");
-        return autoExpense;
+        return accountAutoOperationService.getFamilyExpenseAutoOperation(autoExpense.getId());
     }
 
     @RequestMapping(value = "/deleteAutoIncome/{incomeId}", method = RequestMethod.GET)
