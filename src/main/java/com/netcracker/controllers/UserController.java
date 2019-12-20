@@ -54,7 +54,7 @@ public class UserController {
         return "success";
     }
 
-    @RequestMapping(value = "/deactivation", method = RequestMethod.GET)
+    @RequestMapping(value = "/deactivate", method = RequestMethod.GET)
     @ResponseBody
     public Status deactivateUser(@RequestParam(value = "userId") BigInteger id){
         logger.debug("updateUserStatus by user id " + id);

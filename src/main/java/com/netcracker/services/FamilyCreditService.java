@@ -13,7 +13,7 @@ public interface FamilyCreditService {
 
     void deleteFamilyCredit(BigInteger id);
 
-    void addFamilyCreditPayment(BigInteger idAccount, BigInteger idCredit, double amount, Date date);
+    void addFamilyCreditPayment(BigInteger idAccount, BigInteger idCredit, double amount, Date date, BigInteger userId);
 
     boolean addFamilyCreditPaymentAuto(BigInteger idDebitAccount, BigInteger idCredit, double amount);
 

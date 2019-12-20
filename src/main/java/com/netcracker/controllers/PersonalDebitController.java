@@ -17,7 +17,7 @@ import java.util.Collection;
 import java.util.List;
 
 @Controller
-@RequestMapping("/PersonalDebit")
+@RequestMapping("/debit/personal/{id}")
 public class PersonalDebitController {
 
     @Autowired

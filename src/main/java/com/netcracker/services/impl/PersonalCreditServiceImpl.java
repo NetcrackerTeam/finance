@@ -63,7 +63,7 @@ public class PersonalCreditServiceImpl implements PersonalCreditService {
     }
 
     void makeUserPayment(AbstractDebitAccount debitAccount, AbstractCreditAccount creditAccount, double amount) {
-        if (debitAccount.getAmount() > amount) {
+        if (debitAccount.getAmount() < amount) {
             logger.error("Not enough money on debit account by id = {}", debitAccount.getId());
             throw new CreditAccountException(ExceptionMessages.NOT_ENOUGH_MONEY_ERROR, creditAccount, ErrorVisibility.VISIBLE);
         }

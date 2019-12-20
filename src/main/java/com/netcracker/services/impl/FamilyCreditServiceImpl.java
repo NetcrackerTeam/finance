@@ -54,7 +54,7 @@ public class FamilyCreditServiceImpl implements FamilyCreditService {
     }
 
     @Override
-    public void addFamilyCreditPayment(BigInteger idDebitAccount, BigInteger idCredit, double amount, Date date) {
+    public void addFamilyCreditPayment(BigInteger idDebitAccount, BigInteger idCredit, double amount, Date date, BigInteger userId) {
         ObjectsCheckUtils.isNotNull(idDebitAccount, idCredit);
 
         FamilyCreditAccount creditAccount = getFamilyCreditAccount(idCredit);
@@ -63,7 +63,7 @@ public class FamilyCreditServiceImpl implements FamilyCreditService {
         ObjectsCheckUtils.isNotNull(creditAccount, debitAccount);
 
         creditService.makeUserPayment(debitAccount, creditAccount, amount);
-        addPayment(creditAccount, debitAccount, amount, null);
+        addPayment(creditAccount, debitAccount, amount, userId);
 
     }
 
@@ -80,7 +80,7 @@ public class FamilyCreditServiceImpl implements FamilyCreditService {
         boolean isSuccess = creditService.makeAutoPayment(debitAccount, creditAccount, amount);
         if (!isSuccess)
             return false;
-        addPayment(creditAccount, debitAccount, amount, null);
+        addPayment(creditAccount, debitAccount, amount, debitAccount.getOwner().getId());
         logger.debug("Payment was completed successfully");
         return true;
     }
