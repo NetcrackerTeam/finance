@@ -3,6 +3,7 @@ package com.netcracker.controllers;
 
 import com.netcracker.dao.AutoOperationDao;
 import com.netcracker.dao.CreditAccountDao;
+import com.netcracker.exception.NullObjectException;
 import com.netcracker.models.*;
 import com.netcracker.models.enums.CategoryIncome;
 import com.netcracker.services.*;
@@ -55,7 +56,7 @@ public class FamilyDebitController {
             familyDebitService.deleteFamilyDebitAccount(accountId, userId);
             logger.debug("success deactivate");
             return "success";
-        } catch (RuntimeException ex) {
+        } catch (NullObjectException ex) {
             model.addAttribute("errorMessage", ex.getMessage());
             return "unsuccess";
         }
@@ -69,7 +70,7 @@ public class FamilyDebitController {
             logger.debug("add user to account " + accountId + "user id " + userId);
             familyDebitService.addUserToAccount(accountId, userId);
             logger.debug("success adding user");
-        } catch (RuntimeException ex) {
+        } catch (NullObjectException ex) {
             model.addAttribute("errorMessage", ex.getMessage());
             return "unsuccess";
         }
@@ -85,7 +86,7 @@ public class FamilyDebitController {
             familyDebitService.deleteUserFromAccount(accountId, userId);
             logger.debug("success adding user");
             return "success";
-        } catch (RuntimeException ex) {
+        } catch (NullObjectException ex) {
             model.addAttribute("errorMessage", ex.getMessage());
             return "unsuccess";
         }
