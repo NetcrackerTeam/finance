@@ -56,7 +56,7 @@ public class PersonalDebitController {
         return new Status(true, "Added new income by account " + id);
     }
 
-    @RequestMapping(value = "/addExpensePersonal", method = RequestMethod.POST )
+    @RequestMapping(value = "/addExpensePersonal/{debitId}/{afterDate}", method = RequestMethod.POST)
     public @ResponseBody List<AccountExpense> addExpensePersonal(
             @RequestBody AccountExpense expense,
             @PathVariable(value = "debitId") BigInteger debitId,
