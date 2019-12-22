@@ -32,7 +32,6 @@ public class OperationServiceImpl implements OperationService {
         logger.debug("[getAllFamilyOperations]" + debugStartMessage + "[accountId = " + accountId + "], [afterDate = " + afterDate + "]");
 
         ObjectsCheckUtils.isNotNull(accountId, afterDate);
-
         List<AccountIncome> allFamilyOperationsIncomeList = operationDao.getIncomesFamilyAfterDateByAccountId(accountId, afterDate);
         List<AccountExpense> allFamilyOperationsExpenseList = operationDao.getExpensesFamilyAfterDateByAccountId(accountId, afterDate);
         return createAllOperationsList(allFamilyOperationsIncomeList, allFamilyOperationsExpenseList);
@@ -41,29 +40,41 @@ public class OperationServiceImpl implements OperationService {
     @Override
     public List<AccountExpense> getExpensesFamilyAfterDateByAccountId(BigInteger id, LocalDate afterDate) {
         logger.debug("[getExpensesFamilyAfterDateByAccountId]" + debugStartMessage + "[id = " + id + "], afterDate = " + afterDate + "]");
+
         ObjectsCheckUtils.isNotNull(id, afterDate);
-        return operationDao.getExpensesFamilyAfterDateByAccountId(id, afterDate);
+        List<AccountExpense> accountExpenseList = operationDao.getExpensesFamilyAfterDateByAccountId(id, afterDate);
+        ObjectsCheckUtils.collectionIsEmpty(Collections.singletonList(accountExpenseList));
+        return accountExpenseList;
     }
 
     @Override
     public List<AccountIncome> getIncomesFamilyAfterDateByAccountId(BigInteger id, LocalDate afterDate) {
         logger.debug("[getIncomesFamilyAfterDateByAccountId]" + debugStartMessage + "[id = " + id + "], afterDate = " + afterDate + "]");
+
         ObjectsCheckUtils.isNotNull(id, afterDate);
-        return operationDao.getIncomesFamilyAfterDateByAccountId(id, afterDate);
+        List<AccountIncome> accountIncomeList = operationDao.getIncomesFamilyAfterDateByAccountId(id, afterDate);
+        ObjectsCheckUtils.collectionIsEmpty(Collections.singletonList(accountIncomeList));
+        return accountIncomeList;
     }
 
     @Override
     public List<AccountExpense> getExpensesPersonalAfterDateByAccountId(BigInteger id, LocalDate afterDate) {
         logger.debug("[getExpensesPersonalAfterDateByAccountId]" + debugStartMessage + "[id = " + id + "], afterDate = " + afterDate + "]");
+
         ObjectsCheckUtils.isNotNull(id, afterDate);
-        return operationDao.getExpensesPersonalAfterDateByAccountId(id, afterDate);
+        List<AccountExpense> accountExpenseList = operationDao.getExpensesPersonalAfterDateByAccountId(id, afterDate);
+        ObjectsCheckUtils.collectionIsEmpty(Collections.singletonList(accountExpenseList));
+        return accountExpenseList;
     }
 
     @Override
     public List<AccountIncome> getIncomesPersonalAfterDateByAccountId(BigInteger id, LocalDate afterDate) {
         logger.debug("[getIncomesPersonalAfterDateByAccountId]" + debugStartMessage + "[id = " + id + "], afterDate = " + afterDate + "]");
+
         ObjectsCheckUtils.isNotNull(id, afterDate);
-        return operationDao.getIncomesPersonalAfterDateByAccountId(id, afterDate);
+        List<AccountIncome> accountIncomeList = operationDao.getIncomesPersonalAfterDateByAccountId(id, afterDate);
+        ObjectsCheckUtils.collectionIsEmpty(Collections.singletonList(accountIncomeList));
+        return accountIncomeList;
     }
 
     @Override
@@ -81,11 +92,8 @@ public class OperationServiceImpl implements OperationService {
                                                                    List<AccountExpense> allOperationsExpenseList) {
         List<AbstractAccountOperation> allOperationsList = new ArrayList<>(allOperationsIncomeList);
         allOperationsList.addAll(allOperationsExpenseList);
-        if (CollectionUtils.isEmpty(allOperationsList)) return Collections.emptyList();
-        else {
-            allOperationsList.sort(Comparator.comparing(AbstractAccountOperation::getId));
-            return allOperationsList;
-        }
+        ObjectsCheckUtils.collectionIsEmpty(Collections.singleton(allOperationsList));
+        return allOperationsList;
     }
 
     @Override
@@ -94,6 +102,7 @@ public class OperationServiceImpl implements OperationService {
                 + idFamily + "], [income = " + income + "], [date = " + date + "], [categoryIncome = " + categoryIncome + "]");
 
         ObjectsCheckUtils.isNotNull(idUser, idFamily, income, date, categoryIncome);
+        ObjectsCheckUtils.numberIsZero(income);
         operationDao.createIncomeFamilyByAccId(idUser, idFamily, income, date, categoryIncome);
     }
 
@@ -103,6 +112,7 @@ public class OperationServiceImpl implements OperationService {
                 + idFamily + "], [expense = " + expense + "], [date = " + date + "], [categoryExpense = " + categoryExpense + "]");
 
         ObjectsCheckUtils.isNotNull(idUser, idFamily, expense, date, categoryExpense);
+        ObjectsCheckUtils.numberIsZero(expense);
         operationDao.createExpenseFamilyByAccId(idUser, idFamily, expense, date, categoryExpense);
     }
 
@@ -112,6 +122,7 @@ public class OperationServiceImpl implements OperationService {
                 "], [date = " + date + "], [categoryIncome = " + categoryIncome + "]");
 
         ObjectsCheckUtils.isNotNull(id, income, date, categoryIncome);
+        ObjectsCheckUtils.numberIsZero(income);
         operationDao.createIncomePersonalByAccId(id, income, date, categoryIncome);
     }
 
@@ -121,6 +132,7 @@ public class OperationServiceImpl implements OperationService {
                 "], [date = " + date + "], [categoryExpense = " + categoryExpense + "]");
 
         ObjectsCheckUtils.isNotNull(id, expense, date, categoryExpense);
+        ObjectsCheckUtils.numberIsZero(expense);
         operationDao.createExpensePersonaByAccId(id, expense, date, categoryExpense);
     }
 }

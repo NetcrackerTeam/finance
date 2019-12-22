@@ -3,6 +3,7 @@ package com.netcracker.services.impl;
 import com.netcracker.AssertUtils;
 import com.netcracker.configs.WebConfig;
 import com.netcracker.dao.OperationDao;
+import com.netcracker.exception.OperationException;
 import com.netcracker.models.AbstractAccountOperation;
 import com.netcracker.models.AccountExpense;
 import com.netcracker.models.AccountIncome;
@@ -45,7 +46,7 @@ public class OperationServiceTest {
     private BigInteger debitIdFamily = BigInteger.valueOf(3);
     private BigInteger debitIdPersonal = BigInteger.valueOf(2);
     private BigInteger currentId = BigInteger.valueOf(97);
-    private BigInteger nonexistentId = BigInteger.valueOf(1001);
+    private BigInteger nonexistentId = BigInteger.valueOf(2001);
 
     private AccountIncome personalIncomeExpected;
     private AccountExpense personalExpenseExpected;

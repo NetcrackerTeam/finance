@@ -16,4 +16,5 @@ public interface ExceptionMessages {
     String ERROR_MESSAGE_PERSONAL = "the personal debit account doesn`t exist";
     String ERROR_MESSAGE_PERSONAL_STATUS = "The user is unactive";
     String ERROR_MESSAGE_ILLEGAL_AMOUNT = "Amount can`t be negative";
+    String ERROR_MESSAGE_NUMBER_ZERO = "The value of the entered number is zero";
 }

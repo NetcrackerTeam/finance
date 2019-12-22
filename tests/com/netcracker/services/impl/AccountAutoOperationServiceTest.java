@@ -2,6 +2,7 @@ package com.netcracker.services.impl;
 
 import com.netcracker.AssertUtils;
 import com.netcracker.configs.WebConfig;
+import com.netcracker.exception.OperationException;
 import com.netcracker.models.AbstractAutoOperation;
 import com.netcracker.models.AutoOperationExpense;
 import com.netcracker.models.AutoOperationIncome;
@@ -44,7 +45,7 @@ public class AccountAutoOperationServiceTest {
     private BigInteger familyDebitId = BigInteger.valueOf(76);
     private BigInteger personalDebitId = BigInteger.valueOf(75);
 
-    private String dateTodayString = "2019-12-16";
+    private String dateTodayString = "2019-12-22";
     private LocalDate dateToday = LocalDate.parse(dateTodayString);
     private int dayOfMonth = 1;
     private List<AbstractAutoOperation> expectedList = new ArrayList<>();
@@ -229,7 +230,7 @@ public class AccountAutoOperationServiceTest {
         AssertUtils.assertAutoOperationsCollections(Collections.emptyList(), actualList);
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test(expected = OperationException.class)
     public void getAllTodayOperationsPersonalCheckNull() {
         autoOperationService.getAllTodayOperationsPersonalIncome(0);
     }
@@ -248,7 +249,7 @@ public class AccountAutoOperationServiceTest {
         AssertUtils.assertAutoOperationsCollections(Collections.emptyList(), actualList);
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test(expected = OperationException.class)
     public void getAllTodayOperationsFamilyCheckNull() {
         autoOperationService.getAllTodayOperationsFamilyIncome(0);
     }

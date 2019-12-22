@@ -1,6 +1,11 @@
 package com.netcracker.services.utils;
 
 import com.netcracker.exception.NullObjectException;
+import com.netcracker.exception.OperationException;
+import org.springframework.util.CollectionUtils;
+
+import java.util.Collection;
+import java.util.Collections;
 
 public final class ObjectsCheckUtils {
 
@@ -17,5 +22,14 @@ public final class ObjectsCheckUtils {
             if (obj == null)
                 throw new NullObjectException();
         }
+    }
+
+    public static Collection<Object> collectionIsEmpty(Collection<Object> collection) {
+        if (CollectionUtils.isEmpty(collection)) return Collections.emptyList();
+        else return collection;
+    }
+
+    public static void numberIsZero(double number) {
+        if (number == 0) throw new OperationException(ExceptionMessages.ERROR_MESSAGE_NUMBER_ZERO);
     }
 }

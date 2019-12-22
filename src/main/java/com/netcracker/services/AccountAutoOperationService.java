@@ -31,7 +31,7 @@ public interface AccountAutoOperationService {
 
     void deleteAutoOperation(BigInteger autoOperationId);
 
-    List getAllTodayOperationsPersonalIncome(int dayOfMonth);
+    List<AutoOperationIncome> getAllTodayOperationsPersonalIncome(int dayOfMonth);
     List<AutoOperationExpense> getAllTodayOperationsPersonalExpense(int dayOfMonth);
     List<AutoOperationIncome> getAllTodayOperationsFamilyIncome(int dayOfMonth);
     List<AutoOperationExpense> getAllTodayOperationsFamilyExpense(int dayOfMonth);

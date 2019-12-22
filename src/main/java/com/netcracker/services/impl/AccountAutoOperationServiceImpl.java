@@ -8,7 +8,6 @@ import com.netcracker.services.utils.ObjectsCheckUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 
 import java.math.BigInteger;
 import java.util.Collections;
@@ -109,40 +108,44 @@ public class AccountAutoOperationServiceImpl implements AccountAutoOperationServ
     public List<AutoOperationIncome> getAllTodayOperationsPersonalIncome(int dayOfMonth) {
         logger.debug("[getAllTodayOperationsPersonalIncome]" + debugStartMessage + "[dayOfMonth = " + dayOfMonth + "]");
 
-        ObjectsCheckUtils.isNotNull(dayOfMonth);
+        checkDayOfMonth(dayOfMonth);
         List<AutoOperationIncome> autoOperationIncomeList = autoOperationDao.getAllTodayOperationsPersonalIncome(dayOfMonth);
-        return createAllTodayOperationsList(autoOperationIncomeList);
+        ObjectsCheckUtils.collectionIsEmpty(Collections.singletonList(autoOperationIncomeList));
+        return autoOperationIncomeList;
     }
 
     @Override
     public List<AutoOperationExpense> getAllTodayOperationsPersonalExpense(int dayOfMonth) {
         logger.debug("[getAllTodayOperationsPersonalExpense]" + debugStartMessage + "[dayOfMonth = " + dayOfMonth + "]");
 
-        ObjectsCheckUtils.isNotNull(dayOfMonth);
+        checkDayOfMonth(dayOfMonth);
         List<AutoOperationExpense> autoOperationExpenseList = autoOperationDao.getAllTodayOperationsPersonalExpense(dayOfMonth);
-        return createAllTodayOperationsList(autoOperationExpenseList);
+        ObjectsCheckUtils.collectionIsEmpty(Collections.singletonList(autoOperationExpenseList));
+        return autoOperationExpenseList;
     }
 
     @Override
     public List<AutoOperationIncome> getAllTodayOperationsFamilyIncome(int dayOfMonth) {
         logger.debug("[getAllTodayOperationsFamilyIncome]" + debugStartMessage + "[dayOfMonth = " + dayOfMonth + "]");
 
-        ObjectsCheckUtils.isNotNull(dayOfMonth);
+        checkDayOfMonth(dayOfMonth);
         List<AutoOperationIncome> autoOperationIncomeList = autoOperationDao.getAllTodayOperationsFamilyIncome(dayOfMonth);
-        return createAllTodayOperationsList(autoOperationIncomeList);
+        ObjectsCheckUtils.collectionIsEmpty(Collections.singletonList(autoOperationIncomeList));
+        return autoOperationIncomeList;
     }
 
     @Override
     public List<AutoOperationExpense> getAllTodayOperationsFamilyExpense(int dayOfMonth) {
         logger.debug("[getAllTodayOperationsFamilyExpense]" + debugStartMessage + "[dayOfMonth = " + dayOfMonth + "]");
 
-        ObjectsCheckUtils.isNotNull(dayOfMonth);
+        checkDayOfMonth(dayOfMonth);
         List<AutoOperationExpense> autoOperationExpenseList = autoOperationDao.getAllTodayOperationsFamilyExpense(dayOfMonth);
-        return createAllTodayOperationsList(autoOperationExpenseList);
+        ObjectsCheckUtils.collectionIsEmpty(Collections.singletonList(autoOperationExpenseList));
+        return autoOperationExpenseList;
     }
 
-    private List createAllTodayOperationsList(List allTodayOperationsList) {
-        if (CollectionUtils.isEmpty(allTodayOperationsList)) return Collections.emptyList();
-        else return allTodayOperationsList;
+    private void checkDayOfMonth(int dayOfMonth) {
+        ObjectsCheckUtils.isNotNull(dayOfMonth);
+        ObjectsCheckUtils.numberIsZero(dayOfMonth);
     }
 }
