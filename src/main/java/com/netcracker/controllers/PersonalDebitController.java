@@ -60,10 +60,10 @@ public class PersonalDebitController {
         return new Status(true, "Added new income by account " + id);
     }
 
-    @RequestMapping(value = "/addExpensePersonal/{debitId}/{afterDate}", method = RequestMethod.POST)
+    @RequestMapping(value = "/addExpensePersonal/{afterDate}", method = RequestMethod.POST)
     public @ResponseBody List<AccountExpense> addExpensePersonal(
             @RequestBody AccountExpense expense,
-            @PathVariable(value = "debitId") BigInteger debitId,
+            @PathVariable(value = "id") BigInteger debitId,
             @PathVariable(value = "afterDate") LocalDate afterDate) {
         operationService.createPersonalOperationExpense(debitId, expense.getAmount(), expense.getDate(), expense.getCategoryExpense());
         return operationService.getExpensesPersonalAfterDateByAccountId(debitId, afterDate);

@@ -112,11 +112,11 @@ public class FamilyDebitController {
                 .categoryIncome(categoryIncome).build();
     }
 
-    @RequestMapping(value = "/addExpenseFamily/{debitId}/{afterDate}", method = RequestMethod.POST)
+    @RequestMapping(value = "/addExpenseFamily/{afterDate}", method = RequestMethod.POST)
     @ResponseBody
     public List<AccountExpense> addExpenseFamily(
             @RequestBody AccountExpense expense,
-            @PathVariable(value = "debitId") BigInteger debitId,
+            @PathVariable(value = "id") BigInteger debitId,
             @PathVariable(value = "afterDate") LocalDate afterDate,
             @RequestParam(value = "userId") BigInteger userId) {
         operationService.createFamilyOperationExpense(userId, debitId, expense.getAmount(), expense.getDate(), expense.getCategoryExpense());
