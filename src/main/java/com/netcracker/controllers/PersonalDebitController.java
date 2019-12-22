@@ -54,6 +54,9 @@ public class PersonalDebitController {
     public Status addIncomePersonal(@RequestBody AccountIncome income,
                                     @PathVariable("id") BigInteger id) {
         operationService.createPersonalOperationIncome(id, income.getAmount(), income.getDate(), income.getCategoryIncome());
+        PersonalDebitAccount debit = personalDebitAccountDao.getPersonalAccountById(id);
+        double amount = debit.getAmount() + income.getAmount();
+        personalDebitAccountDao.updateAmountOfPersonalAccount(id, amount);
         return new Status(true, "Added new income by account " + id);
     }
 
