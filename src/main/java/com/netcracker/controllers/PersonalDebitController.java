@@ -18,7 +18,7 @@ import java.util.Collection;
 import java.util.List;
 
 @Controller
-@RequestMapping("/debit/personal/{id}")
+@RequestMapping("/debit/personal")
 public class PersonalDebitController {
 
     @Autowired
@@ -126,6 +126,11 @@ public class PersonalDebitController {
        MonthReport monthReport = monthReportService.getMonthPersonalReport(personalId, dateFrom, dateTo);
         logger.debug("Month report is ready");
         return monthReport;
+    }
+
+    @RequestMapping("/layout")
+    public String getCarPartialPage() {
+        return "personalDebit/layoutPersonalDebit";
     }
 
 }

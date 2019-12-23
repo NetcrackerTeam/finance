@@ -1,6 +1,8 @@
 package com.netcracker.configs;
 
+import com.netcracker.services.FamilyDebitService;
 import com.netcracker.services.UserService;
+import com.netcracker.services.impl.FamilyDebitServiceImpl;
 import com.netcracker.services.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -15,7 +17,9 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import org.springframework.web.servlet.view.InternalResourceViewResolver;
+import org.thymeleaf.spring4.SpringTemplateEngine;
+import org.thymeleaf.spring4.view.ThymeleafViewResolver;
+import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
 import javax.sql.DataSource;
 import java.util.Locale;
@@ -30,10 +34,26 @@ public class WebConfig implements WebMvcConfigurer {
     private Environment env;
 
     @Bean
-    public InternalResourceViewResolver getViewResolver() {
-        InternalResourceViewResolver resolver = new InternalResourceViewResolver();
-        resolver.setPrefix(env.getProperty("jsp.prefix"));
-        resolver.setSuffix(env.getProperty("jsp.suffix"));
+    public ServletContextTemplateResolver templateResolver() {
+        ServletContextTemplateResolver resolver = new ServletContextTemplateResolver();
+        resolver.setPrefix("/WEB-INF/html/");
+        resolver.setSuffix(".html");
+        resolver.setTemplateMode("HTML5");
+        resolver.setCacheable(false);
+        return resolver;
+    }
+
+    @Bean
+    public SpringTemplateEngine templateEngine() {
+        SpringTemplateEngine engine = new SpringTemplateEngine();
+        engine.setTemplateResolver(templateResolver());
+        return engine;
+    }
+
+    @Bean
+    public ThymeleafViewResolver thymeleafViewResolver() {
+        ThymeleafViewResolver resolver = new ThymeleafViewResolver();
+        resolver.setTemplateEngine(templateEngine());
         return resolver;
     }
 
@@ -74,5 +94,9 @@ public class WebConfig implements WebMvcConfigurer {
     @Bean(name = "userService")
     public UserService getUserService() {
         return new UserServiceImpl();
+    }
+    @Bean(name = "familyDebitService")
+    public FamilyDebitService getFamilyDebitService() {
+        return new FamilyDebitServiceImpl();
     }
 }

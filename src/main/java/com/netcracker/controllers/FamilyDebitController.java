@@ -48,47 +48,47 @@ public class FamilyDebitController {
     }
 
     @RequestMapping(value = "/deactivation", method = RequestMethod.GET)
-    public String deleteFamilyDebitAccount(@PathVariable("id") BigInteger accountId,
+    public Status deleteFamilyDebitAccount(@PathVariable("id") BigInteger accountId,
                                            @RequestParam(value = "userId") BigInteger userId,
                                            Model model) {
         try {
             logger.debug("deactivate family account " + accountId + "user id " + userId);
             familyDebitService.deleteFamilyDebitAccount(accountId, userId);
             logger.debug("success deactivate");
-            return "success";
+            return new Status(true, "Deactivated successfully account " + accountId);
         } catch (NullObjectException ex) {
             model.addAttribute("errorMessage", ex.getMessage());
-            return "unsuccess";
+            return new Status(true, "Deactivated unsuccessfully account " + accountId);
         }
     }
 
-    @RequestMapping(value = "/addUser", method = RequestMethod.GET)
-    public String addUserToAccount(@PathVariable("id") BigInteger accountId,
+    @RequestMapping(value = "/addUser", method = RequestMethod.POST)
+    public Status addUserToAccount(@PathVariable("id") BigInteger accountId,
                                    @RequestParam(value = "userId") BigInteger userId,
                                    Model model) {
         try {
             logger.debug("add user to account " + accountId + "user id " + userId);
             familyDebitService.addUserToAccount(accountId, userId);
             logger.debug("success adding user");
+            return new Status(true, "Adding successfully user " + userId + " to account " + accountId);
         } catch (NullObjectException ex) {
             model.addAttribute("errorMessage", ex.getMessage());
-            return "unsuccess";
+            return new Status(true, "Adding unsuccessfully user " + userId + " to account " + accountId);
         }
-        return "success";
     }
 
     @RequestMapping(value = "/deleteUser", method = RequestMethod.GET)
-    public String deleteUserFromAccount(@PathVariable("id") BigInteger accountId,
+    public Status deleteUserFromAccount(@PathVariable("id") BigInteger accountId,
                                         @RequestParam(value = "userId") BigInteger userId,
                                         Model model) {
         try {
             logger.debug("delete user to account " + accountId + "user id " + userId);
             familyDebitService.deleteUserFromAccount(accountId, userId);
             logger.debug("success adding user");
-            return "success";
+            return new Status(true, "Deleting successfully user " + userId + " from account " + accountId);
         } catch (NullObjectException ex) {
             model.addAttribute("errorMessage", ex.getMessage());
-            return "unsuccess";
+            return new Status(true, "Deleting successfully user " + userId + " from account " + accountId);
         }
     }
 
@@ -153,23 +153,23 @@ public class FamilyDebitController {
     }
 
     @RequestMapping(value = "/deleteAutoIncome/{incomeId}", method = RequestMethod.GET)
-    public String deleteAutoIncome(@PathVariable("incomeId") BigInteger incomeId,
+    public Status deleteAutoIncome(@PathVariable("incomeId") BigInteger incomeId,
                                    Model model
     ) {
         logger.debug("delete autoIncomePersonal");
         accountAutoOperationService.deleteAutoOperation(incomeId);
         model.addAttribute("incomeId", incomeId);
-        return "family/deleteFamilyAutoIncome";
+        return new Status(true, "Deleting successfully autoIncomeOperation " + incomeId);
     }
 
     @RequestMapping(value = "/deleteAutoExpense/{expenseId}", method = RequestMethod.GET)
-    public String deleteAutoExpense(@PathVariable("expenseId") BigInteger expenseId,
+    public Status deleteAutoExpense(@PathVariable("expenseId") BigInteger expenseId,
                                     Model model
     ) {
         logger.debug("delete autoExpensePersonal");
         accountAutoOperationService.deleteAutoOperation(expenseId);
         model.addAttribute("expenseId", expenseId);
-        return "family/deleteFamilyAutoExpense";
+        return new Status(true, "Deleting successfully autoExpenseOperation " + expenseId);
     }
 
     @RequestMapping(value = "/getReport", method = RequestMethod.POST)
