@@ -55,7 +55,6 @@ public class UserDaoTest {
     @Test
     public void getUserById(){
         User user = userDao.getUserById(BigInteger.valueOf(24));
-        //System.out.println(user.geteMail()); он работает и отдает данные
         assertEquals("user_id=24 ListStatus=YES name=Dimas email=mailDimas@gmail.com password=passwordDima personal_Acc=25 familyAcc=26",
                 "user_id=" + user.getId() + " ListStatus=" + user.getUserStatusActive() +
                         " name=" + user.getName() + " email=" + user.geteMail() +
@@ -64,7 +63,7 @@ public class UserDaoTest {
 
     @Test
     public void getUserByLogin(){
-        User user = userDao.getUserByEmail("Dimas");
+        User user = userDao.getUserByEmail("mailDimas@gmail.com");
         assertEquals("user_id=24 ListStatus=YES name=Dimas email=mailDimas@gmail.com password=passwordDima personal_Acc=25 familyAcc=26",
                 "user_id=" + user.getId() + " ListStatus=" + user.getUserStatusActive() +
                         " name=" + user.getName() + " email=" + user.geteMail() +

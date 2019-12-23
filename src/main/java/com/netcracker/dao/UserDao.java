@@ -39,11 +39,13 @@ public interface UserDao {
             "FROM  OBJECTS EMP, OBJECTS PER, OBJECTS FAM, " +
             "ATTRIBUTES EMP_NAME, ATTRIBUTES EMP_EMAIL, ATTRIBUTES PASSWORD, ATTRIBUTES EMP_STATUS, " +
             "OBJREFERENCE PER_US, OBJREFERENCE FAM_US "
-            + "WHERE  EMP.OBJECT_TYPE_ID = 1 AND PER.OBJECT_TYPE_ID = 2 AND FAM.OBJECT_TYPE_ID = 13  " +
+            + "WHERE  EMP.OBJECT_TYPE_ID = 1 " +
+            "AND PER.OBJECT_TYPE_ID = 2" +
+            " AND FAM.OBJECT_TYPE_ID = 13  " +
             " AND EMP_NAME.ATTR_ID = 5  /* NAME*/ " +
-            " AND EMP_NAME.VALUE = ?  " +
+            " AND EMP_EMAIL.VALUE = ? /* MAIL*/ " +
             " AND EMP_NAME.OBJECT_ID = EMP.OBJECT_ID  " +
-            " AND EMP_EMAIL.ATTR_ID = 3  /* MAIL*/ " +
+            " AND EMP_NAME.ATTR_ID = 5  " +
             " AND EMP_EMAIL.OBJECT_ID = EMP.OBJECT_ID  " +
             " AND PASSWORD.ATTR_ID = 4  /* PASSWORD*/ " +
             " AND PASSWORD.OBJECT_ID = EMP.OBJECT_ID  " +
