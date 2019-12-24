@@ -2,8 +2,7 @@
 
 #wrapper {
     margin: 0 auto;
-    width: 650px;
-    margin-top: 50px;
+    width: 100%;
 }
 
 header{
@@ -14,12 +13,24 @@ header{
 .topnav{
     color:#000;
     text-align: left;
-    padding: 40px 2px 0px;
+    padding: 40px 2px 0;
     font-size: 24px;
 }
 .topnav a:hover{
-    border-top: 2px solid #fcac45;
+    border-top: 3px solid #fcac45;
 }
 .topnav a{
+    margin: 20px;
+}
+.topnavPersonal{
+    color:#000;
+    text-align: left;
+    padding: 20px 2px 0;
+    font-size: 24px;
+}
+.topnavPersonal a:hover{
+    border-top: 3px solid #fcac45;
+}
+.topnavPersonal a{
     margin: 20px;
 }
