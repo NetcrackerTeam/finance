@@ -7,15 +7,17 @@
     <link rel="stylesheet" href="resources/bootstrap/css/bootstrap.min.css" />
 </head>
 <body>
-<div id="wrapper">
-    <ul class="menu">
-        <li><a href="#/personalDebit">Personal Account</a></li>
-        <li><a href="#/familyAccount">Family Account</a></li>
-        <li><a href="#/">-------</a></li>
-    </ul>
-    <hr class="" />
-    <div ng-view=""></div>
-</div>
+<header>
+    <nav>
+        <div class="topnav" id="myTopnav">
+            <a href="#/personalDebit">Personal account</a>
+            <a href="#/familyAccount">Family account</a>
+            <a href="#/">User</a>
+        </div>
+    </nav>
+</header>
+
+<div ng-view=""></div>
 
 <script src="resources/js/angular/angular.js"></script>
 <script src="resources/js/app.js"></script>

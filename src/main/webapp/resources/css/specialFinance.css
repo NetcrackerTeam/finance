@@ -6,32 +6,20 @@
     margin-top: 50px;
 }
 
-.menu {
-    text-align: center;
-    list-style: none;
-    padding: 0 0 0.5em;
-    font-size: 40px;
-    font-weight: bolder;
+header{
+    width: 100%;
+    background: #dcdcdc;
+    display: flex;
 }
-
-.menu:before {
-    content: "[";
+.topnav{
+    color:#000;
+    text-align: left;
+    padding: 40px 2px 0px;
+    font-size: 24px;
 }
-
-.menu:after {
-    content: "]";
+.topnav a:hover{
+    border-top: 2px solid #fcac45;
 }
-
-.menu > li {
-    display: inline;
-}
-
-.menu > li:before {
-    content: "|";
-    padding-right: 0.3em;
-}
-
-.menu > li:nth-child(1):before {
-    content: "";
-    padding: 0;
+.topnav a{
+    margin: 20px;
 }
