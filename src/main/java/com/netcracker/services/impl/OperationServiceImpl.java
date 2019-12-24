@@ -11,13 +11,11 @@ import com.netcracker.services.utils.ObjectsCheckUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 
 import java.math.BigInteger;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -92,7 +90,7 @@ public class OperationServiceImpl implements OperationService {
                                                                    List<AccountExpense> allOperationsExpenseList) {
         List<AbstractAccountOperation> allOperationsList = new ArrayList<>(allOperationsIncomeList);
         allOperationsList.addAll(allOperationsExpenseList);
-        ObjectsCheckUtils.collectionIsEmpty(Collections.singleton(allOperationsList));
+        ObjectsCheckUtils.collectionIsEmpty(Collections.singletonList(allOperationsList));
         return allOperationsList;
     }
 
