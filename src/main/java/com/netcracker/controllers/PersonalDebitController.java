@@ -18,7 +18,7 @@ import java.util.Collection;
 import java.util.List;
 
 @Controller
-@RequestMapping("/debit/personal")
+@RequestMapping("/debitPersonal")
 public class PersonalDebitController {
 
     @Autowired
@@ -129,7 +129,7 @@ public class PersonalDebitController {
     }
 
     @RequestMapping("/layout")
-    public String getCarPartialPage() {
+    public String getPersonalAccountPartialPage() {
         return "personalDebit/layoutPersonalDebit";
     }
 

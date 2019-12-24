@@ -2,36 +2,35 @@
 
 #wrapper {
     margin: 0 auto;
-    width: 650px;
-    margin-top: 50px;
+    width: 100%;
 }
 
-.menu {
-    text-align: center;
-    list-style: none;
-    padding: 0 0 0.5em;
-    font-size: 40px;
-    font-weight: bolder;
+header{
+    width: 100%;
+    background: #dcdcdc;
+    display: flex;
 }
-
-.menu:before {
-    content: "[";
+.topnav{
+    color:#000;
+    text-align: left;
+    padding: 40px 2px 0;
+    font-size: 24px;
 }
-
-.menu:after {
-    content: "]";
+.topnav a:hover{
+    border-top: 3px solid #fcac45;
 }
-
-.menu > li {
-    display: inline;
+.topnav a{
+    margin: 20px;
 }
-
-.menu > li:before {
-    content: "|";
-    padding-right: 0.3em;
+.topnavPersonal{
+    color:#000;
+    text-align: left;
+    padding: 20px 2px 0;
+    font-size: 24px;
 }
-
-.menu > li:nth-child(1):before {
-    content: "";
-    padding: 0;
+.topnavPersonal a:hover{
+    border-top: 3px solid #fcac45;
+}
+.topnavPersonal a{
+    margin: 20px;
 }
