@@ -45,7 +45,6 @@ public interface UserDao {
             " AND EMP_NAME.ATTR_ID = 5  /* NAME*/ " +
             " AND EMP_EMAIL.VALUE = ? /* MAIL*/ " +
             " AND EMP_NAME.OBJECT_ID = EMP.OBJECT_ID  " +
-            " AND EMP_NAME.ATTR_ID = 5  " +
             " AND EMP_EMAIL.OBJECT_ID = EMP.OBJECT_ID  " +
             " AND PASSWORD.ATTR_ID = 4  /* PASSWORD*/ " +
             " AND PASSWORD.OBJECT_ID = EMP.OBJECT_ID  " +
