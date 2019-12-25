@@ -8,3 +8,15 @@
     </div>
 </nav>
 
+<h3 style="margin-left:100px;">History</h3>
+<div class="alert alert-info" style="width:400px;margin-left:100px;" ng-show="personalHistory.length == 0">
+    No historu found
+</div>
+<table class="table table-bordered table-striped" style="width:450px; margin-left: 100px;" ng-show="personalHistory.length > 0">
+    <thead>
+    <tr>
+        <th style=" width: 25px;">Action</th>
+        <th style="text-align: center;">Name</th>
+    </tr>
+    </thead>
+</table>

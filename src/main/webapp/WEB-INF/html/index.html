@@ -12,12 +12,23 @@
         <div class="topnav" id="myTopnav">
             <a href="#/personalDebit">Personal account</a>
             <a href="#/familyAccount">Family account</a>
-            <a href="#/">User</a>
         </div>
+        <div class="name">
+        </div>
+        <ul class="menu">
+            <li><a href="#" id="menu" class="icon">&#9776;</a>
+                <ul class="submenu">
+                    <li><a href="#/">Change password</a></li>
+                    <li><a href="#/">Change email</a></li>
+                    <li><a href="#/">Delete account</a></li>
+                    <li><a href="#/">Log out</a></li>
+                </ul>
+            </li>
+            </ul>
     </nav>
 </header>
 <div id="wrapper">
-<div ng-view=""></div>
+    <div ng-view=""></div>
 </div>
 <script src="resources/js/angular/angular.js"></script>
 <script src="resources/js/app.js"></script>
