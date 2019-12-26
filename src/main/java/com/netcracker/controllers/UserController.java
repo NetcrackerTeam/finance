@@ -24,32 +24,8 @@ public class UserController {
 
     private static final Logger logger = Logger.getLogger(UserController.class);
 
-    @RequestMapping(value = "/createUser", method = RequestMethod.POST)
-    public String createUser(
-            @RequestParam(value = " name ") String name,
-            @RequestParam(value = " eMail ") String eMail,
-            @RequestParam(value = " password ") String password,
-            Model model) {
-        boolean validationUser = userValidation.validateName(name)
-                && userValidation.validateEmail(eMail)
-                && userValidation.validatePassword(password);
-        if (validationUser) {
-            User user = new User.Builder()
-                    .user_name(name)
-                    .user_eMail(eMail)
-                    .user_password(password)
-                    .userActive(UserStatusActive.YES)
-                    .build();
-            userDao.createUser(user);
-            return "success";
-        }
-
-        return "unsuccess";
-    }
-
     @RequestMapping(value = "/updatePassword/{userId}/{userLogin}", method = RequestMethod.POST)
-    public String updateUserPassword(
-            Model model,
+    public Status updateUserPassword(
             @PathVariable(value = "userId") String id,
             @RequestParam("newPaswword") String password) {
         logger.debug("updatePasswordByUser in  method updateUserPassword . User id - " + id);
@@ -58,9 +34,8 @@ public class UserController {
         if (validationPassword) {
             User user = userDao.getUserById(userId);
             userDao.updateUserPasswordById(user.getId(), password);
-            return "success";
         }
-        return "unsuccess";
+        return new Status (true, "Password was update ");
 
     }
 
@@ -74,8 +49,7 @@ public class UserController {
 
 
     @RequestMapping(value = "/updateEmail/{userId}/{userEmail}", method = RequestMethod.POST)
-    public String updateEmail(
-            Model model,
+    public Status updateEmail(
             @PathVariable(value = "userId") String id,
             @PathVariable("userEmail") String userEmail) {
         logger.debug("updateEmailByUser in  method updateEmail . User id - " + id);
@@ -84,9 +58,7 @@ public class UserController {
         if (validateEmail) {
             User user = userDao.getUserById(userId);
             userDao.updateEmail(user.getId(), userEmail);
-            return "success";
         }
-        return "unsucces";
-
+            return  new Status(true, "Email was update ");
     }
 }

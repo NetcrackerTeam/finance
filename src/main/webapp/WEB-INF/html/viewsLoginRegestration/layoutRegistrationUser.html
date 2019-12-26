@@ -1,29 +1,32 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8"/>
     <title>Service App</title>
     <link rel="stylesheet" href="resources/css/specialFinance.css"/>
     <link rel="stylesheet" href="resources/bootstrap/css/bootstrap.min.css"/>
 </head>
-<body class="background-colors" >
+<body class="background-colors">
 <div class="container">
-    <form class="form-signin form-group">
+    <form class="form-signin form-group"  th:action="@{/registration}" method="post">
         <img class="img-circle center-block center-img" src="resources/images/ewallet.png"
              alt="" width="82" height="82"></img>
         <h2 class="form-signin-heading">Create your account</h2>
         <div class="form-group">
-
             <input type="text" class="form-control" placeholder="Username" autofocus="true"/>
             <p></p>
             <input type="password" class="form-control" placeholder="Password"/>
             <p></p>
-            <input type="password" class="form-control" placeholder="Confirm your password"/>
+            <input type="text" class="form-control" placeholder="E-mail"/>
             <p></p>
-            <button class="btn btn-lg btn-primary btn-block" type="submit"> Submit</button>
+            <!-- <input type="password" class="form-control" placeholder="Confirm your password"/>-->
             <p></p>
-            <h4 class="text-center"><a href="/layoutLoginUser">back to login Tab </a></h4>
+            <input type="submit" class="btn btn-lg btn-primary btn-block" value="Submit"/>
+          <!--  <button class="btn btn-lg btn-primary btn-block" type="submit"> Submit</button> -->
+            <p></p>
+            <h4 class="text-center"><a href="login">back to login Tab </a></h4>
         </div>
+        <p align="center" class="mt-5 mb-3 text-muted">&copy; Netcracker 2019-2020</p>
 
     </form>
 </div>
