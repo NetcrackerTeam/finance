@@ -8,7 +8,7 @@ var App = angular.module('AngularSpringApp', []);
 App.config(['$routeProvider', function ($routeProvider) {
     $routeProvider.when('/personalDebit', {
         templateUrl: 'debitPersonal/2/layout',
-        controller: personalDebitController
+        controller: PersonalDebitController
     }).when('/createCredit', {
         templateUrl: 'debitPersonal/createCredit',
         controller: PersonalDebitController

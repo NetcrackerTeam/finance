@@ -76,7 +76,7 @@ public class PersonalDebitController {
         return operationService.getExpensesPersonalAfterDateByAccountId(debitId, afterDate);
     }
 
-    @RequestMapping(value = "/history.json", method = RequestMethod.GET)
+    @RequestMapping(value = "/history", method = RequestMethod.GET)
     public @ResponseBody
     Collection<AbstractAccountOperation> getHistory(@PathVariable("id") BigInteger personalId,
                                                     @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {

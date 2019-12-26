@@ -1,31 +1,62 @@
 <nav>
     <div class="topnavPersonal" id="TopnavPersonal">
-        <!--<a href="personalCredit/getPersonalCredits?debitId=2">Create Credit</a>-->
-        <!--<a href="#/addCredit">Create Credit</a>--><!--#1 class = main_about-->
-        <a href="#/createCredit" target="_blank">Create Credit</a>
+        <a href="#/personalCredit">Create Credit</a> <!--#1 class = main_about-->
         <a href="#/personalExpense">Expense Operation</a> <!--#2 class = Comment_form-->
         <a href="#/personalIncome">Income Operation</a> <!--#2 class = Comment_form-->
         <a href="#/personalPeport">Report</a> <!--#2 class = Comment_form-->
         <a href="#/personalPrognos">Prognosis</a> <!--#2 class = Comment_form-->
     </div>
 </nav>
-
 <h3 style="margin-left:100px;">History</h3>
 <div class="alert alert-info" style="width:400px;margin-left:100px;" ng-show="personalHistory.length == 0">
-    No historu found
+    No history found
 </div>
-<table class="table table-bordered table-striped" style="width:450px; margin-left: 100px;" ng-show="personalHistory.length > 0">
-    <thead>
+<table class="table table-bordered table-striped"  ng-show="personalHistory.length > 0">
     <tr>
-        <th style=" width: 25px;">Action</th>
-        <th style="text-align: center;">Name</th>
+        <th>ID</th>
+        <th>Amount</th>
+        <th>Income</th>
+        <th>Expense</th>
+        <th>Date</th>
     </tr>
-    </thead>
+    <tr ng-repeat="hisInf in personalHistory">
+        <td>{{hisInf.id}}</td>
+        <td>{{hisInf.amount}}</td>
+        <td>{{hisInf.categoryIncome}}</td>
+        <td>{{hisInf.categoryExpense}}</td>
+        <td>{{hisInf.date.year}}-{{hisInf.date.month}}-{{hisInf.date.day}}</td>
+    </tr>
 </table>
+<form class="form-horizontal">
+    <div class="control-group">
+        <label class="control-label" for="inputEmail">Credit Name</label>
 
-<!--<div class="createCredit" id="createCreditBackground">
-    <div id="createCreditWindow">
-        Всплывающее окошко!<br>
-        <a href="#" class="close">Закрыть окно</a>
+        <div class="controls">
+            <input type="text" id="inputEmail" ng-model="credit.name" placeholder="Credit Name" required="required" min="2" />
+        </div>
     </div>
-</div>-->
+    <div class="control-group">
+        <label class="control-label" for="inputEmail">Amount</label>
+
+        <div class="controls">
+            <input class="span3" type="text" id="inputAmount" ng-model="credit.amount" placeholder="amount" required="required" min="1" />
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="inputEmail">PaidAmount</label>
+
+        <div class="controls">
+            <input class="span3" type="text" id="inputPaidAmount" ng-model="credit.paidAmount" placeholder="PaidAmount" required="required" min="1" />
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="inputEmail">Date</label>
+
+        <div class="controls">
+            <input class="span3" type="text" id="inputDate" ng-model="credit.date" placeholder="date" required="required" min="1" />
+        </div>
+    </div>
+    <div class="controls">
+        <button type="button" class="btn btn-primary" ng-disabled="!credit.name || !credit.amount" ng-click="addCredit(credit)">Add Credit</button>
+    </div>
+</form>
