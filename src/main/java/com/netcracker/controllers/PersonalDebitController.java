@@ -1,6 +1,5 @@
 package com.netcracker.controllers;
 
-import com.google.gson.Gson;
 import com.netcracker.dao.AutoOperationDao;
 import com.netcracker.dao.CreditAccountDao;
 import com.netcracker.dao.PersonalDebitAccountDao;
@@ -56,6 +55,9 @@ public class PersonalDebitController {
     public String createCredit(){
         return "personalDebit/layoutCreateCredit";
     }
+
+    @RequestMapping("/modalDialog")
+    public String showModalDialog(){return "personalDebit/modalDialog";}
 
     @RequestMapping(value = "/addIncome", method = RequestMethod.POST)
     public Status addIncomePersonal(@RequestBody AccountIncome income,
