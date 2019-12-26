@@ -12,8 +12,8 @@ var PersonalDebitController = function($scope, $http) {
         });
     };
 
-    $scope.addCredit = function(credit){
-        $http.post('debitPersonal/2/addCredit', credit).success(function() {
+    $scope.createCredit = function(credit){
+        $http.get('debitPersonal/2/createCredit', credit).success(function() {
             $scope.credit.name = '';
             $scope.credit.amount = '';
             $scope.credit.paidAmount = '';
@@ -21,6 +21,6 @@ var PersonalDebitController = function($scope, $http) {
         }).error(function() {
             alert('Could not add a new train');
         });
-    }
+    };
     $scope.fetchPersonalHistory('2000-01-11')
 };

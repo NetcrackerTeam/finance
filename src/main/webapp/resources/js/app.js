@@ -9,8 +9,8 @@ App.config(['$routeProvider', function ($routeProvider) {
     $routeProvider.when('/personalDebit', {
         templateUrl: 'debitPersonal/2/layout',
         controller: PersonalDebitController
-    }).when('/createCredit', {
-        templateUrl: 'debitPersonal/createCredit',
+    }).when('/personalCredit', {
+        templateUrl: 'debitPersonal/2/createCredit',
         controller: PersonalDebitController
     });
 

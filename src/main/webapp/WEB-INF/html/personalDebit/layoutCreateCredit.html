@@ -1,19 +1,35 @@
-<!DOCTYPE html>
-<html lang="en" ng-app="AngularSpringApp">
-<head>
-    <meta charset="UTF-8">
-    <title>Creating Credit</title>
-    <style>
-        .text {
-            text-align:  center;
-        }
-    </style>
-</head>
-<body>
-<div class="text">Nu pozhalujsta</div>
+<h2>Nu pozhalujsta</h2>
 
-<script src="resources/js/angular/angular.js"></script>
-<script src="resources/js/app.js"></script>
-<script src="resources/js/controllers/PersonalDebitController.js"></script>
-</body>
-</html>
+<form class="form-horizontal">
+    <div class="control-group">
+        <label class="control-label" for="inputEmail">Credit Name</label>
+
+        <div class="controls">
+            <input type="text" id="inputEmail" ng-model="credit.name" placeholder="Credit Name" required="required" min="2" />
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="inputEmail">Amount</label>
+
+        <div class="controls">
+            <input class="span3" type="text" id="inputAmount" ng-model="credit.amount" placeholder="amount" required="required" min="1" />
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="inputEmail">PaidAmount</label>
+
+        <div class="controls">
+            <input class="span3" type="text" id="inputPaidAmount" ng-model="credit.paidAmount" placeholder="PaidAmount" required="required" min="1" />
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="inputEmail">Date</label>
+
+        <div class="controls">
+            <input class="span3" type="text" id="inputDate" ng-model="credit.date" placeholder="date" required="required" min="1" />
+        </div>
+    </div>
+    <div class="controls">
+        <button type="button" class="btn btn-primary" ng-disabled="!credit.name || !credit.amount" ng-click="addCredit(credit)">Add Credit</button>
+    </div>
+</form>
