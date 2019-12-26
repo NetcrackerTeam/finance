@@ -20,4 +20,6 @@ public interface PersonalDebitService {
 
     Collection<PersonalDebitAccount> getAllPersonalAccounts();
 
+    String ACCOUNT_NAME = "account";
+
 }

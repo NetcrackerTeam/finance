@@ -1,8 +1,10 @@
 package com.netcracker.controllers;
 
 import com.netcracker.dao.UserDao;
+import com.netcracker.models.PersonalDebitAccount;
 import com.netcracker.models.Status;
 import com.netcracker.models.User;
+import com.netcracker.services.PersonalDebitService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -16,6 +18,9 @@ public class LoginController {
 
     @Autowired
     UserDao userDao;
+
+    @Autowired
+    PersonalDebitService debitService;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -37,7 +42,11 @@ public class LoginController {
             (@ModelAttribute("user") User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userDao.createUser(user);
-        return new Status(true, "success");
+        User registered = userDao.getUserByEmail(user.geteMail());
+        debitService.createPersonalDebitAccount(new PersonalDebitAccount.Builder()
+                .debitOwner(registered)
+                .build());
+        return new Status(true, "Account was created success");
     }
 
 }

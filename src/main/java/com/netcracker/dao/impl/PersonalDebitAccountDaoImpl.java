@@ -4,6 +4,7 @@ import com.netcracker.dao.PersonalDebitAccountDao;
 import com.netcracker.dao.impl.mapper.PersonalDebitAccountMapper;
 import com.netcracker.exception.PersonalDebitAccountException;
 import com.netcracker.models.PersonalDebitAccount;
+import com.netcracker.models.enums.PersonalAccountStatusActive;
 import com.netcracker.services.utils.ExceptionMessages;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,12 +40,10 @@ public class PersonalDebitAccountDaoImpl implements PersonalDebitAccountDao {
     @Override
     public PersonalDebitAccount createPersonalAccount(PersonalDebitAccount personalDebitAccount) {
         logger.debug("Entering insert(createPersonalAccount=" + personalDebitAccount + ")");
-        this.template.update(CREATE_PERSONAL_ACCOUNT, new Object[]{
-                personalDebitAccount.getObjectName(),
+        this.template.update(CREATE_PERSONAL_ACCOUNT, personalDebitAccount.getObjectName(),
                 personalDebitAccount.getAmount(),
-                personalDebitAccount.getStatus().getId(),
-                personalDebitAccount.getOwner().getId()
-        });
+                PersonalAccountStatusActive.YES.getId(),
+                personalDebitAccount.getOwner().getId());
         logger.debug("Entering insert success(createPersonalAccount=" + personalDebitAccount + ")");
         return personalDebitAccount;
     }

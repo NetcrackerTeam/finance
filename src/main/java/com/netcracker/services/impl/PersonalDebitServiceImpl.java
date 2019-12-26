@@ -31,6 +31,7 @@ public class PersonalDebitServiceImpl implements PersonalDebitService {
 
     @Override
     public PersonalDebitAccount createPersonalDebitAccount(PersonalDebitAccount personalDebitAccount) {
+        personalDebitAccount.setObjectName(personalDebitAccount.getOwner().getName() + ACCOUNT_NAME);
         logger.debug("createPersonalDebitAccount() method. projectId = " + personalDebitAccount);
         return personalDebitAccountDao.createPersonalAccount(personalDebitAccount);
     }

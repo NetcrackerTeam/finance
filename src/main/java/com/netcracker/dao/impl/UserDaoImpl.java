@@ -21,26 +21,18 @@ public class UserDaoImpl implements UserDao {
     private static final Logger logger = Logger.getLogger(UserDaoImpl.class);
     private JdbcTemplate template;
 
+    @Autowired
     public UserDaoImpl(DataSource dataSource) {
         template = new JdbcTemplate(dataSource);
     }
 
-    @Autowired
-    public void setDataSource(DataSource dataSource) {
-        template = new JdbcTemplate(dataSource);
-    }
-
-
     @Override
     public User createUser(User user) {
         logger.debug("Entering insert(user=" + user + ")");
-        this.template.update(CREATE_USER, new Object[]{
-                user.geteMail(),
+        this.template.update(CREATE_USER, user.geteMail(),
                 user.getPassword(),
                 user.getName(),
-                user.getUserStatusActive().getId().toString()
-
-        });
+                user.getUserStatusActive().getId().toString());
         return user;
     }
 
