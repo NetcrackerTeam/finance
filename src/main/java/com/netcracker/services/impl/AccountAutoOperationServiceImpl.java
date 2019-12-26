@@ -1,6 +1,7 @@
 package com.netcracker.services.impl;
 
 import com.netcracker.dao.AutoOperationDao;
+import com.netcracker.exception.ErrorsMap;
 import com.netcracker.models.AutoOperationExpense;
 import com.netcracker.models.AutoOperationIncome;
 import com.netcracker.services.AccountAutoOperationService;
@@ -19,6 +20,8 @@ public class AccountAutoOperationServiceImpl implements AccountAutoOperationServ
     private AutoOperationDao autoOperationDao;
 
     private static final Logger logger = Logger.getLogger(AccountAutoOperationServiceImpl.class);
+
+    private String errorNameZero = "NumberZero";
 
     @Override
     public AutoOperationIncome createFamilyIncomeAutoOperation(AutoOperationIncome autoOperationIncome, BigInteger userId,
@@ -147,5 +150,7 @@ public class AccountAutoOperationServiceImpl implements AccountAutoOperationServ
     private void checkDayOfMonth(int dayOfMonth) {
         ObjectsCheckUtils.isNotNull(dayOfMonth);
         ObjectsCheckUtils.numberIsZero(dayOfMonth);
+        if (ErrorsMap.getErrorsMap().isEmpty()) logger.debug("Map is empty");
+        else logger.debug(ErrorsMap.getErrorsMap().get(errorNameZero));
     }
 }

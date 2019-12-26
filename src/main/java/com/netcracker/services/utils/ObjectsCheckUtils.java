@@ -1,5 +1,6 @@
 package com.netcracker.services.utils;
 
+import com.netcracker.exception.ErrorsMap;
 import com.netcracker.exception.NullObjectException;
 import com.netcracker.exception.OperationException;
 import org.springframework.util.CollectionUtils;
@@ -30,6 +31,9 @@ public final class ObjectsCheckUtils {
     }
 
     public static void numberIsZero(double number) {
-        if (number == 0) throw new OperationException(ExceptionMessages.ERROR_MESSAGE_NUMBER_ZERO);
+        if (number == 0) {
+            ErrorsMap.setErrorToMap("NumberZero", ExceptionMessages.ERROR_MESSAGE_NUMBER_ZERO);
+            throw new OperationException(ExceptionMessages.ERROR_MESSAGE_NUMBER_ZERO);
+        }
     }
 }
