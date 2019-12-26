@@ -4,15 +4,10 @@
  * PersonalDebitController
  * @constructor
  */
-var PersonalDebitController = function($scope, $http) {
-    $scope.fetchPersonalAccount = function() {
-        $http.get('debitPersonal/layout').success(function(personalAccount){
-            $scope.personalAccount = personalAccount;
-        });
-    };
-    $scope.fetchPersonalHistory = function(){
-        $http.get('debitPersonal/history').success(function(personalHistory) {
-            $scope.personalHistory = personalHistory;
+var personalDebitController = function($scope, $http) {
+    $scope.fetchPersonalHistory = function(date){
+        $http.get('debitPersonal/2/history', {params: {date:date.toLocaleString()}}).success(function(historyList) {
+            $scope.personalHistory = historyList;
         });
     };
     $scope.fetchCreateCredit = function(){
@@ -21,7 +16,6 @@ var PersonalDebitController = function($scope, $http) {
         });
     };
 
-    $scope.fetchPersonalAccount();
-    $scope.fetchPersonalHistory();
+    $scope.fetchPersonalHistory('2019-01-11')
     $scope.fetchCreateCredit();
 };
