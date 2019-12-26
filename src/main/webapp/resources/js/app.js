@@ -9,6 +9,9 @@ App.config(['$routeProvider', function ($routeProvider) {
     $routeProvider.when('/personalDebit', {
         templateUrl: 'debitPersonal/layout',
         controller: PersonalDebitController
+    }).when('/createCredit', {
+        templateUrl: 'debitPersonal/createCredit',
+        controller: PersonalDebitController
     });
 
     $routeProvider.otherwise({redirectTo: '/'});

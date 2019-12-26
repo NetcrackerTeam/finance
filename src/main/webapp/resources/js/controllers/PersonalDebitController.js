@@ -15,7 +15,13 @@ var PersonalDebitController = function($scope, $http) {
             $scope.personalHistory = personalHistory;
         });
     };
+    $scope.fetchCreateCredit = function(){
+        $http.get('debitPersonal/createCredit').success(function(createCredit) {
+            $scope.createCredit = createCredit;
+        });
+    };
 
     $scope.fetchPersonalAccount();
     $scope.fetchPersonalHistory();
+    $scope.fetchCreateCredit();
 };

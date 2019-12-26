@@ -23,11 +23,12 @@ public class CreditPersonalController {
             @RequestParam(value = "amount") double amount, Model model){
         personalCreditService.addPersonalCreditPayment(debitId, creditId, amount);
         model.addAttribute("amount", amount);
-        return "personalCredit/addPersonalCreditPayment";
+        return "personalCredit/layoutAddPersonalCreditPayment";
     }
 
     @RequestMapping(value = "/getPersonalCredits", method = RequestMethod.GET)
     public @ResponseBody Collection<PersonalCreditAccount> getPersonalCredits(@RequestParam(value = "debitId") BigInteger debitId){
         return personalCreditService.getPersonalCredits(debitId);
     }
+
 }
