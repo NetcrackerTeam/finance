@@ -2,7 +2,6 @@ package com.netcracker.controllers;
 
 import com.netcracker.exception.PredictionException;
 import com.netcracker.models.Status;
-import com.netcracker.services.MonthReportService;
 import com.netcracker.services.PredictionService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -82,5 +81,10 @@ public class PredictionController {
             model.addAttribute("status", new Status(false, e.getMessage()));
         }
         return amount;
+    }
+
+    @RequestMapping("/predict")
+    public String predict(){
+        return "personalDebit/layoutPrediction";
     }
 }

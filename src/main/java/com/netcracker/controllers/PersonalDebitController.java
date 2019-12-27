@@ -141,4 +141,9 @@ public class PersonalDebitController {
         return "personalDebit/layoutPersonalDebit";
     }
 
+    @RequestMapping("/getReportView")
+    public String getReportView() {
+        return "personalDebit/layoutReport";
+    }
+
 }

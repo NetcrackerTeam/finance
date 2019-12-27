@@ -1,0 +1,28 @@
+<link rel="stylesheet" href="resources/css/prediction.css"/>
+<form class="predict-form">
+    <h1>Prediction</h1>
+    <div class="control-group">
+        <label class="control-label" for="inputEmail">Type of transactions</label>
+
+        <div class="controls">
+            <select type="text" id="inputEmail" ng-model="summ.type"  required="required" min="2" >
+                <option>Expense</option>
+                <option>Income</option>
+            </select>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="inputEmail">Duration</label>
+
+        <div class="controls">
+            <input class="span3" type="number" id="inputAmount" ng-model="summ.duration" placeholder="amount" required="required" min="1" />
+        </div>
+    </div>
+
+
+    <div class="controls">
+        <button type="button" class="btn btn-primary" ng-disabled="!summ.duration || !summ.type" ng-click="addCredit(credit)">Get predict</button>
+        <p>Possible sum <output name="result">0</output></p>
+    </div>
+
+</form>
