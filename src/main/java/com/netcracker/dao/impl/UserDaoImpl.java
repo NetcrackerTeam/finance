@@ -29,7 +29,8 @@ public class UserDaoImpl implements UserDao {
     @Override
     public User createUser(User user) {
         logger.debug("Entering insert(user=" + user + ")");
-        this.template.update(CREATE_USER, user.geteMail(),
+        this.template.update(CREATE_USER,
+                user.geteMail(),
                 user.getPassword(),
                 user.getName(),
                 user.getUserStatusActive().getId().toString());

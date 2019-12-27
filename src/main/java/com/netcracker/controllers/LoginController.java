@@ -4,6 +4,7 @@ import com.netcracker.dao.UserDao;
 import com.netcracker.models.PersonalDebitAccount;
 import com.netcracker.models.Status;
 import com.netcracker.models.User;
+import com.netcracker.models.enums.UserStatusActive;
 import com.netcracker.services.PersonalDebitService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -32,14 +33,14 @@ public class LoginController {
 
     @RequestMapping(value = "/registration", method = RequestMethod.GET)
     public String showRegistrationForm(Model model) {
-        User user = new User.Builder().build();
-        model.addAttribute("user", user);
+        model.addAttribute("user", new User());
         return "viewsLoginRegestration/layoutRegistrationUser";
     }
 
     @RequestMapping(value = "/registration", method = RequestMethod.POST)
-    public Status registerUserAccount
-            (@ModelAttribute("user") User user) {
+    public Status registerUserAccount(@ModelAttribute  User user, Model model) {
+        model.addAttribute("user",user);
+        user.setUserStatusActive(UserStatusActive.YES);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userDao.createUser(user);
         User registered = userDao.getUserByEmail(user.geteMail());

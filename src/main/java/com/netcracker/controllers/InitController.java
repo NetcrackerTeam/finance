@@ -12,7 +12,7 @@ public class InitController {
     public String welcomePage(Model model) {
         model.addAttribute("hello", "HELLO WORLD");
         return  "index";
-     //  return "viewsLoginRegestration/layoutLoginUser";
-      // return "viewsLoginRegestration/layoutRegistrationUser";
+     // return "viewsLoginRegestration/layoutLoginUser";
+      //return "viewsLoginRegestration/layoutRegistrationUser";
     }
 }

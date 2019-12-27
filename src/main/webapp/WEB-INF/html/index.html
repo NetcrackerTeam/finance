@@ -1,10 +1,12 @@
 <!doctype html>
-<html lang="en" ng-app="AngularSpringApp">
+<html lang="en" ng-app="AngularSpringApp"  xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8"/>
     <title>Service App</title>
     <link rel="stylesheet" href="resources/css/specialFinance.css"/>
-    <link rel="stylesheet" href="resources/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="resources/bootstrap/css/bootstrap.min.css"/>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="resources/bootstrap/js/bootstrap.js" type="text/javascript"></script>
 </head>
 <body>
 <header>
@@ -18,15 +20,65 @@
         <ul class="menu">
             <li><a href="#" id="menu" class="icon">&#9776;</a>
                 <ul class="submenu">
-                    <li><a href="#/">Change password</a></li>
-                    <li><a href="#/">Change email</a></li>
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#passwordModal">
+                        Change password
+                    </button>
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#emailModal">
+                        Change email
+                    </button>
+
                     <li><a href="#/">Delete account</a></li>
                     <li><a href="#/">Log out</a></li>
                 </ul>
             </li>
-            </ul>
+        </ul>
     </nav>
 </header>
+
+<!-- Modal -->
+<div class="modal fade" id="passwordModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 align="center" class="modal-title" id="passwordModalLabel"> Change password </h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input type="text" class="form-control" placeholder="New Password" autofocus="true"/>
+                <p></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="emailModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 align="center" class="modal-title" id="emailModalLabel"> Change Email </h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input type="text" class="form-control" placeholder="New Mail" autofocus="true"/>
+                <p></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
 <div id="wrapper">
     <div ng-view=""></div>
 </div>

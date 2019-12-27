@@ -13,7 +13,8 @@ public class User {
     private BigInteger family_id;
     private UserStatusActive  userStatusActive;
 
-
+    public User() {
+    }
 
     public static class Builder {
         private  BigInteger id;
@@ -86,6 +87,22 @@ public class User {
 
     public String geteMail() {
         return eMail;
+    }
+
+    public void setId(BigInteger id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setUserStatusActive(UserStatusActive userStatusActive) {
+        this.userStatusActive = userStatusActive;
+    }
+
+    public void seteMail(String eMail) {
+        this.eMail = eMail;
     }
 
     public String getPassword() {
