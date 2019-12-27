@@ -100,7 +100,6 @@ public class OperationServiceImpl implements OperationService {
                 + idFamily + "], [income = " + income + "], [date = " + date + "], [categoryIncome = " + categoryIncome + "]");
 
         ObjectsCheckUtils.isNotNull(idUser, idFamily, income, date, categoryIncome);
-        ObjectsCheckUtils.numberIsZero(income);
         operationDao.createIncomeFamilyByAccId(idUser, idFamily, income, date, categoryIncome);
     }
 
@@ -110,7 +109,6 @@ public class OperationServiceImpl implements OperationService {
                 + idFamily + "], [expense = " + expense + "], [date = " + date + "], [categoryExpense = " + categoryExpense + "]");
 
         ObjectsCheckUtils.isNotNull(idUser, idFamily, expense, date, categoryExpense);
-        ObjectsCheckUtils.numberIsZero(expense);
         operationDao.createExpenseFamilyByAccId(idUser, idFamily, expense, date, categoryExpense);
     }
 
@@ -120,7 +118,6 @@ public class OperationServiceImpl implements OperationService {
                 "], [date = " + date + "], [categoryIncome = " + categoryIncome + "]");
 
         ObjectsCheckUtils.isNotNull(id, income, date, categoryIncome);
-        ObjectsCheckUtils.numberIsZero(income);
         operationDao.createIncomePersonalByAccId(id, income, date, categoryIncome);
     }
 
@@ -130,7 +127,6 @@ public class OperationServiceImpl implements OperationService {
                 "], [date = " + date + "], [categoryExpense = " + categoryExpense + "]");
 
         ObjectsCheckUtils.isNotNull(id, expense, date, categoryExpense);
-        ObjectsCheckUtils.numberIsZero(expense);
         operationDao.createExpensePersonaByAccId(id, expense, date, categoryExpense);
     }
 }
