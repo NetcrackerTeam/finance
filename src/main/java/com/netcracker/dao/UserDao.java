@@ -33,7 +33,7 @@ public interface UserDao {
             "SELECT * " +
             "FROM Dual";
 
-    String GET_USER_BY_LOGIN = "SELECT US.name obj_name , EMP_NAME.value name,  US_EMAIL.VALUE email,US.OBJECT_ID AS USER_ID, " +
+    String GET_USER_BY_LOGIN = "SELECT DISTINCT US.name obj_name , EMP_NAME.value name,  US_EMAIL.VALUE email,US.OBJECT_ID AS USER_ID, " +
             "PASSWORD.VALUE AS PASSWORD, EMP_STATUS.LIST_VALUE_ID AS IS_ACTIVE, " +
             "(SELECT PER_ACC.REFERENCE from OBJREFERENCE PER_ACC where US.OBJECT_ID  = PER_ACC.OBJECT_ID AND PER_ACC.ATTR_ID = 1) as per_deb_acc1, " +
             "(SELECT FAM_ACC.REFERENCE from OBJREFERENCE FAM_ACC where US.OBJECT_ID  = FAM_ACC.OBJECT_ID AND FAM_ACC.ATTR_ID = 2) as fam_deb_acc1 " +

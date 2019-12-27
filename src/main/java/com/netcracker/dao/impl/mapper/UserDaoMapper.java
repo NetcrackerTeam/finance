@@ -2,6 +2,9 @@ package com.netcracker.dao.impl.mapper;
 import com.netcracker.models.User;
 import com.netcracker.models.enums.UserStatusActive;
 import org.springframework.jdbc.core.RowMapper;
+
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -15,8 +18,11 @@ public class UserDaoMapper implements RowMapper<User> {
                 .user_eMail(resultSet.getString("email"))
                 .user_password(resultSet.getString("password"))
                 .userActive(UserStatusActive.getStatusByKey( resultSet.getBigDecimal("is_active").toBigInteger()))
-                .personalDebit(resultSet.getBigDecimal("per_deb_acc1").toBigInteger())
-                .familyDebit(resultSet.getBigDecimal("fam_deb_acc1").toBigInteger())
+                .personalDebit(checkNull(resultSet.getBigDecimal("per_deb_acc1")))
+                .familyDebit(checkNull(resultSet.getBigDecimal("fam_deb_acc1")))
                 .build();
+    }
+    private BigInteger checkNull(BigDecimal id) {
+        return id == null ? null : id.toBigInteger();
     }
 }

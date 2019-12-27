@@ -38,7 +38,7 @@ public class LoginController {
     }
 
     @RequestMapping(value = "/registration", method = RequestMethod.POST)
-    public Status registerUserAccount(@ModelAttribute  User user, Model model) {
+    public String registerUserAccount(@ModelAttribute  User user, Model model) {
         model.addAttribute("user",user);
         user.setUserStatusActive(UserStatusActive.YES);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -47,7 +47,7 @@ public class LoginController {
         debitService.createPersonalDebitAccount(new PersonalDebitAccount.Builder()
                 .debitOwner(registered)
                 .build());
-        return new Status(true, "Account was created success");
+        return "viewsLoginRegestration/layoutLoginUser";
     }
 
 }
