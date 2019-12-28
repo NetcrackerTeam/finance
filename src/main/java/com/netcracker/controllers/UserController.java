@@ -4,11 +4,11 @@ import com.netcracker.dao.UserDao;
 import com.netcracker.models.Status;
 import com.netcracker.models.User;
 import com.netcracker.models.enums.UserStatusActive;
+import com.netcracker.services.validation.RegexPatterns;
 import com.netcracker.services.validation.UserValidationRegex;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigInteger;
@@ -30,7 +30,7 @@ public class UserController {
             @RequestParam("newPaswword") String password) {
         logger.debug("updatePasswordByUser in  method updateUserPassword . User id - " + id);
         BigInteger userId = new BigInteger(id);
-        boolean validationPassword = userValidation.validatePassword(password);
+        boolean validationPassword = userValidation.validateValueByUser(password, RegexPatterns.PASSWORD_PATTERN);
         if (validationPassword) {
             User user = userDao.getUserById(userId);
             userDao.updateUserPasswordById(user.getId(), password);
@@ -54,7 +54,7 @@ public class UserController {
             @PathVariable("userEmail") String userEmail) {
         logger.debug("updateEmailByUser in  method updateEmail . User id - " + id);
         BigInteger userId = new BigInteger(id);
-        boolean validateEmail = userValidation.validateEmail(userEmail);
+        boolean validateEmail = userValidation.validateValueByUser(userEmail,RegexPatterns.EMAIL_PATTERN);
         if (validateEmail) {
             User user = userDao.getUserById(userId);
             userDao.updateEmail(user.getId(), userEmail);

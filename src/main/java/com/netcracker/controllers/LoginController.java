@@ -2,7 +2,6 @@ package com.netcracker.controllers;
 
 import com.netcracker.dao.UserDao;
 import com.netcracker.models.PersonalDebitAccount;
-import com.netcracker.models.Status;
 import com.netcracker.models.User;
 import com.netcracker.models.enums.UserStatusActive;
 import com.netcracker.services.PersonalDebitService;
@@ -28,18 +27,18 @@ public class LoginController {
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public String login() {
-        return "viewsLoginRegestration/layoutLoginUser";
+        return URL.LOGIN_URL;
     }
 
     @RequestMapping(value = "/registration", method = RequestMethod.GET)
     public String showRegistrationForm(Model model) {
         model.addAttribute("user", new User());
-        return "viewsLoginRegestration/layoutRegistrationUser";
+        return URL.REGISTRATIONS_URL;
     }
 
     @RequestMapping(value = "/registration", method = RequestMethod.POST)
-    public String registerUserAccount(@ModelAttribute  User user, Model model) {
-        model.addAttribute("user",user);
+    public String registerUserAccount(@ModelAttribute User user, Model model) {
+        model.addAttribute("user", user);
         user.setUserStatusActive(UserStatusActive.YES);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userDao.createUser(user);
@@ -47,7 +46,7 @@ public class LoginController {
         debitService.createPersonalDebitAccount(new PersonalDebitAccount.Builder()
                 .debitOwner(registered)
                 .build());
-        return "viewsLoginRegestration/layoutLoginUser";
+        return URL.LOGIN_URL;
     }
 
 }

@@ -52,9 +52,15 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public User getUserByEmail(String login) {
+        try {
             logger.debug("Entering getUserByUserLogin(login=" + login + ")");
             return template.queryForObject(GET_USER_BY_LOGIN, new Object[]{login},
                     new UserDaoMapper());
+        } catch (
+                EmptyResultDataAccessException EmptyResultDataAccessException) {
+            throw new UserException(ExceptionMessages.ERROR_MESSAGE_USER);
+        }
+
     }
 
     @Override

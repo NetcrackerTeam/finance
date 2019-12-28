@@ -85,6 +85,6 @@ public class PredictionController {
 
     @RequestMapping("/predict")
     public String predict(){
-        return "personalDebit/layoutPrediction";
+        return URL.PERSONAL_DEBIT_URL;
     }
 }

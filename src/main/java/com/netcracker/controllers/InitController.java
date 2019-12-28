@@ -11,8 +11,8 @@ public class InitController {
     @RequestMapping
     public String welcomePage(Model model) {
         model.addAttribute("hello", "HELLO WORLD");
-       // return  "index";
-      return "viewsLoginRegestration/layoutLoginUser";
+        return  "index";
+     // return "viewsLoginRegestration/layoutLoginUser";
       //return "viewsLoginRegestration/layoutRegistrationUser";
     }
 }
