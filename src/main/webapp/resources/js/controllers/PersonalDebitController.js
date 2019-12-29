@@ -23,30 +23,19 @@ var PersonalDebitController = function($scope, $http) {
         });
     };
 
-    $scope.showModalDialog = function() {
-        var params = 'scrollbars=no,resizable=no,status=no,location=no,toolbar=no,menubar=no,' +
-            'width=800,height=400,left=100,top=100';
-        window.open("#/modalDialog", "Modal Window", params);
+    var slider = document.getElementById("creditRateRange");
+    var output = document.getElementById("creditRateText");
+    output.innerHTML = 'Credit rate: ' + slider.value + ' %';
+    slider.oninput = function() {
+        output.innerHTML = 'Credit rate: ' + this.value + ' %';
     };
 
     $scope.showPrompt = function(){
         var result = window.prompt("Napishi cheto umnoje");
         alert(result);
     };
-    $scope.closeModalDialog = function() {
-        window.close();
-    };
-    $scope.okModalDialog = function() {
-        alert('Button OK');
-        $scope.closeModalDialog();
-    };
-    $scope.msg = "I love nc";
-    $scope.headerText = "New Window";
-    $scope.bodyText = "Hello NCTeam";
-    $scope.closeButtonText = "Close me, plz";
-    $scope.actionButtonText = "PRESS ME";
 
-    $scope.fetchPersonalHistory('2000-01-11')
+    $scope.fetchPersonalHistory('2000-01-11');
 
     $scope.summ = {};
 
