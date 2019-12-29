@@ -5,22 +5,31 @@
  * @constructor
  */
 var PersonalDebitController = function($scope, $http) {
-    $scope.credit = {};
     $scope.fetchPersonalHistory = function(date){
             $http.get('debitPersonal/2/history', {params: {date:date.toLocaleString()}}).success(function (response) {
             $scope.personalHistory = response;
         });
     };
 
-    $scope.createCredit = function(credit){
-        $http.get('debitPersonal/2/createCredit', credit).success(function() {
-            $scope.credit.name = '';
+    $scope.credit = {};
+    $scope.addCredit = function(credit){
+        $scope.credit.name = credit.name;
+        var creditName = this.credit.name;
+        alert('Credit name is "' + creditName + '"');
+        /*$http.get('debitPersonal/2/createCredit', credit).success(function() {
+            $scope.credit.name = credit.name;
+            creditName.innerHTML = this.credit.name;
+            alert('Credit name is "' + creditName + '"');
             $scope.credit.amount = '';
             $scope.credit.paidAmount = '';
-            $scope.credit.date ='';
+            $scope.credit.dateFrom = '';
+            $scope.credit.dateTo = '';
+            $scope.credit.rate = '';
+            $scope.credit.isPaid = 'NO';
+            $scope.credit.dayOfMonth = '';
         }).error(function() {
             alert('Could not add a new train');
-        });
+        });*/
     };
 
     var slider = document.getElementById("creditRateRange");
@@ -28,11 +37,6 @@ var PersonalDebitController = function($scope, $http) {
     output.innerHTML = 'Credit rate: ' + slider.value + ' %';
     slider.oninput = function() {
         output.innerHTML = 'Credit rate: ' + this.value + ' %';
-    };
-
-    $scope.showPrompt = function(){
-        var result = window.prompt("Napishi cheto umnoje");
-        alert(result);
     };
 
     $scope.fetchPersonalHistory('2000-01-11');
