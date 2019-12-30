@@ -3,6 +3,7 @@ package com.netcracker.dao.impl.mapper;
 import com.netcracker.models.AbstractCategoryReport;
 import com.netcracker.models.CategoryExpenseReport;
 import com.netcracker.models.enums.CategoryExpense;
+import com.netcracker.models.enums.ReportCategoryExpense;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;
@@ -15,7 +16,8 @@ public class CategoryExpenseFamilyReportMapper implements RowMapper<CategoryExpe
         AbstractCategoryReport categoryExpenseReport =
                 new CategoryExpenseReport.Builder()
                         .amount(resultSet.getDouble("amount"))
-                        .categoryExpense(CategoryExpense.getNameByKey(resultSet.getBigDecimal("category").toBigInteger()))
+                        .abstractCategoryReportId(resultSet.getBigDecimal("category_expense_report").toBigInteger())
+                        .categoryExpense(ReportCategoryExpense.getNameByKey(resultSet.getBigDecimal("category").toBigInteger()))
                         .userReference(resultSet.getBigDecimal("user_id").toBigInteger())
                         .build();
         return (CategoryExpenseReport) categoryExpenseReport;

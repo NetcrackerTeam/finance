@@ -1,16 +1,16 @@
 package com.netcracker.models;
 
 import com.netcracker.models.enums.CategoryExpense;
-
+import com.netcracker.models.enums.ReportCategoryExpense;
 
 
 public class CategoryExpenseReport extends AbstractCategoryReport {
-    private CategoryExpense categoryExpense;
+    private ReportCategoryExpense categoryExpense;
 
     public static class Builder extends BaseBuilder<CategoryExpenseReport, Builder> {
 
 
-        public Builder categoryExpense(CategoryExpense expense) {
+        public Builder categoryExpense(ReportCategoryExpense expense) {
             actualClass.setCategoryExpense(expense);
             return this;
         }
@@ -26,11 +26,11 @@ public class CategoryExpenseReport extends AbstractCategoryReport {
         }
     }
 
-    public CategoryExpense getCategoryExpense() {
+    public ReportCategoryExpense getCategoryExpense() {
         return categoryExpense;
     }
 
-    public void setCategoryExpense(CategoryExpense categoryExpense) {
+    public void setCategoryExpense(ReportCategoryExpense categoryExpense) {
         this.categoryExpense = categoryExpense;
     }
 }

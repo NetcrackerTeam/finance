@@ -19,4 +19,11 @@ public enum ReportCategoryIncome {
     public BigInteger getId() {
         return id;
     }
+
+    public static ReportCategoryIncome getNameByKey(BigInteger key) {
+        for (ReportCategoryIncome c : values())
+            if (c.getId().equals(key))
+                return c;
+        throw new IllegalArgumentException();
+    }
 }

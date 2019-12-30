@@ -27,4 +27,11 @@ public enum ReportCategoryExpense {
     public BigInteger getId() {
         return id;
     }
+
+    public static ReportCategoryExpense getNameByKey(BigInteger key) {
+        for (ReportCategoryExpense c : values())
+            if (c.getId().equals(key))
+                return c;
+        throw new IllegalArgumentException();
+    }
 }
