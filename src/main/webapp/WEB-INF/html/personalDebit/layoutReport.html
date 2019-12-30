@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en" ng-app="AngularSpringApp">
+<head>
+    <meta charset="utf-8"/>
+    <title>Service App</title>
+    <link rel="stylesheet" href="resources/css/specialFinance.css"/>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous"/>
+</head>
+<body>
+<md-content ng-controller='AppCtrl as ctrl' padding = "layout-padding" ng-cloak>
+
+    <div layout-gt-xs="row">
+        <div flex-gt-xs>
+            <h4>Custom calendar trigger</h4>
+            <md-datepicker ng-model="ctrl.myDate" md-placeholder="Enter date" md-is-open="ctrl.isOpen"></md-datepicker>
+            <md-button class="md-primary md-raised" ng-click="ctrl.isOpen = true">Open</md-button>
+        </div>
+
+        <div flex-gt-xs>
+            <h4>Date-picker that only allows for the month to be selected</h4>
+            <md-datepicker ng-model="ctrl.myDate" md-placeholder="Enter date" md-mode="month"></md-datepicker>
+        </div>
+    </div>
+</md-content>
+<script src="resources/js/angular/angular.js"></script>
+<script src="resources/js/app.js"></script>
+<script src="resources/js/controllers/PersonalDebitController.js"></script>
+</body>
+</html>
