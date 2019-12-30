@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigInteger;
+import java.text.MessageFormat;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
@@ -42,22 +43,13 @@ public class PersonalDebitController {
 
     private static final Logger logger = Logger.getLogger(PersonalDebitController.class);
 
-    @RequestMapping(value = "/addCredit/{debitId}", method = RequestMethod.POST)
+    @RequestMapping(value = "/addCredit", method = RequestMethod.POST)
     @ResponseBody
-    public String addCreditAccount(@RequestBody PersonalCreditAccount creditAccount,
-                                                        @PathVariable("debitId") BigInteger id) {
+    public Status addCreditAccount(@RequestBody PersonalCreditAccount creditAccount,
+                                                        @PathVariable("id") BigInteger id) {
         creditService.createPersonalCredit(id, creditAccount);
-        return "addCredit";
-        //return creditAccountDao.getAllPersonalCreditsByAccountId(id);
+        return new Status(true, MessageController.ADD_CREDIT_PERS + id);
     }
-
-    @RequestMapping("/createCredit")
-    public String createCredit(){
-        return "personalDebit/layoutCreateCredit";
-    }
-
-    @RequestMapping("/modalDialog")
-    public String showModalDialog(){return "personalDebit/modalDialog";}
 
     @RequestMapping(value = "/addIncome", method = RequestMethod.POST)
     public Status addIncomePersonal(@RequestBody AccountIncome income,
@@ -66,7 +58,7 @@ public class PersonalDebitController {
         PersonalDebitAccount debit = personalDebitAccountDao.getPersonalAccountById(id);
         double amount = debit.getAmount() + income.getAmount();
         personalDebitAccountDao.updateAmountOfPersonalAccount(id, amount);
-        return new Status(true, "Added new income by account " + id);
+        return new Status(true, MessageController.ADD_INCOME_PERS + id);
     }
 
     @RequestMapping(value = "/addExpensePersonal/{afterDate}", method = RequestMethod.POST)
@@ -104,24 +96,24 @@ public class PersonalDebitController {
     }
 
     @RequestMapping(value = "/deleteAutoIncome/{incomeId}", method = RequestMethod.GET)
-    public String deleteAutoIncome(@PathVariable("incomeId") BigInteger incomeId,
+    public Status deleteAutoIncome(@PathVariable("incomeId") BigInteger incomeId,
                                    Model model
     ) {
         logger.debug("delete autoIncomePersonal");
         accountAutoOperationService.deleteAutoOperation(incomeId);
         model.addAttribute("incomeId", incomeId);
-        return "personal/deletePersonalAutoIncome";
+        return new Status(true, MessageController.DELETE_AUTO_INCOME_PERS + incomeId);
     }
 
     @RequestMapping(value = "/deleteAutoExpense/{expenseId}", method = RequestMethod.DELETE)
-    public String deleteAutoExpense(
+    public Status deleteAutoExpense(
             @PathVariable("expenseId") BigInteger expenseId,
             Model model
     ) {
         logger.debug("delete autoExpensePersonal");
         accountAutoOperationService.deleteAutoOperation(expenseId);
         model.addAttribute("expenseId", expenseId);
-        return "personal/deleteAutoExpensePersonal";
+        return new Status(true, MessageController.DELETE_AUTO_EXPENSE_PERS + expenseId);
     }
 
     @RequestMapping(value = "/Report", method = RequestMethod.GET)
@@ -136,14 +128,22 @@ public class PersonalDebitController {
         return monthReport;
     }
 
+    @RequestMapping("/createCredit")
+    public String createCredit(){
+        return URL.CREDIT_PERS;
+    }
+
+    @RequestMapping("/modalDialog")
+    public String showModalDialog(){return URL.MODAL_DIALOG_PERS;}
+
     @RequestMapping("/layout")
     public String getPersonalAccountPartialPage() {
-        return "personalDebit/layoutPersonalDebit";
+        return URL.PERSONAL_DEBIT;
     }
 
     @RequestMapping("/getReportView")
     public String getReportView() {
-        return "personalDebit/layoutReport";
+        return URL.REPORT_PERS;
     }
 
 }
