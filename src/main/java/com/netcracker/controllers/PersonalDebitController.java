@@ -3,17 +3,19 @@ package com.netcracker.controllers;
 import com.netcracker.dao.AutoOperationDao;
 import com.netcracker.dao.CreditAccountDao;
 import com.netcracker.dao.PersonalDebitAccountDao;
+import com.netcracker.dao.UserDao;
 import com.netcracker.models.*;
 import com.netcracker.services.*;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigInteger;
-import java.text.MessageFormat;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
@@ -40,15 +42,33 @@ public class PersonalDebitController {
     PersonalCreditService creditService;
     @Autowired
     PersonalDebitService personalDebitService;
+    @Autowired
+    UserDao userDao;
 
     private static final Logger logger = Logger.getLogger(PersonalDebitController.class);
 
-    @RequestMapping(value = "/addCredit", method = RequestMethod.POST)
+    @RequestMapping(value = "/addCredit/{debitId}", method = RequestMethod.POST)
     @ResponseBody
     public Status addCreditAccount(@RequestBody PersonalCreditAccount creditAccount,
                                                         @PathVariable("id") BigInteger id) {
         creditService.createPersonalCredit(id, creditAccount);
         return new Status(true, MessageController.ADD_CREDIT_PERS + id);
+    }
+
+    @RequestMapping(value = "/createCredit", method = RequestMethod.GET)
+    public String createCredit(Model model){
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String email;
+        if (principal instanceof UserDetails) {
+            email = ((UserDetails)principal).getUsername();
+        } else {
+            email = principal.toString();
+        }
+        model.addAttribute("email", email);
+        User user = userDao.getUserByEmail(email);
+        BigInteger debitId = user.getPersonalDebitAccount();
+        model.addAttribute("debitId", " Debit Id: " + debitId);
+        return "personalDebit/layoutCreateCredit";
     }
 
     @RequestMapping(value = "/addIncome", method = RequestMethod.POST)
@@ -127,14 +147,6 @@ public class PersonalDebitController {
         logger.debug("Month report is ready");
         return monthReport;
     }
-
-    @RequestMapping("/createCredit")
-    public String createCredit(){
-        return URL.CREDIT_PERS;
-    }
-
-    @RequestMapping("/modalDialog")
-    public String showModalDialog(){return URL.MODAL_DIALOG_PERS;}
 
     @RequestMapping("/layout")
     public String getPersonalAccountPartialPage() {

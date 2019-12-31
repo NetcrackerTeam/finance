@@ -11,6 +11,18 @@ var PersonalDebitController = function($scope, $http) {
         });
     };
 
+    $scope.user = {
+        email: 'default'
+    };
+
+        var currentUser = {
+            email: $scope.user.email
+        };
+        $http.get('debitPersonal/2/createCredit', {params: currentUser}).success(function (response) {
+            $scope.currentEmail = response;
+        });
+
+
     $scope.credit = {};
     $scope.addCredit = function(credit){
         $scope.credit.name = credit.name;

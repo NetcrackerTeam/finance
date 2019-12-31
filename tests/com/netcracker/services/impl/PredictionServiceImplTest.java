@@ -8,6 +8,8 @@ import com.netcracker.models.MonthReport;
 
 import com.netcracker.models.enums.CategoryExpense;
 import com.netcracker.models.enums.CategoryIncome;
+import com.netcracker.models.enums.ReportCategoryExpense;
+import com.netcracker.models.enums.ReportCategoryIncome;
 import com.netcracker.services.utils.DateUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -60,31 +62,31 @@ public class PredictionServiceImplTest {
         categoryExpenseReport1 = new CategoryExpenseReport.Builder()
                 .abstractCategoryReportId(BigInteger.valueOf(1))
                 .amount(500L)
-                .categoryExpense(CategoryExpense.CHILDREN)
+                .categoryExpense(ReportCategoryExpense.CHILDREN)
                 .build();
 
         categoryExpenseReport2 = new CategoryExpenseReport.Builder()
                 .abstractCategoryReportId(BigInteger.valueOf(2))
                 .amount(1000L)
-                .categoryExpense(CategoryExpense.EDUCATION)
+                .categoryExpense(ReportCategoryExpense.EDUCATION)
                 .build();
 
         categoryExpenseReport3 = new CategoryExpenseReport.Builder()
                 .abstractCategoryReportId(BigInteger.valueOf(3))
                 .amount(300L)
-                .categoryExpense(CategoryExpense.FOOD)
+                .categoryExpense(ReportCategoryExpense.FOOD)
                 .build();
 
         categoryIncomeReport1 = new CategoryIncomeReport.Builder()
                 .abstractCategoryReportId(BigInteger.valueOf(4))
                 .amount(900L)
-                .categoryIncome(CategoryIncome.AWARD)
+                .categoryIncome(ReportCategoryIncome.AWARD)
                 .build();
 
         categoryIncomeReport2 = new CategoryIncomeReport.Builder()
                 .abstractCategoryReportId(BigInteger.valueOf(4))
                 .amount(1300L)
-                .categoryIncome(CategoryIncome.SALARY)
+                .categoryIncome(ReportCategoryIncome.SALARY)
                 .build();
         categoryIncomeReport.add(categoryIncomeReport1);
         categoryIncomeReport.add(categoryIncomeReport2);
