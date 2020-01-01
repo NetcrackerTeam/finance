@@ -11,11 +11,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigInteger;
+import java.security.Principal;
+import java.text.MessageFormat;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
@@ -71,23 +74,31 @@ public class PersonalDebitController {
         return "personalDebit/layoutCreateCredit";
     }
 
-    @RequestMapping(value = "/addIncome", method = RequestMethod.POST)
+    @RequestMapping(value = "/income", consumes = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.POST)
     public Status addIncomePersonal(@RequestBody AccountIncome income,
-                                    @PathVariable("id") BigInteger id) {
-        operationService.createPersonalOperationIncome(id, income.getAmount(), income.getDate(), income.getCategoryIncome());
-        PersonalDebitAccount debit = personalDebitAccountDao.getPersonalAccountById(id);
+                                    Principal principal) {
+        BigInteger accountId = getAccountByPrincipal(principal);
+        operationService.createPersonalOperationIncome(accountId, income.getAmount(), LocalDate.now(), income.getCategoryIncome());
+        PersonalDebitAccount debit = personalDebitAccountDao.getPersonalAccountById(accountId);
         double amount = debit.getAmount() + income.getAmount();
-        personalDebitAccountDao.updateAmountOfPersonalAccount(id, amount);
-        return new Status(true, MessageController.ADD_INCOME_PERS + id);
+        personalDebitAccountDao.updateAmountOfPersonalAccount(accountId, amount);
+        return new Status(true, MessageController.ADD_INCOME_PERS + accountId);
     }
 
-    @RequestMapping(value = "/addExpensePersonal/{afterDate}", method = RequestMethod.POST)
-    public @ResponseBody List<AccountExpense> addExpensePersonal(
-            @RequestBody AccountExpense expense,
-            @PathVariable(value = "id") BigInteger debitId,
-            @PathVariable(value = "afterDate") LocalDate afterDate) {
-        operationService.createPersonalOperationExpense(debitId, expense.getAmount(), expense.getDate(), expense.getCategoryExpense());
-        return operationService.getExpensesPersonalAfterDateByAccountId(debitId, afterDate);
+    @RequestMapping(value = "/expense", method = RequestMethod.POST)
+    public Status addExpensePersonal(
+            @RequestBody AccountExpense expense, Principal principal) {
+        BigInteger accountId = getAccountByPrincipal(principal);
+        operationService.createPersonalOperationExpense(accountId, expense.getAmount(), LocalDate.now(), expense.getCategoryExpense());
+        PersonalDebitAccount debit = personalDebitAccountDao.getPersonalAccountById(accountId);
+        double amount = debit.getAmount() - expense.getAmount();
+        personalDebitAccountDao.updateAmountOfPersonalAccount(accountId, amount);
+        return new Status(true, MessageController.ADD_EXPENSE_PERS + accountId);
+    }
+
+    private BigInteger getAccountByPrincipal(Principal principal) {
+        User user = userDao.getUserByEmail(principal.getName());
+        return user.getPersonalDebitAccount();
     }
 
     @RequestMapping(value = "/history", method = RequestMethod.GET)
