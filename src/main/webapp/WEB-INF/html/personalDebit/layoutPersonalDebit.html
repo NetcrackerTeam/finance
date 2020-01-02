@@ -13,26 +13,107 @@
     </div>
 </nav>
 <h1><span ng-show="user.debitId.length > 0">ID from RootScope: {{user.debitId}}</span></h1>
-<h3 style="margin-left:100px;">History</h3>
-<div class="alert alert-info" style="width:400px;margin-left:100px;" ng-show="personalHistory.length == 0">
-    No history found
+<div class="col-xl-8 col-lg-7">
+    <div class="card shadow mb-4">
+        <!-- Card Header - Dropdown -->
+        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+            <h6 class="m-0 font-weight-bold text-primary">History</h6>
+        </div>
+        <!-- Card Body -->
+        <div class="card-body" ng-controller="PersonalCreditController">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">History</div>
+                        <div class="panel-body">
+                            <table class="table table-striped">
+                                <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Amount</th>
+                                    <th>Income</th>
+                                    <th>Expense</th>
+                                    <th>Date</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr ng-repeat="hisInf in personalHistory">
+                                    <td>{{hisInf.id}}</td>
+                                    <td>{{hisInf.amount}}</td>
+                                    <td>{{hisInf.categoryIncome}}</td>
+                                    <td>{{hisInf.categoryExpense}}</td>
+                                    <td>{{hisInf.date.year}}-{{hisInf.date.month}}-{{hisInf.date.day}}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
 </div>
-<table class="table table-bordered table-striped"  ng-show="personalHistory.length > 0">
-    <tr>
-        <th>ID</th>
-        <th>Amount</th>
-        <th>Income</th>
-        <th>Expense</th>
-        <th>Date</th>
-    </tr>
-    <tr ng-repeat="hisInf in personalHistory">
-        <td>{{hisInf.id}}</td>
-        <td>{{hisInf.amount}}</td>
-        <td>{{hisInf.categoryIncome}}</td>
-        <td>{{hisInf.categoryExpense}}</td>
-        <td>{{hisInf.date.year}}-{{hisInf.date.month}}-{{hisInf.date.day}}</td>
-    </tr>
-</table>
+
+<div class="col-xl-8 col-lg-7">
+    <div class="card shadow mb-4">
+        <!-- Card Header - Dropdown -->
+        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+            <h6 class="m-0 font-weight-bold text-primary">Credits</h6>
+        </div>
+        <!-- Card Body -->
+        <div class="card-body" ng-controller="PersonalCreditController">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Credits</div>
+                        <div class="panel-body">
+                            <table class="table table-striped">
+                                <thead>
+                                <tr>
+                                    <th>creditId</th>
+                                    <th>name</th>
+                                    <th>amount</th>
+                                    <th>paidAmount</th>
+                                    <th>Date</th>
+                                    <th>creditRate</th>
+                                    <th>dateTo</th>
+                                    <th>monthDay</th>
+                                    <th>isPaid</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr ng-repeat="credInf in personalCredit">
+                                    <td>{{credInf.creditId}}</td>
+                                    <td>{{credInf.name}}</td>
+                                    <td>{{credInf.amount}}</td>
+                                    <td>{{credInf.paidAmount}}</td>
+                                    <td>{{credInf.date.year}}-{{credInf.date.month}}-{{credInf.date.day}}</td>
+                                    <td>{{credInf.creditRate}}</td>
+                                    <td>{{credInf.dateTo.year}}-{{credInf.dateTo.month}}-{{credInf.dateTo.day}}</td>
+                                    <td>{{credInf.monthDay}}</td>
+                                    <td>{{credInf.isPaid}}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+</div>
 
 <form>
 <div class="modal fade" id="createCreditModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">

@@ -6,7 +6,7 @@
  */
 var PersonalDebitController = function($scope, $http) {
     $scope.fetchPersonalHistory = function(date){
-            $http.get('debitPersonal/2/history', {params: {date:date.toLocaleString()}}).success(function (response) {
+        $http.get('debitPersonal/2/history', {params: {date:date.toLocaleString()}}).success(function (response) {
             $scope.personalHistory = response;
         });
     };
@@ -39,7 +39,7 @@ var PersonalDebitController = function($scope, $http) {
         output.innerHTML = 'Credit rate: ' + this.value + ' %';
     };
 
-    $scope.fetchPersonalHistory('2000-01-11');
+    $scope.fetchPersonalHistory('2019-01-11');
 
     $scope.summ = {};
 
@@ -53,4 +53,11 @@ var PersonalDebitController = function($scope, $http) {
         });
     };
 };
-
+var PersonalCreditController = function($scope, $http) {
+    $scope.fetchCreditList= function(){
+        $http.get('personalCredit/getPersonalCredits?debitId=2').success(function (creditList) {
+            $scope.personalCredit = creditList;
+        });
+    };
+    $scope.fetchCreditList();
+};
