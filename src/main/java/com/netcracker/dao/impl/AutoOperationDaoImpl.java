@@ -127,4 +127,24 @@ public class AutoOperationDaoImpl implements AutoOperationDao {
     public List<AutoOperationExpense> getAllTodayOperationsFamilyExpense(int dayOfMonth) {
         return jdbcTemplate.query(GET_ALL_TODAY_AO_EXPENSE_FAMILY, new Object[]{dayOfMonth}, new AutoOperationExpenseMapper());
     }
+
+    @Override
+    public List<AutoOperationExpense> getAllOperationsFamilyExpense(BigInteger debitId) {
+        return jdbcTemplate.query(GET_ALL_AO_EXPENSE_FAMILY, new Object[]{debitId}, new AutoOperationExpenseMapper());
+    }
+
+    @Override
+    public List<AutoOperationIncome> getAllOperationsFamilyIncome(BigInteger debitId) {
+        return jdbcTemplate.query(GET_ALL_AO_INCOME_FAMILY, new Object[]{debitId}, new AutoOperationIncomeMapper());
+    }
+
+    @Override
+    public List<AutoOperationIncome> getAllOperationsPersonalIncome(BigInteger debitId) {
+        return jdbcTemplate.query(GET_ALL_AO_INCOME_PERSONAL, new Object[]{debitId}, new AutoOperationIncomeMapper());
+    }
+
+    @Override
+    public List<AutoOperationExpense> getAllOperationsPersonalExpense(BigInteger debitId) {
+        return jdbcTemplate.query(GET_ALL_AO_EXPENSE_PERSONAL, new Object[]{debitId}, new AutoOperationExpenseMapper());
+    }
 }

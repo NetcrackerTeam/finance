@@ -1,7 +1,7 @@
 package com.netcracker.services.impl;
 
 import com.netcracker.dao.AutoOperationDao;
-import com.netcracker.exception.ErrorsMap;
+import com.netcracker.models.AbstractAutoOperation;
 import com.netcracker.models.AutoOperationExpense;
 import com.netcracker.models.AutoOperationIncome;
 import com.netcracker.services.AccountAutoOperationService;
@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -144,6 +145,49 @@ public class AccountAutoOperationServiceImpl implements AccountAutoOperationServ
         ObjectsCheckUtils.collectionIsEmpty(Collections.singletonList(autoOperationExpenseList));
         return autoOperationExpenseList;
     }
+
+    public List<AutoOperationExpense> getAllOperationsFamilyExpense(BigInteger debitId){
+        logger.debug("[getAllTodayOperationsFamilyExpense]" + debugStartMessage + "[debitId = " + debitId + "]");
+        ObjectsCheckUtils.isNotNull(debitId);
+        return autoOperationDao.getAllOperationsFamilyExpense(debitId);
+    }
+
+    public List<AutoOperationIncome> getAllOperationsFamilyIncome(BigInteger debitId){
+        logger.debug("[getAllTodayOperationsFamilyIncome]" + debugStartMessage + "[debitId = " + debitId + "]");
+        ObjectsCheckUtils.isNotNull(debitId);
+        return autoOperationDao.getAllOperationsFamilyIncome(debitId);
+    }
+
+    public List<AutoOperationIncome> getAllOperationsPersonalIncome(BigInteger debitId){
+        logger.debug("[getAllTodayOperationsPersonalIncome]" + debugStartMessage + "[debitId = " + debitId + "]");
+        ObjectsCheckUtils.isNotNull(debitId);
+        return autoOperationDao.getAllOperationsPersonalIncome(debitId);
+    }
+
+    public List<AutoOperationExpense> getAllOperationsPersonalExpense(BigInteger debitId){
+        logger.debug("[getAllTodayOperationsPersonalExpense]" + debugStartMessage + "[debitId = " + debitId + "]");
+        ObjectsCheckUtils.isNotNull(debitId);
+        return autoOperationDao.getAllOperationsPersonalExpense(debitId);
+    }
+
+    public List<AbstractAutoOperation> getAllOperationsPersonal(BigInteger debitId){
+        logger.debug("[getAllTodayOperationsPersonal]" + debugStartMessage + "[debitId = " + debitId + "]");
+        ObjectsCheckUtils.isNotNull(debitId);
+        List<AbstractAutoOperation> allOperationsList = new ArrayList<>(getAllOperationsPersonalExpense(debitId));
+        allOperationsList.addAll(getAllOperationsPersonalIncome(debitId));
+        ObjectsCheckUtils.collectionIsEmpty(Collections.singletonList(allOperationsList));
+        return allOperationsList;
+    }
+
+    public List<AbstractAutoOperation> getAllOperationsFamily(BigInteger debitId){
+        logger.debug("[getAllTodayOperationsFamily]" + debugStartMessage + "[debitId = " + debitId + "]");
+        ObjectsCheckUtils.isNotNull(debitId);
+        List<AbstractAutoOperation> allOperationsList = new ArrayList<>(getAllOperationsFamilyExpense(debitId));
+        allOperationsList.addAll(getAllOperationsFamilyIncome(debitId));
+        ObjectsCheckUtils.collectionIsEmpty(Collections.singletonList(allOperationsList));
+        return allOperationsList;
+    }
+
 
     private void checkDayOfMonth(int dayOfMonth) {
         ObjectsCheckUtils.isNotNull(dayOfMonth);
