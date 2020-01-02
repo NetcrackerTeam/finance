@@ -10,7 +10,7 @@ app.controller("AddIncomeController", function ($scope, $http) {
 
     $scope.submitOperation = function () {
         method = "POST";
-        url = 'debitPersonal/2/income';
+        url = 'debitPersonal/income';
 
         $http({
             method: method,
@@ -34,7 +34,7 @@ app.controller("AddExpenseController", function ($scope, $http) {
 
     $scope.submitOperation = function () {
         method = "POST";
-        url = 'debitPersonal/2/expense';
+        url = 'debitPersonal/expense';
 
         $http({
             method: method,
