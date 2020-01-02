@@ -9,8 +9,6 @@ import com.netcracker.services.*;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,7 +22,8 @@ import java.util.Collection;
 import java.util.List;
 
 @Controller
-@RequestMapping("/debitPersonal/{id}")
+//@RequestMapping("/debitPersonal/{id}")
+@RequestMapping("/debitPersonal")
 public class PersonalDebitController {
 
     @Autowired
@@ -58,20 +57,10 @@ public class PersonalDebitController {
         return new Status(true, MessageController.ADD_CREDIT_PERS + id);
     }
 
-    @RequestMapping(value = "/createCredit", method = RequestMethod.GET)
-    public String createCredit(Model model){
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String email;
-        if (principal instanceof UserDetails) {
-            email = ((UserDetails)principal).getUsername();
-        } else {
-            email = principal.toString();
-        }
-        model.addAttribute("email", email);
-        User user = userDao.getUserByEmail(email);
-        BigInteger debitId = user.getPersonalDebitAccount();
-        model.addAttribute("debitId", " Debit Id: " + debitId);
-        return "personalDebit/layoutCreateCredit";
+    @RequestMapping(value = "/{debitId}/createCredit", method = RequestMethod.GET)
+    public String createCredit(@PathVariable("debitId") BigInteger debitId, Model model){
+        model.addAttribute("debit_id", "Your ID from PersonalDebitController.java: " + debitId);
+        return URL.CREDIT_PERS;
     }
 
     @RequestMapping(value = "/income", consumes = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.POST)
