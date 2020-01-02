@@ -5,7 +5,9 @@ app.controller("AddIncomeController", function ($scope, $http) {
     debugger;
     $scope.form = {
         amount: 0.00,
-        categoryIncome: "DEFAULT"
+        categoryIncome: "DEFAULT",
+        checkbox: false,
+        dayOfMonth: "5"
     };
 
     $scope.submitOperation = function () {
@@ -16,11 +18,32 @@ app.controller("AddIncomeController", function ($scope, $http) {
             method: method,
             url: url,
             data: angular.toJson($scope.form),
-            headers : {
-                'Content-Type' : 'application/json'
+            headers: {
+                'Content-Type': 'application/json'
             }
+        }).success(function () {
+            alert("success")
+        }).error(function () {
+            alert("unsuccess")
         });
+    }
 
+        $scope.submitAutoOperation = function () {
+            method = "POST";
+            url = 'debitPersonal/createAutoIncome';
+
+            $http({
+                method: method,
+                url: url,
+                data: angular.toJson($scope.form),
+                headers : {
+                    'Content-Type' : 'application/json'
+                }
+            }).success(function () {
+                alert("success")
+            }).error(function () {
+                alert("unsuccess")
+            });
     }
 
 });

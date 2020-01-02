@@ -96,11 +96,12 @@ public class PersonalDebitController {
     }
 
     @RequestMapping(value = "/createAutoIncome", method = RequestMethod.POST)
-    public @ResponseBody AutoOperationIncome createAutoIncome(@PathVariable("id") BigInteger id,
-                                                              @RequestBody AutoOperationIncome autoOperationIncome) {
-        AutoOperationIncome autoOperationIncome1 = accountAutoOperationService.createPersonalIncomeAutoOperation(autoOperationIncome, id);
+    public @ResponseBody Status createAutoIncome(@RequestBody AutoOperationIncome autoOperationIncome,
+                                                 Principal principal) {
+        BigInteger accountId = getAccountByPrincipal(principal);
+        accountAutoOperationService.createPersonalIncomeAutoOperation(autoOperationIncome, accountId);
         logger.debug("autoIncome is done!");
-        return accountAutoOperationService.getPersonalIncomeAutoOperation(autoOperationIncome1.getId());
+        return new Status(true, MessageController.ADD_AUTO_INCOME_PERS + accountId);
     }
     @RequestMapping(value = "/createAutoExpense", method = RequestMethod.POST)
     public @ResponseBody AutoOperationExpense createAutoExpense(

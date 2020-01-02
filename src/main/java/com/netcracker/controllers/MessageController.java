@@ -7,4 +7,5 @@ public interface MessageController {
     String ADD_EXPENSE_PERS = "Added new expense by account";
     String DELETE_AUTO_INCOME_PERS = "Your auto income deleted by account";
     String DELETE_AUTO_EXPENSE_PERS = "Your auto income deleted by account";
+    String ADD_AUTO_INCOME_PERS = "Added new auto income by account";
 }
