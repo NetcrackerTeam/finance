@@ -134,14 +134,15 @@ public class PersonalDebitController {
         return new Status(true, MessageController.DELETE_AUTO_EXPENSE_PERS + expenseId);
     }
 
-    @RequestMapping(value = "/Report", method = RequestMethod.GET)
+    @RequestMapping(value = "/report", method = RequestMethod.GET)
     @ResponseBody
     public MonthReport getReport(
-            @PathVariable("id") BigInteger personalId,
+            Principal principal,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateFrom,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateTo
     ) {
-        MonthReport monthReport = monthReportService.getMonthPersonalReport(personalId, dateFrom, dateTo);
+        BigInteger accountId = getAccountByPrincipal(principal);
+        MonthReport monthReport = monthReportService.getMonthPersonalReport(accountId, dateFrom, dateTo);
         logger.debug("Month report is ready");
         return monthReport;
     }

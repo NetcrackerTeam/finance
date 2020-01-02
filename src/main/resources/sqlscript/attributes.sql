@@ -71,7 +71,7 @@
 	INSERT INTO OBJREFERENCE (ATTR_ID,OBJECT_ID,REFERENCE) VALUES (19,7,1);
 -----------------------------------------------------------------------------	
 -- атрибуты для personal_category_report expense1
- insert into attributes(attr_id, object_id, list_value_id) values(25, 8, 11);
+ insert into attributes(attr_id, object_id, list_value_id) values(25, 8, 25);
  insert into attributes(attr_id, object_id, value) values(26, 8, '3500');
 	
 	-- reference to personal_report1
