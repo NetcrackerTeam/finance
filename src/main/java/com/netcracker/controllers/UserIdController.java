@@ -11,7 +11,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-
 import java.math.BigInteger;
 
 @Controller
@@ -28,5 +27,10 @@ public class UserIdController {
         User user = userDao.getUserByEmail(email);
         BigInteger debitId = user.getPersonalDebitAccount();
         return new ResponseEntity<>(debitId, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/templateURL", method = RequestMethod.GET)
+    public String templateMethod() {
+        return URL.TEMPLATE_URL;
     }
 }

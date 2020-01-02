@@ -1,7 +1,7 @@
 'use strict';
 
 var AngularSpringApp = {};
-var rootUserId = '101';
+
 var routeProvider,
 app = angular.module('AngularSpringApp', []).run(function ($rootScope, $http) {
     $rootScope.user = {
@@ -15,19 +15,17 @@ app = angular.module('AngularSpringApp', []).run(function ($rootScope, $http) {
     };
     $rootScope.fetchUserDebitId();
 
-    rootUserId = $rootScope.user.debitId;
 });
 
-var way = 'debitPersonal/' + rootUserId + '/createCredit';
 // Declare app level module which depends on filters, and services
 app.config(['$routeProvider', function ($routeProvider) {
     routeProvider = $routeProvider;
-    $routeProvider.when('/personalDebit', {
-        templateUrl: 'debitPersonal/layout',
-        controller: PersonalDebitController
-    }).when('/personalCredit', {
-        templateUrl: way,
-        controller: 'UserController'
+    $routeProvider.when('/personalDebit/:debitId', {
+        templateUrl: 'templateURL',
+        controller: 'RouteControllerLayout'
+    }).when('/personalCredit/:debitId', {
+        templateUrl: 'templateURL',
+        controller: 'RouteControllerCreateCredit'
     }).when('/prediction', {
         templateUrl: 'prediction/predict',
         controller: PersonalDebitController
@@ -39,10 +37,12 @@ app.config(['$routeProvider', function ($routeProvider) {
     $routeProvider.otherwise({redirectTo: '/'});
 }]);
 
-app.controller('UserController', function($scope, $rootScope, $location){
-    var idParam = $rootScope.user.debitId;
-    routeProvider.when('/personalCredit', {templateUrl: 'debitPersonal/' + idParam + '/createCredit'});
-    $location.path('debitPersonal/' + idParam + '/createCredit');
+app.controller('RouteControllerCreateCredit', function($scope, $routeParams) {
+    $scope.templateUrl = 'debitPersonal/' + $routeParams.debitId + '/createCredit';
+});
+
+app.controller('RouteControllerLayout', function ($scope, $routeParams) {
+   $scope.templateUrl = 'debitPersonal/' + $routeParams.debitId + '/layout';
 });
 
 app.controller('AppCtrl', function() {

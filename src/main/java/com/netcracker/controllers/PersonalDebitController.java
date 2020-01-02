@@ -16,13 +16,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.math.BigInteger;
 import java.security.Principal;
-import java.text.MessageFormat;
 import java.time.LocalDate;
 import java.util.Collection;
-import java.util.List;
 
 @Controller
-//@RequestMapping("/debitPersonal/{id}")
 @RequestMapping("/debitPersonal")
 public class PersonalDebitController {
 
@@ -49,10 +46,10 @@ public class PersonalDebitController {
 
     private static final Logger logger = Logger.getLogger(PersonalDebitController.class);
 
-    @RequestMapping(value = "/addCredit/{debitId}", method = RequestMethod.POST)
+    @RequestMapping(value = "/{debitId}/addCredit/", method = RequestMethod.POST)
     @ResponseBody
     public Status addCreditAccount(@RequestBody PersonalCreditAccount creditAccount,
-                                                        @PathVariable("id") BigInteger id) {
+                                                        @PathVariable("debitId") BigInteger id) {
         creditService.createPersonalCredit(id, creditAccount);
         return new Status(true, MessageController.ADD_CREDIT_PERS + id);
     }
@@ -148,8 +145,8 @@ public class PersonalDebitController {
         return monthReport;
     }
 
-    @RequestMapping("/layout")
-    public String getPersonalAccountPartialPage() {
+    @RequestMapping("/{debitId}/layout")
+    public String getPersonalAccountPartialPage(@PathVariable("debitId") BigInteger debitId) {
         return URL.PERSONAL_DEBIT;
     }
 

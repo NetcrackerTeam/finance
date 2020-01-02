@@ -9,4 +9,5 @@ public interface URL {
     String MODAL_DIALOG_PERS = "personalDebit/modalDialog";
     String PERSONAL_DEBIT = "personalDebit/layoutPersonalDebit";
     String REPORT_PERS = "personalDebit/layoutReport";
+    String TEMPLATE_URL = "templateForURL";
 }

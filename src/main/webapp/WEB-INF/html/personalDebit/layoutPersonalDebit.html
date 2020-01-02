@@ -1,6 +1,6 @@
 <nav>
     <div class="topnavPersonal" id="TopnavPersonal">
-        <a href="#/personalCredit">Create Credit</a> <!--#1 class = main_about-->
+        <a href="#/personalCredit/{{user.debitId}}">Create Credit</a> <!--#1 class = main_about-->
         <!--<a href="#createCreditModal" data-toggle="modal">Create Credit</a>-->
         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#incomeOp">
             Add income
@@ -13,6 +13,7 @@
     </div>
 </nav>
 <h1><span ng-show="user.debitId.length > 0">ID from RootScope: {{user.debitId}}</span></h1>
+<h2><span>{{blyad}}</span></h2>
 <div class="col-xl-8 col-lg-7">
     <div class="card shadow mb-4">
         <!-- Card Header - Dropdown -->
