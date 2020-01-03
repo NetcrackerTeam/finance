@@ -3,6 +3,7 @@ package com.netcracker.controllers;
 
 import com.netcracker.dao.AutoOperationDao;
 import com.netcracker.dao.CreditAccountDao;
+import com.netcracker.dao.UserDao;
 import com.netcracker.exception.NullObjectException;
 import com.netcracker.models.*;
 import com.netcracker.models.enums.CategoryIncome;
@@ -15,6 +16,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigInteger;
+import java.security.Principal;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
@@ -38,8 +40,15 @@ public class FamilyDebitController {
     CreditAccountDao creditAccountDao;
     @Autowired
     FamilyCreditService creditService;
+    @Autowired
+    UserDao userDao;
 
     private static final Logger logger = Logger.getLogger(FamilyDebitController.class);
+
+    private BigInteger getAccountByPrincipal(Principal principal) {
+        User user = userDao.getUserByEmail(principal.getName());
+        return user.getFamilyDebitAccount();
+    }
 
     @RequestMapping(value = "/createAccount", method = RequestMethod.POST)
     @ResponseBody
@@ -55,10 +64,10 @@ public class FamilyDebitController {
             logger.debug("deactivate family account " + accountId + "user id " + userId);
             familyDebitService.deleteFamilyDebitAccount(accountId, userId);
             logger.debug("success deactivate");
-            return new Status(true, "Deactivated successfully account " + accountId);
+            return new Status(true, MessageController.DEACT_FAMACC_FAM + accountId);
         } catch (NullObjectException ex) {
             model.addAttribute("errorMessage", ex.getMessage());
-            return new Status(true, "Deactivated unsuccessfully account " + accountId);
+            return new Status(true, MessageController.DEACT_UNS_FAMACC_FAM + accountId);
         }
     }
 
@@ -70,10 +79,10 @@ public class FamilyDebitController {
             logger.debug("add user to account " + accountId + "user id " + userId);
             familyDebitService.addUserToAccount(accountId, userId);
             logger.debug("success adding user");
-            return new Status(true, "Adding successfully user " + userId + " to account " + accountId);
+            return new Status(true, MessageController.ADD_USER_FAM + userDao.getUserById(userId).getName());
         } catch (NullObjectException ex) {
             model.addAttribute("errorMessage", ex.getMessage());
-            return new Status(true, "Adding unsuccessfully user " + userId + " to account " + accountId);
+            return new Status(true, MessageController.ADD_UNS_USER_FAM + userDao.getUserById(userId).getName());
         }
     }
 
@@ -85,10 +94,10 @@ public class FamilyDebitController {
             logger.debug("delete user to account " + accountId + "user id " + userId);
             familyDebitService.deleteUserFromAccount(accountId, userId);
             logger.debug("success adding user");
-            return new Status(true, "Deleting successfully user " + userId + " from account " + accountId);
+            return new Status(true, MessageController.DELETE_USER_FAM + userDao.getUserById(userId).getName());
         } catch (NullObjectException ex) {
             model.addAttribute("errorMessage", ex.getMessage());
-            return new Status(true, "Deleting successfully user " + userId + " from account " + accountId);
+            return new Status(true, MessageController.DELETE_UNS_USER_FAM + userDao.getUserById(userId).getName());
         }
     }
 
@@ -125,10 +134,18 @@ public class FamilyDebitController {
 
     @RequestMapping(value = "/history", method = RequestMethod.GET)
     @ResponseBody
-    public Collection<AbstractAccountOperation> getHistory(@PathVariable("id") BigInteger familyId,
+    public Collection<AbstractAccountOperation> getHistory(Principal principal,
                                                            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
         logger.debug("getHistory Personal");
-        return familyDebitService.getHistory(familyId, date);
+        BigInteger debitId = getAccountByPrincipal(principal);
+        return familyDebitService.getHistory(debitId, date);
+    }
+
+    @RequestMapping(value = "/autoOperationHistory", method = RequestMethod.GET)
+    public @ResponseBody
+    List<AbstractAutoOperation> getAutoHis(Principal principal) {
+        BigInteger debitId = getAccountByPrincipal(principal);
+        return accountAutoOperationService.getAllOperationsFamily(debitId);
     }
 
     /*@RequestMapping(value = "/createAutoIncome", method = RequestMethod.POST)
@@ -159,7 +176,7 @@ public class FamilyDebitController {
         logger.debug("delete autoIncomePersonal");
         accountAutoOperationService.deleteAutoOperation(incomeId);
         model.addAttribute("incomeId", incomeId);
-        return new Status(true, "Deleting successfully autoIncomeOperation " + incomeId);
+        return new Status(true, MessageController.DELETE_AUTO_INCOME_FAM + incomeId);
     }
 
     @RequestMapping(value = "/deleteAutoExpense/{expenseId}", method = RequestMethod.GET)
@@ -169,12 +186,19 @@ public class FamilyDebitController {
         logger.debug("delete autoExpensePersonal");
         accountAutoOperationService.deleteAutoOperation(expenseId);
         model.addAttribute("expenseId", expenseId);
-        return new Status(true, "Deleting successfully autoExpenseOperation " + expenseId);
+        return new Status(true, MessageController.DELETE_AUTO_EXPENSE_FAM + expenseId);
     }
 
     @RequestMapping(value = "/getReport", method = RequestMethod.POST)
-    public String getReport() {
-        return null;
+    public MonthReport getReport(
+            Principal principal,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateFrom,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateTo
+    ) {
+        BigInteger accountId = getAccountByPrincipal(principal);
+        MonthReport monthReport = monthReportService.getMonthFamilyReport(accountId, dateFrom, dateTo);
+        logger.debug("Month report is ready");
+        return monthReport;
     }
 
     @RequestMapping("/layout")

@@ -12,8 +12,7 @@
         <a href="#prediction" data-toggle="modal">Prognosis</a> <!--#2 class = Comment_form-->
     </div>
 </nav>
-<h1><span ng-show="user.debitId.length > 0">ID from RootScope: {{user.debitId}}</span></h1>
-<h2><span>{{blyad}}</span></h2>
+
 <div class="col-xl-8 col-lg-7">
     <div class="card shadow mb-4">
         <!-- Card Header - Dropdown -->
@@ -21,7 +20,7 @@
             <h6 class="m-0 font-weight-bold text-primary">History</h6>
         </div>
         <!-- Card Body -->
-        <div class="card-body" ng-controller="PersonalCreditController">
+        <div class="card-body" ng-controller="FamilyDebitController">
             <div class="row">
                 <div class="col-md-12">
                     <div class="panel panel-default">
@@ -30,7 +29,6 @@
                             <table class="table table-striped">
                                 <thead>
                                 <tr>
-                                    <th>ID</th>
                                     <th>Amount</th>
                                     <th>Income</th>
                                     <th>Expense</th>
@@ -38,8 +36,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr ng-repeat="hisInf in personalHistory">
-                                    <td>{{hisInf.id}}</td>
+                                <tr ng-repeat="hisInf in familyHistory">
                                     <td>{{hisInf.amount}}</td>
                                     <td>{{hisInf.categoryIncome}}</td>
                                     <td>{{hisInf.categoryExpense}}</td>
@@ -68,7 +65,7 @@
             <h6 class="m-0 font-weight-bold text-primary">Credits</h6>
         </div>
         <!-- Card Body -->
-        <div class="card-body" ng-controller="PersonalCreditController">
+        <div class="card-body" ng-controller="FamilyCreditController">
             <div class="row">
                 <div class="col-md-12">
                     <div class="panel panel-default">
@@ -99,6 +96,53 @@
                                     <td>{{credInf.dateTo.year}}-{{credInf.dateTo.month}}-{{credInf.dateTo.day}}</td>
                                     <td>{{credInf.monthDay}}</td>
                                     <td>{{credInf.isPaid}}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+</div>
+
+<div class="col-xl-8 col-lg-7">
+    <div class="card shadow mb-4">
+        <!-- Card Header - Dropdown -->
+        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+            <h6 class="m-0 font-weight-bold text-primary">Auto operations</h6>
+        </div>
+        <!-- Card Body -->
+        <div class="card-body" ng-controller="FamilyDebitController">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Auto operations</div>
+                        <div class="panel-body">
+                            <table class="table table-striped">
+                                <thead>
+                                <tr>
+                                    <th>categoryExpense</th>
+                                    <th>categoryIncome</th>
+                                    <th>dayOfMonth</th>
+                                    <th>amount</th>
+                                    <th>Date</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr ng-repeat="autoOperInf in familyAutoOperationHistory">
+                                    <td>{{autoOperInf.categoryExpense}}</td>
+                                    <td>{{autoOperInf.categoryIncome}}</td>
+                                    <td>{{autoOperInf.dayOfMonth}}</td>
+                                    <td>{{autoOperInf.amount}}</td>
+                                    <td>{{autoOperInf.date.year}}-{{autoOperInf.date.month}}-{{autoOperInf.date.day}}</td>
                                 </tr>
                                 </tbody>
                             </table>

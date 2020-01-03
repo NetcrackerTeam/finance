@@ -55,7 +55,7 @@ public class PersonalDebitController {
         PersonalDebitAccount debit = personalDebitAccountDao.getPersonalAccountById(accountId);
         double amount = debit.getAmount() + income.getAmount();
         personalDebitAccountDao.updateAmountOfPersonalAccount(accountId, amount);
-        return new Status(true, MessageController.ADD_INCOME_PERS + accountId);
+        return new Status(true, MessageController.ADD_INCOME_PERS);
     }
 
     @RequestMapping(value = "/expense", method = RequestMethod.POST)
@@ -66,7 +66,7 @@ public class PersonalDebitController {
         PersonalDebitAccount debit = personalDebitAccountDao.getPersonalAccountById(accountId);
         double amount = debit.getAmount() - expense.getAmount();
         personalDebitAccountDao.updateAmountOfPersonalAccount(accountId, amount);
-        return new Status(true, MessageController.ADD_EXPENSE_PERS + accountId);
+        return new Status(true, MessageController.ADD_EXPENSE_PERS);
     }
 
     private BigInteger getAccountByPrincipal(Principal principal) {
@@ -74,12 +74,13 @@ public class PersonalDebitController {
         return user.getPersonalDebitAccount();
     }
 
-    @RequestMapping(value = "/{id}/history", method = RequestMethod.GET)
+    @RequestMapping(value = "/history", method = RequestMethod.GET)
     public @ResponseBody
-    Collection<AbstractAccountOperation> getHistory(@PathVariable("id") BigInteger personalId,
+    Collection<AbstractAccountOperation> getHistory(Principal principal,
                                                     @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
         logger.debug("getHistory Personal");
-        return personalDebitService.getHistory(personalId, date);
+        BigInteger debitId = getAccountByPrincipal(principal);
+        return personalDebitService.getHistory(debitId, date);
     }
 
     @RequestMapping(value = "/autoOperationHistory", method = RequestMethod.GET)
@@ -96,7 +97,7 @@ public class PersonalDebitController {
         BigInteger accountId = getAccountByPrincipal(principal);
         accountAutoOperationService.createPersonalIncomeAutoOperation(autoOperationIncome, accountId);
         logger.debug("autoIncome is done!");
-        return new Status(true, MessageController.ADD_AUTO_INCOME_PERS + accountId);
+        return new Status(true, MessageController.ADD_AUTO_INCOME_PERS);
     }
 
     @RequestMapping(value = "/createAutoExpense", method = RequestMethod.POST)
@@ -106,28 +107,26 @@ public class PersonalDebitController {
         BigInteger accountId = getAccountByPrincipal(principal);
         accountAutoOperationService.createPersonalExpenseAutoOperation(autoOperationExpense, accountId);
         logger.debug("expense is done!");
-        return new Status(true, MessageController.ADD_AUTO_EXPENSE_PERS + accountId);
+        return new Status(true, MessageController.ADD_AUTO_EXPENSE_PERS);
     }
 
-    @RequestMapping(value = "/deleteAutoIncome/{incomeId}", method = RequestMethod.GET)
-    public Status deleteAutoIncome(@PathVariable("incomeId") BigInteger incomeId,
-                                   Model model
+    @RequestMapping(value = "/deleteAutoIncome", method = RequestMethod.GET)
+    public Status deleteAutoIncome(Principal principal
     ) {
         logger.debug("delete autoIncomePersonal");
-        accountAutoOperationService.deleteAutoOperation(incomeId);
-        model.addAttribute("incomeId", incomeId);
-        return new Status(true, MessageController.DELETE_AUTO_INCOME_PERS + incomeId);
+        BigInteger debitId = getAccountByPrincipal(principal);
+        accountAutoOperationService.deleteAutoOperation(debitId);
+        return new Status(true, MessageController.DELETE_AUTO_INCOME_PERS);
     }
 
-    @RequestMapping(value = "/deleteAutoExpense/{expenseId}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/deleteAutoExpense", method = RequestMethod.DELETE)
     public Status deleteAutoExpense(
-            @PathVariable("expenseId") BigInteger expenseId,
-            Model model
+            Principal principal
     ) {
         logger.debug("delete autoExpensePersonal");
-        accountAutoOperationService.deleteAutoOperation(expenseId);
-        model.addAttribute("expenseId", expenseId);
-        return new Status(true, MessageController.DELETE_AUTO_EXPENSE_PERS + expenseId);
+        BigInteger debitId = getAccountByPrincipal(principal);
+        accountAutoOperationService.deleteAutoOperation(debitId);
+        return new Status(true, MessageController.DELETE_AUTO_EXPENSE_PERS);
     }
 
     @RequestMapping(value = "/report", method = RequestMethod.GET)
