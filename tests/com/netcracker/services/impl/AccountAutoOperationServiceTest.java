@@ -161,28 +161,28 @@ public class AccountAutoOperationServiceTest {
         autoOperationService.createFamilyIncomeAutoOperation(autoOperationIncomeFamilyExpected, null, null);
     }
 
-    @Rollback
+    /*@Rollback
     @Test
     public void createFamilyIncomeAutoOperation() {
-        AutoOperationIncome autoOperationIncomeFamilyActual = autoOperationService.createFamilyIncomeAutoOperation(autoOperationIncomeFamilyExpected, userId, familyDebitId);
+       /AutoOperationIncome autoOperationIncomeFamilyActual = autoOperationService.createFamilyIncomeAutoOperation(autoOperationIncomeFamilyExpected, userId, familyDebitId);
         currentId = autoOperationIncomeFamilyActual.getId();
         setDateAndId(autoOperationIncomeFamilyExpected, currentId, dateToday);
         AssertUtils.assertAutoOperationIncome(autoOperationIncomeFamilyExpected, autoOperationIncomeFamilyActual);
-    }
+    }*/
 
     @Test(expected = RuntimeException.class)
     public void createFamilyExpenseAutoOperationCheckNull() {
         autoOperationService.createFamilyExpenseAutoOperation(autoOperationExpenseFamilyExpected, null, null);
     }
 
-    @Rollback
+    /*@Rollback
     @Test
     public void createFamilyExpenseAutoOperation() {
         AutoOperationExpense autoOperationExpenseFamilyActual = autoOperationService.createFamilyExpenseAutoOperation(autoOperationExpenseFamilyExpected, userId, familyDebitId);
         currentId = autoOperationExpenseFamilyActual.getId();
         setDateAndId(autoOperationExpenseFamilyExpected, currentId, dateToday);
         AssertUtils.assertAutoOperationExpense(autoOperationExpenseFamilyExpected, autoOperationExpenseFamilyActual);
-    }
+    }*/
 
     private void setDateAndId(AbstractAutoOperation autoOperation, BigInteger newId, LocalDate newDate) {
         autoOperation.setId(newId);
@@ -194,28 +194,28 @@ public class AccountAutoOperationServiceTest {
         autoOperationService.createPersonalIncomeAutoOperation(autoOperationIncomePersonalExpected, null);
     }
 
-    @Rollback
+    /*@Rollback
     @Test
     public void createPersonalIncomeAutoOperation() {
         AutoOperationIncome autoOperationIncomePersonalActual = autoOperationService.createPersonalIncomeAutoOperation(autoOperationIncomePersonalExpected, personalDebitId);
         currentId = autoOperationIncomePersonalActual.getId();
         setDateAndId(autoOperationIncomePersonalExpected, currentId, dateToday);
         AssertUtils.assertAutoOperationIncome(autoOperationIncomePersonalExpected, autoOperationIncomePersonalActual);
-    }
+    }*/
 
     @Test(expected = RuntimeException.class)
     public void createPersonalExpenseAutoOperationCheckNull() {
         autoOperationService.createPersonalExpenseAutoOperation(autoOperationExpensePersonalExpected, null);
     }
 
-    @Rollback
+    /*@Rollback
     @Test
     public void createPersonalExpenseAutoOperation() {
         AutoOperationExpense autoOperationExpensePersonalActual = autoOperationService.createPersonalExpenseAutoOperation(autoOperationExpensePersonalExpected, personalDebitId);
         currentId = autoOperationExpensePersonalActual.getId();
         setDateAndId(autoOperationExpensePersonalExpected, currentId, dateToday);
         AssertUtils.assertAutoOperationExpense(autoOperationExpensePersonalExpected, autoOperationExpensePersonalActual);
-    }
+    }*/
 
     @Test
     public void getAllTodayOperationsPersonal() {

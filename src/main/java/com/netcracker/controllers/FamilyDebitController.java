@@ -131,7 +131,7 @@ public class FamilyDebitController {
         return familyDebitService.getHistory(familyId, date);
     }
 
-    @RequestMapping(value = "/createAutoIncome", method = RequestMethod.POST)
+    /*@RequestMapping(value = "/createAutoIncome", method = RequestMethod.POST)
     @ResponseBody
     public AutoOperationIncome createAutoIncome(@PathVariable("id") BigInteger familyId,
                                            @RequestParam(value = "userId") BigInteger userId,
@@ -150,7 +150,7 @@ public class FamilyDebitController {
         AutoOperationExpense autoExpense = accountAutoOperationService.createFamilyExpenseAutoOperation(autoOperationExpense, userId, familyId);
         logger.debug("expense is done!");
         return accountAutoOperationService.getFamilyExpenseAutoOperation(autoExpense.getId());
-    }
+    }*/
 
     @RequestMapping(value = "/deleteAutoIncome/{incomeId}", method = RequestMethod.GET)
     public Status deleteAutoIncome(@PathVariable("incomeId") BigInteger incomeId,

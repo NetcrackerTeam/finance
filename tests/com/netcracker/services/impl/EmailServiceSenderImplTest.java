@@ -302,7 +302,7 @@ public class EmailServiceSenderImplTest {
         );
     }
 
-    @Test
+    /*@Test
     public void sendFamilyAutoIncome() {
         autoOperationIncomeFamilyExpected = new AutoOperationIncome.Builder()
                 .accountId(familyIncomeObjectIdAO)
@@ -385,5 +385,5 @@ public class EmailServiceSenderImplTest {
                 expPersExpense.getAmount(),
                 userDao.getUserById(expPersExpense.getUserId()).getName()
         );
-    }
+    }*/
 }

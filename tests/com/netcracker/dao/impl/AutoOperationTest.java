@@ -111,7 +111,7 @@ public class AutoOperationTest {
         AssertUtils.assertAutoOperationExpense(autoOperationExpensePersonalExpected, autoOperationExpensePersonalActual);
     }
 
-    @Rollback
+    /*@Rollback
     @Test
     public void createFamilyIncomeAutoOperation() {
         AutoOperationIncome autoOperationIncomeFamilyActual = autoOperationDao.createFamilyIncomeAutoOperation(autoOperationIncomeFamilyExpected, userId, familyDebitId);
@@ -150,7 +150,7 @@ public class AutoOperationTest {
         currentId = autoOperationExpensePersonalActual.getId();
         setDateAndId(autoOperationExpensePersonalExpected, currentId, dateToday);
         AssertUtils.assertAutoOperationExpense(autoOperationExpensePersonalExpected, autoOperationExpensePersonalActual);
-    }
+    }*/
 
     @Rollback
     @Test
