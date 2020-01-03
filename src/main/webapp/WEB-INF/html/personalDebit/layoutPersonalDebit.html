@@ -79,7 +79,7 @@
                                     <th>name</th>
                                     <th>amount</th>
                                     <th>paidAmount</th>
-                                    <th>Date</th>
+                                    <th>dateFrom</th>
                                     <th>creditRate</th>
                                     <th>dateTo</th>
                                     <th>monthDay</th>
@@ -160,6 +160,7 @@
     <br/>
     <br/>
 </div>
+
 <form ng-controller="PersonalCreditController" ng-submit="addCredit()">
 <div class="modal fade" id="createCreditModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -174,22 +175,22 @@
             <div class="modal-body">
                 <p><input type="text" class="form-control" placeholder="Enter credit name" ng-model="credit.name" id="creditName"/></p>
                 <p>Enter credit start date:</p>
-                <p><input type="date" class="form-control" id="dateFrom" ng-model="credit.dateFrom"/></p>
-                <p><input type="number" min="1" class="form-control" placeholder="Enter credit amount" ng-model="credit.amount"/></p>
-                <p><input type="number" min="0" class="form-control" placeholder="Enter credit paid amount" ng-model="credit.paidAmount"/></p>
+                <p><input type="date" class="form-control" id="dateFrom" ng-model="credit.date"/></p>
+                <p><input type="number" min="1" step="0.01" class="form-control" placeholder="Enter credit amount" ng-model="credit.amount"/></p>
+                <p><input type="number" min="0" step="0.01" class="form-control" placeholder="Enter credit paid amount" ng-model="credit.paidAmount"/></p>
                 <div class="slidecontainer">
                     <p id="creditRateText">Credit rate: </p>
-                    <p><input type="range" min="0" max="100" step="0.1" class="slider" id="creditRateRange" ng-model="credit.rate"/></p>
+                    <p><input type="range" min="0" max="100" step="0.1" class="slider" id="creditRateRange" ng-model="credit.creditRate"/></p>
                 </div>
                 <p>Enter credit ends date:</p>
                 <p><input type="date" class="form-control" id="dateTo" ng-model="credit.dateTo"/></p>
                 <p style="color:#565656"><h6>*The end date must be bigger than the start date </h6></p>
-                <p><input type="number" min="1" max="28" class="form-control" placeholder="Enter payment day of month" ng-model="credit.dayOfMonth"/></p>
+                <p><input type="number" min="1" max="28" class="form-control" placeholder="Enter payment day of month" ng-model="credit.monthDay"/></p>
                 <p></p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-primary" ng-disabled="isNotEmptyCredit(credit)" onclick="$('.modal').modal('hide')" ng-click="addCredit()">Save changes</button>
+                <button type="submit" class="btn btn-primary" ng-disabled="isNotEmptyCredit(credit)" onclick="$('.modal').modal('hide')">Save changes</button>
             </div>
         </div>
     </div>

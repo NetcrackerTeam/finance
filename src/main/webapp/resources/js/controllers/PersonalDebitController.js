@@ -4,8 +4,7 @@
  * PersonalDebitController
  * @constructor
  */
-var PersonalDebitController = function($scope, $http, $rootScope) {
-    //var personalHistoryURL = 'debitPersonal/' + $rootScope.user.debitId + '/history';
+var PersonalDebitController = function($scope, $http) {
     var personalHistoryURL = 'debitPersonal/2/history';
     $scope.fetchPersonalHistory = function(date){
         $http.get(personalHistoryURL, {params: {date:date.toLocaleString()}}).success(function (response) {
