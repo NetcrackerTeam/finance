@@ -46,20 +46,6 @@ public class PersonalDebitController {
 
     private static final Logger logger = Logger.getLogger(PersonalDebitController.class);
 
-    @RequestMapping(value = "/{debitId}/addCredit/", method = RequestMethod.POST)
-    @ResponseBody
-    public Status addCreditAccount(@RequestBody PersonalCreditAccount creditAccount,
-                                   @PathVariable("debitId") BigInteger id) {
-        creditService.createPersonalCredit(id, creditAccount);
-        return new Status(true, MessageController.ADD_CREDIT_PERS + id);
-    }
-
-    @RequestMapping(value = "/{debitId}/createCredit", method = RequestMethod.GET)
-    public String createCredit(@PathVariable("debitId") BigInteger debitId, Model model) {
-        model.addAttribute("debit_id", "Your ID from PersonalDebitController.java: " + debitId);
-        return URL.CREDIT_PERS;
-    }
-
     @RequestMapping(value = "/income", consumes = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.POST)
     public Status addIncomePersonal(@RequestBody AccountIncome income,
                                     Principal principal) {
@@ -87,7 +73,7 @@ public class PersonalDebitController {
         return user.getPersonalDebitAccount();
     }
 
-    @RequestMapping(value = "/history", method = RequestMethod.GET)
+    @RequestMapping(value = "/{id}/history", method = RequestMethod.GET)
     public @ResponseBody
     Collection<AbstractAccountOperation> getHistory(@PathVariable("id") BigInteger personalId,
                                                     @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
@@ -149,8 +135,8 @@ public class PersonalDebitController {
         return monthReport;
     }
 
-    @RequestMapping("/{debitId}/layout")
-    public String getPersonalAccountPartialPage(@PathVariable("debitId") BigInteger debitId) {
+    @RequestMapping("/layout")
+    public String getPersonalAccountPartialPage() {
         return URL.PERSONAL_DEBIT;
     }
 

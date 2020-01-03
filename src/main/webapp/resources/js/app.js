@@ -2,8 +2,7 @@
 
 var AngularSpringApp = {};
 
-var routeProvider,
-app = angular.module('AngularSpringApp', []).run(function ($rootScope, $http) {
+var app = angular.module('AngularSpringApp', []).run(function ($rootScope, $http) {
     $rootScope.user = {
         debitId: "100"
     };
@@ -17,15 +16,10 @@ app = angular.module('AngularSpringApp', []).run(function ($rootScope, $http) {
 
 });
 
-// Declare app level module which depends on filters, and services
 app.config(['$routeProvider', function ($routeProvider) {
-    routeProvider = $routeProvider;
-    $routeProvider.when('/personalDebit/:debitId', {
-        templateUrl: 'templateURL',
-        controller: 'RouteControllerLayout'
-    }).when('/personalCredit/:debitId', {
-        templateUrl: 'templateURL',
-        controller: 'RouteControllerCreateCredit'
+    $routeProvider.when('/personalDebit', {
+        templateUrl: 'debitPersonal/layout',
+        controller: PersonalDebitController
     }).when('/prediction', {
         templateUrl: 'prediction/predict',
         controller: PersonalDebitController
@@ -40,13 +34,6 @@ app.config(['$routeProvider', function ($routeProvider) {
     $routeProvider.otherwise({redirectTo: '/'});
 }]);
 
-app.controller('RouteControllerCreateCredit', function($scope, $routeParams) {
-    $scope.templateUrl = 'debitPersonal/' + $routeParams.debitId + '/createCredit';
-});
-
-app.controller('RouteControllerLayout', function ($scope, $routeParams) {
-   $scope.templateUrl = 'debitPersonal/' + $routeParams.debitId + '/layout';
-});
 
 app.controller('AppCtrl', function() {
     this.myDate = new Date();

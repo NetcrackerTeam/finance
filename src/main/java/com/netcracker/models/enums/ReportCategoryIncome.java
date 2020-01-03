@@ -6,7 +6,7 @@ public enum ReportCategoryIncome {
     DEFAULT(new BigInteger("0")),
     SALARY(new BigInteger("32")),
     AWARD(new BigInteger("33")),
-    PERSENTS(new BigInteger("34")),
+    PRESENTS(new BigInteger("34")),
     GIFTS(new BigInteger("35")),
     OTHER(new BigInteger("36"));
 

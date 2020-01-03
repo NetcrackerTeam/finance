@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import java.math.BigInteger;
+import java.security.Principal;
 
 @Controller
 public class UserIdController {
@@ -32,5 +33,10 @@ public class UserIdController {
     @RequestMapping(value = "/templateURL", method = RequestMethod.GET)
     public String templateMethod() {
         return URL.TEMPLATE_URL;
+    }
+
+    public BigInteger getAccountByPrincipal(Principal principal) {
+        User user = userDao.getUserByEmail(principal.getName());
+        return user.getPersonalDebitAccount();
     }
 }

@@ -10,16 +10,16 @@ import java.util.List;
 public interface AccountAutoOperationService {
     String debugStartMessage = " method start with parameters: ";
 
-    AutoOperationIncome createFamilyIncomeAutoOperation(AutoOperationIncome autoOperationIncome, BigInteger userId,
+    void createFamilyIncomeAutoOperation(AutoOperationIncome autoOperationIncome, BigInteger userId,
                                                         BigInteger familyDebitAccountId);
 
-    AutoOperationIncome createPersonalIncomeAutoOperation(AutoOperationIncome autoOperationIncome,
+    void createPersonalIncomeAutoOperation(AutoOperationIncome autoOperationIncome,
                                                           BigInteger personalDebitAccountId);
 
-    AutoOperationExpense createFamilyExpenseAutoOperation(AutoOperationExpense autoOperationExpense, BigInteger userId,
+    void createFamilyExpenseAutoOperation(AutoOperationExpense autoOperationExpense, BigInteger userId,
                                                           BigInteger familyDebitAccountId);
 
-    AutoOperationExpense createPersonalExpenseAutoOperation(AutoOperationExpense autoOperationExpense,
+    void createPersonalExpenseAutoOperation(AutoOperationExpense autoOperationExpense,
                                                             BigInteger personalDebitAccountId);
 
     AutoOperationIncome getFamilyIncomeAutoOperation(BigInteger autoOperationId);

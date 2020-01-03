@@ -23,47 +23,47 @@ public class AccountAutoOperationServiceImpl implements AccountAutoOperationServ
     private static final Logger logger = Logger.getLogger(AccountAutoOperationServiceImpl.class);
 
     @Override
-    public AutoOperationIncome createFamilyIncomeAutoOperation(AutoOperationIncome autoOperationIncome, BigInteger userId,
+    public void createFamilyIncomeAutoOperation(AutoOperationIncome autoOperationIncome, BigInteger userId,
                                                                BigInteger familyDebitAccountId) {
         logger.debug("[createFamilyIncomeAutoOperation]" + debugStartMessage + "[ familyDebitAccountId = " +
                 familyDebitAccountId + "], [userId = " + userId + "], " + autoOperationIncome.toString());
 
         ObjectsCheckUtils.isNotNull(autoOperationIncome.getDayOfMonth(), autoOperationIncome.getAmount(),
                 autoOperationIncome.getCategoryIncome(), userId, familyDebitAccountId);
-        return autoOperationDao.createFamilyIncomeAutoOperation(autoOperationIncome, userId, familyDebitAccountId);
+        autoOperationDao.createFamilyIncomeAutoOperation(autoOperationIncome, userId, familyDebitAccountId);
     }
 
     @Override
-    public AutoOperationIncome createPersonalIncomeAutoOperation(AutoOperationIncome autoOperationIncome,
+    public void createPersonalIncomeAutoOperation(AutoOperationIncome autoOperationIncome,
                                                                  BigInteger personalDebitAccountId) {
         logger.debug("[createPersonalIncomeAutoOperation]" + debugStartMessage + "[personalDebitAccountId = " +
                 personalDebitAccountId + "], " + autoOperationIncome.toString());
 
         ObjectsCheckUtils.isNotNull(autoOperationIncome.getDayOfMonth(), autoOperationIncome.getAmount(),
                 autoOperationIncome.getCategoryIncome(), personalDebitAccountId);
-        return autoOperationDao.createPersonalIncomeAutoOperation(autoOperationIncome, personalDebitAccountId);
+        autoOperationDao.createPersonalIncomeAutoOperation(autoOperationIncome, personalDebitAccountId);
     }
 
     @Override
-    public AutoOperationExpense createFamilyExpenseAutoOperation(AutoOperationExpense autoOperationExpense, BigInteger userId,
+    public void createFamilyExpenseAutoOperation(AutoOperationExpense autoOperationExpense, BigInteger userId,
                                                                  BigInteger familyDebitAccountId) {
         logger.debug("[createFamilyExpenseAutoOperation]" + debugStartMessage + "[familyDebitAccountId = " +
                 familyDebitAccountId + "], [userId = " + userId + "], " + autoOperationExpense.toString());
 
         ObjectsCheckUtils.isNotNull(autoOperationExpense.getDayOfMonth(), autoOperationExpense.getAmount(),
                 autoOperationExpense.getCategoryExpense(), userId, familyDebitAccountId);
-        return autoOperationDao.createFamilyExpenseAutoOperation(autoOperationExpense, userId, familyDebitAccountId);
+       autoOperationDao.createFamilyExpenseAutoOperation(autoOperationExpense, userId, familyDebitAccountId);
     }
 
     @Override
-    public AutoOperationExpense createPersonalExpenseAutoOperation(AutoOperationExpense autoOperationExpense,
+    public void createPersonalExpenseAutoOperation(AutoOperationExpense autoOperationExpense,
                                                                    BigInteger personalDebitAccountId) {
         logger.debug("[createPersonalExpenseAutoOperation]" + debugStartMessage + "[personalDebitAccountId = " +
                 personalDebitAccountId + "], " + autoOperationExpense.toString());
 
         ObjectsCheckUtils.isNotNull(autoOperationExpense.getDayOfMonth(), autoOperationExpense.getAmount(),
                 autoOperationExpense.getCategoryExpense(), personalDebitAccountId);
-        return autoOperationDao.createPersonalExpenseAutoOperation(autoOperationExpense, personalDebitAccountId);
+        autoOperationDao.createPersonalExpenseAutoOperation(autoOperationExpense, personalDebitAccountId);
     }
 
     @Override
@@ -110,7 +110,7 @@ public class AccountAutoOperationServiceImpl implements AccountAutoOperationServ
     public List<AutoOperationIncome> getAllTodayOperationsPersonalIncome(int dayOfMonth) {
         logger.debug("[getAllTodayOperationsPersonalIncome]" + debugStartMessage + "[dayOfMonth = " + dayOfMonth + "]");
 
-        checkDayOfMonth(dayOfMonth);
+        ObjectsCheckUtils.isNotNull(dayOfMonth);
         List<AutoOperationIncome> autoOperationIncomeList = autoOperationDao.getAllTodayOperationsPersonalIncome(dayOfMonth);
         ObjectsCheckUtils.collectionIsEmpty(Collections.singletonList(autoOperationIncomeList));
         return autoOperationIncomeList;
@@ -120,7 +120,7 @@ public class AccountAutoOperationServiceImpl implements AccountAutoOperationServ
     public List<AutoOperationExpense> getAllTodayOperationsPersonalExpense(int dayOfMonth) {
         logger.debug("[getAllTodayOperationsPersonalExpense]" + debugStartMessage + "[dayOfMonth = " + dayOfMonth + "]");
 
-        checkDayOfMonth(dayOfMonth);
+        ObjectsCheckUtils.isNotNull(dayOfMonth);
         List<AutoOperationExpense> autoOperationExpenseList = autoOperationDao.getAllTodayOperationsPersonalExpense(dayOfMonth);
         ObjectsCheckUtils.collectionIsEmpty(Collections.singletonList(autoOperationExpenseList));
         return autoOperationExpenseList;
@@ -130,7 +130,7 @@ public class AccountAutoOperationServiceImpl implements AccountAutoOperationServ
     public List<AutoOperationIncome> getAllTodayOperationsFamilyIncome(int dayOfMonth) {
         logger.debug("[getAllTodayOperationsFamilyIncome]" + debugStartMessage + "[dayOfMonth = " + dayOfMonth + "]");
 
-        checkDayOfMonth(dayOfMonth);
+        ObjectsCheckUtils.isNotNull(dayOfMonth);
         List<AutoOperationIncome> autoOperationIncomeList = autoOperationDao.getAllTodayOperationsFamilyIncome(dayOfMonth);
         ObjectsCheckUtils.collectionIsEmpty(Collections.singletonList(autoOperationIncomeList));
         return autoOperationIncomeList;
@@ -140,7 +140,7 @@ public class AccountAutoOperationServiceImpl implements AccountAutoOperationServ
     public List<AutoOperationExpense> getAllTodayOperationsFamilyExpense(int dayOfMonth) {
         logger.debug("[getAllTodayOperationsFamilyExpense]" + debugStartMessage + "[dayOfMonth = " + dayOfMonth + "]");
 
-        checkDayOfMonth(dayOfMonth);
+        ObjectsCheckUtils.isNotNull(dayOfMonth);
         List<AutoOperationExpense> autoOperationExpenseList = autoOperationDao.getAllTodayOperationsFamilyExpense(dayOfMonth);
         ObjectsCheckUtils.collectionIsEmpty(Collections.singletonList(autoOperationExpenseList));
         return autoOperationExpenseList;
@@ -186,10 +186,5 @@ public class AccountAutoOperationServiceImpl implements AccountAutoOperationServ
         allOperationsList.addAll(getAllOperationsFamilyIncome(debitId));
         ObjectsCheckUtils.collectionIsEmpty(Collections.singletonList(allOperationsList));
         return allOperationsList;
-    }
-
-
-    private void checkDayOfMonth(int dayOfMonth) {
-        ObjectsCheckUtils.isNotNull(dayOfMonth);
     }
 }
