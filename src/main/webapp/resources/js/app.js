@@ -32,6 +32,9 @@ app.config(['$routeProvider', function ($routeProvider) {
     }).when('/personalReport', {
         templateUrl: 'debitPersonal/getReportView',
         controller: PersonalDebitController
+    }).when('/familyAccount', {
+        templateUrl: 'debitFamily/layout',
+        controller: FamilyDebitController
     });
 
     $routeProvider.otherwise({redirectTo: '/'});

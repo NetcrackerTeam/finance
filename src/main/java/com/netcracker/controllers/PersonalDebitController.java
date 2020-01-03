@@ -49,13 +49,13 @@ public class PersonalDebitController {
     @RequestMapping(value = "/{debitId}/addCredit/", method = RequestMethod.POST)
     @ResponseBody
     public Status addCreditAccount(@RequestBody PersonalCreditAccount creditAccount,
-                                                        @PathVariable("debitId") BigInteger id) {
+                                   @PathVariable("debitId") BigInteger id) {
         creditService.createPersonalCredit(id, creditAccount);
         return new Status(true, MessageController.ADD_CREDIT_PERS + id);
     }
 
     @RequestMapping(value = "/{debitId}/createCredit", method = RequestMethod.GET)
-    public String createCredit(@PathVariable("debitId") BigInteger debitId, Model model){
+    public String createCredit(@PathVariable("debitId") BigInteger debitId, Model model) {
         model.addAttribute("debit_id", "Your ID from PersonalDebitController.java: " + debitId);
         return URL.CREDIT_PERS;
     }
@@ -96,21 +96,23 @@ public class PersonalDebitController {
     }
 
     @RequestMapping(value = "/createAutoIncome", method = RequestMethod.POST)
-    public @ResponseBody Status createAutoIncome(@RequestBody AutoOperationIncome autoOperationIncome,
-                                                 Principal principal) {
+    public @ResponseBody
+    Status createAutoIncome(@RequestBody AutoOperationIncome autoOperationIncome,
+                            Principal principal) {
         BigInteger accountId = getAccountByPrincipal(principal);
         accountAutoOperationService.createPersonalIncomeAutoOperation(autoOperationIncome, accountId);
         logger.debug("autoIncome is done!");
         return new Status(true, MessageController.ADD_AUTO_INCOME_PERS + accountId);
     }
+
     @RequestMapping(value = "/createAutoExpense", method = RequestMethod.POST)
-    public @ResponseBody AutoOperationExpense createAutoExpense(
-            @RequestBody AutoOperationExpense autoOperationExpense,
-            @PathVariable("id") BigInteger id
-    ) {
-        AutoOperationExpense accountExpense = accountAutoOperationService.createPersonalExpenseAutoOperation(autoOperationExpense, id);
+    public @ResponseBody
+    Status createAutoExpense(@RequestBody AutoOperationExpense autoOperationExpense,
+                                           Principal principal) {
+        BigInteger accountId = getAccountByPrincipal(principal);
+        accountAutoOperationService.createPersonalExpenseAutoOperation(autoOperationExpense, accountId);
         logger.debug("expense is done!");
-        return accountAutoOperationService.getPersonalExpenseAutoOperation(accountExpense.getId());
+        return new Status(true, MessageController.ADD_AUTO_EXPENSE_PERS + accountId);
     }
 
     @RequestMapping(value = "/deleteAutoIncome/{incomeId}", method = RequestMethod.GET)

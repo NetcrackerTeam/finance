@@ -26,7 +26,7 @@ app.controller("AddIncomeController", function ($scope, $http) {
         }).error(function () {
             alert("unsuccess")
         });
-    }
+    };
 
         $scope.submitAutoOperation = function () {
             method = "POST";
@@ -68,7 +68,24 @@ app.controller("AddExpenseController", function ($scope, $http) {
             }
         });
 
-    }
+    };
 
+    $scope.submitAutoOperation = function () {
+        method = "POST";
+        url = 'debitPersonal/createAutoExpense';
+
+        $http({
+            method: method,
+            url: url,
+            data: angular.toJson($scope.form),
+            headers : {
+                'Content-Type' : 'application/json'
+            }
+        }).success(function () {
+            alert("success")
+        }).error(function () {
+            alert("unsuccess")
+        });
+    }
 });
 

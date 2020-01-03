@@ -20,7 +20,7 @@ import java.util.Collection;
 import java.util.List;
 
 @Controller
-@RequestMapping("/debit/family/{id}")
+@RequestMapping("/debitFamily")
 public class FamilyDebitController {
     @Autowired
     FamilyDebitService familyDebitService;
@@ -175,5 +175,10 @@ public class FamilyDebitController {
     @RequestMapping(value = "/getReport", method = RequestMethod.POST)
     public String getReport() {
         return null;
+    }
+
+    @RequestMapping("/layout")
+    public String getPersonalAccountPartialPage() {
+        return URL.PERSONAL_DEBIT;
     }
 }
