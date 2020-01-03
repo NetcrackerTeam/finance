@@ -18,6 +18,7 @@ import java.math.BigInteger;
 import java.security.Principal;
 import java.time.LocalDate;
 import java.util.Collection;
+import java.util.List;
 
 @Controller
 @RequestMapping("/debitPersonal")
@@ -79,6 +80,13 @@ public class PersonalDebitController {
                                                     @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
         logger.debug("getHistory Personal");
         return personalDebitService.getHistory(personalId, date);
+    }
+
+    @RequestMapping(value = "/autoOperationHistory", method = RequestMethod.GET)
+    public @ResponseBody
+    List<AbstractAutoOperation> getAutoHis(Principal principal) {
+        BigInteger debitId = getAccountByPrincipal(principal);
+        return accountAutoOperationService.getAllOperationsPersonal(debitId);
     }
 
     @RequestMapping(value = "/createAutoIncome", method = RequestMethod.POST)

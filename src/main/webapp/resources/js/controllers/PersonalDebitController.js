@@ -13,6 +13,13 @@ var PersonalDebitController = function($scope, $http, $rootScope) {
         });
     };
 
+    $scope.fetchPersonalAutoOperationHistory = function () {
+        $http.get('debitPersonal/autoOperationHistory').success(function (autoOper) {
+            $scope.personalAutoOperationHistory = autoOper;
+        });
+    };
+
+    $scope.fetchPersonalAutoOperationHistory();
     $scope.fetchPersonalHistory('2019-01-11');
 
     $scope.summ = {};
