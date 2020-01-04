@@ -1,5 +1,7 @@
 'use strict';
 
+
+
 var AngularSpringApp = {};
 
 var app = angular.module('AngularSpringApp', []).run(function ($rootScope, $http) {
@@ -35,9 +37,3 @@ app.config(['$routeProvider', function ($routeProvider) {
 
  //   $routeProvider.otherwise({redirectTo: '/'});
 }]);
-
-
-app.controller('AppCtrl', function() {
-    this.myDate = new Date();
-    this.isOpen = false;
-});

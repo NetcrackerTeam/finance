@@ -3,7 +3,7 @@
         <a href="#createCreditModal" data-toggle="modal">Create Credit</a>
         <a href="#incomeOp" data-toggle="modal">Add income</a>
         <a href="#expenseOp" data-toggle="modal">Add expense</a>
-        <a href="#/personalReport">Report</a> <!--#2 class = Comment_form-->
+        <a href="#report" data-toggle="modal">Report</a> <!--#2 class = Comment_form-->
         <a href="#prediction" data-toggle="modal">Prognosis</a> <!--#2 class = Comment_form-->
     </div>
 </nav>
@@ -194,12 +194,12 @@
 </form>
 
 
-<form>
+<form ng-controller="PersonalPredictController" ng-submit="getPredict()">
     <div class="modal fade" id="prediction" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 align="center" class="modal-title" id="passwordModalLabel1"> Creating credit</h4>
+                    <h4 align="center" class="modal-title" id="passwordModalLabel1"> Prediction </h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -207,14 +207,35 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <label for="category">Income category:</label>
-                        <select class="form-control" id="category">
+                        <select class="form-control" id="category" ng-model="predict.category">
                             <option>Income</option>
                             <option>Expense</option>
                         </select>
                     </div>
-                    <p><input type="number" min="1" class="form-control" placeholder="Enter duration" ng-model="amount"/></p>
-                    <output name="x"></output>
+                    <p><input type="number" min="1" class="form-control" placeholder="Enter duration" ng-model="predict.duration"/></p>
+                    <pre>Predict sum: {{status}}</pre>
                 </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" ng-disabled="!predict.duration || !predict.category" ng-click="fetch()">Predict</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<form>
+    <div class="modal fade" id="report" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+    <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 align="center" class="modal-title" id="passwordModalLabel2"> Report </h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <p><input type="month" class="form-control" id="dateFrom1" ng-model="credit.dateFrom"/></p>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     <button type="button" class="btn btn-primary" ng-disabled="!amount">Predict</button>
