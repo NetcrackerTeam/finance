@@ -107,4 +107,14 @@ public class MonthReportDaoImpl implements MonthReportDao {
     public Collection<CategoryExpenseReport> getCategoryExpenseFamilyReport(BigInteger id) {
         return template.query(GET_CATEGORY_EXPENSE_FAMILY_REPORT_BY_ID, new Object[]{id}, new CategoryExpensePersonalReportMapper());
     }
+
+    @Override
+    public Collection<MonthReport> getAllPersonalReports(BigInteger id) {
+        return template.query(GET_ALL_PERSONAL_REPORTS, new Object[]{id}, new MonthReportMapper());
+    }
+
+    @Override
+    public Collection<MonthReport> getAllFamilyReports(BigInteger id) {
+        return template.query(GET_ALL_FAMILY_REPORTS, new Object[]{id}, new MonthReportMapper());
+    }
 }

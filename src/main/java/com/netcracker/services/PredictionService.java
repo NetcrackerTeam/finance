@@ -19,6 +19,5 @@ public interface PredictionService {
 
     public double predictFamilyMonthExpense(BigInteger id, int duration);
 
-    int MONTH_REPORTS = 6;
 
 }

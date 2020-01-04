@@ -55,7 +55,7 @@ public class PredictionServiceImpl implements PredictionService {
     public double predictPersonalMonthIncome(BigInteger id, int duration) {
         logger.debug("Inserting " + id + " " + duration);
 
-        Collection<MonthReport> reports = getPersonalReportsOfSixMonths(id);
+        Collection<MonthReport> reports = monthReportDao.getAllPersonalReports(id);
 
         double average = reports.stream().mapToDouble(MonthReport::getTotalIncome).average().orElse(Double.NaN);
 
@@ -66,7 +66,7 @@ public class PredictionServiceImpl implements PredictionService {
     public double predictPersonalMonthExpense(BigInteger id, int duration) {
         logger.debug("Inserting in predict " + id + " " + duration);
 
-        Collection<MonthReport> reports = getPersonalReportsOfSixMonths(id);
+        Collection<MonthReport> reports = monthReportDao.getAllPersonalReports(id);
 
         double average = reports.stream().mapToDouble(MonthReport::getTotalExpense).average().orElse(Double.NaN);
 
@@ -77,7 +77,7 @@ public class PredictionServiceImpl implements PredictionService {
     public double predictFamilyMonthIncome(BigInteger id, int duration) {
         logger.debug("Inserting " + id + " " + duration);
 
-        Collection<MonthReport> reports = getFamilyReportsOfSixMonths(id);
+        Collection<MonthReport> reports = monthReportDao.getAllFamilyReports(id);
 
         double average = reports.stream().mapToDouble(MonthReport::getTotalIncome).average().orElse(Double.NaN);
 
@@ -88,53 +88,11 @@ public class PredictionServiceImpl implements PredictionService {
     public double predictFamilyMonthExpense(BigInteger id, int duration) {
         logger.debug("Inserting in predict " + id + " " + duration);
 
-        Collection<MonthReport> reports = getFamilyReportsOfSixMonths(id);
+        Collection<MonthReport> reports = monthReportDao.getAllFamilyReports(id);
 
         double average = reports.stream().mapToDouble(MonthReport::getTotalExpense).average().orElse(Double.NaN);
 
         return average * duration;
-    }
-
-
-    private List<MonthReport> getPersonalReportsOfSixMonths(BigInteger id) {
-
-        List<MonthReport> reports = new ArrayList<>();
-
-        LocalDate dateFrom = LocalDate.of(LocalDate.now().getYear(), LocalDate.now().getMonth().getValue() - 1, 1);
-        LocalDate dateTo = LocalDate.of(LocalDate.now().getYear(), LocalDate.now().getMonth().getValue(), 1);
-
-
-        for (int i = 0; i < MONTH_REPORTS; i++) {
-            MonthReport reportTest = monthReportDao.getMonthReportByPersonalAccountId(id, dateFrom, dateTo);
-            if (reportTest == null) {
-                logger.debug("There is no report");
-                throw new PredictionException(ExceptionMessages.ERROR_MESSAGE_PREDICTION);
-            }
-            reports.add(reportTest);
-            dateFrom = DateUtils.addMonthsToDate(dateFrom, -1);
-            dateTo = DateUtils.addMonthsToDate(dateTo, -1);
-        }
-        return reports;
-    }
-
-    private List<MonthReport> getFamilyReportsOfSixMonths(BigInteger id) {
-
-        List<MonthReport> reports = new ArrayList<>();
-
-        LocalDate dateFrom = LocalDate.of(LocalDate.now().getYear(), LocalDate.now().getMonth().getValue() - 1, 1);
-        LocalDate dateTo = LocalDate.of(LocalDate.now().getYear(), LocalDate.now().getMonth().getValue(), 1);
-
-        for (int i = 0; i < MONTH_REPORTS; i++) {
-            MonthReport reportTest = monthReportDao.getMonthReportByFamilyAccountId(id, dateFrom, dateTo);
-            if (reportTest == null) {
-                logger.debug("There is no report");
-                throw new PredictionException(ExceptionMessages.ERROR_MESSAGE_PREDICTION);
-            }
-            reports.add(reportTest);
-            dateFrom = DateUtils.addMonthsToDate(dateFrom, -1);
-            dateTo = DateUtils.addMonthsToDate(dateTo, -1);
-        }
-        return reports;
     }
 
     private boolean calculateDifference(double income, double expense, double amount) {
