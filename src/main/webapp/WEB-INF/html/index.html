@@ -42,15 +42,19 @@
         <ul class="menu">
             <li><a href="#" id="menu" class="icon">&#9776;</a>
                 <ul class="submenu">
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#passwordModal">
-                        Change password
-                    </button>
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#emailModal">
-                        Change email
-                    </button>
+                    <input th:color="transparent" type="button" class="btn btn-primary" data-toggle="modal"
+                           data-target="#passwordModal"
+                           value="Change password   "/>
 
-                    <li><a href="#/">Delete account</a></li>
-                    <li><a href="#/">Log out</a></li>
+                    <input type="button" class="btn btn-primary" data-toggle="modal" data-target="#emailModal"
+                           value="Change email    "/>
+
+                    <form action="">
+                        <input class="btn btn-primary" type="submit" value="Delete Acc     "/>
+                    </form>
+                    <form action="" th:action="@{/logout}" method="get">
+                        <input class="btn btn-primary" type="submit" value="Log out      "/>
+                    </form>
                 </ul>
             </li>
         </ul>
@@ -58,35 +62,35 @@
 </header>
 
 <!-- Modal  password-->
-<form action="" th:action="@{/updatePassword}"  method="post" >
-<div class="modal fade" id="passwordModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-     aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 align="center" class="modal-title" id="passwordModalLabel"> Change password </h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-<!--                <span th:if="${errorOldEmail != null}"   th:text="${errorOldEmail}"> </span>-->
-                <input class="form-control" placeholder="New password" type="text" name="newPassword"/>
-                <p></p>
-                <input class="form-control" placeholder="Confirm password" type="text" name="newConfirmPassword"/>
+<form action="" th:action="@{/updatePassword}" method="post">
+    <div class="modal fade" id="passwordModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 align="center" class="modal-title" id="passwordModalLabel"> Change password </h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!--                <span th:if="${errorOldEmail != null}"   th:text="${errorOldEmail}"> </span>-->
+                    <input class="form-control" placeholder="New password" type="text" name="newPassword"/>
+                    <p></p>
+                    <input class="form-control" placeholder="Confirm password" type="text" name="newConfirmPassword"/>
 
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <input  class="btn btn-primary"  type="submit" value="Save changes"/>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <input class="btn btn-primary" type="submit" value="Save changes"/>
 
+                </div>
             </div>
         </div>
     </div>
-</div>
 </form>
 <!-- Modal email -->
-<form action="" th:action="@{/updateEmail}"  method="post">
+<form action="" th:action="@{/updateEmail}" method="post">
     <div class="modal fade" id="emailModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
          aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -98,7 +102,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <span th:if="${errorOldEmail != null}"   th:text="${errorOldEmail}"> </span>
+                    <span th:if="${errorOldEmail != null}" th:text="${errorOldEmail}"> </span>
                     <input class="form-control" placeholder="Old Email" type="password" name="oldEmail"/>
                     <p></p>
                     <input class="form-control" placeholder="New Email" type="password" name="newEmail"/>
@@ -106,7 +110,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <input  class="btn btn-primary"  type="submit" value="Save changes"/>
+                    <input class="btn btn-primary" type="submit" value="Save changes"/>
                 </div>
             </div>
         </div>
