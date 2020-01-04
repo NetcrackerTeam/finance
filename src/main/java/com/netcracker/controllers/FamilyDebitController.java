@@ -50,6 +50,11 @@ public class FamilyDebitController {
         return user.getFamilyDebitAccount();
     }
 
+    private BigInteger getUserIdByPrincipal(Principal principal) {
+        User user = userDao.getUserByEmail(principal.getName());
+        return user.getId();
+    }
+
     @RequestMapping(value = "/createAccount", method = RequestMethod.POST)
     @ResponseBody
     public FamilyDebitAccount createFamilyDebitAccount(@RequestBody FamilyDebitAccount familyDebitAccount) {
@@ -104,7 +109,7 @@ public class FamilyDebitController {
     @RequestMapping(value = "/addCredit", method = RequestMethod.POST)
     @ResponseBody
     public List<FamilyCreditAccount> addCreditAccount(@RequestBody FamilyCreditAccount creditAccount,
-                                                        @PathVariable("id") BigInteger id) {
+                                                      @PathVariable("id") BigInteger id) {
         creditService.createFamilyCredit(id, creditAccount);
         return creditAccountDao.getAllFamilyCreditsByAccountId(id);
     }
@@ -148,26 +153,27 @@ public class FamilyDebitController {
         return accountAutoOperationService.getAllOperationsFamily(debitId);
     }
 
-    /*@RequestMapping(value = "/createAutoIncome", method = RequestMethod.POST)
+    @RequestMapping(value = "/createAutoIncome", method = RequestMethod.POST)
     @ResponseBody
-    public AutoOperationIncome createAutoIncome(@PathVariable("id") BigInteger familyId,
-                                           @RequestParam(value = "userId") BigInteger userId,
-                                           @RequestBody AutoOperationIncome autoOperationIncome) {
-        AutoOperationIncome autoIncome = accountAutoOperationService.createFamilyIncomeAutoOperation(autoOperationIncome,userId, familyId);
+    public Status createAutoIncome(@RequestBody AutoOperationIncome autoOperationIncome,
+                                   Principal principal) {
+        BigInteger accountId = getAccountByPrincipal(principal);
+        BigInteger userId = getUserIdByPrincipal(principal);
+        accountAutoOperationService.createFamilyIncomeAutoOperation(autoOperationIncome, userId, BigInteger.valueOf(3));
         logger.debug("autoIncome is done!");
-        return accountAutoOperationService.getFamilyIncomeAutoOperation(autoIncome.getId());
+        return new Status(true, MessageController.ADD_AUTO_INCOME);
     }
 
     @RequestMapping(value = "/createAutoExpense", method = RequestMethod.POST)
     @ResponseBody
-    public AutoOperationExpense createAutoExpense(@RequestBody AutoOperationExpense autoOperationExpense,
-                                                  @RequestParam(value = "userId") BigInteger userId,
-                                                  @PathVariable("id") BigInteger familyId
-    ) {
-        AutoOperationExpense autoExpense = accountAutoOperationService.createFamilyExpenseAutoOperation(autoOperationExpense, userId, familyId);
-        logger.debug("expense is done!");
-        return accountAutoOperationService.getFamilyExpenseAutoOperation(autoExpense.getId());
-    }*/
+    public Status createAutoExpense(@RequestBody AutoOperationExpense autoOperationExpense,
+                                    Principal principal) {
+        BigInteger accountId = getAccountByPrincipal(principal);
+        BigInteger userId = getUserIdByPrincipal(principal);
+        accountAutoOperationService.createFamilyExpenseAutoOperation(autoOperationExpense, userId, BigInteger.valueOf(3));
+        logger.debug("autoIncome is done!");
+        return new Status(true, MessageController.ADD_AUTO_INCOME);
+    }
 
     @RequestMapping(value = "/deleteAutoIncome/{incomeId}", method = RequestMethod.GET)
     public Status deleteAutoIncome(@PathVariable("incomeId") BigInteger incomeId,
@@ -203,6 +209,6 @@ public class FamilyDebitController {
 
     @RequestMapping("/layout")
     public String getPersonalAccountPartialPage() {
-        return URL.PERSONAL_DEBIT;
+        return URL.FAMILY_DEBIT;
     }
 }

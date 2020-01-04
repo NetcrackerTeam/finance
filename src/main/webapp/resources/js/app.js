@@ -33,7 +33,7 @@ app.config(['$routeProvider', function ($routeProvider) {
         controller: FamilyDebitController
     });
 
-    $routeProvider.otherwise({redirectTo: '/'});
+ //   $routeProvider.otherwise({redirectTo: '/'});
 }]);
 
 

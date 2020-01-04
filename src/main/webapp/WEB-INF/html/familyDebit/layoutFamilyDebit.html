@@ -1,18 +1,13 @@
 <nav>
-    <div class="topnavFamily" id="TopnavFamily">
-        <a href="#/personalCredit/{{user.debitId}}">Create Credit</a> <!--#1 class = main_about-->
-        <!--<a href="#createCreditModal" data-toggle="modal">Create Credit</a>-->
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#incomeOp">
-            Add income
-        </button>
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#expenseOp">
-            Add expense
-        </button>
+    <div class="topnavPersonal" id="TopnavPersonal">
+        <a href="#createCreditModal" data-toggle="modal">Create Credit</a>
+        <a href="#incomeOp" data-toggle="modal">Add income</a>
+        <a href="#expenseOp" data-toggle="modal">Add expense</a>
         <a href="#/personalReport">Report</a> <!--#2 class = Comment_form-->
         <a href="#prediction" data-toggle="modal">Prognosis</a> <!--#2 class = Comment_form-->
     </div>
 </nav>
-
+<h1><span ng-show="user.debitId.length > 0">ID from RootScope: {{user.debitId}}</span></h1>
 <div class="col-xl-8 col-lg-7">
     <div class="card shadow mb-4">
         <!-- Card Header - Dropdown -->
@@ -20,7 +15,7 @@
             <h6 class="m-0 font-weight-bold text-primary">History</h6>
         </div>
         <!-- Card Body -->
-        <div class="card-body" ng-controller="FamilyDebitController">
+        <div class="card-body" ng-controller="PersonalDebitController">
             <div class="row">
                 <div class="col-md-12">
                     <div class="panel panel-default">
@@ -29,6 +24,7 @@
                             <table class="table table-striped">
                                 <thead>
                                 <tr>
+                                    <th>ID</th>
                                     <th>Amount</th>
                                     <th>Income</th>
                                     <th>Expense</th>
@@ -36,7 +32,8 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr ng-repeat="hisInf in familyHistory">
+                                <tr ng-repeat="hisInf in personalHistory">
+                                    <td>{{hisInf.id}}</td>
                                     <td>{{hisInf.amount}}</td>
                                     <td>{{hisInf.categoryIncome}}</td>
                                     <td>{{hisInf.categoryExpense}}</td>
@@ -65,7 +62,7 @@
             <h6 class="m-0 font-weight-bold text-primary">Credits</h6>
         </div>
         <!-- Card Body -->
-        <div class="card-body" ng-controller="FamilyCreditController">
+        <div class="card-body" ng-controller="PersonalCreditController">
             <div class="row">
                 <div class="col-md-12">
                     <div class="panel panel-default">
@@ -78,7 +75,7 @@
                                     <th>name</th>
                                     <th>amount</th>
                                     <th>paidAmount</th>
-                                    <th>Date</th>
+                                    <th>dateFrom</th>
                                     <th>creditRate</th>
                                     <th>dateTo</th>
                                     <th>monthDay</th>
@@ -120,7 +117,7 @@
             <h6 class="m-0 font-weight-bold text-primary">Auto operations</h6>
         </div>
         <!-- Card Body -->
-        <div class="card-body" ng-controller="FamilyDebitController">
+        <div class="card-body" ng-controller="PersonalDebitController">
             <div class="row">
                 <div class="col-md-12">
                     <div class="panel panel-default">
@@ -137,7 +134,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr ng-repeat="autoOperInf in familyAutoOperationHistory">
+                                <tr ng-repeat="autoOperInf in personalAutoOperationHistory">
                                     <td>{{autoOperInf.categoryExpense}}</td>
                                     <td>{{autoOperInf.categoryIncome}}</td>
                                     <td>{{autoOperInf.dayOfMonth}}</td>
@@ -160,36 +157,40 @@
     <br/>
 </div>
 
-<form>
-<div class="modal fade" id="createCreditModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 align="center" class="modal-title" id="passwordModalLabel"> Creating credit</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p><input type="text" class="form-control" placeholder="Enter credit name" ng-model="credit.name" id="creditName"/></p>
-                <p><input type="date" class="form-control" placeholder="Enter credit creation date" ng-model="credit.dateFrom"/></p>
-                <p><input type="number" min="1" class="form-control" placeholder="Enter credit amount" ng-model="credit.amount"/></p>
-                <p><input type="number" min="1" class="form-control" placeholder="Enter credit paid amount" ng-model="credit.paidAmount"/></p>
-                <div class="slidecontainer">
-                    <p id="creditRateText">Credit rate: </p>
-                    <p><input type="range" min="0" max="100" step="0.1" class="slider" id="creditRateRange" ng-model="credit.rate"/></p>
+<form ng-controller="PersonalCreditController" ng-submit="addCredit()">
+    <div class="modal fade" id="createCreditModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 align="center" class="modal-title" id="passwordModalLabel"> Creating credit</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <i><h6><p align="center" style="color:#565656">Please fill in all fields</p></h6></i>
                 </div>
-                <p><input type="date" class="form-control" placeholder="Enter credit ends date" ng-model="credit.dateTo"/></p>
-                <p><input type="number" min="1" max="28" class="form-control" placeholder="Enter payment day of month" ng-model="credit.dayOfMonth"/></p>
-                <p></p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" ng-disabled="!credit.name" ng-click="addCredit(credit)">Save changes</button>
+                <div class="modal-body">
+                    <p><input type="text" class="form-control" placeholder="Enter credit name" ng-model="credit.name" id="creditName"/></p>
+                    <p>Enter credit start date:</p>
+                    <p><input type="date" class="form-control" id="dateFrom" ng-model="credit.date"/></p>
+                    <p><input type="number" min="1" step="0.01" class="form-control" placeholder="Enter credit amount" ng-model="credit.amount"/></p>
+                    <p><input type="number" min="0" step="0.01" class="form-control" placeholder="Enter credit paid amount" ng-model="credit.paidAmount"/></p>
+                    <div class="slidecontainer">
+                        <p id="creditRateText">Credit rate: </p>
+                        <p><input type="range" min="0" max="100" step="0.1" class="slider" id="creditRateRange" ng-model="credit.creditRate"/></p>
+                    </div>
+                    <p>Enter credit ends date:</p>
+                    <p><input type="date" class="form-control" id="dateTo" ng-model="credit.dateTo"/></p>
+                    <p style="color:#565656"><h6>*The end date must be bigger than the start date </h6></p>
+                    <p><input type="number" min="1" max="28" class="form-control" placeholder="Enter payment day of month" ng-model="credit.monthDay"/></p>
+                    <p></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary" ng-disabled="isNotEmptyCredit(credit)" onclick="$('.modal').modal('hide')">Save changes</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
 </form>
 
 
@@ -230,7 +231,7 @@
             <div class="modal-header">
                 <h4 align="center" class="modal-title" id="incomeOpLabel"> New income </h4>
             </div>
-            <div class="modal-body" ng-controller="AddIncomeController">
+            <div class="modal-body" ng-controller="AddIncomeControllerFamily">
                 <form >
                     <div class="form-group">
                         <label for="income">Amount:</label>
@@ -248,17 +249,16 @@
                         </select>
                     </div>
                     <div class="form-group">
-                            <input type="checkbox" ng-model="form.checkbox" /> Is auto income
+                        <input type="checkbox" ng-model="form.checkbox" /> Make operation repetitive each month
                     </div>
                     <div class="form-group">
-                        <label for="income">dayOfMonth:</label>
-                        <input type="number" ng-disabled="!form.checkbox" ng-model="form.dayOfMonth" class="form-control" placeholder="Enter amount" name="incomeAmount"/>
+                        <label for="income">Day of month:</label>
+                        <input type="number" ng-disabled="!form.checkbox" ng-model="form.dayOfMonth" class="form-control" placeholder="Enter day of month" name="expenseAccount"/>
                     </div>
 
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal" >Close</button>
                         <button type="submit" value="Submit" class="btn btn-primary" ng-disabled = "!form.amount || !form.categoryIncome" onclick="$('.modal').modal('hide')" ng-click="submitOperation()" >Add </button>
-                        <button type="button" class="btn btn-primary" ng-disabled="!form.amount || !form.categoryIncome || !form.checkbox || !form.dayOfMonth" ng-hide="!form.checkbox" onclick="$('.modal').modal('hide')" ng-click="submitAutoOperation()">Add Auto Income</button>
                     </div>
                 </form>
 
@@ -275,11 +275,11 @@
             <div class="modal-header">
                 <h4 align="center" class="modal-title" id="expenseOpLabel"> New expense </h4>
             </div>
-            <div class="modal-body" ng-controller="AddExpenseController">
+            <div class="modal-body" ng-controller="AddExpenseControllerFamily">
                 <form>
                     <div class="form-group">
                         <label for="expense">Amount:</label>
-                        <input type="number" ng-model="form.amount" class="form-control" step=".01" id="expense" placeholder="Enter amount" name="expenseAmount"/>
+                        <input type="number" ng-model="form.amountExp" class="form-control" step=".01" id="expense" placeholder="Enter amount" name="expenseAmount"/>
                     </div>
                     <div class="form-group">
                         <label for="categoryExp">Expense category:</label>
@@ -301,17 +301,16 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <input type="checkbox" ng-model="form.checkbox" /> Is auto income
+                        <input type="checkbox" ng-model="form.checkbox" /> Make operation repetitive each month
                     </div>
                     <div class="form-group">
-                        <label for="income">dayOfMonth:</label>
-                        <input type="number" ng-disabled="!form.checkbox" ng-model="form.dayOfMonth" class="form-control" placeholder="Enter amount" name="incomeAmount"/>
+                        <label for="income">Day of month:</label>
+                        <input type="number" ng-disabled="!form.checkbox" ng-model="form.dayOfMonth" class="form-control" placeholder="Enter day of month" name="incomeAmount"/>
                     </div>
 
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal" >Close</button>
-                        <button type="submit" value="Submit" class="btn btn-primary" ng-disabled = "!form.amount || !form.categoryIncome" onclick="$('.modal').modal('hide')" ng-click="submitOperation()" >Add </button>
-                        <button type="button" class="btn btn-primary" ng-disabled="!form.amount || !form.categoryExpense || !form.checkbox || !form.dayOfMonth" ng-hide="!form.checkbox" onclick="$('.modal').modal('hide')" ng-click="submitAutoOperation()">Add Auto Income</button>
+                        <button type="submit" value="Submit" class="btn btn-primary" ng-disabled = "!form.amountExp || !form.categoryExpense" onclick="$('.modal').modal('hide')" ng-click="submitOperation()" >Add </button>
                     </div>
                 </form>
             </div>

@@ -97,7 +97,7 @@ public class PersonalDebitController {
         BigInteger accountId = getAccountByPrincipal(principal);
         accountAutoOperationService.createPersonalIncomeAutoOperation(autoOperationIncome, accountId);
         logger.debug("autoIncome is done!");
-        return new Status(true, MessageController.ADD_AUTO_INCOME_PERS);
+        return new Status(true, MessageController.ADD_AUTO_INCOME);
     }
 
     @RequestMapping(value = "/createAutoExpense", method = RequestMethod.POST)
@@ -107,7 +107,7 @@ public class PersonalDebitController {
         BigInteger accountId = getAccountByPrincipal(principal);
         accountAutoOperationService.createPersonalExpenseAutoOperation(autoOperationExpense, accountId);
         logger.debug("expense is done!");
-        return new Status(true, MessageController.ADD_AUTO_EXPENSE_PERS);
+        return new Status(true, MessageController.ADD_AUTO_EXPENSE);
     }
 
     @RequestMapping(value = "/deleteAutoIncome", method = RequestMethod.GET)

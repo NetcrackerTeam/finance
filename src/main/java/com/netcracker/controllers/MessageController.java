@@ -7,8 +7,8 @@ public interface MessageController {
     String ADD_EXPENSE_PERS = "Added new expense by account";
     String DELETE_AUTO_INCOME_PERS = "Your auto income deleted by account ";
     String DELETE_AUTO_EXPENSE_PERS = "Your auto income deleted by account ";
-    String ADD_AUTO_INCOME_PERS = "Added new auto income by account";
-    String ADD_AUTO_EXPENSE_PERS = "Added new auto expense by account";
+    String ADD_AUTO_INCOME = "Added new auto income by account";
+    String ADD_AUTO_EXPENSE = "Added new auto expense by account";
     //     FamilyDebitController
     String  DEACT_FAMACC_FAM = "Deactivated unsuccessfully account ";
     String DEACT_UNS_FAMACC_FAM = "Deactivated unsuccessfully account ";

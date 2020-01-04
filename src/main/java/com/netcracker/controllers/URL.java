@@ -10,5 +10,5 @@ public interface URL {
     String PERSONAL_DEBIT = "personalDebit/layoutPersonalDebit";
     String REPORT_PERS = "personalDebit/layoutReport";
     String TEMPLATE_URL = "templateForURL";
-    String FAMILY_DEBIT = "personalDebit/layoutPersonalDebit";
+    String FAMILY_DEBIT = "familyDebit/layoutFamilyDebit";
 }
