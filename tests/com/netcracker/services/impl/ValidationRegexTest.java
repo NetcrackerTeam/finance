@@ -10,7 +10,7 @@ public class ValidationRegexTest {
 
     @Test
     public void ValidPasswordTest() {
-        String[] passwordValid = {"mkYOn12$", " dkKdw12#@"};
+        String[] passwordValid = {"mkYOn12$", "dkKdw12#@"};
         for (String temp : passwordValid) {
             boolean valid = userValidationRegex.validateValueByUser(temp, RegexPatterns.PASSWORD_PATTERN);
             Assert.assertEquals(true, valid);

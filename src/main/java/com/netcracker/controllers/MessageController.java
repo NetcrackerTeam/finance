@@ -1,6 +1,15 @@
 package com.netcracker.controllers;
 
 public interface MessageController {
+    //UserController
+    String SUCCESS_UPDATE_PASSWORD = "Password was updated successfully ";
+    String SUCCESS_UPDATE_EMAIL = "Email was updated successfully";
+    String INVALID_OLD_EMAIL = "Old email incorrect,\n" +
+            "does not match the old email try again ";
+    String  ERROR_VALIDATE_EMAIL = "You new email incorrect ";
+    String LOGGER_UPDATE_EMAIL = "updateEmailByUser in  method updateEmail . User id - ";
+    String LOGGER_UPDATE_PASSWORD ="updatePasswordByUser in  method updateUserPassword . User id - ";
+    String INVALID_CONFIRM_PASSWORD = "Your passwords do not match, please  try again  ";
     //    PersonalDebitController
     String ADD_CREDIT_PERS = "Added new credit by account";
     String ADD_INCOME_PERS = "Added new income by account";

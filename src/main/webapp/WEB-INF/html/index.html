@@ -57,7 +57,8 @@
     </nav>
 </header>
 
-<!-- Modal -->
+<!-- Modal  password-->
+<form action="" th:action="@{/updatePassword}"  method="post" >
 <div class="modal fade" id="passwordModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
      aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -69,16 +70,22 @@
                 </button>
             </div>
             <div class="modal-body">
+<!--                <span th:if="${errorOldEmail != null}"   th:text="${errorOldEmail}"> </span>-->
+                <input class="form-control" placeholder="New password" type="text" name="newPassword"/>
                 <p></p>
+                <input class="form-control" placeholder="Confirm password" type="text" name="newConfirmPassword"/>
+
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <input  class="btn btn-primary"  type="submit" value="Save changes"/>
+
             </div>
         </div>
     </div>
 </div>
-
-<!-- Modal -->
+</form>
+<!-- Modal email -->
 <form action="" th:action="@{/updateEmail}"  method="post">
     <div class="modal fade" id="emailModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
          aria-hidden="true">
@@ -91,10 +98,10 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <span th:if="${error != null}"   th:text="${error}"> </span>
-                    <input class="form-control" placeholder="Old Email" type="text" name="oldEmail"/>
+                    <span th:if="${errorOldEmail != null}"   th:text="${errorOldEmail}"> </span>
+                    <input class="form-control" placeholder="Old Email" type="password" name="oldEmail"/>
                     <p></p>
-                    <input class="form-control" placeholder="New Email" type="text" name="newEmail"/>
+                    <input class="form-control" placeholder="New Email" type="password" name="newEmail"/>
 
                 </div>
                 <div class="modal-footer">

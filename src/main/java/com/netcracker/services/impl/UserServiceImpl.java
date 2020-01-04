@@ -6,6 +6,7 @@ import com.netcracker.models.enums.UserStatusActive;
 import com.netcracker.services.UserService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
@@ -42,6 +43,29 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUserById(BigInteger userId) {
-       return  userDao.getUserById(userId);
+        return userDao.getUserById(userId);
+    }
+
+    @Override
+    public boolean confirmUserPassword(String password, String confirmPassword) {
+        boolean notNull = (password != null && confirmPassword != null);
+        boolean equalPassword = (password.equals(confirmPassword));
+        if (!notNull) {
+            logger.debug("password null" + password + " " + " " + confirmPassword);
+        } else if (equalPassword) {
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public String encodePassword(String password) {
+        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+        if (password == null) {
+            logger.debug("password null" + password);
+        } else {
+            return bCryptPasswordEncoder.encode(password);
+        }
+        return null;
     }
 }
