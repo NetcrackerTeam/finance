@@ -29,7 +29,7 @@ public class LoginController {
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public String login() {
-        return URL.LOGIN_URL;
+        return   URL.LOGIN_URL;
     }
 
     @RequestMapping(value = "/registration", method = RequestMethod.GET)

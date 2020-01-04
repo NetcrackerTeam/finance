@@ -8,13 +8,16 @@ import com.netcracker.services.validation.RegexPatterns;
 import com.netcracker.services.validation.UserValidationRegex;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigInteger;
+import java.util.Map;
 
 @Controller
-@RequestMapping("/user")
 public class UserController {
     @Autowired
     private UserDao userDao;
@@ -23,6 +26,26 @@ public class UserController {
 
 
     private static final Logger logger = Logger.getLogger(UserController.class);
+
+    @RequestMapping(value = "/updateEmail", method = RequestMethod.POST)
+    public String updateEmail(@ModelAttribute
+                                  @RequestParam Map<String, String> mapUserData, Model model ) {
+        User userTemp = userDao.getUserByEmail(getCurrentUsername());
+        logger.debug("updateEmailByUser in  method updateEmail . User id - " + userTemp.getId());
+        String oldEmail = mapUserData.get("oldEmail");
+        String newEmail = mapUserData.get("newEmail");
+        boolean validOldEmail = userTemp.geteMail().equals(oldEmail);
+        boolean validateEmail = userValidation.validateValueByUser(newEmail,RegexPatterns.EMAIL_PATTERN);
+        if (!validOldEmail){
+            model.addAttribute("error", "_________________________");
+        }else
+        if (validateEmail) {
+            userDao.updateEmail(userTemp.getId(),newEmail);
+        }else {
+            model.addAttribute("error", "Username or password is incorrect.");
+        }
+        return "index";
+    }
 
     @RequestMapping(value = "/updatePassword/{userId}/{userLogin}", method = RequestMethod.POST)
     public Status updateUserPassword(
@@ -47,18 +70,9 @@ public class UserController {
         return new Status(true, "Deactivated successfully user " + id);
     }
 
-
-    @RequestMapping(value = "/updateEmail/{userId}/{userEmail}", method = RequestMethod.POST)
-    public Status updateEmail(
-            @PathVariable(value = "userId") String id,
-            @PathVariable("userEmail") String userEmail) {
-        logger.debug("updateEmailByUser in  method updateEmail . User id - " + id);
-        BigInteger userId = new BigInteger(id);
-        boolean validateEmail = userValidation.validateValueByUser(userEmail,RegexPatterns.EMAIL_PATTERN);
-        if (validateEmail) {
-            User user = userDao.getUserById(userId);
-            userDao.updateEmail(user.getId(), userEmail);
-        }
-            return  new Status(true, "Email was update ");
+    public  static  String getCurrentUsername() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        return auth.getName();
     }
+
 }
