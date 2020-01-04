@@ -47,7 +47,7 @@ public class PersonalDebitController {
 
     private static final Logger logger = Logger.getLogger(PersonalDebitController.class);
 
-    @RequestMapping(value = "/income", consumes = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.POST)
+    @RequestMapping(value = "/income", method = RequestMethod.POST)
     public Status addIncomePersonal(@RequestBody AccountIncome income,
                                     Principal principal) {
         BigInteger accountId = getAccountByPrincipal(principal);

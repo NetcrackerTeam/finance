@@ -1,12 +1,8 @@
 <nav>
     <div class="topnavPersonal" id="TopnavPersonal">
         <a href="#createCreditModal" data-toggle="modal">Create Credit</a>
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#incomeOp">
-            Add income
-        </button>
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#expenseOp">
-            Add expense
-        </button>
+        <a href="#incomeOp" data-toggle="modal">Add income</a>
+        <a href="#expenseOp" data-toggle="modal">Add expense</a>
         <a href="#/personalReport">Report</a> <!--#2 class = Comment_form-->
         <a href="#prediction" data-toggle="modal">Prognosis</a> <!--#2 class = Comment_form-->
     </div>
@@ -253,17 +249,16 @@
                         </select>
                     </div>
                     <div class="form-group">
-                            <input type="checkbox" ng-model="form.checkbox" /> Is auto income
+                            <input type="checkbox" ng-model="form.checkbox" /> Make operation repetitive each month
                     </div>
                     <div class="form-group">
-                        <label for="income">dayOfMonth:</label>
-                        <input type="number" ng-disabled="!form.checkbox" ng-model="form.dayOfMonth" class="form-control" placeholder="Enter amount" name="incomeAmount"/>
+                        <label for="income">Day of month:</label>
+                        <input type="number" ng-disabled="!form.checkbox" ng-model="form.dayOfMonth" class="form-control" placeholder="Enter day of month" name="expenseAccount"/>
                     </div>
 
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal" >Close</button>
                         <button type="submit" value="Submit" class="btn btn-primary" ng-disabled = "!form.amount || !form.categoryIncome" onclick="$('.modal').modal('hide')" ng-click="submitOperation()" >Add </button>
-                        <button type="button" class="btn btn-primary" ng-disabled="!form.amount || !form.categoryIncome || !form.checkbox || !form.dayOfMonth" ng-hide="!form.checkbox" onclick="$('.modal').modal('hide')" ng-click="submitAutoOperation()">Add Auto Income</button>
                     </div>
                 </form>
 
@@ -284,7 +279,7 @@
                 <form>
                     <div class="form-group">
                         <label for="expense">Amount:</label>
-                        <input type="number" ng-model="form.amount" class="form-control" step=".01" id="expense" placeholder="Enter amount" name="expenseAmount"/>
+                        <input type="number" ng-model="form.amountExp" class="form-control" step=".01" id="expense" placeholder="Enter amount" name="expenseAmount"/>
                     </div>
                     <div class="form-group">
                         <label for="categoryExp">Expense category:</label>
@@ -306,17 +301,16 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <input type="checkbox" ng-model="form.checkbox" /> Is auto income
+                        <input type="checkbox" ng-model="form.checkbox" /> Make operation repetitive each month
                     </div>
                     <div class="form-group">
-                        <label for="income">dayOfMonth:</label>
-                        <input type="number" ng-disabled="!form.checkbox" ng-model="form.dayOfMonth" class="form-control" placeholder="Enter amount" name="incomeAmount"/>
+                        <label for="income">Day of month:</label>
+                        <input type="number" ng-disabled="!form.checkbox" ng-model="form.dayOfMonth" class="form-control" placeholder="Enter day of month" name="incomeAmount"/>
                     </div>
 
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal" >Close</button>
-                        <button type="submit" value="Submit" class="btn btn-primary" ng-disabled = "!form.amount || !form.categoryIncome" onclick="$('.modal').modal('hide')" ng-click="submitOperation()" >Add </button>
-                        <button type="button" class="btn btn-primary" ng-disabled="!form.amount || !form.categoryExpense || !form.checkbox || !form.dayOfMonth" ng-hide="!form.checkbox" onclick="$('.modal').modal('hide')" ng-click="submitAutoOperation()">Add Auto Income</button>
+                        <button type="submit" value="Submit" class="btn btn-primary" ng-disabled = "!form.amountExp || !form.categoryExpense" onclick="$('.modal').modal('hide')" ng-click="submitOperation()" >Add </button>
                     </div>
                 </form>
             </div>

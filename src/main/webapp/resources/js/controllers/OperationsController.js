@@ -7,12 +7,13 @@ app.controller("AddIncomeController", function ($scope, $http) {
         amount: 0.00,
         categoryIncome: "DEFAULT",
         checkbox: false,
-        dayOfMonth: "5"
+        dayOfMonth: "1"
     };
 
     $scope.submitOperation = function () {
         method = "POST";
-        url = 'debitPersonal/income';
+
+        $scope.form.checkbox ? url = 'debitPersonal/createAutoIncome' : url = 'debitPersonal/income';
 
         $http({
             method: method,
@@ -27,37 +28,19 @@ app.controller("AddIncomeController", function ($scope, $http) {
             alert("unsuccess")
         });
     };
-
-        $scope.submitAutoOperation = function () {
-            method = "POST";
-            url = 'debitPersonal/createAutoIncome';
-
-            $http({
-                method: method,
-                url: url,
-                data: angular.toJson($scope.form),
-                headers : {
-                    'Content-Type' : 'application/json'
-                }
-            }).success(function () {
-                alert("success")
-            }).error(function () {
-                alert("unsuccess")
-            });
-    }
-
 });
 
 app.controller("AddExpenseController", function ($scope, $http) {
     debugger;
     $scope.form = {
-        amount: 0.00,
+        amountExp: 0.00,
         categoryExpense: "DEFAULT"
     };
 
     $scope.submitOperation = function () {
         method = "POST";
         url = 'debitPersonal/expense';
+        $scope.form.checkbox ? url = 'debitPersonal/createAutoExpense' : url = 'debitPersonal/expense';
 
         $http({
             method: method,
@@ -69,23 +52,5 @@ app.controller("AddExpenseController", function ($scope, $http) {
         });
 
     };
-
-    $scope.submitAutoOperation = function () {
-        method = "POST";
-        url = 'debitPersonal/createAutoExpense';
-
-        $http({
-            method: method,
-            url: url,
-            data: angular.toJson($scope.form),
-            headers : {
-                'Content-Type' : 'application/json'
-            }
-        }).success(function () {
-            alert("success")
-        }).error(function () {
-            alert("unsuccess")
-        });
-    }
 });
 
