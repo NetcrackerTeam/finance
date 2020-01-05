@@ -1,6 +1,5 @@
 package com.netcracker.configs;
 
-import com.netcracker.services.FamilyDebitService;
 import com.netcracker.services.UserService;
 import com.netcracker.services.impl.UserServiceImpl;
 import org.apache.commons.dbcp.BasicDataSource;
@@ -24,11 +23,7 @@ import org.thymeleaf.spring4.view.ThymeleafViewResolver;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
 import javax.sql.DataSource;
-import java.net.URI;
 import java.net.URISyntaxException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
 import java.util.Locale;
 import java.util.Properties;
 
