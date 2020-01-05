@@ -2,8 +2,8 @@ package com.netcracker.configs;
 
 import com.netcracker.services.FamilyDebitService;
 import com.netcracker.services.UserService;
+import com.netcracker.services.impl.FamilyDebitServiceImpl;
 import com.netcracker.services.impl.UserServiceImpl;
-import org.apache.commons.dbcp.BasicDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -24,8 +24,6 @@ import org.thymeleaf.spring4.view.ThymeleafViewResolver;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
 import javax.sql.DataSource;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.Locale;
 import java.util.Properties;
 
@@ -36,22 +34,6 @@ import java.util.Properties;
 public class WebConfig implements WebMvcConfigurer {
     @Autowired
     private Environment env;
-
-    @Bean
-    public DataSource dataSource() throws URISyntaxException {
-        URI dbUri = new URI(System.getenv("DATABASE_URL"));
-
-        String username = dbUri.getUserInfo().split(":")[0];
-        String password = dbUri.getUserInfo().split(":")[1];
-        String dbUrl = "jdbc:oracle://" + dbUri.getHost() + dbUri.getPath();
-
-        BasicDataSource basicDataSource = new BasicDataSource();
-        basicDataSource.setUrl(dbUrl);
-        basicDataSource.setUsername(username);
-        basicDataSource.setPassword(password);
-
-        return basicDataSource;
-    }
 
     @Bean
     public ServletContextTemplateResolver templateResolver() {
@@ -94,16 +76,16 @@ public class WebConfig implements WebMvcConfigurer {
         return mailSender;
     }
 
-//    @Bean(name = "dataSource")
-//    public DataSource getDataSource() {
-//        DriverManagerDataSource dataSource = new DriverManagerDataSource();
-//        dataSource.setDriverClassName(env.getProperty("db.driver-class-name"));
-//        dataSource.setUrl(env.getProperty("db.url"));
-//        dataSource.setUsername(env.getProperty("db.username"));
-//        dataSource.setPassword(env.getProperty("db.password"));
-//
-//        return dataSource;
-//    }
+    @Bean(name = "dataSource")
+    public DataSource getDataSource() {
+        DriverManagerDataSource dataSource = new DriverManagerDataSource();
+        dataSource.setDriverClassName(env.getProperty("db.driver-class-name"));
+        dataSource.setUrl(env.getProperty("db.url"));
+        dataSource.setUsername(env.getProperty("db.username"));
+        dataSource.setPassword(env.getProperty("db.password"));
+
+        return dataSource;
+    }
     @Override
     public void addResourceHandlers(final ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
@@ -116,13 +98,17 @@ public class WebConfig implements WebMvcConfigurer {
     }
 
     @Bean
-    public PlatformTransactionManager txManager() throws URISyntaxException {
+    public PlatformTransactionManager txManager() {
         Locale.setDefault(Locale.ENGLISH);
-        return new DataSourceTransactionManager(dataSource());
+        return new DataSourceTransactionManager(getDataSource());
     }
 
     @Bean(name = "userService")
     public UserService getUserService() {
         return new UserServiceImpl();
+    }
+    @Bean(name = "familyDebitService")
+    public FamilyDebitService getFamilyDebitService() {
+        return new FamilyDebitServiceImpl();
     }
 }
