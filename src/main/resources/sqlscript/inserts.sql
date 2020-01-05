@@ -96,7 +96,7 @@ INSERT INTO ATTRTYPE (ATTR_ID,OBJECT_TYPE_ID,OBJECT_TYPE_ID_REF,NAME) VALUES (6,
 INSERT INTO ATTRTYPE (ATTR_ID,OBJECT_TYPE_ID,OBJECT_TYPE_ID_REF,NAME) VALUES (7,2,NULL,'AMOUNT');
 INSERT INTO ATTRTYPE (ATTR_ID,OBJECT_TYPE_ID,OBJECT_TYPE_ID_REF,NAME) VALUES (70,2,NULL,'ISACTIVE');
 --FAMILY ACCOUNT
-INSERT INTO ATTRTYPE (ATTR_ID,OBJECT_TYPE_ID,OBJECT_TYPE_ID_REF,NAME) VALUES (8,13,1,'PARTICIPANT_FAMILY_ACC'); 
+INSERT INTO ATTRTYPE (ATTR_ID,OBJECT_TYPE_ID,OBJECT_TYPE_ID_REF,NAME) VALUES (8,13,1,'PARTICIPANT_FAMILY_ACC');
 --REFERENCE TO USER
 
 INSERT INTO ATTRTYPE (ATTR_ID,OBJECT_TYPE_ID,OBJECT_TYPE_ID_REF,NAME) VALUES (9,13,NULL,'AMOUNT');
@@ -244,6 +244,8 @@ INSERT INTO ATTRTYPE (ATTR_ID,OBJECT_TYPE_ID,OBJECT_TYPE_ID_REF,NAME) VALUES (66
 INSERT INTO ATTRTYPE (ATTR_ID,OBJECT_TYPE_ID,OBJECT_TYPE_ID_REF,NAME) VALUES (67,12,NULL,'DAY_OF_MONTH');
 INSERT INTO ATTRTYPE (ATTR_ID,OBJECT_TYPE_ID,OBJECT_TYPE_ID_REF,NAME) VALUES (68,23,NULL,'DAY_OF_MONTH');
 
+--ROLE
+INSERT INTO ATTRTYPE (ATTR_ID,OBJECT_TYPE_ID,OBJECT_TYPE_ID_REF,NAME) VALUES (71,1,NULL,'ROLE');
 
 
 --LISTS
@@ -265,7 +267,7 @@ insert into Lists(attr_id, list_value_id, value) values(51, 13, 'OTHER');
 -- атрибут категории для операции дохода
 insert into Lists(attr_id, list_value_id, value) values(57, 14, 'SALARY');
 insert into Lists(attr_id, list_value_id, value) values(57, 15, 'AWARD');
-insert into Lists(attr_id, list_value_id, value) values(57, 16, 'PERSENTS');
+insert into Lists(attr_id, list_value_id, value) values(57, 16, 'PRESENTS');
 insert into Lists(attr_id, list_value_id, value) values(57, 17, 'GIFTS');
 insert into Lists(attr_id, list_value_id, value) values(57, 18, 'OTHER');
 
@@ -288,7 +290,7 @@ insert into Lists(attr_id, list_value_id, value) values(25, 31, 'OTHER');
 -- REPORT CATEGORY AS INCOME
 insert into Lists(attr_id, list_value_id, value) values(20, 32, 'SALARY');
 insert into Lists(attr_id, list_value_id, value) values(20, 33, 'AWARD');
-insert into Lists(attr_id, list_value_id, value) values(20, 34, 'PERSENTS');
+insert into Lists(attr_id, list_value_id, value) values(20, 34, 'PRESENTS');
 insert into Lists(attr_id, list_value_id, value) values(20, 35, 'GIFTS');
 insert into Lists(attr_id, list_value_id, value) values(20, 36, 'OTHER');
 
@@ -308,5 +310,9 @@ insert into Lists(attr_id, list_value_id, value) values(69, 42, 'NO');
 insert into Lists(attr_id, list_value_id, value) values(70, 43, 'YES');
 insert into Lists(attr_id, list_value_id, value) values(70, 44, 'NO');
 
+-- ROLE
+insert into Lists(attr_id, list_value_id, value) values(71, 45, 'USER');
+insert into Lists(attr_id, list_value_id, value) values(71, 46, 'OWNER');
+insert into Lists(attr_id, list_value_id, value) values(71, 47, 'PARTICIPANT');
 
 COMMIT;

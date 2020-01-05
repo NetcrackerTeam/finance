@@ -15,6 +15,7 @@
  insert into attributes(attr_id, object_id, value) values(4, 1, 'password');
  insert into attributes(attr_id, object_id, value) values(5, 1, 'Eugen');
  insert into attributes(attr_id, object_id, list_value_id) values(6, 1, 39);
+ insert into attributes(attr_id, object_id, list_value_id) values(71, 1, 46);
  
 	-- reference to personal_deb_acc1
 	INSERT INTO OBJREFERENCE (ATTR_ID,OBJECT_ID,REFERENCE) VALUES (1,1,2);
