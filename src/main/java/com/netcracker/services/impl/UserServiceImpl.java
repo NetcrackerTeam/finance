@@ -33,7 +33,7 @@ public class UserServiceImpl implements UserService {
     public boolean isUserHaveFamilyAccount(BigInteger userId) {
         User userTemp = getUserById(userId);
         boolean isUserHasFamilyAccount = BigInteger.ZERO.equals(userTemp.getFamilyDebitAccount());
-        if (!isUserHasFamilyAccount) {
+        if (isUserHasFamilyAccount) {
             logger.debug("User  have family Account with id " + userId);
             return true;
         }

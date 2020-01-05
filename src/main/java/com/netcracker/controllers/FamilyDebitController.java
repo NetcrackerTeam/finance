@@ -58,7 +58,7 @@ public class FamilyDebitController {
 
     @RequestMapping(value = "/createAccount", method = RequestMethod.POST)
     @ResponseBody
-    public Status createFamilyDebitAccount(@RequestParam String nameAccount,
+    public Status createFamilyDebitAccount(@RequestParam(value = "nameAccount") String nameAccount,
                                            Principal principal) {
         User user = userDao.getUserByEmail(principal.getName());
         FamilyDebitAccount familyDebitAccount = new FamilyDebitAccount.Builder()
@@ -72,46 +72,51 @@ public class FamilyDebitController {
     }
 
     @RequestMapping(value = "/deactivation", method = RequestMethod.GET)
-    public Status deleteFamilyDebitAccount(@PathVariable("id") BigInteger accountId,
-                                           @RequestParam(value = "userId") BigInteger userId,
-                                           Model model) {
+    @ResponseBody
+    public Status deleteFamilyDebitAccount(Principal principal) {
+
+        BigInteger accountId = getAccountByPrincipal(principal);
+        BigInteger userId = getUserIdByPrincipal(principal);
         try {
-            logger.debug("deactivate family account " + accountId + "user id " + userId);
+            logger.debug("deactivate family account " + accountId + " user id " + userId);
             familyDebitService.deleteFamilyDebitAccount(accountId, userId);
             logger.debug("success deactivate");
             return new Status(true, MessageController.DEACT_FAMACC_FAM + accountId);
         } catch (NullObjectException ex) {
-            model.addAttribute("errorMessage", ex.getMessage());
             return new Status(true, MessageController.DEACT_UNS_FAMACC_FAM + accountId);
         }
     }
 
     @RequestMapping(value = "/addUser", method = RequestMethod.POST)
-    public Status addUserToAccount(@PathVariable("id") BigInteger accountId,
-                                   @RequestParam(value = "userId") BigInteger userId,
-                                   Model model) {
+    @ResponseBody
+    public Status addUserToAccount(@RequestParam(value = "userLogin") String userLogin,
+                                   Principal principal) {
+
+        BigInteger userId = userDao.getUserByEmail(userLogin).getId();
+        BigInteger accountId = getAccountByPrincipal(principal);
         try {
             logger.debug("add user to account " + accountId + "user id " + userId);
             familyDebitService.addUserToAccount(accountId, userId);
             logger.debug("success adding user");
             return new Status(true, MessageController.ADD_USER_FAM + userDao.getUserById(userId).getName());
         } catch (NullObjectException ex) {
-            model.addAttribute("errorMessage", ex.getMessage());
             return new Status(true, MessageController.ADD_UNS_USER_FAM + userDao.getUserById(userId).getName());
         }
     }
 
     @RequestMapping(value = "/deleteUser", method = RequestMethod.GET)
-    public Status deleteUserFromAccount(@PathVariable("id") BigInteger accountId,
-                                        @RequestParam(value = "userId") BigInteger userId,
-                                        Model model) {
+    @ResponseBody
+    public Status deleteUserFromAccount(@RequestParam(value = "userLogin") String userLogin,
+                                        Principal principal) {
+
+        BigInteger userId = userDao.getUserByEmail(userLogin).getId();
+        BigInteger accountId = getAccountByPrincipal(principal);
         try {
             logger.debug("delete user to account " + accountId + "user id " + userId);
             familyDebitService.deleteUserFromAccount(accountId, userId);
             logger.debug("success adding user");
             return new Status(true, MessageController.DELETE_USER_FAM + userDao.getUserById(userId).getName());
         } catch (NullObjectException ex) {
-            model.addAttribute("errorMessage", ex.getMessage());
             return new Status(true, MessageController.DELETE_UNS_USER_FAM + userDao.getUserById(userId).getName());
         }
     }

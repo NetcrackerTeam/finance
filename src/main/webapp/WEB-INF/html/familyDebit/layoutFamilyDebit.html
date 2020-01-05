@@ -5,12 +5,14 @@
         <a href="#expenseOp" data-toggle="modal">Add expense</a>
         <a href="#/personalReport">Report</a> <!--#2 class = Comment_form-->
         <a href="#prediction" data-toggle="modal">Prognosis</a> <!--#2 class = Comment_form-->
+        <a href="#addUser" data-toggle="modal">Participants Control</a> <!--#2 class = Comment_form-->
     </div>
 </nav>
 <h1><span ng-show="user.debitIdFamily.length > 0">ID from RootScope: {{user.debitId}}</span></h1>
 <!-- creating Family Account -->
 <div class="input-append" ng-show="user.debitIdFamily.length == 0">
-    <input style="width:358px; margin-left: 100px;" class="span2" type="text" ng-model="nameFamilyAccount" placeholder="Enter family account name" required="required" min="1" />
+    <input style="width:358px; margin-left: 100px;" class="span2" type="text" ng-model="nameFamilyAccount"
+           placeholder="Enter family account name" required="required" min="1"/>
     <button class="btn btn-primary" ng-click="createFamilyAccount()">Add Family Account</button>
 </div>
 
@@ -141,7 +143,8 @@
                                     <td>{{autoOperInf.categoryIncome}}</td>
                                     <td>{{autoOperInf.dayOfMonth}}</td>
                                     <td>{{autoOperInf.amount}}</td>
-                                    <td>{{autoOperInf.date.year}}-{{autoOperInf.date.month}}-{{autoOperInf.date.day}}</td>
+                                    <td>{{autoOperInf.date.year}}-{{autoOperInf.date.month}}-{{autoOperInf.date.day}}
+                                    </td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -160,7 +163,8 @@
 </div>
 
 <form ng-controller="PersonalCreditController" ng-submit="addCredit()" ng-show="user.debitIdFamily.length > 0">
-    <div class="modal fade" id="createCreditModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="createCreditModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -168,27 +172,36 @@
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
-                    <i><h6><p align="center" style="color:#565656">Please fill in all fields</p></h6></i>
+                    <i>
+                        <h6><p align="center" style="color:#565656">Please fill in all fields</p></h6>
+                    </i>
                 </div>
                 <div class="modal-body">
-                    <p><input type="text" class="form-control" placeholder="Enter credit name" ng-model="credit.name" id="creditName"/></p>
+                    <p><input type="text" class="form-control" placeholder="Enter credit name" ng-model="credit.name"
+                              id="creditName"/></p>
                     <p>Enter credit start date:</p>
                     <p><input type="date" class="form-control" id="dateFrom" ng-model="credit.date"/></p>
-                    <p><input type="number" min="1" step="0.01" class="form-control" placeholder="Enter credit amount" ng-model="credit.amount"/></p>
-                    <p><input type="number" min="0" step="0.01" class="form-control" placeholder="Enter credit paid amount" ng-model="credit.paidAmount"/></p>
+                    <p><input type="number" min="1" step="0.01" class="form-control" placeholder="Enter credit amount"
+                              ng-model="credit.amount"/></p>
+                    <p><input type="number" min="0" step="0.01" class="form-control"
+                              placeholder="Enter credit paid amount" ng-model="credit.paidAmount"/></p>
                     <div class="slidecontainer">
                         <p id="creditRateText">Credit rate: </p>
-                        <p><input type="range" min="0" max="100" step="0.1" class="slider" id="creditRateRange" ng-model="credit.creditRate"/></p>
+                        <p><input type="range" min="0" max="100" step="0.1" class="slider" id="creditRateRange"
+                                  ng-model="credit.creditRate"/></p>
                     </div>
                     <p>Enter credit ends date:</p>
                     <p><input type="date" class="form-control" id="dateTo" ng-model="credit.dateTo"/></p>
                     <p style="color:#565656"><h6>*The end date must be bigger than the start date </h6></p>
-                    <p><input type="number" min="1" max="28" class="form-control" placeholder="Enter payment day of month" ng-model="credit.monthDay"/></p>
+                    <p><input type="number" min="1" max="28" class="form-control"
+                              placeholder="Enter payment day of month" ng-model="credit.monthDay"/></p>
                     <p></p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary" ng-disabled="isNotEmptyCredit(credit)" onclick="$('.modal').modal('hide')">Save changes</button>
+                    <button type="submit" class="btn btn-primary" ng-disabled="isNotEmptyCredit(credit)"
+                            onclick="$('.modal').modal('hide')">Save changes
+                    </button>
                 </div>
             </div>
         </div>
@@ -197,7 +210,8 @@
 
 
 <form ng-controller="FamilyPredictController" ng-submit="getPredict()" ng-show="user.debitIdFamily.length > 0">
-    <div class="modal fade" id="prediction" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="prediction" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -214,12 +228,15 @@
                             <option>Expense</option>
                         </select>
                     </div>
-                    <p><input type="number" min="1" class="form-control" placeholder="Enter duration" ng-model="predict.duration"/></p>
+                    <p><input type="number" min="1" class="form-control" placeholder="Enter duration"
+                              ng-model="predict.duration"/></p>
                     <pre>Predict sum: {{status}}</pre>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" ng-disabled="!predict.duration || !predict.category" ng-click="fetch()">Predict</button>
+                    <button type="button" class="btn btn-primary" ng-disabled="!predict.duration || !predict.category"
+                            ng-click="fetch()">Predict
+                    </button>
                 </div>
             </div>
         </div>
@@ -227,17 +244,19 @@
 </form>
 
 <!-- Income/Auto_Income Operations -->
-<div class="modal fade" id="incomeOp" tabindex="-1" role="dialog" aria-labelledby="incomeOpLabel" aria-hidden="true" ng-show="user.debitIdFamily.length > 0">
+<div class="modal fade" id="incomeOp" tabindex="-1" role="dialog" aria-labelledby="incomeOpLabel" aria-hidden="true"
+     ng-show="user.debitIdFamily.length > 0">
     <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h4 align="center" class="modal-title" id="incomeOpLabel"> New income </h4>
             </div>
             <div class="modal-body" ng-controller="AddIncomeControllerFamily">
-                <form >
+                <form>
                     <div class="form-group">
                         <label for="income">Amount:</label>
-                        <input type="number" ng-model="form.amount" class="form-control" step=".01" id="income" placeholder="Enter amount" name="incomeAmount"/>
+                        <input type="number" ng-model="form.amount" class="form-control" step=".01" id="income"
+                               placeholder="Enter amount" name="incomeAmount"/>
                     </div>
                     <div class="form-group">
                         <label for="categoryInc">Income category:</label>
@@ -251,16 +270,20 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <input type="checkbox" ng-model="form.checkbox" /> Make operation repetitive each month
+                        <input type="checkbox" ng-model="form.checkbox"/> Make operation repetitive each month
                     </div>
                     <div class="form-group">
                         <label for="income">Day of month:</label>
-                        <input type="number" ng-disabled="!form.checkbox" ng-model="form.dayOfMonth" class="form-control" placeholder="Enter day of month" name="expenseAccount"/>
+                        <input type="number" ng-disabled="!form.checkbox" ng-model="form.dayOfMonth"
+                               class="form-control" placeholder="Enter day of month" name="expenseAccount"/>
                     </div>
 
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal" >Close</button>
-                        <button type="submit" value="Submit" class="btn btn-primary" ng-disabled = "!form.amount || !form.categoryIncome" onclick="$('.modal').modal('hide')" ng-click="submitOperation()" >Add </button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" value="Submit" class="btn btn-primary"
+                                ng-disabled="!form.amount || !form.categoryIncome" onclick="$('.modal').modal('hide')"
+                                ng-click="submitOperation()">Add
+                        </button>
                     </div>
                 </form>
 
@@ -271,7 +294,8 @@
 </div>
 
 <!-- Expense/Auto_Expense Operations -->
-<div class="modal fade" id="expenseOp" tabindex="-1" role="dialog" aria-labelledby="expenseOpLabel" aria-hidden="true" ng-show="user.debitIdFamily.length > 0">
+<div class="modal fade" id="expenseOp" tabindex="-1" role="dialog" aria-labelledby="expenseOpLabel" aria-hidden="true"
+     ng-show="user.debitIdFamily.length > 0">
     <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -281,7 +305,8 @@
                 <form>
                     <div class="form-group">
                         <label for="expense">Amount:</label>
-                        <input type="number" ng-model="form.amountExp" class="form-control" step=".01" id="expense" placeholder="Enter amount" name="expenseAmount"/>
+                        <input type="number" ng-model="form.amountExp" class="form-control" step=".01" id="expense"
+                               placeholder="Enter amount" name="expenseAmount"/>
                     </div>
                     <div class="form-group">
                         <label for="categoryExp">Expense category:</label>
@@ -303,20 +328,59 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <input type="checkbox" ng-model="form.checkbox" /> Make operation repetitive each month
+                        <input type="checkbox" ng-model="form.checkbox"/> Make operation repetitive each month
                     </div>
                     <div class="form-group">
                         <label for="income">Day of month:</label>
-                        <input type="number" ng-disabled="!form.checkbox" ng-model="form.dayOfMonth" class="form-control" placeholder="Enter day of month" name="incomeAmount"/>
+                        <input type="number" ng-disabled="!form.checkbox" ng-model="form.dayOfMonth"
+                               class="form-control" placeholder="Enter day of month" name="incomeAmount"/>
                     </div>
 
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal" >Close</button>
-                        <button type="submit" value="Submit" class="btn btn-primary" ng-disabled = "!form.amountExp || !form.categoryExpense" onclick="$('.modal').modal('hide')" ng-click="submitOperation()" >Add </button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" value="Submit" class="btn btn-primary"
+                                ng-disabled="!form.amountExp || !form.categoryExpense"
+                                onclick="$('.modal').modal('hide')" ng-click="submitOperation()">Add
+                        </button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
+</div>
+
+
+<!-- add user to family account -->
+<div class="modal fade" id="addUser" tabindex="-1" role="dialog" aria-labelledby="incomeOpLabel" aria-hidden="true"
+     ng-show="user.debitIdFamily.length > 0">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 align="center" class="modal-title" id="addUserLabel"> New Participant </h4>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="income">User login</label>
+                        <input type="text" ng-model="loginParticipant" class="form-control"
+                               id="participant" placeholder="Enter user login"/>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" value="Submit" class="btn btn-primary" ng-disabled="!loginParticipant"
+                                onclick="$('.modal').modal('hide')" ng-click="deleteParticipant()">Delete User
+                        </button>
+                        <button type="submit" value="Submit" class="btn btn-primary" ng-disabled="!loginParticipant"
+                                onclick="$('.modal').modal('hide')" ng-click="addParticipant()">Add
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="input-append" ng-show="user.debitIdFamily.length > 0">
+    <button class="btn btn-primary" ng-click="deleteFamilyAccount()">Delete Family Account</button>
 </div>
 

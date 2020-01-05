@@ -33,6 +33,62 @@ var FamilyDebitController = function ($scope, $http, $rootScope) {
             });
         };
 
+    $scope.deleteFamilyAccount = function () {
+        var method = "GET";
+
+        var url = 'debitFamily/deactivation';
+
+        $http({
+            method: method,
+            url: url
+        }).success(function () {
+            alert("success");
+            window.location.reload();
+        }).error(function () {
+            alert("unsuccess")
+        });
+    };
+    $scope.loginParticipant = "";
+    $scope.addParticipant = function () {
+        var method = "POST";
+
+        var url = 'debitFamily/addUser';
+
+        $http({
+            method: method,
+            url: url,
+            params: {'userLogin':$scope.loginParticipant},
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).success(function () {
+            alert("success");
+     //       window.location.reload();
+        }).error(function () {
+            alert("unsuccess " + $scope.loginParticipant)
+        });
+    };
+
+    $scope.deleteParticipant = function () {
+        var method = "GET";
+
+        var url = 'debitFamily/deleteUser';
+
+        $http({
+            method: method,
+            url: url,
+            params: {'userLogin':$scope.loginParticipant},
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).success(function () {
+            alert("success");
+            //       window.location.reload();
+        }).error(function () {
+            alert("unsuccess " + $scope.loginParticipant)
+        });
+    };
+
         $scope.fetchPersonalAutoOperationHistory();
         $scope.fetchFamilyHistory('2019-01-11');
     };
