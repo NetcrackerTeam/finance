@@ -14,3 +14,8 @@ deploy:
   app: teamexample
   api_key:
     secure: 3f72c6ba-31d0-4d50-a2ef-33ed37ae61d4
+spring:
+  datasource:
+    url: ${JDBC_DATABASE_URL}
+    username: ${JDBC_DATABASE_USERNAME}
+    password: ${JDBC_DATABASE_PASSWORD}
