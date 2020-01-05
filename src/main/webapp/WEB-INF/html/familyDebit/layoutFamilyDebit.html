@@ -24,7 +24,6 @@
                             <table class="table table-striped">
                                 <thead>
                                 <tr>
-                                    <th>ID</th>
                                     <th>Amount</th>
                                     <th>Income</th>
                                     <th>Expense</th>
@@ -33,7 +32,6 @@
                                 </thead>
                                 <tbody>
                                 <tr ng-repeat="hisInf in personalHistory">
-                                    <td>{{hisInf.id}}</td>
                                     <td>{{hisInf.amount}}</td>
                                     <td>{{hisInf.categoryIncome}}</td>
                                     <td>{{hisInf.categoryExpense}}</td>
@@ -71,7 +69,6 @@
                             <table class="table table-striped">
                                 <thead>
                                 <tr>
-                                    <th>creditId</th>
                                     <th>name</th>
                                     <th>amount</th>
                                     <th>paidAmount</th>
@@ -84,7 +81,6 @@
                                 </thead>
                                 <tbody>
                                 <tr ng-repeat="credInf in familyCredit">
-                                    <td>{{credInf.creditId}}</td>
                                     <td>{{credInf.name}}</td>
                                     <td>{{credInf.amount}}</td>
                                     <td>{{credInf.paidAmount}}</td>
