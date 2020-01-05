@@ -97,6 +97,11 @@ public class CreditAccountDaoImpl implements CreditAccountDao {
         return jdbcTemplate.queryForObject(GET_FAMILY_DEBIT_ID_BY_CREDIT_ID, new Object[]{idCreditAccount}, BigInteger.class);
     }
 
+    @Override
+    public void deletePersonalCreditAccountByCreditId(BigInteger creditId) {
+        jdbcTemplate.update(DELETE_CREDIT_ACCOUNT, creditId);
+    }
+
     private void createCredit(BigInteger id, AbstractCreditAccount creditAccount, String queryCredit, String queryDebt) {
         String creditName = id + creditAccount.getName();
         jdbcTemplate.update(queryCredit,

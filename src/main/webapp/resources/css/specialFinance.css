@@ -65,7 +65,7 @@ ul.menu > li {
     position: relative;
 }
 ul.menu > li > a {
-    margin-top: -42px;
+    margin-top: -40px;
     display: block;
     padding: 0 30px;
     color: #3a4e7a;
@@ -78,7 +78,7 @@ ul.menu > li > a:hover {
 ul.submenu {
     display: none;
     position: absolute;
-    width: 150px;
+    width: 250px;
     right: 0;
     background-color: #5e83ba;
     border: #5e83ba;

@@ -8,7 +8,9 @@
     </div>
 </nav>
 <h1><span ng-show="user.debitId.length > 0">ID from RootScope: {{user.debitId}}</span></h1>
-<div class="col-xl-8 col-lg-7">
+
+<div class="row">
+<div class="col-xl-8 col-lg-6">
     <div class="card shadow mb-4">
         <!-- Card Header - Dropdown -->
         <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
@@ -54,6 +56,29 @@
     <br/>
     <br/>
 </div>
+
+<div class="col-lg-6">
+<form class="creditsForm" ng-controller="PersonalCreditController">
+    <fieldset>
+        <legend>Credits</legend>
+        <center>
+            <!--<button class="creditButtons" id="infoCredit" disabled="disabled" data-toggle="modal" data-target="#infoCreditModal" >Info</button>-->
+            <button class="creditButtons" id="infoCredit" disabled="disabled"
+                    onclick="window.open('#/infoCredit/{{optionSelect.idCredit}}')">Info</button>
+            <button class="creditButtons" id="deleteCredit" disabled="disabled" ng-click="deletePersonalCredit()">Delete</button>
+        </center>
+            <div class="creditsDiv">
+                <select id="creditsSelect" ng-click="checkSelect()" multiple="multiple" size="3">
+                    <option ng-repeat="credInf in personalCredit" value="{{credInf.creditId}}">{{credInf.name}}</option>
+                </select>
+            </div>
+    </fieldset>
+</form>
+</div>
+</div>
+
+
+
 
 <div class="col-xl-8 col-lg-7">
     <div class="card shadow mb-4">
@@ -157,7 +182,7 @@
     <br/>
 </div>
 
-<form ng-controller="PersonalCreditController" ng-submit="addCredit()">
+<form ng-controller="PersonalCreditController" ng-submit="addPersonalCredit()">
 <div class="modal fade" id="createCreditModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -338,4 +363,3 @@
         </div>
     </div>
 </div>
-

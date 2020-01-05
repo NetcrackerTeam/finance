@@ -5898,6 +5898,7 @@ button.close {
        -o-transform: translate(0, 0);
           transform: translate(0, 0);
 }
+
 .modal-open .modal {
   overflow-x: hidden;
   overflow-y: auto;

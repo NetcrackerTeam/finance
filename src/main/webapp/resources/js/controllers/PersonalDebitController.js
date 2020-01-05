@@ -20,6 +20,5 @@ var PersonalDebitController = function($scope, $http) {
 
     $scope.fetchPersonalAutoOperationHistory();
     $scope.fetchPersonalHistory('2019-01-11');
-
 };
 

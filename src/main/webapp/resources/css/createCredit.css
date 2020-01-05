@@ -35,3 +35,120 @@
     background: #62A4DC;
     cursor: pointer;
 }
+
+.split {
+    width: 50%;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    overflow-x: hidden;
+    padding-top: 20px;
+}
+
+.left {
+    left: 0;
+    margin-left: 10px;
+}
+
+.right {
+    right: 0;
+    margin-right: 10px;
+}
+
+.centered {
+    position: absolute;
+    left: 50%;
+}
+
+.creditsForm legend {
+    padding: 0.2em 0.5em;
+    color: #346d7e;
+    font-size: 22pt;
+    margin-left: 40px;
+    border-bottom:none;
+    width: 95pt;
+}
+
+.creditsForm fieldset {
+    border: 1px solid #6EA5BF;
+}
+
+.creditsForm {
+    padding-right: 10px;
+}
+
+.creditsDiv {
+    height: 50%;
+    font-size: 48px;
+    overflow: auto;
+    padding: 10px;
+}
+
+.creditsDiv select::-webkit-scrollbar {
+    width: 10px;
+}
+
+.creditsDiv select::-webkit-scrollbar-track {
+    background: #D9E5EB;
+}
+
+.creditsDiv select::-webkit-scrollbar-thumb {
+    background: #77A1B5;
+}
+
+.creditsDiv select::-webkit-scrollbar-thumb:hover {
+    background: #657D88;
+}
+
+.creditsDiv select::-webkit-scrollbar-thumb:active {
+    background: #596A72;
+}
+
+.creditsDiv select {
+    background-color: white;
+    color: #215772;
+    padding: 12pt;
+    width: 100%;
+    height: 100%;
+    border: none;
+    font-size: 20px;
+    outline: none;
+}
+
+.creditsDiv select option {
+    -webkit-transition-duration: 0.2s;
+    transition-duration: 0.2s;
+    padding: 20px;
+}
+
+.creditsDiv select option:hover {
+    background: #A5C7D7;
+    cursor: pointer;
+}
+
+.creditButtons {
+    display: inline-block;
+    padding: 8pt 50pt;
+    color: 	#EFFAFF;
+    background: #35A2D7;
+    border: none;
+    outline: none;
+    font-size: 16px;
+    -webkit-transition-duration: 0.4s;
+    transition-duration: 0.4s;
+}
+
+.creditButtons:hover {
+    background: #3594C3;
+    color: #EAF2F5;
+    cursor: pointer;
+}
+
+.creditButtons:active {
+    background: #2C7BA1;
+}
+
+.creditButtons:disabled {
+    background: #9CADB5;
+    cursor: not-allowed;
+}

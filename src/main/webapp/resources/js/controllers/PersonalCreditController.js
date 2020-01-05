@@ -3,7 +3,7 @@
  * PersonalCreditController
  * @constructor
  */
-var PersonalCreditController = function($scope, $http) {
+var PersonalCreditController = function($scope, $http, $rootScope) {
     $scope.credits = [];
     $scope.credit = {
         name: "",
@@ -17,7 +17,7 @@ var PersonalCreditController = function($scope, $http) {
     };
 
     var getPersonalCreditsURL = 'personalCredit/getPersonalCredits';
-    $scope.fetchCreditList= function(){
+    $scope.fetchCreditList = function(){
         $http.get(getPersonalCreditsURL).success(function (creditList) {
             $scope.personalCredit = creditList;
         });
@@ -25,7 +25,7 @@ var PersonalCreditController = function($scope, $http) {
     $scope.fetchCreditList();
 
     var addCreditURL = 'personalCredit/addCredit';
-    $scope.addCredit = function() {
+    $scope.addPersonalCredit = function() {
         var dateFrom = new Date(Date.parse($scope.credit.date));
         var dateTo = new Date(Date.parse($scope.credit.dateTo));
         $scope.credit.date = {
@@ -93,4 +93,47 @@ var PersonalCreditController = function($scope, $http) {
         output.innerHTML = 'Credit rate: ' + this.value + ' %';
     };
 
+    $scope.checkSelect = function() {
+        var selectedDiv = document.getElementById("creditsSelect");
+        var infoButton = document.getElementById("infoCredit");
+        var deleteButton = document.getElementById("deleteCredit");
+        var selectedOption = selectedDiv.options[selectedDiv.selectedIndex].text;
+        $rootScope.optionSelect.idCredit = selectedDiv.options[selectedDiv.selectedIndex].value;
+        if (selectedOption !== "none") {
+            infoButton.disabled = false;
+            deleteButton.disabled = false;
+        }
+    };
+
+    $scope.fetchPersonalCredit = function(creditId) {
+        $http.get('/personalCredit/getPersonalCredit', {params: creditId}).success(function (response) {
+            $rootScope.gottenPersonalCredit = response;
+        });
+    };
+    $scope.fetchPersonalCredit($rootScope.optionSelect.idCredit);
+
+    $scope.checkDebtDateFrom = function () {
+        var debtDateFrom = document.getElementById("debtDateFrom");
+        if (debtDateFrom.innerHTML === null) return false;
+    };
+
+    $scope.deletePersonalCredit = function () {
+        var doDelete = confirm("Are you sure you want to delete the credit?");
+        if (doDelete) {
+            $http({
+                method: "DELETE",
+                url: "personalCredit/deletePersonalCredit/" + $rootScope.optionSelect.idCredit
+            }).then(success, error);
+        } else alert("Credit hasn't been deleted");
+    };
+
+    $scope.addPersonalCreditPayment = function () {
+        $http({
+            method : "PUT",
+            url : "personalCredit/" + $rootScope.optionSelect.idCredit + "/addPersonalCreditPayment" + "?amount=" + $rootScope.personalCreditPayment.amount,
+            headers : {
+                'Content-Type' : 'application/json'
+            }
+        }).then(success, error );
+    };
 };

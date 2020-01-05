@@ -104,6 +104,10 @@ public interface CreditAccountDao {
 
     BigInteger getFamilyDebitIdByCreditId(BigInteger idCreditAccount);
 
+    void deletePersonalCreditAccountByCreditId(BigInteger creditId);
+
+    String DELETE_CREDIT_ACCOUNT = "DELETE FROM OBJECTS WHERE OBJECT_ID = ?";
+
     String SELECT_FAMILY_CREDIT_QUERY = "SELECT CRED.OBJECT_ID CREDIT_ID, NAME_AT.VALUE NAME, AMOUNT_AT.VALUE AMOUNT,\n" +
             "  PAID_AT.VALUE PAID, DATE_AT.DATE_VALUE DATE_CR,  RATE_AT.VALUE CREDIT_RATE, \n" +
             "  DATE_TO_AT.DATE_VALUE DATE_TO, MONTH_DAY_AT.VALUE MONTH_DAY, IS_PAID_AT.LIST_VALUE_ID IS_PAID,\n" +

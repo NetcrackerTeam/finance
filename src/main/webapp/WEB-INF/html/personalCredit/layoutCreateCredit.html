@@ -1,0 +1,56 @@
+<html lang="en" ng-app="AngularSpringApp" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title></title>
+</head>
+<body>
+<div ng-controller="PersonalCreditController" id="mainPage" class="parallax-section" >
+    <header class="headerInfoCredit"><span th:text="${creditName}"></span></header>
+    <form class="formInfoCredit">
+        <p><span class="spanInfoCredit" th:text="${creditAmount}"></span></p>
+        <p><span class="spanInfoCredit" th:text="${creditRate}"></span></p>
+        <p><span class="spanInfoCredit" th:text="${creditPaidAmount}"></span></p>
+        <p><span class="spanInfoCredit" th:text="${creditDateFrom}"></span></p>
+        <p><span class="spanInfoCredit" th:text="${creditDateTo}"></span></p>
+        <p><span class="spanInfoCredit notSee" id="debtDateFrom" th:text="${creditDebtDateFrom}"></span></p>
+        <p><span class="spanInfoCredit notSee" id="debtDateTo" th:text="${creditDebtDateTo}"></span></p>
+        <p><span class="spanInfoCredit" th:text="${creditDebtAmount}"></span></p>
+        <center><p><button type="button" class="infoCreditButtons" data-toggle="modal" data-target="#addPersonalCreditPayment">Add Credit Payment</button></p></center>
+    </form>
+</div>
+<form ng-controller="PersonalCreditController" ng-submit="addPersonalCreditPayment()">
+    <div class="modal fade" id="addPersonalCreditPayment" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 align="center" class="modal-title"> Add Credit Payment</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <i><h6><p align="center" style="color:#565656">Please fill in all fields</p></h6></i>
+                </div>
+                <div class="modal-body">
+                    <p>{{personalCreditPayment.amount}}</p>
+                    <p><input type="number" step="0.01" min="0.01" class="form-control" placeholder="Enter payment amount" ng-model="" id="creditName"/></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary" ng-disabled="" onclick="$('.modal').modal('hide')">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<footer class="footerInfoCredit">&copy; NetCracker 2019-2020</footer>
+<script src="resources/js/angular/angular.js"></script>
+<script src="resources/js/app.js"></script>
+<script type="text/javascript" src="resources/js/jquery.touchSwipe.min.js"></script>
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.js"></script>
+<script src="resources/js/controllers/PersonalDebitController.js"></script>
+<script src="resources/js/controllers/PersonalCreditController.js"></script>
+<script src="resources/js/controllers/OperationsController.js"></script>
+<script src="resources/js/controllers/FamilyDebitController.js"></script>
+<script src="resources/js/controllers/PersonalPredictController.js"></script>
+<script src="resources/js/controllers/FamilyPredictController.js"></script>
+</body>
+</html>
