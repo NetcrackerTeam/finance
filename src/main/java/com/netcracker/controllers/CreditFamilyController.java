@@ -14,13 +14,13 @@ import java.util.Collection;
 import java.util.Date;
 
 @Controller
-@RequestMapping("/debit/family/{id}/credit")
+@RequestMapping("/familyCredit")
 public class CreditFamilyController {
 
     @Autowired
     FamilyCreditService creditService;
 
-    @RequestMapping(value = "/all", method = RequestMethod.GET)
+    @RequestMapping(value = "/getFamilyCredits", method = RequestMethod.GET)
     @ResponseBody
     public Collection<FamilyCreditAccount> getAllCredits(@PathVariable("id") BigInteger id) {
         return creditService.getFamilyCredits(id);

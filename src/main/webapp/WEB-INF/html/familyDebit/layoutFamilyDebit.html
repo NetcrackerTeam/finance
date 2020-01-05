@@ -62,7 +62,7 @@
             <h6 class="m-0 font-weight-bold text-primary">Credits</h6>
         </div>
         <!-- Card Body -->
-        <div class="card-body" ng-controller="PersonalCreditController">
+        <div class="card-body" ng-controller="FamilyCreditController">
             <div class="row">
                 <div class="col-md-12">
                     <div class="panel panel-default">
@@ -83,7 +83,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr ng-repeat="credInf in personalCredit">
+                                <tr ng-repeat="credInf in familyCredit">
                                     <td>{{credInf.creditId}}</td>
                                     <td>{{credInf.name}}</td>
                                     <td>{{credInf.amount}}</td>
