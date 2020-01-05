@@ -2,6 +2,7 @@ package com.netcracker.services.impl;
 
 import com.netcracker.dao.*;
 import com.netcracker.exception.MonthReportException;
+import com.netcracker.exception.UserException;
 import com.netcracker.models.*;
 import com.netcracker.services.FamilyDebitService;
 import com.netcracker.services.MonthReportService;
@@ -146,7 +147,12 @@ public class MonthReportServiceImpl implements MonthReportService {
             for (CategoryExpenseReport exp :
                     monthReport.getCategoryExpense()) {
 
-                String name = userDao.getUserById(exp.getUserReference()).getName();
+                String name = null;
+                try {
+                    name = userDao.getUserById(exp.getUserReference()).getName();
+                } catch (UserException e) {
+                    logger.debug(e.getMessage(), e);
+                }
                 if (name != null) {
                     writer.write(name + SPACE);
                 }
@@ -155,9 +161,16 @@ public class MonthReportServiceImpl implements MonthReportService {
 
             writer.write(INCOMES_BY_CATEGORIES);
             writer.write(DOTTED_LINE);
+
             for (CategoryIncomeReport inc :
                     monthReport.getCategoryIncome()) {
-                String name = userDao.getUserById(inc.getUserReference()).getName();
+
+                String name = null;
+                try {
+                    name = userDao.getUserById(inc.getUserReference()).getName();
+                } catch (UserException e) {
+                    logger.debug(e.getMessage(), e);
+                }
                 if (name != null) {
                     writer.write(name + SPACE);
                 }

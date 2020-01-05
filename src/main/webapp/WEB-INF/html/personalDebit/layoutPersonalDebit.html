@@ -245,7 +245,7 @@
     </div>
 </form>
 
-<form>
+<form ng-controller="RepCtrl" ng-submit="getReport()">
     <div class="modal fade" id="report" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 
     <div class="modal-dialog" role="document">
@@ -256,10 +256,16 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <p><input type="month" class="form-control" id="dateFrom1" ng-model="credit.dateFrom"/></p>
+
+                <div class="modal-body">
+                    <label for="category">Choose month to get report</label>
+                    <p><input type="month" class="form-control" id="month" ng-model="month"/></p>
+<!--                    <input type="file" on-read-file="showContent($fileContent)" />-->
+                    <pre>{{content}}</pre>
+                </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" ng-disabled="!amount">Predict</button>
+                    <button type="submit" class="btn btn-primary" ng-disabled="!month" ng-click="getReport()">Get report</button>
                 </div>
             </div>
         </div>

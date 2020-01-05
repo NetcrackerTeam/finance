@@ -14,11 +14,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.math.BigInteger;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.security.Principal;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
+import java.util.Scanner;
 
 @Controller
 @RequestMapping("/debitPersonal")
@@ -131,15 +135,27 @@ public class PersonalDebitController {
 
     @RequestMapping(value = "/report", method = RequestMethod.GET)
     @ResponseBody
-    public MonthReport getReport(
+    public String getReport(
             Principal principal,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateFrom,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateTo
     ) {
-        BigInteger accountId = getAccountByPrincipal(principal);
+        BigInteger accountId = BigInteger.valueOf(2); //getAccountByPrincipal(principal);
+
         MonthReport monthReport = monthReportService.getMonthPersonalReport(accountId, dateFrom, dateTo);
+
+        Path path = monthReportService.convertToTxt(monthReport);
+
+        String report = null;
+        try {
+            report = new String(Files.readAllBytes(path.getFileName()));
+        } catch (IOException e) {
+
+        }
+
         logger.debug("Month report is ready");
-        return monthReport;
+
+        return report;
     }
 
     @RequestMapping("/layout")
