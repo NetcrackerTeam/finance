@@ -25,6 +25,7 @@ import javax.sql.DataSource;
 import java.net.URISyntaxException;
 import java.util.Locale;
 import java.util.Properties;
+import java.util.TimeZone;
 
 @Configuration
 @EnableWebMvc
@@ -76,6 +77,9 @@ public class WebConfig implements WebMvcConfigurer {
     }
     @Bean
     public DataSource dataSource() {
+        TimeZone timeZone = TimeZone.getTimeZone("Europe/Kiev");
+        TimeZone.setDefault(timeZone);
+
         String dbUrl = System.getenv("JDBC_DATABSE_URL");
         String username = System.getenv("JDBC_DATABASE_USERNAME");
         String password = System.getenv("JDBC_DATABASE_PASSWORD");
