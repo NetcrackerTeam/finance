@@ -1,5 +1,6 @@
 package com.netcracker.dao.impl.mapper;
 import com.netcracker.models.User;
+import com.netcracker.models.enums.UserRole;
 import com.netcracker.models.enums.UserStatusActive;
 import org.springframework.jdbc.core.RowMapper;
 
@@ -20,6 +21,7 @@ public class UserDaoMapper implements RowMapper<User> {
                 .userActive(UserStatusActive.getStatusByKey( resultSet.getBigDecimal("is_active").toBigInteger()))
                 .personalDebit(checkNull(resultSet.getBigDecimal("per_deb_acc1")))
                 .familyDebit(checkNull(resultSet.getBigDecimal("fam_deb_acc1")))
+                .userRole(UserRole.getStatusByKey(resultSet.getBigDecimal("role").toBigInteger()))
                 .build();
     }
     private BigInteger checkNull(BigDecimal id) {
