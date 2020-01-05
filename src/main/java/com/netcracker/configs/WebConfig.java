@@ -2,8 +2,8 @@ package com.netcracker.configs;
 
 import com.netcracker.services.FamilyDebitService;
 import com.netcracker.services.UserService;
-import com.netcracker.services.impl.FamilyDebitServiceImpl;
 import com.netcracker.services.impl.UserServiceImpl;
+import org.apache.commons.dbcp.BasicDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -24,6 +24,11 @@ import org.thymeleaf.spring4.view.ThymeleafViewResolver;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
 import javax.sql.DataSource;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.Locale;
 import java.util.Properties;
 
@@ -34,6 +39,20 @@ import java.util.Properties;
 public class WebConfig implements WebMvcConfigurer {
     @Autowired
     private Environment env;
+
+    @Bean
+    public BasicDataSource dataSource() throws URISyntaxException {
+        String dbUrl = System.getenv("JDBC_DATABASE_URL");
+        String username = System.getenv("JDBC_DATABASE_USERNAME");
+        String password = System.getenv("JDBC_DATABASE_PASSWORD");
+
+        BasicDataSource basicDataSource = new BasicDataSource();
+        basicDataSource.setUrl(dbUrl);
+        basicDataSource.setUsername(username);
+        basicDataSource.setPassword(password);
+
+        return basicDataSource;
+    }
 
     @Bean
     public ServletContextTemplateResolver templateResolver() {
@@ -107,8 +126,5 @@ public class WebConfig implements WebMvcConfigurer {
     public UserService getUserService() {
         return new UserServiceImpl();
     }
-    @Bean(name = "familyDebitService")
-    public FamilyDebitService getFamilyDebitService() {
-        return new FamilyDebitServiceImpl();
-    }
+
 }
