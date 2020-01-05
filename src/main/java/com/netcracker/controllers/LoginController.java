@@ -32,7 +32,10 @@ public class LoginController {
     private PasswordEncoder passwordEncoder;
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
-    public String login() {
+    public String login(Model model, String error) {
+        if (error != null) {
+            model.addAttribute("error", "Username or password is incorrect.");
+        }
         return   URL.LOGIN_URL;
     }
 
