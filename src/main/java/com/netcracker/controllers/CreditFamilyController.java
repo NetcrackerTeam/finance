@@ -64,9 +64,10 @@ public class CreditFamilyController {
         try {
             familyCreditService.addFamilyCreditPayment(familyDebitId, creditId, amount, new Date(), userId);
         } catch (CreditAccountException ex) {
-            if (ex.getMessage().equals(ErrorsMap.NOT_MONEY)) model.addAttribute("message", ErrorsMap.getErrorsMap().get(ErrorsMap.CODE_NOT_MONEY));
+            if (ex.getMessage().equals(ExceptionMessages.NOT_ENOUGH_MONEY_ERROR))
+                model.addAttribute("message", ErrorsMap.getErrorsMap().get(ExceptionMessages.NOT_ENOUGH_MONEY_ERROR));
             else model.addAttribute("message", ex.getMessage());
-            return "exceptionPage";
+            return URL.EXCEPTION_PAGE;
         }
         return URL.FAMILY_CREDIT;
     }

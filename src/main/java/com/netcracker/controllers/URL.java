@@ -16,4 +16,5 @@ public interface URL {
 //    PersonalCreditController URL
     String FAMILY_CREDIT = "familyCredit/layoutCreateFamilyCredit";
 
+    String EXCEPTION_PAGE = "exceptionPage";
 }

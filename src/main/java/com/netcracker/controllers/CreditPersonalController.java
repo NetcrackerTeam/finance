@@ -2,9 +2,12 @@ package com.netcracker.controllers;
 
 import com.netcracker.dao.CreditAccountDao;
 import com.netcracker.dao.UserDao;
+import com.netcracker.exception.CreditAccountException;
+import com.netcracker.exception.ErrorsMap;
 import com.netcracker.models.PersonalCreditAccount;
 import com.netcracker.models.Status;
 import com.netcracker.services.PersonalCreditService;
+import com.netcracker.services.utils.ExceptionMessages;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -50,7 +53,14 @@ public class CreditPersonalController {
         logger.debug("[addPersonalCreditPayment]" + MessageController.debugStartMessage  + "[debitId = " + debitId + "], [creditId = " + creditId + "]");
         double amount = Double.parseDouble(amountMap.get("amount"));
         model.addAttribute("creditPayment", amount);
-        personalCreditService.addPersonalCreditPayment(debitId, creditId, amount);
+        try {
+            personalCreditService.addPersonalCreditPayment(debitId, creditId, amount);
+        } catch (CreditAccountException ex) {
+            if (ex.getMessage().equals(ExceptionMessages.NOT_ENOUGH_MONEY_ERROR))
+                model.addAttribute("message", ErrorsMap.getErrorsMap().get(ExceptionMessages.NOT_ENOUGH_MONEY_ERROR));
+            else model.addAttribute("message", ex.getMessage());
+            return URL.EXCEPTION_PAGE;
+        }
         return URL.PERSONAL_CREDIT;
     }
 

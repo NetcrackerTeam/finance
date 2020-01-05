@@ -32,4 +32,6 @@ public interface MessageController {
     //     CreditsControllers
     String ADD_PERSONAL_CREDIT = "Add new personal credit: ";
     String ADD_FAMILY_CREDIT = "Add new family credit: ";
+
+    String NOT_ENOUGH_MONEY_MESSAGE = "There's not enough money on your debit account to complete this operation.";
 }

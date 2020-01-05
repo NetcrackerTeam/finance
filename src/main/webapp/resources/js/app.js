@@ -25,14 +25,6 @@ var app = angular.module('AngularSpringApp', []).run(function ($rootScope, $http
         });
     };
 
-    /*$rootScope.fetchUserDebitIdFamily = function(){
-        $http.get('getUserDebitIdFamily').success(function (response) {
-            $rootScope.user.debitIdFamily = response;
-        });
-    };*/
-
-    //$rootScope.fetchUserDebitIdFamily();
-
     $rootScope.fetchUserDebitId();
 
     $rootScope.fetchFamilyDebitId = function () {
