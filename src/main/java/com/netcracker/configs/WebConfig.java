@@ -78,15 +78,18 @@ public class WebConfig implements WebMvcConfigurer {
     }
 
     @Bean
-    public BasicDataSource getDataSource(){
-        String dbUrl = System.getenv("JDBC_DATABASE_URL");
-        String username = System.getenv("JDBC_DATABASE_USERNAME");
-        String password = System.getenv("JDBC_DATABASE_PASSWORD");
+    public BasicDataSource getDataSource() throws URISyntaxException {
+        URI dbUri = new URI(System.getenv("DATABASE_URL"));
+
+        String username = dbUri.getUserInfo().split(":")[0];
+        String password = dbUri.getUserInfo().split(":")[1];
+        String dbUrl = "jdbc:oracle://" + dbUri.getHost() + dbUri.getPath() + ":" + dbUri.getPort() + dbUri.getPath();
 
         BasicDataSource dataSource = new BasicDataSource();
         dataSource.setUrl(dbUrl);
         dataSource.setUsername(username);
         dataSource.setPassword(password);
+
         return dataSource;
     }
 
@@ -102,7 +105,7 @@ public class WebConfig implements WebMvcConfigurer {
     }
 
     @Bean
-    public PlatformTransactionManager txManager() {
+    public PlatformTransactionManager txManager() throws URISyntaxException {
         Locale.setDefault(Locale.ENGLISH);
         return new DataSourceTransactionManager(getDataSource());
     }
