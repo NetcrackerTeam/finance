@@ -2,7 +2,6 @@ package com.netcracker.configs;
 
 import com.netcracker.services.UserService;
 import com.netcracker.services.impl.UserServiceImpl;
-import org.apache.commons.dbcp.BasicDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -23,7 +22,6 @@ import org.thymeleaf.spring4.view.ThymeleafViewResolver;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
 import javax.sql.DataSource;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Locale;
 import java.util.Properties;
@@ -76,21 +74,18 @@ public class WebConfig implements WebMvcConfigurer {
         props.put("mail.debug", "true");
         return mailSender;
     }
-
     @Bean
-    public BasicDataSource getDataSource() throws URISyntaxException {
-        URI dbUri = new URI(System.getenv("DATABASE_URL"));
+    public DataSource dataSource() {
+        String dbUrl = System.getenv("JDBC_DATABSE_URL");
+        String username = System.getenv("JDBC_DATABASE_USERNAME");
+        String password = System.getenv("JDBC_DATABASE_PASSWORD");
 
-        String username = dbUri.getUserInfo().split(":")[0];
-        String password = dbUri.getUserInfo().split(":")[1];
-        String dbUrl = "jdbc:oracle://" + dbUri.getHost() + dbUri.getPath() + ":" + dbUri.getPort() + dbUri.getPath();
-
-        BasicDataSource dataSource = new BasicDataSource();
-        dataSource.setUrl(dbUrl);
-        dataSource.setUsername(username);
-        dataSource.setPassword(password);
-
-        return dataSource;
+        DriverManagerDataSource ds = new DriverManagerDataSource();
+        ds.setDriverClassName(oracle.jdbc.driver.OracleDriver.class.getName());
+        ds.setUrl(dbUrl);
+        ds.setUsername(username);
+        ds.setPassword(password);
+        return ds;
     }
 
     @Override
@@ -105,9 +100,9 @@ public class WebConfig implements WebMvcConfigurer {
     }
 
     @Bean
-    public PlatformTransactionManager txManager() throws URISyntaxException {
+    public PlatformTransactionManager txManager(){
         Locale.setDefault(Locale.ENGLISH);
-        return new DataSourceTransactionManager(getDataSource());
+        return new DataSourceTransactionManager(dataSource());
     }
 
     @Bean(name = "userService")
