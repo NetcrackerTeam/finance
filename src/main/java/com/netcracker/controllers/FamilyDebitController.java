@@ -7,6 +7,7 @@ import com.netcracker.dao.UserDao;
 import com.netcracker.exception.NullObjectException;
 import com.netcracker.models.*;
 import com.netcracker.models.enums.CategoryIncome;
+import com.netcracker.models.enums.FamilyAccountStatusActive;
 import com.netcracker.services.*;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,8 +58,17 @@ public class FamilyDebitController {
 
     @RequestMapping(value = "/createAccount", method = RequestMethod.POST)
     @ResponseBody
-    public FamilyDebitAccount createFamilyDebitAccount(@RequestBody FamilyDebitAccount familyDebitAccount) {
-        return familyDebitService.createFamilyDebitAccount(familyDebitAccount);
+    public Status createFamilyDebitAccount(@RequestParam String nameAccount,
+                                           Principal principal) {
+        User user = userDao.getUserByEmail(principal.getName());
+        FamilyDebitAccount familyDebitAccount = new FamilyDebitAccount.Builder()
+                .debitObjectName(nameAccount)
+                .debitAmount(0)
+                .debitFamilyAccountStatus(FamilyAccountStatusActive.YES)
+                .debitOwner(user)
+                .build();
+        familyDebitService.createFamilyDebitAccount(familyDebitAccount);
+        return new Status(true, MessageController.ADD_FAMILY_ACCOUNT);
     }
 
     @RequestMapping(value = "/deactivation", method = RequestMethod.GET)
@@ -159,7 +169,7 @@ public class FamilyDebitController {
                                    Principal principal) {
         BigInteger accountId = getAccountByPrincipal(principal);
         BigInteger userId = getUserIdByPrincipal(principal);
-        accountAutoOperationService.createFamilyIncomeAutoOperation(autoOperationIncome, userId, BigInteger.valueOf(3));
+        accountAutoOperationService.createFamilyIncomeAutoOperation(autoOperationIncome, userId, accountId);
         logger.debug("autoIncome is done!");
         return new Status(true, MessageController.ADD_AUTO_INCOME);
     }
@@ -170,7 +180,7 @@ public class FamilyDebitController {
                                     Principal principal) {
         BigInteger accountId = getAccountByPrincipal(principal);
         BigInteger userId = getUserIdByPrincipal(principal);
-        accountAutoOperationService.createFamilyExpenseAutoOperation(autoOperationExpense, userId, BigInteger.valueOf(3));
+        accountAutoOperationService.createFamilyExpenseAutoOperation(autoOperationExpense, userId, accountId);
         logger.debug("autoIncome is done!");
         return new Status(true, MessageController.ADD_AUTO_INCOME);
     }

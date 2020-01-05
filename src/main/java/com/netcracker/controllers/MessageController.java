@@ -27,4 +27,5 @@ public interface MessageController {
     String DELETE_UNS_USER_FAM = "Deleting unsuccessfully user ";
     String DELETE_AUTO_INCOME_FAM = "Deleting successfully autoIncomeOperation ";
     String DELETE_AUTO_EXPENSE_FAM = "Deleting successfully autoExpenseOperation ";
+    String ADD_FAMILY_ACCOUNT = "Added new family account for user ";
 }

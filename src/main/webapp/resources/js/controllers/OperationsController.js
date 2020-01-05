@@ -52,6 +52,10 @@ app.controller("AddExpenseControllerPersonal", function ($scope, $http) {
             headers : {
                 'Content-Type' : 'application/json'
             }
+        }).success(function () {
+            alert("success")
+        }).error(function () {
+            alert("unsuccess")
         });
 
     };
@@ -112,8 +116,11 @@ app.controller("AddExpenseControllerFamily", function ($scope, $http) {
             headers : {
                 'Content-Type' : 'application/json'
             }
+        }).success(function () {
+            alert("success")
+        }).error(function () {
+            alert("unsuccess")
         });
-
     };
 });
 

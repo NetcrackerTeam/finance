@@ -30,6 +30,17 @@ public class UserIdController {
         return new ResponseEntity<>(debitId, HttpStatus.OK);
     }
 
+    @RequestMapping(value = "/getUserDebitIdFamily", produces = MediaType.APPLICATION_JSON_VALUE,  method = RequestMethod.GET)
+    public ResponseEntity<BigInteger> getUserDebitIdFamily() {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String email;
+        if (principal instanceof UserDetails) email = ((UserDetails)principal).getUsername();
+        else email = principal.toString();
+        User user = userDao.getUserByEmail(email);
+        BigInteger debitId = user.getFamilyDebitAccount();
+        return new ResponseEntity<>(debitId, HttpStatus.OK);
+    }
+
     @RequestMapping(value = "/templateURL", method = RequestMethod.GET)
     public String templateMethod() {
         return URL.TEMPLATE_URL;

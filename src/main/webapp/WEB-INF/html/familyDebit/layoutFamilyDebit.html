@@ -1,4 +1,4 @@
-<nav>
+<nav ng-show="user.debitIdFamily.length > 0">
     <div class="topnavPersonal" id="TopnavPersonal">
         <a href="#createCreditModal" data-toggle="modal">Create Credit</a>
         <a href="#incomeOp" data-toggle="modal">Add income</a>
@@ -7,8 +7,14 @@
         <a href="#prediction" data-toggle="modal">Prognosis</a> <!--#2 class = Comment_form-->
     </div>
 </nav>
-<h1><span ng-show="user.debitId.length > 0">ID from RootScope: {{user.debitId}}</span></h1>
-<div class="col-xl-8 col-lg-7">
+<h1><span ng-show="user.debitIdFamily.length > 0">ID from RootScope: {{user.debitId}}</span></h1>
+<!-- creating Family Account -->
+<div class="input-append" ng-show="user.debitIdFamily.length == 0">
+    <input style="width:358px; margin-left: 100px;" class="span2" type="text" ng-model="nameFamilyAccount" placeholder="Enter family account name" required="required" min="1" />
+    <button class="btn btn-primary" ng-click="createFamilyAccount()">Add Family Account</button>
+</div>
+
+<div class="col-xl-8 col-lg-7" ng-show="user.debitIdFamily.length > 0">
     <div class="card shadow mb-4">
         <!-- Card Header - Dropdown -->
         <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
@@ -53,7 +59,7 @@
     <br/>
 </div>
 
-<div class="col-xl-8 col-lg-7">
+<div class="col-xl-8 col-lg-7" ng-show="user.debitIdFamily.length > 0">
     <div class="card shadow mb-4">
         <!-- Card Header - Dropdown -->
         <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
@@ -106,7 +112,7 @@
     <br/>
 </div>
 
-<div class="col-xl-8 col-lg-7">
+<div class="col-xl-8 col-lg-7" ng-show="user.debitIdFamily.length > 0">
     <div class="card shadow mb-4">
         <!-- Card Header - Dropdown -->
         <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
@@ -153,7 +159,7 @@
     <br/>
 </div>
 
-<form ng-controller="PersonalCreditController" ng-submit="addCredit()">
+<form ng-controller="PersonalCreditController" ng-submit="addCredit()" ng-show="user.debitIdFamily.length > 0">
     <div class="modal fade" id="createCreditModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -190,7 +196,7 @@
 </form>
 
 
-<form ng-controller="FamilyPredictController" ng-submit="getPredict()">
+<form ng-controller="FamilyPredictController" ng-submit="getPredict()" ng-show="user.debitIdFamily.length > 0">
     <div class="modal fade" id="prediction" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -221,7 +227,7 @@
 </form>
 
 <!-- Income/Auto_Income Operations -->
-<div class="modal fade" id="incomeOp" tabindex="-1" role="dialog" aria-labelledby="incomeOpLabel" aria-hidden="true">
+<div class="modal fade" id="incomeOp" tabindex="-1" role="dialog" aria-labelledby="incomeOpLabel" aria-hidden="true" ng-show="user.debitIdFamily.length > 0">
     <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -265,7 +271,7 @@
 </div>
 
 <!-- Expense/Auto_Expense Operations -->
-<div class="modal fade" id="expenseOp" tabindex="-1" role="dialog" aria-labelledby="expenseOpLabel" aria-hidden="true">
+<div class="modal fade" id="expenseOp" tabindex="-1" role="dialog" aria-labelledby="expenseOpLabel" aria-hidden="true" ng-show="user.debitIdFamily.length > 0">
     <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content">
             <div class="modal-header">

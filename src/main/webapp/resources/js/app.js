@@ -12,7 +12,8 @@ var app = angular.module('AngularSpringApp', []).run(function ($rootScope, $http
     };
 
     $rootScope.user = {
-        debitId: "100"
+        debitId: "100",
+        debitIdFamily: ''
     };
 
     $rootScope.fetchUserDebitId = function(){
@@ -20,6 +21,14 @@ var app = angular.module('AngularSpringApp', []).run(function ($rootScope, $http
             $rootScope.user.debitId = response;
         });
     };
+
+    $rootScope.fetchUserDebitIdFamily = function(){
+        $http.get('getUserDebitIdFamily').success(function (response) {
+            $rootScope.user.debitIdFamily = response;
+        });
+    };
+
+    $rootScope.fetchUserDebitIdFamily();
     $rootScope.fetchUserDebitId();
 
 });
