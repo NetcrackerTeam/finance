@@ -19,7 +19,7 @@ public class PersonalDebitAccountMapper implements RowMapper<PersonalDebitAccoun
         return new PersonalDebitAccount.Builder()
                 .debitId(rs.getBigDecimal("PERSONAL_DEBIT_ID").toBigInteger())
                 .debitObjectName(rs.getString("NAME_PERSONAL_DEBIT"))
-                .debitAmount(Long.valueOf(rs.getString("AMOUNT_PERSONAL_DEBIT")))
+                .debitAmount(rs.getDouble("AMOUNT_PERSONAL_DEBIT"))
                 .debitPersonalAccountStatus(PersonalAccountStatusActive.getStatusByKey(rs.getBigDecimal("STATUS_PERSONAL_DEBIT").toBigInteger()))
                 .debitOwner(user)
                 .build();
