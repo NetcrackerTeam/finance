@@ -18,32 +18,34 @@ import java.security.Principal;
 public class UserIdController {
     @Autowired
     UserDao userDao;
+    private User user;
+    private BigInteger personalDebitId;
 
     @RequestMapping(value = "/getUserDebitId", produces = MediaType.APPLICATION_JSON_VALUE,  method = RequestMethod.GET)
     public ResponseEntity<BigInteger> getUserDebitId() {
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String email;
-        if (principal instanceof UserDetails) email = ((UserDetails)principal).getUsername();
-        else email = principal.toString();
-        User user = userDao.getUserByEmail(email);
-        BigInteger debitId = user.getPersonalDebitAccount();
-        return new ResponseEntity<>(debitId, HttpStatus.OK);
+        getUserInfo();
+        return new ResponseEntity<>(personalDebitId, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/getUserDebitIdFamily", produces = MediaType.APPLICATION_JSON_VALUE,  method = RequestMethod.GET)
-    public ResponseEntity<BigInteger> getUserDebitIdFamily() {
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String email;
-        if (principal instanceof UserDetails) email = ((UserDetails)principal).getUsername();
-        else email = principal.toString();
-        User user = userDao.getUserByEmail(email);
-        BigInteger debitId = user.getFamilyDebitAccount();
-        return new ResponseEntity<>(debitId, HttpStatus.OK);
+    @RequestMapping(value = "/getFamilyDebitId", produces = MediaType.APPLICATION_JSON_VALUE,  method = RequestMethod.GET)
+    public ResponseEntity<BigInteger> getFamilyDebitId() {
+        getUserInfo();
+        BigInteger familyDebitId = user.getFamilyDebitAccount();
+        return new ResponseEntity<>(familyDebitId, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/templateURL", method = RequestMethod.GET)
     public String templateMethod() {
         return URL.TEMPLATE_URL;
+    }
+
+    private void getUserInfo() {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String email;
+        if (principal instanceof UserDetails) email = ((UserDetails)principal).getUsername();
+        else email = principal.toString();
+        user = userDao.getUserByEmail(email);
+        personalDebitId = user.getPersonalDebitAccount();
     }
 
     public BigInteger getAccountByPrincipal(Principal principal) {

@@ -4,22 +4,22 @@
 </head>
 <body>
 <div id="mainPage" class="parallax-section" >
-    <header class="headerInfoCredit"><span th:text="${creditName}"></span></header>
+    <header class="headerInfoCredit"><span th:text="${creditFamilyName}"></span></header>
     <form class="formInfoCredit">
-        <p><span class="spanInfoCredit" th:text="${creditAmount}"></span></p>
-        <p><span class="spanInfoCredit" th:text="${creditRate}"></span></p>
-        <p><span class="spanInfoCredit" th:text="${creditPaidAmount}"></span></p>
-        <p><span class="spanInfoCredit" th:text="${creditDateFrom}"></span></p>
-        <p><span class="spanInfoCredit" th:text="${creditDateTo}"></span></p>
-        <p><span class="spanInfoCredit" th:text="${creditMonthDay}"></span></p>
-        <p><span class="spanInfoCredit notSee" id="debtDateFrom" th:text="${creditDebtDateFrom}"></span></p>
-        <p><span class="spanInfoCredit notSee" id="debtDateTo" th:text="${creditDebtDateTo}"></span></p>
-        <p><span class="spanInfoCredit" th:text="${creditDebtAmount}"></span></p>
-        <center><p><button type="button" class="infoCreditButtons" data-toggle="modal" data-target="#addPersonalCreditPayment">Add Credit Payment</button></p></center>
+        <p><span class="spanInfoCredit" th:text="${creditFamilyAmount}"></span></p>
+        <p><span class="spanInfoCredit" th:text="${creditFamilyRate}"></span></p>
+        <p><span class="spanInfoCredit" th:text="${creditFamilyPaidAmount}"></span></p>
+        <p><span class="spanInfoCredit" th:text="${creditFamilyDateFrom}"></span></p>
+        <p><span class="spanInfoCredit" th:text="${creditFamilyDateTo}"></span></p>
+        <p><span class="spanInfoCredit" th:text="${creditFamilyMonthDay}"></span></p>
+        <p><span class="spanInfoCredit notSee" id="debtDateFrom" th:text="${creditFamilyDebtDateFrom}"></span></p>
+        <p><span class="spanInfoCredit notSee" id="debtDateTo" th:text="${creditFamilyDebtDateTo}"></span></p>
+        <p><span class="spanInfoCredit" th:text="${creditFamilyDebtAmount}"></span></p>
+        <center><p><button type="button" class="infoCreditButtons" data-toggle="modal" data-target="#addFamilyCreditPayment">Add Credit Payment</button></p></center>
     </form>
 </div>
-<form th:action="@{personalCredit/addPersonalCreditPayment}" method="post">
-    <div class="modal fade" id="addPersonalCreditPayment" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<form th:action="@{familyCredit/addFamilyCreditPayment}" method="post">
+    <div class="modal fade" id="addFamilyCreditPayment" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -30,7 +30,7 @@
                     <i><h6><p align="center" style="color:#565656">Please fill in all fields</p></h6></i>
                 </div>
                 <div class="modal-body">
-                    <span th:text="${creditPayment}"></span>
+                    <span th:text="${creditFamilyPayment}"></span>
                     <p><input type="number" step="0.01" min="0.01" class="form-control" placeholder="Enter payment amount" id="creditName" name="amount"/></p>
                 </div>
                 <div class="modal-footer">

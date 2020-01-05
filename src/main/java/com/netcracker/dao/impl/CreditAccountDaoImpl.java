@@ -98,7 +98,7 @@ public class CreditAccountDaoImpl implements CreditAccountDao {
     }
 
     @Override
-    public void deletePersonalCreditAccountByCreditId(BigInteger creditId) {
+    public void deleteCreditAccountByCreditId(BigInteger creditId) {
         jdbcTemplate.update(DELETE_CREDIT_ACCOUNT, creditId);
     }
 

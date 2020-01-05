@@ -65,7 +65,7 @@ public class UserController {
             userDao.updateUserPasswordById(userTemp.getId(), passwordEncode);
             model.addAttribute("successUpdatePass", MessageController.SUCCESS_UPDATE_PASSWORD);
         }
-        return URL.INDEX;
+        return URL.INDEX ;
 
     }
 
@@ -74,7 +74,7 @@ public class UserController {
     public String deactivateUser(@RequestParam(value = "userId") BigInteger id) {
         logger.debug("updateUserStatus by user id " + id);
         userDao.updateUserStatus(id, UserStatusActive.NO.getId());
-        return URL.INDEX;
+        return URL.INDEX ;
     }
 
     public static String getCurrentUsername() {

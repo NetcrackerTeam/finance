@@ -12,8 +12,11 @@ var app = angular.module('AngularSpringApp', []).run(function ($rootScope, $http
     };
 
     $rootScope.user = {
-        debitId: "100",
-        debitIdFamily: ''
+        debitId: "100"
+    };
+
+    $rootScope.family = {
+        debitId: "0"
     };
 
     $rootScope.fetchUserDebitId = function(){
@@ -22,14 +25,22 @@ var app = angular.module('AngularSpringApp', []).run(function ($rootScope, $http
         });
     };
 
-    $rootScope.fetchUserDebitIdFamily = function(){
+    /*$rootScope.fetchUserDebitIdFamily = function(){
         $http.get('getUserDebitIdFamily').success(function (response) {
             $rootScope.user.debitIdFamily = response;
         });
-    };
+    };*/
 
-    $rootScope.fetchUserDebitIdFamily();
+    //$rootScope.fetchUserDebitIdFamily();
+
     $rootScope.fetchUserDebitId();
+
+    $rootScope.fetchFamilyDebitId = function () {
+      $http.get('getFamilyDebitId').success(function (response) {
+          $rootScope.family.debitId = response;
+      });
+    };
+    $rootScope.fetchFamilyDebitId();
 
 });
 
@@ -51,6 +62,9 @@ app.config(['$routeProvider', function ($routeProvider) {
     $routeProvider.when('/familyAccount', {
         templateUrl: 'debitFamily/layout',
         controller: FamilyDebitController
+    }).when('/infoFamilyCredit/:familyCreditId', {
+        templateUrl: 'templateURL',
+        controller: 'GetFamilyCreditController'
     });
 
  //   $routeProvider.otherwise({redirectTo: '/'});
@@ -58,6 +72,10 @@ app.config(['$routeProvider', function ($routeProvider) {
 
 app.controller('GetCreditController', function ($scope, $routeParams) {
     $scope.templateUrl = 'personalCredit/getPersonalCredit/' + $routeParams.creditId;
+});
+
+app.controller('GetFamilyCreditController', function ($scope, $routeParams) {
+    $scope.templateUrl = 'familyCredit/getFamilyCredit/' + $routeParams.familyCreditId;
 });
 
 app.controller('AppCtrl', function() {

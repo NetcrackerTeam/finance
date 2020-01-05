@@ -126,14 +126,4 @@ var PersonalCreditController = function($scope, $http, $rootScope) {
             }).then(success, error);
         } else alert("Credit hasn't been deleted");
     };
-
-    $scope.addPersonalCreditPayment = function () {
-        $http({
-            method : "PUT",
-            url : "personalCredit/" + $rootScope.optionSelect.idCredit + "/addPersonalCreditPayment" + "?amount=" + $rootScope.personalCreditPayment.amount,
-            headers : {
-                'Content-Type' : 'application/json'
-            }
-        }).then(success, error );
-    };
 };

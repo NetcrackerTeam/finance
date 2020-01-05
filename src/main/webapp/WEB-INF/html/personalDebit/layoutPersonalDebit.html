@@ -7,72 +7,72 @@
         <a href="#prediction" data-toggle="modal">Prognosis</a> <!--#2 class = Comment_form-->
     </div>
 </nav>
-<h1><span ng-show="user.debitId.length > 0">ID from RootScope: {{user.debitId}}</span></h1>
+<h1><span ng-show="user.debitId.length > 0">PersonalDebitID from RootScope: {{user.debitId}}</span></h1>
 
 <div class="row">
-<div class="col-xl-8 col-lg-6">
-    <div class="card shadow mb-4">
-        <!-- Card Header - Dropdown -->
-        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-            <h6 class="m-0 font-weight-bold text-primary">History</h6>
-        </div>
-        <!-- Card Body -->
-        <div class="card-body" ng-controller="PersonalDebitController">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">History</div>
-                        <div class="panel-body">
-                            <table class="table table-striped">
-                                <thead>
-                                <tr>
-                                    <th>Amount</th>
-                                    <th>Income</th>
-                                    <th>Expense</th>
-                                    <th>Date</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr ng-repeat="hisInf in personalHistory">
-                                    <td>{{hisInf.amount}}</td>
-                                    <td>{{hisInf.categoryIncome}}</td>
-                                    <td>{{hisInf.categoryExpense}}</td>
-                                    <td>{{hisInf.date.year}}-{{hisInf.date.month}}-{{hisInf.date.day}}</td>
-                                </tr>
-                                </tbody>
-                            </table>
+    <div class="col-xl-8 col-lg-6">
+        <div class="card shadow mb-4">
+            <!-- Card Header - Dropdown -->
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">History</h6>
+            </div>
+            <!-- Card Body -->
+            <div class="card-body" ng-controller="PersonalDebitController">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">History</div>
+                            <div class="panel-body">
+                                <table class="table table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th>Amount</th>
+                                        <th>Income</th>
+                                        <th>Expense</th>
+                                        <th>Date</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr ng-repeat="hisInf in personalHistory">
+                                        <td>{{hisInf.amount}}</td>
+                                        <td>{{hisInf.categoryIncome}}</td>
+                                        <td>{{hisInf.categoryExpense}}</td>
+                                        <td>{{hisInf.date.year}}-{{hisInf.date.month}}-{{hisInf.date.day}}</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
     </div>
-    <br/>
-    <br/>
-    <br/>
-    <br/>
-    <br/>
-    <br/>
-</div>
 
-<div class="col-lg-6">
-<form class="creditsForm" ng-controller="PersonalCreditController">
-    <fieldset>
-        <legend>Credits</legend>
-        <center>
-            <!--<button class="creditButtons" id="infoCredit" disabled="disabled" data-toggle="modal" data-target="#infoCreditModal" >Info</button>-->
-            <button class="creditButtons" id="infoCredit" disabled="disabled"
-                    onclick="window.open('#/infoCredit/{{optionSelect.idCredit}}')">Info</button>
-            <button class="creditButtons" id="deleteCredit" disabled="disabled" ng-click="deletePersonalCredit()">Delete</button>
-        </center>
-            <div class="creditsDiv">
-                <select id="creditsSelect" ng-click="checkSelect()" multiple="multiple" size="3">
-                    <option ng-repeat="credInf in personalCredit" value="{{credInf.creditId}}">{{credInf.name}}</option>
-                </select>
-            </div>
-    </fieldset>
-</form>
-</div>
+    <div class="col-lg-6">
+        <form class="creditsForm" ng-controller="PersonalCreditController">
+            <fieldset>
+                <legend>Credits</legend>
+                <center>
+                    <!--<button class="creditButtons" id="infoCredit" disabled="disabled" data-toggle="modal" data-target="#infoCreditModal" >Info</button>-->
+                    <button class="creditButtons" id="infoCredit" disabled="disabled"
+                            onclick="window.open('#/infoCredit/{{optionSelect.idCredit}}')">Info</button>
+                    <button class="creditButtons" id="deleteCredit" disabled="disabled" ng-click="deletePersonalCredit()">Delete</button>
+                </center>
+                <div class="creditsDiv">
+                    <select id="creditsSelect" ng-click="checkSelect()" multiple="multiple" size="3">
+                        <option ng-repeat="credInf in personalCredit" value="{{credInf.creditId}}">{{credInf.name}}</option>
+                    </select>
+                </div>
+            </fieldset>
+        </form>
+    </div>
 </div>
 
 
@@ -179,39 +179,39 @@
 </div>
 
 <form ng-controller="PersonalCreditController" ng-submit="addPersonalCredit()">
-<div class="modal fade" id="createCreditModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 align="center" class="modal-title" id="passwordModalLabel"> Creating credit</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                <i><h6><p align="center" style="color:#565656">Please fill in all fields</p></h6></i>
-            </div>
-            <div class="modal-body">
-                <p><input type="text" class="form-control" placeholder="Enter credit name" ng-model="credit.name" id="creditName"/></p>
-                <p>Enter credit start date:</p>
-                <p><input type="date" class="form-control" id="dateFrom" ng-model="credit.date"/></p>
-                <p><input type="number" min="1" step="0.01" class="form-control" placeholder="Enter credit amount" ng-model="credit.amount"/></p>
-                <p><input type="number" min="0" step="0.01" class="form-control" placeholder="Enter credit paid amount" ng-model="credit.paidAmount"/></p>
-                <div class="slidecontainer">
-                    <p id="creditRateText">Credit rate: </p>
-                    <p><input type="range" min="0" max="100" step="0.1" class="slider" id="creditRateRange" ng-model="credit.creditRate"/></p>
+    <div class="modal fade" id="createCreditModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 align="center" class="modal-title" id="passwordModalLabel"> Creating credit</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <i><h6><p align="center" style="color:#565656">Please fill in all fields</p></h6></i>
                 </div>
-                <p>Enter credit ends date:</p>
-                <p><input type="date" class="form-control" id="dateTo" ng-model="credit.dateTo"/></p>
-                <p style="color:#565656"><h6>*The end date must be bigger than the start date </h6></p>
-                <p><input type="number" min="1" max="28" class="form-control" placeholder="Enter payment day of month" ng-model="credit.monthDay"/></p>
-                <p></p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-primary" ng-disabled="isNotEmptyCredit(credit)" onclick="$('.modal').modal('hide')">Save changes</button>
+                <div class="modal-body">
+                    <p><input type="text" class="form-control" placeholder="Enter credit name" ng-model="credit.name" id="creditName"/></p>
+                    <p>Enter credit start date:</p>
+                    <p><input type="date" class="form-control" id="dateFrom" ng-model="credit.date"/></p>
+                    <p><input type="number" min="1" step="0.01" class="form-control" placeholder="Enter credit amount" ng-model="credit.amount"/></p>
+                    <p><input type="number" min="0" step="0.01" class="form-control" placeholder="Enter credit paid amount" ng-model="credit.paidAmount"/></p>
+                    <div class="slidecontainer">
+                        <p id="creditRateText">Credit rate: </p>
+                        <p><input type="range" min="0" max="100" step="0.1" class="slider" id="creditRateRange" ng-model="credit.creditRate"/></p>
+                    </div>
+                    <p>Enter credit ends date:</p>
+                    <p><input type="date" class="form-control" id="dateTo" ng-model="credit.dateTo"/></p>
+                    <p style="color:#565656"><h6>*The end date must be bigger than the start date </h6></p>
+                    <p><input type="number" min="1" max="28" class="form-control" placeholder="Enter payment day of month" ng-model="credit.monthDay"/></p>
+                    <p></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary" ng-disabled="isNotEmptyCredit(credit)" onclick="$('.modal').modal('hide')">Save changes</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
 </form>
 
 
@@ -248,7 +248,7 @@
 <form ng-controller="RepCtrl" ng-submit="getReport()">
     <div class="modal fade" id="report" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 
-    <div class="modal-dialog" role="document">
+        <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 align="center" class="modal-title" id="passwordModalLabel2"> Report </h4>
@@ -297,7 +297,7 @@
                         </select>
                     </div>
                     <div class="form-group">
-                            <input type="checkbox" ng-model="form.checkbox" /> Make operation repetitive each month
+                        <input type="checkbox" ng-model="form.checkbox" /> Make operation repetitive each month
                     </div>
                     <div class="form-group">
                         <label for="income">Day of month:</label>

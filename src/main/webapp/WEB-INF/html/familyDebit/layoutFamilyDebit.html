@@ -1,6 +1,6 @@
-<nav ng-show="user.debitIdFamily.length > 0">
+<nav>
     <div class="topnavPersonal" id="TopnavPersonal">
-        <a href="#createCreditModal" data-toggle="modal">Create Credit</a>
+        <a href="#createFamilyCreditModal" data-toggle="modal">Create Credit</a>
         <a href="#incomeOp" data-toggle="modal">Add income</a>
         <a href="#expenseOp" data-toggle="modal">Add expense</a>
         <a href="#/personalReport">Report</a> <!--#2 class = Comment_form-->
@@ -8,22 +8,23 @@
         <a href="#addUser" data-toggle="modal">Participants Control</a> <!--#2 class = Comment_form-->
     </div>
 </nav>
-<h1><span ng-show="user.debitIdFamily.length > 0">ID from RootScope: {{user.debitId}}</span></h1>
+<h1><span ng-show="family.debitId.length > 0">FamilyDebitID from RootScope: {{family.debitId}}</span></h1>
 <!-- creating Family Account -->
-<div class="input-append" ng-show="user.debitIdFamily.length == 0">
+<div class="input-append" ng-show="family.debitId.length == 0">
     <input style="width:358px; margin-left: 100px;" class="span2" type="text" ng-model="nameFamilyAccount"
            placeholder="Enter family account name" required="required" min="1"/>
     <button class="btn btn-primary" ng-click="createFamilyAccount()">Add Family Account</button>
 </div>
 
-<div class="col-xl-8 col-lg-7" ng-show="user.debitIdFamily.length > 0">
+    <div class="row">
+<div class="col-xl-8 col-lg-6" ng-show="family.debitId.length > 0">
     <div class="card shadow mb-4">
         <!-- Card Header - Dropdown -->
         <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
             <h6 class="m-0 font-weight-bold text-primary">History</h6>
         </div>
         <!-- Card Body -->
-        <div class="card-body" ng-controller="PersonalDebitController">
+        <div class="card-body" ng-controller="FamilyDebitController">
             <div class="row">
                 <div class="col-md-12">
                     <div class="panel panel-default">
@@ -61,7 +62,26 @@
     <br/>
 </div>
 
-<div class="col-xl-8 col-lg-7" ng-show="user.debitIdFamily.length > 0">
+<div class="col-lg-6" ng-show="family.debitId.length > 0">
+    <form class="creditsForm" ng-controller="FamilyCreditController">
+        <fieldset>
+            <legend>Credits</legend>
+            <center>
+                <button class="creditButtons" id="infoCredit" disabled="disabled"
+                        onclick="window.open('#/infoFamilyCredit/{{optionSelect.idCredit}}')">Info</button>
+                <button class="creditButtons" id="deleteCredit" disabled="disabled" ng-click="deleteFamilyCredit()">Delete</button>
+            </center>
+            <div class="creditsDiv">
+                <select id="creditsSelect" ng-click="checkSelect()" multiple="multiple" size="3">
+                    <option ng-repeat="credInf in familyCredit" value="{{credInf.creditId}}">{{credInf.name}}</option>
+                </select>
+            </div>
+        </fieldset>
+    </form>
+</div>
+</div>
+
+<div class="col-xl-8 col-lg-7" ng-show="family.debitId.length > 0">
     <div class="card shadow mb-4">
         <!-- Card Header - Dropdown -->
         <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
@@ -114,7 +134,7 @@
     <br/>
 </div>
 
-<div class="col-xl-8 col-lg-7" ng-show="user.debitIdFamily.length > 0">
+<div class="col-xl-8 col-lg-7" ng-show="family.debitId.length > 0">
     <div class="card shadow mb-4">
         <!-- Card Header - Dropdown -->
         <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
@@ -162,9 +182,8 @@
     <br/>
 </div>
 
-<form ng-controller="PersonalCreditController" ng-submit="addCredit()" ng-show="user.debitIdFamily.length > 0">
-    <div class="modal fade" id="createCreditModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-         aria-hidden="true">
+<form ng-controller="FamilyCreditController" ng-submit="addFamilyCredit()">
+    <div class="modal fade" id="createFamilyCreditModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -172,36 +191,27 @@
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
-                    <i>
-                        <h6><p align="center" style="color:#565656">Please fill in all fields</p></h6>
-                    </i>
+                    <i><h6><p align="center" style="color:#565656">Please fill in all fields</p></h6></i>
                 </div>
                 <div class="modal-body">
-                    <p><input type="text" class="form-control" placeholder="Enter credit name" ng-model="credit.name"
-                              id="creditName"/></p>
+                    <p><input type="text" class="form-control" placeholder="Enter credit name" ng-model="credit.name" id="creditName"/></p>
                     <p>Enter credit start date:</p>
                     <p><input type="date" class="form-control" id="dateFrom" ng-model="credit.date"/></p>
-                    <p><input type="number" min="1" step="0.01" class="form-control" placeholder="Enter credit amount"
-                              ng-model="credit.amount"/></p>
-                    <p><input type="number" min="0" step="0.01" class="form-control"
-                              placeholder="Enter credit paid amount" ng-model="credit.paidAmount"/></p>
+                    <p><input type="number" min="1" step="0.01" class="form-control" placeholder="Enter credit amount" ng-model="credit.amount"/></p>
+                    <p><input type="number" min="0" step="0.01" class="form-control" placeholder="Enter credit paid amount" ng-model="credit.paidAmount"/></p>
                     <div class="slidecontainer">
                         <p id="creditRateText">Credit rate: </p>
-                        <p><input type="range" min="0" max="100" step="0.1" class="slider" id="creditRateRange"
-                                  ng-model="credit.creditRate"/></p>
+                        <p><input type="range" min="0" max="100" step="0.1" class="slider" id="creditRateRange" ng-model="credit.creditRate"/></p>
                     </div>
                     <p>Enter credit ends date:</p>
                     <p><input type="date" class="form-control" id="dateTo" ng-model="credit.dateTo"/></p>
                     <p style="color:#565656"><h6>*The end date must be bigger than the start date </h6></p>
-                    <p><input type="number" min="1" max="28" class="form-control"
-                              placeholder="Enter payment day of month" ng-model="credit.monthDay"/></p>
+                    <p><input type="number" min="1" max="28" class="form-control" placeholder="Enter payment day of month" ng-model="credit.monthDay"/></p>
                     <p></p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary" ng-disabled="isNotEmptyCredit(credit)"
-                            onclick="$('.modal').modal('hide')">Save changes
-                    </button>
+                    <button type="submit" class="btn btn-primary" ng-disabled="isNotEmptyCredit(credit)" onclick="$('.modal').modal('hide')">Save changes</button>
                 </div>
             </div>
         </div>
@@ -209,7 +219,7 @@
 </form>
 
 
-<form ng-controller="FamilyPredictController" ng-submit="getPredict()" ng-show="user.debitIdFamily.length > 0">
+<form ng-controller="FamilyPredictController" ng-submit="getPredict()" ng-show="family.debitId.length > 0">
     <div class="modal fade" id="prediction" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
          aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -245,7 +255,7 @@
 
 <!-- Income/Auto_Income Operations -->
 <div class="modal fade" id="incomeOp" tabindex="-1" role="dialog" aria-labelledby="incomeOpLabel" aria-hidden="true"
-     ng-show="user.debitIdFamily.length > 0">
+     ng-show="family.debitId.length > 0">
     <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -295,7 +305,7 @@
 
 <!-- Expense/Auto_Expense Operations -->
 <div class="modal fade" id="expenseOp" tabindex="-1" role="dialog" aria-labelledby="expenseOpLabel" aria-hidden="true"
-     ng-show="user.debitIdFamily.length > 0">
+     ng-show="family.debitId.length > 0">
     <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -352,7 +362,7 @@
 
 <!-- add user to family account -->
 <div class="modal fade" id="addUser" tabindex="-1" role="dialog" aria-labelledby="incomeOpLabel" aria-hidden="true"
-     ng-show="user.debitIdFamily.length > 0">
+     ng-show="family.debitId.length > 0">
     <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -380,7 +390,6 @@
     </div>
 </div>
 
-<div class="input-append" ng-show="user.debitIdFamily.length > 0">
+<div class="input-append" ng-show="family.debitId.length > 0">
     <button class="btn btn-primary" ng-click="deleteFamilyAccount()">Delete Family Account</button>
 </div>
-

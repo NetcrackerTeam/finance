@@ -11,7 +11,6 @@ public interface MessageController {
     String LOGGER_UPDATE_PASSWORD ="updatePasswordByUser in  method updateUserPassword . User id - ";
     String INVALID_CONFIRM_PASSWORD = "Your passwords do not match, please  try again  ";
     //    PersonalDebitController
-    String ADD_CREDIT_PERS = "Added new credit by account";
     String ADD_INCOME_PERS = "Added new income by account";
     String ADD_EXPENSE_PERS = "Added new expense by account";
     String DELETE_AUTO_INCOME_PERS = "Your auto income deleted by account ";
@@ -28,4 +27,9 @@ public interface MessageController {
     String DELETE_AUTO_INCOME_FAM = "Deleting successfully autoIncomeOperation ";
     String DELETE_AUTO_EXPENSE_FAM = "Deleting successfully autoExpenseOperation ";
     String ADD_FAMILY_ACCOUNT = "Added new family account for user ";
+
+    String debugStartMessage = " method start with parameters: ";
+    //     CreditsControllers
+    String ADD_PERSONAL_CREDIT = "Add new personal credit: ";
+    String ADD_FAMILY_CREDIT = "Add new family credit: ";
 }
