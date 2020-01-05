@@ -1,5 +1,6 @@
 package com.netcracker.models;
 
+import com.netcracker.models.enums.UserRole;
 import com.netcracker.models.enums.UserStatusActive;
 
 import java.math.BigInteger;
@@ -12,6 +13,7 @@ public class User {
     private BigInteger personal_id;
     private BigInteger family_id;
     private UserStatusActive  userStatusActive;
+    private UserRole userRole;
 
     public User() {
     }
@@ -24,6 +26,7 @@ public class User {
         private BigInteger personal_id;
         private BigInteger family_id;
         private UserStatusActive  userStatusActive;
+        private UserRole userRole;
 
         public Builder() {
         }
@@ -61,6 +64,10 @@ public class User {
             this.userStatusActive = val;
             return this;
         }
+        public Builder userRole(UserRole val){
+            this.userRole = val;
+            return this;
+        }
 
         public User build() {
             return new User(this);
@@ -75,6 +82,7 @@ public class User {
         this.userStatusActive = builder.userStatusActive;
         this.personal_id = builder.personal_id;
         this.family_id = builder.family_id;
+        this.userRole = builder.userRole;
     }
 
     public BigInteger getId() {
@@ -122,5 +130,13 @@ public class User {
     }
     public UserStatusActive getUserStatusActive() {
         return userStatusActive;
+    }
+
+    public UserRole getUserRole() {
+        return userRole;
+    }
+
+    public void setUserRole(UserRole userRole) {
+        this.userRole = userRole;
     }
 }

@@ -25,8 +25,6 @@ app.controller("AddIncomeControllerPersonal", function ($scope, $http) {
             }
         }).success(function () {
             alert("success")
-        }).error(function () {
-            alert("unsuccess")
         });
     };
 });
@@ -34,7 +32,7 @@ app.controller("AddIncomeControllerPersonal", function ($scope, $http) {
 app.controller("AddExpenseControllerPersonal", function ($scope, $http) {
     debugger;
     $scope.form = {
-        amountExp: 0.00,
+        amount: 0.00,
         categoryExpense: "DEFAULT",
         checkbox: false,
         dayOfMonth: "1"
@@ -42,7 +40,6 @@ app.controller("AddExpenseControllerPersonal", function ($scope, $http) {
 
     $scope.submitOperation = function () {
         var method = "POST";
-        var url = 'debitPersonal/expense';
         $scope.form.checkbox ? url = 'debitPersonal/createAutoExpense' : url = 'debitPersonal/expense';
 
         $http({
@@ -54,8 +51,6 @@ app.controller("AddExpenseControllerPersonal", function ($scope, $http) {
             }
         }).success(function () {
             alert("success")
-        }).error(function () {
-            alert("unsuccess")
         });
 
     };
@@ -87,8 +82,6 @@ app.controller("AddIncomeControllerFamily", function ($scope, $http) {
             }
         }).success(function () {
             alert("success")
-        }).error(function () {
-            alert("unsuccess")
         });
     };
 });
@@ -118,8 +111,6 @@ app.controller("AddExpenseControllerFamily", function ($scope, $http) {
             }
         }).success(function () {
             alert("success")
-        }).error(function () {
-            alert("unsuccess")
         });
     };
 });
