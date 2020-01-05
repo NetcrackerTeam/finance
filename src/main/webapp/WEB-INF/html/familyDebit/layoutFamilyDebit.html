@@ -1,9 +1,9 @@
 <nav>
-    <div class="topnavPersonal" id="TopnavPersonal">
+    <div class="topnavFamily" id="TopnavFamily">
         <a href="#createFamilyCreditModal" data-toggle="modal">Create Credit</a>
         <a href="#incomeOp" data-toggle="modal">Add income</a>
         <a href="#expenseOp" data-toggle="modal">Add expense</a>
-        <a href="#/personalReport">Report</a> <!--#2 class = Comment_form-->
+        <a href="#">Report</a> <!--#2 class = Comment_form-->
         <a href="#prediction" data-toggle="modal">Prognosis</a> <!--#2 class = Comment_form-->
         <a href="#addUser" data-toggle="modal">Participants Control</a> <!--#2 class = Comment_form-->
     </div>
@@ -40,7 +40,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr ng-repeat="hisInf in personalHistory">
+                                <tr ng-repeat="hisInf in familyHistory">
                                     <td>{{hisInf.amount}}</td>
                                     <td>{{hisInf.categoryIncome}}</td>
                                     <td>{{hisInf.categoryExpense}}</td>
@@ -141,7 +141,7 @@
             <h6 class="m-0 font-weight-bold text-primary">Auto operations</h6>
         </div>
         <!-- Card Body -->
-        <div class="card-body" ng-controller="PersonalDebitController">
+        <div class="card-body" ng-controller="FamilyDebitController">
             <div class="row">
                 <div class="col-md-12">
                     <div class="panel panel-default">
@@ -158,7 +158,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr ng-repeat="autoOperInf in personalAutoOperationHistory">
+                                <tr ng-repeat="autoOperInf in familyAutoOperationHistory">
                                     <td>{{autoOperInf.categoryExpense}}</td>
                                     <td>{{autoOperInf.categoryIncome}}</td>
                                     <td>{{autoOperInf.dayOfMonth}}</td>
