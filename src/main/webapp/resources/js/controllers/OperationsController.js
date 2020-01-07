@@ -23,8 +23,8 @@ app.controller("AddIncomeControllerPersonal", function ($scope, $http) {
             headers: {
                 'Content-Type': 'application/json'
             }
-        }).success(function () {
-            alert("success")
+        }).error(function () {
+            alert("unsuccess")
         });
     };
 });
@@ -40,7 +40,7 @@ app.controller("AddExpenseControllerPersonal", function ($scope, $http) {
 
     $scope.submitOperation = function () {
         var method = "POST";
-        $scope.form.checkbox ? url = 'debitPersonal/createAutoExpense' : url = 'debitPersonal/expense';
+        $scope.form.checkbox ? url = 'debitPersonal/createAutoExpense' : url = 'debitPersonal/income';
 
         $http({
             method: method,
@@ -49,8 +49,8 @@ app.controller("AddExpenseControllerPersonal", function ($scope, $http) {
             headers : {
                 'Content-Type' : 'application/json'
             }
-        }).success(function () {
-            alert("success")
+        }).error(function () {
+            alert("unsuccess")
         });
 
     };
@@ -80,8 +80,8 @@ app.controller("AddIncomeControllerFamily", function ($scope, $http) {
             headers: {
                 'Content-Type': 'application/json'
             }
-        }).success(function () {
-            alert("success")
+        }).error(function () {
+            alert("unsuccess")
         });
     };
 });
@@ -109,8 +109,8 @@ app.controller("AddExpenseControllerFamily", function ($scope, $http) {
             headers : {
                 'Content-Type' : 'application/json'
             }
-        }).success(function () {
-            alert("success")
+        }).error(function () {
+            alert("unsuccess")
         });
     };
 });
