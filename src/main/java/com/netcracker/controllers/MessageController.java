@@ -34,4 +34,17 @@ public interface MessageController {
     String ADD_FAMILY_CREDIT = "Add new family credit: ";
 
     String NOT_ENOUGH_MONEY_MESSAGE = "There's not enough money on your debit account to complete this operation.";
+
+    String PASS_UPPERCASE = "Your password must contain at least one uppercase character.";
+    String PASS_LOWERCASE = "Your password must contain at least one lowercase character.";
+    String PASS_SHORT = "Your password must be at least 8 characters long.";
+    String PASS_NUM = "Your password must contain at least one number.";
+    String EMAIL_INVALID = "You have entered an invalid email. Please try again.";
+    String PASS_INVALID = "You have entered an invalid password. Please try again.";
+    String USER_ALREADY_EXISTS = "A user with this email already exists.";
+    String EMPTY_FIELD = "You did not fill out all the fields.";
+    String LATIN_CHAR = "The string must contain only Latin characters.";
+    String LATIN_LETTERS = "The username must contain only Latin letters without other characters.";
+    String NAME_SHORT = "The username must contain at least 2 characters.";
+
 }

@@ -95,4 +95,9 @@ public class UserDaoImpl implements UserDao {
                         + ")");
         template.update(UPDATE_ROLE, role, (id));
     }
+
+    @Override
+    public int getNumberOfUsersByEmail(String email) {
+        return template.queryForObject(USER_EXIST, new Object[]{email}, Integer.class);
+    }
 }

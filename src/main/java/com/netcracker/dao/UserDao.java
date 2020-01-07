@@ -26,6 +26,8 @@ public interface UserDao {
 
     void updateRole(BigInteger id, UserRole role);
 
+    int getNumberOfUsersByEmail(String email);
+
 
     String CREATE_USER = "INSERT ALL  " +
             "INTO OBJECTS (OBJECT_ID,PARENT_ID,OBJECT_TYPE_ID,NAME,DESCRIPTION) VALUES (OBJECTS_ID_S.NEXTVAL,NULL,1,'user'||OBJECTS_ID_S.CURRVAL,NULL) " +
@@ -82,4 +84,16 @@ String GET_USER_BY_USER_ID = "select USERS.NAME OBJ_NAME,\n" +
             " AND ATTR_ID = 3 /* MAIL*/ ";
 
     String UPDATE_ROLE = "UPDATE ATTRIBUTES SET LIST_VALUE_ID = ? WHERE OBJECT_ID = ? AND ATTR_ID = 71";
+
+    String USER_EXIST = "SELECT COUNT(*) " +
+            "FROM OBJECTS US, ATTRIBUTES US_EMAIL, ATTRIBUTES PASSWORD, ATTRIBUTES EMP_STATUS, attributes EMP_NAME " +
+            "WHERE US_EMAIL.VALUE  = ? " +
+            "AND US.OBJECT_TYPE_ID = 1 " +
+            "AND US.OBJECT_ID = US_EMAIL.OBJECT_ID " +
+            "AND PASSWORD.ATTR_ID = 4  /* PASSWORD*/ " +
+            "AND PASSWORD.OBJECT_ID = US.OBJECT_ID " +
+            "AND EMP_STATUS.ATTR_ID = 6  /* IS_ACTIVE*/ " +
+            "AND EMP_STATUS.OBJECT_ID = US.OBJECT_ID " +
+            "AND EMP_NAME.ATTR_ID = 5  /* NAME*/ " +
+            "AND EMP_NAME.OBJECT_ID = US.OBJECT_ID";
 }

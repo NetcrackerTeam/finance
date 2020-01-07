@@ -1,10 +1,14 @@
 package com.netcracker.controllers;
 
+import com.netcracker.controllers.validators.UserDataValidator;
 import com.netcracker.dao.UserDao;
+import com.netcracker.exception.ErrorsMap;
+import com.netcracker.exception.UserException;
 import com.netcracker.models.PersonalDebitAccount;
 import com.netcracker.models.User;
 import com.netcracker.models.enums.UserStatusActive;
 import com.netcracker.services.PersonalDebitService;
+import com.netcracker.services.utils.ExceptionMessages;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -36,7 +40,7 @@ public class LoginController {
         if (error != null) {
             model.addAttribute("error", "Username or password is incorrect.");
         }
-        return   URL.LOGIN_URL;
+        return URL.LOGIN_URL;
     }
 
     @RequestMapping(value = "/registration", method = RequestMethod.GET)
@@ -47,6 +51,29 @@ public class LoginController {
 
     @RequestMapping(value = "/registration", method = RequestMethod.POST)
     public String registerUserAccount(@ModelAttribute User user, Model model) {
+        try {
+            String username = user.getName();
+            String password = user.getPassword();
+            String email = user.geteMail();
+
+            UserDataValidator.isValidEmail(email);
+            UserDataValidator.isValidUsername(username);
+            UserDataValidator.isValidPassword(password);
+
+            if (userDao.getNumberOfUsersByEmail(email) > 0) return showMsg(model, ExceptionMessages.USER_ALREADY_EXIST);
+        } catch (UserException ex) {
+            String error = ex.getMessage();
+            if (ExceptionMessages.EMPTY_FIELD.equals(error)) return showMsg(model, ExceptionMessages.EMPTY_FIELD);
+            if (ExceptionMessages.INVALID_EMAIL.equals(error)) return showMsg(model, ExceptionMessages.INVALID_EMAIL);
+            if (ExceptionMessages.LATIN_LETTERS.equals(error)) return showMsg(model, ExceptionMessages.LATIN_LETTERS);
+            if (ExceptionMessages.NAME_SHORT.equals(error)) return showMsg(model, ExceptionMessages.NAME_SHORT);
+            if (ExceptionMessages.LATIN_CHAR.equals(error)) return showMsg(model, ExceptionMessages.LATIN_CHAR);
+            if (ExceptionMessages.PASS_SHORT.equals(error)) return showMsg(model, ExceptionMessages.PASS_SHORT);
+            if (ExceptionMessages.PASS_UPPER.equals(error)) return showMsg(model, ExceptionMessages.PASS_UPPER);
+            if (ExceptionMessages.PASS_LOWER.equals(error)) return showMsg(model, ExceptionMessages.PASS_LOWER);
+            if (ExceptionMessages.PASS_NUM.equals(error)) return showMsg(model, ExceptionMessages.PASS_NUM);
+        }
+
         model.addAttribute("user", user);
         user.setUserStatusActive(UserStatusActive.YES);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -56,6 +83,11 @@ public class LoginController {
                 .debitOwner(registered)
                 .build());
         return URL.LOGIN_URL;
+    }
+
+    private String showMsg(Model model, String msgKey) {
+        model.addAttribute("message", ErrorsMap.getErrorsMap().get(msgKey));
+        return URL.REGISTRATIONS_URL;
     }
 
     @RequestMapping(value="/logout", method = RequestMethod.GET)

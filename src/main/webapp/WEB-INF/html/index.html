@@ -43,37 +43,30 @@
             <li><a href="#passwordModal" data-toggle="modal" th:color="transparent">Change password</a></li>
             <li><a href="#emailModal" data-toggle="modal">Change email</a></li>
             <li><a href="#/">Delete account</a></li>
-            <li><a href="#/" th:action="@{/logout}">Log out</a></li>
+            <li><a href="#logout" data-toggle="modal">Log out</a></li>
         </ul>
     </nav>
-    <!--<nav>
-        <div class="topnav" id="myTopnav">
-            <a href="#/personalDebit">Personal account</a>
-            <a href="#/familyAccount">Family account</a>
-        </div>
-        <div class="name">
-        </div>
-        <ul class="menu">
-            <li><a href="#" id="menu" class="icon">&#9776;</a>
-                <ul class="submenu">
-                    <input th:color="transparent" type="button" class="btn btn-primary" data-toggle="modal"
-                           data-target="#passwordModal"
-                           value="Change password   "/>
-
-                    <input type="button" class="btn btn-primary" data-toggle="modal" data-target="#emailModal"
-                           value="Change email    "/>
-
-                    <form action="">
-                        <input class="btn btn-primary" type="submit" value="Delete Acc     "/>
-                    </form>
-                    <form action="" th:action="@{/logout}" method="get">
-                        <input class="btn btn-primary" type="submit" value="Log out      "/>
-                    </form>
-                </ul>
-            </li>
-        </ul>
-    </nav>-->
 </header>
+
+<form th:action="@{/logout}" method="get" action="">
+    <div class="modal fade" id="logout" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 align="center" class="modal-title">Log out</h4>
+                </div>
+                <div class="modal-body">
+                    <h5>Are you sure you want to sign out?</h5>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Yes</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
 
 <!-- Modal  password-->
 <form action="" th:action="@{/updatePassword}" method="post">

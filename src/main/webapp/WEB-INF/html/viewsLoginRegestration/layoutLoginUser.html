@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" ng-app="LoginApp"  xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8"/>
     <title>Service App</title>
@@ -18,7 +18,7 @@
             <p></p>
             <input type="password"  name="password" class="form-control" placeholder="Password"/>
             <p></p>
-            <span  style="color:red;" th:text="${error}"> </span>
+            <span style="color:#b42624;" th:text="${error}"> </span>
             <input type="submit" class="btn btn-lg btn-primary btn-block" value="Log In"/>
             <h4 class="text-center"><a href="registration">Create an account</a></h4>
         </div>
@@ -28,5 +28,4 @@
     </form>
 </div>
 </body>
-
 </html>

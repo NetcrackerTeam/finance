@@ -17,4 +17,16 @@ public interface ExceptionMessages {
     String ERROR_MESSAGE_PERSONAL_STATUS = "The user is unactive";
     String ERROR_MESSAGE_ILLEGAL_AMOUNT = "Amount can`t be negative";
     String ERROR_MESSAGE_NUMBER_ZERO = "The value of the entered number is zero";
+
+    String INVALID_EMAIL = "The email is invalid";
+    String INVALID_PASSWORD = "The password is invalid";
+    String PASS_UPPER = "Not found an uppercase";
+    String PASS_LOWER = "Not found a lowercase";
+    String PASS_NUM = "Not found a number";
+    String PASS_SHORT = "Password is too short";
+    String USER_ALREADY_EXIST = "User already exist";
+    String EMPTY_FIELD = "The field is empty";
+    String LATIN_CHAR = "String hasn't latin char";
+    String LATIN_LETTERS = "Must be only latin char without numbers";
+    String NAME_SHORT = "Username is too short";
 }
