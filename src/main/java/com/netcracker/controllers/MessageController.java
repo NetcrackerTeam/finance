@@ -43,7 +43,7 @@ public interface MessageController {
     String PASS_INVALID = "You have entered an invalid password. Please try again.";
     String USER_ALREADY_EXISTS = "A user with this email already exists.";
     String EMPTY_FIELD = "You did not fill out all the fields.";
-    String LATIN_CHAR = "The string must contain only Latin characters.";
+    String LATIN_CHAR = "The password must contain only Latin characters.";
     String LATIN_LETTERS = "The username must contain only Latin letters without other characters.";
     String NAME_SHORT = "The username must contain at least 2 characters.";
 

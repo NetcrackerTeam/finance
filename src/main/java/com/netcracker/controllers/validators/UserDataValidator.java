@@ -12,7 +12,7 @@ public class UserDataValidator {
     private final static Pattern hasUppercase = Pattern.compile("[A-Z]");
     private final static Pattern hasLowercase = Pattern.compile("[a-z]");
     private final static Pattern hasNumber = Pattern.compile("\\d");
-    private final static Pattern onlyLatinAlphabet = Pattern.compile("^[a-zA-Z0-9]+$");
+    private final static Pattern onlyLatinAlphabet = Pattern.compile("^[a-zA-Z0-9\\S]+$");
     private final static Pattern onlyLatinLetters = Pattern.compile("^[a-zA-Z\\s]+$");
     private final static Pattern emailPattern = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$",
             Pattern.CASE_INSENSITIVE);
