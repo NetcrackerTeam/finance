@@ -40,7 +40,7 @@ app.controller("AddExpenseControllerPersonal", function ($scope, $http) {
 
     $scope.submitOperation = function () {
         var method = "POST";
-        $scope.form.checkbox ? url = 'debitPersonal/createAutoExpense' : url = 'debitPersonal/income';
+        $scope.form.checkbox ? url = 'debitPersonal/createAutoExpense' : url = 'debitPersonal/expense';
 
         $http({
             method: method,

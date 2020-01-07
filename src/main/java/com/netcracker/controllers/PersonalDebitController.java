@@ -9,9 +9,7 @@ import com.netcracker.services.*;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -22,7 +20,6 @@ import java.security.Principal;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
-import java.util.Scanner;
 
 @Controller
 @RequestMapping("/debitPersonal")
@@ -109,7 +106,7 @@ public class PersonalDebitController {
     @RequestMapping(value = "/createAutoExpense", method = RequestMethod.POST)
     public @ResponseBody
     Status createAutoExpense(@RequestBody AutoOperationExpense autoOperationExpense,
-                                           Principal principal) {
+                             Principal principal) {
         BigInteger accountId = getAccountByPrincipal(principal);
         accountAutoOperationService.createPersonalExpenseAutoOperation(autoOperationExpense, accountId);
         logger.debug("expense is done!");
@@ -158,6 +155,12 @@ public class PersonalDebitController {
         logger.debug("Month report is ready");
 
         return report;
+    }
+
+    @RequestMapping(value = "/info", method = RequestMethod.GET)
+    @ResponseBody
+    public PersonalDebitAccount getPersonalAccount(Principal principal) {
+        return personalDebitService.getPersonalDebitAccount(getAccountByPrincipal(principal));
     }
 
     @RequestMapping("/layout")
