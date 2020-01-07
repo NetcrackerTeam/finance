@@ -12,12 +12,20 @@ var app = angular.module('AngularSpringApp', []).run(function ($rootScope, $http
     };
 
     $rootScope.user = {
-        debitId: "100"
+        debitId: "100",
+        id: "",
+        familyDebitId: "",
+        role: ''
     };
 
-    $rootScope.family = {
-        debitId: "0"
+    $rootScope.fetchUserId = function(){
+        $http.get('getUserId').success(function (response) {
+            $rootScope.user.id = response;
+        });
     };
+
+    $rootScope.fetchUserId();
+
 
     $rootScope.fetchUserDebitId = function(){
         $http.get('getUserDebitId').success(function (response) {
@@ -29,12 +37,19 @@ var app = angular.module('AngularSpringApp', []).run(function ($rootScope, $http
 
     $rootScope.fetchFamilyDebitId = function () {
       $http.get('getFamilyDebitId').success(function (response) {
-          $rootScope.family.debitId = response;
+          $rootScope.user.familyDebitId = response;
       });
     };
+
     $rootScope.fetchFamilyDebitId();
 
+    $rootScope.fetchUserRole = function(){
+        $http.get('getUserRole').success(function (response) {
+            $rootScope.user.role = response;
+        });
+    };
 
+    $rootScope.fetchUserRole();
 
 });
 
@@ -59,6 +74,9 @@ app.config(['$routeProvider', function ($routeProvider) {
     }).when('/infoFamilyCredit/:familyCreditId', {
         templateUrl: 'templateURL',
         controller: 'GetFamilyCreditController'
+    }).when('/userControl', {
+        templateUrl: 'debitFamily/getUserControl',
+        controller: FamilyDebitController
     });
 
  //   $routeProvider.otherwise({redirectTo: '/'});

@@ -5,6 +5,7 @@ import com.netcracker.dao.UserDao;
 import com.netcracker.models.FamilyDebitAccount;
 import com.netcracker.models.User;
 import org.apache.log4j.Logger;
+import com.netcracker.models.enums.UserRole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -37,7 +38,7 @@ public class UserIdController {
 
     @RequestMapping(value = "/getFamilyDebitId", produces = MediaType.APPLICATION_JSON_VALUE,  method = RequestMethod.GET)
     public ResponseEntity<BigInteger> getFamilyDebitId() {
-        getUserInfo();
+        getParticipantInfo();
         return new ResponseEntity<>(familyDebitId, HttpStatus.OK);
     }
 
@@ -45,6 +46,18 @@ public class UserIdController {
     public ResponseEntity<User> getUser() {
         getUserInfo();
         return new ResponseEntity<>(user, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/getUserId", produces = MediaType.APPLICATION_JSON_VALUE,  method = RequestMethod.GET)
+    public ResponseEntity<BigInteger> getUserId() {
+        getParticipantInfo();
+        return new ResponseEntity<>(user.getId(), HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/getUserRole", produces = MediaType.APPLICATION_JSON_VALUE,  method = RequestMethod.GET)
+    public ResponseEntity<UserRole> getUserRole() {
+        getParticipantInfo();
+        return new ResponseEntity<>(user.getUserRole(), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/templateURL", method = RequestMethod.GET)
@@ -59,6 +72,14 @@ public class UserIdController {
         else email = principal.toString();
         user = userDao.getUserByEmail(email);
         personalDebitId = user.getPersonalDebitAccount();
+    }
+
+    private void getParticipantInfo() {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String email;
+        if (principal instanceof UserDetails) email = ((UserDetails)principal).getUsername();
+        else email = principal.toString();
+        user = userDao.getParticipantByEmail(email);
         familyDebitId = user.getFamilyDebitAccount();
     }
 

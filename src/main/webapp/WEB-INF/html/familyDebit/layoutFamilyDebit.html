@@ -1,5 +1,5 @@
-<nav>
-    <div class="topnavFamily" id="TopnavFamily">
+<nav ng-show="user.familyDebitId.length > 0">
+    <div class="topnavPersonal" id="TopnavPersonal">
         <a href="#createFamilyCreditModal" data-toggle="modal">Create Credit</a>
         <a href="#incomeOp" data-toggle="modal">Add income</a>
         <a href="#expenseOp" data-toggle="modal">Add expense</a>
@@ -16,14 +16,14 @@
     </div>
 </div>
 <!-- creating Family Account -->
-<div class="input-append" ng-show="family.debitId.length == 0">
+<div class="input-append" ng-show="user.familyDebitId.length == 0">
     <input style="width:358px; margin-left: 100px;" class="span2" type="text" ng-model="nameFamilyAccount"
            placeholder="Enter family account name" required="required" min="1"/>
     <button class="btn btn-primary" ng-click="createFamilyAccount()">Add Family Account</button>
 </div>
 
     <div class="row">
-<div class="col-xl-8 col-lg-6" ng-show="family.debitId.length > 0">
+<div class="col-xl-8 col-lg-6" ng-show="user.familyDebitId.length > 0">
     <div class="card shadow mb-4">
         <!-- Card Header - Dropdown -->
         <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
@@ -68,7 +68,7 @@
     <br/>
 </div>
 
-<div class="col-lg-6" ng-show="family.debitId.length > 0">
+<div class="col-lg-6" ng-show="user.familyDebitId.length > 0">
     <form class="creditsForm" ng-controller="FamilyCreditController">
         <fieldset>
             <legend>Credits</legend>
@@ -127,7 +127,7 @@
     </div>
 </form>
 
-<div class="col-xl-8 col-lg-7" ng-show="family.debitId.length > 0">
+<div class="col-xl-8 col-lg-7" ng-show="user.familyDebitId.length > 0">
     <div class="card shadow mb-4">
         <!-- Card Header - Dropdown -->
         <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
@@ -180,7 +180,7 @@
     <br/>
 </div>
 
-<div class="col-xl-8 col-lg-7" ng-show="family.debitId.length > 0">
+<div class="col-xl-8 col-lg-7" ng-show="user.familyDebitId.length > 0">
     <div class="card shadow mb-4">
         <!-- Card Header - Dropdown -->
         <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
@@ -265,7 +265,7 @@
 </form>
 
 
-<form ng-controller="FamilyPredictController" ng-submit="getPredict()" ng-show="family.debitId.length > 0">
+<form ng-controller="FamilyPredictController" ng-submit="getPredict()" ng-show="user.familyDebitId.length > 0">
     <div class="modal fade" id="prediction" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
          aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -327,7 +327,7 @@
 
 <!-- Income/Auto_Income Operations -->
 <div class="modal fade" id="incomeOp" tabindex="-1" role="dialog" aria-labelledby="incomeOpLabel" aria-hidden="true"
-     ng-show="family.debitId.length > 0">
+     ng-show="user.familyDebitId.length > 0">
     <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -377,7 +377,7 @@
 
 <!-- Expense/Auto_Expense Operations -->
 <div class="modal fade" id="expenseOp" tabindex="-1" role="dialog" aria-labelledby="expenseOpLabel" aria-hidden="true"
-     ng-show="family.debitId.length > 0">
+     ng-show="user.familyDebitId.length > 0">
     <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -434,7 +434,7 @@
 
 <!-- add user to family account -->
 <div class="modal fade" id="addUser" tabindex="-1" role="dialog" aria-labelledby="incomeOpLabel" aria-hidden="true"
-     ng-show="family.debitId.length > 0">
+     ng-show="user.familyDebitId.length > 0">
     <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -462,6 +462,6 @@
     </div>
 </div>
 
-<div class="input-append" ng-show="family.debitId.length > 0">
+<div class="input-append" ng-show="user.familyDebitId.length > 0">
     <button class="btn btn-primary" ng-click="deleteFamilyAccount()">Delete Family Account</button>
 </div>

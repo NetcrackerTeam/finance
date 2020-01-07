@@ -17,4 +17,5 @@ public interface URL {
     String FAMILY_CREDIT = "familyCredit/layoutCreateFamilyCredit";
 
     String EXCEPTION_PAGE = "exceptionPage";
+    String PARTICIPANTS_OF_FAMILY = "familyDebit/ParticipantsOfFamilyAccount";
 }

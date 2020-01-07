@@ -1,0 +1,55 @@
+<!-- add user to family account -->
+<div class="input-append">
+    <input style="width:358px; margin: 10px 10px 10px 100px;" class="span2" type="text" ng-model="loginParticipant" required="required" min="1" />
+    <button class="btn btn-primary" ng-disabled="!loginParticipant" ng-click="addParticipant()">Add User</button>
+</div>
+
+<!-- add user to family account -->
+<div class="col-xl-8 col-lg-6" ng-show="participants.length > 0">
+    <div class="card shadow mb-4">
+        <!-- Card Header - Dropdown -->
+        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+            <h6 class="m-0 font-weight-bold text-primary">Participants</h6>
+        </div>
+        <!-- Card Body -->
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">History</div>
+                        <div class="panel-body">
+                            <table class="table table-striped">
+                                <thead>
+                                <tr>
+                                    <th>UserName</th>
+                                    <th>Login</th>
+                                    <th>UserRole</th>
+                                    <th>IsActive</th>
+                                    <th>Action</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr ng-repeat="participant in participants">
+                                    <td>{{participant.name}}</td>
+                                    <td>{{participant.eMail}}</td>
+                                    <td>{{participant.userRole}}</td>
+                                    <td>{{participant.userStatusActive}}</td>
+                                    <td style="width:70px;text-align:center;">
+                                        <button class="btn btn-mini btn-danger" ng-hide="participant.userRole == 'OWNER' || participant.id == user.id" ng-click="deleteParticipant(participant.eMail)">Remove
+                                        </button>
+                                        <button class="btn btn-mini btn-danger" ng-hide="participant.userRole == 'OWNER' || participant.id != user.id" ng-click="deleteParticipant(participant.eMail)">Leave
+                                        </button>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<h1><span ng-show="user.familydebitId.length > 0">FamilyDebitID from RootScope: {{user.role}}</span></h1>
+<h1><span ng-show="user.familydebitId.length > 0">UserId from RootScope: {{user.id}}</span></h1>

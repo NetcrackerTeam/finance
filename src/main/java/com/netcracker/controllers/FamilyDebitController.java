@@ -8,6 +8,7 @@ import com.netcracker.exception.NullObjectException;
 import com.netcracker.models.*;
 import com.netcracker.models.enums.CategoryIncome;
 import com.netcracker.models.enums.FamilyAccountStatusActive;
+import com.netcracker.models.enums.UserRole;
 import com.netcracker.services.*;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +48,7 @@ public class FamilyDebitController {
     private static final Logger logger = Logger.getLogger(FamilyDebitController.class);
 
     private BigInteger getAccountByPrincipal(Principal principal) {
-        User user = userDao.getUserByEmail(principal.getName());
+        User user = userDao.getParticipantByEmail(principal.getName());
         return user.getFamilyDebitAccount();
     }
 
@@ -68,6 +69,7 @@ public class FamilyDebitController {
                 .debitOwner(user)
                 .build();
         familyDebitService.createFamilyDebitAccount(familyDebitAccount);
+        userDao.updateRole(user.getId(), UserRole.OWNER.getId());
         return new Status(true, MessageController.ADD_FAMILY_ACCOUNT);
     }
 
@@ -92,16 +94,26 @@ public class FamilyDebitController {
     public Status addUserToAccount(@RequestParam(value = "userLogin") String userLogin,
                                    Principal principal) {
 
-        BigInteger userId = userDao.getUserByEmail(userLogin).getId();
+        BigInteger userId = userDao.getParticipantByEmail(userLogin).getId();
         BigInteger accountId = getAccountByPrincipal(principal);
         try {
             logger.debug("add user to account " + accountId + "user id " + userId);
             familyDebitService.addUserToAccount(accountId, userId);
             logger.debug("success adding user");
+            userDao.updateRole(userId, UserRole.PARTICIPANT.getId());
             return new Status(true, MessageController.ADD_USER_FAM + userDao.getUserById(userId).getName());
         } catch (NullObjectException ex) {
             return new Status(true, MessageController.ADD_UNS_USER_FAM + userDao.getUserById(userId).getName());
         }
+    }
+
+    @RequestMapping(value = "/getParicipants", method = RequestMethod.GET)
+    @ResponseBody
+    public Collection<User> getParticipants(Principal principal) {
+
+            BigInteger accountId = getAccountByPrincipal(principal);
+            logger.debug("getting participants from account " + accountId);
+            return familyDebitService.getParticipantsOfFamilyAccount(accountId);
     }
 
     @RequestMapping(value = "/deleteUser", method = RequestMethod.GET)
@@ -109,12 +121,13 @@ public class FamilyDebitController {
     public Status deleteUserFromAccount(@RequestParam(value = "userLogin") String userLogin,
                                         Principal principal) {
 
-        BigInteger userId = userDao.getUserByEmail(userLogin).getId();
+        BigInteger userId = userDao.getParticipantByEmail(userLogin).getId();
         BigInteger accountId = getAccountByPrincipal(principal);
         try {
             logger.debug("delete user to account " + accountId + "user id " + userId);
             familyDebitService.deleteUserFromAccount(accountId, userId);
             logger.debug("success adding user");
+            userDao.updateRole(userId, UserRole.USER.getId());
             return new Status(true, MessageController.DELETE_USER_FAM + userDao.getUserById(userId).getName());
         } catch (NullObjectException ex) {
             return new Status(true, MessageController.DELETE_UNS_USER_FAM + userDao.getUserById(userId).getName());
@@ -229,7 +242,12 @@ public class FamilyDebitController {
     }
 
     @RequestMapping("/layout")
-    public String getPersonalAccountPartialPage() {
+    public String getFamilyAccountPartialPage() {
         return URL.FAMILY_DEBIT;
+    }
+
+    @RequestMapping("/getUserControl")
+    public String getParticipants() {
+        return URL.PARTICIPANTS_OF_FAMILY;
     }
 }

@@ -89,15 +89,27 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public void updateRole(BigInteger id, UserRole role) {
+    public void updateRole(BigInteger id, BigInteger roleId) {
         logger.debug(
-                "Entering updateRole(id=" + id + "," + " role=" + role
+                "Entering updateRole(id=" + id + "," + " role=" + roleId
                         + ")");
-        template.update(UPDATE_ROLE, role, (id));
+        template.update(UPDATE_ROLE, roleId, (id));
     }
 
     @Override
     public int getNumberOfUsersByEmail(String email) {
         return template.queryForObject(USER_EXIST, new Object[]{email}, Integer.class);
+    }
+
+    @Override
+    public User getParticipantByEmail(String login) {
+        try {
+            logger.debug("Entering getUserByUserLogin(login=" + login + ")");
+            return template.queryForObject(GET_FAMILY_ACCOUNT_OF_PARTICIPANT_BY_LOGIN, new Object[]{login},
+                    new UserDaoMapper());
+        } catch (
+                EmptyResultDataAccessException EmptyResultDataAccessException) {
+            throw new UserException(ExceptionMessages.ERROR_MESSAGE_USER);
+        }
     }
 }

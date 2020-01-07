@@ -1,49 +1,42 @@
-'use strict';
+var FamilyDebitController = function ($scope, $http, $rootScope) {
 
-/**
- * FamilyDebitController
- * @constructor
- */
-var FamilyDebitController = function ($scope, $http) {
+    $scope.fetchFamilyHistory = function (date) {
+        $http.get('debitFamily/history', {params: {date: date.toLocaleString()}}).success(function (historyList) {
+            $scope.familyHistory = historyList;
+        });
+    };
 
-        $scope.fetchFamilyHistory = function (date) {
-            $http.get('debitFamily/history', {params: {date: date.toLocaleString()}}).success(function (historyList) {
-                $scope.familyHistory = historyList;
-            });
-        };
+    $scope.fetchPersonalAutoOperationHistory = function () {
+        $http.get('debitFamily/autoOperationHistory').success(function (autoOper) {
+            $scope.familyAutoOperationHistory = autoOper;
+        });
+    };
 
-        $scope.fetchPersonalAutoOperationHistory = function () {
-            $http.get('debitFamily/autoOperationHistory').success(function (autoOper) {
-                $scope.familyAutoOperationHistory = autoOper;
-            });
-        };
+    $scope.fetchFamilyInfo = function () {
+        $http.get('debitFamily/info').success(function (accountInfo) {
+            $scope.accountInfo = accountInfo;
+        });
+    };
 
-        $scope.fetchFamilyInfo = function () {
-            $http.get('debitFamily/info').success(function (accountInfo) {
-                $scope.accountInfo = accountInfo;
-            });
-        };
+    $scope.nameFamilyAccount = "";
+    $scope.createFamilyAccount = function () {
+        var method = "POST";
+        var url = 'debitFamily/createAccount';
 
-        $scope.nameFamilyAccount = "";
-        $scope.createFamilyAccount = function () {
-            var method = "POST";
-
-            var url = 'debitFamily/createAccount';
-
-            $http({
-                method: method,
-                url: url,
-                params: {'nameAccount':angular.toJson($scope.nameFamilyAccount)},
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            }).success(function () {
-                alert("success");
-                window.location.reload();
-            }).error(function () {
-                alert("unsuccess")
-            });
-        };
+        $http({
+            method: method,
+            url: url,
+            params: {'nameAccount': angular.toJson($scope.nameFamilyAccount)},
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).success(function () {
+            alert("success");
+            window.location.reload();
+        }).error(function () {
+            alert("unsuccess")
+        });
+    };
 
     $scope.deleteFamilyAccount = function () {
         var method = "GET";
@@ -69,19 +62,19 @@ var FamilyDebitController = function ($scope, $http) {
         $http({
             method: method,
             url: url,
-            params: {'userLogin':$scope.loginParticipant},
+            params: {'userLogin': $scope.loginParticipant},
             headers: {
                 'Content-Type': 'application/json'
             }
         }).success(function () {
             alert("success");
-     //       window.location.reload();
+            window.location.reload();
         }).error(function () {
             alert("unsuccess " + $scope.loginParticipant)
         });
     };
 
-    $scope.deleteParticipant = function () {
+    $scope.deleteParticipant = function (userLogin) {
         var method = "GET";
 
         var url = 'debitFamily/deleteUser';
@@ -89,19 +82,26 @@ var FamilyDebitController = function ($scope, $http) {
         $http({
             method: method,
             url: url,
-            params: {'userLogin':$scope.loginParticipant},
+            params: {'userLogin': userLogin},
             headers: {
                 'Content-Type': 'application/json'
             }
         }).success(function () {
             alert("success");
-            //       window.location.reload();
+            window.location.reload();
         }).error(function () {
             alert("unsuccess " + $scope.loginParticipant)
         });
     };
 
-        $scope.fetchPersonalAutoOperationHistory();
-        $scope.fetchFamilyHistory('2019-01-11');
-        $scope.fetchFamilyInfo();
+    $scope.fetchParticipants = function () {
+        $http.get('debitFamily/getParicipants').success(function (response) {
+            $scope.participants = response;
+        });
     };
+
+    $scope.fetchParticipants();
+    $scope.fetchPersonalAutoOperationHistory();
+    $scope.fetchFamilyHistory('2019-01-11');
+    $scope.fetchFamilyInfo();
+};
