@@ -8,7 +8,13 @@
         <a href="#addUser" data-toggle="modal">Participants Control</a> <!--#2 class = Comment_form-->
     </div>
 </nav>
-<h1><span ng-show="family.debitId.length > 0">FamilyDebitID from RootScope: {{family.debitId}}</span></h1>
+<!--<h1><span ng-show="family.debitId.length > 0">FamilyDebitID from RootScope: {{family.debitId}}</span></h1>-->
+<div ng-controller="FamilyDebitController">
+    <h1>Current amount: {{accountInfo.amount}}</h1>
+    <div>
+        User name: {{accountInfo.owner.name}}
+    </div>
+</div>
 <!-- creating Family Account -->
 <div class="input-append" ng-show="family.debitId.length == 0">
     <input style="width:358px; margin-left: 100px;" class="span2" type="text" ng-model="nameFamilyAccount"

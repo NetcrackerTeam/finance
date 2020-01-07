@@ -18,11 +18,12 @@ var PersonalDebitController = function($scope, $http) {
         });
     };
 
-    $scope.fetchPersonalAutoOperationHistory = function () {
+    $scope.fetchPersonalInfo = function () {
         $http.get('debitPersonal/info').success(function (accountInfo) {
             $scope.accountInfo = accountInfo;
         });
     };
     $scope.fetchPersonalAutoOperationHistory();
     $scope.fetchPersonalHistory('2019-01-11');
+    $scope.fetchPersonalInfo();
 };

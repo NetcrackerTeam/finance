@@ -3,7 +3,6 @@ var app = angular.module('AngularSpringApp');
 //Personal Auto Operations and Simple Operations
 
 app.controller("AddIncomeControllerPersonal", function ($scope, $http) {
-    debugger;
     $scope.form = {
         amount: 0.00,
         categoryIncome: "DEFAULT",
@@ -30,7 +29,6 @@ app.controller("AddIncomeControllerPersonal", function ($scope, $http) {
 });
 
 app.controller("AddExpenseControllerPersonal", function ($scope, $http) {
-    debugger;
     $scope.form = {
         amount: 0.00,
         categoryExpense: "DEFAULT",
@@ -60,7 +58,6 @@ app.controller("AddExpenseControllerPersonal", function ($scope, $http) {
 //Family Auto Operations and Simple Operations
 
 app.controller("AddIncomeControllerFamily", function ($scope, $http) {
-    debugger;
     $scope.form = {
         amount: 0.00,
         categoryIncome: "DEFAULT",
@@ -89,7 +86,6 @@ app.controller("AddIncomeControllerFamily", function ($scope, $http) {
 
 
 app.controller("AddExpenseControllerFamily", function ($scope, $http) {
-    debugger;
     $scope.form = {
         amountExp: 0.00,
         categoryExpense: "DEFAULT",

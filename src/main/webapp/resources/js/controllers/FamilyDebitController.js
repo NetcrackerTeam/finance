@@ -12,6 +12,12 @@ var FamilyDebitController = function ($scope, $http, $rootScope) {
             });
         };
 
+        $scope.fetchFamilyInfo = function () {
+            $http.get('debitFamily/info').success(function (accountInfo) {
+                $scope.accountInfo = accountInfo;
+            });
+        };
+
         $scope.nameFamilyAccount = "";
         $scope.createFamilyAccount = function () {
             var method = "POST";
@@ -91,4 +97,5 @@ var FamilyDebitController = function ($scope, $http, $rootScope) {
 
         $scope.fetchPersonalAutoOperationHistory();
         $scope.fetchFamilyHistory('2019-01-11');
+        $scope.fetchFamilyInfo();
     };

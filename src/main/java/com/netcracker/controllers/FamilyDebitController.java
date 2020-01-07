@@ -222,6 +222,12 @@ public class FamilyDebitController {
         return monthReport;
     }
 
+    @RequestMapping(value = "/info", method = RequestMethod.GET)
+    @ResponseBody
+    public FamilyDebitAccount getPersonalAccount(Principal principal) {
+        return familyDebitService.getFamilyDebitAccount(getAccountByPrincipal(principal));
+    }
+
     @RequestMapping("/layout")
     public String getPersonalAccountPartialPage() {
         return URL.FAMILY_DEBIT;
