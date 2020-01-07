@@ -1,11 +1,9 @@
 package com.netcracker.controllers;
 
-import ch.qos.logback.core.status.ErrorStatus;
 import com.netcracker.dao.CreditAccountDao;
 import com.netcracker.dao.UserDao;
 import com.netcracker.exception.CreditAccountException;
 import com.netcracker.exception.ErrorsMap;
-import com.netcracker.exception.UserException;
 import com.netcracker.models.*;
 import com.netcracker.services.FamilyCreditService;
 import com.netcracker.services.PersonalCreditService;
@@ -109,6 +107,14 @@ public class CreditFamilyController {
                 "], [familyDebitId = " + familyDebitId + "], [userId = " + userId + "], [creditId = " + creditId + "]");
         creditAccountDao.deleteCreditAccountByCreditId(creditId);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "updateFamilyCredit", method = RequestMethod.PUT)
+    public ResponseEntity<FamilyCreditAccount> updateFamilyCreditAccount(@RequestBody FamilyCreditAccount familyCreditAccount) {
+        logger.debug("[updatePersonalCredit]" + MessageController.debugStartMessage  + "[personalDebitId = " + personalDebitId +
+                "], [familyDebitId = " + familyDebitId + "], [creditId = " + creditId + "]");
+        creditAccountDao.updateCreditAccountByCreditId(familyCreditAccount, creditId);
+        return new ResponseEntity<>(familyCreditAccount, HttpStatus.OK);
     }
 
     private void getUserInfo(Principal principal) {

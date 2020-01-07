@@ -23,7 +23,15 @@ var PersonalDebitController = function($scope, $http) {
             $scope.accountInfo = accountInfo;
         });
     };
+
+    $scope.fetchUserInfo = function() {
+        $http.get('getUserInfo').success(function (userInfo) {
+            $scope.userInfo = userInfo;
+        });
+    };
+
     $scope.fetchPersonalAutoOperationHistory();
     $scope.fetchPersonalHistory('2019-01-11');
     $scope.fetchPersonalInfo();
+    $scope.fetchUserInfo();
 };

@@ -34,6 +34,8 @@ var app = angular.module('AngularSpringApp', []).run(function ($rootScope, $http
     };
     $rootScope.fetchFamilyDebitId();
 
+
+
 });
 
 app.config(['$routeProvider', function ($routeProvider) {

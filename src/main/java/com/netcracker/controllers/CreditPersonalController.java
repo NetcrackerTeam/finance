@@ -11,6 +11,7 @@ import com.netcracker.services.utils.ExceptionMessages;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -95,8 +96,15 @@ public class CreditPersonalController {
 
     @RequestMapping(value = "deletePersonalCredit/{creditId}", method = RequestMethod.DELETE)
     public ResponseEntity<String> deletePersonalCredit(@PathVariable("creditId") BigInteger creditId) {
-        logger.debug("[createCreditAccount]" + MessageController.debugStartMessage  + "[debitId = " + debitId + "], [creditId = " + creditId + "]");
+        logger.debug("[deletePersonalCreditAccount]" + MessageController.debugStartMessage  + "[debitId = " + debitId + "], [creditId = " + creditId + "]");
         creditAccountDao.deleteCreditAccountByCreditId(creditId);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "updatePersonalCredit", method = RequestMethod.PUT)
+    public ResponseEntity<PersonalCreditAccount> updatePersonalCreditAccount(@RequestBody PersonalCreditAccount personalCreditAccount) {
+        logger.debug("[updatePersonalCredit]" + MessageController.debugStartMessage  + "[debitId = " + debitId + "], [creditId = " + creditId + "]");
+        creditAccountDao.updateCreditAccountByCreditId(personalCreditAccount, creditId);
+        return new ResponseEntity<>(personalCreditAccount, HttpStatus.OK);
     }
 }

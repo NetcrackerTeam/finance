@@ -13,7 +13,8 @@ var FamilyCreditController = function($scope, $http, $rootScope) {
         creditRate: {},
         dateTo: "",
         monthDay: "",
-        isPaid: "NO"
+        isPaid: "NO",
+        isCommodity: "false"
     };
 
     var getFamilyCreditsURL = 'familyCredit/getFamilyCredits';
@@ -80,6 +81,7 @@ var FamilyCreditController = function($scope, $http, $rootScope) {
         $scope.credit.dateTo = {};
         $scope.credit.monthDay = "";
         $scope.credit.isPaid = 'NO';
+        $scope.credit.isCommodity = "false"
     }
 
     $scope.isNotEmptyCredit = function(credit) {
@@ -97,7 +99,7 @@ var FamilyCreditController = function($scope, $http, $rootScope) {
     $scope.checkSelect = function() {
         var selectedDiv = document.getElementById("creditsSelect");
         var infoButton = document.getElementById("infoCredit");
-        var deleteButton = document.getElementById("deleteCredit");
+        var deleteButton = document.getElementById("editCredit");
         var selectedOption = selectedDiv.options[selectedDiv.selectedIndex].text;
         $rootScope.optionSelect.idCredit = selectedDiv.options[selectedDiv.selectedIndex].value;
         if (selectedOption !== "none") {
@@ -122,5 +124,36 @@ var FamilyCreditController = function($scope, $http, $rootScope) {
             }).then(success, error);
         } else alert("Credit hasn't been deleted");
     };
+
+    var sliderEdit = document.getElementById("creditRateRangeEdit");
+    var outputEdit = document.getElementById("creditRateTextEdit");
+    outputEdit.innerHTML = 'Credit rate: ' + sliderEdit.value + ' %';
+    sliderEdit.oninput = function() {
+        outputEdit.innerHTML = 'Credit rate: ' + this.value + ' %';
+    };
+
+    var updateCreditURL = 'familyCredit/updateFamilyCredit';
+    $scope.updateFamilyCredit = function () {
+        var dateFrom = new Date(Date.parse($scope.credit.date));
+        var dateTo = new Date(Date.parse($scope.credit.dateTo));
+        $scope.credit.date = {
+            year: dateFrom.getFullYear(),
+            month: dateFrom.getMonth(),
+            day: dateFrom.getDay()
+        };
+        $scope.credit.dateTo = {
+            year: dateTo.getFullYear(),
+            month: dateTo.getMonth(),
+            day: dateTo.getDay()
+        };
+        $http({
+            method : "PUT",
+            url : updateCreditURL,
+            data : angular.toJson($scope.credit),
+            headers : {
+                'Content-Type' : 'application/json'
+            }
+        }).then( success, error );
+    }
 
 };

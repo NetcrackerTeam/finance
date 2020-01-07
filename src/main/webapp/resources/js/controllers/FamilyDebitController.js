@@ -1,4 +1,10 @@
-var FamilyDebitController = function ($scope, $http, $rootScope) {
+'use strict';
+
+/**
+ * FamilyDebitController
+ * @constructor
+ */
+var FamilyDebitController = function ($scope, $http) {
 
         $scope.fetchFamilyHistory = function (date) {
             $http.get('debitFamily/history', {params: {date: date.toLocaleString()}}).success(function (historyList) {

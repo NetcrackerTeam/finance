@@ -102,6 +102,18 @@ public class CreditAccountDaoImpl implements CreditAccountDao {
         jdbcTemplate.update(DELETE_CREDIT_ACCOUNT, creditId);
     }
 
+    @Override
+    public void updateCreditAccountByCreditId(AbstractCreditAccount creditAccount, BigInteger creditId) {
+        jdbcTemplate.update(UPDATE_NAME, creditAccount.getName(), creditId);
+        jdbcTemplate.update(UPDATE_AMOUNT, creditAccount.getAmount(), creditId);
+        jdbcTemplate.update(UPDATE_PAID_AMOUNT, creditAccount.getPaidAmount(), creditId);
+        jdbcTemplate.update(UPDATE_DATE_FROM, Date.valueOf(creditAccount.getDate()), creditId);
+        jdbcTemplate.update(UPDATE_RATE, creditAccount.getCreditRate(), creditId);
+        jdbcTemplate.update(UPDATE_DATE_TO, Date.valueOf(creditAccount.getDateTo()), creditId);
+        jdbcTemplate.update(UPDATE_MONTHDAY, creditAccount.getMonthDay(), creditId);
+        jdbcTemplate.update(UPDATE_COMMODITY, creditAccount.isCommodity(), creditId);
+    }
+
     private void createCredit(BigInteger id, AbstractCreditAccount creditAccount, String queryCredit, String queryDebt) {
         String creditName = id + creditAccount.getName();
         jdbcTemplate.update(queryCredit,

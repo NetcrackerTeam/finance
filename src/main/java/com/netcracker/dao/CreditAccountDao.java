@@ -1,5 +1,6 @@
 package com.netcracker.dao;
 
+import com.netcracker.models.AbstractCreditAccount;
 import com.netcracker.models.FamilyCreditAccount;
 import com.netcracker.models.PersonalCreditAccount;
 import com.netcracker.models.enums.CreditStatusPaid;
@@ -105,6 +106,17 @@ public interface CreditAccountDao {
     BigInteger getFamilyDebitIdByCreditId(BigInteger idCreditAccount);
 
     void deleteCreditAccountByCreditId(BigInteger creditId);
+
+    void updateCreditAccountByCreditId(AbstractCreditAccount creditAccount, BigInteger creditId);
+
+    String UPDATE_NAME = "UPDATE ATTRIBUTES NAME_AT SET NAME_AT.VALUE = ? WHERE NAME_AT.OBJECT_ID = ? AND NAME_AT.ATTR_ID = 30";
+    String UPDATE_AMOUNT = "UPDATE ATTRIBUTES AMOUNT_AT SET AMOUNT_AT.VALUE = ? WHERE AMOUNT_AT.OBJECT_ID = ? AND AMOUNT_AT.ATTR_ID = 31";
+    String UPDATE_PAID_AMOUNT = "UPDATE ATTRIBUTES PAID_AT SET PAID_AT.VALUE = ? WHERE PAID_AT.OBJECT_ID = ? AND PAID_AT.ATTR_ID = 32";
+    String UPDATE_DATE_FROM = "UPDATE ATTRIBUTES DATE_AT SET DATE_AT.VALUE = ? WHERE DATE_AT.OBJECT_ID = ? AND DATE_AT.ATTR_ID = 29";
+    String UPDATE_RATE = "UPDATE ATTRIBUTES RATE_AT SET RATE_AT.VALUE = ? WHERE RATE_AT.OBJECT_ID = ? AND RATE_AT.ATTR_ID = 33";
+    String UPDATE_DATE_TO = "UPDATE ATTRIBUTES DATE_TO_AT SET DATE_TO_AT.VALUE = ? WHERE DATE_TO_AT.OBJECT_ID = ? AND DATE_TO_AT.ATTR_ID = 34";
+    String UPDATE_MONTHDAY = "UPDATE ATTRIBUTES MONTH_DAY_AT SET MONTH_DAY_AT.VALUE = ? WHERE MONTH_DAY_AT.OBJECT_ID = ? AND MONTH_DAY_AT.ATTR_ID = 36";
+    String UPDATE_COMMODITY = "UPDATE  ATTRIBUTES COM_AT SET COM_AT.VALUE = ? WHERE COM_AT.OBJECT_ID = ? AND COM_AT.ATTR_ID = 72";
 
     String DELETE_CREDIT_ACCOUNT = "DELETE FROM OBJECTS WHERE OBJECT_ID = ?";
 

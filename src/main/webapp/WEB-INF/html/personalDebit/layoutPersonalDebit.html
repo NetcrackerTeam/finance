@@ -9,6 +9,10 @@
 </nav>
 <!--<h1><span ng-show="user.debitId.length > 0">PersonalDebitID from RootScope: {{user.debitId}}</span></h1>-->
 <div ng-controller="PersonalDebitController">
+    <h3>Hello, {{userInfo.name}}</h3>
+</div>
+
+<div ng-controller="PersonalDebitController">
     <h1>Current amount: {{accountInfo.amount}}</h1>
     <div>
         User name: {{accountInfo.owner.name}}
@@ -70,7 +74,7 @@
                     <!--<button class="creditButtons" id="infoCredit" disabled="disabled" data-toggle="modal" data-target="#infoCreditModal" >Info</button>-->
                     <button class="creditButtons" id="infoCredit" disabled="disabled"
                             onclick="window.open('#/infoCredit/{{optionSelect.idCredit}}')">Info</button>
-                    <button class="creditButtons" id="deleteCredit" disabled="disabled" ng-click="deletePersonalCredit()">Delete</button>
+                    <button class="creditButtons" id="editCredit" disabled="disabled" data-toggle="modal" data-target="#updateCreditModal">Edit</button>
                 </center>
                 <div class="creditsDiv">
                     <select id="creditsSelect" ng-click="checkSelect()" multiple="multiple" size="3">
@@ -82,7 +86,45 @@
     </div>
 </div>
 
-
+<form ng-controller="PersonalCreditController" ng-submit="updatePersonalCredit()">
+    <div class="modal fade" id="updateCreditModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 align="center" class="modal-title"> Edit credit</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <i><h6><p align="center" style="color:#565656">Please fill in all fields</p></h6></i>
+                </div>
+                <div class="modal-body">
+                    <p><input type="text" class="form-control" placeholder="Enter credit name" ng-model="credit.name"/></p>
+                    <p>Enter credit start date:</p>
+                    <p><input type="date" class="form-control" ng-model="credit.date"/></p>
+                    <p><input type="number" min="1" step="0.01" class="form-control" placeholder="Enter credit amount" ng-model="credit.amount"/></p>
+                    <p><input type="number" min="0" step="0.01" class="form-control" placeholder="Enter credit paid amount" ng-model="credit.paidAmount"/></p>
+                    <div class="slidecontainer">
+                        <p id="creditRateTextEdit">Credit rate: </p>
+                        <p><input type="range" min="0" max="100" step="0.1" class="slider" id="creditRateRangeEdit" ng-model="credit.creditRate"/></p>
+                    </div>
+                    <p>Enter credit ends date:</p>
+                    <p><input type="date" class="form-control" ng-model="credit.dateTo"/></p>
+                    <p style="color:#565656"><h6>*The end date must be bigger than the start date </h6></p>
+                    <p><input type="number" min="1" max="28" class="form-control" placeholder="Enter payment day of month" ng-model="credit.monthDay"/></p>
+                    <p>
+                    <div>
+                        <input type="checkbox" ng-model="credit.isCommodity" /> The credit is commodity
+                    </div>
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary" ng-disabled="isNotEmptyCredit(credit)" onclick="$('.modal').modal('hide')">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
 
 
 <div class="col-xl-8 col-lg-7">
