@@ -158,6 +158,7 @@ INSERT INTO ATTRTYPE (ATTR_ID,OBJECT_TYPE_ID,OBJECT_TYPE_ID_REF,NAME) VALUES (33
 INSERT INTO ATTRTYPE (ATTR_ID,OBJECT_TYPE_ID,OBJECT_TYPE_ID_REF,NAME) VALUES (34,600,NULL,'DATE_TO');
 INSERT INTO ATTRTYPE (ATTR_ID,OBJECT_TYPE_ID,OBJECT_TYPE_ID_REF,NAME) VALUES (35,600,NULL,'IS_PAID');
 INSERT INTO ATTRTYPE (ATTR_ID,OBJECT_TYPE_ID,OBJECT_TYPE_ID_REF,NAME) VALUES (36,600,NULL,'MONTH_DAY');
+INSERT INTO ATTRTYPE (ATTR_ID,OBJECT_TYPE_ID,OBJECT_TYPE_ID_REF,NAME) VALUES (72,600,NULL,'IS_COMMODITY');
 
 
 --CREDIT OPERATION  REFERENCE
@@ -270,6 +271,7 @@ insert into Lists(attr_id, list_value_id, value) values(57, 15, 'AWARD');
 insert into Lists(attr_id, list_value_id, value) values(57, 16, 'PRESENTS');
 insert into Lists(attr_id, list_value_id, value) values(57, 17, 'GIFTS');
 insert into Lists(attr_id, list_value_id, value) values(57, 18, 'OTHER');
+insert into Lists(attr_id, list_value_id, value) values(57, 49, 'CREDIT');
 
 -- REPORT CATEGORY AS EXPENSE
 insert into Lists(attr_id, list_value_id, value) values(25, 19, 'FOOD');
@@ -293,6 +295,7 @@ insert into Lists(attr_id, list_value_id, value) values(20, 33, 'AWARD');
 insert into Lists(attr_id, list_value_id, value) values(20, 34, 'PRESENTS');
 insert into Lists(attr_id, list_value_id, value) values(20, 35, 'GIFTS');
 insert into Lists(attr_id, list_value_id, value) values(20, 36, 'OTHER');
+insert into Lists(attr_id, list_value_id, value) values(20, 48, 'CREDIT');
 
 -- CREDIT IS PAID
 insert into Lists(attr_id, list_value_id, value) values(35, 37, 'YES');

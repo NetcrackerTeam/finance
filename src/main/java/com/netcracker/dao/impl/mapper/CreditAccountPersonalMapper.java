@@ -26,6 +26,7 @@ public class CreditAccountPersonalMapper implements RowMapper<PersonalCreditAcco
                         .creditRate(resultSet.getDouble("credit_rate"))
                         .dateTo(resultSet.getDate("date_to").toLocalDate())
                         .monthDay(resultSet.getInt("month_day"))
+                        .isCommodity(resultSet.getBoolean("commodity"))
                         .debtCredit(debt)
                         .isPaid(CreditStatusPaid.getStatusByKey(resultSet.getBigDecimal("is_paid").toBigInteger()))
                         .build();

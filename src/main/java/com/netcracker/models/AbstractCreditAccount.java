@@ -15,6 +15,7 @@ public abstract class AbstractCreditAccount {
     private LocalDate dateTo;
     private int monthDay;
     private Debt debt;
+    private boolean isCommodity;
     private CreditStatusPaid isPaid;
 
     protected static abstract class BaseBuilder<T extends AbstractCreditAccount, B extends BaseBuilder> {
@@ -80,6 +81,11 @@ public abstract class AbstractCreditAccount {
             return actualClassBuilder;
         }
 
+        public B isCommodity(boolean isCommodity) {
+            actualClass.setCommodity(isCommodity);
+            return actualClassBuilder;
+        }
+
         public T build() {
             return actualClass;
         }
@@ -111,6 +117,10 @@ public abstract class AbstractCreditAccount {
 
     protected void setDateTo(LocalDate dateTo) {
         this.dateTo = dateTo;
+    }
+
+    protected void setCommodity(boolean isCommodity) {
+        this.isCommodity = isCommodity;
     }
 
     protected void setMonthDay(int monthDay) {
@@ -159,6 +169,10 @@ public abstract class AbstractCreditAccount {
 
     public int getMonthDay() {
         return monthDay;
+    }
+
+    public boolean isCommodity() {
+        return isCommodity;
     }
 
     public CreditStatusPaid isPaid() {

@@ -10,6 +10,9 @@
 <!--<h1><span ng-show="user.debitId.length > 0">PersonalDebitID from RootScope: {{user.debitId}}</span></h1>-->
 <div ng-controller="PersonalDebitController">
     <h1>Current amount: {{accountInfo.amount}}</h1>
+    <div>
+        User name: {{accountInfo.name}}
+    </div>
 </div>
 
 
@@ -105,6 +108,7 @@
                                     <th>creditRate</th>
                                     <th>dateTo</th>
                                     <th>monthDay</th>
+                                    <th>isCommodity</th>
                                     <th>isPaid</th>
                                 </tr>
                                 </thead>
@@ -117,6 +121,7 @@
                                     <td>{{credInf.creditRate}}</td>
                                     <td>{{credInf.dateTo.year}}-{{credInf.dateTo.month}}-{{credInf.dateTo.day}}</td>
                                     <td>{{credInf.monthDay}}</td>
+                                    <td>{{credInf.isCommodity}}</td>
                                     <td>{{credInf.isPaid}}</td>
                                 </tr>
                                 </tbody>
@@ -207,7 +212,11 @@
                     <p><input type="date" class="form-control" id="dateTo" ng-model="credit.dateTo"/></p>
                     <p style="color:#565656"><h6>*The end date must be bigger than the start date </h6></p>
                     <p><input type="number" min="1" max="28" class="form-control" placeholder="Enter payment day of month" ng-model="credit.monthDay"/></p>
-                    <p></p>
+                    <p>
+                    <div>
+                        <input type="checkbox" ng-model="credit.isCommodity" /> The credit is commodity
+                    </div>
+                    </p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

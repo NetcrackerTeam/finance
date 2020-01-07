@@ -13,7 +13,8 @@ var PersonalCreditController = function($scope, $http, $rootScope) {
         creditRate: {},
         dateTo: "",
         monthDay: "",
-        isPaid: "NO"
+        isPaid: "NO",
+        isCommodity: "false"
     };
 
     var getPersonalCreditsURL = 'personalCredit/getPersonalCredits';

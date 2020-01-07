@@ -114,6 +114,7 @@ public class CreditAccountDaoImpl implements CreditAccountDao {
                 Date.valueOf(creditAccount.getDateTo()),
                 creditAccount.isPaid().getId(),
                 creditAccount.getMonthDay(),
+                creditAccount.isCommodity(),
                 id);
         BigInteger accountId = jdbcTemplate.queryForObject(SELECT_CREDIT_ID_BY_NAME, new Object[]{creditName}, BigInteger.class);
         jdbcTemplate.update(queryDebt, accountId);
