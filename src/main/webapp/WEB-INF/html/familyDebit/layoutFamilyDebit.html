@@ -3,7 +3,7 @@
         <a href="#createFamilyCreditModal" data-toggle="modal">Create Credit</a>
         <a href="#incomeOp" data-toggle="modal">Add income</a>
         <a href="#expenseOp" data-toggle="modal">Add expense</a>
-        <a href="#">Report</a> <!--#2 class = Comment_form-->
+        <a href="#report" data-toggle="modal">Report</a> <!--#2 class = Comment_form-->
         <a href="#prediction" data-toggle="modal">Prognosis</a> <!--#2 class = Comment_form-->
         <a href="#addUser" data-toggle="modal">Participants Control</a> <!--#2 class = Comment_form-->
     </div>
@@ -243,10 +243,36 @@
                     <pre>Predict sum: {{status}}</pre>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" ng-disabled="!predict.duration || !predict.category"
-                            ng-click="fetch()">Predict
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" ng-click="clear()">Close</button>
+                    <button type="button" class="btn btn-primary" ng-disabled="!predict.duration || !predict.category" ng-click="fetch()">Predict
                     </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<form ng-controller="RepCtrl" ng-submit="getReport()">
+    <div class="modal fade" id="report" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 align="center" class="modal-title" id="passwordModalLabel2"> Report </h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+                    <label for="category">Choose month to get report</label>
+                    <p><input type="month" class="form-control" id="month" ng-model="month"/></p>
+                    <!--                    <input type="file" on-read-file="showContent($fileContent)" />-->
+                    <pre>{{content}}</pre>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" ng-click="clear()">Close</button>
+                    <button type="submit" class="btn btn-primary" ng-disabled="!month" ng-click="getReport()">Get report</button>
                 </div>
             </div>
         </div>

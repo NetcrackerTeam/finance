@@ -15,9 +15,9 @@ app.controller("PersonalPredictController", ['$scope', '$http', '$templateCache'
             $scope.response = null;
 
             if($scope.predict.category == 'Income') {
-                $scope.url = 'prediction/2/personal/income';
+                $scope.url = 'prediction/personal/income';
             } else {
-                $scope.url = 'prediction/2/personal/expense';
+                $scope.url = 'prediction/personal/expense';
             }
 
             $http({
@@ -28,14 +28,14 @@ app.controller("PersonalPredictController", ['$scope', '$http', '$templateCache'
             then(function(response) {
                 $scope.status = response.data;
             }, function(response) {
-                $scope.data = response.data || 'Request failed';
-                $scope.status = response.status;
+                $scope.status = 'Not enough data from account to make a prediction';
             });
         };
 
-        $scope.updateModel = function(method, url) {
-            $scope.method = method;
-            $scope.url = url;
+        $scope.clear = function() {
+            $scope.predict.category = null;
+            $scope.predict.duration = null;
+            $scope.status = null
         };
     }]);
 
@@ -54,9 +54,9 @@ app.controller("FamilyPredictController", ['$scope', '$http', '$templateCache',
             $scope.response = null;
 
             if($scope.predict.category == 'Income') {
-                $scope.url = 'prediction/3/family/income';
+                $scope.url = 'prediction/family/income';
             } else {
-                $scope.url = 'prediction/3/family/expense';
+                $scope.url = 'prediction/family/expense';
             }
 
             $http({
@@ -67,13 +67,14 @@ app.controller("FamilyPredictController", ['$scope', '$http', '$templateCache',
             then(function(response) {
                 $scope.status = response.data;
             }, function(response) {
-                $scope.data = response.data || 'Request failed';
-                $scope.status = response.status;
+                $scope.status = 'Not enough data from account to make a prediction';
             });
         };
 
-        $scope.updateModel = function(method, url) {
-            $scope.method = method;
-            $scope.url = url;
+        $scope.clear = function() {
+            $scope.predict.category = null;
+            $scope.predict.duration = null;
+            $scope.status = null
         };
+
     }]);

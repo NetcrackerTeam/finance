@@ -16,6 +16,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Stream;
 
 @Service
 public class PredictionServiceImpl implements PredictionService {
@@ -57,9 +58,7 @@ public class PredictionServiceImpl implements PredictionService {
 
         Collection<MonthReport> reports = monthReportDao.getAllPersonalReports(id);
 
-        double average = reports.stream().mapToDouble(MonthReport::getTotalIncome).average().orElse(Double.NaN);
-
-        return average * duration;
+        return calculateAverage(reports) * duration;
     }
 
     @Override
@@ -68,9 +67,7 @@ public class PredictionServiceImpl implements PredictionService {
 
         Collection<MonthReport> reports = monthReportDao.getAllPersonalReports(id);
 
-        double average = reports.stream().mapToDouble(MonthReport::getTotalExpense).average().orElse(Double.NaN);
-
-        return average * duration;
+        return calculateAverage(reports) * duration;
     }
 
     @Override
@@ -79,9 +76,7 @@ public class PredictionServiceImpl implements PredictionService {
 
         Collection<MonthReport> reports = monthReportDao.getAllFamilyReports(id);
 
-        double average = reports.stream().mapToDouble(MonthReport::getTotalIncome).average().orElse(Double.NaN);
-
-        return average * duration;
+        return calculateAverage(reports) * duration;
     }
 
     @Override
@@ -90,9 +85,7 @@ public class PredictionServiceImpl implements PredictionService {
 
         Collection<MonthReport> reports = monthReportDao.getAllFamilyReports(id);
 
-        double average = reports.stream().mapToDouble(MonthReport::getTotalExpense).average().orElse(Double.NaN);
-
-        return average * duration;
+        return calculateAverage(reports) * duration;
     }
 
     private boolean calculateDifference(double income, double expense, double amount) {
@@ -103,5 +96,20 @@ public class PredictionServiceImpl implements PredictionService {
         } else {
             return false;
         }
+    }
+
+    private double calculateAverage(Collection<MonthReport> reports) {
+        int numberOfReports = reports.size();
+
+        double average = 0;
+
+        if (numberOfReports > 2) {
+            average = reports.stream().mapToDouble(MonthReport::getTotalIncome).average().orElse(Double.NaN);
+        } else {
+            PredictionException e = new PredictionException(ExceptionMessages.ERROR_MESSAGE_PREDICTION);
+            logger.error(e.getMessage(), e);
+            throw e;
+        }
+        return average;
     }
 }

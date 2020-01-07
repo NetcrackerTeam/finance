@@ -241,7 +241,7 @@
                     <pre>Predict sum: {{status}}</pre>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" ng-click="clear()">Close</button>
                     <button type="button" class="btn btn-primary" ng-disabled="!predict.duration || !predict.category" ng-click="fetch()">Predict</button>
                 </div>
             </div>
@@ -268,7 +268,7 @@
                     <pre>{{content}}</pre>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" ng-click="clear()">Close</button>
                     <button type="submit" class="btn btn-primary" ng-disabled="!month" ng-click="getReport()">Get report</button>
                 </div>
             </div>
