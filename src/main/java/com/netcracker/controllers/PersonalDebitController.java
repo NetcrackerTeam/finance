@@ -145,7 +145,7 @@ public class PersonalDebitController {
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateFrom,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateTo
     ) {
-        BigInteger accountId = BigInteger.valueOf(2); //getAccountByPrincipal(principal);
+        BigInteger accountId = getAccountByPrincipal(principal);
 
         MonthReport monthReport = monthReportService.getMonthPersonalReport(accountId, dateFrom, dateTo);
 

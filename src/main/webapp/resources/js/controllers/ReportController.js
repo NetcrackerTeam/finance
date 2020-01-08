@@ -23,6 +23,9 @@ app.controller("RepCtrl", ['$scope', '$http', '$templateCache',
 
         $scope.dateTo = $scope.parsedYear + "-" + $scope.parsedMonth + "-01";
 
+        alert($scope.dateFrom);
+        alert($scope.dateTo);
+
         $http({
             method: 'GET',
             url: $scope.getReportURL,

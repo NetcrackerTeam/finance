@@ -167,27 +167,24 @@ var PersonalCreditController = function($scope, $http, $rootScope) {
     };
 
     $scope.checkPersonalCredit = function () {
-        var dateFrom = new Date(Date.parse($scope.credit.date));
-        var dateTo = new Date(Date.parse($scope.credit.dateTo));
-        $scope.duration = dateTo.getMonth() - dateFrom.getMonth() +
-            (12 * (dateTo.getFullYear() - dateFrom.getFullYear()))
 
+        alert($scope.duration);
         $http({
             method: 'GET',
             url: 'prediction/personal/checkCredit',
             params: {duration: $scope.duration, amount: $scope.credit.amount},
         }).
         then(function(response) {
+            console.log(response);
             if(response.status === 200){
                 $scope.check = "You will be able to pay for this credit ";
-            } else if(response.status === 400) {
+            } else if(response.status === 202) {
                 $scope.check = "No enough data to predict";
             } else {
                 $scope.check = "You will not be able to pay for this credit";
             }
-        }, function(response) {
-
-            $scope.check = response.status;
+        }, function() {
+            $scope.check = "error";
         });
     };
 };
