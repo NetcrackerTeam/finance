@@ -11,14 +11,14 @@ public interface MessageController {
     String LOGGER_UPDATE_PASSWORD ="updatePasswordByUser in  method updateUserPassword . User id - ";
     String INVALID_CONFIRM_PASSWORD = "Your passwords do not match, please  try again  ";
     //    PersonalDebitController
-    String ADD_INCOME_PERS = "Added new income by account";
+    String ADD_INCOME = "Added new income by account";
     String ADD_EXPENSE_PERS = "Added new expense by account";
     String DELETE_AUTO_INCOME_PERS = "Your auto income deleted by account ";
     String DELETE_AUTO_EXPENSE_PERS = "Your auto income deleted by account ";
     String ADD_AUTO_INCOME = "Added new auto income by account";
     String ADD_AUTO_EXPENSE = "Added new auto expense by account";
     //     FamilyDebitController
-    String  DEACT_FAMACC_FAM = "Deactivated unsuccessfully account ";
+    String DEACT_FAMACC_FAM = "Deactivated successfully account ";
     String DEACT_UNS_FAMACC_FAM = "Deactivated unsuccessfully account ";
     String ADD_USER_FAM = "Adding successfully user ";
     String ADD_UNS_USER_FAM = "Adding unsuccessfully user ";

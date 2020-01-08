@@ -5,11 +5,11 @@
         <a href="#expenseOp" data-toggle="modal">Add expense</a>
         <a href="#report" data-toggle="modal">Report</a> <!--#2 class = Comment_form-->
         <a href="#prediction" data-toggle="modal">Prognosis</a> <!--#2 class = Comment_form-->
-        <a href="#addUser" data-toggle="modal">Participants Control</a> <!--#2 class = Comment_form-->
+        <a href="#/userControl">Participants Control</a> <!--#2 class = Comment_form-->
     </div>
 </nav>
 <!--<h1><span ng-show="family.debitId.length > 0">FamilyDebitID from RootScope: {{family.debitId}}</span></h1>-->
-<div ng-controller="FamilyDebitController">
+<div ng-controller="FamilyDebitController" ng-show="user.familyDebitId.length > 0" >
     <h1>Current amount: {{accountInfo.amount}}</h1>
     <div>
         User name: {{accountInfo.owner.name}}
@@ -339,7 +339,7 @@
                     <div class="form-group">
                         <label for="income">Amount:</label>
                         <input type="number" ng-model="form.amount" class="form-control" step=".01" id="income"
-                               placeholder="Enter amount" name="incomeAmount"/>
+                               placeholder="Enter amount" name="incomeAmount" min = "1" max ="100000"/>
                     </div>
                     <div class="form-group">
                         <label for="categoryInc">Income category:</label>
@@ -432,36 +432,6 @@
     </div>
 </div>
 
-
-<!-- add user to family account -->
-<div class="modal fade" id="addUser" tabindex="-1" role="dialog" aria-labelledby="incomeOpLabel" aria-hidden="true"
-     ng-show="user.familyDebitId.length > 0">
-    <div class="modal-dialog modal-sm" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 align="center" class="modal-title" id="addUserLabel"> New Participant </h4>
-            </div>
-            <div class="modal-body">
-                <form>
-                    <div class="form-group">
-                        <label for="income">User login</label>
-                        <input type="text" ng-model="loginParticipant" class="form-control"
-                               id="participant" placeholder="Enter user login"/>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" value="Submit" class="btn btn-primary" ng-disabled="!loginParticipant"
-                                onclick="$('.modal').modal('hide')" ng-click="deleteParticipant()">Delete User
-                        </button>
-                        <button type="submit" value="Submit" class="btn btn-primary" ng-disabled="!loginParticipant"
-                                onclick="$('.modal').modal('hide')" ng-click="addParticipant()">Add
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
 
 <div class="input-append" ng-show="user.familyDebitId.length > 0">
     <button class="btn btn-primary" ng-click="deleteFamilyAccount()">Delete Family Account</button>

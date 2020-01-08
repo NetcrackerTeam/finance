@@ -60,6 +60,7 @@ public class FamilyAccountDebitDaoImpl implements FamilyAccountDebitDao {
         logger.debug("Entering unactive success(deleteFamilyAccount=" + accountId + ")");
         logger.debug("Entering delete reference user(deleteFamilyAccount=" + userId + ")");
         this.template.update(DELETE_REFERENCE_FROM_USER_TO_ACCOUNT, userId, accountId);
+        this.template.update(DELETE_REFERENCE_FROM_ACCOUNT_TO_USER, accountId, userId);
         logger.debug("Entering delete success(deleteFamilyAccount=" + userId + ")");
     }
 

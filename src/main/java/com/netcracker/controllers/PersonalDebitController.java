@@ -18,6 +18,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.security.Principal;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Collection;
 import java.util.List;
 
@@ -57,7 +58,7 @@ public class PersonalDebitController {
         PersonalDebitAccount debit = personalDebitAccountDao.getPersonalAccountById(accountId);
         double amount = debit.getAmount() + income.getAmount();
         personalDebitAccountDao.updateAmountOfPersonalAccount(accountId, amount);
-        return new Status(true, MessageController.ADD_INCOME_PERS);
+        return new Status(true, MessageController.ADD_INCOME);
     }
 
     @RequestMapping(value = "/expense", method = RequestMethod.POST)

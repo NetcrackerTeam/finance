@@ -46,12 +46,10 @@ var FamilyDebitController = function ($scope, $http, $rootScope) {
         $http({
             method: method,
             url: url
-        }).success(function () {
-            alert("success");
+        }).success(function (response) {
+            alert(response.message);
             window.location.reload();
-        }).error(function () {
-            alert("unsuccess")
-        });
+        })
     };
     $scope.loginParticipant = "";
     $scope.addParticipant = function () {
@@ -66,12 +64,10 @@ var FamilyDebitController = function ($scope, $http, $rootScope) {
             headers: {
                 'Content-Type': 'application/json'
             }
-        }).success(function () {
-            alert("success");
+        }).success(function (response) {
+            alert(response.message);
             window.location.reload();
-        }).error(function () {
-            alert("unsuccess " + $scope.loginParticipant)
-        });
+        })
     };
 
     $scope.deleteParticipant = function (userLogin) {
@@ -102,6 +98,6 @@ var FamilyDebitController = function ($scope, $http, $rootScope) {
 
     $scope.fetchParticipants();
     $scope.fetchPersonalAutoOperationHistory();
-    $scope.fetchFamilyHistory('2019-01-11');
+    $scope.fetchFamilyHistory('2007-01-11');
     $scope.fetchFamilyInfo();
 };
