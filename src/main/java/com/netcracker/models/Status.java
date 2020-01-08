@@ -4,8 +4,8 @@ public class Status {
     private boolean status;
     private String message;
 
-    public Status(boolean satus, String message) {
-        this.status = satus;
+    public Status(boolean status, String message) {
+        this.status = status;
         this.message = message;
     }
 

@@ -259,8 +259,10 @@
                         <input type="checkbox" ng-model="credit.isCommodity" /> The credit is commodity
                     </div>
                     </p>
+                    <pre>{{check}}</pre>
                 </div>
                 <div class="modal-footer">
+                    <button style="float: left" type="button" class="btn btn-info" ng-click="checkPersonalCredit()">Check credit possibility</button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-primary" ng-disabled="isNotEmptyCredit(credit)" onclick="$('.modal').modal('hide')">Save changes</button>
                 </div>
@@ -315,7 +317,7 @@
                 <div class="modal-body">
                     <label for="category">Choose month to get report</label>
                     <p><input type="month" class="form-control" id="month" ng-model="month"/></p>
-<!--                    <input type="file" on-read-file="showContent($fileContent)" />-->
+                    <!--                    <input type="file" on-read-file="showContent($fileContent)" />-->
                     <pre>{{content}}</pre>
                 </div>
                 <div class="modal-footer">

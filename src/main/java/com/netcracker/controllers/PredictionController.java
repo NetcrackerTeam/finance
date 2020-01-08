@@ -7,6 +7,8 @@ import com.netcracker.models.User;
 import com.netcracker.services.PredictionService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -19,8 +21,6 @@ import java.security.Principal;
 public class PredictionController {
 
     private static final Logger logger = Logger.getLogger(PredictionController.class);
-
-
 
     @Autowired
     PredictionService predictionService;
@@ -38,11 +38,54 @@ public class PredictionController {
         return user.getFamilyDebitAccount();
     }
 
+    @RequestMapping(value = "/personal/checkCredit")
+    @ResponseBody
+    public ResponseEntity<String> checkPersonalCreditPossibility(Principal principal,
+                                                  @RequestParam("duration") int duration,
+                                                  @RequestParam("amount") double amount){
+
+        BigInteger accountId = getPersonalAccountByPrincipal(principal);
+
+        boolean check;
+        try{
+            check = predictionService.predictPersonalCreditPossibility(accountId, duration, amount);
+        } catch (PredictionException e) {
+            logger.error(e.getMessage(), e);
+            return new ResponseEntity<>(HttpStatus.ACCEPTED);
+        }
+        if (check) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+    }
+
+    @RequestMapping(value = "/family/checkCredit")
+    @ResponseBody
+    public ResponseEntity<String> checkFamilyCreditPossibility(Principal principal,
+                                                                 @RequestParam("duration") int duration,
+                                                                 @RequestParam("amount") double amount){
+
+        BigInteger accountId = getFamilyAccountByPrincipal(principal);
+
+        boolean check;
+        try{
+            check = predictionService.predictFamilyCreditPossibility(accountId, duration, amount);
+        } catch (PredictionException e) {
+            logger.error(e.getMessage(), e);
+            return new ResponseEntity<>(HttpStatus.ACCEPTED);
+        }
+        if (check) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+    }
+
     @RequestMapping(value = "/personal/income", method = RequestMethod.GET )
     @ResponseBody
-    public double predictPersonalIncome(Principal principal,
-                                        @RequestParam("duration") int duration,
-                                        Model model){
+    public ResponseEntity<Double> predictPersonalIncome(Principal principal,
+                                                @RequestParam("duration") int duration){
 
         BigInteger accountId = getPersonalAccountByPrincipal(principal);
 
@@ -51,16 +94,15 @@ public class PredictionController {
             amount = predictionService.predictPersonalMonthIncome(accountId, duration);
         } catch (PredictionException e) {
             logger.error(e.getMessage(), e);
-            model.addAttribute("status", new Status(false, e.getMessage()));
+            return new ResponseEntity<>(amount, HttpStatus.BAD_REQUEST);
         }
-        return amount;
+        return new ResponseEntity<>(amount, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/personal/expense", method = RequestMethod.GET)
     @ResponseBody
-    public double predictPersonalExpense(Principal principal,
-                                         @RequestParam("duration") int duration,
-                                         Model model){
+    public ResponseEntity<Double> predictPersonalExpense(Principal principal,
+                                         @RequestParam("duration") int duration){
         BigInteger accountId = getPersonalAccountByPrincipal(principal);
 
         double amount = 0;
@@ -69,16 +111,15 @@ public class PredictionController {
             amount = predictionService.predictPersonalMonthExpense(accountId, duration);
         } catch (PredictionException e) {
             logger.error(e.getMessage(), e);
-            model.addAttribute("status", new Status(false, e.getMessage()));
+            return new ResponseEntity<>(amount, HttpStatus.BAD_REQUEST);
         }
-        return amount;
+        return new ResponseEntity<>(amount, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/family/income", method = RequestMethod.GET )
     @ResponseBody
-    public double predictFamilyIncome(Principal principal,
-                                      @RequestParam("duration") int duration,
-                                      Model model){
+    public ResponseEntity<Double> predictFamilyIncome(Principal principal,
+                                      @RequestParam("duration") int duration){
         BigInteger accountId = getFamilyAccountByPrincipal(principal);
 
         double amount = 0;
@@ -87,14 +128,14 @@ public class PredictionController {
             amount = predictionService.predictFamilyMonthIncome(accountId, duration);
         } catch (PredictionException e) {
             logger.error(e.getMessage(), e);
-            model.addAttribute("status", new Status(false, e.getMessage()));
+            return new ResponseEntity<>(amount, HttpStatus.BAD_REQUEST);
         }
-        return amount;
+        return new ResponseEntity<>(amount, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/family/expense", method = RequestMethod.GET)
     @ResponseBody
-    public double predictFamilyExpense(Principal principal,
+    public ResponseEntity<Double> predictFamilyExpense(Principal principal,
                                        @RequestParam("duration") int duration,
                                        Model model){
         BigInteger accountId = getFamilyAccountByPrincipal(principal);
@@ -105,13 +146,8 @@ public class PredictionController {
             amount = predictionService.predictFamilyMonthExpense(accountId, duration);
         } catch (PredictionException e) {
             logger.error(e.getMessage(), e);
-            model.addAttribute("status", new Status(false, e.getMessage()));
+            return new ResponseEntity<>(amount, HttpStatus.BAD_REQUEST);
         }
-        return amount;
-    }
-
-    @RequestMapping("/predict")
-    public String predict(){
-        return URL.PERSONAL_DEBIT_URL;
+        return new ResponseEntity<>(amount, HttpStatus.OK);
     }
 }

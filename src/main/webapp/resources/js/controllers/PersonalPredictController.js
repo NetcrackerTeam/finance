@@ -27,7 +27,7 @@ app.controller("PersonalPredictController", ['$scope', '$http', '$templateCache'
             }).
             then(function(response) {
                 $scope.status = response.data;
-            }, function(response) {
+            }, function() {
                 $scope.status = 'Not enough data from account to make a prediction';
             });
         };
@@ -35,7 +35,7 @@ app.controller("PersonalPredictController", ['$scope', '$http', '$templateCache'
         $scope.clear = function() {
             $scope.predict.category = null;
             $scope.predict.duration = null;
-            $scope.status = null
+            $scope.sum = null
         };
     }]);
 
@@ -66,7 +66,7 @@ app.controller("FamilyPredictController", ['$scope', '$http', '$templateCache',
             }).
             then(function(response) {
                 $scope.status = response.data;
-            }, function(response) {
+            }, function() {
                 $scope.status = 'Not enough data from account to make a prediction';
             });
         };

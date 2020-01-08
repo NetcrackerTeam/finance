@@ -91,11 +91,7 @@ public class PredictionServiceImpl implements PredictionService {
     private boolean calculateDifference(double income, double expense, double amount) {
         double difference = income - expense;
 
-        if (amount < difference) {
-            return true;
-        } else {
-            return false;
-        }
+        return amount < difference;
     }
 
     private double calculateAverage(Collection<MonthReport> reports) {
