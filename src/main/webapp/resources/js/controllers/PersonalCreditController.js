@@ -65,6 +65,7 @@ var PersonalCreditController = function($scope, $http, $rootScope) {
         refreshPageData();
         clearForm();
         alert("VSYO SAJEBIS'");
+        window.location.reload();
     }
 
     function error(response) {

@@ -96,22 +96,21 @@
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
-                    <i><h6><p align="center" style="color:#565656">Please fill in all fields</p></h6></i>
                 </div>
                 <div class="modal-body">
-                    <p><input type="text" class="form-control" placeholder="Enter credit name" ng-model="credit.name"/></p>
-                    <p>Enter credit start date:</p>
+                    <p><input type="text" class="form-control" placeholder="*Enter credit name" ng-model="credit.name"/></p>
+                    <p>*Enter credit start date:</p>
                     <p><input type="date" class="form-control" ng-model="credit.date"/></p>
-                    <p><input type="number" min="1" step="0.01" class="form-control" placeholder="Enter credit amount" ng-model="credit.amount"/></p>
-                    <p><input type="number" min="0" step="0.01" class="form-control" placeholder="Enter credit paid amount" ng-model="credit.paidAmount"/></p>
+                    <p><input type="number" min="1" step="0.01" class="form-control" placeholder="*Enter credit amount" ng-model="credit.amount"/></p>
+                    <p><input type="number" min="0" step="0.01" class="form-control" placeholder="*Enter credit paid amount" ng-model="credit.paidAmount"/></p>
                     <div class="slidecontainer">
-                        <p id="creditRateTextEdit">Credit rate: </p>
+                        <p id="creditRateTextEdit">*Credit rate: </p>
                         <p><input type="range" min="0" max="100" step="0.1" class="slider" id="creditRateRangeEdit" ng-model="credit.creditRate"/></p>
                     </div>
-                    <p>Enter credit ends date:</p>
+                    <p>*Enter credit ends date:</p>
                     <p><input type="date" class="form-control" ng-model="credit.dateTo"/></p>
-                    <p style="color:#565656"><h6>*The end date must be bigger than the start date </h6></p>
-                    <p><input type="number" min="1" max="28" class="form-control" placeholder="Enter payment day of month" ng-model="credit.monthDay"/></p>
+                    <p style="color:#565656"><h6>The end date must be bigger than the start date </h6></p>
+                    <p><input type="number" min="1" max="28" class="form-control" placeholder="*Enter payment day of month" ng-model="credit.monthDay"/></p>
                     <p>
                     <div>
                         <input type="checkbox" ng-model="credit.isCommodity" /> The credit is commodity
@@ -233,26 +232,25 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 align="center" class="modal-title" id="passwordModalLabel"> Creating credit</h4>
+                    <h4 align="center" class="modal-title" id="passwordModalLabel"> Create credit</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
-                    <i><h6><p align="center" style="color:#565656">Please fill in all fields</p></h6></i>
                 </div>
                 <div class="modal-body">
-                    <p><input type="text" class="form-control" placeholder="Enter credit name" ng-model="credit.name" id="creditName"/></p>
-                    <p>Enter credit start date:</p>
+                    <p><input type="text" class="form-control" placeholder="*Enter credit name" ng-model="credit.name" id="creditName"/></p>
+                    <p>*Enter credit start date:</p>
                     <p><input type="date" class="form-control" id="dateFrom" ng-model="credit.date"/></p>
-                    <p><input type="number" min="1" step="0.01" class="form-control" placeholder="Enter credit amount" ng-model="credit.amount"/></p>
-                    <p><input type="number" min="0" step="0.01" class="form-control" placeholder="Enter credit paid amount" ng-model="credit.paidAmount"/></p>
+                    <p><input type="number" min="1" step="0.01" class="form-control" placeholder="*Enter credit amount" ng-model="credit.amount"/></p>
+                    <p><input type="number" min="0" step="0.01" class="form-control" placeholder="*Enter credit paid amount" ng-model="credit.paidAmount"/></p>
                     <div class="slidecontainer">
-                        <p id="creditRateText">Credit rate: </p>
+                        <p id="creditRateText">*Credit rate: </p>
                         <p><input type="range" min="0" max="100" step="0.1" class="slider" id="creditRateRange" ng-model="credit.creditRate"/></p>
                     </div>
-                    <p>Enter credit ends date:</p>
+                    <p>*Enter credit ends date:</p>
                     <p><input type="date" class="form-control" id="dateTo" ng-model="credit.dateTo"/></p>
-                    <p style="color:#565656"><h6>*The end date must be bigger than the start date </h6></p>
-                    <p><input type="number" min="1" max="28" class="form-control" placeholder="Enter payment day of month" ng-model="credit.monthDay"/></p>
+                    <p style="color:#565656"><h6>The end date must be bigger than the start date </h6></p>
+                    <p><input type="number" min="1" max="28" class="form-control" placeholder="*Enter payment day of month" ng-model="credit.monthDay"/></p>
                     <p></p>
                 </div>
                 <div class="modal-footer">
