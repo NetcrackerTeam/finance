@@ -6,6 +6,7 @@ import com.netcracker.dao.PersonalDebitAccountDao;
 import com.netcracker.dao.UserDao;
 import com.netcracker.models.*;
 import com.netcracker.services.*;
+import com.netcracker.services.impl.EmailServiceSenderImpl;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -46,6 +47,8 @@ public class PersonalDebitController {
     PersonalDebitService personalDebitService;
     @Autowired
     UserDao userDao;
+    @Autowired
+    EmailServiceSender emailServiceSender;
 
     private static final Logger logger = Logger.getLogger(PersonalDebitController.class);
 
@@ -54,10 +57,12 @@ public class PersonalDebitController {
     public Status addIncomePersonal(@RequestBody AccountIncome income,
                                     Principal principal) {
         BigInteger accountId = getAccountByPrincipal(principal);
+        BigInteger userId = getUserIdByPrincipal(principal);
         operationService.createPersonalOperationIncome(accountId, income.getAmount(), LocalDate.now(), income.getCategoryIncome());
         PersonalDebitAccount debit = personalDebitAccountDao.getPersonalAccountById(accountId);
         double amount = debit.getAmount() + income.getAmount();
         personalDebitAccountDao.updateAmountOfPersonalAccount(accountId, amount);
+        emailServiceSender.sendMailAutoPersonalIncome(userDao.getUserById(userId).geteMail(),userDao.getUserById(userId).getName(), income.getAmount(), income.getCategoryIncome().toString());
         return new Status(true, MessageController.ADD_INCOME);
     }
 
@@ -163,6 +168,12 @@ public class PersonalDebitController {
     public PersonalDebitAccount getPersonalAccount(Principal principal) {
         return personalDebitService.getPersonalDebitAccount(getAccountByPrincipal(principal));
     }
+
+    private BigInteger getUserIdByPrincipal(Principal principal) {
+        User user = userDao.getUserByEmail(principal.getName());
+        return user.getId();
+    }
+
 
     @RequestMapping("/layout")
     public String getPersonalAccountPartialPage() {

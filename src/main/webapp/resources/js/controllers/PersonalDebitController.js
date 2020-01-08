@@ -7,7 +7,7 @@
 var PersonalDebitController = function($scope, $http) {
 
     $scope.fetchPersonalHistory = function(date){
-        $http.get('debitPersonal/history', {params: {date:date.toLocaleString()}}).success(function (response) {
+        $http.get('debitPersonal/history', {params: {date:date}}).success(function (response) {
             $scope.personalHistory = response;
         });
     };
@@ -23,6 +23,7 @@ var PersonalDebitController = function($scope, $http) {
             $scope.accountInfo = accountInfo;
         });
     };
+    $scope.fetchPersonalInfo();
 
     $scope.fetchUserInfo = function() {
         $http.get('getUserInfo').success(function (userInfo) {
@@ -31,7 +32,7 @@ var PersonalDebitController = function($scope, $http) {
     };
 
     $scope.fetchPersonalAutoOperationHistory();
-    $scope.fetchPersonalHistory('2019-01-11');
+    $scope.fetchPersonalHistory('2016-01-25');
     $scope.fetchPersonalInfo();
     $scope.fetchUserInfo();
 };
