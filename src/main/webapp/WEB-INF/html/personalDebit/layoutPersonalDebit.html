@@ -228,48 +228,73 @@
     <br/>
     <br/>
 </div>
-
 <form ng-controller="PersonalCreditController" ng-submit="addPersonalCredit()">
-    <div class="modal fade" id="createCreditModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div  class="modal fade" id="createCreditModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 align="center" class="modal-title" id="passwordModalLabel"> Create credit</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
                 </div>
                 <div class="modal-body">
-                    <p><input type="text" class="form-control" placeholder="*Enter credit name" ng-model="credit.name" id="creditName"/></p>
-                    <p>*Enter credit start date:</p>
-                    <p><input type="date" class="form-control" id="dateFrom" ng-model="credit.date"/></p>
-                    <p><input type="number" min="1" step="0.01" class="form-control" placeholder="*Enter credit amount" ng-model="credit.amount"/></p>
-                    <p><input type="number" min="0" step="0.01" class="form-control" placeholder="*Enter credit paid amount" ng-model="credit.paidAmount"/></p>
-                    <div class="slidecontainer">
-                        <p id="creditRateText">*Credit rate: </p>
+                    <div class="form-group">
+                        <label for="creditName">Credit name:</label>
+                        <input type="text" class="form-control" placeholder="Enter name" ng-model="credit.name" id="creditName"/>
+                    </div>
+                    <div class="form-group">
+                    </div>
+                    <div class="form-group">
+                        <label for="creditAmount">Credit amount:</label>
+                        <input type="number" min="1" id="creditAmount" step="0.01" class="form-control" placeholder="Enter amount" ng-model="credit.amount"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="datetimepicker">Credit start date:</label>
+                        <div class="input-group fetched-date date_field">
+                            <input type="text" class="form-control" id="datetimepicker" ng-model="dateFrom"/>
+                            <div class="input-group-addon">
+                                <span class="glyphicon glyphicon-th"></span>
+                            </div>
+                        </div>
+                        <script type="text/javascript">
+                            $(function() {
+                                $('#datetimepicker').datepicker({
+                                    calendarWeeks: true,
+                                    todayHighlight: true,
+                                    autoclose: true,
+                                    zIndexOffset: '2001',
+                                    dateFormat: "yyyy-MM-dd"
+                                });
+                            });
+                        </script>
+                    </div>
+                    <div class="form-group slidecontainer">
+                        <label for="creditRateRange" id="creditRateText">Credit rate:</label>
                         <p><input type="range" min="0" max="100" step="0.1" class="slider" id="creditRateRange" ng-model="credit.creditRate"/></p>
                     </div>
-                    <p>*Enter credit ends date:</p>
-                    <p><input type="date" class="form-control" id="dateTo" ng-model="credit.dateTo"/></p>
-                    <p style="color:#565656"><h6>The end date must be bigger than the start date </h6></p>
-                    <p><input type="number" min="1" max="28" class="form-control" placeholder="*Enter payment day of month" ng-model="credit.monthDay"/></p>
-                    <p>
-                    <div>
-                        <input type="checkbox" ng-model="credit.isCommodity" /> The credit is commodity
+                    <div class="form-group">
+                        <label for="creditDuration">Credit duration in months:</label>
+                        <input type="number" min="1" id="creditDuration" step="1" class="form-control" placeholder="Enter amount" ng-model="duration"/>
                     </div>
-                    </p>
+    <!--                    <p>Enter credit ends date:</p>-->
+    <!--                    <p><input type="date" class="form-control" id="dateTo" ng-model="credit.dateTo"/></p>-->
+    <!--                    <p style="color:#565656"><h6>*The end date must be bigger than the start date </h6></p>-->
+                    <div class="form-group">
+                        <label for="paymentDay">Credit payment day of month</label>
+                        <input type="number" min="1" id="paymentDay" max="28" class="form-control" placeholder="Enter payment day of month" ng-model="credit.monthDay"/>
+                    </div>
+                    <div class="form-group">
+                        <input type="checkbox" ng-model="credit.isCommodity" /> The credit is commodity (amount on debit account won't increase)
+                    </div>
                     <pre>{{check}}</pre>
                 </div>
                 <div class="modal-footer">
                     <button style="float: left" type="button" class="btn btn-info" ng-click="checkPersonalCredit()">Check credit possibility</button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary" ng-disabled="isNotEmptyCredit(credit)" onclick="$('.modal').modal('hide')">Save changes</button>
+                    <button type="submit" class="btn btn-primary"  onclick="$('.modal').modal('hide')">Save changes</button>
                 </div>
             </div>
         </div>
     </div>
 </form>
-
 
 <form ng-controller="PersonalPredictController" ng-submit="getPredict()">
     <div class="modal fade" id="prediction" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">

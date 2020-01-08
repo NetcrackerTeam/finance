@@ -9,7 +9,7 @@ var PersonalCreditController = function($scope, $http, $rootScope) {
     $scope.credit = {
         name: "",
         amount: "",
-        paidAmount: "",
+        paidAmount: 0,
         date: {},
         creditRate: {},
         dateTo: "",
@@ -28,17 +28,21 @@ var PersonalCreditController = function($scope, $http, $rootScope) {
 
     var addCreditURL = 'personalCredit/addCredit';
     $scope.addPersonalCredit = function() {
-        var dateFrom = new Date(Date.parse($scope.credit.date));
-        var dateTo = new Date(Date.parse($scope.credit.dateTo));
+        // var dateFrom = $("#datetimepicker").datepicker('getDate');
+        var dateFromStr = $("#datetimepicker").val();
+        var dateFrom = moment(dateFromStr).format('YYYY-MM-DD');
+        var duration = $scope.duration;
+        var dateTo = moment(dateFrom).clone().add(duration, 'months').format('YYYY-MM-DD') ;
+        // var dateTo = new Date(dateFrom.setMonth(dateFrom.getMonth() + 5))
         $scope.credit.date = {
-            year: dateFrom.getFullYear(),
-            month: dateFrom.getMonth(),
-            day: dateFrom.getDay()
+            year: moment(dateFrom).year() + 1,
+            month: moment(dateFrom).month() + 1,
+            day: moment(dateFrom).date() + 1
         };
         $scope.credit.dateTo = {
-            year: dateTo.getFullYear(),
-            month: dateTo.getMonth(),
-            day: dateTo.getDay()
+            year: moment(dateTo).year() + 1,
+            month: moment(dateTo).month() + 1,
+            day: moment(dateTo).date() + 1
         };
         $http({
             method: 'POST',
@@ -64,13 +68,13 @@ var PersonalCreditController = function($scope, $http, $rootScope) {
     function success() {
         refreshPageData();
         clearForm();
-        alert("VSYO SAJEBIS'");
+        alert("success'");
         window.location.reload();
     }
 
     function error(response) {
         console.log(response.statusText);
-        alert("VSYO NE OCHEN'");
+        alert("unsuccess'");
     }
 
     function clearForm() {

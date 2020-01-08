@@ -10,6 +10,7 @@ header{
     background: #dcdcdc;
     display: flex;
 }
+
 .topnav{
     color:#000;
     text-align: left;
@@ -99,3 +100,8 @@ ul.submenu > li > a:hover {
 ul.menu > li:hover > ul.submenu {
     display: block;
 }
+
+.datetimepicker {
+    z-index:1001 !important;
+}
+/*.datepicker.datepicker-dropdown.dropdown-menu { z-index: 9999999; }*/

@@ -41,6 +41,11 @@ public class PersonalCreditServiceImpl implements PersonalCreditService {
 
     @Override
     public void createPersonalCredit(BigInteger id, PersonalCreditAccount creditAccount) {
+        if(!creditAccount.isCommodity()){
+            double amount = debitAccountDao.getPersonalAccountById(id).getAmount();
+            debitAccountDao.updateAmountOfPersonalAccount(id,
+                    amount + creditAccount.getAmount());
+        }
         creditAccountDao.createPersonalCreditByDebitAccountId(id, creditAccount);
     }
 
