@@ -4,7 +4,9 @@ package com.netcracker.services;
 public interface JobService {
     String CRON_BY_EVERYDAY = "0 0 8 * * ?";//at 8 am every day
 
-    String CRON_BY_REPORT = "0 0 18 L * ?";//At 6 pm on the last of every month
+    String CRON_BY_REPORT = "0 0 9 1 * ?";//At 9 am every first day of month
+
+    String cront = "*/10 * * * * *"; // every ten second for test
 
     public void executeMonthPersonalReportOnEmailJob();
 

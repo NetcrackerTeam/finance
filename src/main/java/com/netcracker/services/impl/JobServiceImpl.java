@@ -17,8 +17,10 @@ import org.springframework.stereotype.Service;
 import javax.mail.MessagingException;
 import java.math.BigInteger;
 import java.nio.file.Path;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -73,6 +75,7 @@ public class JobServiceImpl implements JobService {
         if (familyDebitAccounts.isEmpty())
             return;
         familyDebitAccounts.forEach(debitAccountFamily -> {
+
             ObjectsCheckUtils.isNotNull(debitAccountFamily);
                 monthReportService.formMonthFamilyReportFromDb(debitAccountFamily.getId());
                 MonthReport monthReport = monthReportService.getMonthPersonalReport(debitAccountFamily.getId(), dateFrom, localDateNow);
@@ -80,14 +83,18 @@ public class JobServiceImpl implements JobService {
         });
 
     }
-
     @Override
-    @Scheduled(cron = CRON_BY_REPORT)
+   @Scheduled(cron = cront)
     public void executeMonthPersonalReportOnEmailJob() {
+//        System.err.println("______________________________________________");
+//        System.err.println("______________________________________________");
+//        System.err.println("______________________________________________");
         Collection<PersonalDebitAccount> personalDebitAccounts = personalDebitService.getAllPersonalAccounts();
+//        System.err.println(personalDebitAccounts);
         if (personalDebitAccounts.isEmpty())
             return;
         personalDebitAccounts.forEach(debitAccountPersonal -> {
+            System.err.println(personalDebitAccounts);
             ObjectsCheckUtils.isNotNull(debitAccountPersonal);
                 monthReportService.formMonthPersonalReportFromDb(debitAccountPersonal.getId());
                 MonthReport monthReport = monthReportService.getMonthPersonalReport(debitAccountPersonal.getId(), dateFrom, localDateNow);
@@ -131,7 +138,7 @@ public class JobServiceImpl implements JobService {
     }
 
     @Override
-    @Scheduled(cron = CRON_BY_EVERYDAY)
+   @Scheduled(cron = CRON_BY_EVERYDAY)
     public void executeRemindAutoIncomePersonalJob() {
         List<AutoOperationIncome> autoOperationIncomePersonal = accountAutoOperationService.getAllTodayOperationsPersonalIncome(dayNow);
         if (autoOperationIncomePersonal.isEmpty())
