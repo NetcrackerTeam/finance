@@ -84,7 +84,7 @@ public class JobServiceImpl implements JobService {
 
     }
     @Override
-   @Scheduled(cron = cront)
+  // @Scheduled(cron = cront)
     public void executeMonthPersonalReportOnEmailJob() {
 //        System.err.println("______________________________________________");
 //        System.err.println("______________________________________________");
