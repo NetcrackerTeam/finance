@@ -64,13 +64,13 @@ var FamilyCreditController = function($scope, $http, $rootScope) {
     function success() {
         refreshPageData();
         clearForm();
-        alert("VSYO SAJEBIS'");
+        alert("success");
         window.location.reload();
     }
 
     function error(response) {
         console.log(response.statusText);
-        alert("VSYO NE OCHEN'");
+        alert("unsuccess");
     }
 
     function clearForm() {

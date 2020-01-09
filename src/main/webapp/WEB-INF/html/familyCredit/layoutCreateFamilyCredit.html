@@ -3,8 +3,21 @@
     <title></title>
 </head>
 <body>
+
+
+<nav>
+    <div class="topnavPersonal" id="TopnavPersonal">
+        <a href="#createCreditModal" data-toggle="modal">Create Credit</a>
+        <a href="#incomeOp" data-toggle="modal">Add income</a>
+        <a href="#expenseOp" data-toggle="modal">Add expense</a>
+        <a href="#report" data-toggle="modal">Report</a> <!--#2 class = Comment_form-->
+        <a href="#prediction" data-toggle="modal">Prognosis</a> <!--#2 class = Comment_form-->
+        <span  data-toggle="modal" style="color: #337ab7" th:text="${creditFamilyName}"></span>
+    </div>
+</nav>
+
 <div id="mainPage" class="parallax-section" >
-    <header class="headerInfoCredit"><span th:text="${creditFamilyName}"></span></header>
+<!--    <header class="headerInfoCredit"><span th:text="${creditFamilyName}"></span></header>-->
     <form class="formInfoCredit">
         <p><span class="spanInfoCredit" th:text="${creditFamilyAmount}"></span></p>
         <p><span class="spanInfoCredit" th:text="${creditFamilyRate}"></span></p>
@@ -42,6 +55,6 @@
     </div>
 </form>
 
-<footer class="footerInfoCredit">&copy; NetCracker 2019-2020</footer>
+<footer  class="footer-copyright text-center py-3">&copy; NetCracker 2019-2020</footer>
 </body>
 </html>

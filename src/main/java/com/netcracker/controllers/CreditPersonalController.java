@@ -77,7 +77,7 @@ public class CreditPersonalController {
         PersonalCreditAccount personalCreditAccount = creditAccountDao.getPersonalCreditById(creditId);
         this.creditId = creditId;
         logger.debug("[getPersonalCredit]" + MessageController.debugStartMessage  + "[debitId = " + debitId + "], [creditId = " + creditId + "]");
-        model.addAttribute("creditName", personalCreditAccount.getName());
+        model.addAttribute("creditName", "Credit name: " + personalCreditAccount.getName());
         model.addAttribute("creditAmount", "CREDIT AMOUNT: " + personalCreditAccount.getAmount());
         model.addAttribute("creditRate", "CREDIT RATE: " + personalCreditAccount.getCreditRate());
         model.addAttribute("creditPaidAmount", "CREDIT PAID AMOUNT: " + personalCreditAccount.getPaidAmount());

@@ -84,7 +84,7 @@ public class CreditFamilyController {
         logger.debug("[getFamilyCredit]" + MessageController.debugStartMessage  + "[personalDebitID = " + personalDebitId +
                 "], [familyDebitId = " + familyDebitId + "], [userId = " + userId + "], [creditId = " + creditId + "]");
         this.creditId = creditId;
-        model.addAttribute("creditFamilyName", familyCreditAccount.getName());
+        model.addAttribute("creditFamilyName", "Credit name:" + familyCreditAccount.getName());
         model.addAttribute("creditFamilyAmount", "FAMILY CREDIT AMOUNT: " + familyCreditAccount.getAmount());
         model.addAttribute("creditFamilyRate", "FAMILY CREDIT RATE: " + familyCreditAccount.getCreditRate());
         model.addAttribute("creditFamilyPaidAmount", "FAMILY CREDIT PAID AMOUNT: " + familyCreditAccount.getPaidAmount());

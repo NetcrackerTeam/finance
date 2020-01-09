@@ -3,8 +3,19 @@
     <title></title>
 </head>
 <body>
+
+<nav>
+    <div class="topnavPersonal" id="TopnavPersonal">
+        <a href="#createCreditModal" data-toggle="modal">Create Credit</a>
+        <a href="#incomeOp" data-toggle="modal">Add income</a>
+        <a href="#expenseOp" data-toggle="modal">Add expense</a>
+        <a href="#report" data-toggle="modal">Report</a> <!--#2 cl ass = Comment_form-->
+        <a href="#prediction" data-toggle="modal">Prognosis</a> <!--#2 class = Comment_form-->
+        <span  data-toggle="modal"  style="color: #337ab7"  th:text="${creditName}"></span>
+    </div>
+</nav>
 <div id="mainPage" class="parallax-section" >
-    <header class="headerInfoCredit"><span th:text="${creditName}"></span></header>
+<!--    <header class=""><span th:text="${creditName}"></span></header>-->
     <form class="formInfoCredit">
         <p><span class="spanInfoCredit" th:text="${creditAmount}"></span></p>
         <p><span class="spanInfoCredit" th:text="${creditRate}"></span></p>
@@ -15,7 +26,7 @@
         <p><span class="spanInfoCredit notSee" id="debtDateFrom" th:text="${creditDebtDateFrom}"></span></p>
         <p><span class="spanInfoCredit notSee" id="debtDateTo" th:text="${creditDebtDateTo}"></span></p>
         <p><span class="spanInfoCredit" th:text="${creditDebtAmount}"></span></p>
-        <center><p><button type="button" class="infoCreditButtons" data-toggle="modal" data-target="#addPersonalCreditPayment">Add Credit Payment</button></p></center>
+        <center><p><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addPersonalCreditPayment">Add Credit Payment</button></p></center>
     </form>
 </div>
 <form th:action="@{personalCredit/addPersonalCreditPayment}" method="post">
@@ -42,6 +53,6 @@
     </div>
 </form>
 
-<footer class="footerInfoCredit">&copy; NetCracker 2019-2020</footer>
+<footer  class="footer-copyright text-center py-3">&copy; NetCracker 2019-2020</footer>
 </body>
 </html>
