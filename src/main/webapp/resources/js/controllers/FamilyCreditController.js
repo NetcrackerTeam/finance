@@ -64,13 +64,13 @@ var FamilyCreditController = function($scope, $http, $rootScope) {
     function success() {
         refreshPageData();
         clearForm();
-        alert("success");
+        alert("success'");
         window.location.reload();
     }
 
     function error(response) {
         console.log(response.statusText);
-        alert("unsuccess");
+        alert("unsuccess'");
     }
 
     function clearForm() {
@@ -107,14 +107,27 @@ var FamilyCreditController = function($scope, $http, $rootScope) {
             infoButton.disabled = false;
             deleteButton.disabled = false;
         }
+        $scope.sendCreditId($rootScope.optionSelect.idCredit);
     };
 
-    $scope.fetchFamilyCredit = function(creditId) {
-        $http.get('/familyCredit/getFamilyCredit', {params: creditId}).success(function (response) {
-            $rootScope.gottenPersonalCredit = response;
+    $scope.sendCreditId = function(creditId) {
+        $http({
+            method: 'POST',
+            url: 'familyCredit/sendCreditId',
+            data: angular.toJson(creditId),
+            headers: {
+                'Content-Type': 'application/json'
+            }
         });
     };
-    $scope.fetchFamilyCredit($rootScope.optionSelect.idCredit);
+
+    $scope.fetchFamilyCredit = function(){
+        $http.get('familyCredit/getFamilyCredit').success(function (response) {
+            $rootScope.personalCreditor = response;
+            if ($rootScope.personalCreditor.isCommodity === false) $rootScope.personalCreditor.isCommodity = "no";
+            if ($rootScope.personalCreditor.isCommodity === true) $rootScope.personalCreditor.isCommodity = "yes";
+        });
+    };
 
     $scope.deleteFamilyCredit = function () {
         var doDelete = confirm("Are you sure you want to delete the credit?");

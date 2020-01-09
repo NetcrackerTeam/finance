@@ -72,36 +72,27 @@ public class CreditPersonalController {
         return personalCreditService.getPersonalCredits(debitId);
     }
 
-    @RequestMapping(value = "/getPersonalCredit/{creditId}", method = RequestMethod.GET)
-    public String getPersonalCredit(@PathVariable("creditId") BigInteger creditId, Model model) {
-        PersonalCreditAccount personalCreditAccount = creditAccountDao.getPersonalCreditById(creditId);
-        this.creditId = creditId;
+    @RequestMapping(value = "/getPersonalCredit", method = RequestMethod.GET)
+    public @ResponseBody PersonalCreditAccount getPersonalCredit() {
         logger.debug("[getPersonalCredit]" + MessageController.debugStartMessage  + "[debitId = " + debitId + "], [creditId = " + creditId + "]");
-        model.addAttribute("creditName", "Credit name: " + personalCreditAccount.getName());
-        model.addAttribute("creditAmount", "CREDIT AMOUNT: " + personalCreditAccount.getAmount());
-        model.addAttribute("creditRate", "CREDIT RATE: " + personalCreditAccount.getCreditRate());
-        model.addAttribute("creditPaidAmount", "CREDIT PAID AMOUNT: " + personalCreditAccount.getPaidAmount());
-        model.addAttribute("creditDateFrom", "CREDIT START DATE: " + personalCreditAccount.getDate());
-        model.addAttribute("creditDateTo", "CREDIT ENDS DATE: " + personalCreditAccount.getDateTo());
-        model.addAttribute("creditMonthDay", "CREDIT MONTH DAY: " + personalCreditAccount.getMonthDay());
-        LocalDate debtDateFrom = personalCreditAccount.getDebt().getDateFrom();
-        LocalDate debtDateTo = personalCreditAccount.getDebt().getDateTo();
-        if (debtDateFrom != null) model.addAttribute("creditDebtDateFrom", "CREDIT DEBT START DATE: " + debtDateFrom);
-        else model.addAttribute("creditDebtDateFrom", "null");
-        if (debtDateTo != null) model.addAttribute("creditDebtDateTo", "CREDIT DEBT ENDS DATE: " + debtDateTo);
-        else model.addAttribute("creditDebtDateTo", "null");
-        model.addAttribute("creditDebtAmount", "CREDIT DEBT AMOUNT: " + personalCreditAccount.getDebt().getAmountDebt());
-        return URL.PERSONAL_CREDIT;
+        return creditAccountDao.getPersonalCreditById(creditId);
     }
 
-    @RequestMapping(value = "deletePersonalCredit/{creditId}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/sendCreditId", method = RequestMethod.POST)
+    public ResponseEntity<String> sendCreditId(@RequestBody BigInteger creditId) {
+        logger.debug("[sendCreditId]" + MessageController.debugStartMessage  + "[debitId = " + debitId + "], [creditId = " + creditId + "]");
+        this.creditId = creditId;
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/deletePersonalCredit/{creditId}", method = RequestMethod.DELETE)
     public ResponseEntity<String> deletePersonalCredit(@PathVariable("creditId") BigInteger creditId) {
         logger.debug("[deletePersonalCreditAccount]" + MessageController.debugStartMessage  + "[debitId = " + debitId + "], [creditId = " + creditId + "]");
         creditAccountDao.deleteCreditAccountByCreditId(creditId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @RequestMapping(value = "updatePersonalCredit", method = RequestMethod.PUT)
+    @RequestMapping(value = "/updatePersonalCredit", method = RequestMethod.PUT)
     public ResponseEntity<PersonalCreditAccount> updatePersonalCreditAccount(@RequestBody PersonalCreditAccount personalCreditAccount) {
         logger.debug("[updatePersonalCredit]" + MessageController.debugStartMessage  + "[debitId = " + debitId + "], [creditId = " + creditId + "]");
         creditAccountDao.updateCreditAccountByCreditId(personalCreditAccount, creditId);

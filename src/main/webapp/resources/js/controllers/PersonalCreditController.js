@@ -101,6 +101,7 @@ var PersonalCreditController = function($scope, $http, $rootScope) {
         output.innerHTML = 'Credit rate: ' + this.value + ' %';
     };
 
+
     $scope.checkSelect = function() {
         var selectedDiv = document.getElementById("creditsSelect");
         var infoButton = document.getElementById("infoCredit");
@@ -111,14 +112,27 @@ var PersonalCreditController = function($scope, $http, $rootScope) {
             infoButton.disabled = false;
             deleteButton.disabled = false;
         }
+        $scope.sendCreditId($rootScope.optionSelect.idCredit);
     };
 
-    $scope.fetchPersonalCredit = function(creditId) {
-        $http.get('/personalCredit/getPersonalCredit', {params: creditId}).success(function (response) {
-            $rootScope.gottenPersonalCredit = response;
+    $scope.sendCreditId = function(creditId) {
+        $http({
+            method: 'POST',
+            url: 'personalCredit/sendCreditId',
+            data: angular.toJson(creditId),
+            headers: {
+                'Content-Type': 'application/json'
+            }
         });
     };
-    $scope.fetchPersonalCredit($rootScope.optionSelect.idCredit);
+
+    $scope.fetchPersonalCredit = function(){
+        $http.get('personalCredit/getPersonalCredit').success(function (response) {
+            $rootScope.personalCreditor = response;
+            if ($rootScope.personalCreditor.isCommodity === false) $rootScope.personalCreditor.isCommodity = "no";
+            if ($rootScope.personalCreditor.isCommodity === true) $rootScope.personalCreditor.isCommodity = "yes";
+        });
+    };
 
     $scope.checkDebtDateFrom = function () {
         var debtDateFrom = document.getElementById("debtDateFrom");

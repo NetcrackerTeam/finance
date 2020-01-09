@@ -78,27 +78,17 @@ public class CreditFamilyController {
         return familyCreditService.getFamilyCredits(familyDebitId);
     }
 
-    @RequestMapping(value = "/getFamilyCredit/{creditId}", method = RequestMethod.GET)
-    public String getFamilyCredit(@PathVariable("creditId") BigInteger creditId, Model model) {
-        FamilyCreditAccount familyCreditAccount = creditAccountDao.getFamilyCreditById(creditId);
-        logger.debug("[getFamilyCredit]" + MessageController.debugStartMessage  + "[personalDebitID = " + personalDebitId +
-                "], [familyDebitId = " + familyDebitId + "], [userId = " + userId + "], [creditId = " + creditId + "]");
+    @RequestMapping(value = "/getFamilyCredit", method = RequestMethod.GET)
+    public @ResponseBody FamilyCreditAccount getPersonalCredit() {
+        logger.debug("[getFamilyCredit]" + MessageController.debugStartMessage  + "[familyDebitId = " + familyDebitId + "], [creditId = " + creditId + "]");
+        return creditAccountDao.getFamilyCreditById(creditId);
+    }
+
+    @RequestMapping(value = "/sendCreditId", method = RequestMethod.POST)
+    public ResponseEntity<String> sendCreditId(@RequestBody BigInteger creditId) {
+        logger.debug("[sendCreditId]" + MessageController.debugStartMessage  + "[debitId = " + familyDebitId + "], [creditId = " + creditId + "]");
         this.creditId = creditId;
-        model.addAttribute("creditFamilyName", "Credit name:" + familyCreditAccount.getName());
-        model.addAttribute("creditFamilyAmount", "FAMILY CREDIT AMOUNT: " + familyCreditAccount.getAmount());
-        model.addAttribute("creditFamilyRate", "FAMILY CREDIT RATE: " + familyCreditAccount.getCreditRate());
-        model.addAttribute("creditFamilyPaidAmount", "FAMILY CREDIT PAID AMOUNT: " + familyCreditAccount.getPaidAmount());
-        model.addAttribute("creditFamilyDateFrom", "FAMILY CREDIT START DATE: " + familyCreditAccount.getDate());
-        model.addAttribute("creditFamilyDateTo", "FAMILY CREDIT ENDS DATE: " + familyCreditAccount.getDateTo());
-        model.addAttribute("creditFamilyMonthDay", "FAMILY CREDIT MONTH DAY: " + familyCreditAccount.getMonthDay());
-        LocalDate debtDateFrom = familyCreditAccount.getDebt().getDateFrom();
-        LocalDate debtDateTo = familyCreditAccount.getDebt().getDateTo();
-        if (debtDateFrom != null) model.addAttribute("creditFamilyDebtDateFrom", "FAMILY CREDIT DEBT START DATE: " + debtDateFrom);
-        else model.addAttribute("creditFamilyDebtDateFrom", "null");
-        if (debtDateTo != null) model.addAttribute("creditFamilyDebtDateTo", "FAMILY CREDIT DEBT ENDS DATE: " + debtDateTo);
-        else model.addAttribute("creditFamilyDebtDateTo", "null");
-        model.addAttribute("creditFamilyDebtAmount", "FAMILY CREDIT DEBT AMOUNT: " + familyCreditAccount.getDebt().getAmountDebt());
-        return URL.FAMILY_CREDIT;
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @RequestMapping(value = "deleteFamilyCredit/{creditId}", method = RequestMethod.DELETE)

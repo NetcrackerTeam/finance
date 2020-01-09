@@ -71,13 +71,11 @@
             <fieldset>
                 <legend>Credits</legend>
                 <center>
-                    <!--<button class="creditButtons" id="infoCredit" disabled="disabled" data-toggle="modal" data-target="#infoCreditModal" >Info</button>-->
-                    <button class="creditButtons" id="infoCredit" disabled="disabled"
-                            onclick="window.open('#/infoCredit/{{optionSelect.idCredit}}')">Info</button>
+                    <button class="creditButtons" id="infoCredit" disabled="disabled" data-toggle="modal" data-target="#infoCreditModal" ng-click="fetchPersonalCredit()">Info</button>
                     <button class="creditButtons" id="editCredit" disabled="disabled" data-toggle="modal" data-target="#updateCreditModal">Edit</button>
                 </center>
                 <div class="creditsDiv">
-                    <select id="creditsSelect" ng-click="checkSelect()" multiple="multiple" size="3">
+                    <select id="creditsSelect" multiple="multiple" size="3" ng-click="checkSelect()">
                         <option ng-repeat="credInf in personalCredit" value="{{credInf.creditId}}">{{credInf.name}}</option>
                     </select>
                 </div>
@@ -86,6 +84,35 @@
         </form>
     </div>
 </div>
+
+<form ng-controller="PersonalCreditController">
+    <div class="modal fade" id="infoCreditModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 align="center" class="modal-title"> Info credit</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Name: <pre>{{personalCreditor.name}}</pre>
+                    Amount: <pre>{{personalCreditor.amount}}</pre>
+                    Paid Amount: <pre>{{personalCreditor.paidAmount}}</pre>
+                    Rate: <pre>{{personalCreditor.creditRate}}</pre>
+                    Start Date: <pre>{{personalCreditor.date.year}}-{{personalCreditor.date.month}}-{{personalCreditor.date.day}}</pre>
+                    Ends Date: <pre>{{personalCreditor.dateTo.year}}-{{personalCreditor.dateTo.month}}-{{personalCreditor.dateTo.day}}</pre>
+                    Month Day: <pre>{{personalCreditor.monthDay}}</pre>
+                    Credit is commodity: <pre>{{personalCreditor.isCommodity}}</pre>
+                    Amount Debt: <pre>{{personalCreditor.debt.amountDebt}}</pre>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
 
 <form ng-controller="PersonalCreditController" ng-submit="updatePersonalCredit()">
     <div class="modal fade" id="updateCreditModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -228,6 +255,7 @@
     <br/>
     <br/>
 </div>
+
 <form novalidate="novalidate" name="addCreditForm" ng-controller="PersonalCreditController" ng-submit="addPersonalCredit()" class="needs-validation">
     <div  class="modal fade" id="createCreditModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">

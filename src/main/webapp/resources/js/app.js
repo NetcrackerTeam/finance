@@ -7,6 +7,18 @@ var app = angular.module('AngularSpringApp', []).run(function ($rootScope, $http
         amount: 10
     };
 
+    $rootScope.personalCreditor = {
+        name: "",
+        amount: 0,
+        paidAmount: 0,
+        date: {},
+        creditRate: {},
+        dateTo: "",
+        monthDay: "",
+        isPaid: "NO",
+        isCommodity: "false"
+    };
+
     $rootScope.optionSelect = {
         idCredit: "01"
     };
@@ -17,6 +29,8 @@ var app = angular.module('AngularSpringApp', []).run(function ($rootScope, $http
         familyDebitId: "",
         role: ''
     };
+
+    $rootScope.gottenPersonalCredit = "";
 
     $rootScope.fetchUserId = function(){
         $http.get('getUserId').success(function (response) {
@@ -63,17 +77,11 @@ app.config(['$routeProvider', function ($routeProvider) {
     }).when('/personalReport', {
         templateUrl: 'debitPersonal/getReportView',
         controller: PersonalDebitController
-    }).when('/infoCredit/:creditId', {
-        templateUrl: 'templateURL',
-        controller: 'GetCreditController'
     });
 
     $routeProvider.when('/familyAccount', {
         templateUrl: 'debitFamily/layout',
         controller: FamilyDebitController
-    }).when('/infoFamilyCredit/:familyCreditId', {
-        templateUrl: 'templateURL',
-        controller: 'GetFamilyCreditController'
     }).when('/userControl', {
         templateUrl: 'debitFamily/getUserControl',
         controller: FamilyDebitController
@@ -81,14 +89,6 @@ app.config(['$routeProvider', function ($routeProvider) {
 
  //   $routeProvider.otherwise({redirectTo: '/'});
 }]);
-
-app.controller('GetCreditController', function ($scope, $routeParams) {
-    $scope.templateUrl = 'personalCredit/getPersonalCredit/' + $routeParams.creditId;
-});
-
-app.controller('GetFamilyCreditController', function ($scope, $routeParams) {
-    $scope.templateUrl = 'familyCredit/getFamilyCredit/' + $routeParams.familyCreditId;
-});
 
 app.controller('AppCtrl', function() {
     this.myDate = new Date();
