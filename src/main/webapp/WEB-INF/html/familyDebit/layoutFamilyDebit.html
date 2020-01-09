@@ -119,44 +119,82 @@
 
 
 
-<form ng-controller="FamilyCreditController" ng-submit="updateFamilyCredit()">
-    <div class="modal fade" id="updateCreditModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<form novalidate="novalidate" name="editCreditForm" ng-controller="FamilyCreditController" ng-submit="updateFamilyCredit()" class="needs-validation">
+    <div  class="modal fade" id="updateCreditModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 align="center" class="modal-title"> Edit credit</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                    <h3 align="center">{{pidoras}}</h3>
                 </div>
                 <div class="modal-body">
-                    <p><input type="text" class="form-control" placeholder="*Enter credit name" ng-model="credit.name"/></p>
-                    <p>*Enter credit start date:</p>
-                    <p><input type="date" class="form-control" ng-model="credit.date"/></p>
-                    <p><input type="number" min="1" step="0.01" class="form-control" placeholder="*Enter credit amount" ng-model="credit.amount"/></p>
-                    <p><input type="number" min="0" step="0.01" class="form-control" placeholder="*Enter credit paid amount" ng-model="credit.paidAmount"/></p>
-                    <div class="slidecontainer">
-                        <p id="creditRateTextEdit">*Credit rate: </p>
-                        <p><input type="range" min="0" max="100" step="0.1" class="slider" id="creditRateRangeEdit" ng-model="credit.creditRate"/></p>
+                    <div class="form-group" ng-class="{ 'has-error' : editCreditForm.nameCr.$invalid &amp;&amp; !editCreditForm.nameCr.$pristine}">
+                        <label for="editCreditName">Credit name:</label>
+                        <input type="text" name="nameCr" class="item-input-wrapper form-control" maxlength="60" placeholder="Enter name" ng-model="personalCreditor.name" id="editCreditName" required="required" ng-minlength="3"/>
+                        <p ng-show="editCreditForm.nameCr.$error.minlength" class="help-block">Credit name is too short</p>
                     </div>
-                    <p>*Enter credit ends date:</p>
-                    <p><input type="date" class="form-control" ng-model="credit.dateTo"/></p>
-                    <p style="color:#565656"><h6>The end date must be bigger than the start date </h6></p>
-                    <p><input type="number" min="1" max="28" class="form-control" placeholder="*Enter payment day of month" ng-model="credit.monthDay"/></p>
-                    <p>
-                    <div>
-                        <input type="checkbox" ng-model="credit.isCommodity" /> The credit is commodity
+
+                    <div class="form-group" ng-class="{ 'has-error' : (editCreditForm.am.$error.max || editCreditForm.am.$error.min) &amp;&amp; !editCreditForm.am.$pristine}">
+                        <label for="editCreditAmount">Credit amount:</label>
+                        <input type="number" name="am" min="1" max="10000000" id="editCreditAmount" step="0.01" class="item-input-wrapper form-control" placeholder="Enter amount" ng-model="personalCreditor.amount" required="required"/>
+                        <p ng-show="(editCreditForm.am.$error.max || editCreditForm.am.$error.min) &amp;&amp; !editCreditForm.am.$pristine" class="help-block">Amount can be from 1 to 10000000</p>
                     </div>
-                    </p>
+
+                    <div class="form-group">
+                        <label for="datetimepickerEdit">Credit start date:</label>
+                        <div class="input-group fetched-date date_field">
+                            <input type="text" name="dt" class="form-control" placeholder="yyyy/mm/dd" id="datetimepickerEdit" ng-model="dateFrom"/>
+                            <div class="input-group-addon">
+                                <span class="glyphicon glyphicon-th"></span>
+                            </div>
+                        </div>
+                        <script type="text/javascript">
+                            $(function() {
+                                $('#datetimepickerEdit').datepicker({
+                                    calendarWeeks: true,
+                                    todayHighlight: true,
+                                    autoclose: true,
+                                    zIndexOffset: '2001',
+                                    format: 'yyyy/mm/dd'
+                                }).datepicker("setDate", new Date());;
+                            });
+                        </script>
+                        <p ng-show="editCreditForm.dt.$invalid &amp;&amp; !editCreditForm.dt.$pristine" class="help-block">Required field</p>
+                    </div>
+
+                    <div class="form-group slidecontainer">
+                        <label for="creditRateRange" id="creditRateTextEdit">Credit rate:</label>
+                        <p><input type="range" min="0" max="60" step="0.1" class="slider" id="creditRateRangeEdit" ng-model="personalCreditor.creditRate"/></p>
+                    </div>
+
+                    <div class="form-group" ng-class="{ 'has-error' : (editCreditForm.dur.$error.max || editCreditForm.dur.$error.min) &amp;&amp; !editCreditForm.dur.$pristine}">
+                        <label for="creditDurationEdit">Credit duration in months:</label>
+                        <input type="number" name="dur" min="1" max="600" id="creditDurationEdit" step="1" class="form-control" placeholder="Enter amount" ng-model="duration" required="required"/>
+                        <p ng-show="(editCreditForm.dur.$error.max || editCreditForm.dur.$error.min) &amp;&amp; !editCreditForm.dur.$pristine" class="help-block">Duration can be from 1 to 600</p>
+                    </div>
+
+                    <div class="form-group" ng-class="{ 'has-error' : (editCreditForm.pd.$error.max || editCreditForm.pd.$error.min) &amp;&amp; !editCreditForm.pd.$pristine}">
+                        <label for="paymentDayEdit">Credit payment day of month</label>
+                        <input type="number" name="pd" min="1" id="paymentDayEdit" max="28" class="form-control" placeholder="Enter payment day of month" ng-model="personalCreditor.monthDay" required="required"/>
+                        <p ng-show="(editCreditForm.pd.$error.max || editCreditForm.pd.$error.min) &amp;&amp; !editCreditForm.pd.$pristine" class="help-block">Payment day can be from 1 to 28</p>
+                    </div>
+
+                    <div class="form-group">
+                        <input type="checkbox" ng-model="personalCreditor.isCommodity" /> The credit is commodity (amount on debit account won't increase)
+                    </div>
+                    <pre ng-show="check != null">{{check}}</pre>
+
                 </div>
                 <div class="modal-footer">
+                    <button style="float: left" ng-disabled="editCreditForm.$invalid" type="button" class="btn btn-info" ng-click="checkPersonalCredit()">Check credit possibility</button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary" ng-disabled="isNotEmptyCredit(credit)" onclick="$('.modal').modal('hide')">Save changes</button>
+                    <button type="submit" class="btn btn-primary" ng-disabled="editCreditForm.$invalid" onclick="$('.modal').modal('hide')">Save changes</button>
                 </div>
             </div>
         </div>
     </div>
 </form>
+
 
 <div class="col-xl-8 col-lg-7" ng-show="user.familyDebitId.length > 0">
     <div class="card shadow mb-4">

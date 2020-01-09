@@ -158,22 +158,26 @@ var PersonalCreditController = function($scope, $http, $rootScope) {
 
     var updateCreditURL = 'personalCredit/updatePersonalCredit';
     $scope.updatePersonalCredit = function () {
-        var dateFrom = new Date(Date.parse($scope.credit.date));
-        var dateTo = new Date(Date.parse($scope.credit.dateTo));
-        $scope.credit.date = {
-            year: dateFrom.getFullYear(),
-            month: dateFrom.getMonth(),
-            day: dateFrom.getDay()
+        // var dateFrom = $("#datetimepicker").datepicker('getDate');
+        var dateFromStr = $("#datetimepickerEdit").val();
+        var dateFrom = moment(dateFromStr).format('YYYY-MM-DD');
+        var duration = $scope.duration;
+        var dateTo = moment(dateFrom).clone().add(duration, 'months').format('YYYY-MM-DD') ;
+        // var dateTo = new Date(dateFrom.setMonth(dateFrom.getMonth() + 5))
+        $rootScope.personalCreditor.date = {
+            year: moment(dateFrom).year() + 1,
+            month: moment(dateFrom).month() + 1,
+            day: moment(dateFrom).date() + 1
         };
-        $scope.credit.dateTo = {
-            year: dateTo.getFullYear(),
-            month: dateTo.getMonth(),
-            day: dateTo.getDay()
+        $rootScope.personalCreditor.dateTo = {
+            year: moment(dateTo).year() + 1,
+            month: moment(dateTo).month() + 1,
+            day: moment(dateTo).date() + 1
         };
         $http({
             method : "PUT",
             url : updateCreditURL,
-            data : angular.toJson($scope.credit),
+            data : angular.toJson($rootScope.personalCreditor),
             headers : {
                 'Content-Type' : 'application/json'
             }
@@ -201,4 +205,5 @@ var PersonalCreditController = function($scope, $http, $rootScope) {
             $scope.check = "error";
         });
     };
+
 };
