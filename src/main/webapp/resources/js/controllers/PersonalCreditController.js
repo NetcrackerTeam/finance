@@ -8,7 +8,7 @@ var PersonalCreditController = function($scope, $http, $rootScope) {
     $scope.credits = [];
     $scope.credit = {
         name: "",
-        amount: "",
+        amount: 0,
         paidAmount: 0,
         date: {},
         creditRate: {},

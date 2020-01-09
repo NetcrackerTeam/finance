@@ -228,7 +228,7 @@
     <br/>
     <br/>
 </div>
-<form ng-controller="PersonalCreditController" ng-submit="addPersonalCredit()">
+<form novalidate="novalidate" name="addCreditForm" ng-controller="PersonalCreditController" ng-submit="addPersonalCredit()" class="needs-validation">
     <div  class="modal fade" id="createCreditModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -236,20 +236,22 @@
                     <h4 align="center" class="modal-title" id="passwordModalLabel"> Create credit</h4>
                 </div>
                 <div class="modal-body">
-                    <div class="form-group">
+                    <div class="form-group" ng-class="{ 'has-error' : addCreditForm.nameCr.$invalid &amp;&amp; !addCreditForm.nameCr.$pristine}">
                         <label for="creditName">Credit name:</label>
-                        <input type="text" class="form-control" placeholder="Enter name" ng-model="credit.name" id="creditName"/>
+                        <input type="text" name="nameCr" class="item-input-wrapper form-control" maxlength="60" placeholder="Enter name" ng-model="credit.name" id="creditName" required="required" ng-minlength="3"/>
+                        <p ng-show="addCreditForm.nameCr.$error.minlength" class="help-block">Credit name is too short</p>
                     </div>
-                    <div class="form-group">
-                    </div>
-                    <div class="form-group">
+
+                    <div class="form-group" ng-class="{ 'has-error' : (addCreditForm.am.$error.max || addCreditForm.am.$error.min) &amp;&amp; !addCreditForm.am.$pristine}">
                         <label for="creditAmount">Credit amount:</label>
-                        <input type="number" min="1" id="creditAmount" step="0.01" class="form-control" placeholder="Enter amount" ng-model="credit.amount"/>
+                        <input type="number" name="am" min="1" max="10000000" id="creditAmount" step="0.01" class="item-input-wrapper form-control" placeholder="Enter amount" ng-model="credit.amount" required="required"/>
+                        <p ng-show="(addCreditForm.am.$error.max || addCreditForm.am.$error.min) &amp;&amp; !addCreditForm.am.$pristine" class="help-block">Amount can be from 1 to 10000000</p>
                     </div>
+
                     <div class="form-group">
                         <label for="datetimepicker">Credit start date:</label>
                         <div class="input-group fetched-date date_field">
-                            <input type="text" class="form-control" id="datetimepicker" ng-model="dateFrom"/>
+                            <input type="text" name="dt" class="form-control" placeholder="yyyy/mm/dd" id="datetimepicker" ng-model="dateFrom"/>
                             <div class="input-group-addon">
                                 <span class="glyphicon glyphicon-th"></span>
                             </div>
@@ -261,35 +263,40 @@
                                     todayHighlight: true,
                                     autoclose: true,
                                     zIndexOffset: '2001',
-                                    dateFormat: "yyyy-MM-dd"
-                                });
+                                    format: 'yyyy/mm/dd'
+                                }).datepicker("setDate", new Date());;
                             });
                         </script>
+                        <p ng-show="addCreditForm.dt.$invalid &amp;&amp; !addCreditForm.dt.$pristine" class="help-block">Required field</p>
                     </div>
+
                     <div class="form-group slidecontainer">
                         <label for="creditRateRange" id="creditRateText">Credit rate:</label>
-                        <p><input type="range" min="0" max="100" step="0.1" class="slider" id="creditRateRange" ng-model="credit.creditRate"/></p>
+                        <p><input type="range" min="0" max="60" step="0.1" class="slider" id="creditRateRange" ng-model="credit.creditRate"/></p>
                     </div>
-                    <div class="form-group">
+
+                    <div class="form-group" ng-class="{ 'has-error' : (addCreditForm.dur.$error.max || addCreditForm.dur.$error.min) &amp;&amp; !addCreditForm.dur.$pristine}">
                         <label for="creditDuration">Credit duration in months:</label>
-                        <input type="number" min="1" id="creditDuration" step="1" class="form-control" placeholder="Enter amount" ng-model="duration"/>
+                        <input type="number" name="dur" min="1" max="600" id="creditDuration" step="1" class="form-control" placeholder="Enter amount" ng-model="duration" required="required"/>
+                        <p ng-show="(addCreditForm.dur.$error.max || addCreditForm.dur.$error.min) &amp;&amp; !addCreditForm.dur.$pristine" class="help-block">Duration can be from 1 to 600</p>
                     </div>
-    <!--                    <p>Enter credit ends date:</p>-->
-    <!--                    <p><input type="date" class="form-control" id="dateTo" ng-model="credit.dateTo"/></p>-->
-    <!--                    <p style="color:#565656"><h6>*The end date must be bigger than the start date </h6></p>-->
-                    <div class="form-group">
+
+                    <div class="form-group" ng-class="{ 'has-error' : (addCreditForm.pd.$error.max || addCreditForm.pd.$error.min) &amp;&amp; !addCreditForm.pd.$pristine}">
                         <label for="paymentDay">Credit payment day of month</label>
-                        <input type="number" min="1" id="paymentDay" max="28" class="form-control" placeholder="Enter payment day of month" ng-model="credit.monthDay"/>
+                        <input type="number" name="pd" min="1" id="paymentDay" max="28" class="form-control" placeholder="Enter payment day of month" ng-model="credit.monthDay" required="required"/>
+                        <p ng-show="(addCreditForm.pd.$error.max || addCreditForm.pd.$error.min) &amp;&amp; !addCreditForm.pd.$pristine" class="help-block">Payment day can be from 1 to 28</p>
                     </div>
+
                     <div class="form-group">
                         <input type="checkbox" ng-model="credit.isCommodity" /> The credit is commodity (amount on debit account won't increase)
                     </div>
-                    <pre>{{check}}</pre>
+                    <pre ng-show="check != null">{{check}}</pre>
+
                 </div>
                 <div class="modal-footer">
-                    <button style="float: left" type="button" class="btn btn-info" ng-click="checkPersonalCredit()">Check credit possibility</button>
+                    <button style="float: left" ng-disabled="addCreditForm.$invalid" type="button" class="btn btn-info" ng-click="checkPersonalCredit()">Check credit possibility</button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary"  onclick="$('.modal').modal('hide')">Save changes</button>
+                    <button type="submit" class="btn btn-primary" ng-disabled="addCreditForm.$invalid" onclick="$('.modal').modal('hide')">Save changes</button>
                 </div>
             </div>
         </div>

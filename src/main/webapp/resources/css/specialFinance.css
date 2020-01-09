@@ -104,4 +104,10 @@ ul.menu > li:hover > ul.submenu {
 .datetimepicker {
     z-index:1001 !important;
 }
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
 /*.datepicker.datepicker-dropdown.dropdown-menu { z-index: 9999999; }*/
