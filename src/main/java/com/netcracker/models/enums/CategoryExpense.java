@@ -3,7 +3,7 @@ package com.netcracker.models.enums;
 import java.math.BigInteger;
 
 public enum CategoryExpense {
-    DEFAULT(new BigInteger("0")),
+    NONE(new BigInteger("0")),
     FOOD(new BigInteger("1")),
     RESIDENTIAL(new BigInteger("2")),
     ENTERTAINMENT(new BigInteger("3")),

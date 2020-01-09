@@ -1,12 +1,8 @@
 package com.netcracker.controllers;
 
-import com.netcracker.dao.AutoOperationDao;
-import com.netcracker.dao.CreditAccountDao;
-import com.netcracker.dao.PersonalDebitAccountDao;
-import com.netcracker.dao.UserDao;
+import com.netcracker.dao.*;
 import com.netcracker.models.*;
 import com.netcracker.services.*;
-import com.netcracker.services.impl.EmailServiceSenderImpl;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -19,8 +15,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.security.Principal;
 import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.Collection;
 import java.util.List;
 
 @Controller
@@ -48,7 +42,7 @@ public class PersonalDebitController {
     @Autowired
     UserDao userDao;
     @Autowired
-    EmailServiceSender emailServiceSender;
+    OperationDao operationDao;
 
     private static final Logger logger = Logger.getLogger(PersonalDebitController.class);
 
@@ -57,12 +51,10 @@ public class PersonalDebitController {
     public Status addIncomePersonal(@RequestBody AccountIncome income,
                                     Principal principal) {
         BigInteger accountId = getAccountByPrincipal(principal);
-        BigInteger userId = getUserIdByPrincipal(principal);
         operationService.createPersonalOperationIncome(accountId, income.getAmount(), LocalDate.now(), income.getCategoryIncome());
         PersonalDebitAccount debit = personalDebitAccountDao.getPersonalAccountById(accountId);
         double amount = debit.getAmount() + income.getAmount();
         personalDebitAccountDao.updateAmountOfPersonalAccount(accountId, amount);
-        emailServiceSender.sendMailAutoPersonalIncome(userDao.getUserById(userId).geteMail(),userDao.getUserById(userId).getName(), income.getAmount(), income.getCategoryIncome().toString());
         return new Status(true, MessageController.ADD_INCOME);
     }
 
@@ -85,11 +77,12 @@ public class PersonalDebitController {
 
     @RequestMapping(value = "/history", method = RequestMethod.GET)
     public @ResponseBody
-    Collection<AbstractAccountOperation> getHistory(Principal principal,
-                                                    @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+    List<HistoryOperation> getHistory(Principal principal,
+                                      @RequestParam("period") int period
+    ) {
         logger.debug("getHistory Personal");
         BigInteger debitId = getAccountByPrincipal(principal);
-        return personalDebitService.getHistory(debitId, date);
+        return operationDao.getHistoryByAccountId(debitId, period);
     }
 
     @RequestMapping(value = "/autoOperationHistory", method = RequestMethod.GET)

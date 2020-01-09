@@ -2,10 +2,7 @@ package com.netcracker.dao.impl;
 
 import com.netcracker.dao.OperationDao;
 import com.netcracker.dao.impl.mapper.*;
-import com.netcracker.models.AccountExpense;
-import com.netcracker.models.AccountIncome;
-import com.netcracker.models.CategoryExpenseReport;
-import com.netcracker.models.CategoryIncomeReport;
+import com.netcracker.models.*;
 import com.netcracker.models.enums.CategoryExpense;
 import com.netcracker.models.enums.CategoryIncome;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +42,7 @@ public class OperationDaoImpl implements OperationDao {
     }
 
     @Override
-    public void createExpenseFamilyByAccId(BigInteger idUser, BigInteger idFamily, double expense, LocalDate date, CategoryExpense categoryExpense ) {
+    public void createExpenseFamilyByAccId(BigInteger idUser, BigInteger idFamily, double expense, LocalDate date, CategoryExpense categoryExpense) {
         template.update(ADD_EXPENSE_FAMILY_BY_ACCOUNT_ID, idUser, idFamily, expense, Date.valueOf(date), categoryExpense.getId());
     }
 
@@ -91,5 +88,10 @@ public class OperationDaoImpl implements OperationDao {
     @Override
     public Collection<CategoryIncomeReport> getIncomesFamilyGroupByCategories(BigInteger id, LocalDate date) {
         return template.query(GET_INCOMES_FAMILY_GROUP_BY_CATEGORIES, new Object[]{id, Date.valueOf(date)}, new CategoryIncomeFamilyReportMapper());
+    }
+
+    @Override
+    public List<HistoryOperation> getHistoryByAccountId(BigInteger id, int period) {
+        return template.query(GET__PERSONAL_FOR_DATE_BY_ACCOUNT_ID, new Object[]{id, period, id, period}, new HistoryOperationMapper());
     }
 }

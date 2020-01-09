@@ -1,9 +1,6 @@
 package com.netcracker.dao;
 
-import com.netcracker.models.AccountExpense;
-import com.netcracker.models.AccountIncome;
-import com.netcracker.models.CategoryExpenseReport;
-import com.netcracker.models.CategoryIncomeReport;
+import com.netcracker.models.*;
 import com.netcracker.models.enums.CategoryExpense;
 import com.netcracker.models.enums.CategoryIncome;
 
@@ -37,6 +34,9 @@ public interface OperationDao {
     Collection<CategoryExpenseReport> getExpensesFamilyGroupByCategories(BigInteger id, LocalDate date);
 
     Collection<CategoryIncomeReport> getIncomesFamilyGroupByCategories(BigInteger id, LocalDate date);
+
+    List<HistoryOperation> getHistoryByAccountId(BigInteger id, int period);
+
 
     String ADD_INCOME_PERSONAL_BY_ACCOUNT_ID = "INSERT ALL" +
             " INTO OBJECTS (OBJECT_ID,PARENT_ID,OBJECT_TYPE_ID,NAME,DESCRIPTION) VALUES (objects_id_s.nextval,NULL,10,'ACC_INC_PER1','account income personal1')" +
@@ -109,7 +109,7 @@ public interface OperationDao {
             " AND SUMM.OBJECT_ID = O.OBJECT_ID AND SUMM.ATTR_ID = 50 /* amount*/" +
             " AND CATEGORY.OBJECT_ID = O.OBJECT_ID AND CATEGORY.ATTR_ID = 51 /* category*/" +
             " AND DATE_OF.OBJECT_ID = O.OBJECT_ID AND DATE_OF.ATTR_ID = 52/* date*/" +
-            " AND DATE_OF.DATE_VALUE > ?" +
+            " AND DATE_OF.DATE_VALUE > TO_DATE(?)" +
             " ORDER BY O.OBJECT_ID ";
 
     String GET_EXPENSES_PERSONAL_GROUP_BY_CATEGORIES = "SELECT  SUM(SUMM.VALUE) AS EXPENSE_AMOUNT,  CATEGORY.LIST_VALUE_ID AS CATEGORY_EXPENSE" +
@@ -150,4 +150,19 @@ public interface OperationDao {
             " AND DATE_OF.DATE_VALUE > ? " +
             " GROUP BY CATEGORY.LIST_VALUE_ID, CONSUMER.REFERENCE";
 
+    String GET__PERSONAL_FOR_DATE_BY_ACCOUNT_ID = "SELECT O.OBJECT_ID AS TRANSACTION_ID,  SUMM.VALUE AS AMOUNT," +
+            " DATE_OF.DATE_VALUE AS DATE_IN, (CASE WHEN CATEGORY.LIST_VALUE_ID >= 14 THEN  CATEGORY.LIST_VALUE_ID ELSE 0 END) AS CATEGORY_INCOME, " +
+            " (CASE WHEN CATEGORY.LIST_VALUE_ID < 14 THEN  CATEGORY.LIST_VALUE_ID ELSE 0 END) AS CATEGORY_EXPENSE" +
+            " FROM ATTRIBUTES SUMM, ATTRIBUTES DATE_OF, ATTRIBUTES CATEGORY, OBJECTS O, OBJREFERENCE REF" +
+            " WHERE O.OBJECT_TYPE_ID = 10 AND REF.ATTR_ID = 53 AND O.OBJECT_ID = REF.OBJECT_ID AND REF.REFERENCE = ? " +
+            " AND SUMM.OBJECT_ID = O.OBJECT_ID AND SUMM.ATTR_ID = 56 /* amount*/ " +
+            " AND CATEGORY.OBJECT_ID = O.OBJECT_ID AND CATEGORY.ATTR_ID = 57 /* category*/ " +
+            " AND DATE_OF.OBJECT_ID = O.OBJECT_ID AND DATE_OF.ATTR_ID = 58 /* date*/" +
+            " AND DATE_OF.DATE_VALUE BETWEEN  ADD_MONTHS(TO_DATE (SYSDATE), -(?)) AND  TO_DATE (SYSDATE) " +
+            " OR (O.OBJECT_TYPE_ID = 9 AND REF.ATTR_ID = 47 AND O.OBJECT_ID = REF.OBJECT_ID AND REF.REFERENCE = ? " +
+            " AND SUMM.OBJECT_ID = O.OBJECT_ID AND SUMM.ATTR_ID = 50 /* amount*/ " +
+            " AND CATEGORY.OBJECT_ID = O.OBJECT_ID AND CATEGORY.ATTR_ID = 51 /* category*/ " +
+            " AND DATE_OF.OBJECT_ID = O.OBJECT_ID AND DATE_OF.ATTR_ID = 52 /* date*/ " +
+            " AND DATE_OF.DATE_VALUE BETWEEN  ADD_MONTHS(TO_DATE (SYSDATE), -(?)) AND  TO_DATE (SYSDATE))" +
+            " ORDER BY DATE_OF.DATE_VALUE DESC";
 }
