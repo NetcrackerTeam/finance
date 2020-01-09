@@ -1,9 +1,7 @@
 package com.netcracker.dao.impl;
 
 import com.netcracker.dao.MonthReportDao;
-import com.netcracker.dao.impl.mapper.CategoryExpensePersonalReportMapper;
-import com.netcracker.dao.impl.mapper.CategoryIncomePersonalReportMapper;
-import com.netcracker.dao.impl.mapper.MonthReportMapper;
+import com.netcracker.dao.impl.mapper.*;
 import com.netcracker.models.CategoryExpenseReport;
 import com.netcracker.models.CategoryIncomeReport;
 import com.netcracker.models.MonthReport;
@@ -55,7 +53,7 @@ public class MonthReportDaoImpl implements MonthReportDao {
     @Override
     public MonthReport getMonthReportByFamilyAccountId(BigInteger id, LocalDate dateFrom, LocalDate dateTo) {
         return template.queryForObject(GET_MONTH_REPORT_BY_FAMILY_ACCOUNT_ID,
-                new Object[]{id, dateFrom, dateTo }, new MonthReportMapper());
+                new Object[]{id, DateUtils.localDateToDate(dateFrom), DateUtils.localDateToDate(dateTo) }, new MonthReportMapper());
     }
 
     @Override
@@ -95,7 +93,7 @@ public class MonthReportDaoImpl implements MonthReportDao {
 
     @Override
     public Collection<CategoryIncomeReport> getCategoryIncomeFamilyReport(BigInteger id) {
-        return template.query(GET_CATEGORY_INCOME_FAMILY_REPORT_BY_ID, new Object[]{id}, new CategoryIncomePersonalReportMapper());
+        return template.query(GET_CATEGORY_INCOME_FAMILY_REPORT_BY_ID, new Object[]{id}, new CategoryIncomeFamilyReportMapper());
     }
 
     @Override
@@ -105,7 +103,7 @@ public class MonthReportDaoImpl implements MonthReportDao {
 
     @Override
     public Collection<CategoryExpenseReport> getCategoryExpenseFamilyReport(BigInteger id) {
-        return template.query(GET_CATEGORY_EXPENSE_FAMILY_REPORT_BY_ID, new Object[]{id}, new CategoryExpensePersonalReportMapper());
+        return template.query(GET_CATEGORY_EXPENSE_FAMILY_REPORT_BY_ID, new Object[]{id}, new CategoryExpenseFamilyReportMapper());
     }
 
     @Override

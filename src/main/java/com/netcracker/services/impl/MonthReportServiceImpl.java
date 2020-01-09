@@ -144,17 +144,23 @@ public class MonthReportServiceImpl implements MonthReportService {
 
             writer.write(NEW_LINE + EXPENSES_BY_CATEGORIES);
             writer.write(DOTTED_LINE);
+
+            String compareParticipants = null;
+            String name = null;
             for (CategoryExpenseReport exp :
                     monthReport.getCategoryExpense()) {
-
-                String name = null;
                 try {
                     name = userDao.getUserById(exp.getUserReference()).getName();
                 } catch (UserException e) {
                     logger.debug(e.getMessage(), e);
                 }
+
                 if (name != null) {
-                    writer.write(name + SPACE);
+                    if(!name.equals(compareParticipants)){
+                        writer.write(name + NEW_LINE);
+                        compareParticipants = name;
+                    }
+                    writer.write(SPACE);
                 }
                 writer.write(exp.getCategoryExpense().toString() + DOUBLE_DOTS + exp.getAmount() + NEW_LINE);
             }
@@ -162,17 +168,23 @@ public class MonthReportServiceImpl implements MonthReportService {
             writer.write(INCOMES_BY_CATEGORIES);
             writer.write(DOTTED_LINE);
 
+            compareParticipants = null;
+            name = null;
+
             for (CategoryIncomeReport inc :
                     monthReport.getCategoryIncome()) {
 
-                String name = null;
                 try {
                     name = userDao.getUserById(inc.getUserReference()).getName();
                 } catch (UserException e) {
                     logger.debug(e.getMessage(), e);
                 }
                 if (name != null) {
-                    writer.write(name + SPACE);
+                    if(!name.equals(compareParticipants)){
+                        writer.write(name + NEW_LINE);
+                        compareParticipants = name;
+                    }
+                    writer.write(SPACE);
                 }
                 writer.write(inc.getCategoryIncome().toString() + DOUBLE_DOTS + inc.getAmount() + NEW_LINE);
             }

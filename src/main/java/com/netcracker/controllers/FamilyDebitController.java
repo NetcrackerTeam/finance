@@ -18,7 +18,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.math.BigInteger;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.security.Principal;
 import java.time.LocalDate;
 import java.util.Collection;
@@ -233,16 +236,30 @@ public class FamilyDebitController {
         return new Status(true, MessageController.DELETE_AUTO_EXPENSE_FAM + expenseId);
     }
 
-    @RequestMapping(value = "/getReport", method = RequestMethod.POST)
-    public MonthReport getReport(
+    @RequestMapping(value = "/report", method = RequestMethod.GET)
+    @ResponseBody
+    public String getReport(
             Principal principal,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateFrom,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateTo
     ) {
         BigInteger accountId = getAccountByPrincipal(principal);
+
         MonthReport monthReport = monthReportService.getMonthFamilyReport(accountId, dateFrom, dateTo);
+
+        Path path = monthReportService.convertToTxt(monthReport);
+
+        String report = null;
+
+        try{
+            report = new String(Files.readAllBytes(path.getFileName()));
+        } catch (IOException e) {
+
+        }
+
         logger.debug("Month report is ready");
-        return monthReport;
+
+        return report;
     }
 
     @RequestMapping(value = "/info", method = RequestMethod.GET)

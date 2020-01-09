@@ -8,9 +8,10 @@
         <a href="#/userControl">Participants Control</a> <!--#2 class = Comment_form-->
     </div>
 </nav>
-<!--<h1><span ng-show="family.debitId.length > 0">FamilyDebitID from RootScope: {{family.debitId}}</span></h1>-->
+<h1><span ng-show="family.debitId.length > 0">FamilyDebitID from RootScope: {{family.debitId}}</span></h1>
 <div ng-controller="FamilyDebitController" ng-show="user.familyDebitId.length > 0" >
     <h1>Current amount: {{accountInfo.amount}}</h1>
+    <h1>Id of family account: {{accountInfo.id}}</h1>
     <div>
         User name: {{accountInfo.owner.name}}
     </div>
@@ -271,9 +272,6 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 align="center" class="modal-title" id="passwordModalLabel1"> Prediction </h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
@@ -297,16 +295,13 @@
     </div>
 </form>
 
-<form ng-controller="RepCtrl" ng-submit="getReport()">
+<form ng-controller="RepFamilyCtrl" ng-submit="getReport()">
     <div class="modal fade" id="report" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 align="center" class="modal-title" id="passwordModalLabel2"> Report </h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
                 </div>
 
                 <div class="modal-body">
