@@ -38,13 +38,15 @@ public class UserController {
         String newEmail = mapUserData.get("newEmail");
         boolean validOldEmail = userTemp.geteMail().equals(oldEmail);
         boolean validateEmail = userValidation.validateValueByUser(newEmail, RegexPatterns.EMAIL_PATTERN);
+        boolean equalsEmail = (userDao.getNumberOfUsersByEmail(newEmail) > 0);
         if (!validOldEmail) {
             model.addAttribute("errorOldEmail", MessageController.INVALID_OLD_EMAIL);
-        } else if (validateEmail) {
+        } else if ((validateEmail) && (!equalsEmail) ) {
             userDao.updateEmail(userTemp.getId(), newEmail);
             model.addAttribute("successUpdatePass", MessageController.SUCCESS_UPDATE_EMAIL);
-        } else {
-            model.addAttribute("errorValidateNewEmail", MessageController.ERROR_VALIDATE_EMAIL);
+        }
+        else {
+            model.addAttribute("errorValidateNewEmail or email already exist", MessageController.ERROR_VALIDATE_EMAIL);
         }
         return URL.INDEX;
     }
