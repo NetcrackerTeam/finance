@@ -374,59 +374,6 @@
     </div>
 </form>
 
-<div class="col-xl-8 col-lg-7" ng-show="user.familyDebitId.length > 0">
-    <div class="card shadow mb-4">
-        <!-- Card Header - Dropdown -->
-        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-            <h6 class="m-0 font-weight-bold text-primary">Credits</h6>
-        </div>
-        <!-- Card Body -->
-        <div class="card-body" ng-controller="FamilyCreditController">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">Credits</div>
-                        <div class="panel-body">
-                            <table class="table table-striped">
-                                <thead>
-                                <tr>
-                                    <th>name</th>
-                                    <th>amount</th>
-                                    <th>paidAmount</th>
-                                    <th>dateFrom</th>
-                                    <th>creditRate</th>
-                                    <th>dateTo</th>
-                                    <th>monthDay</th>
-                                    <th>isPaid</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr ng-repeat="credInf in familyCredit">
-                                    <td>{{credInf.name}}</td>
-                                    <td>{{credInf.amount}}</td>
-                                    <td>{{credInf.paidAmount}}</td>
-                                    <td>{{credInf.date.year}}-{{credInf.date.month}}-{{credInf.date.day}}</td>
-                                    <td>{{credInf.creditRate}}</td>
-                                    <td>{{credInf.dateTo.year}}-{{credInf.dateTo.month}}-{{credInf.dateTo.day}}</td>
-                                    <td>{{credInf.monthDay}}</td>
-                                    <td>{{credInf.isPaid}}</td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <br/>
-    <br/>
-    <br/>
-    <br/>
-    <br/>
-    <br/>
-</div>
-
 <form ng-controller="FamilyPredictController" ng-submit="getPredict()" ng-show="user.familyDebitId.length > 0">
     <div class="modal fade" id="prediction" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
          aria-hidden="true">
