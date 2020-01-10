@@ -178,7 +178,7 @@ var FamilyCreditController = function($scope, $http, $rootScope) {
 
     $scope.checkFamilyCredit = function () {
 
-        alert($scope.duration);
+
         $http({
             method: 'GET',
             url: 'prediction/family/checkCredit',

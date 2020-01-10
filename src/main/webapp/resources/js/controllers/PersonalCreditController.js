@@ -197,7 +197,7 @@ var PersonalCreditController = function ($scope, $http, $rootScope) {
 
     $scope.checkPersonalCredit = function () {
 
-        alert($scope.duration);
+
         $http({
             method: 'GET',
             url: 'prediction/personal/checkCredit',
