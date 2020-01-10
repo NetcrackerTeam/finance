@@ -45,11 +45,9 @@ public class CreditPersonalController {
         debitId = userController.getAccountByPrincipal(principal);
         logger.debug("[createCreditAccount]" + MessageController.debugStartMessage + "[debitId = " + debitId + "]");
         if (!personalCreditService.doesCreditWithNameNotExist(debitId, creditAccount.getName()))
-            return new Status(false, "Credit with this name already exists");
-        if (creditAccount.getName().equals("none"))
-            return new Status(false, "Invalid name");
-        if (!creditAccount.getName().matches("^[A-Za-z0-9 _]*$"))
-            return new Status(false, "The name can contain only latin letters, numbers and spaces");
+            return new Status(false, MessageController.CREDIT_NAME_EXISTS);
+        Status checked = personalCreditService.checkCreditName(creditAccount.getName());
+        if (!checked.isStatus()) return checked;
         personalCreditService.createPersonalCredit(debitId, creditAccount);
         return new Status(true, MessageController.ADD_PERSONAL_CREDIT + creditAccount.getName());
     }

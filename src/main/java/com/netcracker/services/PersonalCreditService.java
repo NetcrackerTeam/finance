@@ -2,6 +2,7 @@ package com.netcracker.services;
 
 import com.netcracker.models.CreditOperation;
 import com.netcracker.models.PersonalCreditAccount;
+import com.netcracker.models.Status;
 
 import java.math.BigInteger;
 import java.util.Collection;
@@ -27,4 +28,10 @@ public interface PersonalCreditService {
     PersonalCreditAccount getPersonalCreditAccount(BigInteger id);
 
     boolean doesCreditWithNameNotExist(BigInteger debitId, String name);
+
+    Status checkCreditName(String name);
+
+    String NONE_NAME = "none";
+
+    String REGULAR_FOR_NAME = "^[A-Za-z0-9 _]*$";
 }

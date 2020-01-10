@@ -184,15 +184,17 @@ public class FamilyDebitController {
         }
     }
 
-    @RequestMapping(value = "/addExpenseFamily/{afterDate}", method = RequestMethod.POST)
+    @RequestMapping(value = "/expense", method = RequestMethod.POST)
     @ResponseBody
-    public List<AccountExpense> addExpenseFamily(
-            @RequestBody AccountExpense expense,
-            @PathVariable(value = "id") BigInteger debitId,
-            @PathVariable(value = "afterDate") LocalDate afterDate,
-            @RequestParam(value = "userId") BigInteger userId) {
-        operationService.createFamilyOperationExpense(userId, debitId, expense.getAmount(), expense.getDate(), expense.getCategoryExpense());
-        return operationService.getExpensesFamilyAfterDateByAccountId(debitId, afterDate);
+    public Status addExpenseFamily(
+            @RequestBody AccountExpense expense, Principal principal) {
+        BigInteger accountId = getAccountByPrincipal(principal);
+        BigInteger userId = getUserIdByPrincipal(principal);
+        operationService.createFamilyOperationExpense(userId, accountId, expense.getAmount(), LocalDate.now(), expense.getCategoryExpense());
+        FamilyDebitAccount debit = familyDebitService.getFamilyDebitAccount(accountId);
+        double amount = debit.getAmount() - expense.getAmount();
+        familyDebitService.updateAmountOfFamilyAccount(accountId, amount);
+        return new Status(true, MessageController.ADD_EXPENSE_PERS);
     }
 
     @RequestMapping(value = "/history", method = RequestMethod.GET)

@@ -74,8 +74,10 @@ var PersonalCreditController = function ($scope, $http, $rootScope) {
             }).success(function (response) {
                 if (response.status === false)
                     $scope.nameErrorMessage = response.message;
-                if (response.status === true)
+                if (response.status === true) {
                     $('.modal').modal('hide');
+                    refreshPageData()
+                }
             });
         }
     };

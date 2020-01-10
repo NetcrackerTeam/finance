@@ -1,5 +1,6 @@
 package com.netcracker.services.impl;
 
+import com.netcracker.controllers.MessageController;
 import com.netcracker.dao.CreditAccountDao;
 import com.netcracker.dao.CreditDeptDao;
 import com.netcracker.dao.CreditOperationDao;
@@ -202,6 +203,15 @@ public class PersonalCreditServiceImpl implements PersonalCreditService {
     @Override
     public boolean doesCreditWithNameNotExist(BigInteger debitId, String name) {
         return creditAccountDao.getCreditsIdByNamePers(debitId, name).isEmpty();
+    }
+
+    @Override
+    public Status checkCreditName(String name) {
+        if (NONE_NAME.equals(name))
+            return new Status(false, MessageController.INVALID_NAME);
+        if (!name.matches(REGULAR_FOR_NAME))
+            return new Status(false, MessageController.CREDIT_NAME_ERROR);
+        return new Status(true, null);
     }
 
     private void addPayment(AbstractCreditAccount creditAccount, AbstractDebitAccount debitAccount, double amount) {

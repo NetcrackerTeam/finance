@@ -32,6 +32,7 @@ public class CreditFamilyController {
     private BigInteger familyDebitId;
     private BigInteger userId;
     private User currentUser;
+    private BigInteger debitId;
     @Autowired
     private UserDao userDao;
     @Autowired
@@ -45,9 +46,13 @@ public class CreditFamilyController {
     @RequestMapping(value = "/addCredit", method = RequestMethod.POST)
     @ResponseBody
     public Status createFamilyCreditAccount(@RequestBody FamilyCreditAccount creditAccount, Principal principal) {
-        getUserInfo(principal);
+        debitId = userDao.getParticipantByEmail(principal.getName()).getFamilyDebitAccount();
         logger.debug("[createFamilyCreditAccount]" + MessageController.debugStartMessage  + "[personalDebitID = " + personalDebitId +
                 "], [familyDebitId = " + familyDebitId + "], [userId = " + userId + "]");
+        if (!familyCreditService.doesCreditWithNameNotExist(debitId, creditAccount.getName()))
+            return new Status(false, MessageController.CREDIT_NAME_EXISTS);
+        Status checked = personalCreditService.checkCreditName(creditAccount.getName());
+        if (!checked.isStatus()) return checked;
         familyCreditService.createFamilyCredit(familyDebitId, creditAccount);
         return new Status(true, MessageController.ADD_FAMILY_CREDIT + creditAccount.getName());
     }

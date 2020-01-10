@@ -3,12 +3,13 @@
  * FamilyCreditController
  * @constructor
  */
-var FamilyCreditController = function($scope, $http, $rootScope) {
+var FamilyCreditController = function ($scope, $http, $rootScope) {
+    $scope.check = null;
     $scope.credits = [];
     $scope.credit = {
         name: "",
-        amount: "",
-        paidAmount: "",
+        amount: 0,
+        paidAmount: 0,
         date: {},
         creditRate: {},
         dateTo: "",
@@ -24,7 +25,7 @@ var FamilyCreditController = function($scope, $http, $rootScope) {
     $scope.allDebt = 0;
     $scope.totalPaidCredits = 0;
     var getFamilyCreditsURL = 'familyCredit/getFamilyCredits';
-    $scope.fetchCreditList = function(){
+    $scope.fetchCreditList = function () {
         $http.get(getFamilyCreditsURL).success(function (creditList) {
             $scope.familyCredit = creditList;
             for (var i = 0; i < $scope.familyCredit.length; i++) {
@@ -43,33 +44,52 @@ var FamilyCreditController = function($scope, $http, $rootScope) {
 
 
     var addCreditURL = 'familyCredit/addCredit';
-    $scope.addFamilyCredit = function() {
-        var dateFrom = new Date(Date.parse($scope.credit.date));
-        var dateTo = new Date(Date.parse($scope.credit.dateTo));
-        $scope.credit.date = {
-            year: dateFrom.getFullYear(),
-            month: dateFrom.getMonth(),
-            day: dateFrom.getDay()
-        };
-        $scope.credit.dateTo = {
-            year: dateTo.getFullYear(),
-            month: dateTo.getMonth(),
-            day: dateTo.getDay()
-        };
-        $http({
-            method: 'POST',
-            url: addCreditURL,
-            data: angular.toJson($scope.credit),
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        }).then(success, error);
-    };
+    $scope.addFamilyCredit = function () {
+        var dateFromStr = $("#datetimepicker").val();
+        var dateFrom = moment(dateFromStr).format('YYYY-MM-DD');
+        var duration = $scope.duration;
+        var dateTo = moment(dateFrom).clone().add(duration, 'months').format('YYYY-MM-DD');
+        var pat = /^[0-9]+(\.[0-9][0-9]?)?$/;
+        if (!pat.test($scope.credit.amount)) {
+            $scope.amountErrorMessage = 'Invalid amount';
+        } else {
+            $scope.amountErrorMessage = "";
+            $scope.credit.date = {
+                year: moment(dateFrom).year() + 1,
+                month: moment(dateFrom).month() + 1,
+                day: moment(dateFrom).date() + 1
+            };
+            $scope.credit.dateTo = {
+                year: moment(dateTo).year() + 1,
+                month: moment(dateTo).month() + 1,
+                day: moment(dateTo).date() + 1
+            };
+
+
+            $http({
+                method: 'POST',
+                url: addCreditURL,
+                data: angular.toJson($scope.credit),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).success(function (response) {
+                if (response.status === false)
+                    $scope.nameErrorMessage = response.message;
+                if (response.status === true) {
+                    $('.modal').modal('hide');
+                    refreshPageData()
+                }
+
+            });
+        }
+    }
+    ;
 
     function refreshPageData() {
         $http({
-            method : 'GET',
-            url : getFamilyCreditsURL
+            method: 'GET',
+            url: getFamilyCreditsURL
         }).then(function successCallback(response) {
             $scope.credits = response.data.credits;
         }, function errorCallback(response) {
@@ -101,7 +121,7 @@ var FamilyCreditController = function($scope, $http, $rootScope) {
         $scope.credit.isCommodity = "false"
     }
 
-    $scope.isNotEmptyCredit = function(credit) {
+    $scope.isNotEmptyCredit = function (credit) {
         return !credit.name || !credit.date || !credit.amount || !credit.dateTo ||
             !credit.monthDay || credit.dateTo <= credit.date;
     };
@@ -109,11 +129,11 @@ var FamilyCreditController = function($scope, $http, $rootScope) {
     var slider = document.getElementById("creditRateRange");
     var output = document.getElementById("creditRateText");
     output.innerHTML = 'Credit rate: ' + slider.value + ' %';
-    slider.oninput = function() {
+    slider.oninput = function () {
         output.innerHTML = 'Credit rate: ' + this.value + ' %';
     };
 
-    $scope.checkSelect = function() {
+    $scope.checkSelect = function () {
         var selectedDiv = document.getElementById("creditsSelect");
         var infoButton = document.getElementById("infoCredit");
         var deleteButton = document.getElementById("editCredit");
@@ -126,7 +146,7 @@ var FamilyCreditController = function($scope, $http, $rootScope) {
         $scope.sendCreditId($rootScope.optionSelect.idCredit);
     };
 
-    $scope.sendCreditId = function(creditId) {
+    $scope.sendCreditId = function (creditId) {
         $http({
             method: 'POST',
             url: 'familyCredit/sendCreditId',
@@ -137,7 +157,7 @@ var FamilyCreditController = function($scope, $http, $rootScope) {
         });
     };
 
-    $scope.fetchFamilyCredit = function(){
+    $scope.fetchFamilyCredit = function () {
         $http.get('familyCredit/getFamilyCredit').success(function (response) {
             $rootScope.personalCreditor = response;
             if ($rootScope.personalCreditor.isCommodity === false) $rootScope.personalCreditor.isCommodity = "NO";
@@ -158,7 +178,7 @@ var FamilyCreditController = function($scope, $http, $rootScope) {
     var sliderEdit = document.getElementById("creditRateRangeEdit");
     var outputEdit = document.getElementById("creditRateTextEdit");
     outputEdit.innerHTML = 'Credit rate: ' + sliderEdit.value + ' %';
-    sliderEdit.oninput = function() {
+    sliderEdit.oninput = function () {
         outputEdit.innerHTML = 'Credit rate: ' + this.value + ' %';
     };
 
@@ -168,7 +188,7 @@ var FamilyCreditController = function($scope, $http, $rootScope) {
         var dateFromStr = $("#datetimepickerEdit").val();
         var dateFrom = moment(dateFromStr).format('YYYY-MM-DD');
         var duration = $scope.duration;
-        var dateTo = moment(dateFrom).clone().add(duration, 'months').format('YYYY-MM-DD') ;
+        var dateTo = moment(dateFrom).clone().add(duration, 'months').format('YYYY-MM-DD');
         // var dateTo = new Date(dateFrom.setMonth(dateFrom.getMonth() + 5))
         $rootScope.personalCreditor.date = {
             year: moment(dateFrom).year() + 1,
@@ -181,13 +201,13 @@ var FamilyCreditController = function($scope, $http, $rootScope) {
             day: moment(dateTo).date() + 1
         };
         $http({
-            method : "PUT",
-            url : updateCreditURL,
-            data : angular.toJson($rootScope.personalCreditor),
-            headers : {
-                'Content-Type' : 'application/json'
+            method: "PUT",
+            url: updateCreditURL,
+            data: angular.toJson($rootScope.personalCreditor),
+            headers: {
+                'Content-Type': 'application/json'
             }
-        }).then( success, error );
+        }).then(success, error);
     };
 
 

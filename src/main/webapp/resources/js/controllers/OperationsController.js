@@ -31,12 +31,12 @@ app.controller("AddIncomeControllerPersonal", function ($scope, $http) {
                         'Content-Type': 'application/json'
                     }
                 }).success(function (response) {
-                    alert(response.message);
+                    $('.modal').modal('hide');
                     window.location.reload();
                 }).error(function () {
                     alert("unsuccess");
                 });
-                $('.modal').modal('hide');
+
             }
         }
     };
@@ -71,12 +71,12 @@ app.controller("AddExpenseControllerPersonal", function ($scope, $http) {
                         'Content-Type': 'application/json'
                     }
                 }).success(function (response) {
-                    alert(response.message);
+                    $('.modal').modal('hide');
                     window.location.reload();
                 }).error(function () {
                     alert("unsuccess");
                 });
-                $('.modal').modal('hide');
+
             }
         }
 
@@ -117,12 +117,12 @@ app.controller("AddIncomeControllerFamily", function ($scope, $http) {
                         'Content-Type': 'application/json'
                     }
                 }).success(function (response) {
-                    alert(response.message);
+                    $('.modal').modal('hide');
                     window.location.reload();
                 }).error(function () {
                     alert("unsuccess");
                 });
-                $('.modal').modal('hide');
+
             }
         }
     }
@@ -131,7 +131,7 @@ app.controller("AddIncomeControllerFamily", function ($scope, $http) {
 
 app.controller("AddExpenseControllerFamily", function ($scope, $http) {
     $scope.form = {
-        amountExp: 0.00,
+        amount: 0.00,
         categoryExpense: "DEFAULT",
         checkbox: false,
         dayOfMonth: "1"
@@ -140,15 +140,14 @@ app.controller("AddExpenseControllerFamily", function ($scope, $http) {
 
     $scope.submitOperation = function () {
         method = "POST";
-        url = 'debitFamily/expense';
         $scope.form.checkbox ? url = 'debitFamily/createAutoExpense' : url = 'debitFamily/expense';
 
-        if ($scope.form.categoryIncome === 'DEFAULT') {
-            $scope.categoryCheck = 'Choose a category';
+        if ($scope.form.categoryExpense === 'DEFAULT') {
+            $scope.categoryCheckExp = 'Choose a category';
         } else {
 
             if (!pat.test($scope.form.amount)) {
-                $scope.amountIncErrorMessage = 'Invalid amount';
+                $scope.amountExpErrorMessage = 'Invalid amount';
             } else {
                 $http({
                     method: method,
@@ -157,15 +156,15 @@ app.controller("AddExpenseControllerFamily", function ($scope, $http) {
                     headers: {
                         'Content-Type': 'application/json'
                     }
-                }).success(function (response) {
-                    alert(response.message);
+                }).success(function () {
+                    $('.modal').modal('hide');
                     window.location.reload();
                 }).error(function () {
                     alert("unsuccess");
                 });
-                $('.modal').modal('hide');
             }
         }
-    };
+        ;
+    }
 });
 

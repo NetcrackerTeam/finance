@@ -51,4 +51,8 @@ public interface MessageController {
     String LATIN_CHAR = "The password must contain only Latin characters.";
     String LATIN_LETTERS = "The username must contain only Latin letters without other characters.";
     String NAME_SHORT = "The username must contain at least 2 characters.";
+    String CREDIT_NAME_EXISTS = "Credit with this name already exists";
+    String INVALID_NAME = "Invalid name";
+    String CREDIT_NAME_ERROR = "The name can contain only latin letters, numbers and spaces";
+
 }
