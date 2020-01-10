@@ -10,10 +10,10 @@ var PersonalCreditController = function ($scope, $http, $rootScope) {
         name: "",
         amount: 0,
         paidAmount: 0,
-        date: {},
-        creditRate: {},
-        dateTo: "",
-        monthDay: "",
+        date: new Date(),
+        creditRate: 30,
+        dateTo: new Date(),
+        monthDay: 1,
         isPaid: "NO",
         isCommodity: "false"
     };
@@ -44,7 +44,7 @@ var PersonalCreditController = function ($scope, $http, $rootScope) {
 
     var addCreditURL = 'personalCredit/addCredit';
     $scope.addPersonalCredit = function () {
-        var dateFromStr = $("#datetimepicker").val();
+        var dateFromStr = $("#datetimepickerPer").val();
         var dateFrom = moment(dateFromStr).format('YYYY-MM-DD');
         var duration = $scope.duration;
         var dateTo = moment(dateFrom).clone().add(duration, 'months').format('YYYY-MM-DD');

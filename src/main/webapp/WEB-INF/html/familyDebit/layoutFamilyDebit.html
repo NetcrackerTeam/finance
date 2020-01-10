@@ -340,6 +340,19 @@
                         </div>
                         <p ng-show="addCreditForm.dt.$invalid &amp;&amp; !addCreditForm.dt.$pristine" class="help-block">Required field</p>
                     </div>
+                    <script type="text/javascript">
+                        $(function() {
+                            $('#datetimepicker').datepicker({
+                                calendarWeeks: true,
+                                todayHighlight: true,
+                                autoclose: true,
+                                zIndexOffset: '2001',
+                                format: 'yyyy/mm/dd',
+                                startDate: '-1m',
+                                endDate: '+1w'
+                            }).datepicker("setDate", new Date());;
+                        });
+                    </script>
 
                     <div class="form-group slidecontainer">
                         <label for="creditRateRange" id="creditRateText">Credit rate:</label>

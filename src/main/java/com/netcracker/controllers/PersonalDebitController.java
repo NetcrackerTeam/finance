@@ -72,8 +72,10 @@ public class PersonalDebitController {
     public Status addExpensePersonal(
             @RequestBody AccountExpense expense, Principal principal) {
         BigInteger accountId = getAccountByPrincipal(principal);
-        operationService.createPersonalOperationExpense(accountId, expense.getAmount(), LocalDate.now(), expense.getCategoryExpense());
         PersonalDebitAccount debit = personalDebitAccountDao.getPersonalAccountById(accountId);
+        if (debit.getAmount() < expense.getAmount())
+            return new Status(false, MessageController.NOT_ENOUGH_MONEY_MESSAGE);
+        operationService.createPersonalOperationExpense(accountId, expense.getAmount(), LocalDate.now(), expense.getCategoryExpense());
         double amount = debit.getAmount() - expense.getAmount();
         personalDebitAccountDao.updateAmountOfPersonalAccount(accountId, amount);
         return new Status(true, MessageController.ADD_EXPENSE_PERS);

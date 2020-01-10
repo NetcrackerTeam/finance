@@ -190,8 +190,11 @@ public class FamilyDebitController {
             @RequestBody AccountExpense expense, Principal principal) {
         BigInteger accountId = getAccountByPrincipal(principal);
         BigInteger userId = getUserIdByPrincipal(principal);
-        operationService.createFamilyOperationExpense(userId, accountId, expense.getAmount(), LocalDate.now(), expense.getCategoryExpense());
         FamilyDebitAccount debit = familyDebitService.getFamilyDebitAccount(accountId);
+        if (debit.getAmount() < expense.getAmount()){
+            return new Status(false, MessageController.NOT_ENOUGH_MONEY_MESSAGE);
+        }
+        operationService.createFamilyOperationExpense(userId, accountId, expense.getAmount(), LocalDate.now(), expense.getCategoryExpense());
         double amount = debit.getAmount() - expense.getAmount();
         familyDebitService.updateAmountOfFamilyAccount(accountId, amount);
         return new Status(true, MessageController.ADD_EXPENSE_PERS);

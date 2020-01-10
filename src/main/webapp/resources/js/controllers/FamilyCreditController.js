@@ -10,10 +10,10 @@ var FamilyCreditController = function ($scope, $http, $rootScope) {
         name: "",
         amount: 0,
         paidAmount: 0,
-        date: {},
-        creditRate: {},
-        dateTo: "",
-        monthDay: "",
+        date: new Date(),
+        creditRate: 30,
+        dateTo: new Date(),
+        monthDay: 1,
         isPaid: "NO",
         isCommodity: "false"
     };

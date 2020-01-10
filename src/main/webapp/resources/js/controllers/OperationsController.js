@@ -71,8 +71,12 @@ app.controller("AddExpenseControllerPersonal", function ($scope, $http) {
                         'Content-Type': 'application/json'
                     }
                 }).success(function (response) {
-                    $('.modal').modal('hide');
-                    window.location.reload();
+                    if (response.status === false)
+                        $scope.amountExpErrorMessage = response.message;
+                    else {
+                        $('.modal').modal('hide');
+                        window.location.reload();
+                    }
                 }).error(function () {
                     alert("unsuccess");
                 });
@@ -156,9 +160,13 @@ app.controller("AddExpenseControllerFamily", function ($scope, $http) {
                     headers: {
                         'Content-Type': 'application/json'
                     }
-                }).success(function () {
-                    $('.modal').modal('hide');
-                    window.location.reload();
+                }).success(function (response) {
+                    if (response.status === false)
+                        $scope.amountExpErrorMessage = response.message;
+                    else {
+                        $('.modal').modal('hide');
+                        window.location.reload();
+                    }
                 }).error(function () {
                     alert("unsuccess");
                 });
