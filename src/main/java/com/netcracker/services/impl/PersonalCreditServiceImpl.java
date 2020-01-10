@@ -199,6 +199,11 @@ public class PersonalCreditServiceImpl implements PersonalCreditService {
         return creditAccountDao.getPersonalCreditById(id);
     }
 
+    @Override
+    public boolean doesCreditWithNameNotExist(BigInteger debitId, String name) {
+        return creditAccountDao.getCreditsIdByNamePers(debitId, name).isEmpty();
+    }
+
     private void addPayment(AbstractCreditAccount creditAccount, AbstractDebitAccount debitAccount, double amount) {
         double actualDebitAmount = debitAccount.getAmount();
         debitAccountDao.updateAmountOfPersonalAccount(debitAccount.getId(), actualDebitAmount - amount);

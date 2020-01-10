@@ -114,6 +114,16 @@ public class CreditAccountDaoImpl implements CreditAccountDao {
         jdbcTemplate.update(UPDATE_COMMODITY, creditAccount.isCommodity(), creditId);
     }
 
+    @Override
+    public Collection<BigInteger> getCreditsIdByNamePers(BigInteger idDebit, String name) {
+        return jdbcTemplate.query(GET_CREDIT_ID_BY_NAME_PERS, new Object[]{idDebit, name}, (resultSet, i) -> null);
+    }
+
+    @Override
+    public Collection<FamilyCreditAccount> getCreditsIdByNameFam(BigInteger idDebit, String name) {
+        return jdbcTemplate.query(GET_CREDIT_ID_BY_NAME_FAM, new Object[]{idDebit, name}, (resultSet, i) -> null);
+    }
+
     private void createCredit(BigInteger id, AbstractCreditAccount creditAccount, String queryCredit, String queryDebt) {
         String creditName = id + creditAccount.getName();
         jdbcTemplate.update(queryCredit,

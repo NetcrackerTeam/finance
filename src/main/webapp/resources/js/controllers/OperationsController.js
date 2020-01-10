@@ -7,24 +7,33 @@ app.controller("AddIncomeControllerPersonal", function ($scope, $http) {
         amount: 0.00,
         categoryIncome: "DEFAULT",
         checkbox: false,
-        dayOfMonth: "1"
+        dayOfMonth: 1
     };
+    var pat = /^[0-9]+(\.[0-9][0-9]?)?$/;
 
     $scope.submitOperation = function () {
         var method = "POST";
-
         $scope.form.checkbox ? url = 'debitPersonal/createAutoIncome' : url = 'debitPersonal/income';
 
-        $http({
-            method: method,
-            url: url,
-            data: angular.toJson($scope.form),
-            headers: {
-                'Content-Type': 'application/json'
+        if ($scope.form.categoryIncome === 'DEFAULT') {
+            $scope.categoryCheck = 'Choose a category';
+        } else {
+
+            if (!pat.test($scope.form.amount)) {
+                $scope.amountIncErrorMessage = 'Invalid amount';
+            } else {
+
+                $http({
+                    method: method,
+                    url: url,
+                    data: angular.toJson($scope.form),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                $('.modal').modal('hide');
             }
-        }).error(function () {
-            alert("unsuccess")
-        });
+        }
     };
 });
 
@@ -35,24 +44,36 @@ app.controller("AddExpenseControllerPersonal", function ($scope, $http) {
         checkbox: false,
         dayOfMonth: "1"
     };
+    var pat = /^[0-9]+(\.[0-9][0-9]?)?$/;
 
     $scope.submitOperation = function () {
         var method = "POST";
         $scope.form.checkbox ? url = 'debitPersonal/createAutoExpense' : url = 'debitPersonal/expense';
 
-        $http({
-            method: method,
-            url: url,
-            data: angular.toJson($scope.form),
-            headers : {
-                'Content-Type' : 'application/json'
+        if ($scope.form.categoryExpense === 'DEFAULT') {
+            $scope.categoryCheckExp = 'Choose a category';
+        } else {
+
+            if (!pat.test($scope.form.amount)) {
+                $scope.amountExpErrorMessage = 'Invalid amount';
+            } else {
+
+                $http({
+                    method: method,
+                    url: url,
+                    data: angular.toJson($scope.form),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                $('.modal').modal('hide');
             }
-        }).error(function () {
-            alert("unsuccess")
-        });
+        }
+
 
     };
-});
+})
+;
 
 
 //Family Auto Operations and Simple Operations
@@ -84,7 +105,6 @@ app.controller("AddIncomeControllerFamily", function ($scope, $http) {
 });
 
 
-
 app.controller("AddExpenseControllerFamily", function ($scope, $http) {
     $scope.form = {
         amountExp: 0.00,
@@ -102,8 +122,8 @@ app.controller("AddExpenseControllerFamily", function ($scope, $http) {
             method: method,
             url: url,
             data: angular.toJson($scope.form),
-            headers : {
-                'Content-Type' : 'application/json'
+            headers: {
+                'Content-Type': 'application/json'
             }
         }).error(function () {
             alert("unsuccess")

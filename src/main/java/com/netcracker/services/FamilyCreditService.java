@@ -26,4 +26,6 @@ public interface FamilyCreditService {
     Collection<CreditOperation> getAllFamilyCreditOperations(BigInteger id);
 
     FamilyCreditAccount getFamilyCreditAccount(BigInteger id);
+
+    boolean doesCreditWithNameNotExist(BigInteger debitId, String name);
 }

@@ -109,6 +109,10 @@ public interface CreditAccountDao {
 
     void updateCreditAccountByCreditId(AbstractCreditAccount creditAccount, BigInteger creditId);
 
+    Collection<BigInteger> getCreditsIdByNamePers(BigInteger idDebit, String name);
+
+    Collection<FamilyCreditAccount> getCreditsIdByNameFam(BigInteger idDebit, String name);
+
     String UPDATE_NAME = "UPDATE ATTRIBUTES NAME_AT SET NAME_AT.VALUE = ? WHERE NAME_AT.OBJECT_ID = ? AND NAME_AT.ATTR_ID = 30";
     String UPDATE_AMOUNT = "UPDATE ATTRIBUTES AMOUNT_AT SET AMOUNT_AT.VALUE = ? WHERE AMOUNT_AT.OBJECT_ID = ? AND AMOUNT_AT.ATTR_ID = 31";
     String UPDATE_PAID_AMOUNT = "UPDATE ATTRIBUTES PAID_AT SET PAID_AT.VALUE = ? WHERE PAID_AT.OBJECT_ID = ? AND PAID_AT.ATTR_ID = 32";
@@ -205,7 +209,7 @@ public interface CreditAccountDao {
             "         ATTRIBUTES PAID_AT, ATTRIBUTES DATE_AT, ATTRIBUTES RATE_AT, ATTRIBUTES DATE_TO_AT,  ATTRIBUTES MONTH_DAY_AT,\n" +
             "         ATTRIBUTES IS_PAID_AT, OBJREFERENCE DEBT_REF, OBJECTS DEBT, ATTRIBUTES DEBT_DATE_FROM_AT,\n" +
             "         ATTRIBUTES DEBT_DATE_TO_AT, ATTRIBUTES DEBT_AMOUNT_AT, ATTRIBUTES COM_AT\n" +
-            "     WHERE REFER_ACC.REFERENCE = ?/*FAMILY DEBIT ACCOUNT ID*/\n" +
+            "     WHERE REFER_ACC.REFERENCE = ?/*PERSONAL DEBIT ACCOUNT ID*/\n" +
             "        AND CRED.OBJECT_ID = REFER_ACC.OBJECT_ID\n" +
             "        AND REFER_ACC.REFERENCE = ACC_OBJ.OBJECT_ID\n" +
             "        AND CRED.OBJECT_ID = NAME_AT.OBJECT_ID\n" +
@@ -237,7 +241,7 @@ public interface CreditAccountDao {
             "        AND DEBT_DATE_TO_AT.ATTR_ID = 45/*DEBT DATE TO ATTRIBUTE*/\n" +
             "        AND DEBT_AMOUNT_AT.ATTR_ID = 46/*DEBT AMOUNT ATTRIBUTE*/\n" +
             "        AND COM_AT.ATTR_ID = 72\n" +
-            "   ORDER BY DATE_CR";
+            "   ORDER BY DATE_CR DESC";
 
     String SELECT_FAMILY_CREDITS_BY_ACCOUNT_QUERY = "SELECT CRED.OBJECT_ID CREDIT_ID, NAME_AT.VALUE NAME, AMOUNT_AT.VALUE AMOUNT,\n" +
             " PAID_AT.VALUE PAID, DATE_AT.DATE_VALUE DATE_CR,  RATE_AT.VALUE CREDIT_RATE,\n" +
@@ -280,7 +284,7 @@ public interface CreditAccountDao {
             "       AND DEBT_DATE_TO_AT.ATTR_ID = 45/*DEBT DATE TO ATTRIBUTE*/\n" +
             "       AND DEBT_AMOUNT_AT.ATTR_ID = 46/*DEBT AMOUNT ATTRIBUTE*/\n" +
             "        AND COM_AT.ATTR_ID = 72\n" +
-            "   ORDER BY DATE_CR";
+            "   ORDER BY DATE_CR DESC";
 
     String UPDATE_CREDIT_PAYMENT_QUERY = "UPDATE ATTRIBUTES\n" +
             "    SET VALUE = ?/*NEW CREDIT PAYED AMOUNT */\n" +
@@ -417,4 +421,26 @@ public interface CreditAccountDao {
     String GET_PERSONAL_DEBIT_ID_BY_CREDIT_ID = "SELECT * FROM OBJREFERENCE WHERE OBJECT_ID = ? AND ATTR_ID = 27";
 
     String GET_FAMILY_DEBIT_ID_BY_CREDIT_ID = "SELECT * FROM OBJREFERENCE WHERE OBJECT_ID = ? AND ATTR_ID = 28";
+
+    String GET_CREDIT_ID_BY_NAME_PERS = "SELECT CRED.OBJECT_ID CREDIT_ID\n" +
+            "FROM OBJECTS CRED, OBJREFERENCE REFER_ACC, OBJECTS ACC_OBJ, ATTRIBUTES NAME_AT\n" +
+            "WHERE REFER_ACC.REFERENCE = ?/*FAMILY DEBIT ACCOUNT ID*/\n" +
+            "  AND CRED.OBJECT_ID = REFER_ACC.OBJECT_ID\n" +
+            "  AND REFER_ACC.REFERENCE = ACC_OBJ.OBJECT_ID\n" +
+            "  AND CRED.OBJECT_ID = NAME_AT.OBJECT_ID\n" +
+            "  AND NAME_AT.VALUE = ?\n" +
+            "  AND ACC_OBJ.OBJECT_TYPE_ID = 2/*PERSONAL ACCOUNT OBJECT TYPE ID*/\n" +
+            "  AND REFER_ACC.ATTR_ID = 27/*ATTRIBUTE RELATION PER CREDIT AND DEBIT ACC*/\n" +
+            "  AND NAME_AT.ATTR_ID = 30/*NAME ATTRIBUTE*/";
+
+    String GET_CREDIT_ID_BY_NAME_FAM = "SELECT CRED.OBJECT_ID CREDIT_ID\n" +
+            "FROM OBJECTS CRED, OBJREFERENCE REFER_ACC, OBJECTS ACC_OBJ, ATTRIBUTES NAME_AT\n" +
+            "WHERE REFER_ACC.REFERENCE = ?/*FAMILY DEBIT ACCOUNT ID*/\n" +
+            "  AND CRED.OBJECT_ID = REFER_ACC.OBJECT_ID\n" +
+            "  AND REFER_ACC.REFERENCE = ACC_OBJ.OBJECT_ID\n" +
+            "  AND CRED.OBJECT_ID = NAME_AT.OBJECT_ID\n" +
+            "  AND NAME_AT.VALUE = ?\n" +
+            "  AND ACC_OBJ.OBJECT_TYPE_ID = 13/*FAMILY ACCOUNT OBJECT TYPE ID*/\n" +
+            "  AND REFER_ACC.ATTR_ID = 28/*ATTRIBUTE RELATION FAM CREDIT AND DEBIT ACC*/\n" +
+            "  AND NAME_AT.ATTR_ID = 30";
 }

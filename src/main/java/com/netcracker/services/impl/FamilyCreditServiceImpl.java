@@ -140,6 +140,11 @@ public class FamilyCreditServiceImpl implements FamilyCreditService {
         return creditAccountDao.getFamilyCreditById(id);
     }
 
+    @Override
+    public boolean doesCreditWithNameNotExist(BigInteger debitId, String name) {
+        return creditAccountDao.getCreditsIdByNameFam(debitId, name).isEmpty();
+    }
+
     private void changeDebt(Debt debt) {
         changeDebtDateTo(debt.getDebtId(), debt.getDateTo());
         changeDebtDateFrom(debt.getDebtId(), debt.getDateFrom());

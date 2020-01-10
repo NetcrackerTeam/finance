@@ -301,16 +301,18 @@
                     <h4 align="center" class="modal-title" id="passwordModalLabel"> Create credit</h4>
                 </div>
                 <div class="modal-body">
-                    <div class="form-group" ng-class="{ 'has-error' : addCreditForm.nameCr.$invalid &amp;&amp; !addCreditForm.nameCr.$pristine}">
+                    <div class="form-group" ng-class="{ 'has-error' : (addCreditForm.nameCr.$invalid || nameErrorMessage) &amp;&amp; !addCreditForm.nameCr.$pristine}">
                         <label for="creditName">Credit name:</label>
                         <input type="text" name="nameCr" class="item-input-wrapper form-control" maxlength="60" placeholder="Enter name" ng-model="credit.name" id="creditName" required="required" ng-minlength="3"/>
                         <p ng-show="addCreditForm.nameCr.$error.minlength" class="help-block">Credit name is too short</p>
+                        <p ng-if="nameErrorMessage" class="help-block">{{ nameErrorMessage }}</p>
                     </div>
 
-                    <div class="form-group" ng-class="{ 'has-error' : (addCreditForm.am.$error.max || addCreditForm.am.$error.min) &amp;&amp; !addCreditForm.am.$pristine}">
+                    <div class="form-group" ng-class="{ 'has-error' : (addCreditForm.am.$error.max || addCreditForm.am.$error.min || amountErrorMessage) &amp;&amp; !addCreditForm.am.$pristine }">
                         <label for="creditAmount">Credit amount:</label>
-                        <input type="number" name="am" min="1" max="10000000" id="creditAmount" step="0.01" class="item-input-wrapper form-control" placeholder="Enter amount" ng-model="credit.amount" required="required"/>
-                        <p ng-show="(addCreditForm.am.$error.max || addCreditForm.am.$error.min) &amp;&amp; !addCreditForm.am.$pristine" class="help-block">Amount can be from 1 to 10000000</p>
+                        <input type="number" name="am" min="1" max="100000000" step="0.01" id="creditAmount" class="item-input-wrapper form-control" placeholder="Enter amount" ng-model="credit.amount" required="required"/>
+                        <p ng-show="(addCreditForm.am.$error.max || addCreditForm.am.$error.min) &amp;&amp; !addCreditForm.am.$pristine" class="help-block">Amount can be from 1 to 100000000</p>
+                        <p ng-if="amountErrorMessage &amp;&amp; !(addCreditForm.am.$error.max &amp;&amp; addCreditForm.am.$error.min)" class="help-block">{{ amountErrorMessage }}</p>
                     </div>
 
                     <div class="form-group">
@@ -321,17 +323,6 @@
                                 <span class="glyphicon glyphicon-th"></span>
                             </div>
                         </div>
-                        <script type="text/javascript">
-                            $(function() {
-                                $('#datetimepicker').datepicker({
-                                    calendarWeeks: true,
-                                    todayHighlight: true,
-                                    autoclose: true,
-                                    zIndexOffset: '2001',
-                                    format: 'yyyy/mm/dd'
-                                }).datepicker("setDate", new Date());;
-                            });
-                        </script>
                         <p ng-show="addCreditForm.dt.$invalid &amp;&amp; !addCreditForm.dt.$pristine" class="help-block">Required field</p>
                     </div>
 
@@ -361,7 +352,7 @@
                 <div class="modal-footer">
                     <button style="float: left" ng-disabled="addCreditForm.$invalid" type="button" class="btn btn-info" ng-click="checkPersonalCredit()">Check credit possibility</button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary" ng-disabled="addCreditForm.$invalid" onclick="$('.modal').modal('hide')">Save changes</button>
+                    <button type="submit" class="btn btn-primary" ng-disabled="addCreditForm.$invalid" >Save changes</button>
                 </div>
             </div>
         </div>
@@ -429,14 +420,16 @@
                 <h4 align="center" class="modal-title" id="incomeOpLabel"> New income </h4>
             </div>
             <div class="modal-body" ng-controller="AddIncomeControllerPersonal">
-                <form >
-                    <div class="form-group">
+                <form name="addIncomeForm"  novalidate="novalidate">
+                    <div class="form-group" ng-class="{ 'has-error' : (addIncomeForm.incomeAmount.$error.max || addIncomeForm.incomeAmount.$error.min || amountIncErrorMessage) &amp;&amp; !addIncomeForm.incomeAmount.$pristine}">
                         <label for="income">Amount:</label>
-                        <input type="number" ng-model="form.amount" class="form-control" step=".01" id="income" placeholder="Enter amount" name="incomeAmount" min = "1" max ="100000"/>
+                        <input type="number" ng-model="form.amount" class="form-control" step=".01" id="income" placeholder="Enter amount" name="incomeAmount" min = "1" max ="100000000" required="required"/>
+                        <p ng-show="(addIncomeForm.incomeAmount.$error.max || addIncomeForm.incomeAmount.$error.min) &amp;&amp; !addIncomeForm.incomeAmount.$pristine" class="help-block">Amount can be from 1 to 100000000</p>
+                        <p ng-if="amountIncErrorMessage &amp;&amp; !(addCreditForm.incomeAmount.$error.max &amp;&amp; addCreditForm.incomeAmount.$error.min)" class="help-block">{{ amountIncErrorMessage }}</p>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" ng-class="{ 'has-error' : categoryCheck}">
                         <label for="categoryInc">Income category:</label>
-                        <select class="form-control" ng-model="form.categoryIncome" id="categoryInc">
+                        <select class="form-control"   ng-model="form.categoryIncome" id="categoryInc" required="required">
                             <option disabled="disabled" selected="selected">DEFAULT</option>
                             <option>SALARY</option>
                             <option>AWARD</option>
@@ -444,18 +437,20 @@
                             <option>GIFTS</option>
                             <option>OTHER</option>
                         </select>
+                        <p ng-if="categoryCheck" class="help-block">{{ categoryCheck }}</p>
                     </div>
                     <div class="form-group">
-                        <input type="checkbox" ng-model="form.checkbox" /> Make operation repetitive each month
+                        <input type="checkbox" ng-model="form.checkbox" name="ch"/> Make operation repetitive each month
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" ng-class="{ 'has-error' : (addIncomeForm.pd.$error.max || addIncomeForm.pd.$error.min) &amp;&amp; !addIncomeForm.pd.$pristine &amp;&amp; form.checkbox}">
                         <label for="income">Day of month:</label>
-                        <input type="number" ng-disabled="!form.checkbox" ng-model="form.dayOfMonth" class="form-control" placeholder="Enter day of month" name="expenseAccount"/>
+                        <input type="number" ng-disabled="!form.checkbox" ng-model="form.dayOfMonth" min="1" max="28" class="form-control" name="pd"/>
+                        <p ng-show="(addIncomeForm.pd.$error.max || addIncomeForm.pd.$error.min) &amp;&amp; !addIncomeForm.pd.$pristine &amp;&amp; addIncomeForm.ch" class="help-block">Payment day can be from 1 to 28</p>
                     </div>
 
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal" >Close</button>
-                        <button type="submit" value="Submit" class="btn btn-primary" ng-disabled = "!form.amount || !form.categoryIncome" onclick="$('.modal').modal('hide')" ng-click="submitOperation()" >Add </button>
+                        <button type="submit" value="Submit" class="btn btn-primary" ng-disabled = "!form.amount"  ng-click="submitOperation()" >Add </button>
                     </div>
                 </form>
 
@@ -473,14 +468,16 @@
                 <h4 align="center" class="modal-title" id="expenseOpLabel"> New expense </h4>
             </div>
             <div class="modal-body" ng-controller="AddExpenseControllerPersonal">
-                <form>
-                    <div class="form-group">
+                <form name="addExpenseForm"  novalidate="novalidate">
+                    <div class="form-group" ng-class="{ 'has-error' : (addExpenseForm.expenseAmount.$error.max || addExpenseForm.expenseAmount.$error.min || amountExpErrorMessage) &amp;&amp; !addExpenseForm.expenseAmount.$pristine}">
                         <label for="amountExp">Amount:</label>
-                        <input type="number" ng-model="form.amount" class="form-control" step=".01" id="amountExp" placeholder="Enter amount" name="expenseAmount"/>
+                        <input type="number" ng-model="form.amount" min = "1" max ="100000000" class="form-control" step=".01" id="amountExp" placeholder="Enter amount" name="expenseAmount"  required="required"/>
+                        <p ng-show="(addExpenseForm.expenseAmount.$error.max || addExpenseForm.expenseAmount.$error.min) &amp;&amp; !addExpenseForm.expenseAmount.$pristine" class="help-block">Amount can be from 1 to 100000000</p>
+                        <p ng-if="amountExpErrorMessage &amp;&amp; !(addCreditForm.expenseAmount.$error.max &amp;&amp; addCreditForm.expenseAmount.$error.min)" class="help-block">{{ amountExpErrorMessage }}</p>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" ng-class="{ 'has-error' : categoryCheckExp}">
                         <label for="categoryExp">Expense category:</label>
-                        <select class="form-control" ng-model="form.categoryExpense" id="categoryExp">
+                        <select class="form-control" ng-model="form.categoryExpense" id="categoryExp" required="required">
                             <option disabled="disabled" selected="selected">DEFAULT</option>
                             <option>FOOD</option>
                             <option>RESIDENTIAL</option>
@@ -496,18 +493,20 @@
                             <option>CREDIT</option>
                             <option>OTHER</option>
                         </select>
+                        <p ng-if="categoryCheck" class="help-block">{{ categoryCheckExp }}</p>
                     </div>
                     <div class="form-group">
-                        <input type="checkbox" ng-model="form.checkbox" /> Make operation repetitive each month
+                        <input type="checkbox" ng-model="form.checkbox" name="chEx"/> Make operation repetitive each month
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" ng-class="{ 'has-error' : (addExpenseForm.pd.$error.max || addExpenseForm.pd.$error.min) &amp;&amp; !addExpenseForm.pd.$pristine &amp;&amp; form.checkbox}">
                         <label for="income">Day of month:</label>
-                        <input type="number" ng-disabled="!form.checkbox" ng-model="form.dayOfMonth" class="form-control" placeholder="Enter day of month" name="incomeAmount"/>
+                        <input type="number" ng-disabled="!form.checkbox" ng-model="form.dayOfMonth" min="1" max="28" class="form-control" placeholder="Enter day of month" name="pd"/>
+                        <p ng-show="(addExpenseForm.pd.$error.max || addExpenseForm.pd.$error.min) &amp;&amp; !addExpenseForm.pd.$pristine &amp;&amp; addExpenseForm.chEx" class="help-block">Payment day can be from 1 to 28</p>
                     </div>
 
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal" >Close</button>
-                        <button type="submit" value="Submit" class="btn btn-primary" ng-disabled = "!form.amount || !form.categoryExpense" onclick="$('.modal').modal('hide');" ng-click="submitOperation()" >Add </button>
+                        <button type="submit" value="Submit" class="btn btn-primary" ng-disabled = "!form.amount" ng-click="submitOperation()" >Add </button>
                     </div>
                 </form>
             </div>

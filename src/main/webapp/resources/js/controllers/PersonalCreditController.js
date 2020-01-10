@@ -3,7 +3,7 @@
  * PersonalCreditController
  * @constructor
  */
-var PersonalCreditController = function($scope, $http, $rootScope) {
+var PersonalCreditController = function ($scope, $http, $rootScope) {
     $scope.check = null;
     $scope.credits = [];
     $scope.credit = {
@@ -19,7 +19,7 @@ var PersonalCreditController = function($scope, $http, $rootScope) {
     };
 
     var getPersonalCreditsURL = 'personalCredit/getPersonalCredits';
-    $scope.fetchCreditList = function(){
+    $scope.fetchCreditList = function () {
         $http.get(getPersonalCreditsURL).success(function (creditList) {
             $scope.personalCredit = creditList;
         });
@@ -27,37 +27,47 @@ var PersonalCreditController = function($scope, $http, $rootScope) {
     $scope.fetchCreditList();
 
     var addCreditURL = 'personalCredit/addCredit';
-    $scope.addPersonalCredit = function() {
-        // var dateFrom = $("#datetimepicker").datepicker('getDate');
+    $scope.addPersonalCredit = function () {
         var dateFromStr = $("#datetimepicker").val();
         var dateFrom = moment(dateFromStr).format('YYYY-MM-DD');
         var duration = $scope.duration;
-        var dateTo = moment(dateFrom).clone().add(duration, 'months').format('YYYY-MM-DD') ;
-        // var dateTo = new Date(dateFrom.setMonth(dateFrom.getMonth() + 5))
-        $scope.credit.date = {
-            year: moment(dateFrom).year() + 1,
-            month: moment(dateFrom).month() + 1,
-            day: moment(dateFrom).date() + 1
-        };
-        $scope.credit.dateTo = {
-            year: moment(dateTo).year() + 1,
-            month: moment(dateTo).month() + 1,
-            day: moment(dateTo).date() + 1
-        };
-        $http({
-            method: 'POST',
-            url: addCreditURL,
-            data: angular.toJson($scope.credit),
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        }).then(success, error);
+        var dateTo = moment(dateFrom).clone().add(duration, 'months').format('YYYY-MM-DD');
+        var pat = /^[0-9]+(\.[0-9][0-9]?)?$/;
+        if (!pat.test($scope.credit.amount) ){
+            $scope.amountErrorMessage = 'Invalid amount';
+        } else {
+            $scope.amountErrorMessage = "";
+            $scope.credit.date = {
+                year: moment(dateFrom).year() + 1,
+                month: moment(dateFrom).month() + 1,
+                day: moment(dateFrom).date() + 1
+            };
+            $scope.credit.dateTo = {
+                year: moment(dateTo).year() + 1,
+                month: moment(dateTo).month() + 1,
+                day: moment(dateTo).date() + 1
+            };
+
+            $http({
+                method: 'POST',
+                url: addCreditURL,
+                data: angular.toJson($scope.credit),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).success(function (response) {
+                if (response.status === false)
+                    $scope.nameErrorMessage = response.message;
+                if (response.status === true)
+                    $('.modal').modal('hide');
+            });
+        }
     };
 
     function refreshPageData() {
         $http({
-            method : 'GET',
-            url : getPersonalCreditsURL
+            method: 'GET',
+            url: getPersonalCreditsURL
         }).then(function successCallback(response) {
             $scope.credits = response.data.credits;
         }, function errorCallback(response) {
@@ -89,7 +99,7 @@ var PersonalCreditController = function($scope, $http, $rootScope) {
         $scope.credit.isCommodity = "false";
     }
 
-    $scope.isNotEmptyCredit = function(credit) {
+    $scope.isNotEmptyCredit = function (credit) {
         return !credit.name || !credit.date || !credit.amount || !credit.dateTo ||
             !credit.monthDay || credit.dateTo <= credit.date;
     };
@@ -97,7 +107,7 @@ var PersonalCreditController = function($scope, $http, $rootScope) {
     var slider = document.getElementById("creditRateRange");
     var output = document.getElementById("creditRateText");
     output.innerHTML = 'Credit rate: ' + slider.value + ' %';
-    slider.oninput = function() {
+    slider.oninput = function () {
         output.innerHTML = 'Credit rate: ' + this.value + ' %';
     };
 
@@ -152,7 +162,7 @@ var PersonalCreditController = function($scope, $http, $rootScope) {
     var sliderEdit = document.getElementById("creditRateRangeEdit");
     var outputEdit = document.getElementById("creditRateTextEdit");
     outputEdit.innerHTML = 'Credit rate: ' + sliderEdit.value + ' %';
-    sliderEdit.oninput = function() {
+    sliderEdit.oninput = function () {
         outputEdit.innerHTML = 'Credit rate: ' + this.value + ' %';
     };
 
@@ -181,7 +191,7 @@ var PersonalCreditController = function($scope, $http, $rootScope) {
             headers : {
                 'Content-Type' : 'application/json'
             }
-        }).then( success, error );
+        }).then(success, error);
     };
 
     $scope.checkPersonalCredit = function () {
@@ -191,17 +201,16 @@ var PersonalCreditController = function($scope, $http, $rootScope) {
             method: 'GET',
             url: 'prediction/personal/checkCredit',
             params: {duration: $scope.duration, amount: $scope.credit.amount},
-        }).
-        then(function(response) {
+        }).then(function (response) {
             console.log(response);
-            if(response.status === 200){
+            if (response.status === 200) {
                 $scope.check = "You will be able to pay for this credit ";
-            } else if(response.status === 202) {
+            } else if (response.status === 202) {
                 $scope.check = "No enough data to predict";
             } else {
                 $scope.check = "You will not be able to pay for this credit";
             }
-        }, function() {
+        }, function () {
             $scope.check = "error";
         });
     };

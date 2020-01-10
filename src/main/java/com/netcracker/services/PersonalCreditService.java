@@ -25,4 +25,6 @@ public interface PersonalCreditService {
     Collection<CreditOperation> getAllPersonalCreditOperations(BigInteger id);
 
     PersonalCreditAccount getPersonalCreditAccount(BigInteger id);
+
+    boolean doesCreditWithNameNotExist(BigInteger debitId, String name);
 }
