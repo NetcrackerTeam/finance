@@ -17,10 +17,26 @@ var FamilyCreditController = function($scope, $http, $rootScope) {
         isCommodity: "false"
     };
 
+    $scope.summAmount = 0;
+    $scope.summPaidAmount = 0;
+    $scope.remainsToPay = 0;
+    $scope.totalCredits = 0;
+    $scope.allDebt = 0;
+    $scope.totalPaidCredits = 0;
     var getFamilyCreditsURL = 'familyCredit/getFamilyCredits';
     $scope.fetchCreditList = function(){
         $http.get(getFamilyCreditsURL).success(function (creditList) {
             $scope.familyCredit = creditList;
+            for (var i = 0; i < $scope.familyCredit.length; i++) {
+                $scope.summAmount += $scope.familyCredit[i].amount;
+                $scope.summPaidAmount += $scope.familyCredit[i].paidAmount;
+                $scope.allDebt += $scope.familyCredit[i].debt.amountDebt;
+                if ($scope.familyCredit[i].isPaid === "YES") $scope.totalPaidCredits++;
+                if ($scope.familyCredit[i].isCommodity === false) $scope.familyCredit[i].isCommodity = "NO";
+                if ($scope.familyCredit[i].isCommodity === true) $scope.familyCredit[i].isCommodity = "YES";
+            }
+            $scope.totalCredits = $scope.familyCredit.length;
+            $scope.remainsToPay = $scope.summAmount - $scope.summPaidAmount;
         });
     };
     $scope.fetchCreditList();
@@ -124,8 +140,8 @@ var FamilyCreditController = function($scope, $http, $rootScope) {
     $scope.fetchFamilyCredit = function(){
         $http.get('familyCredit/getFamilyCredit').success(function (response) {
             $rootScope.personalCreditor = response;
-            if ($rootScope.personalCreditor.isCommodity === false) $rootScope.personalCreditor.isCommodity = "no";
-            if ($rootScope.personalCreditor.isCommodity === true) $rootScope.personalCreditor.isCommodity = "yes";
+            if ($rootScope.personalCreditor.isCommodity === false) $rootScope.personalCreditor.isCommodity = "NO";
+            if ($rootScope.personalCreditor.isCommodity === true) $rootScope.personalCreditor.isCommodity = "YES";
         });
     };
 

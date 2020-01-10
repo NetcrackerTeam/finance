@@ -18,11 +18,26 @@ var PersonalCreditController = function ($scope, $http, $rootScope) {
         isCommodity: "false"
     };
 
-
+    $scope.summAmount = 0;
+    $scope.summPaidAmount = 0;
+    $scope.remainsToPay = 0;
+    $scope.totalCredits = 0;
+    $scope.allDebt = 0;
+    $scope.totalPaidCredits = 0;
     var getPersonalCreditsURL = 'personalCredit/getPersonalCredits';
     $scope.fetchCreditList = function () {
         $http.get(getPersonalCreditsURL).success(function (creditList) {
             $scope.personalCredit = creditList;
+            for (var i = 0; i < $scope.personalCredit.length; i++) {
+                $scope.summAmount += $scope.personalCredit[i].amount;
+                $scope.summPaidAmount += $scope.personalCredit[i].paidAmount;
+                $scope.allDebt += $scope.personalCredit[i].debt.amountDebt;
+                if ($scope.personalCredit[i].isPaid === "YES") $scope.totalPaidCredits++;
+                if ($scope.personalCredit[i].isCommodity === false) $scope.personalCredit[i].isCommodity = "NO";
+                if ($scope.personalCredit[i].isCommodity === true) $scope.personalCredit[i].isCommodity = "YES";
+            }
+            $scope.totalCredits = $scope.personalCredit.length;
+            $scope.remainsToPay = $scope.summAmount - $scope.summPaidAmount;
         });
     };
     $scope.fetchCreditList();
@@ -215,7 +230,5 @@ var PersonalCreditController = function ($scope, $http, $rootScope) {
             $scope.check = "error";
         });
     };
-
-
 
 };
