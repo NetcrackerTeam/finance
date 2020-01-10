@@ -84,12 +84,14 @@ public class EmailServiceSenderImpl implements EmailServiceSender {
     public void monthReport(String emailTo, String userName, Path path) throws MessagingException {
         ObjectsCheckUtils.isNotNull(emailTo);
         String monthReportMess = MessageFormat.format(templatesDao.sendMassageById(EmailServiceTemplateCategory.MONTH_REPORT.getId()), userName);
+        String subject = MessageFormat.format(templatesDao.sendMassageById(EmailServiceTemplateCategory.MONTH_REPORT.getId()), userName);
 
         MimeMessage message = mailSender.createMimeMessage();
         boolean multipart = true;
         MimeMessageHelper helper = new MimeMessageHelper(message, multipart);
         helper.setTo(RIGHT_BRACKET + emailTo + LEFT_BRACKET);
-        helper.setSubject(templatesDao.sendMassageById(EmailServiceTemplateCategory.MONTH_REPORT.getId()));
+
+        helper.setSubject(subject);
         helper.setText(monthReportMess);
         FileSystemResource monthReport = new FileSystemResource(path);
         helper.addAttachment(FILE_NAME, monthReport);

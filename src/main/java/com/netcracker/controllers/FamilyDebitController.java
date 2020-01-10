@@ -15,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.nio.file.Files;
@@ -49,6 +50,8 @@ public class FamilyDebitController {
     PersonalDebitService personalDebitService;
     @Autowired
     PersonalDebitAccountDao personalDebitAccountDao;
+    @Autowired
+    EmailServiceSender emailServiceSender;
     @Autowired
     OperationDao operationDao;
 
@@ -248,17 +251,32 @@ public class FamilyDebitController {
 
         Path path = monthReportService.convertToTxt(monthReport);
 
-        String report = null;
+        String report = monthReportService.convertToString(path);
 
-        try{
-            report = new String(Files.readAllBytes(path.getFileName()));
-        } catch (IOException e) {
+        return report;
+    }
 
+    @RequestMapping(value = "/sendReport", method = RequestMethod.GET)
+    public void sendReport(
+            Principal principal,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateFrom,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateTo
+    ) {
+        BigInteger accountId = getAccountByPrincipal(principal);
+
+        MonthReport monthReport = monthReportService.getMonthFamilyReport(accountId, dateFrom, dateTo);
+
+        Path path;
+        try {
+            path = monthReportService.convertToTxt(monthReport);
+            emailServiceSender.monthReport(principal.getName(), userDao.getUserByEmail(principal.getName()).getName(), path);
+            logger.debug("Email have been sent");
+        } catch (MessagingException e) {
+            logger.debug("Email can't be sent, messaging exception", e);
         }
 
         logger.debug("Month report is ready");
 
-        return report;
     }
 
     @RequestMapping(value = "/info", method = RequestMethod.GET)

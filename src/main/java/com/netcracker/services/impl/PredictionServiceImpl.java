@@ -1,9 +1,15 @@
 package com.netcracker.services.impl;
 
+import com.netcracker.dao.FamilyAccountDebitDao;
 import com.netcracker.dao.MonthReportDao;
+import com.netcracker.dao.PersonalDebitAccountDao;
+import com.netcracker.dao.UserDao;
 import com.netcracker.exception.PredictionException;
 import com.netcracker.models.MonthReport;
+import com.netcracker.models.PersonalDebitAccount;
+import com.netcracker.services.PersonalCreditService;
 import com.netcracker.services.PredictionService;
+import com.netcracker.services.utils.CreditUtils;
 import com.netcracker.services.utils.DateUtils;
 import com.netcracker.services.utils.ExceptionMessages;
 import com.netcracker.services.utils.ObjectsCheckUtils;
@@ -25,6 +31,13 @@ public class PredictionServiceImpl implements PredictionService {
 
     @Autowired
     MonthReportDao monthReportDao;
+    @Autowired
+    PersonalDebitAccountDao personalDebitAccountDao;
+    @Autowired
+    FamilyAccountDebitDao familyAccountDebitDao;
+    @Autowired
+    UserDao userDao;
+
 
     @Override
     public boolean predictPersonalCreditPossibility(BigInteger id, int duration, double amount) {
@@ -36,7 +49,15 @@ public class PredictionServiceImpl implements PredictionService {
         double potentialIncome = predictPersonalMonthIncome(id, duration);
         double potentialExpense = predictPersonalMonthExpense(id, duration);
 
-        return calculateDifference(potentialIncome, potentialExpense, amount);
+        boolean result;
+        try {
+            result = calculateDifference(potentialIncome, potentialExpense, amount);
+        } catch (PredictionException e) {
+            logger.error(e.getMessage(), e);
+            double currentAmount = personalDebitAccountDao.getPersonalAccountById(userDao.getUserById(id).getPersonalDebitAccount()).getAmount();
+            return compareCreditAndAmount(currentAmount, amount);
+        }
+        return result;
     }
 
     @Override
@@ -49,7 +70,15 @@ public class PredictionServiceImpl implements PredictionService {
         double potentialIncome = predictFamilyMonthIncome(id, duration);
         double potentialExpense = predictFamilyMonthExpense(id, duration);
 
-        return calculateDifference(potentialIncome, potentialExpense, amount);
+        boolean result;
+        try {
+            result = calculateDifference(potentialIncome, potentialExpense, amount);
+        } catch (PredictionException e) {
+            logger.error(e.getMessage(), e);
+            double currentAmount = familyAccountDebitDao.getFamilyAccountById(userDao.getUserById(id).getFamilyDebitAccount()).getAmount();
+            return compareCreditAndAmount(currentAmount, amount);
+        }
+        return result;
     }
 
     @Override
@@ -58,7 +87,7 @@ public class PredictionServiceImpl implements PredictionService {
 
         Collection<MonthReport> reports = monthReportDao.getAllPersonalReports(id);
 
-        return calculateAverage(reports) * duration;
+        return calculateAverage(reports, reports.size(), INCOME) * duration;
     }
 
     @Override
@@ -67,7 +96,7 @@ public class PredictionServiceImpl implements PredictionService {
 
         Collection<MonthReport> reports = monthReportDao.getAllPersonalReports(id);
 
-        return calculateAverage(reports) * duration;
+        return calculateAverage(reports, reports.size(), EXPENSE) * duration;
     }
 
     @Override
@@ -76,7 +105,7 @@ public class PredictionServiceImpl implements PredictionService {
 
         Collection<MonthReport> reports = monthReportDao.getAllFamilyReports(id);
 
-        return calculateAverage(reports) * duration;
+        return calculateAverage(reports, reports.size(), INCOME) * duration;
     }
 
     @Override
@@ -85,7 +114,7 @@ public class PredictionServiceImpl implements PredictionService {
 
         Collection<MonthReport> reports = monthReportDao.getAllFamilyReports(id);
 
-        return calculateAverage(reports) * duration;
+        return calculateAverage(reports, reports.size(), EXPENSE) * duration;
     }
 
     private boolean calculateDifference(double income, double expense, double amount) {
@@ -94,13 +123,16 @@ public class PredictionServiceImpl implements PredictionService {
         return amount < difference;
     }
 
-    private double calculateAverage(Collection<MonthReport> reports) {
-        int numberOfReports = reports.size();
+    private double calculateAverage(Collection<MonthReport> reports, int size, String type) {
 
         double average = 0;
 
-        if (numberOfReports > 2) {
-            average = reports.stream().mapToDouble(MonthReport::getTotalIncome).average().orElse(Double.NaN);
+        if (size > 2) {
+            if(INCOME.equals(type)) {
+                average = reports.stream().mapToDouble(MonthReport::getTotalIncome).average().orElse(Double.NaN);
+            } else if (EXPENSE.equals(type)){
+                average = reports.stream().mapToDouble(MonthReport::getTotalExpense).average().orElse(Double.NaN);
+            }
         } else {
             PredictionException e = new PredictionException(ExceptionMessages.ERROR_MESSAGE_PREDICTION);
             logger.error(e.getMessage(), e);
@@ -108,4 +140,13 @@ public class PredictionServiceImpl implements PredictionService {
         }
         return average;
     }
+
+    private boolean compareCreditAndAmount(double currentAmount, double amount) {
+        if(currentAmount > amount ) {
+            return true;
+        } else {
+            throw new PredictionException(ExceptionMessages.ERROR_MESSAGE_PREDICTION);
+        }
+    }
+
 }

@@ -2,8 +2,11 @@ app.controller("RepCtrl", ['$scope', '$http', '$templateCache',
     function($scope, $http, $templateCache) {
 
     $scope.getReportURL = 'debitPersonal/report';
+    $scope.sendReportURL = 'debitPersonal/sendReport';
 
     $scope.month = null;
+
+    $scope.sendCondition = null;
 
     $scope.getReport = function() {
 
@@ -23,8 +26,6 @@ app.controller("RepCtrl", ['$scope', '$http', '$templateCache',
 
         $scope.dateTo = $scope.parsedYear + "-" + $scope.parsedMonth + "-01";
 
-        alert($scope.dateFrom);
-        alert($scope.dateTo);
 
         $http({
             method: 'GET',
@@ -35,11 +36,23 @@ app.controller("RepCtrl", ['$scope', '$http', '$templateCache',
             }
         }).then(function(response) {
             $scope.content = response.data;
+            $scope.sendCondition = 'ok';
         }, function(response) {
             $scope.content = 'No information about this report';
             $scope.status = response.status;
         });
     };
+
+        $scope.sendReport = function() {
+            $http({
+                method: 'GET',
+                url: $scope.sendReportURL,
+                params: {
+                    dateFrom: $scope.dateFrom,
+                    dateTo: $scope.dateTo
+                }
+            });
+        };
 
 
     $scope.showContent = function($fileContent){
@@ -56,6 +69,9 @@ app.controller("RepFamilyCtrl", ['$scope', '$http', '$templateCache',
     function($scope, $http, $templateCache) {
 
         $scope.getReportURL = 'debitFamily/report';
+        $scope.sendReportURL = 'debitFamily/sendReport';
+
+        $scope.sendCondition = null;
 
         $scope.month = null;
 
@@ -86,9 +102,21 @@ app.controller("RepFamilyCtrl", ['$scope', '$http', '$templateCache',
                 }
             }).then(function(response) {
                 $scope.content = response.data;
+                $scope.sendCondition = 'ok';
             }, function(response) {
                 $scope.content = 'No information about this report';
                 $scope.status = response.status;
+            });
+        };
+
+        $scope.sendReport = function() {
+            $http({
+                method: 'GET',
+                url: $scope.sendReportURL,
+                params: {
+                    dateFrom: $scope.dateFrom,
+                    dateTo: $scope.dateTo
+                }
             });
         };
 

@@ -11,6 +11,7 @@ import com.netcracker.services.utils.ExceptionMessages;
 import com.netcracker.services.utils.ObjectsCheckUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedWriter;
@@ -230,4 +231,15 @@ public class MonthReportServiceImpl implements MonthReportService {
         return monthReport;
     }
 
+    @Override
+    public String convertToString(Path path) {
+        String report = null;
+        try {
+            report = new String(Files.readAllBytes(path.getFileName()));
+        } catch (IOException e) {
+            logger.error(e.getMessage(), e);
+            throw new MonthReportException(e.getMessage());
+        }
+        return report;
+    }
 }

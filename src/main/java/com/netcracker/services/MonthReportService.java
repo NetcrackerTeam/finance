@@ -20,6 +20,8 @@ public interface MonthReportService {
 
     MonthReport getMonthFamilyReport(BigInteger id, LocalDate dateFrom, LocalDate dateTo);
 
+    String convertToString(Path path);
+
     String MONTH_REPORT_FROM = "Month report from ";
     String MONTH_REPORT_TO = " to ";
     String DOTTED_LINE = "-------------------------------------------\n";

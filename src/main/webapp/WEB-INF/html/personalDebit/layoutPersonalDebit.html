@@ -380,7 +380,7 @@
                             <option>Expense</option>
                         </select>
                     </div>
-                    <p><input type="number" min="1" class="form-control" placeholder="Enter duration" ng-model="predict.duration"/></p>
+                    <p><input type="number" min="1" class="form-control" placeholder="Enter duration" max ="120" ng-model="predict.duration"/></p>
                     <pre>Predict sum: {{status}}</pre>
                 </div>
                 <div class="modal-footer">
@@ -405,11 +405,11 @@
                     <label for="category">Choose month to get report</label>
                     <p><input type="month" class="form-control" id="month" ng-model="month"/></p>
                     <!--                    <input type="file" on-read-file="showContent($fileContent)" />-->
-                    <pre>{{content}}</pre>
+                    <pre class="content">{{content}}</pre>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal" ng-click="clear()">Close</button>
-                    <button type="submit" class="btn btn-primary" ng-disabled="!month" ng-click="sendReport()">Send report</button>
+                    <button type="submit" class="btn btn-primary" ng-disabled="!sendCondition" data-dismiss="modal" ng-click="sendReport()">Send report</button>
                     <button type="submit" class="btn btn-primary" ng-disabled="!month" ng-click="getReport()">Get report</button>
                 </div>
             </div>

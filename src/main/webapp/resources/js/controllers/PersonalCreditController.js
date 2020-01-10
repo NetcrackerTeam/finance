@@ -18,6 +18,7 @@ var PersonalCreditController = function ($scope, $http, $rootScope) {
         isCommodity: "false"
     };
 
+
     var getPersonalCreditsURL = 'personalCredit/getPersonalCredits';
     $scope.fetchCreditList = function () {
         $http.get(getPersonalCreditsURL).success(function (creditList) {
@@ -200,7 +201,7 @@ var PersonalCreditController = function ($scope, $http, $rootScope) {
         $http({
             method: 'GET',
             url: 'prediction/personal/checkCredit',
-            params: {duration: $scope.duration, amount: $scope.credit.amount},
+            params: {duration: $scope.duration, amount: $scope.credit.amount}
         }).then(function (response) {
             console.log(response);
             if (response.status === 200) {
@@ -214,5 +215,7 @@ var PersonalCreditController = function ($scope, $http, $rootScope) {
             $scope.check = "error";
         });
     };
+
+
 
 };
