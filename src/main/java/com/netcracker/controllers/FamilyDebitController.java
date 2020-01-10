@@ -1,10 +1,7 @@
 package com.netcracker.controllers;
 
 
-import com.netcracker.dao.AutoOperationDao;
-import com.netcracker.dao.CreditAccountDao;
-import com.netcracker.dao.PersonalDebitAccountDao;
-import com.netcracker.dao.UserDao;
+import com.netcracker.dao.*;
 import com.netcracker.exception.NullObjectException;
 import com.netcracker.models.*;
 import com.netcracker.models.enums.CategoryIncome;
@@ -52,6 +49,8 @@ public class FamilyDebitController {
     PersonalDebitService personalDebitService;
     @Autowired
     PersonalDebitAccountDao personalDebitAccountDao;
+    @Autowired
+    OperationDao operationDao;
 
     private static final Logger logger = Logger.getLogger(FamilyDebitController.class);
 
@@ -180,11 +179,11 @@ public class FamilyDebitController {
 
     @RequestMapping(value = "/history", method = RequestMethod.GET)
     @ResponseBody
-    public Collection<AbstractAccountOperation> getHistory(Principal principal,
-                                                           @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+    public List<HistoryOperation> getHistory(Principal principal,
+                                                           @RequestParam("period") int period) {
         logger.debug("getHistory Personal");
         BigInteger debitId = getAccountByPrincipal(principal);
-        return familyDebitService.getHistory(debitId, date);
+        return operationDao.getFamilyHistoryByAccountId(debitId, period);
     }
 
     @RequestMapping(value = "/autoOperationHistory", method = RequestMethod.GET)

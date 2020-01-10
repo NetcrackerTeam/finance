@@ -1,7 +1,13 @@
 var FamilyDebitController = function ($scope, $http, $rootScope) {
 
-    $scope.fetchFamilyHistory = function (date) {
-        $http.get('debitFamily/history', {params: {date: date.toLocaleString()}}).success(function (historyList) {
+    $scope.fetchFamilyPeriodHistory = function()  {
+        var period = document.getElementById("familyHistoryPeriod");
+        $scope.periodS = period.options[period.selectedIndex].value;
+        $scope.fetchFamilyHistory();
+    };
+
+    $scope.fetchFamilyHistory = function () {
+        $http.get('debitFamily/history', {params: {period: $scope.periodS}}).success(function (historyList) {
             $scope.familyHistory = historyList;
         });
     };
@@ -96,8 +102,9 @@ var FamilyDebitController = function ($scope, $http, $rootScope) {
         });
     };
 
+    $scope.fetchFamilyPeriodHistory();
     $scope.fetchParticipants();
     $scope.fetchPersonalAutoOperationHistory();
-    $scope.fetchFamilyHistory('2007-01-11');
+    $scope.fetchFamilyHistory();
     $scope.fetchFamilyInfo();
 };

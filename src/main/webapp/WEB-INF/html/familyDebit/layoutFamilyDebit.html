@@ -32,6 +32,12 @@
         </div>
         <!-- Card Body -->
         <div class="card-body" ng-controller="FamilyDebitController">
+            <select class="form-control" id = "familyHistoryPeriod" ng-click="fetchFamilyPeriodHistory()">
+                <option selected="selected" value="1">Last operations</option>
+                <option value="1">Month</option>
+                <option value="6">Half year</option>
+                <option value="12">Year</option>
+            </select>
             <div class="row">
                 <div class="col-md-12">
                     <div class="panel panel-default">
