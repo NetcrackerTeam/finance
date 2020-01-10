@@ -142,7 +142,7 @@ public interface CreditAccountDao {
             "        AND CRED.OBJECT_ID = MONTH_DAY_AT.OBJECT_ID\n" +
             "        AND CRED.OBJECT_ID = IS_PAID_AT.OBJECT_ID\n" +
             "        AND CRED.OBJECT_ID = COM_AT.OBJECT_ID\n" +
-            "        AND CRED.OBJECT_ID = DEBT_REF.REFERENCE\n" +
+            "        AND CRED.OBJECT_ID = DEBT_REF.REFERENCE AND DEBT_REF.ATTR_ID = 43\n" +
             "        AND DEBT_REF.OBJECT_ID = DEBT.OBJECT_ID\n" +
             "        AND DEBT.OBJECT_ID = DEBT_DATE_FROM_AT.OBJECT_ID\n" +
             "        AND DEBT.OBJECT_ID = DEBT_DATE_TO_AT.OBJECT_ID\n" +
@@ -180,7 +180,7 @@ public interface CreditAccountDao {
             "        AND CRED.OBJECT_ID = MONTH_DAY_AT.OBJECT_ID\n" +
             "        AND CRED.OBJECT_ID = IS_PAID_AT.OBJECT_ID\n" +
             "        AND CRED.OBJECT_ID = COM_AT.OBJECT_ID\n" +
-            "        AND CRED.OBJECT_ID = DEBT_REF.REFERENCE\n" +
+            "        AND CRED.OBJECT_ID = DEBT_REF.REFERENCE AND DEBT_REF.ATTR_ID = 42\n" +
             "        AND DEBT_REF.OBJECT_ID = DEBT.OBJECT_ID\n" +
             "        AND DEBT.OBJECT_ID = DEBT_DATE_FROM_AT.OBJECT_ID\n" +
             "        AND DEBT.OBJECT_ID = DEBT_DATE_TO_AT.OBJECT_ID\n" +
@@ -221,7 +221,7 @@ public interface CreditAccountDao {
             "        AND CRED.OBJECT_ID = MONTH_DAY_AT.OBJECT_ID\n" +
             "        AND CRED.OBJECT_ID = IS_PAID_AT.OBJECT_ID\n" +
             "        AND CRED.OBJECT_ID = COM_AT.OBJECT_ID\n" +
-            "        AND CRED.OBJECT_ID = DEBT_REF.REFERENCE\n" +
+            "        AND CRED.OBJECT_ID = DEBT_REF.REFERENCE AND DEBT_REF.ATTR_ID = 42\n" +
             "        AND DEBT_REF.OBJECT_ID = DEBT.OBJECT_ID\n" +
             "        AND DEBT.OBJECT_ID = DEBT_DATE_FROM_AT.OBJECT_ID\n" +
             "        AND DEBT.OBJECT_ID = DEBT_DATE_TO_AT.OBJECT_ID\n" +
@@ -264,7 +264,7 @@ public interface CreditAccountDao {
             "       AND CRED.OBJECT_ID = MONTH_DAY_AT.OBJECT_ID\n" +
             "       AND CRED.OBJECT_ID = IS_PAID_AT.OBJECT_ID\n" +
             "        AND CRED.OBJECT_ID = COM_AT.OBJECT_ID\n" +
-            "       AND CRED.OBJECT_ID = DEBT_REF.REFERENCE\n" +
+            "       AND CRED.OBJECT_ID = DEBT_REF.REFERENCE AND DEBT_REF.ATTR_ID = 43\n" +
             "       AND DEBT_REF.OBJECT_ID = DEBT.OBJECT_ID\n" +
             "       AND DEBT.OBJECT_ID = DEBT_DATE_FROM_AT.OBJECT_ID\n" +
             "       AND DEBT.OBJECT_ID = DEBT_DATE_TO_AT.OBJECT_ID\n" +
@@ -329,7 +329,7 @@ public interface CreditAccountDao {
             "    INTO ATTRIBUTES(ATTR_ID, OBJECT_ID) VALUES(44, OBJECTS_ID_S.CURRVAL) /*DEBT DATE FROM ATTRIBUTE*/\n" +
             "    INTO ATTRIBUTES(ATTR_ID, OBJECT_ID) VALUES(45, OBJECTS_ID_S.CURRVAL) /*DEBT DATE TO ATTRIBUTE*/\n" +
             "    INTO ATTRIBUTES(ATTR_ID, OBJECT_ID, VALUE) VALUES(46, OBJECTS_ID_S.CURRVAL, '0') /*DEBT AMOUNT ATTRIBUTE*/\n" +
-            "    INTO OBJREFERENCE (ATTR_ID,OBJECT_ID,REFERENCE) VALUES (43,OBJECTS_ID_S.CURRVAL, ?) /*REFERENCE BETWEEN DEBT AND CREDIT ACC*/\n" +
+            "    INTO OBJREFERENCE (ATTR_ID,OBJECT_ID,REFERENCE) VALUES (42,OBJECTS_ID_S.CURRVAL, ?) /*REFERENCE BETWEEN DEBT AND CREDIT ACC*/\n" +
             "    SELECT * FROM DUAL";
 
     String CREATE_FAMILY_DEBT_BY_CREDIT_ID = "INSERT ALL\n" +
@@ -337,10 +337,10 @@ public interface CreditAccountDao {
             "    INTO ATTRIBUTES(ATTR_ID, OBJECT_ID) VALUES(44, OBJECTS_ID_S.CURRVAL) /*DEBT DATE FROM ATTRIBUTE*/\n" +
             "    INTO ATTRIBUTES(ATTR_ID, OBJECT_ID) VALUES(45, OBJECTS_ID_S.CURRVAL) /*DEBT DATE TO ATTRIBUTE*/\n" +
             "    INTO ATTRIBUTES(ATTR_ID, OBJECT_ID, VALUE) VALUES(46, OBJECTS_ID_S.CURRVAL, '0') /*DEBT AMOUNT ATTRIBUTE*/\n" +
-            "    INTO OBJREFERENCE (ATTR_ID,OBJECT_ID,REFERENCE) VALUES (42,OBJECTS_ID_S.CURRVAL, ?) /*REFERENCE BETWEEN DEBT AND CREDIT ACC*/\n" +
+            "    INTO OBJREFERENCE (ATTR_ID,OBJECT_ID,REFERENCE) VALUES (43,OBJECTS_ID_S.CURRVAL, ?) /*REFERENCE BETWEEN DEBT AND CREDIT ACC*/\n" +
             "    SELECT * FROM DUAL";
 
-    String SELECT_CREDIT_ID_BY_NAME = "SELECT OBJECT_ID FROM OBJECTS WHERE NAME = ?";
+    String SELECT_CREDIT_ID_BY_NAME = "SELECT OBJECT_ID FROM OBJECTS WHERE NAME = ? AND (OBJECT_TYPE_ID = 6 OR OBJECT_TYPE_ID = 17)";
 
     String SELECT_ALL_CREDIT_FAMILY_ID_BY_MONTH_DAY = "SELECT CRED.OBJECT_ID CREDIT_ID, NAME_AT.VALUE NAME, AMOUNT_AT.VALUE AMOUNT,\n" +
             "  PAID_AT.VALUE PAID, DATE_AT.DATE_VALUE DATE_CR,  RATE_AT.VALUE CREDIT_RATE,\n" +
@@ -360,7 +360,7 @@ public interface CreditAccountDao {
             "        AND CRED.OBJECT_ID = MONTH_DAY_AT.OBJECT_ID\n" +
             "        AND CRED.OBJECT_ID = IS_PAID_AT.OBJECT_ID\n" +
             "        AND CRED.OBJECT_ID = COM_AT.OBJECT_ID\n" +
-            "        AND CRED.OBJECT_ID = DEBT_REF.REFERENCE\n" +
+            "        AND CRED.OBJECT_ID = DEBT_REF.REFERENCE AND DEBT_REF.ATTR_ID = 43\n" +
             "        AND DEBT_REF.OBJECT_ID = DEBT.OBJECT_ID\n" +
             "        AND DEBT.OBJECT_ID = DEBT_DATE_FROM_AT.OBJECT_ID\n" +
             "        AND DEBT.OBJECT_ID = DEBT_DATE_TO_AT.OBJECT_ID\n" +
@@ -398,7 +398,7 @@ public interface CreditAccountDao {
             "        AND CRED.OBJECT_ID = MONTH_DAY_AT.OBJECT_ID\n" +
             "        AND CRED.OBJECT_ID = IS_PAID_AT.OBJECT_ID\n" +
             "        AND CRED.OBJECT_ID = COM_AT.OBJECT_ID\n" +
-            "        AND CRED.OBJECT_ID = DEBT_REF.REFERENCE\n" +
+            "        AND CRED.OBJECT_ID = DEBT_REF.REFERENCE AND DEBT_REF.ATTR_ID = 42\n" +
             "        AND DEBT_REF.OBJECT_ID = DEBT.OBJECT_ID\n" +
             "        AND DEBT.OBJECT_ID = DEBT_DATE_FROM_AT.OBJECT_ID\n" +
             "        AND DEBT.OBJECT_ID = DEBT_DATE_TO_AT.OBJECT_ID\n" +

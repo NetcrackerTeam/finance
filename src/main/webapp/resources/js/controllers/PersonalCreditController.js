@@ -54,14 +54,14 @@ var PersonalCreditController = function ($scope, $http, $rootScope) {
         } else {
             $scope.amountErrorMessage = "";
             $scope.credit.date = {
-                year: moment(dateFrom).year() + 1,
+                year: moment(dateFrom).year(),
                 month: moment(dateFrom).month() + 1,
-                day: moment(dateFrom).date() + 1
+                day: moment(dateFrom).date()
             };
             $scope.credit.dateTo = {
-                year: moment(dateTo).year() + 1,
+                year: moment(dateTo).year(),
                 month: moment(dateTo).month() + 1,
-                day: moment(dateTo).date() + 1
+                day: moment(dateTo).date()
             };
 
             $http({
