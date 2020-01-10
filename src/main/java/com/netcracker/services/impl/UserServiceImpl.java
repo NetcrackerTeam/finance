@@ -1,7 +1,10 @@
 package com.netcracker.services.impl;
 
+import com.netcracker.dao.CreditAccountDao;
+import com.netcracker.dao.FamilyAccountDebitDao;
+import com.netcracker.dao.PersonalDebitAccountDao;
 import com.netcracker.dao.UserDao;
-import com.netcracker.models.User;
+import com.netcracker.models.*;
 import com.netcracker.models.enums.UserStatusActive;
 import com.netcracker.services.UserService;
 import org.apache.log4j.Logger;
@@ -10,11 +13,22 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
+import java.util.Collection;
+import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
     @Autowired
     private UserDao userDao;
+    @Autowired
+    private
+    PersonalDebitAccountDao personalDebitAccountDao;
+    @Autowired
+    FamilyAccountDebitDao familyAccountDebitDao;
+    @Autowired
+    private CreditAccountDao creditAccountDao;
+    private final double ZERO = 0;
+
     private static final org.apache.log4j.Logger logger = Logger.getLogger(UserServiceImpl.class);
 
     @Override
@@ -68,4 +82,47 @@ public class UserServiceImpl implements UserService {
         }
         return null;
     }
+
+    @Override
+    public boolean deactivateUser(User user) {
+        PersonalDebitAccount personalDebitAccount = personalDebitAccountDao.
+                getPersonalAccountById(user.getPersonalDebitAccount());
+
+        FamilyDebitAccount familyDebitAccount = familyAccountDebitDao.
+                getFamilyAccountById(user.getFamilyDebitAccount());
+
+        boolean checkDebitAccount = (ZERO == personalDebitAccount.getAmount()) && (ZERO == familyDebitAccount.getAmount());
+        if (checkDebitAccount && allFamilyCreditNull(user) && allPersonalCreditNull(user)) {
+            return true;
+        }
+        return false;
+    }
+
+
+    public boolean allPersonalCreditNull(User user) {
+        List<PersonalCreditAccount> allPersonalCredit = creditAccountDao.getAllPersonalCreditsByAccountId(user.getId());
+        for (PersonalCreditAccount personalCredit : allPersonalCredit) {
+            if (personalCredit==null)
+                logger.debug("familyCredit null" );
+            boolean checkCredit = (ZERO == personalCredit.getAmount());
+            if (!checkCredit) {
+                return false;
+            }
+        }
+        return false;
+    }
+
+    public boolean allFamilyCreditNull(User user) {
+        List<FamilyCreditAccount> allFamilyCredit = creditAccountDao.getAllFamilyCreditsByAccountId(user.getId());
+        for (FamilyCreditAccount familyCredit : allFamilyCredit) {
+            if (familyCredit==null)
+                logger.debug("familyCredit null" );
+            boolean checkCredit = (ZERO == familyCredit.getAmount());
+            if (!checkCredit) {
+                return false;
+            }
+        }
+        return false;
+    }
+
 }

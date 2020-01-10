@@ -14,7 +14,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigInteger;
 import java.util.Map;
 
 @Controller
@@ -41,11 +40,10 @@ public class UserController {
         boolean equalsEmail = (userDao.getNumberOfUsersByEmail(newEmail) > 0);
         if (!validOldEmail) {
             model.addAttribute("errorOldEmail", MessageController.INVALID_OLD_EMAIL);
-        } else if ((validateEmail) && (!equalsEmail) ) {
+        } else if ((validateEmail) && (!equalsEmail)) {
             userDao.updateEmail(userTemp.getId(), newEmail);
             model.addAttribute("successUpdatePass", MessageController.SUCCESS_UPDATE_EMAIL);
-        }
-        else {
+        } else {
             model.addAttribute("errorValidateNewEmail or email already exist", MessageController.ERROR_VALIDATE_EMAIL);
         }
         return URL.INDEX;
@@ -67,16 +65,18 @@ public class UserController {
             userDao.updateUserPasswordById(userTemp.getId(), passwordEncode);
             model.addAttribute("successUpdatePass", MessageController.SUCCESS_UPDATE_PASSWORD);
         }
-        return URL.INDEX ;
+        return URL.INDEX;
 
     }
 
     @RequestMapping(value = "/deactivate", method = RequestMethod.GET)
-    @ResponseBody
-    public String deactivateUser(@RequestParam(value = "userId") BigInteger id) {
-        logger.debug("updateUserStatus by user id " + id);
-        userDao.updateUserStatus(id, UserStatusActive.NO.getId());
-        return URL.INDEX ;
+    public String deactivateUser() {
+        User userTemp = userDao.getUserByEmail(getCurrentUsername());
+        logger.debug("updateUserStatus by user id " + userTemp.getId());
+        if (userService.deactivateUser(userTemp)) {
+            userDao.updateUserStatus(userTemp.getId(), UserStatusActive.NO.getId());
+        }
+        return URL.INDEX;
     }
 
     public static String getCurrentUsername() {

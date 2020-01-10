@@ -46,11 +46,32 @@
             <li><a href="#/familyAccount"><b>Family account</b></a></li>
             <li><a href="#passwordModal" data-toggle="modal" th:color="transparent">Change password</a></li>
             <li><a href="#emailModal" data-toggle="modal">Change email</a></li>
-            <li><a href="#/">Delete account</a></li>
+            <li><a href="#deactivate" data-toggle="modal">Deactivate user </a></li>
             <li><a href="#logout" data-toggle="modal">Log out</a></li>
         </ul>
     </nav>
 </header>
+
+
+<form th:action="@{/deactivate}" method="get" action="">
+    <div class="modal fade" id="deactivate" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 align="center" class="modal-title">Log out</h4>
+                </div>
+                <div class="modal-body">
+                    <h5>Are you sure you want to deactivate user?</h5>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Yes</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
 
 <form th:action="@{/logout}" method="get" action="">
     <div class="modal fade" id="logout" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
@@ -113,7 +134,6 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <span th:if="${errorOldEmail != null}" th:text="${errorOldEmail}"> </span>
                     <input class="form-control" placeholder="Old Email" type="text" name="oldEmail"/>
                     <p></p>
                     <input class="form-control" placeholder="New Email" type="text" name="newEmail"/>

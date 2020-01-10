@@ -14,4 +14,6 @@ public interface UserService {
     boolean confirmUserPassword(String password, String confirmPassword);
 
     String encodePassword(String password);
+
+    boolean deactivateUser(User user);
 }
