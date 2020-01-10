@@ -30,6 +30,11 @@ app.controller("AddIncomeControllerPersonal", function ($scope, $http) {
                     headers: {
                         'Content-Type': 'application/json'
                     }
+                }).success(function (response) {
+                    alert(response.message);
+                    window.location.reload();
+                }).error(function () {
+                    alert("unsuccess");
                 });
                 $('.modal').modal('hide');
             }
@@ -65,6 +70,11 @@ app.controller("AddExpenseControllerPersonal", function ($scope, $http) {
                     headers: {
                         'Content-Type': 'application/json'
                     }
+                }).success(function (response) {
+                    alert(response.message);
+                    window.location.reload();
+                }).error(function () {
+                    alert("unsuccess");
                 });
                 $('.modal').modal('hide');
             }
@@ -85,23 +95,37 @@ app.controller("AddIncomeControllerFamily", function ($scope, $http) {
         checkbox: false,
         dayOfMonth: "1"
     };
+    var pat = /^[0-9]+(\.[0-9][0-9]?)?$/;
 
     $scope.submitOperation = function () {
         method = "POST";
 
         $scope.form.checkbox ? url = 'debitFamily/createAutoIncome' : url = 'debitFamily/income';
 
-        $http({
-            method: method,
-            url: url,
-            data: angular.toJson($scope.form),
-            headers: {
-                'Content-Type': 'application/json'
+        if ($scope.form.categoryIncome === 'DEFAULT') {
+            $scope.categoryCheck = 'Choose a category';
+        } else {
+
+            if (!pat.test($scope.form.amount)) {
+                $scope.amountIncErrorMessage = 'Invalid amount';
+            } else {
+                $http({
+                    method: method,
+                    url: url,
+                    data: angular.toJson($scope.form),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }).success(function (response) {
+                    alert(response.message);
+                    window.location.reload();
+                }).error(function () {
+                    alert("unsuccess");
+                });
+                $('.modal').modal('hide');
             }
-        }).error(function () {
-            alert("unsuccess")
-        });
-    };
+        }
+    }
 });
 
 
@@ -112,22 +136,36 @@ app.controller("AddExpenseControllerFamily", function ($scope, $http) {
         checkbox: false,
         dayOfMonth: "1"
     };
+    var pat = /^[0-9]+(\.[0-9][0-9]?)?$/;
 
     $scope.submitOperation = function () {
         method = "POST";
         url = 'debitFamily/expense';
         $scope.form.checkbox ? url = 'debitFamily/createAutoExpense' : url = 'debitFamily/expense';
 
-        $http({
-            method: method,
-            url: url,
-            data: angular.toJson($scope.form),
-            headers: {
-                'Content-Type': 'application/json'
+        if ($scope.form.categoryIncome === 'DEFAULT') {
+            $scope.categoryCheck = 'Choose a category';
+        } else {
+
+            if (!pat.test($scope.form.amount)) {
+                $scope.amountIncErrorMessage = 'Invalid amount';
+            } else {
+                $http({
+                    method: method,
+                    url: url,
+                    data: angular.toJson($scope.form),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }).success(function (response) {
+                    alert(response.message);
+                    window.location.reload();
+                }).error(function () {
+                    alert("unsuccess");
+                });
+                $('.modal').modal('hide');
             }
-        }).error(function () {
-            alert("unsuccess")
-        });
+        }
     };
 });
 

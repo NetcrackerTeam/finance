@@ -72,7 +72,7 @@ public class FamilyDebitServiceImpl implements FamilyDebitService {
         if (!statusUser) {
             logger.error("The user " + userId + " is unActive");
             throw new UserException(ExceptionMessages.ERROR_MESSAGE_USER_STATUS, tempUser);
-        } else if (FamilyAccountStatusActive.NO.equals(statusFamily)) {
+        } else if (FamilyAccountStatusActive.NO == statusFamily) {
             logger.error("The family account " + accountId + " is unActive");
             throw new FamilyDebitAccountException(ExceptionMessages.ERROR_MESSAGE_FAMILY_STATUS, familyDebitAccount);
         } else if (userFamilyAccount) {

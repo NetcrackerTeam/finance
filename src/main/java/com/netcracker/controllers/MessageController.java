@@ -1,6 +1,9 @@
 package com.netcracker.controllers;
 
 public interface MessageController {
+    double MIN = 1;
+    double MAX = 100000000;
+
     //UserController
     String SUCCESS_UPDATE_PASSWORD = "Password was updated successfully ";
     String SUCCESS_UPDATE_EMAIL = "Email was updated successfully";
@@ -27,6 +30,8 @@ public interface MessageController {
     String DELETE_AUTO_INCOME_FAM = "Deleting successfully autoIncomeOperation ";
     String DELETE_AUTO_EXPENSE_FAM = "Deleting successfully autoExpenseOperation ";
     String ADD_FAMILY_ACCOUNT = "Added new family account for user ";
+    String FAMILY_ACCOUNT_HAS_NOT_PAID_CREDITS = "The family account has debt or debts";
+    String INCORRECT_AMOUNT = "The amount is incorrect";
 
     String debugStartMessage = " method start with parameters: ";
     //     CreditsControllers
@@ -46,5 +51,4 @@ public interface MessageController {
     String LATIN_CHAR = "The password must contain only Latin characters.";
     String LATIN_LETTERS = "The username must contain only Latin letters without other characters.";
     String NAME_SHORT = "The username must contain at least 2 characters.";
-
 }

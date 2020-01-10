@@ -54,12 +54,17 @@ public class PersonalDebitController {
     @ResponseBody
     public Status addIncomePersonal(@RequestBody AccountIncome income,
                                     Principal principal) {
-        BigInteger accountId = getAccountByPrincipal(principal);
-        operationService.createPersonalOperationIncome(accountId, income.getAmount(), LocalDate.now(), income.getCategoryIncome());
-        PersonalDebitAccount debit = personalDebitAccountDao.getPersonalAccountById(accountId);
-        double amount = debit.getAmount() + income.getAmount();
-        personalDebitAccountDao.updateAmountOfPersonalAccount(accountId, amount);
-        return new Status(true, MessageController.ADD_INCOME);
+        double incomeAmount = income.getAmount();
+        if(incomeAmount <= MessageController.MIN || incomeAmount >= MessageController.MAX){
+            return new Status(true, MessageController.INCORRECT_AMOUNT);
+        } else {
+            BigInteger accountId = getAccountByPrincipal(principal);
+            operationService.createPersonalOperationIncome(accountId, income.getAmount(), LocalDate.now(), income.getCategoryIncome());
+            PersonalDebitAccount debit = personalDebitAccountDao.getPersonalAccountById(accountId);
+            double amount = debit.getAmount() + income.getAmount();
+            personalDebitAccountDao.updateAmountOfPersonalAccount(accountId, amount);
+            return new Status(true, MessageController.ADD_INCOME);
+        }
     }
 
     @RequestMapping(value = "/expense", method = RequestMethod.POST)

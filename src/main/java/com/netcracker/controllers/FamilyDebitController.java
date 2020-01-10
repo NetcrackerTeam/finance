@@ -4,7 +4,7 @@ package com.netcracker.controllers;
 import com.netcracker.dao.*;
 import com.netcracker.exception.NullObjectException;
 import com.netcracker.models.*;
-import com.netcracker.models.enums.CategoryIncome;
+import com.netcracker.models.enums.CreditStatusPaid;
 import com.netcracker.models.enums.FamilyAccountStatusActive;
 import com.netcracker.models.enums.UserRole;
 import com.netcracker.services.*;
@@ -54,6 +54,8 @@ public class FamilyDebitController {
     EmailServiceSender emailServiceSender;
     @Autowired
     OperationDao operationDao;
+    @Autowired
+    private FamilyCreditService familyCreditService;
 
     private static final Logger logger = Logger.getLogger(FamilyDebitController.class);
 
@@ -90,9 +92,17 @@ public class FamilyDebitController {
         try {
             User user = userDao.getParticipantByEmail(principal.getName());
             FamilyDebitAccount familyDebitAccount = familyDebitService.getFamilyDebitAccount(user.getFamilyDebitAccount());
-            logger.debug("deactivate family account " + familyDebitAccount.getId() + " user id " + user.getId());
+            BigInteger userId = user.getId();
+            BigInteger accountId = familyDebitAccount.getId();
+            logger.debug("deactivate family account " + accountId + " user id " + userId);
+            Collection<FamilyCreditAccount> credits = familyCreditService.getFamilyCredits(accountId);
+            for (FamilyCreditAccount credit : credits){
+                if(CreditStatusPaid.NO == credit.isPaid()){
+                    return new Status(true, MessageController.FAMILY_ACCOUNT_HAS_NOT_PAID_CREDITS);
+                }
+            }
             double familyAmount = familyDebitAccount.getAmount();
-            familyDebitService.deleteFamilyDebitAccount(familyDebitAccount.getId(), user.getId());
+            familyDebitService.deleteFamilyDebitAccount(accountId, userId);
             PersonalDebitAccount personalDebitAccount = personalDebitService.getPersonalDebitAccount(user.getPersonalDebitAccount());
             double amount = personalDebitAccount.getAmount() + familyAmount;
             personalDebitAccountDao.updateAmountOfPersonalAccount(personalDebitAccount.getId(), amount);
@@ -160,13 +170,18 @@ public class FamilyDebitController {
     @ResponseBody
     public Status addIncomeFamily(@RequestBody AccountIncome income,
                                          Principal principal) {
-        BigInteger accountId = getAccountByPrincipal(principal);
-        BigInteger userId = getUserIdByPrincipal(principal);
-        operationService.createFamilyOperationIncome(userId, accountId, income.getAmount(), LocalDate.now(), income.getCategoryIncome());
-        FamilyDebitAccount familyDebitAccount = familyDebitService.getFamilyDebitAccount(accountId);
-        double amount = familyDebitAccount.getAmount() + income.getAmount();
-        familyDebitService.updateAmountOfFamilyAccount(accountId, amount);
-        return new Status(true, MessageController.ADD_INCOME);
+        double incomeAmount = income.getAmount();
+        if(incomeAmount <= MessageController.MIN || incomeAmount >= MessageController.MAX){
+            return new Status(true, MessageController.INCORRECT_AMOUNT);
+        } else {
+            BigInteger accountId = getAccountByPrincipal(principal);
+            BigInteger userId = getUserIdByPrincipal(principal);
+            operationService.createFamilyOperationIncome(userId, accountId, income.getAmount(), LocalDate.now(), income.getCategoryIncome());
+            FamilyDebitAccount familyDebitAccount = familyDebitService.getFamilyDebitAccount(accountId);
+            double amount = familyDebitAccount.getAmount() + income.getAmount();
+            familyDebitService.updateAmountOfFamilyAccount(accountId, amount);
+            return new Status(true, MessageController.ADD_INCOME);
+        }
     }
 
     @RequestMapping(value = "/addExpenseFamily/{afterDate}", method = RequestMethod.POST)
