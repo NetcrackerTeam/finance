@@ -40,6 +40,13 @@ var app = angular.module('AngularSpringApp', []).run(function ($rootScope, $http
 
     $rootScope.fetchUserId();
 
+    $rootScope.fetchUserInfo = function() {
+        $http.get('getUserInfo').success(function (userInfo) {
+            $rootScope.userInfo = userInfo;
+        });
+    };
+
+    $rootScope.fetchUserInfo();
 
     $rootScope.fetchUserDebitId = function(){
         $http.get('getUserDebitId').success(function (response) {
@@ -78,7 +85,6 @@ app.config(['$routeProvider', function ($routeProvider) {
         templateUrl: 'debitPersonal/getReportView',
         controller: PersonalDebitController
     });
-
     $routeProvider.when('/familyAccount', {
         templateUrl: 'debitFamily/layout',
         controller: FamilyDebitController
