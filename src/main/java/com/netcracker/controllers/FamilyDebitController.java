@@ -118,9 +118,9 @@ public class FamilyDebitController {
     public Status addUserToAccount(@RequestParam(value = "userLogin") String userLogin,
                                    Principal principal) {
 
-        BigInteger userId = userDao.getParticipantByEmail(userLogin).getId();
-        BigInteger accountId = getAccountByPrincipal(principal);
         try {
+            BigInteger userId = userDao.getParticipantByEmail(userLogin).getId();
+            BigInteger accountId = getAccountByPrincipal(principal);
             logger.debug("add user to account " + accountId + "user id " + userId);
             familyDebitService.addUserToAccount(accountId, userId);
             logger.debug("success adding user");
@@ -131,7 +131,7 @@ public class FamilyDebitController {
         }
     }
 
-    @RequestMapping(value = "/getParicipants", method = RequestMethod.GET)
+    @RequestMapping(value = "/getParticipants", method = RequestMethod.GET)
     @ResponseBody
     public Collection<User> getParticipants(Principal principal) {
 

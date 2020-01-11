@@ -2,6 +2,7 @@ package com.netcracker.dao.impl;
 
 import com.netcracker.dao.FamilyAccountDebitDao;
 import com.netcracker.dao.impl.mapper.FamilyAccountDebitMapper;
+import com.netcracker.dao.impl.mapper.ParticipantsMapper;
 import com.netcracker.dao.impl.mapper.UserDaoMapper;
 import com.netcracker.exception.FamilyDebitAccountException;
 import com.netcracker.models.FamilyDebitAccount;
@@ -89,7 +90,7 @@ public class FamilyAccountDebitDaoImpl implements FamilyAccountDebitDao {
     public Collection<User> getParticipantsOfFamilyAccount(BigInteger accountId) {
         logger.debug("Entering list(getParticipantsOfFamilyAccount=" + accountId + ")");
         try {
-            Collection<User> users = this.template.query(GET_PARTICIPANTS, new Object[]{accountId}, new UserDaoMapper());
+            Collection<User> users = this.template.query(GET_PARTICIPANTS, new Object[]{accountId}, new ParticipantsMapper());
             logger.debug("Entering list success(getParticipantsOfFamilyAccount=" + accountId + ")");
             return users;
         } catch (EmptyResultDataAccessException ex) {

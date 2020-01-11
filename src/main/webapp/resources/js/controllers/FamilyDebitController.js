@@ -97,13 +97,12 @@ var FamilyDebitController = function ($scope, $http, $rootScope) {
     };
 
     $scope.fetchParticipants = function () {
-        $http.get('debitFamily/getParicipants').success(function (response) {
+        $http.get('debitFamily/getParticipants').success(function (response) {
             $scope.participants = response;
         });
     };
 
-    $scope.fetchFamilyPeriodHistory();
-    $scope.fetchParticipants();
+   // $scope.fetchFamilyPeriodHistory();
     $scope.fetchPersonalAutoOperationHistory();
     $scope.fetchFamilyHistory();
     $scope.fetchFamilyInfo();

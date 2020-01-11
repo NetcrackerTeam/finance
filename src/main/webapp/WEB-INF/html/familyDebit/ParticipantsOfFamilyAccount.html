@@ -10,7 +10,8 @@
 </div>
 
 <!-- add user to family account -->
-<div class="col-xl-8 col-lg-6" ng-show="participants.length > 0">
+<h1><span ng-show="user.familyDebitId.length > 0">FamilyDebitID from RootScope: {{user.familyDebitId}}</span></h1>
+<div class="col-xl-8 col-lg-6" ng-init="fetchParticipants()" ng-show="participants.length > 0">
     <div class="card shadow mb-4">
         <!-- Card Header - Dropdown -->
         <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
@@ -30,6 +31,8 @@
                                     <th>Login</th>
                                     <th>UserRole</th>
                                     <th>IsActive</th>
+                                    <th>Total Income</th>
+                                    <th>Total Expense</th>
                                     <th>Action</th>
                                 </tr>
                                 </thead>
@@ -39,6 +42,8 @@
                                     <td>{{participant.eMail}}</td>
                                     <td>{{participant.userRole}}</td>
                                     <td>{{participant.userStatusActive}}</td>
+                                    <td>{{participant.totalIncome}}</td>
+                                    <td>{{participant.totalExpense}}</td>
                                     <td style="width:70px;text-align:center;">
                                         <button class="btn btn-mini btn-danger" ng-hide="participant.userRole == 'OWNER' || participant.id == user.id" ng-click="deleteParticipant(participant.eMail)">Remove
                                         </button>

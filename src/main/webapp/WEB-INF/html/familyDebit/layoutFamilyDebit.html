@@ -8,7 +8,7 @@
         <a href="#/userControl">Participants Control</a> <!--#2 class = Comment_form-->
     </div>
 </nav>
-<h1><span ng-show="family.debitId.length > 0">FamilyDebitID from RootScope: {{family.debitId}}</span></h1>
+<h1><span ng-show="user.familyDebitId.length > 0">FamilyDebitID from RootScope: {{user.familyDebitId}}</span></h1>
 <div ng-controller="FamilyDebitController" ng-show="user.familyDebitId.length > 0" >
 
     <h1>Current amount: {{accountInfo.amount}}</h1>

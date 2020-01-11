@@ -31,8 +31,12 @@ app.controller("AddIncomeControllerPersonal", function ($scope, $http) {
                         'Content-Type': 'application/json'
                     }
                 }).success(function (response) {
-                    $('.modal').modal('hide');
-                    window.location.reload();
+                    if (response.status === false)
+                        $scope.amountExpErrorMessage = response.message;
+                    else {
+                        $('.modal').modal('hide');
+                        window.location.reload();
+                    }
                 }).error(function () {
                     alert("unsuccess");
                 });
@@ -121,8 +125,12 @@ app.controller("AddIncomeControllerFamily", function ($scope, $http) {
                         'Content-Type': 'application/json'
                     }
                 }).success(function (response) {
-                    $('.modal').modal('hide');
-                    window.location.reload();
+                    if (response.status === false)
+                        $scope.amountExpErrorMessage = response.message;
+                    else {
+                        $('.modal').modal('hide');
+                        window.location.reload();
+                    }
                 }).error(function () {
                     alert("unsuccess");
                 });

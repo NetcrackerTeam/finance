@@ -14,6 +14,8 @@ public class User {
     private BigInteger family_id;
     private UserStatusActive  userStatusActive;
     private UserRole userRole;
+    private double totalIncome;
+    private double totalExpense;
 
     public User() {
     }
@@ -27,6 +29,8 @@ public class User {
         private BigInteger family_id;
         private UserStatusActive  userStatusActive;
         private UserRole userRole;
+        private double totalIncome;
+        private double totalExpense;
 
         public Builder() {
         }
@@ -68,6 +72,14 @@ public class User {
             this.userRole = val;
             return this;
         }
+        public Builder userIncome(double income) {
+            this.totalIncome = income;
+            return this;
+        }
+        public Builder userExpense(double expense) {
+            this.totalExpense = expense;
+            return this;
+        }
 
         public User build() {
             return new User(this);
@@ -83,6 +95,8 @@ public class User {
         this.personal_id = builder.personal_id;
         this.family_id = builder.family_id;
         this.userRole = builder.userRole;
+        this.totalIncome = builder.totalIncome;
+        this.totalExpense = builder.totalExpense;
     }
 
     public BigInteger getId() {
@@ -138,5 +152,20 @@ public class User {
 
     public void setUserRole(UserRole userRole) {
         this.userRole = userRole;
+    }
+
+    public double getIncome() {
+        return  totalIncome;
+    }
+
+    public double getExpense() {
+        return  totalExpense;
+    }
+
+    public void setIncome(double income) {
+        this.totalIncome = income;
+    }
+    public void setExpense(double expense) {
+        this.totalExpense = expense;
     }
 }
