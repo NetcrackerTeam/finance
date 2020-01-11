@@ -1,6 +1,7 @@
 package com.netcracker.models;
 
 import com.netcracker.models.enums.CreditStatusPaid;
+import com.netcracker.services.utils.CreditUtils;
 
 import java.math.BigInteger;
 import java.time.LocalDate;
@@ -17,6 +18,9 @@ public abstract class AbstractCreditAccount {
     private Debt debt;
     private boolean isCommodity;
     private CreditStatusPaid isPaid;
+    private double remainsToPay;
+    private double monthPayment;
+    private double totalCreditPayment;
 
     protected static abstract class BaseBuilder<T extends AbstractCreditAccount, B extends BaseBuilder> {
         protected T actualClass;
@@ -86,9 +90,48 @@ public abstract class AbstractCreditAccount {
             return actualClassBuilder;
         }
 
+        public B remainsToPay() {
+            actualClass.setRemainsToPay();
+            return actualClassBuilder;
+        }
+
+        public B monthPayment(LocalDate dateFrom, LocalDate dateTo, double amount, double rate) {
+            actualClass.setMonthPayment(dateFrom, dateTo, amount, rate);
+            return actualClassBuilder;
+        }
+
+        public B totalCreditPayment(LocalDate dateFrom, LocalDate dateTo, double amount, double rate) {
+            actualClass.setTotalCreditPayment(dateFrom, dateTo, amount, rate);
+            return actualClassBuilder;
+        }
+
         public T build() {
             return actualClass;
         }
+    }
+
+    protected void setTotalCreditPayment(LocalDate dateFrom, LocalDate dateTo, double amount, double rate) {
+        totalCreditPayment = CreditUtils.getTotalCreditPayment(getDate(), getDateTo(), getAmount(), getCreditRate());
+    }
+
+    public double getTotalCreditPayment() {
+        return totalCreditPayment;
+    }
+
+    protected void setRemainsToPay() {
+        remainsToPay = getTotalCreditPayment() - getPaidAmount();
+    }
+
+    public double getRemainsToPay() {
+        return remainsToPay;
+    }
+
+    protected void setMonthPayment(LocalDate dateFrom, LocalDate dateTo, double amount, double rate) {
+        monthPayment = CreditUtils.calculateMonthPayment(getDate(), getDateTo(), getAmount(), getCreditRate());
+    }
+
+    public double getMonthPayment() {
+        return monthPayment;
     }
 
     protected void setName(String name) {
@@ -178,5 +221,7 @@ public abstract class AbstractCreditAccount {
     public CreditStatusPaid isPaid() {
         return isPaid;
     }
+
+
 
 }

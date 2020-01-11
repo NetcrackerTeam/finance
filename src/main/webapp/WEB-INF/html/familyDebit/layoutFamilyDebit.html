@@ -21,7 +21,7 @@
     <button class="btn btn-primary" ng-click="createFamilyAccount()">Add Family Account</button>
 </div>
 
-    <div class="row">
+<div class="row" style="padding: 10px;">
 <div class="col-xl-8 col-lg-6" ng-show="user.familyDebitId.length > 0">
     <div class="card shadow mb-4">
         <!-- Card Header - Dropdown -->
@@ -73,22 +73,42 @@
     <br/>
 </div>
 
-<div class="col-lg-6" ng-show="user.familyDebitId.length > 0">
-    <form class="creditsForm" ng-controller="FamilyCreditController">
-        <fieldset>
-            <legend>Credits</legend>
-            <center>
-                <button class="creditButtons" id="infoCredit" disabled="disabled" data-toggle="modal" data-target="#infoCreditModal" ng-click="fetchFamilyCredit()">Info</button>
-                <button class="creditButtons" id="editCredit" disabled="disabled" data-toggle="modal" data-target="#updateCreditModal">Edit</button>
-            </center>
-            <div class="creditsDiv">
-                <select id="creditsSelect" ng-click="checkSelect()" multiple="multiple" size="3">
-                    <option ng-repeat="credInf in familyCredit" value="{{credInf.creditId}}">{{credInf.name}}</option>
-                </select>
+<div class="col-lg-6" ng-show="user.familyDebitId.length > 0" ng-controller="FamilyCreditController">
+    <div ng-show="familyCredit.length == 0" style="height:400px; position:relative; background:#F5F5F5; border-radius:10px;" class="panel panel-default">
+        <h3 style="position: absolute; top: 50%; left: 50%; margin: 0 -50% 0 0; transform: translate(-50%, -50%);" class="panel-heading">
+            You have no credits yet, you are the lucky one!</h3>
+    </div>
+    <div class="card shadow mb-4" ng-show="familyCredit.length > 0">
+        <div class="panel panel-default">
+            <div class="panel-heading" style="text-align: center;"><h4>Your active credits</h4></div>
+            <div class="panel-body" style="height:300px; overflow-y: auto; overflow-x: hidden;">
+                <table class="table table-hover table-cursor">
+                    <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Amount</th>
+                        <th>Remains to pay</th>
+                        <th>Ends date</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="credInf in familyCredit" ng-show="credInf.isPaid == 'NO'" data-toggle="modal"
+                        data-target="#infoCreditModal" ng-click="fetchFamilyCredit()" ng-mouseover="sendCreditId(credInf.creditId)">
+                        <td>{{credInf.name}}</td>
+                        <td>{{credInf.amount}}</td>
+                        <td>{{credInf.remainsToPay}}</td>
+                        <td>{{credInf.dateTo.year}}-{{credInf.dateTo.month}}-{{credInf.dateTo.day}}</td>
+                    </tr>
+                    </tbody>
+                </table>
             </div>
-            <p align="center"><button class="creditButtons" id="showAllCredits" data-toggle="modal" data-target="#showAllCreditModal">Show all credits</button></p>
-        </fieldset>
-    </form>
+            <div class="panel-footer" style="height: 60px; position:relative;">
+                <center><button class="btn btn-info" style="position: absolute; top: 50%; left: 50%; margin: 0 -50% 0 0; transform: translate(-50%, -50%);"
+                                data-toggle="modal" data-target="#showAllCreditModal">
+                    Show all credits</button></center>
+            </div>
+        </div>
+    </div>
 </div>
 </div>
 
@@ -148,7 +168,7 @@
                         </tr>
                         </thead>
                     </table>
-                    <div style="height: 250px; overflow-y: auto;">
+                    <div style="height: 250px; overflow-y: auto;" ng-show="familyCredit.length > 0" >
                         <div class="table-responsive">
                             <table class="table table-striped table-hover">
                                 <tbody>
@@ -169,7 +189,7 @@
                 </div></div>
             </div></div>
         </div></div>
-            <div class="col-lg-4">
+            <div class="col-lg-4" ng-show="familyCredit.length > 0">
                 The amount of payment for all credits is: <pre>{{summAmount}}</pre>
                 Already paid on all credits: <pre>{{summPaidAmount}}</pre>
                 It remains to pay on all credits: <pre>{{remainsToPay}}</pre>
@@ -228,7 +248,7 @@
                     </div>
 
                     <div class="form-group slidecontainer">
-                        <label for="creditRateRange" id="creditRateTextEdit">Credit rate:</label>
+                        <label for="creditRateRangeEdit" id="creditRateTextEdit">Credit rate:</label>
                         <p><input type="range" min="0" max="60" step="0.1" class="slider" id="creditRateRangeEdit" ng-model="personalCreditor.creditRate"/></p>
                     </div>
 

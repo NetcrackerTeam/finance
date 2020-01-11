@@ -75,6 +75,7 @@
 
 .creditsForm {
     padding-right: 10px;
+    padding-left: 10px;
 }
 
 .creditsDiv {
@@ -130,22 +131,23 @@
     display: inline-block;
     padding: 8pt 50pt;
     color: 	#EFFAFF;
-    background: #35A2D7;
+    background: #77A1B5;
     border: none;
     outline: none;
-    font-size: 16px;
+    font-size: 12px;
     -webkit-transition-duration: 0.4s;
     transition-duration: 0.4s;
+    border-radius: 5px;
 }
 
 .creditButtons:hover {
-    background: #3594C3;
+    background: #657D88;
     color: #EAF2F5;
     cursor: pointer;
 }
 
 .creditButtons:active {
-    background: #2C7BA1;
+    background: #5674b7;
 }
 
 .creditButtons:disabled {

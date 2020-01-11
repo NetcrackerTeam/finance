@@ -102,4 +102,5 @@ public class CreditPersonalController {
         creditAccountDao.updateCreditAccountByCreditId(personalCreditAccount, creditId);
         return new ResponseEntity<>(personalCreditAccount, HttpStatus.OK);
     }
+
 }

@@ -15,6 +15,10 @@
     width: .65em;
 }
 
+::-webkit-scrollbar:horizontal {
+    height: .65em;
+}
+
 ::-webkit-scrollbar-track {
     background-color: rgba(217, 217, 217, 0.75);
 }
@@ -294,4 +298,25 @@
     background-image:         linear-gradient(to bottom, #f5f5f5 0%, #e8e8e8 100%);
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fff5f5f5', endColorstr='#ffe8e8e8', GradientType=0);
     background-repeat: repeat-x;
+}
+
+.tables-div {
+    height: 50%;
+    overflow: auto;
+    padding: 10px;
+}
+
+.table-cursor tbody{
+    cursor: pointer;
+}
+.table-cursor td, th {
+    max-width: 150px;
+}
+
+.default-table td, th {
+    max-width: 150px;
+}
+
+.default-table thead > th > td {
+    max-width: 150px;
 }

@@ -15,7 +15,10 @@ var FamilyCreditController = function ($scope, $http, $rootScope) {
         dateTo: new Date(),
         monthDay: 1,
         isPaid: "NO",
-        isCommodity: "false"
+        isCommodity: "false",
+        monthPayment: 0,
+        remainsToPay: 0,
+        totalCreditPayment: 0
     };
 
     $scope.summAmount = 0;
@@ -32,12 +35,12 @@ var FamilyCreditController = function ($scope, $http, $rootScope) {
                 $scope.summAmount += $scope.familyCredit[i].amount;
                 $scope.summPaidAmount += $scope.familyCredit[i].paidAmount;
                 $scope.allDebt += $scope.familyCredit[i].debt.amountDebt;
+                $scope.remainsToPay += $scope.familyCredit[i].remainsToPay;
                 if ($scope.familyCredit[i].isPaid === "YES") $scope.totalPaidCredits++;
                 if ($scope.familyCredit[i].isCommodity === false) $scope.familyCredit[i].isCommodity = "NO";
                 if ($scope.familyCredit[i].isCommodity === true) $scope.familyCredit[i].isCommodity = "YES";
             }
             $scope.totalCredits = $scope.familyCredit.length;
-            $scope.remainsToPay = $scope.summAmount - $scope.summPaidAmount;
         });
     };
     $scope.fetchCreditList();
@@ -131,19 +134,6 @@ var FamilyCreditController = function ($scope, $http, $rootScope) {
     output.innerHTML = 'Credit rate: ' + slider.value + ' %';
     slider.oninput = function () {
         output.innerHTML = 'Credit rate: ' + this.value + ' %';
-    };
-
-    $scope.checkSelect = function () {
-        var selectedDiv = document.getElementById("creditsSelect");
-        var infoButton = document.getElementById("infoCredit");
-        var deleteButton = document.getElementById("editCredit");
-        var selectedOption = selectedDiv.options[selectedDiv.selectedIndex].text;
-        $rootScope.optionSelect.idCredit = selectedDiv.options[selectedDiv.selectedIndex].value;
-        if (selectedOption !== "none") {
-            infoButton.disabled = false;
-            deleteButton.disabled = false;
-        }
-        $scope.sendCreditId($rootScope.optionSelect.idCredit);
     };
 
     $scope.sendCreditId = function (creditId) {

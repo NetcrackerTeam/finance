@@ -29,6 +29,11 @@ public class CreditAccountPersonalMapper implements RowMapper<PersonalCreditAcco
                         .isCommodity(resultSet.getBoolean("commodity"))
                         .debtCredit(debt)
                         .isPaid(CreditStatusPaid.getStatusByKey(resultSet.getBigDecimal("is_paid").toBigInteger()))
+                        .monthPayment(resultSet.getDate("date_cr").toLocalDate(),resultSet.getDate("date_to").toLocalDate(),
+                                resultSet.getDouble("amount"), resultSet.getDouble("credit_rate"))
+                        .totalCreditPayment(resultSet.getDate("date_cr").toLocalDate(),resultSet.getDate("date_to").toLocalDate(),
+                                resultSet.getDouble("amount"), resultSet.getDouble("credit_rate"))
+                        .remainsToPay()
                         .build();
 
         return (PersonalCreditAccount) personalCreditAccount;

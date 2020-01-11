@@ -15,7 +15,10 @@ var PersonalCreditController = function ($scope, $http, $rootScope) {
         dateTo: new Date(),
         monthDay: 1,
         isPaid: "NO",
-        isCommodity: "false"
+        isCommodity: "false",
+        monthPayment: 0,
+        remainsToPay: 0,
+        totalCreditPayment: 0
     };
 
     $scope.summAmount = 0;
@@ -24,6 +27,7 @@ var PersonalCreditController = function ($scope, $http, $rootScope) {
     $scope.totalCredits = 0;
     $scope.allDebt = 0;
     $scope.totalPaidCredits = 0;
+    $scope.remainsToPayOne = 0;
     var getPersonalCreditsURL = 'personalCredit/getPersonalCredits';
     $scope.fetchCreditList = function () {
         $http.get(getPersonalCreditsURL).success(function (creditList) {
@@ -32,12 +36,12 @@ var PersonalCreditController = function ($scope, $http, $rootScope) {
                 $scope.summAmount += $scope.personalCredit[i].amount;
                 $scope.summPaidAmount += $scope.personalCredit[i].paidAmount;
                 $scope.allDebt += $scope.personalCredit[i].debt.amountDebt;
+                $scope.remainsToPay += $scope.personalCredit[i].remainsToPay;
                 if ($scope.personalCredit[i].isPaid === "YES") $scope.totalPaidCredits++;
                 if ($scope.personalCredit[i].isCommodity === false) $scope.personalCredit[i].isCommodity = "NO";
                 if ($scope.personalCredit[i].isCommodity === true) $scope.personalCredit[i].isCommodity = "YES";
             }
             $scope.totalCredits = $scope.personalCredit.length;
-            $scope.remainsToPay = $scope.summAmount - $scope.summPaidAmount;
         });
     };
     $scope.fetchCreditList();
@@ -77,6 +81,7 @@ var PersonalCreditController = function ($scope, $http, $rootScope) {
                 if (response.status === true) {
                     $('.modal').modal('hide');
                     refreshPageData()
+                    window.location.reload();
                 }
             });
         }
@@ -129,20 +134,6 @@ var PersonalCreditController = function ($scope, $http, $rootScope) {
         output.innerHTML = 'Credit rate: ' + this.value + ' %';
     };
 
-
-    $scope.checkSelect = function() {
-        var selectedDiv = document.getElementById("creditsSelect");
-        var infoButton = document.getElementById("infoCredit");
-        var deleteButton = document.getElementById("editCredit");
-        var selectedOption = selectedDiv.options[selectedDiv.selectedIndex].text;
-        $rootScope.optionSelect.idCredit = selectedDiv.options[selectedDiv.selectedIndex].value;
-        if (selectedOption !== "none") {
-            infoButton.disabled = false;
-            deleteButton.disabled = false;
-        }
-        $scope.sendCreditId($rootScope.optionSelect.idCredit);
-    };
-
     $scope.sendCreditId = function(creditId) {
         $http({
             method: 'POST',
@@ -157,8 +148,8 @@ var PersonalCreditController = function ($scope, $http, $rootScope) {
     $scope.fetchPersonalCredit = function(){
         $http.get('personalCredit/getPersonalCredit').success(function (response) {
             $rootScope.personalCreditor = response;
-            if ($rootScope.personalCreditor.isCommodity === false) $rootScope.personalCreditor.isCommodity = "no";
-            if ($rootScope.personalCreditor.isCommodity === true) $rootScope.personalCreditor.isCommodity = "yes";
+            if ($rootScope.personalCreditor.isCommodity === false) $rootScope.personalCreditor.isCommodity = "NO";
+            if ($rootScope.personalCreditor.isCommodity === true) $rootScope.personalCreditor.isCommodity = "YES";
         });
     };
 
@@ -179,7 +170,7 @@ var PersonalCreditController = function ($scope, $http, $rootScope) {
 
     var sliderEdit = document.getElementById("creditRateRangeEdit");
     var outputEdit = document.getElementById("creditRateTextEdit");
-    outputEdit.innerHTML = 'Credit rate: ' + sliderEdit.value + ' %';
+    //outputEdit.innerHTML = 'Credit rate: ' + sliderEdit.value + ' %';
     sliderEdit.oninput = function () {
         outputEdit.innerHTML = 'Credit rate: ' + this.value + ' %';
     };
