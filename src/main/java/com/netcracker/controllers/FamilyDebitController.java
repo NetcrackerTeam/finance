@@ -1,6 +1,7 @@
 package com.netcracker.controllers;
 
 
+import com.netcracker.controllers.validators.UserDataValidator;
 import com.netcracker.dao.*;
 import com.netcracker.exception.NullObjectException;
 import com.netcracker.models.*;
@@ -73,16 +74,21 @@ public class FamilyDebitController {
     @ResponseBody
     public Status createFamilyDebitAccount(@RequestParam(value = "nameAccount") String nameAccount,
                                            Principal principal) {
-        User user = userDao.getUserByEmail(principal.getName());
-        FamilyDebitAccount familyDebitAccount = new FamilyDebitAccount.Builder()
-                .debitObjectName(nameAccount)
-                .debitAmount(0)
-                .debitFamilyAccountStatus(FamilyAccountStatusActive.YES)
-                .debitOwner(user)
-                .build();
-        familyDebitService.createFamilyDebitAccount(familyDebitAccount);
-        userDao.updateRole(user.getId(), UserRole.OWNER.getId());
-        return new Status(true, MessageController.ADD_FAMILY_ACCOUNT);
+        try {
+            UserDataValidator.isValidNameFamily(nameAccount);
+            User user = userDao.getUserByEmail(principal.getName());
+            FamilyDebitAccount familyDebitAccount = new FamilyDebitAccount.Builder()
+                    .debitObjectName(nameAccount)
+                    .debitAmount(0)
+                    .debitFamilyAccountStatus(FamilyAccountStatusActive.YES)
+                    .debitOwner(user)
+                    .build();
+            familyDebitService.createFamilyDebitAccount(familyDebitAccount);
+            userDao.updateRole(user.getId(), UserRole.OWNER.getId());
+            return new Status(true, MessageController.ADD_FAMILY_ACCOUNT);
+        } catch (RuntimeException ex){
+            return new Status(true, ex.getMessage());
+        }
     }
 
     @RequestMapping(value = "/deactivation", method = RequestMethod.GET)
@@ -202,11 +208,11 @@ public class FamilyDebitController {
 
     @RequestMapping(value = "/history", method = RequestMethod.GET)
     @ResponseBody
-    public List<HistoryOperation> getHistory(Principal principal,
-                                                           @RequestParam("period") int period) {
+    public List<HistoryOperation> getHistory(Principal principal
+                                                           ) {
         logger.debug("getHistory Personal");
         BigInteger debitId = getAccountByPrincipal(principal);
-        return operationDao.getFamilyHistoryByAccountId(debitId, period);
+        return operationDao.getFamilyHistoryByAccountId(debitId);
     }
 
     @RequestMapping(value = "/autoOperationHistory", method = RequestMethod.GET)

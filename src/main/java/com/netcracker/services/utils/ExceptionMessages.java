@@ -29,4 +29,5 @@ public interface ExceptionMessages {
     String LATIN_CHAR = "String hasn't latin char";
     String LATIN_LETTERS = "Must be only latin char without numbers";
     String NAME_SHORT = "Username is too short";
+    String NAME_FAMILY_SHORT = "account name is too short";
 }

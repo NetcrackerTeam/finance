@@ -18,12 +18,16 @@
 <!-- Begin Page Content -->
 <div class="container-fluid">
 
-    <div class="input-append" ng-show="user.familyDebitId.length == 0">
-        <input style="width:358px; margin-left: 100px;" class="span2" type="text" ng-model="nameFamilyAccount"
-               placeholder="Enter family account name" required="required" min="1"/>
-        <button class="btn btn-primary" ng-click="createFamilyAccount()">Add Family Account</button>
+    <div class="input-append" ng-show="user.familyDebitId.length == 0" ng-class="{ 'has-error' : ErrorFamilyName}" >
+        <input style="width:358px; margin: 5px 10px 5px 100px;" class="span2" type="text" ng-model="nameFamilyAccount"
+               placeholder="Enter family account name" required="required" ng-minlength="2"/>
+        <!-- <p style="margin: 5px 10px 5px 100px;" class = "help-block"> {{ErrorFamilyName}}</p> -->
+        <br/>
+        <button style="margin: 5px 10px 5px 100px;" type="submit" ng-disabled="!nameFamilyAccount" class="btn btn-primary" ng-click="createFamilyAccount()">Add Family Account</button>
+        <p style="font-size: 8pt; margin: 5px 10px 5px 100px;">Your Account name must contain:<br/>
+            - only Latin letters without other characters except spacebar<br/>
+            - at least 2 characters</p>
     </div>
-    <!-- Content Row -->
     <div class="row"  ng-show="user.familyDebitId.length > 0">
 
         <!-- Content Column -->
@@ -114,6 +118,7 @@
                     <table class="table">
                         <thead>
                         <tr>
+                            <th>UserName</th>
                             <th>Amount</th>
                             <th>Income</th>
                             <th>Expense</th>
@@ -128,6 +133,7 @@
                         </thead>
                         <tbody>
                         <tr ng-repeat="hisInf in familyHistory">
+                            <td>{{hisInf.userName}}</td>
                             <td>{{hisInf.amount}}</td>
                             <td>{{hisInf.categoryIncome}}</td>
                             <td>{{hisInf.categoryExpense}}</td>
@@ -156,34 +162,34 @@
                 <div class="collapse" id="collapseCardExample">
                     <div class="card-body" ng-init="fetchParticipants()" ng-show="participants.length > 0">
                         <div class="table-responsive">
-                        <table class="table">
-                            <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Email</th>
-                                <th>Role</th>
-                                <th>Month income</th>
-                                <th>Month expense</th>
-                                <th></th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr ng-repeat="participant in participants">
-                                <td>{{participant.name}}</td>
-                                <td>{{participant.eMail}}</td>
-                                <td>{{participant.userRole}}</td>
-                                <td>{{participant.totalIncome}}</td>
-                                <td>{{participant.totalExpense}}</td>
-                                <td style="width:70px;text-align:center;">
-                                    <button class="btn btn-mini btn-danger" ng-hide="participant.userRole == 'OWNER' || participant.id == user.id" ng-click="deleteParticipant(participant.eMail)">Remove
-                                    </button>
-                                    <button class="btn btn-mini btn-danger" ng-hide="participant.userRole == 'OWNER' || participant.id != user.id" ng-click="deleteParticipant(participant.eMail)">Leave
-                                    </button>
-                                </td>
-                            </tr>
-                            </tbody>
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Role</th>
+                                    <th>Month income</th>
+                                    <th>Month expense</th>
+                                    <th></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr ng-repeat="participant in participants">
+                                    <td>{{participant.name}}</td>
+                                    <td>{{participant.eMail}}</td>
+                                    <td>{{participant.userRole}}</td>
+                                    <td>{{participant.totalIncome}}</td>
+                                    <td>{{participant.totalExpense}}</td>
+                                    <td style="width:70px;text-align:center;">
+                                        <button class="btn btn-mini btn-danger" ng-hide="participant.userRole == 'OWNER' || participant.id == user.id" ng-click="deleteParticipant(participant.eMail)">Remove
+                                        </button>
+                                        <button class="btn btn-mini btn-danger" ng-hide="participant.userRole == 'OWNER' || participant.id != user.id" ng-click="deleteParticipant(participant.eMail)">Leave
+                                        </button>
+                                    </td>
+                                </tr>
+                                </tbody>
 
-                        </table>
+                            </table>
                         </div>
                         <div class="ml-auto row mt-2">
                             <a href="#addUser" data-toggle="modal" class="btn btn-success btn-icon-split ml-auto mr-2">
@@ -225,13 +231,13 @@
 
                     </table>
                     <div class="ml-auto row mt-2">
-                    <a class="btn btn-info" data-toggle="modal" href="#credirss">
-                        <span class="text">Show all credits</span></a>
-<!--                    <div class="panel-footer" style="height: 60px; position:relative;">-->
-<!--                        <center><a class="btn btn-info" style="position: absolute; top: 50%; left: 50%; margin: 0 -50% 0 0; transform: translate(-50%, -50%);"-->
-<!--                                        data-toggle="modal" href="#showAllCreditModal">-->
-<!--                            Show all credits</a></center>-->
-<!--                    </div>-->
+                        <a class="btn btn-info" data-toggle="modal" href="#credirss">
+                            <span class="text">Show all credits</span></a>
+                        <!--                    <div class="panel-footer" style="height: 60px; position:relative;">-->
+                        <!--                        <center><a class="btn btn-info" style="position: absolute; top: 50%; left: 50%; margin: 0 -50% 0 0; transform: translate(-50%, -50%);"-->
+                        <!--                                        data-toggle="modal" href="#showAllCreditModal">-->
+                        <!--                            Show all credits</a></center>-->
+                        <!--                    </div>-->
                     </div>
                 </div>
             </div>
@@ -386,47 +392,47 @@
             <div class="modal-header">
                 <h4 align="center" id="exampleModalLabelCr" class="modal-title">All Credits</h4>
             </div>            <div class="modal-body" ng-controller="PersonalCreditController">
-                <table class="table table-responsive" ng-show="user.familyDebitId.length > 0">
-                    <thead >
-                    <tr>
-                        <th>Credit name</th>
-                        <th >Credit Amount</th>
-                        <th>Paid Amount</th>
-                        <th>Start Date</th>
-                        <th>Credit Rate</th>
-                        <th>Ends Date</th>
-                        <th>Month Day</th>
-                        <th>Is Commo<br/>dity</th>
-                        <th>Debt</th>
-                        <th>Is Paid</th>
-                    </tr>
-                    </thead>
-    <!--                    <div style="height: 250px; overflow-y: auto;" ng-show="familyCredit.length > 0" >-->
-    <!--                        <div class="">-->
-                            <tbody>
-                            <tr ng-repeat="credInf in familyCredit">
-                                <td>{{credInf.name}}</td>
-                                <td >{{credInf.amount}}</td>
-                                <td >{{credInf.paidAmount}}</td>
-                                <td>{{credInf.date.year}}-{{credInf.date.month}}-{{credInf.date.day}}</td>
-                                <td >{{credInf.creditRate}}</td>
-                                <td >{{credInf.dateTo.year}}-{{credInf.dateTo.month}}-{{credInf.dateTo.day}}</td>
-                                <td>{{credInf.monthDay}}</td>
-                                <td>{{credInf.isCommodity}}</td>
-                                <td>{{credInf.debt.amountDebt}}</td>
-                                <td >{{credInf.isPaid}}</td>
-                            </tr>
-                            </tbody>
-                </table>
-                <div class="col-lg-4" ng-show="familyCredit.length > 0">-->
-                                The amount of payment for all credits is: <pre>{{summAmount}}</pre>
-                                Already paid on all credits: <pre>{{summPaidAmount}}</pre>
-                                It remains to pay on all credits: <pre>{{remainsToPay}}</pre>
-                                Debt on all credits: <pre>{{allDebt}}</pre>
-                                <b><p>Total credits in the account: {{totalCredits}}</p>
-                                    <p>Total credits already paid: {{totalPaidCredits}}</p></b>
-                            </div>
+            <table class="table table-responsive" ng-show="user.familyDebitId.length > 0">
+                <thead >
+                <tr>
+                    <th>Credit name</th>
+                    <th >Credit Amount</th>
+                    <th>Paid Amount</th>
+                    <th>Start Date</th>
+                    <th>Credit Rate</th>
+                    <th>Ends Date</th>
+                    <th>Month Day</th>
+                    <th>Is Commo<br/>dity</th>
+                    <th>Debt</th>
+                    <th>Is Paid</th>
+                </tr>
+                </thead>
+                <!--                    <div style="height: 250px; overflow-y: auto;" ng-show="familyCredit.length > 0" >-->
+                <!--                        <div class="">-->
+                <tbody>
+                <tr ng-repeat="credInf in familyCredit">
+                    <td>{{credInf.name}}</td>
+                    <td >{{credInf.amount}}</td>
+                    <td >{{credInf.paidAmount}}</td>
+                    <td>{{credInf.date.year}}-{{credInf.date.month}}-{{credInf.date.day}}</td>
+                    <td >{{credInf.creditRate}}</td>
+                    <td >{{credInf.dateTo.year}}-{{credInf.dateTo.month}}-{{credInf.dateTo.day}}</td>
+                    <td>{{credInf.monthDay}}</td>
+                    <td>{{credInf.isCommodity}}</td>
+                    <td>{{credInf.debt.amountDebt}}</td>
+                    <td >{{credInf.isPaid}}</td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="col-lg-4" ng-show="familyCredit.length > 0">-->
+                The amount of payment for all credits is: <pre>{{summAmount}}</pre>
+                Already paid on all credits: <pre>{{summPaidAmount}}</pre>
+                It remains to pay on all credits: <pre>{{remainsToPay}}</pre>
+                Debt on all credits: <pre>{{allDebt}}</pre>
+                <b><p>Total credits in the account: {{totalCredits}}</p>
+                    <p>Total credits already paid: {{totalPaidCredits}}</p></b>
             </div>
+        </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
 
@@ -731,14 +737,14 @@
                 <h4 align="center" class="modal-title" id="exampleModalLabelAdd">Add user</h4>
             </div>
             <form>
-            <div class="modal-body">
-                <label for="inputEm">User email:</label>
-                <input type="text" id="inputEm" class="form-control" placeholder="Enter user email" ng-model="loginParticipant" required="required" min="1" />
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary"  data-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-primary" ng-disabled="!loginParticipant" ng-click="addParticipant()">Add</button>
-            </div>
+                <div class="modal-body">
+                    <label for="inputEm">User email:</label>
+                    <input type="text" id="inputEm" class="form-control" placeholder="Enter user email" ng-model="loginParticipant" required="required" min="1" />
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary"  data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary" ng-disabled="!loginParticipant" ng-click="addParticipant()">Add</button>
+                </div>
             </form>
         </div>
     </div>

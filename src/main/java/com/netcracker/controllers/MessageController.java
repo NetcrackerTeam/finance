@@ -54,5 +54,6 @@ public interface MessageController {
     String CREDIT_NAME_EXISTS = "Credit with this name already exists";
     String INVALID_NAME = "Invalid name";
     String CREDIT_NAME_ERROR = "The name can contain only latin letters, numbers and spaces";
+    String ACCOUNT_FAMILY_NAME = "name of family account is incorrect";
 
 }

@@ -7,7 +7,7 @@ var FamilyDebitController = function ($scope, $http, $rootScope) {
     };
 
     $scope.fetchFamilyHistory = function () {
-        $http.get('debitFamily/history', {params: {period: $scope.periodS}}).success(function (historyList) {
+        $http.get('debitFamily/history').success(function (historyList) {
             $scope.familyHistory = historyList;
         });
     };
@@ -32,12 +32,13 @@ var FamilyDebitController = function ($scope, $http, $rootScope) {
         $http({
             method: method,
             url: url,
-            params: {'nameAccount': angular.toJson($scope.nameFamilyAccount)},
+            params: {nameAccount: $scope.nameFamilyAccount},
             headers: {
                 'Content-Type': 'application/json'
             }
-        }).success(function () {
-            alert("success");
+        }).success(function (response) {
+         //   $scope.ErrorFamilyName = response.message;
+            alert(response.message);
             window.location.reload();
         }).error(function () {
             alert("unsuccess")

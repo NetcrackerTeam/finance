@@ -6,6 +6,7 @@ import com.netcracker.models.enums.CategoryIncome;
 public class HistoryOperation extends AbstractAccountOperation {
     private CategoryIncome categoryIncome;
     private CategoryExpense categoryExpense;
+    private  String userName;
 
     public static class Builder extends BaseBuilder<HistoryOperation, Builder> {
 
@@ -17,6 +18,10 @@ public class HistoryOperation extends AbstractAccountOperation {
 
         public Builder categoryExpense(CategoryExpense expense) {
             actualClass.setCategoryExpense(expense);
+            return this;
+        }
+        public Builder userName(String userName){
+            actualClass.setName(userName);
             return this;
         }
 
@@ -46,5 +51,13 @@ public class HistoryOperation extends AbstractAccountOperation {
 
     public void setCategoryExpense(CategoryExpense categoryExpense) {
         this.categoryExpense = categoryExpense;
+    }
+
+    public String getName() {
+        return userName;
+    }
+
+    public void setName(String userName) {
+        this.userName = userName;
     }
 }

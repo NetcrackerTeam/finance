@@ -39,6 +39,7 @@ public class FamilyDebitServiceImpl implements FamilyDebitService {
     @Override
     public FamilyDebitAccount createFamilyDebitAccount(FamilyDebitAccount familyDebitAccount) {
         logger.debug("Entering insert(createFamilyDebitAccount=" + familyDebitAccount + ")");
+        ObjectsCheckUtils.isNotNull(familyDebitAccount);
         return familyAccountDebitDao.createFamilyAccount(familyDebitAccount);
     }
 

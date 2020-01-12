@@ -1,5 +1,7 @@
 package com.netcracker.models.enums;
 
+import org.springframework.lang.Nullable;
+
 import java.math.BigInteger;
 
 public enum CategoryIncome {
@@ -20,7 +22,11 @@ public enum CategoryIncome {
         return id;
     }
 
+    @Nullable
     public static CategoryIncome getNameByKey(BigInteger key) {
+        if(key == null){
+            return null;
+        }
         for (CategoryIncome c : values())
             if (c.getId().equals(key))
                 return c;

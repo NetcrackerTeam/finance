@@ -1,5 +1,6 @@
 package com.netcracker.controllers.validators;
 
+import com.netcracker.exception.FamilyDebitAccountException;
 import com.netcracker.exception.UserException;
 import com.netcracker.services.utils.ExceptionMessages;
 import com.netcracker.services.utils.ObjectsCheckUtils;
@@ -43,6 +44,13 @@ public class UserDataValidator {
             if (!onlyLatinLetters.matcher(username).find()) throw new UserException(ExceptionMessages.LATIN_LETTERS);
             if (username.length() < 2) throw new UserException(ExceptionMessages.NAME_SHORT);
         } else throw new UserException(ExceptionMessages.EMPTY_FIELD);
+    }
+
+    public static void isValidNameFamily(String nameAccount) {
+        if (!isEmptyString(nameAccount)) {
+            if (!onlyLatinLetters.matcher(nameAccount).find()) throw new FamilyDebitAccountException(ExceptionMessages.LATIN_LETTERS);
+            if (nameAccount.length() < 2) throw new FamilyDebitAccountException(ExceptionMessages.NAME_FAMILY_SHORT);
+        } else throw new FamilyDebitAccountException(ExceptionMessages.EMPTY_FIELD);
     }
 
 }

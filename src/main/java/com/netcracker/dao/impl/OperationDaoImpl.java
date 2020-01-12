@@ -96,8 +96,8 @@ public class OperationDaoImpl implements OperationDao {
     }
 
     @Override
-    public List<HistoryOperation> getFamilyHistoryByAccountId(BigInteger id, int period){
-        return template.query(GET_FAMILY_FOR_DATE_BY_ACCOUNT_ID, new Object[]{id, period, id, period}, new HistoryOperationMapper());
+    public List<HistoryOperation> getFamilyHistoryByAccountId(BigInteger id){
+        return template.query(GET_FAMILY_FOR_DATE_BY_ACCOUNT_ID, new Object[]{id}, new HistoryOperationMapper());
     }
 
 }
