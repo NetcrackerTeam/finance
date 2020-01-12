@@ -27,6 +27,7 @@ public class UserServiceImpl implements UserService {
     FamilyAccountDebitDao familyAccountDebitDao;
     @Autowired
     private CreditAccountDao creditAccountDao;
+
     private final double ZERO = 0;
 
     private static final org.apache.log4j.Logger logger = Logger.getLogger(UserServiceImpl.class);
@@ -88,41 +89,47 @@ public class UserServiceImpl implements UserService {
         PersonalDebitAccount personalDebitAccount = personalDebitAccountDao.
                 getPersonalAccountById(user.getPersonalDebitAccount());
 
-        FamilyDebitAccount familyDebitAccount = familyAccountDebitDao.
-                getFamilyAccountById(user.getFamilyDebitAccount());
-
-        boolean checkDebitAccount = (ZERO == personalDebitAccount.getAmount()) && (ZERO == familyDebitAccount.getAmount());
-        if (checkDebitAccount && allFamilyCreditNull(user) && allPersonalCreditNull(user)) {
-            return true;
+        if (isUserHaveFamilyAccount(user.getId())) {
+            FamilyDebitAccount familyDebitAccount = familyAccountDebitDao.getFamilyAccountById(user.getFamilyDebitAccount());
+            boolean checkDebitPersonalAccount = (ZERO == personalDebitAccount.getAmount());
+            if (familyDebitAccount != null) {
+                boolean checkDebitFamilyAndPersonalAccount = (ZERO == personalDebitAccount.getAmount()) && (ZERO == familyDebitAccount.getAmount());
+                if (checkDebitFamilyAndPersonalAccount && allFamilyCreditNull(user) && allPersonalCreditNull(user)) {
+                    return true;
+                }
+            } else if (checkDebitPersonalAccount && allFamilyCreditNull(user) && allPersonalCreditNull(user)) {
+                return true;
+            }
         }
-        return false;
+
+        return true;
     }
 
 
     public boolean allPersonalCreditNull(User user) {
         List<PersonalCreditAccount> allPersonalCredit = creditAccountDao.getAllPersonalCreditsByAccountId(user.getId());
         for (PersonalCreditAccount personalCredit : allPersonalCredit) {
-            if (personalCredit==null)
-                logger.debug("familyCredit null" );
+            if (personalCredit == null)
+                logger.debug("personalCredit null" + personalCredit.getCreditId());
             boolean checkCredit = (ZERO == personalCredit.getAmount());
             if (!checkCredit) {
                 return false;
             }
         }
-        return false;
+        return true;
     }
 
     public boolean allFamilyCreditNull(User user) {
         List<FamilyCreditAccount> allFamilyCredit = creditAccountDao.getAllFamilyCreditsByAccountId(user.getId());
         for (FamilyCreditAccount familyCredit : allFamilyCredit) {
-            if (familyCredit==null)
-                logger.debug("familyCredit null" );
+            if (familyCredit == null)
+                logger.debug("familyCredit null" + familyCredit.getCreditId());
             boolean checkCredit = (ZERO == familyCredit.getAmount());
             if (!checkCredit) {
                 return false;
             }
         }
-        return false;
+        return true;
     }
 
 }

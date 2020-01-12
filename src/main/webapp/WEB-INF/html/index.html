@@ -42,7 +42,7 @@
     <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
         <!-- Sidebar - Brand -->
-        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html" >
             <div class="sidebar-brand-icon">
                 <img class="img-circle center-block center-img"  src="resources/images/ewallet.png" alt="" width="50" height="50"/>
             </div>
@@ -87,7 +87,7 @@
                 <div class="bg-white py-2 collapse-inner rounded">
                     <a class="collapse-item" href="#" data-toggle="modal" data-target="#passwordModal">Change password</a>
                     <a class="collapse-item" href="#" data-toggle="modal" data-target="#emailModal">Change e-mail</a>
-                    <a class="collapse-item" href="#" data-toggle="modal" data-target="#deactivate">Delete user</a>
+                    <a class="collapse-item" href="#" data-toggle="modal" data-target="#deactivate">Deactivate user</a>
                 </div>
             </div>
         </li>
@@ -138,20 +138,33 @@
 <!--<script src="resources/js/controllers/FamilyPredictController.js"></script>-->
 <script src="resources/js/controllers/ReportController.js"></script>
 </body>
+<script >
+    // $(document).ready(function(){
+    //     //при нажатию на элемент, имеющий класс .open-modal, открыть модальное окно
+    //     $('.open-modal').click(function(){
+    //         $('#deactivate').modal('show');
+    //     });
+    //     //отобразить сообщение, когда модальное окно будет полностью скрыто от пользователя
+    //     $("#deactivate").on('hidden.bs.modal', function(){
+    //         alert("window open");
+    //     });
+    // });
+
+</script>
 <form th:action="@{/deactivate}" method="get" action="">
     <div class="modal fade" id="deactivate" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
          aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 align="center" class="modal-title">Log out</h4>
+                    <h4 align="center" class="modal-title">Deactivate user</h4>
                 </div>
                 <div class="modal-body">
-                    <h5>Are you sure you want to deactivate user?</h5>
+                    <h5>Are you want to deactivate user?</h5>
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary">Yes</button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                    <button type="submit" class="btn btn-primary">Yes</button>
                 </div>
             </div>
         </div>
@@ -167,11 +180,11 @@
                     <h4 align="center" class="modal-title">Log out</h4>
                 </div>
                 <div class="modal-body">
-                    <h5>Are you sure you want to sign out?</h5>
+                    <h5>Are  you want to log out?</h5>
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary">Yes</button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                    <button type="submit" class="btn btn-primary">Yes</button>
                 </div>
             </div>
         </div>

@@ -13,6 +13,8 @@ public interface MessageController {
     String LOGGER_UPDATE_EMAIL = "updateEmailByUser in  method updateEmail . User id - ";
     String LOGGER_UPDATE_PASSWORD ="updatePasswordByUser in  method updateUserPassword . User id - ";
     String INVALID_CONFIRM_PASSWORD = "Your passwords do not match, please  try again  ";
+    String SUCCESS_DEACTIVATE = "success deactivate user";
+    String UN_SUCCESS_DEACTIVATE = "unsuccess deactivate user, please check you credit and debit accounts";
     //    PersonalDebitController
     String ADD_INCOME = "Added new income by account";
     String ADD_EXPENSE_PERS = "Added new expense by account";

@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
+import static com.netcracker.controllers.MessageController.*;
+
 @Controller
 public class UserController {
     @Autowired
@@ -39,12 +41,12 @@ public class UserController {
         boolean validateEmail = userValidation.validateValueByUser(newEmail, RegexPatterns.EMAIL_PATTERN);
         boolean equalsEmail = (userDao.getNumberOfUsersByEmail(newEmail) > 0);
         if (!validOldEmail) {
-            model.addAttribute("errorOldEmail", MessageController.INVALID_OLD_EMAIL);
+            model.addAttribute("errorOldEmail", INVALID_OLD_EMAIL);
         } else if ((validateEmail) && (!equalsEmail)) {
             userDao.updateEmail(userTemp.getId(), newEmail);
-            model.addAttribute("successUpdatePass", MessageController.SUCCESS_UPDATE_EMAIL);
+            model.addAttribute("successUpdatePass", SUCCESS_UPDATE_EMAIL);
         } else {
-            model.addAttribute("errorValidateNewEmail or email already exist", MessageController.ERROR_VALIDATE_EMAIL);
+            model.addAttribute("errorValidateNewEmail or email already exist", ERROR_VALIDATE_EMAIL);
         }
         return URL.INDEX;
     }
@@ -59,23 +61,24 @@ public class UserController {
         boolean confirmPass = userService.confirmUserPassword(newPassword, newConfirmPassword);
         boolean validationPassword = userValidation.validateValueByUser(newPassword, RegexPatterns.PASSWORD_PATTERN);
         if (!confirmPass) {
-            model.addAttribute("errorConfirm", MessageController.INVALID_CONFIRM_PASSWORD);
+            model.addAttribute("errorConfirm", INVALID_CONFIRM_PASSWORD);
         } else if (validationPassword) {
             String passwordEncode = userService.encodePassword(newPassword);
             userDao.updateUserPasswordById(userTemp.getId(), passwordEncode);
-            model.addAttribute("successUpdatePass", MessageController.SUCCESS_UPDATE_PASSWORD);
+            model.addAttribute("successUpdatePass", SUCCESS_UPDATE_PASSWORD);
         }
         return URL.INDEX;
 
     }
 
     @RequestMapping(value = "/deactivate", method = RequestMethod.GET)
-    public String deactivateUser() {
+    public String deactivateUser(Model model) {
         User userTemp = userDao.getUserByEmail(getCurrentUsername());
         logger.debug("updateUserStatus by user id " + userTemp.getId());
         if (userService.deactivateUser(userTemp)) {
             userDao.updateUserStatus(userTemp.getId(), UserStatusActive.NO.getId());
-        }
+            model.addAttribute("success", MessageController.SUCCESS_DEACTIVATE);
+        } else model.addAttribute("unsuccess", UN_SUCCESS_DEACTIVATE);
         return URL.INDEX;
     }
 
