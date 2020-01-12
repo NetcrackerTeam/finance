@@ -210,7 +210,7 @@
                         <h3 style="position: absolute; top: 50%; left: 50%; margin: 0 -50% 0 0; transform: translate(-50%, -50%);" class="panel-heading">
                             You have no credits yet, you are the lucky one!</h3>
                     </div>
-                    <table class="table"  ng-show="familyCredit.length > 0">
+                    <table class="table table-hover"  ng-show="familyCredit.length > 0">
                         <thead>
                         <tr>
                             <th>Name</th>
@@ -221,7 +221,7 @@
                         </thead>
                         <tbody>
                         <tr ng-repeat="credInf in familyCredit" ng-show="credInf.isPaid == 'NO'" data-toggle="modal"
-                            data-target="#infoCreditModal" ng-click="fetchPersonalCredit()" ng-mouseover="sendCreditId(credInf.creditId)">
+                            data-target="#infoCreditModal" ng-click="fetchFamilyCredit()" ng-mouseover="sendCreditId(credInf.creditId)">
                             <td>{{credInf.name}}</td>
                             <td>{{credInf.amount}}</td>
                             <td>{{credInf.remainsToPay}}</td>
@@ -231,13 +231,8 @@
 
                     </table>
                     <div class="ml-auto row mt-2">
-                        <a class="btn btn-info" data-toggle="modal" href="#credirss">
-                            <span class="text">Show all credits</span></a>
-                        <!--                    <div class="panel-footer" style="height: 60px; position:relative;">-->
-                        <!--                        <center><a class="btn btn-info" style="position: absolute; top: 50%; left: 50%; margin: 0 -50% 0 0; transform: translate(-50%, -50%);"-->
-                        <!--                                        data-toggle="modal" href="#showAllCreditModal">-->
-                        <!--                            Show all credits</a></center>-->
-                        <!--                    </div>-->
+                    <a class="btn btn-info" data-toggle="modal" href="#credirss">
+                        <span class="text">Show all credits</span></a>
                     </div>
                 </div>
             </div>
@@ -283,24 +278,59 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 align="center" class="modal-title"> Info credit</h4>
+                    <h4 align="center" class="modal-title"> "{{personalCreditor.name}}" credit</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    Name: <pre>{{personalCreditor.name}}</pre>
-                    Amount: <pre>{{personalCreditor.amount}}</pre>
-                    Paid Amount: <pre>{{personalCreditor.paidAmount}}</pre>
-                    Rate: <pre>{{personalCreditor.creditRate}}</pre>
-                    Start Date: <pre>{{personalCreditor.date.year}}-{{personalCreditor.date.month}}-{{personalCreditor.date.day}}</pre>
-                    Ends Date: <pre>{{personalCreditor.dateTo.year}}-{{personalCreditor.dateTo.month}}-{{personalCreditor.dateTo.day}}</pre>
-                    Month Day: <pre>{{personalCreditor.monthDay}}</pre>
-                    Credit is commodity: <pre>{{personalCreditor.isCommodity}}</pre>
-                    Amount Debt: <pre>{{personalCreditor.debt.amountDebt}}</pre>
+                    <table class="table table-borderless">
+                        <tr>
+                            <th>Amount:</th>
+                            <td>{{personalCreditor.amount}}</td>
+                        </tr>
+                        <tr>
+                            <th>Paid Amount:</th>
+                            <td>{{personalCreditor.paidAmount}}</td>
+                        </tr>
+                        <tr>
+                            <th>Rate:</th>
+                            <td>{{personalCreditor.creditRate}}</td>
+                        </tr>
+                        <tr>
+                            <th>Start Date:</th>
+                            <td>{{personalCreditor.date.year}}-{{personalCreditor.date.month}}-{{personalCreditor.date.day}}</td>
+                        </tr>
+                        <tr>
+                            <th>Ends Date:</th>
+                            <td>{{personalCreditor.dateTo.year}}-{{personalCreditor.dateTo.month}}-{{personalCreditor.dateTo.day}}</td>
+                        </tr>
+                        <tr>
+                            <th>Month Day:</th>
+                            <td>{{personalCreditor.monthDay}}</td>
+                        </tr>
+                        <tr>
+                            <th>Ends Date:</th>
+                            <td>{{personalCreditor.dateTo.year}}-{{personalCreditor.dateTo.month}}-{{personalCreditor.dateTo.day}}</td>
+                        </tr>
+                        <tr>
+                            <th>Month Day:</th>
+                            <td>{{personalCreditor.monthDay}}</td>
+                        </tr>
+                        <tr>
+                            <th>Credit is commodity:</th>
+                            <td>{{personalCreditor.isCommodity}}</td>
+                        </tr>
+                        <tr>
+                            <th>Amount Debt:</th>
+                            <td>{{personalCreditor.debt.amountDebt}}</td>
+                        </tr>
+
+                    </table>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addPersonalCreditPayment">Add payment</button>
                 </div>
             </div>
         </div>
@@ -384,54 +414,56 @@
         </div>
     </div>
 </form>
-<div class="dm-overlay modal fade" id="credirss" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabelCr"
+
+<div class=" modal fade" id="credirss" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabelCr"
      aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h4 align="center" id="exampleModalLabelCr" class="modal-title">All Credits</h4>
-            </div>            <div class="modal-body" ng-controller="PersonalCreditController">
-            <table class="table table-responsive" ng-show="user.familyDebitId.length > 0">
-                <thead >
-                <tr>
-                    <th>Credit name</th>
-                    <th >Credit Amount</th>
-                    <th>Paid Amount</th>
-                    <th>Start Date</th>
-                    <th>Credit Rate</th>
-                    <th>Ends Date</th>
-                    <th>Month Day</th>
-                    <th>Is Commo<br/>dity</th>
-                    <th>Debt</th>
-                    <th>Is Paid</th>
-                </tr>
-                </thead>
-                <!--                    <div style="height: 250px; overflow-y: auto;" ng-show="familyCredit.length > 0" >-->
-                <!--                        <div class="">-->
-                <tbody>
-                <tr ng-repeat="credInf in familyCredit">
-                    <td>{{credInf.name}}</td>
-                    <td >{{credInf.amount}}</td>
-                    <td >{{credInf.paidAmount}}</td>
-                    <td>{{credInf.date.year}}-{{credInf.date.month}}-{{credInf.date.day}}</td>
-                    <td >{{credInf.creditRate}}</td>
-                    <td >{{credInf.dateTo.year}}-{{credInf.dateTo.month}}-{{credInf.dateTo.day}}</td>
-                    <td>{{credInf.monthDay}}</td>
-                    <td>{{credInf.isCommodity}}</td>
-                    <td>{{credInf.debt.amountDebt}}</td>
-                    <td >{{credInf.isPaid}}</td>
-                </tr>
-                </tbody>
-            </table>
-            <div class="col-lg-4" ng-show="familyCredit.length > 0">-->
-                The amount of payment for all credits is: <pre>{{summAmount}}</pre>
-                Already paid on all credits: <pre>{{summPaidAmount}}</pre>
-                It remains to pay on all credits: <pre>{{remainsToPay}}</pre>
-                Debt on all credits: <pre>{{allDebt}}</pre>
-                <b><p>Total credits in the account: {{totalCredits}}</p>
-                    <p>Total credits already paid: {{totalPaidCredits}}</p></b>
             </div>
-        </div>
+            <div class="modal-body" ng-controller="FamilyCreditController">
+                <table class="table table-responsive">
+                    <thead >
+                    <tr>
+                        <th>Name</th>
+                        <th>Amount</th>
+                        <th>Paid amount</th>
+                        <th>Start date</th>
+                        <th>Credit rate</th>
+                        <th>Ends date</th>
+                        <th>Month day</th>
+                        <th>Is commo<br/>dity</th>
+                        <th>Debt</th>
+                        <th>Is paid</th>
+                    </tr>
+                    </thead>
+    <!--                    <div style="height: 250px; overflow-y: auto;" ng-show="familyCredit.length > 0" >-->
+    <!--                        <div class="">-->
+                            <tbody>
+                            <tr ng-repeat="credInf in familyCredit">
+                                <td>{{credInf.name}}</td>
+                                <td >{{credInf.amount}}</td>
+                                <td >{{credInf.paidAmount}}</td>
+                                <td>{{credInf.date.year}}-{{credInf.date.month}}-{{credInf.date.day}}</td>
+                                <td >{{credInf.creditRate}}</td>
+                                <td >{{credInf.dateTo.year}}-{{credInf.dateTo.month}}-{{credInf.dateTo.day}}</td>
+                                <td>{{credInf.monthDay}}</td>
+                                <td>{{credInf.isCommodity}}</td>
+                                <td>{{credInf.debt.amountDebt}}</td>
+                                <td>{{credInf.isPaid}}</td>
+                            </tr>
+                            </tbody>
+                </table>
+                <div ng-show="familyCredit.length > 0">
+                                The amount of payment for all credits is: <pre>{{summAmount}}</pre>
+                                Already paid on all credits: <pre>{{summPaidAmount}}</pre>
+                                It remains to pay on all credits: <pre>{{remainsToPay}}</pre>
+                                Debt on all credits: <pre>{{allDebt}}</pre>
+                                <b><p>Total credits in the account: {{totalCredits}}</p>
+                                    <p>Total credits already paid: {{totalPaidCredits}}</p></b>
+                            </div>
+            </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
 
