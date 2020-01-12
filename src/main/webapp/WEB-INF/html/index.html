@@ -4,57 +4,140 @@
 
 <head>
     <meta charset="utf-8"/>
-    <title>Service App</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, initial-scale=1"/>
+
+    <title>E-wallet</title>
     <link rel="stylesheet" href="resources/css/specialFinance.css"/>
     <link rel="stylesheet" href="resources/css/createCredit.css"/>
     <link rel="stylesheet" href="resources/css/infoCredit.css"/>
-    <link rel="stylesheet" href="resources/css/sidebar.css"/>
-    <link rel="stylesheet" href="resources/bootstrap/css/bootstrap.min.css"/>
+<!--    <link rel="stylesheet" href="resources/css/sidebar.css"/>-->
+ <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.0/css/bootstrap-datepicker.min.css" />
 
     <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css"/>
-    <script src="http://code.jquery.com/jquery-3.1.1.js"></script>
-    <script src="http://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
-<!--    <script src="resources/bootstrap/js/bootstrap.js" type="text/javascript"></script>-->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <link href="resources/css/sb-admin.css" rel="stylesheet"/>
+    <script src="http://code.jquery.com/jquery-3.4.1.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.0/js/bootstrap-datepicker.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.2/moment.min.js" type="text/javascript"></script>
     <!--    <script src="resources/js/angular/angular.js"></script>-->
+    <link href="resources/bootstrap/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css"/>
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet"/>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular-route.min.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular-animate.min.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular-aria.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-material/1.0.4/angular-material.js"></script>
     <script src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/t-114/assets-cache.js"></script>
-    <!--    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.2/moment.min.js"></script>-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.2/moment.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/angular-material/1.0.4/angular-material.css"/>
-    <!--    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.7.6/angular-messages.min.js"></script>-->
-    <!--    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>-->
-
-    <!--    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.3/angular-animate.min.js"></script>-->
-    <!--    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.3/angular-aria.min.js"></script>-->
 </head>
 
 
-<body>
-<header>
-    <input type="checkbox" id="nav-toggle" hidden="hidden"/>
-    <nav class="navIndex">
-        <label for="nav-toggle" class="nav-toggle" onclick=""></label>
-            <h2>Hello dear, {{userInfo.name}}</h2>
-            <h2>Your mail, {{userInfo.eMail}}</h2>
-        <ul>
-            <li><a href="#/personalDebit"><b>Personal account</b></a></li>
-            <li><a href="#/familyAccount"><b>Family account</b></a></li>
-            <li><a href="#passwordModal" data-toggle="modal" th:color="transparent">Change password</a></li>
-            <li><a href="#emailModal" data-toggle="modal">Change email</a></li>
-            <li><a href="#deactivate" data-toggle="modal">Deactivate user </a></li>
-            <li><a href="#logout" data-toggle="modal">Log out</a></li>
-        </ul>
-    </nav>
-</header>
+<body id="page-top">
+  <div id="wrapper">
+    <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+
+        <!-- Sidebar - Brand -->
+        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+            <div class="sidebar-brand-icon">
+                <img class="img-circle center-block center-img"  src="resources/images/ewallet.png" alt="" width="50" height="50"/>
+            </div>
+            <div class="sidebar-brand-text mx-3">E-wallet</div>
+        </a>
+
+        <!-- Divider -->
+        <hr class="sidebar-divider"/>
+
+        <div class="sidebar-heading">
+            Accounts
+        </div>
+
+        <!-- Nav Item - Dashboard -->
+        <li class="nav-item active">
+            <a class="nav-link account" href="#/">
+                <i class="fa fa-user"></i>
+                <span>Personal</span></a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link account" href="#/familyAccount">
+                <i class="fa fa-users"></i>
+                <span>Family</span></a>
+        </li>
+
+        <!-- Divider -->
+        <hr class="sidebar-divider"/>
+
+        <!-- Heading -->
+        <div class="sidebar-heading">
+            Settings
+        </div>
+
+        <!-- Nav Item - Pages Collapse Menu -->
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="true" aria-controls="collapsePages">
+                <i class="fa fa-edit"></i>
+                <span>Edit profile</span>
+            </a>
+            <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <a class="collapse-item" href="#" data-toggle="modal" data-target="#passwordModal">Change password</a>
+                    <a class="collapse-item" href="#" data-toggle="modal" data-target="#emailModal">Change e-mail</a>
+                    <a class="collapse-item" href="#" data-toggle="modal" data-target="#deactivate">Delete user</a>
+                </div>
+            </div>
+        </li>
+
+        <!-- Nav Item - Charts -->
+        <li class="nav-item">
+            <a class="nav-link" href="#logout" data-toggle="modal">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Log out</span></a>
+        </li>
+
+        <!-- Divider -->
+        <hr class="sidebar-divider d-none d-md-block"/>
+
+    </ul>
+    <!-- End of Sidebar -->
+      <!-- Content Wrapper -->
+      <div id="content-wrapper" class="d-flex flex-column">
+
+          <!-- Main Content -->
+          <div id="content">
+                  <div ng-view=""></div>
+          </div>
+          <!-- Footer -->
+          <footer class="sticky-footer bg-white">
+              <div class="container my-auto">
+                  <div class="copyright text-center my-auto">
+                      <span>Copyright &copy; Netcracker 2020</span>
+                  </div>
+              </div>
+          </footer>
+          <!-- End of Footer -->
+      </div>
+  </div>
 
 
+
+
+<script src="resources/js/angular/angular.js"></script>
+<script src="resources/js/app.js"></script>
+<!--<script type="text/javascript" src="resources/js/jquery.touchSwipe.min.js"></script>-->
+<script src="resources/js/controllers/PersonalDebitController.js"></script>
+<script src="resources/js/controllers/PersonalCreditController.js"></script>
+<script src="resources/js/controllers/OperationsController.js"></script>
+<script src="resources/js/controllers/FamilyDebitController.js"></script>
+<script src="resources/js/controllers/FamilyCreditController.js"></script>
+<script src="resources/js/controllers/PersonalPredictController.js"></script>
+<!--<script src="resources/js/controllers/FamilyPredictController.js"></script>-->
+<script src="resources/js/controllers/ReportController.js"></script>
+</body>
 <form th:action="@{/deactivate}" method="get" action="">
     <div class="modal fade" id="deactivate" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
          aria-hidden="true">
@@ -76,7 +159,7 @@
 </form>
 
 <form th:action="@{/logout}" method="get" action="">
-    <div class="modal fade" id="logout" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    <div class="modal fade my-modal-wrapper" id="logout" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
          aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -150,19 +233,4 @@
     </div>
 </form>
 
-<div id="wrapper">
-    <div ng-view=""></div>
-</div>
-<script src="resources/js/angular/angular.js"></script>
-<script src="resources/js/app.js"></script>
-<script type="text/javascript" src="resources/js/jquery.touchSwipe.min.js"></script>
-<script src="resources/js/controllers/PersonalDebitController.js"></script>
-<script src="resources/js/controllers/PersonalCreditController.js"></script>
-<script src="resources/js/controllers/OperationsController.js"></script>
-<script src="resources/js/controllers/FamilyDebitController.js"></script>
-<script src="resources/js/controllers/FamilyCreditController.js"></script>
-<script src="resources/js/controllers/PersonalPredictController.js"></script>
-<script src="resources/js/controllers/FamilyPredictController.js"></script>
-<script src="resources/js/controllers/ReportController.js"></script>
-</body>
 </html>

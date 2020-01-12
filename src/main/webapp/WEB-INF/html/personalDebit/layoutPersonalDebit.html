@@ -1,104 +1,217 @@
-<nav>
-    <div class="topnavPersonal" id="TopnavPersonal">
-        <a href="#createCreditModal" data-toggle="modal">Create Credit</a>
-        <a href="#incomeOp" data-toggle="modal">Add income</a>
-        <a href="#expenseOp" data-toggle="modal">Add expense</a>
-        <a href="#report" data-toggle="modal">Report</a> <!--#2 class = Comment_form-->
-        <a href="#prediction" data-toggle="modal">Prognosis</a> <!--#2 class = Comment_form-->
-        Current amount: {{accountInfo.amount}}
+<!-- Topbar -->
+<nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+    <div class="d-sm-flex align-items-center justify-content-between mb-3 mt-2">
+        <h1 class="h3 mb-0 text-gray-800">Personal account</h1>
     </div>
+    <div class="row ml-auto">
+        <div class="col mr-2 d-none d-lg-inline text-gray-600">
+            <h4 class="text-right text-danger">{{accountInfo.owner.name}}</h4>
+            <div class="small text-right">{{accountInfo.owner.eMail}}</div>
+        </div>
+    </div>
+
 </nav>
+<!-- End of Topbar -->
 
-<div class="row" style="padding: 10px;">
-    <div class="col-xl-8 col-lg-6">
-        <div class="card shadow mb-4">
-            <!-- Card Header - Dropdown -->
-            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                <h6 class="m-0 font-weight-bold text-primary">History</h6>
+<div class="container-fluid">
+    <!-- Content Row -->
+    <div class="row">
+
+        <!-- Content Column -->
+        <div class="col-lg-6 mb-4">
+
+            <div class="row ml-1 mb-3">
+                <!-- Content Row -->
+
+                <a href="#createCreditModal" data-toggle="modal" class="btn btn-primary btn-icon-split">
+                    <span class="text" >Create credit</span>
+                </a>
+
+                <a href="#incomeOp" data-toggle="modal" class="btn btn-success btn-icon-split ml-1">
+                    <span class="text">Add income</span>
+                </a>
+
+                <a href="#expenseOp" data-toggle="modal" class="btn btn-danger btn-icon-split ml-1">
+                    <span class="text">Add expense</span>
+                </a>
+
+                <a href="#report" data-toggle="modal" class="btn btn-info btn-icon-split ml-1">
+                    <span class="text">Get report</span>
+                </a>
+
+                <a href="#prediction" data-toggle="modal" class="btn btn-warning btn-icon-split ml-1">
+                    <span class="text">Prediction</span>
+                </a>
             </div>
-            <div class="card-body" ng-controller="PersonalDebitController">
-                <select class="form-control" id = "historyPeriod" ng-click="fetchPeriodHistory()">
-                    <option selected="selected" value="1">Last operations</option>
-                    <option value="1">Month</option>
-                    <option value="6">Half year</option>
-                    <option value="12">Year</option>
-                </select>
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="panel panel-default">
-                            <div class="panel-heading">History</div>
-                            <div class="panel-body">
+            <div class="row">
 
-                                <table class="table table-striped">
-                                    <thead>
-                                    <tr>
-                                        <th>Amount</th>
-                                        <th>Income</th>
-                                        <th>Expense</th>
-                                        <th>Date</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr ng-repeat="hisInf in personalHistory">
-                                        <td>{{hisInf.amount}}</td>
-                                        <td>{{hisInf.categoryIncome}}</td>
-                                        <td>{{hisInf.categoryExpense}}</td>
-                                        <td>{{hisInf.date.year}}-{{hisInf.date.month}}-{{hisInf.date.day}}</td>
-                                    </tr>
-                                    </tbody>
-                                </table>
+                <!-- Earnings (Monthly) Card Example -->
+                <div class="col-md-4 mb-5">
+                    <div class="card border-left-primary shadow h-100 py-2">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Current amount</div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800">{{accountInfo.amount}}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
+                <!-- Earnings (Monthly) Card Example -->
+                <div class=" col-md-4 mb-5">
+                    <div class="card border-left-success shadow h-100 py-2">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Month income</div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800">?</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4 mb-5">
+                    <div class="card border-left-danger shadow h-100 py-2">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">Month expense</div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800">?</div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-    </div>
 
-    <div class="col-lg-6" ng-controller="PersonalCreditController">
-        <div ng-show="personalCredit.length == 0" style="height:400px; position:relative; background:#F5F5F5; border-radius:10px;" class="panel panel-default">
-            <h3 style="position: absolute; top: 50%; left: 50%; margin: 0 -50% 0 0; transform: translate(-50%, -50%);" class="panel-heading">
-                You have no credits yet, you are the lucky one!</h3>
+            <!-- History Card -->
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">History</h6>
+                </div>
+                <div class="card-body" ng-controller="PersonalDebitController">
+                    <select class="form-control" id = "historyPeriod" ng-click="fetchPeriodHistory()">
+                        <option selected="selected" value="1">Last operations</option>
+                        <option value="1">Month</option>
+                        <option value="6">Half year</option>
+                        <option value="12">Year</option>
+                    </select>
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th>Amount</th>
+                            <th>Income</th>
+                            <th>Expense</th>
+                            <th>Date</th>
+                        </tr>
+<!--                        <tr>-->
+<!--                            <th>Type</th>-->
+<!--                            <th>Amount</th>-->
+<!--                            <th>Name</th>-->
+<!--                            <th>Date</th>-->
+<!--                        </tr>-->
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="hisInf in personalHistory">
+                            <td>{{hisInf.amount}}</td>
+                            <td>{{hisInf.categoryIncome}}</td>
+                            <td>{{hisInf.categoryExpense}}</td>
+                            <td>{{hisInf.date.year}}-{{hisInf.date.month}}-{{hisInf.date.day}}</td>
+                        </tr>
+<!--                        <tr class="text-success">-->
+<!--                            <td>Income</td>-->
+<!--                            <td>+2000</td>-->
+<!--                            <td>SALARY</td>-->
+<!--                            <td>2020-01-19</td>-->
+<!--                        </tr>-->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
         </div>
-        <div class="card shadow mb-4" ng-show="personalCredit.length > 0">
-        <div class="panel panel-default">
-            <div class="panel-heading" style="text-align: center;"><h4>Your active credits</h4></div>
-            <div class="panel-body" style="height:300px; overflow-y: auto; overflow-x: hidden;">
-                <table class="table table-hover table-cursor">
-                    <thead>
-                    <tr>
-                        <th>Name</th>
+
+        <div class="col-lg-6 mb-4">
+
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Credits</h6>
+                </div>
+                <div class="card-body" ng-controller="PersonalCreditController">
+                    <div ng-show="personalCredit.length == 0" style="height:400px; position:relative; background:#F5F5F5; border-radius:10px;" class="panel panel-default">
+                        <h3 style="position: absolute; top: 50%; left: 50%; margin: 0 -50% 0 0; transform: translate(-50%, -50%);" class="panel-heading">
+                            You have no credits yet, you are the lucky one!</h3>
+                    </div>
+                    <table class="table"  ng-show="personalCredit.length > 0">
+                        <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Amount</th>
+                            <th>Remains to pay</th>
+                            <th>Ends date</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="credInf in personalCredit" ng-show="credInf.isPaid == 'NO'" data-toggle="modal"
+                            data-target="#infoCreditModal" ng-click="fetchPersonalCredit()" ng-mouseover="sendCreditId(credInf.creditId)">
+                            <td>{{credInf.name}}</td>
+                            <td>{{credInf.amount}}</td>
+                            <td>{{credInf.remainsToPay}}</td>
+                            <td>{{credInf.dateTo.year}}-{{credInf.dateTo.month}}-{{credInf.dateTo.day}}</td>
+                        </tr>
+                        </tbody>
+
+                    </table>
+                    <div class="panel-footer" style="height: 60px; position:relative;">
+                        <center><button class="btn btn-info" style="position: absolute; top: 50%; left: 50%; margin: 0 -50% 0 0; transform: translate(-50%, -50%);"
+                                        data-toggle="modal" data-target="#showAllCreditModal">
+                            Show all credits</button></center>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Auto operations</h6>
+                </div>
+                <div class="card-body" ng-controller="PersonalDebitController">
+                    <table class="table">
+                        <thead>
+                        <th>Expense</th>
+                        <th>Income</th>
+                        <th>Day of month</th>
                         <th>Amount</th>
-                        <th>Remains to pay</th>
-                        <th>Ends date</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr ng-repeat="credInf in personalCredit" ng-show="credInf.isPaid == 'NO'" data-toggle="modal"
-                        data-target="#infoCreditModal" ng-click="fetchPersonalCredit()" ng-mouseover="sendCreditId(credInf.creditId)">
-                        <td>{{credInf.name}}</td>
-                        <td>{{credInf.amount}}</td>
-                        <td>{{credInf.remainsToPay}}</td>
-                        <td>{{credInf.dateTo.year}}-{{credInf.dateTo.month}}-{{credInf.dateTo.day}}</td>
-                    </tr>
-                    </tbody>
-                </table>
+<!--                        <tr>-->
+<!--                            <th>Amount</th>-->
+<!--                            <th>Type</th>-->
+<!--                            <th>Name</th>-->
+<!--                            <th>Day of month</th>-->
+<!--                        </tr>-->
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="autoOperInf in personalAutoOperationHistory">
+                            <td>{{autoOperInf.categoryExpense}}</td>
+                            <td>{{autoOperInf.categoryIncome}}</td>
+                            <td>{{autoOperInf.dayOfMonth}}</td>
+                            <td>{{autoOperInf.amount}}</td>
+                        </tr>
+<!--                        <tr>-->
+<!--                            <td>30000</td>-->
+<!--                            <td>Income</td>-->
+<!--                            <td>SALARY</td>-->
+<!--                            <td>3</td>-->
+<!--                        </tr>-->
+                        </tbody>
+                    </table>
+                </div>
             </div>
-            <div class="panel-footer" style="height: 60px; position:relative;">
-                <center><button class="btn btn-info" style="position: absolute; top: 50%; left: 50%; margin: 0 -50% 0 0; transform: translate(-50%, -50%);"
-                data-toggle="modal" data-target="#showAllCreditModal">
-                    Show all credits</button></center>
-            </div>
-        </div>
-        </div>
+
     </div>
+</div>
+
 </div>
 
 <div class="dm-overlay modal fade" id="showAllCreditModal" ng-controller="PersonalCreditController">
@@ -275,53 +388,6 @@
         </div>
     </div>
 </form>
-
-<div class="col-xl-8 col-lg-7">
-    <div class="card shadow mb-4">
-        <!-- Card Header - Dropdown -->
-        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-            <h6 class="m-0 font-weight-bold text-primary">Auto operations</h6>
-        </div>
-        <!-- Card Body -->
-        <div class="card-body" ng-controller="PersonalDebitController">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">Auto operations</div>
-                        <div class="panel-body">
-                            <table class="table table-striped">
-                                <thead>
-                                <tr>
-                                    <th>categoryExpense</th>
-                                    <th>categoryIncome</th>
-                                    <th>dayOfMonth</th>
-                                    <th>amount</th>
-                                    <th>Date</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr ng-repeat="autoOperInf in personalAutoOperationHistory">
-                                    <td>{{autoOperInf.categoryExpense}}</td>
-                                    <td>{{autoOperInf.categoryIncome}}</td>
-                                    <td>{{autoOperInf.dayOfMonth}}</td>
-                                    <td>{{autoOperInf.amount}}</td>
-                                    <td>{{autoOperInf.date.year}}-{{autoOperInf.date.month}}-{{autoOperInf.date.day}}</td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <br/>
-    <br/>
-    <br/>
-    <br/>
-    <br/>
-    <br/>
-</div>
 
 <form novalidate="novalidate" name="addCreditForm" ng-controller="PersonalCreditController" ng-submit="addPersonalCredit()" class="needs-validation">
     <div  class="modal fade" id="createCreditModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">

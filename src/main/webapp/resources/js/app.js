@@ -75,7 +75,7 @@ var app = angular.module('AngularSpringApp', []).run(function ($rootScope, $http
 });
 
 app.config(['$routeProvider', function ($routeProvider) {
-    $routeProvider.when('/personalDebit', {
+    $routeProvider.when('/', {
         templateUrl: 'debitPersonal/layout',
         controller: PersonalDebitController
     }).when('/prediction', {
