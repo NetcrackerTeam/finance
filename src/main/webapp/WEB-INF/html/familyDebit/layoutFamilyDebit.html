@@ -414,7 +414,7 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button style="float: left" ng-disabled="editCreditForm.$invalid" type="button" class="btn btn-info" ng-click="checkPersonalCredit()">Check credit possibility</button>
+                    <button style="float: left" ng-disabled="editCreditForm.$invalid" type="button" class="btn btn-info" ng-click="checkFamilyCredit()">Check credit possibility</button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-primary" ng-disabled="editCreditForm.$invalid" onclick="$('.modal').modal('hide')">Save changes</button>
                 </div>
@@ -625,7 +625,7 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button style="float: left" ng-disabled="addCreditForm.$invalid" type="button" class="btn btn-info" ng-click="checkPersonalCredit()">Check credit possibility</button>
+                    <button style="float: left" ng-disabled="addCreditForm.$invalid" type="button" class="btn btn-info" ng-click="checkFamilyCredit()">Check credit possibility</button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-primary" ng-disabled="addCreditForm.$invalid" >Save changes</button>
                 </div>
@@ -634,7 +634,7 @@
     </div>
 </form>
 
-<form ng-controller="FamilyPredictController" ng-submit="getPredict()" ng-show="user.familyDebitId.length > 0">
+<form ng-controller="FamilyPredictController" ng-show="user.familyDebitId.length > 0">
     <div class="modal fade" id="prediction" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
          aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -664,7 +664,7 @@
     </div>
 </form>
 
-<form ng-controller="RepFamilyCtrl" ng-submit="getReport()">
+<form ng-controller="RepFamilyCtrl">
     <div class="modal fade" id="report" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 
         <div class="modal-dialog" role="document">
@@ -675,14 +675,23 @@
 
                 <div class="modal-body">
                     <label for="category">Choose month to get report</label>
-                    <p><input type="month" class="form-control" id="month" ng-model="month"/></p>
-                    <!--                    <input type="file" on-read-file="showContent($fileContent)" />-->
+                    <input type="text" name="dmf" class="form-control" placeholder="yyyy-mm" id="datetimepickerPerRepFam"/>
+                    <script type="text/javascript">
+                        $(function() {
+                            $('#datetimepickerPerRepFam').datepicker({
+                                format: "yyyy-mm",
+                                startView: "year",
+                                minViewMode: "months"//,
+                                //endDate: '0'
+                            }).datepicker("setDate", new Date());
+                        });
+                    </script>
                     <pre class="content">{{content}}</pre>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal" ng-click="clear()">Close</button>
                     <button type="button" class="btn btn-primary" ng-disabled="!sendCondition" data-dismiss="modal" ng-click="sendReport()">Send Report</button>
-                    <button type="submit" class="btn btn-primary" ng-disabled="!month" ng-click="getReport()">Get report</button>
+                    <button type="submit" class="btn btn-primary" ng-click="getReport()">Get report</button>
                 </div>
             </div>
         </div>

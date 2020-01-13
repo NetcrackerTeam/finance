@@ -4,42 +4,23 @@ app.controller("RepCtrl", ['$scope', '$http', '$templateCache',
     $scope.getReportURL = 'debitPersonal/report';
     $scope.sendReportURL = 'debitPersonal/sendReport';
 
-    $scope.month = null;
-
     $scope.sendCondition = null;
 
     $scope.getReport = function() {
 
-
-        $scope.dateFrom = $scope.month + "-01";
-
-        var temp = new Date(Date.parse($scope.dateFrom));
-
-        $scope.parsedYear = temp.getFullYear();
-
-        if(temp.getMonth() < 9) {
-            $scope.parsedMonth =  temp.getMonth()  + 2;
-            $scope.parsedMonth = "0" + $scope.parsedMonth;
-        } else {
-            $scope.parsedMonth = temp.getMonth() + 2;
-        }
-
-        $scope.dateTo = $scope.parsedYear + "-" + $scope.parsedMonth + "-01";
-
+        $scope.month = $("#datetimepickerPerRep").val() + "-01";
 
         $http({
             method: 'GET',
             url: $scope.getReportURL,
             params: {
-                 dateFrom: $scope.dateFrom,
-                 dateTo: $scope.dateTo
+                 date: $scope.month
             }
         }).then(function(response) {
             $scope.content = response.data;
             $scope.sendCondition = 'ok';
         }, function(response) {
             $scope.content = 'No information about this report';
-            $scope.status = response.status;
         });
     };
 
@@ -48,11 +29,12 @@ app.controller("RepCtrl", ['$scope', '$http', '$templateCache',
                 method: 'GET',
                 url: $scope.sendReportURL,
                 params: {
-                    dateFrom: $scope.dateFrom,
-                    dateTo: $scope.dateTo
+                    date: $scope.month
                 }
             });
         };
+
+
 
 
     $scope.showContent = function($fileContent){
@@ -78,27 +60,15 @@ app.controller("RepFamilyCtrl", ['$scope', '$http', '$templateCache',
         $scope.getReport = function() {
 
 
-            $scope.dateFrom = $scope.month + "-01";
+            $scope.month = $("#datetimepickerPerRepFam").val() + "-01";
 
-            var temp = new Date(Date.parse($scope.dateFrom));
-
-            $scope.parsedYear = temp.getFullYear();
-
-            if(temp.getMonth() < 9) {
-                $scope.parsedMonth =  temp.getMonth()  + 2;
-                $scope.parsedMonth = "0" + $scope.parsedMonth;
-            } else {
-                $scope.parsedMonth = temp.getMonth() + 2;
-            }
-
-            $scope.dateTo = $scope.parsedYear + "-" + $scope.parsedMonth + "-01";
+            alert($scope.month);
 
             $http({
                 method: 'GET',
                 url: $scope.getReportURL,
                 params: {
-                    dateFrom: $scope.dateFrom,
-                    dateTo: $scope.dateTo
+                    date: $scope.month
                 }
             }).then(function(response) {
                 $scope.content = response.data;

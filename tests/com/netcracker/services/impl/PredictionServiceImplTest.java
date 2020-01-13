@@ -62,31 +62,31 @@ public class PredictionServiceImplTest {
         categoryExpenseReport1 = new CategoryExpenseReport.Builder()
                 .abstractCategoryReportId(BigInteger.valueOf(1))
                 .amount(500L)
-                .categoryExpense(ReportCategoryExpense.CHILDREN)
+                .categoryExpense(CategoryExpense.CHILDREN)
                 .build();
 
         categoryExpenseReport2 = new CategoryExpenseReport.Builder()
                 .abstractCategoryReportId(BigInteger.valueOf(2))
                 .amount(1000L)
-                .categoryExpense(ReportCategoryExpense.EDUCATION)
+                .categoryExpense(CategoryExpense.EDUCATION)
                 .build();
 
         categoryExpenseReport3 = new CategoryExpenseReport.Builder()
                 .abstractCategoryReportId(BigInteger.valueOf(3))
                 .amount(300L)
-                .categoryExpense(ReportCategoryExpense.FOOD)
+                .categoryExpense(CategoryExpense.FOOD)
                 .build();
 
         categoryIncomeReport1 = new CategoryIncomeReport.Builder()
                 .abstractCategoryReportId(BigInteger.valueOf(4))
                 .amount(900L)
-                .categoryIncome(ReportCategoryIncome.AWARD)
+                .categoryIncome(CategoryIncome.AWARD)
                 .build();
 
         categoryIncomeReport2 = new CategoryIncomeReport.Builder()
                 .abstractCategoryReportId(BigInteger.valueOf(4))
                 .amount(1300L)
-                .categoryIncome(ReportCategoryIncome.SALARY)
+                .categoryIncome(CategoryIncome.SALARY)
                 .build();
         categoryIncomeReport.add(categoryIncomeReport1);
         categoryIncomeReport.add(categoryIncomeReport2);

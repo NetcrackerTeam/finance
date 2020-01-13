@@ -10,15 +10,15 @@ import java.time.LocalDate;
 public interface MonthReportService {
 
 
-    void formMonthPersonalReportFromDb(BigInteger id);
+    void formMonthPersonalReportFromDb(BigInteger id, LocalDate dateFrom, LocalDate dateTo);
 
-    void formMonthFamilyReportFromDb(BigInteger id);
+    void formMonthFamilyReportFromDb(BigInteger id, LocalDate dateFrom, LocalDate dateTo);
 
     Path convertToTxt(MonthReport monthReport);
 
-    MonthReport getMonthPersonalReport(BigInteger id, LocalDate dateFrom, LocalDate dateTo);
+    MonthReport getMonthPersonalReport(BigInteger id, LocalDate date, boolean isJob);
 
-    MonthReport getMonthFamilyReport(BigInteger id, LocalDate dateFrom, LocalDate dateTo);
+    MonthReport getMonthFamilyReport(BigInteger id, LocalDate date, boolean isJob);
 
     String convertToString(Path path);
 

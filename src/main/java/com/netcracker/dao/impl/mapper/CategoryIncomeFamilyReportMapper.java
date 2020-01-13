@@ -15,7 +15,7 @@ public class CategoryIncomeFamilyReportMapper implements RowMapper<CategoryIncom
         AbstractCategoryReport categoryIncomeReport =
                 new CategoryIncomeReport.Builder()
                         .amount(resultSet.getDouble("amount"))
-                        .categoryIncome(ReportCategoryIncome.getNameByKey(resultSet.getBigDecimal("category").toBigInteger()))
+                        .categoryIncome(CategoryIncome.getNameByKey(resultSet.getBigDecimal("category").toBigInteger()))
                         .userReference(resultSet.getBigDecimal("user_id").toBigInteger())
                         .build();
         return (CategoryIncomeReport) categoryIncomeReport;

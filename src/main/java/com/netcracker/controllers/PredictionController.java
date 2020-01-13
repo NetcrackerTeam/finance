@@ -78,7 +78,7 @@ public class PredictionController {
         if (check) {
             return new ResponseEntity<>(HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
     }
 

@@ -32,8 +32,8 @@ public class MonthReportDaoImpl implements MonthReportDao {
                 monthReport.getTotalIncome(),
                 monthReport.getTotalExpense(),
                 monthReport.getBalance(),
-                monthReport.getDateFrom(),
-                monthReport.getDateTo(),
+                DateUtils.localDateToDate(monthReport.getDateFrom()),
+                DateUtils.localDateToDate(monthReport.getDateTo()),
                 id);
     }
 
@@ -43,8 +43,8 @@ public class MonthReportDaoImpl implements MonthReportDao {
                 monthReport.getTotalIncome(),
                 monthReport.getTotalExpense(),
                 monthReport.getBalance(),
-                monthReport.getDateFrom(),
-                monthReport.getDateTo(),
+                DateUtils.localDateToDate(monthReport.getDateFrom()),
+                DateUtils.localDateToDate(monthReport.getDateTo()),
                 id);
     }
 
@@ -71,13 +71,13 @@ public class MonthReportDaoImpl implements MonthReportDao {
     @Override
     public void createCategoryIncomeFamilyReport(BigInteger idReport, BigInteger idUser, CategoryIncomeReport categoryIncomeReport) {
         template.update(CREATE_CATEGORY_INCOME_FAMILY_REPORT_BY_ID, idReport, idUser, categoryIncomeReport.getCategoryIncome().getId(),
-                categoryIncomeReport.getAmount(), categoryIncomeReport.getUserReference());
+                categoryIncomeReport.getAmount());
     }
 
     @Override
     public void createCategoryExpensePersonalReport(BigInteger id, CategoryExpenseReport categoryExpenseReport) {
         template.update(CREATE_CATEGORY_EXPENSE_PERSONAL_REPORT_BY_ID, id, categoryExpenseReport.getCategoryExpense().getId(),
-                categoryExpenseReport.getAmount(), categoryExpenseReport.getUserReference());
+                categoryExpenseReport.getAmount());
     }
 
     @Override

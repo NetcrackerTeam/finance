@@ -166,12 +166,11 @@ public class PersonalDebitController {
     @ResponseBody
     public String getReport(
             Principal principal,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateFrom,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateTo
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date
     ) {
         BigInteger accountId = getAccountByPrincipal(principal);
 
-        MonthReport monthReport = monthReportService.getMonthPersonalReport(accountId, dateFrom, dateTo);
+        MonthReport monthReport = monthReportService.getMonthPersonalReport(accountId, date, false);
 
         Path path = monthReportService.convertToTxt(monthReport);
 
@@ -183,12 +182,11 @@ public class PersonalDebitController {
     @RequestMapping(value = "/sendReport", method = RequestMethod.GET)
     public void sendReport(
             Principal principal,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateFrom,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateTo
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date
     ) {
         BigInteger accountId = getAccountByPrincipal(principal);
 
-        MonthReport monthReport = monthReportService.getMonthPersonalReport(accountId, dateFrom, dateTo);
+        MonthReport monthReport = monthReportService.getMonthPersonalReport(accountId, date, false);
 
         Path path;
         try {

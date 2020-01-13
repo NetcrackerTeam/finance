@@ -148,86 +148,86 @@ public interface OperationDao {
             "  GROUP BY CATEGORY.LIST_VALUE_ID, CONSUMER.REFERENCE";
 
     String GET_INCOMES_FAMILY_GROUP_BY_CATEGORIES = "SELECT SUM(SUMM.VALUE) AS AMOUNT, CATEGORY.LIST_VALUE_ID AS CATEGORY, CONSUMER.REFERENCE AS USER_ID " +
-            " FROM ATTRIBUTES SUMM, ATTRIBUTES DATE_OF, ATTRIBUTES CATEGORY, OBJECTS O, OBJREFERENCE REF, OBJREFERENCE CONSUMER " +
-            " WHERE O.OBJECT_TYPE_ID =  21 AND REF.ATTR_ID = 54 AND O.OBJECT_ID = REF.OBJECT_ID AND REF.REFERENCE = ? " +
-            " AND SUMM.OBJECT_ID = O.OBJECT_ID AND SUMM.ATTR_ID = 56 /* amount*/ " +
-            " AND CATEGORY.OBJECT_ID = O.OBJECT_ID AND CATEGORY.ATTR_ID = 57 /* category*/ " +
-            " AND DATE_OF.OBJECT_ID = O.OBJECT_ID AND DATE_OF.ATTR_ID = 58 /* date*/ " +
-            " AND CONSUMER.ATTR_ID = 55 AND CONSUMER.OBJECT_ID = O.OBJECT_ID " +
-            " AND DATE_OF.DATE_VALUE > ? " +
-            " GROUP BY CATEGORY.LIST_VALUE_ID, CONSUMER.REFERENCE";
+            "  FROM ATTRIBUTES SUMM, ATTRIBUTES DATE_OF, ATTRIBUTES CATEGORY, OBJECTS O, OBJREFERENCE REF, OBJREFERENCE CONSUMER " +
+            "  WHERE REF.ATTR_ID = 55 AND O.OBJECT_ID = REF.OBJECT_ID AND REF.REFERENCE = ? " +
+            "  AND SUMM.OBJECT_ID = O.OBJECT_ID AND SUMM.ATTR_ID = 56 /* amount*/ " +
+            "  AND CATEGORY.OBJECT_ID = O.OBJECT_ID AND CATEGORY.ATTR_ID = 57 /* category*/ " +
+            "  AND DATE_OF.OBJECT_ID = O.OBJECT_ID AND DATE_OF.ATTR_ID = 58 /* date*/ " +
+            "  AND CONSUMER.ATTR_ID = 54 AND O.OBJECT_ID = CONSUMER.OBJECT_ID " +
+            "  AND DATE_OF.DATE_VALUE > ? " +
+            "  GROUP BY CONSUMER.REFERENCE, CATEGORY.LIST_VALUE_ID";
 
-    String GET_PERSONAL_FOR_DATE_BY_ACCOUNT_ID = "SELECT SUMM.VALUE AS AMOUNT,\n" +
-            "       DATE_OF.DATE_VALUE AS DATE_IN,\n" +
-            "       DECODE(O.OBJECT_TYPE_ID,\n" +
-            "              10, CATEGORY.LIST_VALUE_ID\n" +
-            "               ) AS CATEGORY_INCOME,\n" +
-            "       DECODE(O.OBJECT_TYPE_ID,\n" +
-            "              9, CATEGORY.LIST_VALUE_ID\n" +
-            "               ) AS CATEGORY_EXPENSE\n" +
-            "FROM ATTRIBUTES SUMM, ATTRIBUTES DATE_OF, ATTRIBUTES CATEGORY, OBJECTS O, OBJREFERENCE REF_O\n" +
-            "WHERE O.OBJECT_TYPE_ID IN (10, 9) AND REF_O.ATTR_ID IN (53, 47)\n" +
-            "    AND O.OBJECT_ID = REF_O.OBJECT_ID AND REF_O.REFERENCE = ? \n" +
-            "    AND SUMM.OBJECT_ID = O.OBJECT_ID AND SUMM.ATTR_ID IN (56, 50) /* amount*/\n" +
-            "    AND CATEGORY.OBJECT_ID = O.OBJECT_ID AND CATEGORY.ATTR_ID IN (57, 51) /* category*/\n" +
-            "    AND DATE_OF.OBJECT_ID = O.OBJECT_ID AND DATE_OF.ATTR_ID IN (58, 52) /* date*/\n" +
-            "    AND DATE_OF.DATE_VALUE > ADD_MONTHS(TO_DATE(SYSDATE,'DD-MM-YYYY HH24:MI:SS'), -(?))\n" +
+    String GET_PERSONAL_FOR_DATE_BY_ACCOUNT_ID = "SELECT SUMM.VALUE AS AMOUNT, " +
+            "       DATE_OF.DATE_VALUE AS DATE_IN, " +
+            "       DECODE(O.OBJECT_TYPE_ID, " +
+            "              10, CATEGORY.LIST_VALUE_ID " +
+            "               ) AS CATEGORY_INCOME, " +
+            "       DECODE(O.OBJECT_TYPE_ID, " +
+            "              9, CATEGORY.LIST_VALUE_ID " +
+            "               ) AS CATEGORY_EXPENSE " +
+            "FROM ATTRIBUTES SUMM, ATTRIBUTES DATE_OF, ATTRIBUTES CATEGORY, OBJECTS O, OBJREFERENCE REF_O " +
+            "WHERE O.OBJECT_TYPE_ID IN (10, 9) AND REF_O.ATTR_ID IN (53, 47) " +
+            "    AND O.OBJECT_ID = REF_O.OBJECT_ID AND REF_O.REFERENCE = ?  " +
+            "    AND SUMM.OBJECT_ID = O.OBJECT_ID AND SUMM.ATTR_ID IN (56, 50) /* amount*/ " +
+            "    AND CATEGORY.OBJECT_ID = O.OBJECT_ID AND CATEGORY.ATTR_ID IN (57, 51) /* category*/ " +
+            "    AND DATE_OF.OBJECT_ID = O.OBJECT_ID AND DATE_OF.ATTR_ID IN (58, 52) /* date*/ " +
+            "    AND DATE_OF.DATE_VALUE > ADD_MONTHS(TO_DATE(SYSDATE,'DD-MM-YYYY HH24:MI:SS'), -(?)) " +
             "ORDER BY DATE_OF.DATE_VALUE DESC";
 
-    String GET_FAMILY_FOR_DATE_BY_ACCOUNT_ID = "SELECT NAME.VALUE USERNAME,  SUMM.VALUE AS AMOUNT,\n" +
-            "       DATE_OF.DATE_VALUE AS DATE_IN,\n" +
-            "       DECODE(O.OBJECT_TYPE_ID,\n" +
-            "              21, CATEGORY.LIST_VALUE_ID\n" +
-            "               ) AS CATEGORY_INCOME,\n" +
-            "       DECODE(O.OBJECT_TYPE_ID,\n" +
-            "              20, CATEGORY.LIST_VALUE_ID\n" +
-            "               ) AS CATEGORY_EXPENSE\n" +
-            "FROM ATTRIBUTES SUMM, ATTRIBUTES DATE_OF, ATTRIBUTES CATEGORY, OBJECTS O,\n" +
-            "     ATTRIBUTES NAME, OBJECTS USERS, OBJREFERENCE REF_O, OBJREFERENCE REF_USER\n" +
-            "WHERE O.OBJECT_TYPE_ID IN (21, 20) AND REF_O.ATTR_ID IN (55, 48)\n" +
-            "    AND O.OBJECT_ID = REF_O.OBJECT_ID AND REF_O.REFERENCE = ?\n" +
-            "    AND REF_USER.ATTR_ID IN (54, 49) AND USERS.OBJECT_ID = REF_USER.REFERENCE AND REF_USER.OBJECT_ID = O.OBJECT_ID\n" +
-            "    AND NAME.ATTR_ID = 5 AND NAME.OBJECT_ID = USERS.OBJECT_ID\n" +
-            "    AND SUMM.OBJECT_ID = O.OBJECT_ID AND SUMM.ATTR_ID IN (56, 50) /* amount*/\n" +
-            "    AND CATEGORY.OBJECT_ID = O.OBJECT_ID AND CATEGORY.ATTR_ID IN (57, 51) /* category*/\n" +
-            "    AND DATE_OF.OBJECT_ID = O.OBJECT_ID AND DATE_OF.ATTR_ID IN (58, 52) /* date*/\n" +
-            "    AND DATE_OF.DATE_VALUE > ADD_MONTHS(TO_DATE(SYSDATE,'DD-MM-YYYY HH24:MI:SS'), -(?))\n" +
+    String GET_FAMILY_FOR_DATE_BY_ACCOUNT_ID = "SELECT NAME.VALUE USERNAME,  SUMM.VALUE AS AMOUNT, " +
+            "       DATE_OF.DATE_VALUE AS DATE_IN, " +
+            "       DECODE(O.OBJECT_TYPE_ID, " +
+            "              21, CATEGORY.LIST_VALUE_ID " +
+            "               ) AS CATEGORY_INCOME, " +
+            "       DECODE(O.OBJECT_TYPE_ID, " +
+            "              20, CATEGORY.LIST_VALUE_ID " +
+            "               ) AS CATEGORY_EXPENSE " +
+            "FROM ATTRIBUTES SUMM, ATTRIBUTES DATE_OF, ATTRIBUTES CATEGORY, OBJECTS O, " +
+            "     ATTRIBUTES NAME, OBJECTS USERS, OBJREFERENCE REF_O, OBJREFERENCE REF_USER " +
+            "WHERE O.OBJECT_TYPE_ID IN (21, 20) AND REF_O.ATTR_ID IN (55, 48) " +
+            "    AND O.OBJECT_ID = REF_O.OBJECT_ID AND REF_O.REFERENCE = ? " +
+            "    AND REF_USER.ATTR_ID IN (54, 49) AND USERS.OBJECT_ID = REF_USER.REFERENCE AND REF_USER.OBJECT_ID = O.OBJECT_ID " +
+            "    AND NAME.ATTR_ID = 5 AND NAME.OBJECT_ID = USERS.OBJECT_ID " +
+            "    AND SUMM.OBJECT_ID = O.OBJECT_ID AND SUMM.ATTR_ID IN (56, 50) /* amount*/ " +
+            "    AND CATEGORY.OBJECT_ID = O.OBJECT_ID AND CATEGORY.ATTR_ID IN (57, 51) /* category*/ " +
+            "    AND DATE_OF.OBJECT_ID = O.OBJECT_ID AND DATE_OF.ATTR_ID IN (58, 52) /* date*/ " +
+            "    AND DATE_OF.DATE_VALUE > ADD_MONTHS(TO_DATE(SYSDATE,'DD-MM-YYYY HH24:MI:SS'), -(?)) " +
             "ORDER BY DATE_OF.DATE_VALUE DESC";
 
-    String GET_FIRST_15_PERSONAL_HISTORY_BY_ACCOUNT_ID = "SELECT SUMM.VALUE AS AMOUNT,\n" +
-            "       DATE_OF.DATE_VALUE AS DATE_IN,\n" +
-            "       DECODE(O.OBJECT_TYPE_ID,\n" +
-            "              10, CATEGORY.LIST_VALUE_ID\n" +
-            "               ) AS CATEGORY_INCOME,\n" +
-            "       DECODE(O.OBJECT_TYPE_ID,\n" +
-            "              9, CATEGORY.LIST_VALUE_ID\n" +
-            "               ) AS CATEGORY_EXPENSE\n" +
-            "FROM ATTRIBUTES SUMM, ATTRIBUTES DATE_OF, ATTRIBUTES CATEGORY, OBJECTS O, OBJREFERENCE REF_O\n" +
-            "WHERE O.OBJECT_TYPE_ID IN (10, 9) AND REF_O.ATTR_ID IN (53, 47)\n" +
-            "    AND O.OBJECT_ID = REF_O.OBJECT_ID AND REF_O.REFERENCE = ? \n" +
-            "    AND SUMM.OBJECT_ID = O.OBJECT_ID AND SUMM.ATTR_ID IN (56, 50) /* amount*/\n" +
-            "    AND CATEGORY.OBJECT_ID = O.OBJECT_ID AND CATEGORY.ATTR_ID IN (57, 51) /* category*/\n" +
-            "    AND DATE_OF.OBJECT_ID = O.OBJECT_ID AND DATE_OF.ATTR_ID IN (58, 52) /* date*/\n" +
+    String GET_FIRST_15_PERSONAL_HISTORY_BY_ACCOUNT_ID = "SELECT SUMM.VALUE AS AMOUNT, " +
+            "       DATE_OF.DATE_VALUE AS DATE_IN, " +
+            "       DECODE(O.OBJECT_TYPE_ID, " +
+            "              10, CATEGORY.LIST_VALUE_ID " +
+            "               ) AS CATEGORY_INCOME, " +
+            "       DECODE(O.OBJECT_TYPE_ID, " +
+            "              9, CATEGORY.LIST_VALUE_ID " +
+            "               ) AS CATEGORY_EXPENSE " +
+            "FROM ATTRIBUTES SUMM, ATTRIBUTES DATE_OF, ATTRIBUTES CATEGORY, OBJECTS O, OBJREFERENCE REF_O " +
+            "WHERE O.OBJECT_TYPE_ID IN (10, 9) AND REF_O.ATTR_ID IN (53, 47) " +
+            "    AND O.OBJECT_ID = REF_O.OBJECT_ID AND REF_O.REFERENCE = ?  " +
+            "    AND SUMM.OBJECT_ID = O.OBJECT_ID AND SUMM.ATTR_ID IN (56, 50) /* amount*/ " +
+            "    AND CATEGORY.OBJECT_ID = O.OBJECT_ID AND CATEGORY.ATTR_ID IN (57, 51) /* category*/ " +
+            "    AND DATE_OF.OBJECT_ID = O.OBJECT_ID AND DATE_OF.ATTR_ID IN (58, 52) /* date*/ " +
             "    AND ROWNUM <= 10" +
             "ORDER BY DATE_OF.DATE_VALUE DESC";
 
-    String GET_FIRST_15_FAMILY_HISTORY_BY_ACCOUNT_ID = "SELECT NAME.VALUE USERNAME,  SUMM.VALUE AS AMOUNT,\n" +
-            "       DATE_OF.DATE_VALUE AS DATE_IN,\n" +
-            "       DECODE(O.OBJECT_TYPE_ID,\n" +
-            "              21, CATEGORY.LIST_VALUE_ID\n" +
-            "               ) AS CATEGORY_INCOME,\n" +
-            "       DECODE(O.OBJECT_TYPE_ID,\n" +
-            "              20, CATEGORY.LIST_VALUE_ID\n" +
-            "               ) AS CATEGORY_EXPENSE\n" +
-            "FROM ATTRIBUTES SUMM, ATTRIBUTES DATE_OF, ATTRIBUTES CATEGORY, OBJECTS O,\n" +
-            "     ATTRIBUTES NAME, OBJECTS USERS, OBJREFERENCE REF_O, OBJREFERENCE REF_USER\n" +
-            "WHERE O.OBJECT_TYPE_ID IN (21, 20) AND REF_O.ATTR_ID IN (55, 48)\n" +
-            "    AND O.OBJECT_ID = REF_O.OBJECT_ID AND REF_O.REFERENCE = ?\n" +
-            "    AND REF_USER.ATTR_ID IN (54, 49) AND USERS.OBJECT_ID = REF_USER.REFERENCE AND REF_USER.OBJECT_ID = O.OBJECT_ID\n" +
-            "    AND NAME.ATTR_ID = 5 AND NAME.OBJECT_ID = USERS.OBJECT_ID\n" +
-            "    AND SUMM.OBJECT_ID = O.OBJECT_ID AND SUMM.ATTR_ID IN (56, 50) /* amount*/\n" +
-            "    AND CATEGORY.OBJECT_ID = O.OBJECT_ID AND CATEGORY.ATTR_ID IN (57, 51) /* category*/\n" +
-            "    AND DATE_OF.OBJECT_ID = O.OBJECT_ID AND DATE_OF.ATTR_ID IN (58, 52) /* date*/\n" +
-            "    AND ROWNUM <= 10\n"+
+    String GET_FIRST_15_FAMILY_HISTORY_BY_ACCOUNT_ID = "SELECT NAME.VALUE USERNAME,  SUMM.VALUE AS AMOUNT, " +
+            "       DATE_OF.DATE_VALUE AS DATE_IN, " +
+            "       DECODE(O.OBJECT_TYPE_ID, " +
+            "              21, CATEGORY.LIST_VALUE_ID " +
+            "               ) AS CATEGORY_INCOME, " +
+            "       DECODE(O.OBJECT_TYPE_ID, " +
+            "              20, CATEGORY.LIST_VALUE_ID " +
+            "               ) AS CATEGORY_EXPENSE " +
+            "FROM ATTRIBUTES SUMM, ATTRIBUTES DATE_OF, ATTRIBUTES CATEGORY, OBJECTS O, " +
+            "     ATTRIBUTES NAME, OBJECTS USERS, OBJREFERENCE REF_O, OBJREFERENCE REF_USER " +
+            "WHERE O.OBJECT_TYPE_ID IN (21, 20) AND REF_O.ATTR_ID IN (55, 48) " +
+            "    AND O.OBJECT_ID = REF_O.OBJECT_ID AND REF_O.REFERENCE = ? " +
+            "    AND REF_USER.ATTR_ID IN (54, 49) AND USERS.OBJECT_ID = REF_USER.REFERENCE AND REF_USER.OBJECT_ID = O.OBJECT_ID " +
+            "    AND NAME.ATTR_ID = 5 AND NAME.OBJECT_ID = USERS.OBJECT_ID " +
+            "    AND SUMM.OBJECT_ID = O.OBJECT_ID AND SUMM.ATTR_ID IN (56, 50) /* amount*/ " +
+            "    AND CATEGORY.OBJECT_ID = O.OBJECT_ID AND CATEGORY.ATTR_ID IN (57, 51) /* category*/ " +
+            "    AND DATE_OF.OBJECT_ID = O.OBJECT_ID AND DATE_OF.ATTR_ID IN (58, 52) /* date*/ " +
+            "    AND ROWNUM <= 10 "+
             "ORDER BY DATE_OF.DATE_VALUE DESC";
 }

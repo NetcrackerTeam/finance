@@ -10,13 +10,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class CategoryIncomePersonalReportMapper implements RowMapper<CategoryIncomeReport> {
-
     @Override
     public CategoryIncomeReport mapRow(ResultSet resultSet, int i) throws SQLException {
+
         AbstractCategoryReport categoryIncomeReport =
                 new CategoryIncomeReport.Builder()
                         .amount(resultSet.getDouble("amount"))
-                        .categoryIncome(ReportCategoryIncome.getNameByKey(resultSet.getBigDecimal("category").toBigInteger()))
+                        .categoryIncome(CategoryIncome.getNameByKey(resultSet.getBigDecimal("category").toBigInteger()))
                         .build();
         return (CategoryIncomeReport) categoryIncomeReport;
     }

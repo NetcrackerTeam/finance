@@ -76,8 +76,8 @@ public class JobServiceImpl implements JobService {
         familyDebitAccounts.forEach(debitAccountFamily -> {
             boolean checkStatus = UserStatusActive.YES.equals(debitAccountFamily.getOwner().getUserStatusActive());
             ObjectsCheckUtils.isNotNull(debitAccountFamily);
-            monthReportService.formMonthFamilyReportFromDb(debitAccountFamily.getId());
-            MonthReport monthReport = monthReportService.getMonthPersonalReport(debitAccountFamily.getId(), dateFrom, localDateNow);
+            monthReportService.formMonthFamilyReportFromDb(debitAccountFamily.getId(), dateFrom, localDateNow);
+            MonthReport monthReport = monthReportService.getMonthPersonalReport(debitAccountFamily.getId(), localDateNow, true);
             sendReportByMail(monthReport, (AbstractDebitAccount) familyDebitAccounts);
         });
 
@@ -93,8 +93,8 @@ public class JobServiceImpl implements JobService {
             boolean checkStatus = UserStatusActive.YES.equals(debitAccountPersonal.getOwner().getUserStatusActive());
             ObjectsCheckUtils.isNotNull(debitAccountPersonal);
             if (checkStatus) {
-                monthReportService.formMonthPersonalReportFromDb(debitAccountPersonal.getId());
-                MonthReport monthReport = monthReportService.getMonthPersonalReport(debitAccountPersonal.getId(), dateFrom, localDateNow);
+                monthReportService.formMonthPersonalReportFromDb(debitAccountPersonal.getId(), dateFrom, localDateNow);
+                MonthReport monthReport = monthReportService.getMonthPersonalReport(debitAccountPersonal.getId(), localDateNow, true);
                 sendReportByMail(monthReport, (AbstractDebitAccount) personalDebitAccounts);
             } else
                 logger.debug("user status not active " + debitAccountPersonal.getOwner().getId());

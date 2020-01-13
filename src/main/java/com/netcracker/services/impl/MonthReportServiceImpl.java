@@ -11,6 +11,7 @@ import com.netcracker.services.utils.ExceptionMessages;
 import com.netcracker.services.utils.ObjectsCheckUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
@@ -44,13 +45,11 @@ public class MonthReportServiceImpl implements MonthReportService {
     UserDao userDao;
 
     @Override
-    public void formMonthFamilyReportFromDb(BigInteger id) {
+    public void formMonthFamilyReportFromDb(BigInteger id, LocalDate dateFrom, LocalDate dateTo) {
         logger.debug("Insert formFamilyReportFromDb " + id);
 
         ObjectsCheckUtils.isNotNull(id);
 
-        LocalDate dateTo = LocalDate.now();
-        LocalDate dateFrom = DateUtils.addMonthsToDate(dateTo, -1);
 
         Collection<CategoryExpenseReport> expenseReports = operationDao.getExpensesFamilyGroupByCategories(id, dateFrom);
         Collection<CategoryIncomeReport> incomeReports = operationDao.getIncomesFamilyGroupByCategories(id, dateFrom);
@@ -91,18 +90,15 @@ public class MonthReportServiceImpl implements MonthReportService {
     }
 
     @Override
-    public void formMonthPersonalReportFromDb(BigInteger id) {
+    public void formMonthPersonalReportFromDb(BigInteger id, LocalDate dateFrom, LocalDate dateTo) {
         logger.debug("Insert formPersonalReportFromDb " + id);
 
-        ObjectsCheckUtils.isNotNull(id);
-
-        LocalDate dateTo = LocalDate.now();
-        LocalDate dateFrom = DateUtils.addMonthsToDate(dateTo, -1);
+        ObjectsCheckUtils.isNotNull(id, dateTo);
 
         Collection<CategoryExpenseReport> expenseReports = operationDao.getExpensesPersonalGroupByCategories(id, dateFrom);
         Collection<CategoryIncomeReport> incomeReports = operationDao.getIncomesPersonalGroupByCategories(id, dateFrom);
 
-        double totalIncome = expenseReports.stream().mapToDouble(AbstractCategoryReport::getAmount).sum();
+        double totalIncome = incomeReports.stream().mapToDouble(AbstractCategoryReport::getAmount).sum();
         double totalExpense = expenseReports.stream().mapToDouble(AbstractCategoryReport::getAmount).sum();
 
         double sum = personalDebitAccountDao.getPersonalAccountById(id).getAmount();
@@ -110,20 +106,23 @@ public class MonthReportServiceImpl implements MonthReportService {
         MonthReport monthReport = new MonthReport.Builder()
                 .balance(sum)
                 .totalIncome(totalIncome)
-                .totalExpense(totalExpense).build();
+                .totalExpense(totalExpense)
+                .dateFrom(dateFrom)
+                .dateTo(dateTo)
+                .build();
 
         monthReportDao.createPersonalMonthReport(monthReport, id);
 
-        BigInteger idOfRecentMonth = monthReportDao.getMonthReportByPersonalAccountId(id, dateFrom,
+        BigInteger idOfRecentReport = monthReportDao.getMonthReportByPersonalAccountId(id, dateFrom,
                 dateTo).getId();
 
-        ObjectsCheckUtils.isNotNull(idOfRecentMonth);
+        ObjectsCheckUtils.isNotNull(idOfRecentReport);
 
         expenseReports.forEach(exp -> {
-            monthReportDao.createCategoryExpensePersonalReport(idOfRecentMonth, exp);
+            monthReportDao.createCategoryExpensePersonalReport(idOfRecentReport, exp);
         });
         incomeReports.forEach(inc -> {
-            monthReportDao.createCategoryIncomePersonalReport(idOfRecentMonth, inc);
+            monthReportDao.createCategoryIncomePersonalReport(idOfRecentReport, inc);
         });
     }
 
@@ -136,8 +135,8 @@ public class MonthReportServiceImpl implements MonthReportService {
         Path path = Paths.get(monthReport.getDateFrom() + UNDERLINE + monthReport.getDateTo() + TXT_FORMAT);
 
         try (BufferedWriter writer = Files.newBufferedWriter(path)) {
-            writer.write(MONTH_REPORT_FROM + monthReport.getDateFrom());
-            writer.write(MONTH_REPORT_TO + monthReport.getDateTo() + NEW_LINE);
+            writer.write(MONTH_REPORT_FROM + monthReport.getDateTo());
+            writer.write(MONTH_REPORT_TO + monthReport.getDateFrom() + NEW_LINE);
             writer.write(DOTTED_LINE);
             writer.write(ACTUAL_BALANCE + monthReport.getBalance() + TAB_AND_LINE);
             writer.write(TOTAL_EXPENSE + monthReport.getTotalExpense() + TAB_AND_LINE);
@@ -198,12 +197,14 @@ public class MonthReportServiceImpl implements MonthReportService {
 
 
     @Override
-    public MonthReport getMonthPersonalReport(BigInteger id, LocalDate dateFrom, LocalDate dateTo) {
-        logger.debug("Id " + id + " dateFrom " + dateFrom + " dateTo " + dateTo);
+    public MonthReport getMonthPersonalReport(BigInteger id, LocalDate date, boolean isJob) {
+        logger.debug("Id " + id + " date " + date);
 
-        ObjectsCheckUtils.isNotNull(id, dateFrom, dateTo);
+        ObjectsCheckUtils.isNotNull(id, date);
 
-        MonthReport monthReport = monthReportDao.getMonthReportByPersonalAccountId(id, dateFrom, dateTo);
+        TwoValue<LocalDate> dates = calculateDates(date, id, isJob, false);
+
+        MonthReport monthReport = monthReportDao.getMonthReportByPersonalAccountId(id, dates.getValue1(), dates.getValue2());
         ObjectsCheckUtils.isNotNull(monthReport);
         Collection<CategoryExpenseReport> expenseReports = monthReportDao.getCategoryExpensePersonalReport(monthReport.getId());
         Collection<CategoryIncomeReport> incomeReports = monthReportDao.getCategoryIncomePersonalReport(monthReport.getId());
@@ -215,12 +216,14 @@ public class MonthReportServiceImpl implements MonthReportService {
     }
 
     @Override
-    public MonthReport getMonthFamilyReport(BigInteger id, LocalDate dateFrom, LocalDate dateTo) {
-        logger.debug("Id " + id + " dateFrom " + dateFrom + " dateTo " + dateTo);
+    public MonthReport getMonthFamilyReport(BigInteger id, LocalDate date, boolean isJob) {
+        logger.debug("Id " + id + " dateFrom " + date);
 
-        ObjectsCheckUtils.isNotNull(id, dateFrom, dateTo);
+        ObjectsCheckUtils.isNotNull(id, date);
 
-        MonthReport monthReport = monthReportDao.getMonthReportByFamilyAccountId(id, dateFrom, dateTo);
+        TwoValue<LocalDate> dates = calculateDates(date, id, isJob, true);
+
+        MonthReport monthReport = monthReportDao.getMonthReportByFamilyAccountId(id, dates.getValue1(), dates.getValue2());
         ObjectsCheckUtils.isNotNull(monthReport);
         Collection<CategoryExpenseReport> expenseReports = monthReportDao.getCategoryExpenseFamilyReport(monthReport.getId());
         Collection<CategoryIncomeReport> incomeReports = monthReportDao.getCategoryIncomeFamilyReport(monthReport.getId());
@@ -241,5 +244,39 @@ public class MonthReportServiceImpl implements MonthReportService {
             throw new MonthReportException(e.getMessage());
         }
         return report;
+    }
+
+    private TwoValue<LocalDate> calculateDates(LocalDate date, BigInteger id, boolean isJob, boolean isFamily) {
+        logger.debug("Date " + id + " id" + " isJob " + isJob + " isFamily " + isFamily);
+        LocalDate dateTo;
+        LocalDate dateFrom;
+        MonthReport monthReport;
+
+        if(isJob) {
+            dateTo = date;
+            dateFrom = DateUtils.addMonthsToDate(date, -1);
+        } else if (date.getMonth().getValue() == LocalDate.now().getMonth().getValue()) {
+            dateTo = LocalDate.now();
+            dateFrom = LocalDate.of(LocalDate.now().getYear(), LocalDate.now().getMonth().getValue(), 1);
+
+            try {
+                if(isFamily){
+                    monthReport = monthReportDao.getMonthReportByFamilyAccountId(id, dateFrom, dateTo);
+                } else {
+                    monthReport = monthReportDao.getMonthReportByPersonalAccountId(id, dateFrom, dateTo);
+                }
+            } catch (EmptyResultDataAccessException e) {
+                if(isFamily) {
+                    formMonthFamilyReportFromDb(id, dateFrom, dateTo);
+                } else {
+                    formMonthPersonalReportFromDb(id, dateFrom, dateTo);
+                }
+            }
+        } else {
+            dateFrom = date;
+            dateTo = DateUtils.addMonthsToDate(date, 1);
+        }
+        logger.debug("DateFrom " + dateFrom + " dateTo" + dateTo);
+        return new TwoValue<>(dateFrom, dateTo);
     }
 }

@@ -78,36 +78,36 @@ public class MonthReportServiceImplTest {
         categoryExpenseReport1 = new CategoryExpenseReport.Builder()
                 .abstractCategoryReportId(BigInteger.valueOf(1))
                 .amount(500L)
-                .categoryExpense(ReportCategoryExpense.CHILDREN)
+                .categoryExpense(CategoryExpense.CHILDREN)
                 .userReference(testId)
                 .build();
 
         categoryExpenseReport2 = new CategoryExpenseReport.Builder()
                 .abstractCategoryReportId(BigInteger.valueOf(2))
                 .amount(1000L)
-                .categoryExpense(ReportCategoryExpense.EDUCATION)
-                .userReference(testId)
+                .categoryExpense(CategoryExpense.EDUCATION)
+                .userReference(BigInteger.valueOf(98))
                 .build();
 
         categoryExpenseReport3 = new CategoryExpenseReport.Builder()
                 .abstractCategoryReportId(BigInteger.valueOf(3))
                 .amount(300L)
-                .categoryExpense(ReportCategoryExpense.FOOD)
-                .userReference(testId)
+                .categoryExpense(CategoryExpense.FOOD)
+                .userReference(BigInteger.valueOf(117))
                 .build();
 
         categoryIncomeReport1 = new CategoryIncomeReport.Builder()
                 .abstractCategoryReportId(BigInteger.valueOf(4))
                 .amount(900L)
-                .categoryIncome(ReportCategoryIncome.AWARD)
-                .userReference(testId)
+                .categoryIncome(CategoryIncome.AWARD)
+                .userReference(BigInteger.valueOf(1))
                 .build();
 
         categoryIncomeReport2 = new CategoryIncomeReport.Builder()
                 .abstractCategoryReportId(BigInteger.valueOf(4))
                 .amount(1300L)
-                .categoryIncome(ReportCategoryIncome.SALARY)
-                .userReference(testId)
+                .categoryIncome(CategoryIncome.SALARY)
+                .userReference(BigInteger.valueOf(98))
                 .build();
         categoryIncomeReport.add(categoryIncomeReport1);
         categoryIncomeReport.add(categoryIncomeReport2);
@@ -138,12 +138,16 @@ public class MonthReportServiceImplTest {
     }
 
 
+
+
     @Test
+    public void convertPersonalToTxt2() {
 
-    public void convertPersonalToTxt() {
-        when(userDao.getUserById(testId)).thenReturn(testUser);
-        monthReportService.convertToTxt(monthReport);
+        LocalDate dateFrom = LocalDate.of(2020,1,1);
+        LocalDate dateTo = LocalDate.of(2020,2,1);
+       // MonthReport monthReport = monthReportService.getMonthFamilyReport(BigInteger.valueOf(98), dateFrom);
+
+
+        //monthReportService.convertToTxt(monthReport);
     }
-
-
 }

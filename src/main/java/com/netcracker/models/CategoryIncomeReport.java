@@ -6,11 +6,11 @@ import com.netcracker.models.enums.ReportCategoryIncome;
 
 
 public class CategoryIncomeReport extends AbstractCategoryReport {
-    private ReportCategoryIncome categoryIncome;
+    private CategoryIncome categoryIncome;
 
     public static class Builder extends BaseBuilder<CategoryIncomeReport, Builder> {
 
-        public Builder categoryIncome(ReportCategoryIncome income) {
+        public Builder categoryIncome(CategoryIncome income) {
             actualClass.setCategoryIncome(income);
             return this;
         }
@@ -26,11 +26,11 @@ public class CategoryIncomeReport extends AbstractCategoryReport {
         }
     }
 
-    public ReportCategoryIncome getCategoryIncome() {
+    public CategoryIncome getCategoryIncome() {
         return categoryIncome;
     }
 
-    public void setCategoryIncome(ReportCategoryIncome categoryIncome) {
+    public void setCategoryIncome(CategoryIncome categoryIncome) {
         this.categoryIncome = categoryIncome;
     }
 }

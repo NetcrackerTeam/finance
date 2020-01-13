@@ -8,20 +8,20 @@ public interface JobService {
 
     String cront = "*/60 * * * * *"; // every ten second for test
 
-    public void executeMonthPersonalReportOnEmailJob();
+    void executeMonthPersonalReportOnEmailJob();
 
-    public void executeMonthFamilyReportOnEmailJob();
+    void executeMonthFamilyReportOnEmailJob();
 
-    public void executeRemindAutoIncomeFamilyJob();
+    void executeRemindAutoIncomeFamilyJob();
 
-    public void executeRemindAutoExpenseFamilyJob();
+    void executeRemindAutoExpenseFamilyJob();
 
-    public void executeRemindAutoExpensePersonalJob();
+    void executeRemindAutoExpensePersonalJob();
 
-    public void executeRemindAutoIncomePersonalJob();
+    void executeRemindAutoIncomePersonalJob();
 
-    public void executeAutoCreditExpenseFamily();
+    void executeAutoCreditExpenseFamily();
 
-    public void executeAutoCreditExpensePersonal();
+    void executeAutoCreditExpensePersonal();
 
 }
