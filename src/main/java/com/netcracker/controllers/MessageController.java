@@ -59,5 +59,10 @@ public interface MessageController {
     String INVALID_NAME = "Invalid name";
     String CREDIT_NAME_ERROR = "The name can contain only latin letters, numbers and spaces";
     String ACCOUNT_FAMILY_NAME = "name of family account is incorrect";
+    String INCORRECT_AMOUNT_BETWEEN = "Amount can be from 1 to 100000000";
+    String START_DATE_ERROR = "Choose a later date";
+    String END_DATE_ERROR = "Choose an earlier date";
+    String CREDIT_RATE_ERROR = "Rate cannot be less then 1 or more then 60";
+    String INVALID_DAY_OF_MONTH = "Invalid day of month";
 
 }

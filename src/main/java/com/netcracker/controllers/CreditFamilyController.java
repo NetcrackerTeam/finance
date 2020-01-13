@@ -51,7 +51,7 @@ public class CreditFamilyController {
                 "], [familyDebitId = " + familyDebitId + "], [userId = " + userId + "]");
         if (!familyCreditService.doesCreditWithNameNotExist(debitId, creditAccount.getName()))
             return new Status(false, MessageController.CREDIT_NAME_EXISTS);
-        Status checked = personalCreditService.checkCreditName(creditAccount.getName());
+        Status checked = personalCreditService.checkCreditData(creditAccount);
         if (!checked.isStatus()) return checked;
         familyCreditService.createFamilyCredit(familyDebitId, creditAccount);
         return new Status(true, MessageController.ADD_FAMILY_CREDIT + creditAccount.getName());

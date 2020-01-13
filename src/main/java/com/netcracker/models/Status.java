@@ -10,6 +10,7 @@ public class Status {
     }
 
     public Status() {
+        status = true;
     }
 
     public boolean isStatus() {

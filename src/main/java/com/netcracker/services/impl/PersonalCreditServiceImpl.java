@@ -205,13 +205,30 @@ public class PersonalCreditServiceImpl implements PersonalCreditService {
         return creditAccountDao.getCreditsIdByNamePers(debitId, name).isEmpty();
     }
 
-    @Override
     public Status checkCreditName(String name) {
         if (NONE_NAME.equals(name))
             return new Status(false, MessageController.INVALID_NAME);
         if (!name.matches(REGULAR_FOR_NAME))
             return new Status(false, MessageController.CREDIT_NAME_ERROR);
-        return new Status(true, null);
+        return new Status();
+    }
+
+    @Override
+    public Status checkCreditData(AbstractCreditAccount creditAccount) {
+        ObjectsCheckUtils.isNotNull(creditAccount, creditAccount.getName(), creditAccount.getAmount(),
+                creditAccount.getDate(), creditAccount.getCreditRate(), creditAccount.getDateTo(), creditAccount.getMonthDay(),
+                creditAccount.isCommodity());
+        if (creditAccount.getAmount() < 1 || creditAccount.getAmount() > 100000000)
+            return new Status(false, MessageController.INCORRECT_AMOUNT_BETWEEN);
+        if (LocalDate.now().minusWeeks(1).isAfter(creditAccount.getDate()))
+            return new Status(false, MessageController.START_DATE_ERROR);
+        if (LocalDate.now().plusMonths(600).isBefore(creditAccount.getDateTo()))
+            return new Status(false, MessageController.END_DATE_ERROR);
+        if (creditAccount.getCreditRate() < 0 || creditAccount.getCreditRate() > 30)
+            return new Status(false, MessageController.CREDIT_RATE_ERROR);
+        if (creditAccount.getMonthDay() < 1 || creditAccount.getMonthDay() > 31)
+            return new Status(false, MessageController.INVALID_DAY_OF_MONTH);
+        return checkCreditName(creditAccount.getName());
     }
 
     private void addPayment(AbstractCreditAccount creditAccount, AbstractDebitAccount debitAccount, double amount) {

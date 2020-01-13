@@ -46,7 +46,7 @@ public class CreditPersonalController {
         logger.debug("[createCreditAccount]" + MessageController.debugStartMessage + "[debitId = " + debitId + "]");
         if (!personalCreditService.doesCreditWithNameNotExist(debitId, creditAccount.getName()))
             return new Status(false, MessageController.CREDIT_NAME_EXISTS);
-        Status checked = personalCreditService.checkCreditName(creditAccount.getName());
+        Status checked = personalCreditService.checkCreditData(creditAccount);
         if (!checked.isStatus()) return checked;
         personalCreditService.createPersonalCredit(debitId, creditAccount);
         return new Status(true, MessageController.ADD_PERSONAL_CREDIT + creditAccount.getName());

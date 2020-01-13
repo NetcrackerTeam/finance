@@ -1,5 +1,6 @@
 package com.netcracker.services;
 
+import com.netcracker.models.AbstractCreditAccount;
 import com.netcracker.models.CreditOperation;
 import com.netcracker.models.PersonalCreditAccount;
 import com.netcracker.models.Status;
@@ -29,7 +30,7 @@ public interface PersonalCreditService {
 
     boolean doesCreditWithNameNotExist(BigInteger debitId, String name);
 
-    Status checkCreditName(String name);
+    Status checkCreditData(AbstractCreditAccount creditAccount);
 
     String NONE_NAME = "none";
 

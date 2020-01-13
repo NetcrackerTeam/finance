@@ -115,6 +115,7 @@ public class FamilyDebitController {
             double familyAmount = familyDebitAccount.getAmount();
             familyDebitService.deleteFamilyDebitAccount(accountId, userId);
             PersonalDebitAccount personalDebitAccount = personalDebitService.getPersonalDebitAccount(user.getPersonalDebitAccount());
+            userDao.updateRole(userId, UserRole.USER.getId());
             double amount = personalDebitAccount.getAmount() + familyAmount;
             personalDebitAccountDao.updateAmountOfPersonalAccount(personalDebitAccount.getId(), amount);
             logger.debug("success deactivate");
