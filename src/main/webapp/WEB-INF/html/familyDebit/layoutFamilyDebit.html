@@ -33,28 +33,38 @@
         <!-- Content Column -->
         <div class="col-lg-6 mb-4">
 
-            <div class="row ml-1 mb-3">
-                <!-- Content Row -->
+            <div class="row">
 
+                <!-- Content Row -->
+                <div class="mb-2 ml-3">
                 <a href="#createFamilyCreditModal" data-toggle="modal" class="btn btn-primary btn-icon-split">
                     <span class="text" >Create credit</span>
                 </a>
+                </div>
 
+                <div class="mb-2 ml-1">
                 <a href="#incomeOp" data-toggle="modal" class="btn btn-success btn-icon-split ml-1">
                     <span class="text">Add income</span>
                 </a>
+                </div>
 
+                <div class="mb-2 ml-1">
                 <a href="#expenseOp" data-toggle="modal" class="btn btn-danger btn-icon-split ml-1">
                     <span class="text">Add expense</span>
                 </a>
+                </div>
 
+                <div class="mb-2 ml-1">
                 <a href="#report" data-toggle="modal" class="btn btn-info btn-icon-split ml-1">
                     <span class="text">Get report</span>
                 </a>
+                </div>
 
+                <div class="mb-2 ml-1">
                 <a href="#prediction" data-toggle="modal" class="btn btn-warning btn-icon-split ml-1">
                     <span class="text">Prediction</span>
                 </a>
+                </div>
             </div>
             <!-- Content Row -->
             <div class="row">
@@ -115,7 +125,7 @@
 <!--                        <option value="6">Half year</option>-->
 <!--                        <option value="12">Year</option>-->
 <!--                    </select>-->
-                    <table class="table">
+                    <table class="table table-responsive">
                         <thead>
                         <tr>
                             <th>UserName</th>
@@ -210,7 +220,7 @@
                         <h3 style="position: absolute; top: 50%; left: 50%; margin: 0 -50% 0 0; transform: translate(-50%, -50%);" class="panel-heading">
                             You have no credits yet, you are the lucky one!</h3>
                     </div>
-                    <table class="table table-hover"  ng-show="familyCredit.length > 0">
+                    <table class="table table-hover table-responsive"  ng-show="familyCredit.length > 0">
                         <thead>
                         <tr>
                             <th>Name</th>
@@ -242,7 +252,7 @@
                     <h6 class="m-0 font-weight-bold text-primary">Auto operations</h6>
                 </div>
                 <div class="card-body" ng-controller="FamilyDebitController">
-                    <table class="table">
+                    <table class="table table-responsive">
                         <thead>
                         <th>Expense</th>
                         <th>Income</th>
@@ -273,9 +283,9 @@
 </div>
 <!-- /.container-fluid -->
 
-<form ng-controller="FamilyCreditController">
+<form novalidate="novalidate" ng-controller="FamilyCreditController" ng-submit="addCreditPayment()">
     <div class="modal fade" id="infoCreditModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
+        <div class="modal-dialog  modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 align="center" class="modal-title"> "{{personalCreditor.name}}" credit</h4>
@@ -284,13 +294,14 @@
                     </button>
                 </div>
                 <div class="modal-body">
+                    <div class="col-lg-6 mb-4">
                     <table class="table table-borderless">
                         <tr>
                             <th>Amount:</th>
                             <td>{{personalCreditor.amount}}</td>
                         </tr>
                         <tr>
-                            <th>Paid Amount:</th>
+                            <th>Paid amount:</th>
                             <td>{{personalCreditor.paidAmount}}</td>
                         </tr>
                         <tr>
@@ -298,23 +309,15 @@
                             <td>{{personalCreditor.creditRate}}</td>
                         </tr>
                         <tr>
-                            <th>Start Date:</th>
+                            <th>Start date:</th>
                             <td>{{personalCreditor.date.year}}-{{personalCreditor.date.month}}-{{personalCreditor.date.day}}</td>
                         </tr>
                         <tr>
-                            <th>Ends Date:</th>
+                            <th>Ends date:</th>
                             <td>{{personalCreditor.dateTo.year}}-{{personalCreditor.dateTo.month}}-{{personalCreditor.dateTo.day}}</td>
                         </tr>
                         <tr>
-                            <th>Month Day:</th>
-                            <td>{{personalCreditor.monthDay}}</td>
-                        </tr>
-                        <tr>
-                            <th>Ends Date:</th>
-                            <td>{{personalCreditor.dateTo.year}}-{{personalCreditor.dateTo.month}}-{{personalCreditor.dateTo.day}}</td>
-                        </tr>
-                        <tr>
-                            <th>Month Day:</th>
+                            <th>Month day:</th>
                             <td>{{personalCreditor.monthDay}}</td>
                         </tr>
                         <tr>
@@ -322,15 +325,23 @@
                             <td>{{personalCreditor.isCommodity}}</td>
                         </tr>
                         <tr>
-                            <th>Amount Debt:</th>
+                            <th>Amount debt:</th>
                             <td>{{personalCreditor.debt.amountDebt}}</td>
                         </tr>
 
                     </table>
+                    </div>
+                    <div class="col-lg-6 mb-4">
+                        <div class="form-group" ng-class="{ 'invalid' : (editCreditForm.am.$error.max || editCreditForm.am.$error.min) &amp;&amp; !editCreditForm.am.$pristine}">
+                            <label for="editCreditAmount">Payment amount:</label>
+                            <input type="number" name="am" min="1" max="10000000" id="addCrPay" ng-model="amountToPay" step="0.01" class="item-input-wrapper form-control" placeholder="Enter amount" required="required"/>
+                            {{ messageAmountPay }}
+                        </div>
+                        <button type="submit" class="btn btn-primary" >Add payment</button>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addPersonalCreditPayment">Add payment</button>
                 </div>
             </div>
         </div>

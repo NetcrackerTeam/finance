@@ -57,22 +57,18 @@ public class CreditFamilyController {
         return new Status(true, MessageController.ADD_FAMILY_CREDIT + creditAccount.getName());
     }
 
-    @RequestMapping(value = "/addFamilyCreditPayment", method = RequestMethod.POST)
-    public String addFamilyCreditPayment(@ModelAttribute @RequestParam Map<String, String> amountMap, Principal principal, Model model){
+    @RequestMapping(value = "/pay", method = RequestMethod.POST)
+    @ResponseBody
+    public Status addFamilyCreditPayment(@RequestBody Double amount, Principal principal){
         getUserInfo(principal);
         logger.debug("[addFamilyCreditPayment]" + MessageController.debugStartMessage  + "[personalDebitID = " + personalDebitId +
                 "], [familyDebitId = " + familyDebitId + "], [userId = " + userId + "], [creditId = " + creditId + "]");
-        double amount = Double.parseDouble(amountMap.get("amount"));
-        model.addAttribute("creditFamilyPayment", amount);
         try {
             familyCreditService.addFamilyCreditPayment(familyDebitId, creditId, amount, new Date(), userId);
         } catch (CreditAccountException ex) {
-            if (ex.getMessage().equals(ExceptionMessages.NOT_ENOUGH_MONEY_ERROR))
-                model.addAttribute("message", ErrorsMap.getErrorsMap().get(ExceptionMessages.NOT_ENOUGH_MONEY_ERROR));
-            else model.addAttribute("message", ex.getMessage());
-            return URL.EXCEPTION_PAGE;
+            return new Status(false, ex.getMessage());
         }
-        return URL.FAMILY_CREDIT;
+        return new Status(true, null);
     }
 
     @RequestMapping(value = "/getFamilyCredits", method = RequestMethod.GET)

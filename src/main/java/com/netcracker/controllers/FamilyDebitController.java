@@ -18,7 +18,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.math.RoundingMode;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.security.Principal;
@@ -201,7 +203,7 @@ public class FamilyDebitController {
             return new Status(false, MessageController.NOT_ENOUGH_MONEY_MESSAGE);
         }
         operationService.createFamilyOperationExpense(userId, accountId, expense.getAmount(), LocalDate.now(), expense.getCategoryExpense());
-        double amount = debit.getAmount() - expense.getAmount();
+        double amount = new BigDecimal(debit.getAmount() - expense.getAmount()).setScale(2, RoundingMode.UP).doubleValue();
         familyDebitService.updateAmountOfFamilyAccount(accountId, amount);
         return new Status(true, MessageController.ADD_EXPENSE_PERS);
     }

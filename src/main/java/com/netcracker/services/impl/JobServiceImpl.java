@@ -18,10 +18,8 @@ import org.springframework.stereotype.Service;
 import javax.mail.MessagingException;
 import java.math.BigInteger;
 import java.nio.file.Path;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 
 @Service
@@ -225,7 +223,7 @@ public class JobServiceImpl implements JobService {
             BigInteger id = creditAccountDao.getFamilyDebitIdByCreditId(familyCredit.getCreditId());
             calculateCredit = CreditUtils.calculateMonthPayment(familyCredit.getDate(), familyCredit.getDateTo(), familyCredit.getPaidAmount(), familyCredit.getCreditRate());
             User user = familyDebitService.getFamilyDebitAccount(id).getOwner();
-            boolean paymentAutoFamilyCredit = familyCreditService.addFamilyCreditPaymentAuto(id, familyCredit.getCreditId(), calculateCredit);
+            boolean paymentAutoFamilyCredit = familyCreditService.addFamilyCreditPaymentAuto(id, familyCredit.getCreditId(), calculateCredit, null);
             if (!paymentAutoFamilyCredit) {
                 familyCreditService.increaseDebt(familyCredit.getCreditId(), familyCredit.getPaidAmount());
                 emailServiceSender.sendMailAboutFamilyDebt(user.geteMail(), user.getName(), familyCredit.getName(), calculateCredit);

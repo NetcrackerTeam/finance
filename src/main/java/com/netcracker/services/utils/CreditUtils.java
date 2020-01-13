@@ -22,7 +22,7 @@ public final class CreditUtils {
     }
 
     public static double getTotalCreditPayment(LocalDate dateFrom, LocalDate dateTo, double amount, double rate) {
-        return getMonthAmountBetweenDates(dateFrom, dateTo) * calculateMonthPayment(dateFrom, dateTo, amount, rate);
+        return Math.round(getMonthAmountBetweenDates(dateFrom, dateTo) * calculateMonthPayment(dateFrom, dateTo, amount, rate)) * 100 / 100;
     }
 
 

@@ -15,7 +15,7 @@ public interface FamilyCreditService {
 
     void addFamilyCreditPayment(BigInteger idAccount, BigInteger idCredit, double amount, Date date, BigInteger userId);
 
-    boolean addFamilyCreditPaymentAuto(BigInteger idDebitAccount, BigInteger idCredit, double amount);
+    boolean addFamilyCreditPaymentAuto(BigInteger idDebitAccount, BigInteger idCredit, double amount, BigInteger userId);
 
     void increaseDebt(BigInteger idCredit, double amount);
 

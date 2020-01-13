@@ -1,15 +1,14 @@
 package com.netcracker.services.impl;
 
-import com.netcracker.dao.CreditAccountDao;
-import com.netcracker.dao.CreditDeptDao;
-import com.netcracker.dao.CreditOperationDao;
-import com.netcracker.dao.FamilyAccountDebitDao;
+import com.netcracker.dao.*;
 import com.netcracker.models.CreditOperation;
 import com.netcracker.models.Debt;
 import com.netcracker.models.FamilyCreditAccount;
 import com.netcracker.models.FamilyDebitAccount;
+import com.netcracker.models.enums.CategoryExpense;
 import com.netcracker.models.enums.CreditStatusPaid;
 import com.netcracker.services.FamilyCreditService;
+import com.netcracker.services.OperationService;
 import com.netcracker.services.utils.DateUtils;
 import com.netcracker.services.utils.ObjectsCheckUtils;
 import org.slf4j.Logger;
@@ -43,6 +42,9 @@ public class FamilyCreditServiceImpl implements FamilyCreditService {
     @Autowired
     private PersonalCreditServiceImpl creditService;
 
+    @Autowired
+    private OperationService operationService;
+
     @Override
     public void createFamilyCredit(BigInteger id, FamilyCreditAccount creditAccount) {
         creditAccountDao.createFamilyCreditByDebitAccountId(id, creditAccount);
@@ -68,7 +70,7 @@ public class FamilyCreditServiceImpl implements FamilyCreditService {
     }
 
     @Override
-    public boolean addFamilyCreditPaymentAuto(BigInteger idDebitAccount, BigInteger idCredit, double amount) {
+    public boolean addFamilyCreditPaymentAuto(BigInteger idDebitAccount, BigInteger idCredit, double amount, BigInteger userId) {
         ObjectsCheckUtils.isNotNull(idDebitAccount, idCredit);
 
         FamilyCreditAccount creditAccount = getFamilyCreditAccount(idCredit);
@@ -112,7 +114,7 @@ public class FamilyCreditServiceImpl implements FamilyCreditService {
         ObjectsCheckUtils.isNotNull(creditAccount, debitAccount);
         ObjectsCheckUtils.isNotNull(creditAccount.getDebt());
         decreaseDebt(creditAccount.getDebt(), amount);
-        addPayment(creditAccount, debitAccount, amount, null);
+        addPayment(creditAccount, debitAccount, amount, debitAccount.getOwner().getId());
         logger.debug("Repayment was completed successfully");
 
     }
@@ -166,12 +168,13 @@ public class FamilyCreditServiceImpl implements FamilyCreditService {
     private void addPayment(FamilyCreditAccount creditAccount, FamilyDebitAccount debitAccount, double amount, BigInteger idUser) {
         double actualDebitAmount = debitAccount.getAmount();
         debitAccountDao.updateAmountOfFamilyAccount(debitAccount.getId(), actualDebitAmount - amount);
+        operationService.createFamilyOperationExpense(idUser,debitAccount.getId(), amount, LocalDate.now(), CategoryExpense.CREDIT);
         creditOperationDao.createFamilyCreditOperation(amount, LocalDate.now(), creditAccount.getCreditId(), idUser);
         double updatedAmount = creditAccount.getPaidAmount() + amount;
         creditAccountDao.updateFamilyCreditPayment(creditAccount.getCreditId(), updatedAmount);
-        double monthPayment = getTotalCreditPayment(creditAccount.getDate(), creditAccount.getDateTo(),
+        double totalPay = getTotalCreditPayment(creditAccount.getDate(), creditAccount.getDateTo(),
                 creditAccount.getAmount(), creditAccount.getCreditRate());
-        if (monthPayment == updatedAmount) {
+        if (totalPay == updatedAmount) {
             creditAccountDao.updateIsPaidStatusFamilyCredit(creditAccount.getCreditId(), CreditStatusPaid.YES);
         }
     }

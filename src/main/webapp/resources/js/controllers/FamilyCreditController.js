@@ -200,6 +200,22 @@ var FamilyCreditController = function ($scope, $http, $rootScope) {
         }).then(success, error);
     };
 
+    var addCreditPayURL = 'familyCredit/pay';
+    $scope.addCreditPayment = function() {
+        var amount = $scope.amountToPay;
+        $http({
+            method: 'POST',
+            url: addCreditPayURL,
+            data: angular.toJson(amount),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).success(function (response) {
+            if (response.status === false)
+                $scope.messageAmountPay = response.message;
+        });
+    }
+
 
 
     $scope.checkFamilyCredit = function () {
