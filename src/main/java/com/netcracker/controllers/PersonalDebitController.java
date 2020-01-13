@@ -1,5 +1,6 @@
 package com.netcracker.controllers;
 
+import com.netcracker.controllers.validators.UserDataValidator;
 import com.netcracker.dao.*;
 import com.netcracker.models.*;
 import com.netcracker.services.*;
@@ -18,6 +19,8 @@ import java.nio.file.Path;
 import java.security.Principal;
 import java.time.LocalDate;
 import java.util.List;
+
+import static com.netcracker.controllers.MessageController.*;
 
 @Controller
 @RequestMapping("/debitPersonal")
@@ -55,7 +58,7 @@ public class PersonalDebitController {
     public Status addIncomePersonal(@RequestBody AccountIncome income,
                                     Principal principal) {
         double incomeAmount = income.getAmount();
-        if(incomeAmount <= MessageController.MIN || incomeAmount >= MessageController.MAX){
+        if (incomeAmount <= MessageController.MIN || incomeAmount >= MessageController.MAX) {
             return new Status(true, MessageController.INCORRECT_AMOUNT);
         } else {
             BigInteger accountId = getAccountByPrincipal(principal);
@@ -97,7 +100,7 @@ public class PersonalDebitController {
     @RequestMapping(value = "/historyByPerio", method = RequestMethod.GET)
     public @ResponseBody
     List<HistoryOperation> getHistoryByPeriod(Principal principal,
-                                      @RequestParam("period") int period
+                                              @RequestParam("period") int period
     ) {
         logger.debug("getHistory Personal");
         BigInteger debitId = getAccountByPrincipal(principal);
@@ -116,9 +119,13 @@ public class PersonalDebitController {
     Status createAutoIncome(@RequestBody AutoOperationIncome autoOperationIncome,
                             Principal principal) {
         BigInteger accountId = getAccountByPrincipal(principal);
-        accountAutoOperationService.createPersonalIncomeAutoOperation(autoOperationIncome, accountId);
-        logger.debug("autoIncome is done!");
-        return new Status(true, MessageController.ADD_AUTO_INCOME);
+        if (UserDataValidator.isValidDateForAutoOperationIncome(autoOperationIncome)) {
+            accountAutoOperationService.createPersonalIncomeAutoOperation(autoOperationIncome, accountId);
+            logger.debug("autoIncome is done!");
+            return new Status(true, ADD_AUTO_INCOME);
+        }
+        logger.debug("autoIncome is not valid !" + autoOperationIncome.getId() + " " + autoOperationIncome.getCategoryIncome());
+        return new Status(false, NO_VALID_ADD_AUTO_INCOME);
     }
 
     @RequestMapping(value = "/createAutoExpense", method = RequestMethod.POST)
@@ -126,9 +133,14 @@ public class PersonalDebitController {
     Status createAutoExpense(@RequestBody AutoOperationExpense autoOperationExpense,
                              Principal principal) {
         BigInteger accountId = getAccountByPrincipal(principal);
-        accountAutoOperationService.createPersonalExpenseAutoOperation(autoOperationExpense, accountId);
-        logger.debug("expense is done!");
-        return new Status(true, MessageController.ADD_AUTO_EXPENSE);
+        if (UserDataValidator.isValidDateForAutoOperationExpense(autoOperationExpense)) {
+            accountAutoOperationService.createPersonalExpenseAutoOperation(autoOperationExpense, accountId);
+            logger.debug("expense is done!");
+            return new Status(true, ADD_AUTO_EXPENSE);
+        }
+        logger.debug("autoExpense is not valid !" + autoOperationExpense.getId() + " " + autoOperationExpense.getCategoryExpense());
+        return new Status(false, NO_VALID_ADD_AUTO_EXPENSE);
+
     }
 
     @RequestMapping(value = "/deleteAutoIncome", method = RequestMethod.GET)

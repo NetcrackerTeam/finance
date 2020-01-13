@@ -2,6 +2,8 @@ package com.netcracker.controllers.validators;
 
 import com.netcracker.exception.FamilyDebitAccountException;
 import com.netcracker.exception.UserException;
+import com.netcracker.models.AutoOperationExpense;
+import com.netcracker.models.AutoOperationIncome;
 import com.netcracker.services.utils.ExceptionMessages;
 import com.netcracker.services.utils.ObjectsCheckUtils;
 import org.springframework.stereotype.Component;
@@ -24,7 +26,7 @@ public class UserDataValidator {
     }
 
     public static void isValidEmail(String email) {
-        if(!isEmptyString(email)) {
+        if (!isEmptyString(email)) {
             if (!emailPattern.matcher(email).find()) throw new UserException(ExceptionMessages.INVALID_EMAIL);
         } else throw new UserException(ExceptionMessages.EMPTY_FIELD);
     }
@@ -48,9 +50,26 @@ public class UserDataValidator {
 
     public static void isValidNameFamily(String nameAccount) {
         if (!isEmptyString(nameAccount)) {
-            if (!onlyLatinLetters.matcher(nameAccount).find()) throw new FamilyDebitAccountException(ExceptionMessages.LATIN_LETTERS);
+            if (!onlyLatinLetters.matcher(nameAccount).find())
+                throw new FamilyDebitAccountException(ExceptionMessages.LATIN_LETTERS);
             if (nameAccount.length() < 2) throw new FamilyDebitAccountException(ExceptionMessages.NAME_FAMILY_SHORT);
         } else throw new FamilyDebitAccountException(ExceptionMessages.EMPTY_FIELD);
+    }
+
+    public static boolean isValidDateForAutoOperationExpense(AutoOperationExpense autoOperationExpense) {
+        boolean validDayOfMonth = (autoOperationExpense.getDayOfMonth() < 31) && (autoOperationExpense.getDayOfMonth() > 1);
+        if (validDayOfMonth) {
+            return true;
+        } else
+            return false;
+    }
+
+    public static boolean isValidDateForAutoOperationIncome(AutoOperationIncome autoOperationIncome) {
+        boolean validDayOfMonth = (autoOperationIncome.getDayOfMonth() < 31) && (autoOperationIncome.getDayOfMonth() > 1);
+        if (validDayOfMonth) {
+            return true;
+        } else
+            return false;
     }
 
 }

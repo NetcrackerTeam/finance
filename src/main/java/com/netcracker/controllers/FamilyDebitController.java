@@ -9,6 +9,7 @@ import com.netcracker.models.enums.CreditStatusPaid;
 import com.netcracker.models.enums.FamilyAccountStatusActive;
 import com.netcracker.models.enums.UserRole;
 import com.netcracker.services.*;
+import com.netcracker.services.validation.UserValidation;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -27,6 +28,8 @@ import java.security.Principal;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
+
+import static com.netcracker.controllers.MessageController.*;
 
 @Controller
 @RequestMapping("/debitFamily")
@@ -88,7 +91,7 @@ public class FamilyDebitController {
             familyDebitService.createFamilyDebitAccount(familyDebitAccount);
             userDao.updateRole(user.getId(), UserRole.OWNER.getId());
             return new Status(true, MessageController.ADD_FAMILY_ACCOUNT);
-        } catch (RuntimeException ex){
+        } catch (RuntimeException ex) {
             return new Status(true, ex.getMessage());
         }
     }
@@ -104,8 +107,8 @@ public class FamilyDebitController {
             BigInteger accountId = familyDebitAccount.getId();
             logger.debug("deactivate family account " + accountId + " user id " + userId);
             Collection<FamilyCreditAccount> credits = familyCreditService.getFamilyCredits(accountId);
-            for (FamilyCreditAccount credit : credits){
-                if(CreditStatusPaid.NO == credit.isPaid()){
+            for (FamilyCreditAccount credit : credits) {
+                if (CreditStatusPaid.NO == credit.isPaid()) {
                     return new Status(true, MessageController.FAMILY_ACCOUNT_HAS_NOT_PAID_CREDITS);
                 }
             }
@@ -143,9 +146,9 @@ public class FamilyDebitController {
     @ResponseBody
     public Collection<User> getParticipants(Principal principal) {
 
-            BigInteger accountId = getAccountByPrincipal(principal);
-            logger.debug("getting participants from account " + accountId);
-            return familyDebitService.getParticipantsOfFamilyAccount(accountId);
+        BigInteger accountId = getAccountByPrincipal(principal);
+        logger.debug("getting participants from account " + accountId);
+        return familyDebitService.getParticipantsOfFamilyAccount(accountId);
     }
 
     @RequestMapping(value = "/deleteUser", method = RequestMethod.GET)
@@ -177,9 +180,9 @@ public class FamilyDebitController {
     @RequestMapping(value = "/income", method = RequestMethod.POST)
     @ResponseBody
     public Status addIncomeFamily(@RequestBody AccountIncome income,
-                                         Principal principal) {
+                                  Principal principal) {
         double incomeAmount = income.getAmount();
-        if(incomeAmount <= MessageController.MIN || incomeAmount >= MessageController.MAX){
+        if (incomeAmount <= MessageController.MIN || incomeAmount >= MessageController.MAX) {
             return new Status(true, MessageController.INCORRECT_AMOUNT);
         } else {
             BigInteger accountId = getAccountByPrincipal(principal);
@@ -199,7 +202,7 @@ public class FamilyDebitController {
         BigInteger accountId = getAccountByPrincipal(principal);
         BigInteger userId = getUserIdByPrincipal(principal);
         FamilyDebitAccount debit = familyDebitService.getFamilyDebitAccount(accountId);
-        if (debit.getAmount() < expense.getAmount()){
+        if (debit.getAmount() < expense.getAmount()) {
             return new Status(false, MessageController.NOT_ENOUGH_MONEY_MESSAGE);
         }
         operationService.createFamilyOperationExpense(userId, accountId, expense.getAmount(), LocalDate.now(), expense.getCategoryExpense());
@@ -225,6 +228,7 @@ public class FamilyDebitController {
         BigInteger debitId = getAccountByPrincipal(principal);
         return operationDao.getFamilyHistoryByAccountId(debitId, period);
     }
+
     @RequestMapping(value = "/autoOperationHistory", method = RequestMethod.GET)
     public @ResponseBody
     List<AbstractAutoOperation> getAutoHis(Principal principal) {
@@ -238,9 +242,13 @@ public class FamilyDebitController {
                                    Principal principal) {
         BigInteger accountId = getAccountByPrincipal(principal);
         BigInteger userId = getUserIdByPrincipal(principal);
-        accountAutoOperationService.createFamilyIncomeAutoOperation(autoOperationIncome, userId, accountId);
-        logger.debug("autoIncome is done!");
-        return new Status(true, MessageController.ADD_AUTO_INCOME);
+        if (UserDataValidator.isValidDateForAutoOperationIncome(autoOperationIncome)) {
+            accountAutoOperationService.createFamilyIncomeAutoOperation(autoOperationIncome, userId, accountId);
+            logger.debug("autoIncome is done!");
+            return new Status(true, MessageController.ADD_AUTO_INCOME);
+        }
+        logger.debug("autoExpense is not valid !" + autoOperationIncome.getId() + " " + autoOperationIncome.getCategoryIncome());
+        return new Status(false, NO_VALID_ADD_AUTO_INCOME);
     }
 
     @RequestMapping(value = "/createAutoExpense", method = RequestMethod.POST)
@@ -249,9 +257,14 @@ public class FamilyDebitController {
                                     Principal principal) {
         BigInteger accountId = getAccountByPrincipal(principal);
         BigInteger userId = getUserIdByPrincipal(principal);
-        accountAutoOperationService.createFamilyExpenseAutoOperation(autoOperationExpense, userId, accountId);
-        logger.debug("autoIncome is done!");
-        return new Status(true, MessageController.ADD_AUTO_INCOME);
+        if (UserDataValidator.isValidDateForAutoOperationExpense(autoOperationExpense)) {
+            accountAutoOperationService.createFamilyExpenseAutoOperation(autoOperationExpense, userId, accountId);
+            logger.debug("autoIncome is done!");
+            return new Status(true, ADD_AUTO_EXPENSE);
+        }
+        logger.debug("autoExpense is not valid !" + autoOperationExpense.getId() + " " + autoOperationExpense.getCategoryExpense());
+        return new Status(false, NO_VALID_ADD_AUTO_EXPENSE);
+
     }
 
     @RequestMapping(value = "/deleteAutoIncome/{incomeId}", method = RequestMethod.GET)

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 
@@ -24,46 +25,58 @@ public class AccountAutoOperationServiceImpl implements AccountAutoOperationServ
 
     @Override
     public void createFamilyIncomeAutoOperation(AutoOperationIncome autoOperationIncome, BigInteger userId,
-                                                               BigInteger familyDebitAccountId) {
+                                                BigInteger familyDebitAccountId) {
         logger.debug("[createFamilyIncomeAutoOperation]" + debugStartMessage + "[ familyDebitAccountId = " +
                 familyDebitAccountId + "], [userId = " + userId + "], " + autoOperationIncome.toString());
 
         ObjectsCheckUtils.isNotNull(autoOperationIncome.getDayOfMonth(), autoOperationIncome.getAmount(),
                 autoOperationIncome.getCategoryIncome(), userId, familyDebitAccountId);
-        autoOperationDao.createFamilyIncomeAutoOperation(autoOperationIncome, userId, familyDebitAccountId);
+        boolean checksMaxDay = checkMaxDayInCurrentMonth(autoOperationIncome.getDayOfMonth());
+        if (checksMaxDay) {
+            autoOperationDao.createFamilyIncomeAutoOperation(autoOperationIncome, userId, familyDebitAccountId);
+        }
     }
 
     @Override
     public void createPersonalIncomeAutoOperation(AutoOperationIncome autoOperationIncome,
-                                                                 BigInteger personalDebitAccountId) {
+                                                  BigInteger personalDebitAccountId) {
         logger.debug("[createPersonalIncomeAutoOperation]" + debugStartMessage + "[personalDebitAccountId = " +
                 personalDebitAccountId + "], " + autoOperationIncome.toString());
 
         ObjectsCheckUtils.isNotNull(autoOperationIncome.getDayOfMonth(), autoOperationIncome.getAmount(),
                 autoOperationIncome.getCategoryIncome(), personalDebitAccountId);
-        autoOperationDao.createPersonalIncomeAutoOperation(autoOperationIncome, personalDebitAccountId);
+        boolean checksMaxDay = checkMaxDayInCurrentMonth(autoOperationIncome.getDayOfMonth());
+        if (checksMaxDay) {
+            autoOperationDao.createPersonalIncomeAutoOperation(autoOperationIncome, personalDebitAccountId);
+        }
     }
 
     @Override
     public void createFamilyExpenseAutoOperation(AutoOperationExpense autoOperationExpense, BigInteger userId,
-                                                                 BigInteger familyDebitAccountId) {
+                                                 BigInteger familyDebitAccountId) {
         logger.debug("[createFamilyExpenseAutoOperation]" + debugStartMessage + "[familyDebitAccountId = " +
                 familyDebitAccountId + "], [userId = " + userId + "], " + autoOperationExpense.toString());
 
         ObjectsCheckUtils.isNotNull(autoOperationExpense.getDayOfMonth(), autoOperationExpense.getAmount(),
                 autoOperationExpense.getCategoryExpense(), userId, familyDebitAccountId);
-       autoOperationDao.createFamilyExpenseAutoOperation(autoOperationExpense, userId, familyDebitAccountId);
+        boolean checksMaxDay = checkMaxDayInCurrentMonth(autoOperationExpense.getDayOfMonth());
+        if (checksMaxDay) {
+            autoOperationDao.createFamilyExpenseAutoOperation(autoOperationExpense, userId, familyDebitAccountId);
+        }
     }
 
     @Override
     public void createPersonalExpenseAutoOperation(AutoOperationExpense autoOperationExpense,
-                                                                   BigInteger personalDebitAccountId) {
+                                                   BigInteger personalDebitAccountId) {
         logger.debug("[createPersonalExpenseAutoOperation]" + debugStartMessage + "[personalDebitAccountId = " +
                 personalDebitAccountId + "], " + autoOperationExpense.toString());
 
         ObjectsCheckUtils.isNotNull(autoOperationExpense.getDayOfMonth(), autoOperationExpense.getAmount(),
                 autoOperationExpense.getCategoryExpense(), personalDebitAccountId);
-        autoOperationDao.createPersonalExpenseAutoOperation(autoOperationExpense, personalDebitAccountId);
+        boolean checksMaxDay = checkMaxDayInCurrentMonth(autoOperationExpense.getDayOfMonth());
+        if (checksMaxDay) {
+            autoOperationDao.createPersonalExpenseAutoOperation(autoOperationExpense, personalDebitAccountId);
+        }
     }
 
     @Override
@@ -146,31 +159,31 @@ public class AccountAutoOperationServiceImpl implements AccountAutoOperationServ
         return autoOperationExpenseList;
     }
 
-    public List<AutoOperationExpense> getAllOperationsFamilyExpense(BigInteger debitId){
+    public List<AutoOperationExpense> getAllOperationsFamilyExpense(BigInteger debitId) {
         logger.debug("[getAllTodayOperationsFamilyExpense]" + debugStartMessage + "[debitId = " + debitId + "]");
         ObjectsCheckUtils.isNotNull(debitId);
         return autoOperationDao.getAllOperationsFamilyExpense(debitId);
     }
 
-    public List<AutoOperationIncome> getAllOperationsFamilyIncome(BigInteger debitId){
+    public List<AutoOperationIncome> getAllOperationsFamilyIncome(BigInteger debitId) {
         logger.debug("[getAllTodayOperationsFamilyIncome]" + debugStartMessage + "[debitId = " + debitId + "]");
         ObjectsCheckUtils.isNotNull(debitId);
         return autoOperationDao.getAllOperationsFamilyIncome(debitId);
     }
 
-    public List<AutoOperationIncome> getAllOperationsPersonalIncome(BigInteger debitId){
+    public List<AutoOperationIncome> getAllOperationsPersonalIncome(BigInteger debitId) {
         logger.debug("[getAllTodayOperationsPersonalIncome]" + debugStartMessage + "[debitId = " + debitId + "]");
         ObjectsCheckUtils.isNotNull(debitId);
         return autoOperationDao.getAllOperationsPersonalIncome(debitId);
     }
 
-    public List<AutoOperationExpense> getAllOperationsPersonalExpense(BigInteger debitId){
+    public List<AutoOperationExpense> getAllOperationsPersonalExpense(BigInteger debitId) {
         logger.debug("[getAllTodayOperationsPersonalExpense]" + debugStartMessage + "[debitId = " + debitId + "]");
         ObjectsCheckUtils.isNotNull(debitId);
         return autoOperationDao.getAllOperationsPersonalExpense(debitId);
     }
 
-    public List<AbstractAutoOperation> getAllOperationsPersonal(BigInteger debitId){
+    public List<AbstractAutoOperation> getAllOperationsPersonal(BigInteger debitId) {
         logger.debug("[getAllTodayOperationsPersonal]" + debugStartMessage + "[debitId = " + debitId + "]");
         ObjectsCheckUtils.isNotNull(debitId);
         List<AbstractAutoOperation> allOperationsList = new ArrayList<>(getAllOperationsPersonalExpense(debitId));
@@ -179,12 +192,21 @@ public class AccountAutoOperationServiceImpl implements AccountAutoOperationServ
         return allOperationsList;
     }
 
-    public List<AbstractAutoOperation> getAllOperationsFamily(BigInteger debitId){
+    public List<AbstractAutoOperation> getAllOperationsFamily(BigInteger debitId) {
         logger.debug("[getAllTodayOperationsFamily]" + debugStartMessage + "[debitId = " + debitId + "]");
         ObjectsCheckUtils.isNotNull(debitId);
         List<AbstractAutoOperation> allOperationsList = new ArrayList<>(getAllOperationsFamilyExpense(debitId));
         allOperationsList.addAll(getAllOperationsFamilyIncome(debitId));
         ObjectsCheckUtils.collectionIsEmpty(Collections.singletonList(allOperationsList));
         return allOperationsList;
+    }
+
+    public boolean checkMaxDayInCurrentMonth(int days) {
+        Calendar myCalendar = (Calendar) Calendar.getInstance().clone();
+        int max_date = myCalendar.getActualMaximum(Calendar.DAY_OF_MONTH);
+        if (days > max_date) {
+            return false;
+        }
+        return true;
     }
 }
