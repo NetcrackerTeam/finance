@@ -92,12 +92,22 @@ public class OperationDaoImpl implements OperationDao {
 
     @Override
     public List<HistoryOperation> getHistoryByAccountId(BigInteger id, int period) {
-        return template.query(GET__PERSONAL_FOR_DATE_BY_ACCOUNT_ID, new Object[]{id, period, id, period}, new HistoryOperationMapper());
+        return template.query(GET_PERSONAL_FOR_DATE_BY_ACCOUNT_ID, new Object[]{id, period}, new PersonalHistoryOperationMapper());
     }
 
     @Override
-    public List<HistoryOperation> getFamilyHistoryByAccountId(BigInteger id){
+    public List<HistoryOperation> getFamilyHistoryByAccountId(BigInteger id, int period){
         return template.query(GET_FAMILY_FOR_DATE_BY_ACCOUNT_ID, new Object[]{id}, new HistoryOperationMapper());
+    }
+
+    @Override
+    public List<HistoryOperation> getFirstPersonalHistoryByAccountId(BigInteger id) {
+        return template.query(GET_FIRST_15_PERSONAL_HISTORY_BY_ACCOUNT_ID, new Object[]{id}, new PersonalHistoryOperationMapper());
+    }
+
+    @Override
+    public List<HistoryOperation> getFirstFamilyHistoryByAccountId(BigInteger id){
+        return template.query(GET_FIRST_15_FAMILY_HISTORY_BY_ACCOUNT_ID, new Object[]{id}, new HistoryOperationMapper());
     }
 
 }

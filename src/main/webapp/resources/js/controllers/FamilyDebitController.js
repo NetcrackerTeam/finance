@@ -1,11 +1,5 @@
 var FamilyDebitController = function ($scope, $http, $rootScope) {
 
-    $scope.fetchFamilyPeriodHistory = function()  {
-        var period = document.getElementById("familyHistoryPeriod");
-        $scope.periodS = period.options[period.selectedIndex].value;
-        $scope.fetchFamilyHistory();
-    };
-
     $scope.fetchFamilyHistory = function () {
         $http.get('debitFamily/history').success(function (historyList) {
             $scope.familyHistory = historyList;

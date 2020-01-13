@@ -207,14 +207,22 @@ public class FamilyDebitController {
     }
 
     @RequestMapping(value = "/history", method = RequestMethod.GET)
-    @ResponseBody
-    public List<HistoryOperation> getHistory(Principal principal
-                                                           ) {
+    public @ResponseBody
+    List<HistoryOperation> getHistory(Principal principal) {
         logger.debug("getHistory Personal");
         BigInteger debitId = getAccountByPrincipal(principal);
-        return operationDao.getFamilyHistoryByAccountId(debitId);
+        return operationDao.getFirstFamilyHistoryByAccountId(debitId);
     }
 
+    @RequestMapping(value = "/historyByPerio", method = RequestMethod.GET)
+    public @ResponseBody
+    List<HistoryOperation> getHistoryByPeriod(Principal principal,
+                                              @RequestParam("period") int period
+    ) {
+        logger.debug("getHistory Personal");
+        BigInteger debitId = getAccountByPrincipal(principal);
+        return operationDao.getFamilyHistoryByAccountId(debitId, period);
+    }
     @RequestMapping(value = "/autoOperationHistory", method = RequestMethod.GET)
     public @ResponseBody
     List<AbstractAutoOperation> getAutoHis(Principal principal) {

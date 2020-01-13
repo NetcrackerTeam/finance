@@ -88,7 +88,15 @@ public class PersonalDebitController {
 
     @RequestMapping(value = "/history", method = RequestMethod.GET)
     public @ResponseBody
-    List<HistoryOperation> getHistory(Principal principal,
+    List<HistoryOperation> getHistory(Principal principal) {
+        logger.debug("getHistory Personal");
+        BigInteger debitId = getAccountByPrincipal(principal);
+        return operationDao.getFirstPersonalHistoryByAccountId(debitId);
+    }
+
+    @RequestMapping(value = "/historyByPerio", method = RequestMethod.GET)
+    public @ResponseBody
+    List<HistoryOperation> getHistoryByPeriod(Principal principal,
                                       @RequestParam("period") int period
     ) {
         logger.debug("getHistory Personal");
