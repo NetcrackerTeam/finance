@@ -211,16 +211,12 @@
 
             </div>
 
-            <div class="card shadow mb-4">
+            <div class="card shadow mb-4" ng-controller="FamilyCreditController">
                 <div class="card-header py-3">
                     <h6 class="m-0 font-weight-bold text-primary">Credits</h6>
                 </div>
-                <div class="card-body" ng-controller="FamilyCreditController">
-                    <div ng-show="familyCredit.length == 0" style="height:400px; position:relative; background:#F5F5F5; border-radius:10px;" class="panel panel-default">
-                        <h3 style="position: absolute; top: 50%; left: 50%; margin: 0 -50% 0 0; transform: translate(-50%, -50%);" class="panel-heading">
-                            You have no credits yet, you are the lucky one!</h3>
-                    </div>
-                    <table class="table table-hover table-responsive"  ng-show="familyCredit.length > 0">
+                <div class="card-body" style="height: 250px; overflow-y: auto;">
+                    <table class="table table-hover table-cursor">
                         <thead>
                         <tr>
                             <th>Name</th>
@@ -240,10 +236,11 @@
                         </tbody>
 
                     </table>
-                    <div class="ml-auto row mt-2">
-                    <a class="btn btn-info" data-toggle="modal" href="#credirss">
-                        <span class="text">Show all credits</span></a>
-                    </div>
+                </div>
+                <div class="card-footer" style="height: 60px; position:relative;">
+                    <center><button class="btn btn-info" style="position: absolute; top: 50%; left: 50%; margin: 0 -50% 0 0; transform: translate(-50%, -50%);"
+                                    data-toggle="modal" href="#showAllCreditModal"  ng-show="familyCredit.length > 0">
+                        Show all credits</button></center>
                 </div>
             </div>
 
@@ -426,62 +423,86 @@
     </div>
 </form>
 
-<div class=" modal fade" id="credirss" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabelCr"
-     aria-hidden="true">
+<div class=" modal fade " id="showAllCreditModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabelCr"
+     aria-hidden="true" style="overflow-x: hidden;" data-backdrop="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
-            <div class="modal-header">
-                <h4 align="center" id="exampleModalLabelCr" class="modal-title">All Credits</h4>
+            <div class="modal-header" style="position: relative;">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 id="exampleModalLabelCr" class="modal-title" style="position: absolute; top: 50%; left: 50%; margin: 0 -50% 0 0; transform: translate(-50%, -50%);">
+                    All credits</h4>
             </div>
-            <div class="modal-body" ng-controller="FamilyCreditController">
-                <table class="table table-responsive">
-                    <thead >
-                    <tr>
-                        <th>Name</th>
-                        <th>Amount</th>
-                        <th>Paid amount</th>
-                        <th>Start date</th>
-                        <th>Credit rate</th>
-                        <th>Ends date</th>
-                        <th>Month day</th>
-                        <th>Is commo<br/>dity</th>
-                        <th>Debt</th>
-                        <th>Is paid</th>
-                    </tr>
-                    </thead>
-    <!--                    <div style="height: 250px; overflow-y: auto;" ng-show="familyCredit.length > 0" >-->
-    <!--                        <div class="">-->
-                            <tbody>
-                            <tr ng-repeat="credInf in familyCredit">
-                                <td>{{credInf.name}}</td>
-                                <td >{{credInf.amount}}</td>
-                                <td >{{credInf.paidAmount}}</td>
-                                <td>{{credInf.date.year}}-{{credInf.date.month}}-{{credInf.date.day}}</td>
-                                <td >{{credInf.creditRate}}</td>
-                                <td >{{credInf.dateTo.year}}-{{credInf.dateTo.month}}-{{credInf.dateTo.day}}</td>
-                                <td>{{credInf.monthDay}}</td>
-                                <td>{{credInf.isCommodity}}</td>
-                                <td>{{credInf.debt.amountDebt}}</td>
-                                <td>{{credInf.isPaid}}</td>
-                            </tr>
-                            </tbody>
-                </table>
-                <div ng-show="familyCredit.length > 0">
-                                The amount of payment for all credits is: <pre>{{summAmount}}</pre>
-                                Already paid on all credits: <pre>{{summPaidAmount}}</pre>
-                                It remains to pay on all credits: <pre>{{remainsToPay}}</pre>
-                                Debt on all credits: <pre>{{allDebt}}</pre>
-                                <b><p>Total credits in the account: {{totalCredits}}</p>
-                                    <p>Total credits already paid: {{totalPaidCredits}}</p></b>
-                            </div>
+            <div class="modal-body" ng-controller="FamilyCreditController" >
+                <div style="height: 350px; overflow-y: auto;">
+                    <table class="table table-striped default-table">
+                        <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Amount</th>
+                            <th>Paid amount</th>
+                            <th>Start date</th>
+                            <th>Credit rate</th>
+                            <th>Ends date</th>
+                            <th>Month day</th>
+                            <th>Is commo<br/>dity</th>
+                            <th>Debt</th>
+                            <th>Is paid</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="credInf in familyCredit">
+                            <td>{{credInf.name}}</td>
+                            <td >{{credInf.amount}}</td>
+                            <td >{{credInf.paidAmount}}</td>
+                            <td>{{credInf.date.year}}-{{credInf.date.month}}-{{credInf.date.day}}</td>
+                            <td >{{credInf.creditRate}}</td>
+                            <td >{{credInf.dateTo.year}}-{{credInf.dateTo.month}}-{{credInf.dateTo.day}}</td>
+                            <td>{{credInf.monthDay}}</td>
+                            <td>{{credInf.isCommodity}}</td>
+                            <td>{{credInf.debt.amountDebt}}</td>
+                            <td>{{credInf.isPaid}}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
             <div class="modal-footer">
+                <button type="button" class="btn btn-info" style="float: left;" data-toggle="modal" data-target="#showAdditionalInfo"
+                        onclick="$('.modal').modal('hide');">Show additional information</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-
             </div>
         </div>
     </div>
 </div>
+
+<div class=" modal fade" id="showAdditionalInfo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabelCr"
+     aria-hidden="true" style="overflow-x: hidden;" data-backdrop="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header" style="position: relative;">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" style="position: absolute; top: 50%; left: 50%; margin: 0 -50% 0 0; transform: translate(-50%, -50%);">
+                    Additional information about credits</h4>
+            </div>
+            <div class="modal-body" ng-controller="FamilyCreditController" >
+                The amount of payment for all credits is: <pre class="pre">{{summAmount}}</pre>
+                Already paid on all credits: <pre class="pre">{{summPaidAmount}}</pre>
+                It remains to pay on all credits: <pre class="pre">{{remainsToPay}}</pre>
+                Debt on all credits: <pre class="pre">{{allDebt}}</pre>
+                <b><p>Total credits in the account: {{totalCredits}}</p>
+                    <p>Total credits already paid: {{totalPaidCredits}}</p></b>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="modal fade" id="showAllCreditsModal" >
     <!--    <div class="dm-table"><div class="dm-cell"><div class="dm-modal">-->
     <div class="modal-header">

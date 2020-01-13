@@ -214,7 +214,7 @@ var FamilyCreditController = function ($scope, $http, $rootScope) {
             if (response.status === false)
                 $scope.messageAmountPay = response.message;
         });
-    }
+    };
 
 
 
