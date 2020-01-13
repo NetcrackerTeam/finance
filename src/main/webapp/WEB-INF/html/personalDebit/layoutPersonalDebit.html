@@ -13,7 +13,7 @@
 </nav>
 <!-- End of Topbar -->
 
-<div class="container-fluid">
+<div class="container-fluid" ng-init="fetchCreditListPersonalRoot()">
     <!-- Content Row -->
     <div class="row">
 
@@ -150,8 +150,10 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr ng-repeat="credInf in personalCredit" ng-show="credInf.isPaid == 'NO'" data-toggle="modal"
-                            data-target="#infoCreditModal" ng-click="fetchPersonalCredit()" ng-mouseover="sendCreditId(credInf.creditId)">
+                        <!--<tr ng-repeat="credInf in personalCredit" ng-show="credInf.isPaid == 'NO'" data-toggle="modal"
+                            data-target="#infoCreditModal" ng-click="fetchPersonalCredit()" ng-mouseover="sendCreditId(credInf.creditId)">-->
+                        <tr ng-repeat="credInf in personalCreditRoot" ng-show="credInf.isPaid == 'NO'" data-toggle="modal"
+                            data-target="#infoCreditModal" ng-click="fetchPersonalCreditFromArray()" ng-mouseover="changeCreditIdInArray(credInf.creditId)">
                             <td>{{credInf.name}}</td>
                             <td>{{credInf.amount}}</td>
                             <td>{{credInf.remainsToPay}}</td>
@@ -162,7 +164,7 @@
                 </div>
                     <div class="card-footer" style="height: 60px; position:relative;">
                         <center><button type="submit" class="btn btn-info" style="position: absolute; top: 50%; left: 50%; margin: 0 -50% 0 0; transform: translate(-50%, -50%);"
-                                        data-toggle="modal" data-target="#showAllCreditModal" ng-show="personalCredit.length > 0">
+                                        data-toggle="modal" data-target="#showAllCreditModal" ng-show="personalCreditRoot.length > 0">
                             Show all credits</button></center>
                     </div>
             </div>
@@ -205,12 +207,11 @@
 
     </div>
 </div>
-
 </div>
 
-<div class=" modal fade " id="showAllCreditModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabelCr"
+<div class="modal fade" id="showAllCreditModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabelCr"
      aria-hidden="true" style="overflow-x: hidden;" data-backdrop="true">
-    <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-dialog modal-lg mw-100" role="document">
         <div class="modal-content">
             <div class="modal-header" style="position: relative;">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -220,9 +221,9 @@
                     All credits</h4>
             </div>
             <div class="modal-body" ng-controller="PersonalCreditController" >
-                <div style="height: 350px; overflow-y: auto;">
+                <div style="height: 400px; overflow-y: auto;">
                 <table class="table table-striped default-table">
-                    <thead>
+                    <thead style="background: #F8F9FC; color: #4E73E5;">
                     <tr>
                         <th>Name</th>
                         <th>Amount</th>
@@ -234,10 +235,13 @@
                         <th>Is commo<br/>dity</th>
                         <th>Debt</th>
                         <th>Is paid</th>
+                        <th>Total credit payment</th>
+                        <th>Month payment</th>
+                        <th>Remains to pay</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr ng-repeat="credInf in personalCredit">
+                    <tr ng-repeat="credInf in personalCreditRoot">
                         <td>{{credInf.name}}</td>
                         <td >{{credInf.amount}}</td>
                         <td >{{credInf.paidAmount}}</td>
@@ -248,13 +252,16 @@
                         <td>{{credInf.isCommodity}}</td>
                         <td>{{credInf.debt.amountDebt}}</td>
                         <td>{{credInf.isPaid}}</td>
+                        <td>{{credInf.totalCreditPayment}}</td>
+                        <td>{{credInf.monthPayment}}</td>
+                        <td>{{credInf.remainsToPay}}</td>
                     </tr>
                     </tbody>
                 </table>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-info" style="float: left;" data-toggle="modal" data-target="#showAdditionalInfo"
+                <button type="button" class="btn btn-info" data-toggle="modal" data-target="#showAdditionalInfo"
                 onclick="$('.modal').modal('hide');">Show additional information</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
@@ -274,12 +281,12 @@
                     Additional information about credits</h4>
             </div>
             <div class="modal-body" ng-controller="PersonalCreditController" >
-                The amount of payment for all credits is: <pre class="pre">{{summAmount}}</pre>
-                Already paid on all credits: <pre class="pre">{{summPaidAmount}}</pre>
-                It remains to pay on all credits: <pre class="pre">{{remainsToPay}}</pre>
-                Debt on all credits: <pre class="pre">{{allDebt}}</pre>
-                <b><p>Total credits in the account: {{totalCredits}}</p>
-                    <p>Total credits already paid: {{totalPaidCredits}}</p></b>
+                The amount of payment for all credits is: <pre class="pre">{{summAmountPersonalRoot}}</pre>
+                Already paid on all credits: <pre class="pre">{{summPaidAmountPersonalRoot}}</pre>
+                It remains to pay on all credits: <pre class="pre">{{remainsToPayPersonalRoot}}</pre>
+                Debt on all credits: <pre class="pre">{{allDebtPersonalRoot}}</pre>
+                <b><p>Total credits in the account: {{totalCreditsPersonalRoot}}</p>
+                    <p>Total credits already paid: {{totalPaidCreditsPersonalRoot}}</p></b>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

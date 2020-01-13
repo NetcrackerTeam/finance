@@ -16,7 +16,7 @@
 <!-- End of Topbar -->
 
 <!-- Begin Page Content -->
-<div class="container-fluid">
+<div class="container-fluid" >
 
     <div class="input-append" ng-show="user.familyDebitId.length == 0" ng-class="{ 'has-error' : ErrorFamilyName}" >
         <input style="width:358px; margin: 5px 10px 5px 100px;" class="span2" type="text" ng-model="nameFamilyAccount"
@@ -28,7 +28,7 @@
             - only Latin letters without other characters except spacebar<br/>
             - at least 2 characters</p>
     </div>
-    <div class="row"  ng-show="user.familyDebitId.length > 0">
+    <div class="row"  ng-show="user.familyDebitId.length > 0" ng-init="fetchCreditListFamilyRoot()">
 
         <!-- Content Column -->
         <div class="col-lg-6 mb-4">
@@ -226,8 +226,10 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr ng-repeat="credInf in familyCredit" ng-show="credInf.isPaid == 'NO'" data-toggle="modal"
-                            data-target="#infoCreditModal" ng-click="fetchFamilyCredit()" ng-mouseover="sendCreditId(credInf.creditId)">
+                        <!--<tr ng-repeat="credInf in familyCredit" ng-show="credInf.isPaid == 'NO'" data-toggle="modal"
+                            data-target="#infoCreditModal" ng-click="fetchFamilyCredit()" ng-mouseover="sendCreditId(credInf.creditId)">-->
+                        <tr ng-repeat="credInf in familyCreditRoot" ng-show="credInf.isPaid == 'NO'" data-toggle="modal"
+                            data-target="#infoCreditModal" ng-click="fetchFamilyCreditFromArray()" ng-mouseover="changeCreditIdInArray(credInf.creditId)">
                             <td>{{credInf.name}}</td>
                             <td>{{credInf.amount}}</td>
                             <td>{{credInf.remainsToPay}}</td>
@@ -239,7 +241,7 @@
                 </div>
                 <div class="card-footer" style="height: 60px; position:relative;">
                     <center><button class="btn btn-info" style="position: absolute; top: 50%; left: 50%; margin: 0 -50% 0 0; transform: translate(-50%, -50%);"
-                                    data-toggle="modal" href="#showAllCreditModal"  ng-show="familyCredit.length > 0">
+                                    data-toggle="modal" href="#showAllCreditModal"  ng-show="familyCreditRoot.length > 0">
                         Show all credits</button></center>
                 </div>
             </div>
@@ -285,7 +287,7 @@
         <div class="modal-dialog  modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 align="center" class="modal-title"> "{{personalCreditor.name}}" credit</h4>
+                    <h4 align="center" class="modal-title"> "{{familyCreditor.name}}" credit</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -295,35 +297,35 @@
                     <table class="table table-borderless">
                         <tr>
                             <th>Amount:</th>
-                            <td>{{personalCreditor.amount}}</td>
+                            <td>{{familyCreditor.amount}}</td>
                         </tr>
                         <tr>
                             <th>Paid amount:</th>
-                            <td>{{personalCreditor.paidAmount}}</td>
+                            <td>{{familyCreditor.paidAmount}}</td>
                         </tr>
                         <tr>
                             <th>Rate:</th>
-                            <td>{{personalCreditor.creditRate}}</td>
+                            <td>{{familyCreditor.creditRate}}</td>
                         </tr>
                         <tr>
                             <th>Start date:</th>
-                            <td>{{personalCreditor.date.year}}-{{personalCreditor.date.month}}-{{personalCreditor.date.day}}</td>
+                            <td>{{familyCreditor.date.year}}-{{familyCreditor.date.month}}-{{familyCreditor.date.day}}</td>
                         </tr>
                         <tr>
                             <th>Ends date:</th>
-                            <td>{{personalCreditor.dateTo.year}}-{{personalCreditor.dateTo.month}}-{{personalCreditor.dateTo.day}}</td>
+                            <td>{{familyCreditor.dateTo.year}}-{{familyCreditor.dateTo.month}}-{{familyCreditor.dateTo.day}}</td>
                         </tr>
                         <tr>
                             <th>Month day:</th>
-                            <td>{{personalCreditor.monthDay}}</td>
+                            <td>{{familyCreditor.monthDay}}</td>
                         </tr>
                         <tr>
                             <th>Credit is commodity:</th>
-                            <td>{{personalCreditor.isCommodity}}</td>
+                            <td>{{familyCreditor.isCommodity}}</td>
                         </tr>
                         <tr>
                             <th>Amount debt:</th>
-                            <td>{{personalCreditor.debt.amountDebt}}</td>
+                            <td>{{familyCreditor.debt.amountDebt}}</td>
                         </tr>
 
                     </table>
@@ -358,13 +360,13 @@
                 <div class="modal-body">
                     <div class="form-group" ng-class="{ 'has-error' : editCreditForm.nameCr.$invalid &amp;&amp; !editCreditForm.nameCr.$pristine}">
                         <label for="editCreditName">Credit name:</label>
-                        <input type="text" name="nameCr" class="item-input-wrapper form-control" maxlength="60" placeholder="Enter name" ng-model="personalCreditor.name" id="editCreditName" required="required" ng-minlength="3"/>
+                        <input type="text" name="nameCr" class="item-input-wrapper form-control" maxlength="60" placeholder="Enter name" ng-model="familyCreditor.name" id="editCreditName" required="required" ng-minlength="3"/>
                         <p ng-show="editCreditForm.nameCr.$error.minlength" class="help-block">Credit name is too short</p>
                     </div>
 
                     <div class="form-group" ng-class="{ 'has-error' : (editCreditForm.am.$error.max || editCreditForm.am.$error.min) &amp;&amp; !editCreditForm.am.$pristine}">
                         <label for="editCreditAmount">Credit amount:</label>
-                        <input type="number" name="am" min="1" max="10000000" id="editCreditAmount" step="0.01" class="item-input-wrapper form-control" placeholder="Enter amount" ng-model="personalCreditor.amount" required="required"/>
+                        <input type="number" name="am" min="1" max="10000000" id="editCreditAmount" step="0.01" class="item-input-wrapper form-control" placeholder="Enter amount" ng-model="familyCreditor.amount" required="required"/>
                         <p ng-show="(editCreditForm.am.$error.max || editCreditForm.am.$error.min) &amp;&amp; !editCreditForm.am.$pristine" class="help-block">Amount can be from 1 to 10000000</p>
                     </div>
 
@@ -392,7 +394,7 @@
 
                     <div class="form-group slidecontainer">
                         <label for="creditRateRangeEdit" id="creditRateTextEdit">Credit rate:</label>
-                        <p><input type="range" min="0" max="60" step="0.1" class="slider" id="creditRateRangeEdit" ng-model="personalCreditor.creditRate"/></p>
+                        <p><input type="range" min="0" max="60" step="0.1" class="slider" id="creditRateRangeEdit" ng-model="familyCreditor.creditRate"/></p>
                     </div>
 
                     <div class="form-group" ng-class="{ 'has-error' : (editCreditForm.dur.$error.max || editCreditForm.dur.$error.min) &amp;&amp; !editCreditForm.dur.$pristine}">
@@ -403,12 +405,12 @@
 
                     <div class="form-group" ng-class="{ 'has-error' : (editCreditForm.pd.$error.max || editCreditForm.pd.$error.min) &amp;&amp; !editCreditForm.pd.$pristine}">
                         <label for="paymentDayEdit">Credit payment day of month</label>
-                        <input type="number" name="pd" min="1" id="paymentDayEdit" max="28" class="form-control" placeholder="Enter payment day of month" ng-model="personalCreditor.monthDay" required="required"/>
+                        <input type="number" name="pd" min="1" id="paymentDayEdit" max="28" class="form-control" placeholder="Enter payment day of month" ng-model="familyCreditor.monthDay" required="required"/>
                         <p ng-show="(editCreditForm.pd.$error.max || editCreditForm.pd.$error.min) &amp;&amp; !editCreditForm.pd.$pristine" class="help-block">Payment day can be from 1 to 28</p>
                     </div>
 
                     <div class="form-group">
-                        <input type="checkbox" ng-model="personalCreditor.isCommodity" /> The credit is commodity (amount on debit account won't increase)
+                        <input type="checkbox" ng-model="familyCreditor.isCommodity" /> The credit is commodity (amount on debit account won't increase)
                     </div>
                     <pre ng-show="check != null">{{check}}</pre>
 
@@ -425,7 +427,7 @@
 
 <div class=" modal fade " id="showAllCreditModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabelCr"
      aria-hidden="true" style="overflow-x: hidden;" data-backdrop="true">
-    <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-dialog modal-lg mw-100" role="document">
         <div class="modal-content">
             <div class="modal-header" style="position: relative;">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -435,9 +437,9 @@
                     All credits</h4>
             </div>
             <div class="modal-body" ng-controller="FamilyCreditController" >
-                <div style="height: 350px; overflow-y: auto;">
+                <div style="height: 400px; overflow-y: auto;">
                     <table class="table table-striped default-table">
-                        <thead>
+                        <thead style="background: #F8F9FC; color: #4E73E5;">
                         <tr>
                             <th>Name</th>
                             <th>Amount</th>
@@ -449,10 +451,13 @@
                             <th>Is commo<br/>dity</th>
                             <th>Debt</th>
                             <th>Is paid</th>
+                            <th>Total credit payment</th>
+                            <th>Month payment</th>
+                            <th>Remains to pay</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr ng-repeat="credInf in familyCredit">
+                        <tr ng-repeat="credInf in familyCreditRoot">
                             <td>{{credInf.name}}</td>
                             <td >{{credInf.amount}}</td>
                             <td >{{credInf.paidAmount}}</td>
@@ -463,6 +468,9 @@
                             <td>{{credInf.isCommodity}}</td>
                             <td>{{credInf.debt.amountDebt}}</td>
                             <td>{{credInf.isPaid}}</td>
+                            <td>{{credInf.totalCreditPayment}}</td>
+                            <td>{{credInf.monthPayment}}</td>
+                            <td>{{credInf.remainsToPay}}</td>
                         </tr>
                         </tbody>
                     </table>
@@ -489,12 +497,12 @@
                     Additional information about credits</h4>
             </div>
             <div class="modal-body" ng-controller="FamilyCreditController" >
-                The amount of payment for all credits is: <pre class="pre">{{summAmount}}</pre>
-                Already paid on all credits: <pre class="pre">{{summPaidAmount}}</pre>
-                It remains to pay on all credits: <pre class="pre">{{remainsToPay}}</pre>
-                Debt on all credits: <pre class="pre">{{allDebt}}</pre>
-                <b><p>Total credits in the account: {{totalCredits}}</p>
-                    <p>Total credits already paid: {{totalPaidCredits}}</p></b>
+                The amount of payment for all credits is: <pre class="pre">{{summAmountFamilyRoot}}</pre>
+                Already paid on all credits: <pre class="pre">{{summPaidAmountFamilyRoot}}</pre>
+                It remains to pay on all credits: <pre class="pre">{{remainsToPayFamilyRoot}}</pre>
+                Debt on all credits: <pre class="pre">{{allDebtFamilyRoot}}</pre>
+                <b><p>Total credits in the account: {{totalCreditsFamilyRoot}}</p>
+                    <p>Total credits already paid: {{totalPaidCreditsFamilyRoot}}</p></b>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

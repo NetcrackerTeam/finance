@@ -224,4 +224,18 @@ var PersonalCreditController = function ($scope, $http, $rootScope) {
         });
     };
 
+    $scope.changeCreditIdInArray = function (creditId) {
+        $rootScope.creditIdInArray = creditId;
+    };
+
+    $scope.fetchPersonalCreditFromArray = function () {
+        for (var i = 0; i < $rootScope.personalCreditRoot.length; i++) {
+            if ($rootScope.personalCreditRoot[i].creditId === $rootScope.creditIdInArray) {
+                $rootScope.personalCreditor = $rootScope.personalCreditRoot[i];
+                if ($rootScope.personalCreditor.isCommodity === false) $rootScope.personalCreditor.isCommodity = "NO";
+                if ($rootScope.personalCreditor.isCommodity === true) $rootScope.personalCreditor.isCommodity = "YES";
+            }
+        }
+    };
+
 };

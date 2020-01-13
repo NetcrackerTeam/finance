@@ -149,9 +149,9 @@ var FamilyCreditController = function ($scope, $http, $rootScope) {
 
     $scope.fetchFamilyCredit = function () {
         $http.get('familyCredit/getFamilyCredit').success(function (response) {
-            $rootScope.personalCreditor = response;
-            if ($rootScope.personalCreditor.isCommodity === false) $rootScope.personalCreditor.isCommodity = "NO";
-            if ($rootScope.personalCreditor.isCommodity === true) $rootScope.personalCreditor.isCommodity = "YES";
+            $rootScope.familyCreditor = response;
+            if ($rootScope.familyCreditor.isCommodity === false) $rootScope.familyCreditor.isCommodity = "NO";
+            if ($rootScope.familyCreditor.isCommodity === true) $rootScope.familyCreditor.isCommodity = "YES";
         });
     };
 
@@ -180,12 +180,12 @@ var FamilyCreditController = function ($scope, $http, $rootScope) {
         var duration = $scope.duration;
         var dateTo = moment(dateFrom).clone().add(duration, 'months').format('YYYY-MM-DD');
         // var dateTo = new Date(dateFrom.setMonth(dateFrom.getMonth() + 5))
-        $rootScope.personalCreditor.date = {
+        $rootScope.familyCreditor.date = {
             year: moment(dateFrom).year(),
             month: moment(dateFrom).month() + 1,
             day: moment(dateFrom).date()
         };
-        $rootScope.personalCreditor.dateTo = {
+        $rootScope.familyCreditor.dateTo = {
             year: moment(dateTo).year(),
             month: moment(dateTo).month() + 1,
             day: moment(dateTo).date()
@@ -193,7 +193,7 @@ var FamilyCreditController = function ($scope, $http, $rootScope) {
         $http({
             method: "PUT",
             url: updateCreditURL,
-            data: angular.toJson($rootScope.personalCreditor),
+            data: angular.toJson($rootScope.familyCreditor),
             headers: {
                 'Content-Type': 'application/json'
             }
@@ -237,6 +237,20 @@ var FamilyCreditController = function ($scope, $http, $rootScope) {
         }, function () {
             $scope.check = "error";
         });
+    };
+
+    $scope.changeCreditIdInArray = function (creditId) {
+        $rootScope.creditIdInArray = creditId;
+    };
+
+    $scope.fetchFamilyCreditFromArray = function () {
+        for (var i = 0; i < $rootScope.familyCreditRoot.length; i++) {
+            if ($rootScope.familyCreditRoot[i].creditId === $rootScope.creditIdInArray) {
+                $rootScope.familyCreditor = $rootScope.familyCreditRoot[i];
+                if ($rootScope.familyCreditor.isCommodity === false) $rootScope.familyCreditor.isCommodity = "NO";
+                if ($rootScope.familyCreditor.isCommodity === true) $rootScope.familyCreditor.isCommodity = "YES";
+            }
+        }
     };
 
 };
