@@ -86,33 +86,33 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean deactivateUser(User user) {
-        PersonalDebitAccount personalDebitAccount = personalDebitAccountDao.
-                getPersonalAccountById(user.getPersonalDebitAccount());
+        PersonalDebitAccount personalDebitAccount = personalDebitAccountDao.getPersonalAccountById(user.getPersonalDebitAccount());
+        boolean checkDebitPersonalAccount = (ZERO == personalDebitAccount.getAmount());
 
         if (isUserHaveFamilyAccount(user.getId())) {
             FamilyDebitAccount familyDebitAccount = familyAccountDebitDao.getFamilyAccountById(user.getFamilyDebitAccount());
-            boolean checkDebitPersonalAccount = (ZERO == personalDebitAccount.getAmount());
             if (familyDebitAccount != null) {
                 boolean checkDebitFamilyAndPersonalAccount = (ZERO == personalDebitAccount.getAmount()) && (ZERO == familyDebitAccount.getAmount());
                 if (checkDebitFamilyAndPersonalAccount && allFamilyCreditNull(user) && allPersonalCreditNull(user)) {
                     return true;
                 }
-            } else if (checkDebitPersonalAccount && allFamilyCreditNull(user) && allPersonalCreditNull(user)) {
-                return true;
             }
         }
+        if (checkDebitPersonalAccount && allPersonalCreditNull(user)) {
+            return true;
+        }
 
-        return true;
+        return false;
     }
 
 
     public boolean allPersonalCreditNull(User user) {
         List<PersonalCreditAccount> allPersonalCredit = creditAccountDao.getAllPersonalCreditsByAccountId(user.getId());
         for (PersonalCreditAccount personalCredit : allPersonalCredit) {
-            if (personalCredit == null)
+            if (personalCredit != null)
                 logger.debug("personalCredit null" + personalCredit.getCreditId());
             boolean checkCredit = (ZERO == personalCredit.getAmount());
-            if (!checkCredit) {
+            if (checkCredit) {
                 return false;
             }
         }
@@ -122,11 +122,12 @@ public class UserServiceImpl implements UserService {
     public boolean allFamilyCreditNull(User user) {
         List<FamilyCreditAccount> allFamilyCredit = creditAccountDao.getAllFamilyCreditsByAccountId(user.getId());
         for (FamilyCreditAccount familyCredit : allFamilyCredit) {
-            if (familyCredit == null)
+            if (familyCredit != null) {
                 logger.debug("familyCredit null" + familyCredit.getCreditId());
-            boolean checkCredit = (ZERO == familyCredit.getAmount());
-            if (!checkCredit) {
-                return false;
+                boolean checkCredit = (ZERO == familyCredit.getAmount());
+                if (checkCredit) {
+                    return false;
+                }
             }
         }
         return true;
