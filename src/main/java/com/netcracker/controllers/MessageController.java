@@ -21,9 +21,11 @@ public interface MessageController {
     String DELETE_AUTO_INCOME_PERS = "Your auto income deleted by account ";
     String DELETE_AUTO_EXPENSE_PERS = "Your auto income deleted by account ";
     String ADD_AUTO_INCOME = "Added new auto income by account";
-    String NO_VALID_ADD_AUTO_INCOME = " No valid day for added new auto income by account";
+    String NO_VALID_ADD_AUTO_INCOME = " No valid day for added new auto income by account," +
+            "maximum day in the current month - ";
     String ADD_AUTO_EXPENSE = "Added new auto expense by account";
-    String NO_VALID_ADD_AUTO_EXPENSE = "now valid day for add  new auto expense by account";
+    String NO_VALID_ADD_AUTO_EXPENSE = "now valid day for add  new auto expense by account"+
+            "maximum day in the current month - ";;
     //     FamilyDebitController
     String DEACT_FAMACC_FAM = "Deactivated successfully account ";
     String DEACT_UNS_FAMACC_FAM = "Deactivated unsuccessfully account ";

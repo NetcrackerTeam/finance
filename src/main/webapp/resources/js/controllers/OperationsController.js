@@ -7,7 +7,7 @@ app.controller("AddIncomeControllerPersonal", function ($scope, $http) {
         amount: 0.00,
         categoryIncome: "DEFAULT",
         checkbox: false,
-        dayOfMonth: 1
+        dayOfMonth: "1"
     };
     var pat = /^[0-9]+(\.[0-9][0-9]?)?$/;
 
@@ -32,7 +32,7 @@ app.controller("AddIncomeControllerPersonal", function ($scope, $http) {
                     }
                 }).success(function (response) {
                     if (response.status === false)
-                        $scope.amountExpErrorMessage = response.message;
+                        $scope.amountIncErrorMessage = response.message;
                     else {
                         $('.modal').modal('hide');
                         window.location.reload();
@@ -126,7 +126,7 @@ app.controller("AddIncomeControllerFamily", function ($scope, $http) {
                     }
                 }).success(function (response) {
                     if (response.status === false)
-                        $scope.amountExpErrorMessage = response.message;
+                        $scope.amountIncErrorMessage = response.message;
                     else {
                         $('.modal').modal('hide');
                         window.location.reload();

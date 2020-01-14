@@ -3,6 +3,7 @@ package com.netcracker.services.utils;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.ZoneId;
+import java.util.Calendar;
 import java.util.Date;
 
 public final class DateUtils {
@@ -25,5 +26,21 @@ public final class DateUtils {
 
     public static LocalDate addMonthsToDate(LocalDate date, int amount) {
         return date.plusMonths(amount);
+    }
+
+    public static  boolean checkMaxDayInCurrentMonth(int days) {
+        Calendar myCalendar = (Calendar) Calendar.getInstance().clone();
+        int max_date = myCalendar.getActualMaximum(Calendar.DAY_OF_MONTH);
+        if (days > max_date) {
+            return false;
+        }
+        return true;
+    }
+
+
+    public static int MaxDayInCurrentMonth(){
+        Calendar myCalendar = (Calendar) Calendar.getInstance().clone();
+        int max_date = myCalendar.getActualMaximum(Calendar.DAY_OF_MONTH);
+        return max_date;
     }
 }

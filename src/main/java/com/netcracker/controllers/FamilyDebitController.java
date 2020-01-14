@@ -9,7 +9,7 @@ import com.netcracker.models.enums.CreditStatusPaid;
 import com.netcracker.models.enums.FamilyAccountStatusActive;
 import com.netcracker.models.enums.UserRole;
 import com.netcracker.services.*;
-import com.netcracker.services.validation.UserValidation;
+import com.netcracker.services.utils.DateUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -18,11 +18,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.RoundingMode;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.security.Principal;
 import java.time.LocalDate;
@@ -243,13 +241,15 @@ public class FamilyDebitController {
                                    Principal principal) {
         BigInteger accountId = getAccountByPrincipal(principal);
         BigInteger userId = getUserIdByPrincipal(principal);
-        if (UserDataValidator.isValidDateForAutoOperationIncome(autoOperationIncome)) {
+        boolean validDate = (UserDataValidator.isValidDateForAutoOperationIncome(autoOperationIncome))
+                && (DateUtils.checkMaxDayInCurrentMonth(autoOperationIncome.getDayOfMonth()));
+        if (validDate) {
             accountAutoOperationService.createFamilyIncomeAutoOperation(autoOperationIncome, userId, accountId);
             logger.debug("autoIncome is done!");
             return new Status(true, MessageController.ADD_AUTO_INCOME);
         }
         logger.debug("autoExpense is not valid !" + autoOperationIncome.getId() + " " + autoOperationIncome.getCategoryIncome());
-        return new Status(false, NO_VALID_ADD_AUTO_INCOME);
+        return new Status(false, NO_VALID_ADD_AUTO_INCOME+DateUtils.MaxDayInCurrentMonth());
     }
 
     @RequestMapping(value = "/createAutoExpense", method = RequestMethod.POST)
@@ -258,13 +258,15 @@ public class FamilyDebitController {
                                     Principal principal) {
         BigInteger accountId = getAccountByPrincipal(principal);
         BigInteger userId = getUserIdByPrincipal(principal);
-        if (UserDataValidator.isValidDateForAutoOperationExpense(autoOperationExpense)) {
+        boolean validDate = (UserDataValidator.isValidDateForAutoOperationExpense(autoOperationExpense))
+                && (DateUtils.checkMaxDayInCurrentMonth(autoOperationExpense.getDayOfMonth()));
+        if (validDate) {
             accountAutoOperationService.createFamilyExpenseAutoOperation(autoOperationExpense, userId, accountId);
             logger.debug("autoIncome is done!");
             return new Status(true, ADD_AUTO_EXPENSE);
         }
         logger.debug("autoExpense is not valid !" + autoOperationExpense.getId() + " " + autoOperationExpense.getCategoryExpense());
-        return new Status(false, NO_VALID_ADD_AUTO_EXPENSE);
+        return new Status(false, NO_VALID_ADD_AUTO_EXPENSE + DateUtils.MaxDayInCurrentMonth());
 
     }
 

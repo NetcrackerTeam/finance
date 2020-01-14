@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 
@@ -31,10 +30,8 @@ public class AccountAutoOperationServiceImpl implements AccountAutoOperationServ
 
         ObjectsCheckUtils.isNotNull(autoOperationIncome.getDayOfMonth(), autoOperationIncome.getAmount(),
                 autoOperationIncome.getCategoryIncome(), userId, familyDebitAccountId);
-        boolean checksMaxDay = checkMaxDayInCurrentMonth(autoOperationIncome.getDayOfMonth());
-        if (checksMaxDay) {
-            autoOperationDao.createFamilyIncomeAutoOperation(autoOperationIncome, userId, familyDebitAccountId);
-        }
+        autoOperationDao.createFamilyIncomeAutoOperation(autoOperationIncome, userId, familyDebitAccountId);
+
     }
 
     @Override
@@ -45,10 +42,9 @@ public class AccountAutoOperationServiceImpl implements AccountAutoOperationServ
 
         ObjectsCheckUtils.isNotNull(autoOperationIncome.getDayOfMonth(), autoOperationIncome.getAmount(),
                 autoOperationIncome.getCategoryIncome(), personalDebitAccountId);
-        boolean checksMaxDay = checkMaxDayInCurrentMonth(autoOperationIncome.getDayOfMonth());
-        if (checksMaxDay) {
-            autoOperationDao.createPersonalIncomeAutoOperation(autoOperationIncome, personalDebitAccountId);
-        }
+
+        autoOperationDao.createPersonalIncomeAutoOperation(autoOperationIncome, personalDebitAccountId);
+
     }
 
     @Override
@@ -59,10 +55,8 @@ public class AccountAutoOperationServiceImpl implements AccountAutoOperationServ
 
         ObjectsCheckUtils.isNotNull(autoOperationExpense.getDayOfMonth(), autoOperationExpense.getAmount(),
                 autoOperationExpense.getCategoryExpense(), userId, familyDebitAccountId);
-        boolean checksMaxDay = checkMaxDayInCurrentMonth(autoOperationExpense.getDayOfMonth());
-        if (checksMaxDay) {
-            autoOperationDao.createFamilyExpenseAutoOperation(autoOperationExpense, userId, familyDebitAccountId);
-        }
+
+        autoOperationDao.createFamilyExpenseAutoOperation(autoOperationExpense, userId, familyDebitAccountId);
     }
 
     @Override
@@ -73,10 +67,9 @@ public class AccountAutoOperationServiceImpl implements AccountAutoOperationServ
 
         ObjectsCheckUtils.isNotNull(autoOperationExpense.getDayOfMonth(), autoOperationExpense.getAmount(),
                 autoOperationExpense.getCategoryExpense(), personalDebitAccountId);
-        boolean checksMaxDay = checkMaxDayInCurrentMonth(autoOperationExpense.getDayOfMonth());
-        if (checksMaxDay) {
-            autoOperationDao.createPersonalExpenseAutoOperation(autoOperationExpense, personalDebitAccountId);
-        }
+
+        autoOperationDao.createPersonalExpenseAutoOperation(autoOperationExpense, personalDebitAccountId);
+
     }
 
     @Override
@@ -201,12 +194,5 @@ public class AccountAutoOperationServiceImpl implements AccountAutoOperationServ
         return allOperationsList;
     }
 
-    public boolean checkMaxDayInCurrentMonth(int days) {
-        Calendar myCalendar = (Calendar) Calendar.getInstance().clone();
-        int max_date = myCalendar.getActualMaximum(Calendar.DAY_OF_MONTH);
-        if (days > max_date) {
-            return false;
-        }
-        return true;
-    }
+
 }

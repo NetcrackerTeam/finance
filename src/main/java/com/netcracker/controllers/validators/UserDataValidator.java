@@ -65,7 +65,7 @@ public class UserDataValidator {
     }
 
     public static boolean isValidDateForAutoOperationIncome(AutoOperationIncome autoOperationIncome) {
-        boolean validDayOfMonth = (autoOperationIncome.getDayOfMonth() < 31) && (autoOperationIncome.getDayOfMonth() > 1);
+        boolean validDayOfMonth = (autoOperationIncome.getDayOfMonth() <= 31) && (autoOperationIncome.getDayOfMonth() >= 1);
         if (validDayOfMonth) {
             return true;
         } else

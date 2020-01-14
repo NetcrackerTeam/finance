@@ -753,8 +753,9 @@
                     </div>
                     <div class="form-group" ng-class="{ 'is-invalid' : (addIncomeForm.pd.$error.max || addIncomeForm.pd.$error.min) &amp;&amp; !addIncomeForm.pd.$pristine &amp;&amp; form.checkbox}">
                         <label for="income">Day of month:</label>
-                        <input type="number" ng-disabled="!form.checkbox" ng-model="form.dayOfMonth" min="1" max="28" class="form-control" name="pd"/>
-                        <p ng-show="(addIncomeForm.pd.$error.max || addIncomeForm.pd.$error.min) &amp;&amp; !addIncomeForm.pd.$pristine &amp;&amp; addIncomeForm.ch" class="help-block">Payment day can be from 1 to 28</p>
+                        <input type="number" ng-disabled="!form.checkbox" ng-model="form.dayOfMonth" min="1" max="31" class="form-control" name="pd"/>
+<!--                        <p ng-show="(addIncomeForm.pd.$error.max || addIncomeForm.pd.$error.min) &amp;&amp; !addIncomeForm.pd.$pristine &amp;&amp; addIncomeForm.ch" class="help-block">Payment day can be from 1 to 31</p>-->
+                        <p ng-show="(addIncomeForm.pd.$error.max || addIncomeForm.pd.$error.min) &amp;&amp; !addIncomeForm.pd.$pristine &amp;&amp; addIncomeForm.ch" class="help-block">Payment day can be from 1 to 31</p>
                     </div>
 
                     <div class="modal-footer">
@@ -809,10 +810,9 @@
                     </div>
                     <div class="form-group" ng-class="{ 'has-error' : (addExpenseForm.pd.$error.max || addExpenseForm.pd.$error.min) &amp;&amp; !addExpenseForm.pd.$pristine &amp;&amp; form.checkbox}">
                         <label for="income">Day of month:</label>
-                        <input type="number" ng-disabled="!form.checkbox" ng-model="form.dayOfMonth" min="1" max="28" class="form-control" placeholder="Enter day of month" name="pd"/>
-                        <p ng-show="(addExpenseForm.pd.$error.max || addExpenseForm.pd.$error.min) &amp;&amp; !addExpenseForm.pd.$pristine &amp;&amp; addExpenseForm.chEx" class="help-block">Payment day can be from 1 to 28</p>
+                        <input type="number" ng-disabled="!form.checkbox" ng-model="form.dayOfMonth" min="1" max="31" class="form-control" placeholder="Enter day of month" name="pd"/>
+                        <p ng-show="(addExpenseForm.pd.$error.max || addExpenseForm.pd.$error.min) &amp;&amp; !addExpenseForm.pd.$pristine &amp;&amp; addExpenseForm.chEx" class="help-block">Payment day can be from 1 to 31</p>
                     </div>
-
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal" >Close</button>
                         <button type="submit" value="Submit" class="btn btn-primary" ng-disabled = "!form.amount" ng-click="submitOperation()" >Add </button>

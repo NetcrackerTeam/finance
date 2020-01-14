@@ -4,7 +4,7 @@ import com.netcracker.controllers.validators.UserDataValidator;
 import com.netcracker.dao.*;
 import com.netcracker.models.*;
 import com.netcracker.services.*;
-import com.netcracker.services.impl.UserServiceImpl;
+import com.netcracker.services.utils.DateUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -12,9 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;
-import java.io.IOException;
 import java.math.BigInteger;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.security.Principal;
 import java.time.LocalDate;
@@ -119,13 +117,15 @@ public class PersonalDebitController {
     Status createAutoIncome(@RequestBody AutoOperationIncome autoOperationIncome,
                             Principal principal) {
         BigInteger accountId = getAccountByPrincipal(principal);
-        if (UserDataValidator.isValidDateForAutoOperationIncome(autoOperationIncome)) {
+        boolean validDate = (UserDataValidator.isValidDateForAutoOperationIncome(autoOperationIncome))
+                && (DateUtils.checkMaxDayInCurrentMonth(autoOperationIncome.getDayOfMonth()));
+        if (validDate) {
             accountAutoOperationService.createPersonalIncomeAutoOperation(autoOperationIncome, accountId);
             logger.debug("autoIncome is done!");
             return new Status(true, ADD_AUTO_INCOME);
         }
         logger.debug("autoIncome is not valid !" + autoOperationIncome.getId() + " " + autoOperationIncome.getCategoryIncome());
-        return new Status(false, NO_VALID_ADD_AUTO_INCOME);
+        return new Status(false, NO_VALID_ADD_AUTO_INCOME + DateUtils.MaxDayInCurrentMonth());
     }
 
     @RequestMapping(value = "/createAutoExpense", method = RequestMethod.POST)
@@ -133,13 +133,15 @@ public class PersonalDebitController {
     Status createAutoExpense(@RequestBody AutoOperationExpense autoOperationExpense,
                              Principal principal) {
         BigInteger accountId = getAccountByPrincipal(principal);
-        if (UserDataValidator.isValidDateForAutoOperationExpense(autoOperationExpense)) {
+        boolean validDate = (UserDataValidator.isValidDateForAutoOperationExpense(autoOperationExpense))
+                && (DateUtils.checkMaxDayInCurrentMonth(autoOperationExpense.getDayOfMonth()));
+        if (validDate) {
             accountAutoOperationService.createPersonalExpenseAutoOperation(autoOperationExpense, accountId);
             logger.debug("expense is done!");
             return new Status(true, ADD_AUTO_EXPENSE);
         }
         logger.debug("autoExpense is not valid !" + autoOperationExpense.getId() + " " + autoOperationExpense.getCategoryExpense());
-        return new Status(false, NO_VALID_ADD_AUTO_EXPENSE);
+        return new Status(false, NO_VALID_ADD_AUTO_EXPENSE + DateUtils.MaxDayInCurrentMonth());
 
     }
 

@@ -608,7 +608,7 @@
                         <p ng-if="categoryCheck" class="help-block">{{ categoryCheck }}</p>
                     </div>
                     <div class="form-group">
-                        <input type="checkbox" ng-model="form.checkbox" name="ch"/> Make operation repetitive each month
+                        <input type="checkbox" ng-model="form.checkbox" name="-ch"/> Make operation repetitive each month
                     </div>
                     <div class="form-group" ng-class="{ 'has-error' : (addIncomeForm.pd.$error.max || addIncomeForm.pd.$error.min) &amp;&amp; !addIncomeForm.pd.$pristine &amp;&amp; form.checkbox}">
                         <label for="income">Day of month:</label>
