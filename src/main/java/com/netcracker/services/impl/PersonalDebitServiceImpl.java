@@ -47,7 +47,13 @@ public class PersonalDebitServiceImpl implements PersonalDebitService {
     public PersonalDebitAccount getPersonalDebitAccount(BigInteger id) {
         logger.debug("get personal debit account by id:" + id);
         ObjectsCheckUtils.isNotNull(id);
-        return personalDebitAccountDao.getPersonalAccountById(id);
+        PersonalDebitAccount debitAccount = personalDebitAccountDao.getPersonalAccountById(id);
+        LocalDate startMonthDate = LocalDate.of(LocalDate.now().getYear(), LocalDate.now().getMonth(), 1);
+        Collection<AccountIncome> incomes = operationService.getIncomesPersonalAfterDateByAccountId(id, startMonthDate);
+        Collection<AccountExpense> expenses = operationService.getExpensesPersonalAfterDateByAccountId(id, startMonthDate);
+        debitAccount.setMonthIncome(incomes.stream().mapToDouble(AccountIncome::getAmount).sum());
+        debitAccount.setMonthExpense(expenses.stream().mapToDouble(AccountExpense::getAmount).sum());
+        return debitAccount;
     }
 
 

@@ -1,10 +1,14 @@
 <!-- Topbar -->
-<nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+<nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow"
+     xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
     <div class="d-sm-flex align-items-center justify-content-between mb-3 mt-2">
-        <h1 class="h3 mb-0 text-gray-800">Family account</h1>
-        <a href="#" class="btn btn-secondary btn-icon-split ml-5" ng-click="deleteFamilyAccount()" ng-show="user.familyDebitId.length > 0" >
-            <span class="text">Delete account</span>
-        </a>
+        <h1 class="h3 mb-0 text-gray-800">Family account "{{accountInfo.name}}"</h1>
+
+<!--        <div sec:authorize="hasAuthority('OWNER')">--> <div>
+            <a href="#" class="btn btn-secondary btn-icon-split ml-5" ng-click="deleteFamilyAccount()" ng-show="user.familyDebitId.length > 0" >
+                <span class="text">Delete account</span>
+            </a>
+        </div>
     </div>
     <div class="row ml-auto">
         <div class="col mr-2 d-none d-lg-inline text-gray-600">
@@ -16,10 +20,12 @@
 <!-- End of Topbar -->
 
 <!-- Begin Page Content -->
-<div class="container-fluid" >
+<div class="container-fluid" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 
-    <div class="input-append" ng-show="user.familyDebitId.length == 0" ng-class="{ 'has-error' : ErrorFamilyName}" >
-        <input style="width:358px; margin: 5px 10px 5px 100px;" class="span2" type="text" ng-model="nameFamilyAccount"
+<!--    <div sec:authorize="hasAuthority('USER')">-->
+    <div>
+    <div class="input-append" ng-show="user.familyDebitId.length == 0" ng-class="{ 'is-invalid' : ErrorFamilyName}" >
+        <input class="span2" type="text" ng-model="nameFamilyAccount"
                placeholder="Enter family account name" required="required" ng-minlength="2"/>
         <!-- <p style="margin: 5px 10px 5px 100px;" class = "help-block"> {{ErrorFamilyName}}</p> -->
         <br/>
@@ -28,6 +34,9 @@
             - only Latin letters without other characters except spacebar<br/>
             - at least 2 characters</p>
     </div>
+    </div>
+<!--    <div sec:authorize="hasAnyAuthority('PARTICIPANT', 'OWNER', 'USER')">-->
+    <div>
     <div class="row"  ng-show="user.familyDebitId.length > 0" ng-init="fetchCreditListFamilyRoot()">
 
         <!-- Content Column -->
@@ -90,7 +99,7 @@
                             <div class="row no-gutters align-items-center">
                                 <div class="col mr-2">
                                     <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Month income</div>
-                                    <div class="h5 mb-0 font-weight-bold text-gray-800">?</div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800">{{accountInfo.monthIncome}}</div>
                                 </div>
                             </div>
                         </div>
@@ -103,7 +112,7 @@
                             <div class="row no-gutters align-items-center">
                                 <div class="col mr-2">
                                     <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">Month expense</div>
-                                    <div class="h5 mb-0 font-weight-bold text-gray-800">?</div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800">{{accountInfo.monthExpense}}</div>
                                 </div>
                             </div>
                         </div>
@@ -125,7 +134,8 @@
 <!--                        <option value="6">Half year</option>-->
 <!--                        <option value="12">Year</option>-->
 <!--                    </select>-->
-                    <table class="table table-responsive">
+                    <div class="table-responsive">
+                    <table class="table">
                         <thead>
                         <tr>
                             <th>UserName</th>
@@ -157,6 +167,7 @@
                         <!--                        </tr>-->
                         </tbody>
                     </table>
+                    </div>
                 </div>
             </div>
 
@@ -251,7 +262,8 @@
                     <h6 class="m-0 font-weight-bold text-primary">Auto operations</h6>
                 </div>
                 <div class="card-body" ng-controller="FamilyDebitController">
-                    <table class="table table-responsive">
+                    <div class="table-responsive">
+                    <table class="table ">
                         <thead>
                         <th>Expense</th>
                         <th>Income</th>
@@ -273,10 +285,12 @@
                         </tr>
                         </tbody>
                     </table>
+                    </div>
                 </div>
             </div>
 
         </div>
+    </div>
     </div>
 
 </div>
@@ -737,7 +751,7 @@
                     <div class="form-group">
                         <input type="checkbox" ng-model="form.checkbox" name="ch"/> Make operation repetitive each month
                     </div>
-                    <div class="form-group" ng-class="{ 'has-error' : (addIncomeForm.pd.$error.max || addIncomeForm.pd.$error.min) &amp;&amp; !addIncomeForm.pd.$pristine &amp;&amp; form.checkbox}">
+                    <div class="form-group" ng-class="{ 'is-invalid' : (addIncomeForm.pd.$error.max || addIncomeForm.pd.$error.min) &amp;&amp; !addIncomeForm.pd.$pristine &amp;&amp; form.checkbox}">
                         <label for="income">Day of month:</label>
                         <input type="number" ng-disabled="!form.checkbox" ng-model="form.dayOfMonth" min="1" max="28" class="form-control" name="pd"/>
                         <p ng-show="(addIncomeForm.pd.$error.max || addIncomeForm.pd.$error.min) &amp;&amp; !addIncomeForm.pd.$pristine &amp;&amp; addIncomeForm.ch" class="help-block">Payment day can be from 1 to 28</p>

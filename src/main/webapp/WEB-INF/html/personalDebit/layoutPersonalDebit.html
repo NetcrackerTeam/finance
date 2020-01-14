@@ -66,7 +66,7 @@
                             <div class="row no-gutters align-items-center">
                                 <div class="col mr-2">
                                     <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Month income</div>
-                                    <div class="h5 mb-0 font-weight-bold text-gray-800">?</div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800">{{accountInfo.monthIncome}}</div>
                                 </div>
                             </div>
                         </div>
@@ -79,7 +79,7 @@
                             <div class="row no-gutters align-items-center">
                                 <div class="col mr-2">
                                     <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">Month expense</div>
-                                    <div class="h5 mb-0 font-weight-bold text-gray-800">?</div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800">{{accountInfo.monthExpense}}</div>
                                 </div>
                             </div>
                         </div>
@@ -99,7 +99,8 @@
 <!--                        <option value="6">Half year</option>-->
 <!--                        <option value="12">Year</option>-->
 <!--                    </select>-->
-                    <table class="table table-responsive">
+                    <div class="table-responsive">
+                    <table class="table">
                         <thead>
                         <tr>
                             <th>Amount</th>
@@ -129,6 +130,7 @@
 <!--                        </tr>-->
                         </tbody>
                     </table>
+                    </div>
                 </div>
             </div>
 
@@ -174,7 +176,8 @@
                     <h6 class="m-0 font-weight-bold text-primary">Auto operations</h6>
                 </div>
                 <div class="card-body" ng-controller="PersonalDebitController">
-                    <table class="table table-responsive">
+                    <div  class="table-responsive">
+                    <table class="table">
                         <thead>
                         <th>Expense</th>
                         <th>Income</th>
@@ -202,6 +205,7 @@
 <!--                        </tr>-->
                         </tbody>
                     </table>
+                    </div>
                 </div>
             </div>
 
@@ -443,11 +447,10 @@
                     <h4 align="center" class="modal-title" id="passwordModalLabel"> Create credit</h4>
                 </div>
                 <div class="modal-body">
-                    <div class="form-group" ng-class="{ 'has-error' : (addCreditForm.nameCr.$invalid || nameErrorMessage) &amp;&amp; !addCreditForm.nameCr.$pristine}">
+                    <div class="form-group" ng-class="{ 'has-error' : (addCreditForm.nameCr.$invalid) &amp;&amp; !addCreditForm.nameCr.$pristine}">
                         <label for="creditName">Credit name:</label>
                         <input type="text" name="nameCr" class="item-input-wrapper form-control" maxlength="60" placeholder="Enter name" ng-model="credit.name" id="creditName" required="required" ng-minlength="3"/>
                         <p ng-show="addCreditForm.nameCr.$error.minlength" class="help-block">Credit name is too short</p>
-                        <p ng-if="nameErrorMessage" class="help-block">{{ nameErrorMessage }}</p>
                     </div>
 
                     <div class="form-group" ng-class="{ 'has-error' : (addCreditForm.am.$error.max || addCreditForm.am.$error.min || amountErrorMessage) &amp;&amp; !addCreditForm.am.$pristine }">
@@ -502,6 +505,7 @@
                         <input type="checkbox" ng-model="credit.isCommodity" /> The credit is commodity (amount on debit account won't increase)
                     </div>
                     <pre ng-show="check != null">{{check}}</pre>
+                    <p ng-if="nameErrorMessage" class="help-block">{{ nameErrorMessage }}</p>
 
                 </div>
                 <div class="modal-footer">

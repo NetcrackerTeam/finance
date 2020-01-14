@@ -10,6 +10,8 @@ public abstract class AbstractDebitAccount {
     private String name;
     private List<AccountIncome> accountIncomesList;
     private List<AccountExpense> accountExpensesList;
+    private double monthIncome;
+    private double monthExpense;
 
     protected static abstract class BaseBuilder<T extends AbstractDebitAccount, B extends BaseBuilder> {
         protected T actualClass;
@@ -52,6 +54,15 @@ public abstract class AbstractDebitAccount {
             return actualClassBuilder;
         }
 
+        public B monthIncome(double monthIncome) {
+            actualClass.setMonthIncome(monthIncome);
+            return actualClassBuilder;
+        }
+        public B monthExpense(double monthExpense) {
+            actualClass.setMonthIncome(monthExpense);
+            return actualClassBuilder;
+        }
+
 
 
         public T build() {
@@ -88,5 +99,21 @@ public abstract class AbstractDebitAccount {
 
     public void setAccountExpensesList(List<AccountExpense> accountExpensesList) {
         this.accountExpensesList = accountExpensesList;
+    }
+
+    public double getMonthIncome() {
+        return monthIncome;
+    }
+
+    public void setMonthIncome(double monthIncome) {
+        this.monthIncome = monthIncome;
+    }
+
+    public double getMonthExpense() {
+        return monthExpense;
+    }
+
+    public void setMonthExpense(double monthExpense) {
+        this.monthExpense = monthExpense;
     }
 }

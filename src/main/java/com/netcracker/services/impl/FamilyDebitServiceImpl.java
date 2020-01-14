@@ -4,9 +4,7 @@ import com.netcracker.dao.FamilyAccountDebitDao;
 import com.netcracker.dao.UserDao;
 import com.netcracker.exception.FamilyDebitAccountException;
 import com.netcracker.exception.UserException;
-import com.netcracker.models.AbstractAccountOperation;
-import com.netcracker.models.FamilyDebitAccount;
-import com.netcracker.models.User;
+import com.netcracker.models.*;
 import com.netcracker.models.enums.FamilyAccountStatusActive;
 import com.netcracker.services.FamilyDebitService;
 import com.netcracker.services.OperationService;
@@ -47,7 +45,13 @@ public class FamilyDebitServiceImpl implements FamilyDebitService {
     public FamilyDebitAccount getFamilyDebitAccount(BigInteger id) {
         logger.debug("Entering select(getFamilyDebitAccount=" + id + ")");
         ObjectsCheckUtils.isNotNull(id);
-        return familyAccountDebitDao.getFamilyAccountById(id);
+        FamilyDebitAccount debitAccount = familyAccountDebitDao.getFamilyAccountById(id);
+        LocalDate startMonthDate = LocalDate.of(LocalDate.now().getYear(), LocalDate.now().getMonth(), 1);
+        Collection<AccountIncome> incomes = operationService.getIncomesFamilyAfterDateByAccountId(id, startMonthDate);
+        Collection<AccountExpense> expenses = operationService.getExpensesFamilyAfterDateByAccountId(id, startMonthDate);
+        debitAccount.setMonthIncome(incomes.stream().mapToDouble(AccountIncome::getAmount).sum());
+        debitAccount.setMonthExpense(expenses.stream().mapToDouble(AccountExpense::getAmount).sum());
+        return debitAccount;
     }
 
     @Override
