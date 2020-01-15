@@ -117,7 +117,7 @@ public class PersonalDebitController {
     Status createAutoIncome(@RequestBody AutoOperationIncome autoOperationIncome,
                             Principal principal) {
         BigInteger accountId = getAccountByPrincipal(principal);
-        boolean validDate = (UserDataValidator.isValidDateForAutoOperationIncome(autoOperationIncome))
+        boolean validDate = (UserDataValidator.isValidDateForAutoOperation(autoOperationIncome))
                 && (DateUtils.checkMaxDayInCurrentMonth(autoOperationIncome.getDayOfMonth()));
         if (validDate) {
             accountAutoOperationService.createPersonalIncomeAutoOperation(autoOperationIncome, accountId);
@@ -133,7 +133,7 @@ public class PersonalDebitController {
     Status createAutoExpense(@RequestBody AutoOperationExpense autoOperationExpense,
                              Principal principal) {
         BigInteger accountId = getAccountByPrincipal(principal);
-        boolean validDate = (UserDataValidator.isValidDateForAutoOperationExpense(autoOperationExpense))
+        boolean validDate = (UserDataValidator.isValidDateForAutoOperation(autoOperationExpense))
                 && (DateUtils.checkMaxDayInCurrentMonth(autoOperationExpense.getDayOfMonth()));
         if (validDate) {
             accountAutoOperationService.createPersonalExpenseAutoOperation(autoOperationExpense, accountId);

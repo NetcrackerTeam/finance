@@ -241,7 +241,7 @@ public class FamilyDebitController {
                                    Principal principal) {
         BigInteger accountId = getAccountByPrincipal(principal);
         BigInteger userId = getUserIdByPrincipal(principal);
-        boolean validDate = (UserDataValidator.isValidDateForAutoOperationIncome(autoOperationIncome))
+        boolean validDate = (UserDataValidator.isValidDateForAutoOperation(autoOperationIncome))
                 && (DateUtils.checkMaxDayInCurrentMonth(autoOperationIncome.getDayOfMonth()));
         if (validDate) {
             accountAutoOperationService.createFamilyIncomeAutoOperation(autoOperationIncome, userId, accountId);
@@ -258,7 +258,7 @@ public class FamilyDebitController {
                                     Principal principal) {
         BigInteger accountId = getAccountByPrincipal(principal);
         BigInteger userId = getUserIdByPrincipal(principal);
-        boolean validDate = (UserDataValidator.isValidDateForAutoOperationExpense(autoOperationExpense))
+        boolean validDate = (UserDataValidator.isValidDateForAutoOperation(autoOperationExpense))
                 && (DateUtils.checkMaxDayInCurrentMonth(autoOperationExpense.getDayOfMonth()));
         if (validDate) {
             accountAutoOperationService.createFamilyExpenseAutoOperation(autoOperationExpense, userId, accountId);

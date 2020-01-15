@@ -2,6 +2,7 @@ package com.netcracker.controllers.validators;
 
 import com.netcracker.exception.FamilyDebitAccountException;
 import com.netcracker.exception.UserException;
+import com.netcracker.models.AbstractAutoOperation;
 import com.netcracker.models.AutoOperationExpense;
 import com.netcracker.models.AutoOperationIncome;
 import com.netcracker.services.utils.ExceptionMessages;
@@ -56,20 +57,14 @@ public class UserDataValidator {
         } else throw new FamilyDebitAccountException(ExceptionMessages.EMPTY_FIELD);
     }
 
-    public static boolean isValidDateForAutoOperationExpense(AutoOperationExpense autoOperationExpense) {
-        boolean validDayOfMonth = (autoOperationExpense.getDayOfMonth() < 31) && (autoOperationExpense.getDayOfMonth() > 1);
+    public static boolean isValidDateForAutoOperation(AbstractAutoOperation abstractAutoOperation) {
+        boolean validDayOfMonth = (abstractAutoOperation.getDayOfMonth() <= 31) && (abstractAutoOperation.getDayOfMonth() >= 1);
         if (validDayOfMonth) {
             return true;
         } else
             return false;
     }
 
-    public static boolean isValidDateForAutoOperationIncome(AutoOperationIncome autoOperationIncome) {
-        boolean validDayOfMonth = (autoOperationIncome.getDayOfMonth() <= 31) && (autoOperationIncome.getDayOfMonth() >= 1);
-        if (validDayOfMonth) {
-            return true;
-        } else
-            return false;
-    }
+
 
 }
