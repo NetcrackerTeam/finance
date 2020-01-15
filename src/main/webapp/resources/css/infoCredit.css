@@ -323,3 +323,14 @@
     padding: 10px;
     border: 1px solid #d8d8d8;
 }
+
+.center-element-hz {
+    position: absolute;
+    left: 50%;
+    margin: 0 -50% 0 0;
+    transform: translate(-50%, -50%);
+}
+
+.center-element-vr {
+    top: 50%;
+}

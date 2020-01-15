@@ -87,53 +87,13 @@ var app = angular.module('AngularSpringApp', []).run(function ($rootScope, $http
 
     $rootScope.fetchUserRole();
 
-    $rootScope.summAmountPersonalRoot = 0;
-    $rootScope.summPaidAmountPersonalRoot = 0;
-    $rootScope.remainsToPayPersonalRoot = 0;
-    $rootScope.totalCreditsPersonalRoot = 0;
-    $rootScope.allDebtPersonalRoot = 0;
-    $rootScope.totalPaidCreditsPersonalRoot = 0;
-    var getPersonalCreditsURL = 'personalCredit/getPersonalCredits';
-    $rootScope.fetchCreditListPersonalRoot = function () {
-        $http.get(getPersonalCreditsURL).success(function (creditList) {
-            $rootScope.personalCreditRoot = creditList;
-            for (var i = 0; i < $rootScope.personalCreditRoot.length; i++) {
-                $rootScope.summAmountPersonalRoot += $rootScope.personalCreditRoot[i].amount;
-                $rootScope.summPaidAmountPersonalRoot += $rootScope.personalCreditRoot[i].paidAmount;
-                $rootScope.allDebtPersonalRoot += $rootScope.personalCreditRoot[i].debt.amountDebt;
-                $rootScope.remainsToPayPersonalRoot += $rootScope.personalCreditRoot[i].remainsToPay;
-                if ($rootScope.personalCreditRoot[i].isPaid === "YES") $rootScope.totalPaidCreditsPersonalRoot++;
-                if ($rootScope.personalCreditRoot[i].isCommodity === false) $rootScope.personalCreditRoot[i].isCommodity = "NO";
-                if ($rootScope.personalCreditRoot[i].isCommodity === true) $rootScope.personalCreditRoot[i].isCommodity = "YES";
-            }
-            $rootScope.totalCreditsPersonalRoot = $rootScope.personalCreditRoot.length;
-        });
+    $rootScope.fetchCreditListPersonalRoot = function (creditList) {
+        $rootScope.personalCreditRoot = creditList;
     };
-    $rootScope.fetchCreditListPersonalRoot();
 
-    $rootScope.summAmountFamilyRoot = 0;
-    $rootScope.summPaidAmountFamilyRoot = 0;
-    $rootScope.remainsToPayFamilyRoot = 0;
-    $rootScope.totalCreditsFamilyRoot = 0;
-    $rootScope.allDebtFamilyRoot = 0;
-    $rootScope.totalPaidCreditsFamilyRoot = 0;
-    var getFamilyCreditsURL = 'familyCredit/getFamilyCredits';
-    $rootScope.fetchCreditListFamilyRoot = function () {
-        $http.get(getFamilyCreditsURL).success(function (creditList) {
-            $rootScope.familyCreditRoot = creditList;
-            for (var i = 0; i < $rootScope.familyCreditRoot.length; i++) {
-                $rootScope.summAmountFamilyRoot += $rootScope.familyCreditRoot[i].amount;
-                $rootScope.summPaidAmountFamilyRoot += $rootScope.familyCreditRoot[i].paidAmount;
-                $rootScope.allDebtFamilyRoot += $rootScope.familyCreditRoot[i].debt.amountDebt;
-                $rootScope.remainsToPayFamilyRoot += $rootScope.familyCreditRoot[i].remainsToPay;
-                if ($rootScope.familyCreditRoot[i].isPaid === "YES") $rootScope.totalPaidCreditsFamilyRoot++;
-                if ($rootScope.familyCreditRoot[i].isCommodity === false) $rootScope.familyCreditRoot[i].isCommodity = "NO";
-                if ($rootScope.familyCreditRoot[i].isCommodity === true) $rootScope.familyCreditRoot[i].isCommodity = "YES";
-            }
-            $rootScope.totalCreditsFamilyRoot = $rootScope.familyCreditRoot.length;
-        });
+    $rootScope.fetchCreditListFamilyRoot = function (creditList) {
+        $rootScope.familyCreditRoot = creditList;
     };
-    $rootScope.fetchCreditListFamilyRoot();
 
 });
 

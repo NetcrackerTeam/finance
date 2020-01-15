@@ -32,6 +32,7 @@ var PersonalCreditController = function ($scope, $http, $rootScope) {
     $scope.fetchCreditList = function () {
         $http.get(getPersonalCreditsURL).success(function (creditList) {
             $scope.personalCredit = creditList;
+            $rootScope.fetchCreditListPersonalRoot(creditList);
             for (var i = 0; i < $scope.personalCredit.length; i++) {
                 $scope.summAmount += $scope.personalCredit[i].amount;
                 $scope.summPaidAmount += $scope.personalCredit[i].paidAmount;
@@ -170,7 +171,7 @@ var PersonalCreditController = function ($scope, $http, $rootScope) {
 
     var sliderEdit = document.getElementById("creditRateRangeEdit");
     var outputEdit = document.getElementById("creditRateTextEdit");
-    //outputEdit.innerHTML = 'Credit rate: ' + sliderEdit.value + ' %';
+    outputEdit.innerHTML = 'Credit rate: ' + sliderEdit.value + ' %';
     sliderEdit.oninput = function () {
         outputEdit.innerHTML = 'Credit rate: ' + this.value + ' %';
     };

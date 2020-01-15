@@ -31,6 +31,7 @@ var FamilyCreditController = function ($scope, $http, $rootScope) {
     $scope.fetchCreditList = function () {
         $http.get(getFamilyCreditsURL).success(function (creditList) {
             $scope.familyCredit = creditList;
+            $rootScope.fetchCreditListFamilyRoot(creditList);
             for (var i = 0; i < $scope.familyCredit.length; i++) {
                 $scope.summAmount += $scope.familyCredit[i].amount;
                 $scope.summPaidAmount += $scope.familyCredit[i].paidAmount;
@@ -44,7 +45,6 @@ var FamilyCreditController = function ($scope, $http, $rootScope) {
         });
     };
     $scope.fetchCreditList();
-
 
     var addCreditURL = 'familyCredit/addCredit';
     $scope.addFamilyCredit = function () {
@@ -67,8 +67,6 @@ var FamilyCreditController = function ($scope, $http, $rootScope) {
                 month: moment(dateTo).month() + 1,
                 day: moment(dateTo).date() + 1
             };
-
-
             $http({
                 method: 'POST',
                 url: addCreditURL,
@@ -81,13 +79,12 @@ var FamilyCreditController = function ($scope, $http, $rootScope) {
                     $scope.nameErrorMessage = response.message;
                 if (response.status === true) {
                     $('.modal').modal('hide');
-                    refreshPageData()
+                    refreshPageData();
+                    //window.location.reload();
                 }
-
             });
         }
-    }
-    ;
+    };
 
     function refreshPageData() {
         $http({
