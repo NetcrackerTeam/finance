@@ -140,8 +140,8 @@
 
     <repositories>
         <repository>
-            <id>codelds</id>
-            <url>https://code.lds.org/nexus/content/groups/main-repo</url>
+            <id>mvnrepository</id>
+            <url>http://nexus.saas.hand-china.com/content/repositories/rdc</url>
         </repository>
     </repositories>
 
