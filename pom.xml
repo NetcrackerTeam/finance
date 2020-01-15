@@ -69,11 +69,15 @@
             <version>1.7.28</version>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/com.oracle.ojdbc/ojdbc8 -->
         <dependency>
-            <groupId>com.oracle</groupId>
-            <artifactId>ojdbc7</artifactId>
-            <version>12.1.0.2</version>
+            <groupId>com.oracle.ojdbc</groupId>
+            <artifactId>ojdbc8</artifactId>
+            <version>19.3.0.0</version>
         </dependency>
+
+
+
 
         <dependency>
             <groupId>javax.mail</groupId>

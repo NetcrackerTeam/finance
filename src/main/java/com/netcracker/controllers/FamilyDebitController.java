@@ -168,13 +168,13 @@ public class FamilyDebitController {
         }
     }
 
-    @RequestMapping(value = "/addCredit", method = RequestMethod.POST)
-    @ResponseBody
-    public List<FamilyCreditAccount> addCreditAccount(@RequestBody FamilyCreditAccount creditAccount,
-                                                      @PathVariable("id") BigInteger id) {
-        creditService.createFamilyCredit(id, creditAccount);
-        return creditAccountDao.getAllFamilyCreditsByAccountId(id);
-    }
+//    @RequestMapping(value = "/addCredit", method = RequestMethod.POST)
+//    @ResponseBody
+//    public List<FamilyCreditAccount> addCreditAccount(@RequestBody FamilyCreditAccount creditAccount,
+//                                                      @PathVariable("id") BigInteger id) {
+//        creditService.createFamilyCredit(id, creditAccount);
+//        return creditAccountDao.getAllFamilyCreditsByAccountId(id);
+//    }
 
     @RequestMapping(value = "/income", method = RequestMethod.POST)
     @ResponseBody
