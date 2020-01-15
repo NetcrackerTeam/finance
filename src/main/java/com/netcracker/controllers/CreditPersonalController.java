@@ -1,9 +1,11 @@
 package com.netcracker.controllers;
 
 import com.netcracker.dao.CreditAccountDao;
+import com.netcracker.dao.CreditOperationDao;
 import com.netcracker.dao.UserDao;
 import com.netcracker.exception.CreditAccountException;
 import com.netcracker.exception.ErrorsMap;
+import com.netcracker.models.CreditOperation;
 import com.netcracker.models.PersonalCreditAccount;
 import com.netcracker.models.Status;
 import com.netcracker.models.User;
@@ -21,6 +23,7 @@ import java.math.BigInteger;
 import java.security.Principal;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -36,6 +39,8 @@ public class CreditPersonalController {
     @Autowired
     CreditAccountDao creditAccountDao;
     private BigInteger creditId;
+    @Autowired
+    CreditOperationDao creditOperationDao;
 
     private static final Logger logger = Logger.getLogger(CreditPersonalController.class);
 
@@ -110,6 +115,13 @@ public class CreditPersonalController {
         logger.debug("[updatePersonalCredit]" + MessageController.debugStartMessage + "[debitId = " + debitId + "], [creditId = " + creditId + "]");
         creditAccountDao.updateCreditAccountByCreditId(personalCreditAccount, creditId);
         return new ResponseEntity<>(personalCreditAccount, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/getCreditHistoryPersonal", method = RequestMethod.GET)
+    public @ResponseBody List<CreditOperation> getCreditHistoryPersonal(){
+        logger.debug("[getCreditHistoryPersonal]" + MessageController.debugStartMessage + "[personalDebitId = " + debitId +
+                "], [creditId = " + creditId + "]");
+        return creditOperationDao.getAllCreditOperationsByCreditPersonalId(creditId);
     }
 
 }

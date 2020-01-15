@@ -244,6 +244,7 @@ var PersonalCreditController = function ($scope, $http, $rootScope) {
 
     $scope.changeCreditIdInArray = function (creditId) {
         $rootScope.creditIdInArray = creditId;
+        $scope.sendCreditId(creditId);
     };
 
     $scope.fetchPersonalCreditFromArray = function () {

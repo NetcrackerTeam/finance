@@ -12,6 +12,8 @@ public class CreditOperationMapper implements RowMapper<CreditOperation> {
         CreditOperation creditOperation = new CreditOperation(resultSet.getDouble("amount"),
                 resultSet.getDate("date_value").toLocalDate());
         creditOperation.setCreditOperationId(resultSet.getBigDecimal("operation_id").toBigInteger());
+        if ("CREDIT_OPERATION_FAMILY".equals(resultSet.getString("operation_name")))
+            creditOperation.setUsername(resultSet.getString("username"));
         return creditOperation;
     }
 }

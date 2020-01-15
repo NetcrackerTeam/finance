@@ -12,6 +12,7 @@ import javax.sql.DataSource;
 import java.math.BigInteger;
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.Collection;
 import java.util.List;
 
 @Repository

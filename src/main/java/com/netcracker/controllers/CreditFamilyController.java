@@ -1,6 +1,7 @@
 package com.netcracker.controllers;
 
 import com.netcracker.dao.CreditAccountDao;
+import com.netcracker.dao.CreditOperationDao;
 import com.netcracker.dao.UserDao;
 import com.netcracker.exception.CreditAccountException;
 import com.netcracker.models.*;
@@ -17,6 +18,8 @@ import java.math.BigInteger;
 import java.security.Principal;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/familyCredit")
@@ -33,6 +36,8 @@ public class CreditFamilyController {
     @Autowired
     private CreditAccountDao creditAccountDao;
     private BigInteger creditId;
+    @Autowired
+    CreditOperationDao creditOperationDao;
 
     @Autowired
     PersonalCreditService personalCreditService;
@@ -101,6 +106,13 @@ public class CreditFamilyController {
                 "], [familyDebitId = " + familyDebitId + "], [creditId = " + creditId + "]");
         creditAccountDao.updateCreditAccountByCreditId(familyCreditAccount, creditId);
         return new ResponseEntity<>(familyCreditAccount, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/getCreditHistoryFamily", method = RequestMethod.GET)
+    public @ResponseBody List<CreditOperation> getCreditHistoryFamily(){
+        logger.debug("[getCreditHistoryFamily]" + MessageController.debugStartMessage + "[familyDebitId = " + familyDebitId +
+                "], [creditId = " + creditId + "]");
+        return creditOperationDao.getAllCreditOperationsByCreditFamilyId(creditId);
     }
 
     private void getUserInfo(Principal principal) {

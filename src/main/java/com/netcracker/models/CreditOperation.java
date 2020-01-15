@@ -7,6 +7,7 @@ public class CreditOperation {
     private BigInteger creditOperationId;
     private double amount;
     private LocalDate date;
+    private String username;
 
     public CreditOperation(double amount, LocalDate date) {
         this.amount = amount;
@@ -35,5 +36,13 @@ public class CreditOperation {
 
     public void setDate(LocalDate date) {
         this.date = date;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getUsername() {
+        return username;
     }
 }

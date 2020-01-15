@@ -14,8 +14,8 @@
 <!-- End of Topbar -->
 
 <div class="container-fluid">
-    userDebitId: {{user.debitId}}
-    userId: {{user.id}}
+    <!--userDebitId: {{user.debitId}}
+    userId: {{user.id}} -->
     <!-- Content Row -->
     <div class="row">
 
@@ -143,7 +143,7 @@
                 <div class="card-header py-3">
                     <h6 class="m-0 font-weight-bold text-primary">Credits</h6>
                 </div>
-                <div class="card-body" style="height: 250px; overflow-y: auto;">
+                <div class="card-body" style="height: 250px; overflow-y: auto;" ng-init="fetchCreditList()">
                     <table class="table table-hover table-cursor">
                         <thead>
                         <tr>
@@ -157,7 +157,7 @@
                         <!--<tr ng-repeat="credInf in personalCredit" ng-show="credInf.isPaid == 'NO'" data-toggle="modal"
                             data-target="#infoCreditModal" ng-click="fetchPersonalCredit()" ng-mouseover="sendCreditId(credInf.creditId)">-->
                         <tr ng-repeat="credInf in personalCredit" ng-show="credInf.isPaid == 'NO'" data-toggle="modal"
-                            data-target="#infoCreditModal" ng-click="fetchPersonalCreditFromArray()" ng-mouseover="changeCreditIdInArray(credInf.creditId)">
+                            data-target="#infoCreditModal" ng-click="fetchPersonalCreditFromArray(); fetchCreditHistoryPersonal()" ng-mouseover="changeCreditIdInArray(credInf.creditId)">
                             <td>{{credInf.name}}</td>
                             <td>{{credInf.amount}}</td>
                             <td>{{credInf.remainsToPay}}</td>
@@ -247,7 +247,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr ng-repeat="credInf in personalCredit">
+                    <tr ng-repeat="credInf in personalCreditRoot">
                         <td>{{credInf.name}}</td>
                         <td >{{credInf.amount}}</td>
                         <td >{{credInf.paidAmount}}</td>
@@ -365,11 +365,26 @@
                             Edit Credit</button>
                     </div>
                         <div class="col-lg-6 mb-4" style="position: relative;">
-                            <pre class="pre">
-                                <b class="center-element-hz" style="color: #4C71DE;">Credit History</b>
-                                <div style="height: 400px; overflow-y: auto;">
-
-                                </div></pre>
+                            <div class="card shadow mb-4">
+                                <div class="card-header py-3"><h6 class="m-0 font-weight-bold text-primary">Credit History</h6></div>
+                                <div class="card-body" style="height: 400px; overflow-y: auto;">
+                                    <div class="center-element-hz center-element-vr" style="color: #4C71DE;" ng-hide="creditHistoryPersonal.length > 0">
+                                        Credit payments not yet added
+                                    </div>
+                                    <table class="table table-responsive history-credit-table " ng-show="creditHistoryPersonal.length > 0">
+                                        <thead>
+                                        <th style="color: #4C71DE;">PAYMENT AMOUNT</th>
+                                        <th style="color: #4C71DE;">PAYMENT DATE</th>
+                                        </thead>
+                                        <tbody>
+                                        <tr ng-repeat="creditHistory in creditHistoryPersonal">
+                                            <td>{{creditHistory.amount}}</td>
+                                            <td>{{creditHistory.date.year}}-{{creditHistory.date.month}}-{{creditHistory.date.day}}</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
                             <div class="form-group" ng-class="{ 'invalid' : (editCreditForm.am.$error.max || editCreditForm.am.$error.min) &amp;&amp; !editCreditForm.am.$pristine}">
                                 <label for="editCreditAmount">Payment amount:</label>
                                 <input type="number" name="am" min="1" max="10000000" id="addCrPay" ng-model="amountToPay" step="0.01" class="item-input-wrapper form-control" placeholder="Enter amount" required="required"/>
@@ -378,8 +393,8 @@
                                         style="position: absolute; top: 100%; left: 50%; margin: 10px -50% 0 0; transform: translate(-50%, -50%);">
                                     Add payment</button>
                             </div>
-                        </div>
                     </div>
+                </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

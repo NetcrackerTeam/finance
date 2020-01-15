@@ -4,6 +4,7 @@ import com.netcracker.models.CreditOperation;
 
 import java.math.BigInteger;
 import java.time.LocalDate;
+import java.util.Collection;
 import java.util.List;
 
 public interface CreditOperationDao {
@@ -104,21 +105,24 @@ public interface CreditOperationDao {
                     "  AND DATES.OBJECT_ID = CREDIT_OPERATION.OBJECT_ID ORDER BY OPERATION_ID";
 
     String GET_ALL_CREDIT_OPERATIONS_FAMILY =
-            "SELECT CREDIT_ACC_FAMILY.OBJECT_ID AS CREDIT_ID_FAMILY, ACC_REF_USER.REFERENCE AS ID_USER, " +
-                "   CREDIT_ACC_NAME.VALUE AS CREDIT_ACC_NAME, CREDIT_OPERATION.OBJECT_ID AS OPERATION_ID, " +
-                "   CREDIT_OPERATION.NAME AS OPERATION_NAME, AMOUNT.VALUE AS AMOUNT, DATES.DATE_VALUE AS DATE_VALUE " +
-                "FROM OBJECTS CREDIT_ACC_FAMILY, OBJECTS CREDIT_OPERATION, ATTRIBUTES CREDIT_ACC_NAME, " +
-                "   ATTRIBUTES AMOUNT, ATTRIBUTES DATES, OBJREFERENCE ACC_REF_USER, OBJREFERENCE CREDIT_ACC_REF_FAMILY " +
-                "WHERE CREDIT_ACC_FAMILY.OBJECT_ID = ? " +
-                    "  AND CREDIT_ACC_REF_FAMILY.ATTR_ID = 38 /*CREDIT_ACCOUNT_ID_FAMILY*/" +
-                    "  AND ACC_REF_USER.ATTR_ID = 39 /*CREDIT_ACCOUNT_ID_USER*/" +
-                    "  AND CREDIT_OPERATION.OBJECT_ID = CREDIT_ACC_REF_FAMILY.OBJECT_ID " +
-                    "  AND CREDIT_ACC_FAMILY.OBJECT_ID = CREDIT_ACC_REF_FAMILY.REFERENCE " +
-                    "  AND CREDIT_OPERATION.OBJECT_ID = ACC_REF_USER.OBJECT_ID " +
-                    "  AND CREDIT_ACC_NAME.ATTR_ID = 30 /*NAME*/" +
-                    "  AND AMOUNT.ATTR_ID = 40 /*AMOUNT*/" +
-                    "  AND DATES.ATTR_ID = 41 /*DATE*/" +
-                    "  AND CREDIT_ACC_NAME.OBJECT_ID = CREDIT_ACC_FAMILY.OBJECT_ID " +
-                    "  AND AMOUNT.OBJECT_ID = CREDIT_OPERATION.OBJECT_ID " +
-                    "  AND DATES.OBJECT_ID = CREDIT_OPERATION.OBJECT_ID ORDER BY OPERATION_ID";
+            "SELECT CREDIT_ACC_FAMILY.OBJECT_ID AS CREDIT_ID_FAMILY, ACC_REF_USER.REFERENCE AS ID_USER, CREDIT_USER.VALUE AS USERNAME, " +
+                    "                   CREDIT_ACC_NAME.VALUE AS CREDIT_ACC_NAME, CREDIT_OPERATION.OBJECT_ID AS OPERATION_ID, " +
+                    "                   CREDIT_OPERATION.NAME AS OPERATION_NAME, AMOUNT.VALUE AS AMOUNT, DATES.DATE_VALUE AS DATE_VALUE " +
+                    "                FROM OBJECTS CREDIT_ACC_FAMILY, OBJECTS CREDIT_OPERATION, ATTRIBUTES CREDIT_ACC_NAME, " +
+                    "                   ATTRIBUTES AMOUNT, ATTRIBUTES DATES, OBJREFERENCE ACC_REF_USER, OBJREFERENCE CREDIT_ACC_REF_FAMILY, " +
+                    "                     ATTRIBUTES CREDIT_USER " +
+                    "                WHERE CREDIT_ACC_FAMILY.OBJECT_ID = ? " +
+                    "                      AND CREDIT_ACC_REF_FAMILY.ATTR_ID = 38 /*CREDIT_ACCOUNT_ID_FAMILY*/ " +
+                    "                      AND ACC_REF_USER.ATTR_ID = 39 /*CREDIT_ACCOUNT_ID_USER*/ " +
+                    "                      AND CREDIT_USER.ATTR_ID = 5 /*USER NAME*/ " +
+                    "                      AND CREDIT_USER.OBJECT_ID = ACC_REF_USER.REFERENCE " +
+                    "                      AND CREDIT_OPERATION.OBJECT_ID = CREDIT_ACC_REF_FAMILY.OBJECT_ID " +
+                    "                      AND CREDIT_ACC_FAMILY.OBJECT_ID = CREDIT_ACC_REF_FAMILY.REFERENCE " +
+                    "                      AND CREDIT_OPERATION.OBJECT_ID = ACC_REF_USER.OBJECT_ID " +
+                    "                      AND CREDIT_ACC_NAME.ATTR_ID = 30 /*CREDIT NAME*/ " +
+                    "                      AND AMOUNT.ATTR_ID = 40 /*AMOUNT*/ " +
+                    "                      AND DATES.ATTR_ID = 41 /*DATE*/ " +
+                    "                      AND CREDIT_ACC_NAME.OBJECT_ID = CREDIT_ACC_FAMILY.OBJECT_ID " +
+                    "                      AND AMOUNT.OBJECT_ID = CREDIT_OPERATION.OBJECT_ID " +
+                    "                      AND DATES.OBJECT_ID = CREDIT_OPERATION.OBJECT_ID ORDER BY OPERATION_ID";
 }
