@@ -117,15 +117,17 @@ public class PersonalDebitController {
     Status createAutoIncome(@RequestBody AutoOperationIncome autoOperationIncome,
                             Principal principal) {
         BigInteger accountId = getAccountByPrincipal(principal);
-        boolean validDate = (UserDataValidator.isValidDateForAutoOperation(autoOperationIncome))
-                && (DateUtils.checkMaxDayInCurrentMonth(autoOperationIncome.getDayOfMonth()));
-        if (validDate) {
+        double incomeAmount = autoOperationIncome.getAmount();
+        boolean validDate = (UserDataValidator.isValidDateForAutoOperation(autoOperationIncome));
+        if ((incomeAmount < MessageController.MIN || incomeAmount > MessageController.MAX)) {
+            return new Status(true, MessageController.INCORRECT_AMOUNT);
+        } else if (validDate) {
             accountAutoOperationService.createPersonalIncomeAutoOperation(autoOperationIncome, accountId);
             logger.debug("autoIncome is done!");
             return new Status(true, ADD_AUTO_INCOME);
         }
         logger.debug("autoIncome is not valid !" + autoOperationIncome.getId() + " " + autoOperationIncome.getCategoryIncome());
-        return new Status(false, NO_VALID_ADD_AUTO_INCOME + DateUtils.MaxDayInCurrentMonth());
+        return new Status(false, NO_VALID_ADD_AUTO_INCOME );
     }
 
     @RequestMapping(value = "/createAutoExpense", method = RequestMethod.POST)
@@ -133,15 +135,14 @@ public class PersonalDebitController {
     Status createAutoExpense(@RequestBody AutoOperationExpense autoOperationExpense,
                              Principal principal) {
         BigInteger accountId = getAccountByPrincipal(principal);
-        boolean validDate = (UserDataValidator.isValidDateForAutoOperation(autoOperationExpense))
-                && (DateUtils.checkMaxDayInCurrentMonth(autoOperationExpense.getDayOfMonth()));
+        boolean validDate = (UserDataValidator.isValidDateForAutoOperation(autoOperationExpense));
         if (validDate) {
             accountAutoOperationService.createPersonalExpenseAutoOperation(autoOperationExpense, accountId);
             logger.debug("expense is done!");
             return new Status(true, ADD_AUTO_EXPENSE);
         }
         logger.debug("autoExpense is not valid !" + autoOperationExpense.getId() + " " + autoOperationExpense.getCategoryExpense());
-        return new Status(false, NO_VALID_ADD_AUTO_EXPENSE + DateUtils.MaxDayInCurrentMonth());
+        return new Status(false, NO_VALID_ADD_AUTO_EXPENSE );
 
     }
 
