@@ -64,7 +64,4 @@ public class UserDataValidator {
         } else
             return false;
     }
-
-
-
 }

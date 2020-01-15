@@ -181,7 +181,7 @@ public class FamilyDebitController {
     public Status addIncomeFamily(@RequestBody AccountIncome income,
                                   Principal principal) {
         double incomeAmount = income.getAmount();
-        if (incomeAmount <= MessageController.MIN || incomeAmount >= MessageController.MAX) {
+        if (incomeAmount < MessageController.MIN || incomeAmount > MessageController.MAX) {
             return new Status(true, MessageController.INCORRECT_AMOUNT);
         } else {
             BigInteger accountId = getAccountByPrincipal(principal);
