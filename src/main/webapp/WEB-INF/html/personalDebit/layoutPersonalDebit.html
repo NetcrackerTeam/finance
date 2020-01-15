@@ -301,7 +301,7 @@
     </div>
 </div>
 
-<form novalidate="novalidate" ng-controller="PersonalCreditController" ng-submit="addCreditPayment()">
+<form novalidate="novalidate" ng-controller="PersonalCreditController" ng-submit="addCreditPayment(personalCreditor.creditId)">
     <div class="modal fade" id="infoCreditModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">

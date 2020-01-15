@@ -46,7 +46,7 @@ var FamilyCreditController = function ($scope, $http, $rootScope) {
     };
     $scope.fetchCreditList();
 
-    var addCreditURL = 'familyCredit/addCredit';
+    var addCreditURL = 'familyCredit/add';
     $scope.addFamilyCredit = function () {
         var dateFromStr = $("#datetimepicker").val();
         var dateFrom = moment(dateFromStr).format('YYYY-MM-DD');
@@ -197,12 +197,12 @@ var FamilyCreditController = function ($scope, $http, $rootScope) {
         }).then(success, error);
     };
 
-    var addCreditPayURL = 'familyCredit/pay';
-    $scope.addCreditPayment = function() {
+    var addCreditPayURL = 'familyCredit/pay/';
+    $scope.addCreditPayment = function(creditId) {
         var amount = $scope.amountToPay;
         $http({
             method: 'POST',
-            url: addCreditPayURL,
+            url: addCreditPayURL + creditId,
             data: angular.toJson(amount),
             headers: {
                 'Content-Type': 'application/json'

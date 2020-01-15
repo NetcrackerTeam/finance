@@ -12,8 +12,8 @@
     </div>
     <div class="row ml-auto">
         <div class="col mr-2 d-none d-lg-inline text-gray-600">
-            <h4 class="text-right text-danger">{{accountInfo.owner.name}}</h4>
-            <div class="small text-right">{{accountInfo.owner.eMail}}</div>
+            <h4 class="text-right text-danger">{{userInfo.name}}</h4>
+            <div class="small text-right">{{userInfo.eMail}}</div>
         </div></div>
 
 </nav>
@@ -295,7 +295,7 @@
 </div>
 <!-- /.container-fluid -->
 
-<form novalidate="novalidate" ng-controller="FamilyCreditController" ng-submit="addCreditPayment()">
+<form novalidate="novalidate" ng-controller="FamilyCreditController" ng-submit="addCreditPayment(familyCreditor.creditId)">
     <div class="modal fade" id="infoCreditModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog  modal-lg" role="document">
             <div class="modal-content">

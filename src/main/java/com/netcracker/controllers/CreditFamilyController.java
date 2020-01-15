@@ -3,25 +3,20 @@ package com.netcracker.controllers;
 import com.netcracker.dao.CreditAccountDao;
 import com.netcracker.dao.UserDao;
 import com.netcracker.exception.CreditAccountException;
-import com.netcracker.exception.ErrorsMap;
 import com.netcracker.models.*;
 import com.netcracker.services.FamilyCreditService;
 import com.netcracker.services.PersonalCreditService;
-import com.netcracker.services.utils.ExceptionMessages;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigInteger;
 import java.security.Principal;
-import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Date;
-import java.util.Map;
 
 @Controller
 @RequestMapping("/familyCredit")
@@ -43,7 +38,7 @@ public class CreditFamilyController {
     PersonalCreditService personalCreditService;
     private static final Logger logger = Logger.getLogger(CreditFamilyController.class);
 
-    @RequestMapping(value = "/addCredit", method = RequestMethod.POST)
+    @RequestMapping(value = "/add", method = RequestMethod.POST)
     @ResponseBody
     public Status createFamilyCreditAccount(@RequestBody FamilyCreditAccount creditAccount, Principal principal) {
         debitId = userDao.getParticipantByEmail(principal.getName()).getFamilyDebitAccount();
@@ -53,18 +48,18 @@ public class CreditFamilyController {
             return new Status(false, MessageController.CREDIT_NAME_EXISTS);
         Status checked = personalCreditService.checkCreditData(creditAccount);
         if (!checked.isStatus()) return checked;
-        familyCreditService.createFamilyCredit(familyDebitId, creditAccount);
+        familyCreditService.createFamilyCredit(familyDebitId, creditAccount, userId);
         return new Status(true, MessageController.ADD_FAMILY_CREDIT + creditAccount.getName());
     }
 
-    @RequestMapping(value = "/pay", method = RequestMethod.POST)
+    @RequestMapping(value = "/pay/{id}", method = RequestMethod.POST)
     @ResponseBody
-    public Status addFamilyCreditPayment(@RequestBody Double amount, Principal principal){
+    public Status addFamilyCreditPayment(@RequestBody Double amount, Principal principal, @PathVariable("id") BigInteger crId){
         getUserInfo(principal);
         logger.debug("[addFamilyCreditPayment]" + MessageController.debugStartMessage  + "[personalDebitID = " + personalDebitId +
-                "], [familyDebitId = " + familyDebitId + "], [userId = " + userId + "], [creditId = " + creditId + "]");
+                "], [familyDebitId = " + familyDebitId + "], [userId = " + userId + "], [creditId = " + crId + "]");
         try {
-            familyCreditService.addFamilyCreditPayment(familyDebitId, creditId, amount, new Date(), userId);
+            familyCreditService.addFamilyCreditPayment(familyDebitId, crId, amount, new Date(), userId);
         } catch (CreditAccountException ex) {
             return new Status(false, ex.getMessage());
         }

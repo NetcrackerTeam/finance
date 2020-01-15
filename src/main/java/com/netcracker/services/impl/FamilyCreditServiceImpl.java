@@ -1,11 +1,9 @@
 package com.netcracker.services.impl;
 
 import com.netcracker.dao.*;
-import com.netcracker.models.CreditOperation;
-import com.netcracker.models.Debt;
-import com.netcracker.models.FamilyCreditAccount;
-import com.netcracker.models.FamilyDebitAccount;
+import com.netcracker.models.*;
 import com.netcracker.models.enums.CategoryExpense;
+import com.netcracker.models.enums.CategoryIncome;
 import com.netcracker.models.enums.CreditStatusPaid;
 import com.netcracker.services.FamilyCreditService;
 import com.netcracker.services.OperationService;
@@ -45,8 +43,15 @@ public class FamilyCreditServiceImpl implements FamilyCreditService {
     @Autowired
     private OperationService operationService;
 
+
     @Override
-    public void createFamilyCredit(BigInteger id, FamilyCreditAccount creditAccount) {
+    public void createFamilyCredit(BigInteger id, FamilyCreditAccount creditAccount, BigInteger userId) {
+        if (!creditAccount.isCommodity()) {
+            double amount = debitAccountDao.getFamilyAccountById(id).getAmount();
+            debitAccountDao.updateAmountOfFamilyAccount(id,
+                    amount + creditAccount.getAmount());
+            operationService.createFamilyOperationIncome(userId, id, creditAccount.getAmount(), LocalDate.now(), CategoryIncome.CREDIT);
+        }
         creditAccountDao.createFamilyCreditByDebitAccountId(id, creditAccount);
     }
 

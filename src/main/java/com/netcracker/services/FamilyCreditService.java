@@ -9,7 +9,7 @@ import java.util.Date;
 
 public interface FamilyCreditService {
 
-    void createFamilyCredit(BigInteger id, FamilyCreditAccount creditAccount);
+    void createFamilyCredit(BigInteger id, FamilyCreditAccount creditAccount, BigInteger userId);
 
     void deleteFamilyCredit(BigInteger id);
 

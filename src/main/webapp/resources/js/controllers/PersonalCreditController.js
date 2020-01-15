@@ -47,7 +47,7 @@ var PersonalCreditController = function ($scope, $http, $rootScope) {
     };
     $scope.fetchCreditList();
 
-    var addCreditURL = 'personalCredit/addCredit';
+    var addCreditURL = 'personalCredit/add';
     $scope.addPersonalCredit = function () {
         var dateFromStr = $("#datetimepickerPer").val();
         var dateFrom = moment(dateFromStr).format('YYYY-MM-DD');
@@ -203,6 +203,23 @@ var PersonalCreditController = function ($scope, $http, $rootScope) {
             }
         }).then(success, error);
     };
+
+    var addCreditPayURL = 'personalCredit/pay/';
+    $scope.addCreditPayment = function(creditId) {
+        var amount = $scope.amountToPay;
+        $http({
+            method: 'POST',
+            url: addCreditPayURL + creditId,
+            data: angular.toJson(amount),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).success(function (response) {
+            if (response.status === false)
+                $scope.messageAmountPay = response.message;
+        });
+    };
+
 
     $scope.checkPersonalCredit = function () {
 

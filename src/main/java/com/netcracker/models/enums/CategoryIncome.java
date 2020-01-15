@@ -10,6 +10,7 @@ public enum CategoryIncome {
     AWARD(new BigInteger("15")),
     PRESENTS(new BigInteger("16")),
     GIFTS(new BigInteger("17")),
+    CREDIT(new BigInteger("49")),
     OTHER(new BigInteger("18"));
 
     private BigInteger id;

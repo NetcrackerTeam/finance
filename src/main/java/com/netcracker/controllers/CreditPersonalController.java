@@ -6,6 +6,7 @@ import com.netcracker.exception.CreditAccountException;
 import com.netcracker.exception.ErrorsMap;
 import com.netcracker.models.PersonalCreditAccount;
 import com.netcracker.models.Status;
+import com.netcracker.models.User;
 import com.netcracker.services.PersonalCreditService;
 import com.netcracker.services.utils.ExceptionMessages;
 import org.apache.log4j.Logger;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import java.math.BigInteger;
 import java.security.Principal;
 import java.util.Collection;
+import java.util.Date;
 import java.util.Map;
 
 @Controller
@@ -37,7 +39,7 @@ public class CreditPersonalController {
 
     private static final Logger logger = Logger.getLogger(CreditPersonalController.class);
 
-    @RequestMapping(value = "/addCredit", method = RequestMethod.POST)
+    @RequestMapping(value = "/add", method = RequestMethod.POST)
     @ResponseBody
     public Status createCreditAccount(@RequestBody PersonalCreditAccount creditAccount, Principal principal) {
         debitId = userController.getAccountByPrincipal(principal);
@@ -50,21 +52,28 @@ public class CreditPersonalController {
         return new Status(true, MessageController.ADD_PERSONAL_CREDIT + creditAccount.getName());
     }
 
-    @RequestMapping(value = "/addPersonalCreditPayment", method = RequestMethod.POST)
-    public String addPersonalCreditPayment(@ModelAttribute @RequestParam Map<String, String> amountMap, Principal principal, Model model) {
+    @RequestMapping(value = "/pay/{id}", method = RequestMethod.POST)
+    public Status addPersonalCreditPayment(@RequestBody Double amount, Principal principal, @PathVariable("id") BigInteger crId) {
         debitId = userController.getAccountByPrincipal(principal);
+        User user = userDao.getUserByEmail(principal.getName());
         logger.debug("[addPersonalCreditPayment]" + MessageController.debugStartMessage + "[debitId = " + debitId + "], [creditId = " + creditId + "]");
-        double amount = Double.parseDouble(amountMap.get("amount"));
-        model.addAttribute("creditPayment", amount);
         try {
-            personalCreditService.addPersonalCreditPayment(debitId, creditId, amount);
+            personalCreditService.addPersonalCreditPayment(debitId, crId, amount);
         } catch (CreditAccountException ex) {
-            if (ex.getMessage().equals(ExceptionMessages.NOT_ENOUGH_MONEY_ERROR))
-                model.addAttribute("message", ErrorsMap.getErrorsMap().get(ExceptionMessages.NOT_ENOUGH_MONEY_ERROR));
-            else model.addAttribute("message", ex.getMessage());
-            return URL.EXCEPTION_PAGE;
+            return new Status(false, ex.getMessage());
         }
-        return URL.PERSONAL_CREDIT;
+        return new Status(true, null);
+//        double amount = Double.parseDouble(amountMap.get("amount"));
+//        model.addAttribute("creditPayment", amount);
+//        try {
+//            personalCreditService.addPersonalCreditPayment(debitId, creditId, amount);
+//        } catch (CreditAccountException ex) {
+//            if (ex.getMessage().equals(ExceptionMessages.NOT_ENOUGH_MONEY_ERROR))
+//                model.addAttribute("message", ErrorsMap.getErrorsMap().get(ExceptionMessages.NOT_ENOUGH_MONEY_ERROR));
+//            else model.addAttribute("message", ex.getMessage());
+//            return URL.EXCEPTION_PAGE;
+//        }
+//        return URL.PERSONAL_CREDIT;
     }
 
     @RequestMapping(value = "/getPersonalCredits", method = RequestMethod.GET)

@@ -97,8 +97,15 @@ var FamilyDebitController = function ($scope, $http, $rootScope) {
         });
     };
 
+    $scope.fetchUserInfo = function() {
+        $http.get('getUserInfo').success(function (userInfo) {
+            $scope.userInfo = userInfo;
+        });
+    };
+
    // $scope.fetchFamilyPeriodHistory();
     $scope.fetchPersonalAutoOperationHistory();
     $scope.fetchFamilyHistory();
     $scope.fetchFamilyInfo();
+    $scope.fetchUserInfo();
 };

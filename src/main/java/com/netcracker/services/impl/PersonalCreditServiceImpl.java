@@ -7,8 +7,11 @@ import com.netcracker.dao.CreditOperationDao;
 import com.netcracker.dao.PersonalDebitAccountDao;
 import com.netcracker.exception.CreditAccountException;
 import com.netcracker.models.*;
+import com.netcracker.models.enums.CategoryExpense;
+import com.netcracker.models.enums.CategoryIncome;
 import com.netcracker.models.enums.CreditStatusPaid;
 import com.netcracker.models.enums.ErrorVisibility;
+import com.netcracker.services.OperationService;
 import com.netcracker.services.PersonalCreditService;
 import com.netcracker.services.utils.DateUtils;
 import com.netcracker.services.utils.ExceptionMessages;
@@ -40,12 +43,16 @@ public class PersonalCreditServiceImpl implements PersonalCreditService {
     @Autowired
     private CreditDeptDao creditDeptDao;
 
+    @Autowired
+    private OperationService operationService;
+
     @Override
     public void createPersonalCredit(BigInteger id, PersonalCreditAccount creditAccount) {
         if(!creditAccount.isCommodity()){
             double amount = debitAccountDao.getPersonalAccountById(id).getAmount();
             debitAccountDao.updateAmountOfPersonalAccount(id,
                     amount + creditAccount.getAmount());
+            operationService.createPersonalOperationIncome(id, creditAccount.getAmount(), LocalDate.now(), CategoryIncome.CREDIT);
         }
         creditAccountDao.createPersonalCreditByDebitAccountId(id, creditAccount);
     }
@@ -234,12 +241,13 @@ public class PersonalCreditServiceImpl implements PersonalCreditService {
     private void addPayment(AbstractCreditAccount creditAccount, AbstractDebitAccount debitAccount, double amount) {
         double actualDebitAmount = debitAccount.getAmount();
         debitAccountDao.updateAmountOfPersonalAccount(debitAccount.getId(), actualDebitAmount - amount);
+        operationService.createPersonalOperationExpense(debitAccount.getId(), amount, LocalDate.now(), CategoryExpense.CREDIT);
         creditOperationDao.createPersonalCreditOperation(amount, LocalDate.now(), creditAccount.getCreditId());
         double updatedAmount = creditAccount.getPaidAmount() + amount;
         creditAccountDao.updatePersonalCreditPayment(creditAccount.getCreditId(), updatedAmount);
-        double monthPayment = getTotalCreditPayment(creditAccount.getDate(), creditAccount.getDateTo(),
+        double totalPay = getTotalCreditPayment(creditAccount.getDate(), creditAccount.getDateTo(),
                 creditAccount.getAmount(), creditAccount.getCreditRate());
-        if (monthPayment == updatedAmount) {
+        if (totalPay == updatedAmount) {
             creditAccountDao.updateIsPaidStatusPersonalCredit(creditAccount.getCreditId(), CreditStatusPaid.YES);
         }
     }

@@ -8,6 +8,7 @@ public enum ReportCategoryIncome {
     AWARD(new BigInteger("33")),
     PRESENTS(new BigInteger("34")),
     GIFTS(new BigInteger("35")),
+    CREDIT(new BigInteger("48")),
     OTHER(new BigInteger("36"));
 
     private BigInteger id;
