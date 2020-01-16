@@ -28,7 +28,7 @@ var FamilyCreditController = function ($scope, $http, $rootScope) {
     $scope.allDebt = 0;
     $scope.totalPaidCredits = 0;
     var getFamilyCreditsURL = 'familyCredit/getFamilyCredits';
-    $scope.fetchCreditList = function () {
+    $scope.fetchCreditListFamily = function () {
         $http.get(getFamilyCreditsURL).success(function (creditList) {
             $scope.familyCredit = creditList;
             $rootScope.fetchCreditListFamilyRoot(creditList);
@@ -44,7 +44,7 @@ var FamilyCreditController = function ($scope, $http, $rootScope) {
             $scope.totalCredits = $scope.familyCredit.length;
         });
     };
-    $scope.fetchCreditList();
+    $scope.fetchCreditListFamily();
 
     var addCreditURL = 'familyCredit/add';
     $scope.addFamilyCredit = function () {
