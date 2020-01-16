@@ -33,7 +33,7 @@ public interface MessageController {
     String DELETE_AUTO_EXPENSE_FAM = "Deleting successfully autoExpenseOperation ";
     String ADD_FAMILY_ACCOUNT = "Added new family account for user ";
     String FAMILY_ACCOUNT_HAS_NOT_PAID_CREDITS = "The family account has debt or debts";
-    String INCORRECT_AMOUNT = "The amount is incorrect";
+    String INCORRECT_AMOUNT = "Invalid amount";
 
     String debugStartMessage = " method start with parameters: ";
     //     CreditsControllers
@@ -62,5 +62,6 @@ public interface MessageController {
     String END_DATE_ERROR = "Choose an earlier date";
     String CREDIT_RATE_ERROR = "Rate cannot be less then 1 or more then 60";
     String INVALID_DAY_OF_MONTH = "Invalid day of month";
+    String SUCCESS_CREDIT_PAYMENT = "Payment added successfully";
 
 }

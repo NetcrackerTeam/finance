@@ -12,7 +12,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;
+import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.math.RoundingMode;
 import java.nio.file.Path;
 import java.security.Principal;
 import java.time.LocalDate;
@@ -58,12 +60,12 @@ public class PersonalDebitController {
                                     Principal principal) {
         double incomeAmount = income.getAmount();
         if ((incomeAmount < MessageController.MIN || incomeAmount > MessageController.MAX)) {
-            return new Status(true, MessageController.INCORRECT_AMOUNT);
+            return new Status(false, MessageController.INCORRECT_AMOUNT);
         } else {
             BigInteger accountId = getAccountByPrincipal(principal);
             operationService.createPersonalOperationIncome(accountId, income.getAmount(), LocalDateTime.now(), income.getCategoryIncome());
             PersonalDebitAccount debit = personalDebitAccountDao.getPersonalAccountById(accountId);
-            double amount = debit.getAmount() + income.getAmount();
+            double amount = new BigDecimal(debit.getAmount() + income.getAmount()).setScale(2, RoundingMode.UP).doubleValue();
             personalDebitAccountDao.updateAmountOfPersonalAccount(accountId, amount);
             return new Status(true, MessageController.ADD_INCOME);
         }
@@ -73,14 +75,19 @@ public class PersonalDebitController {
     @ResponseBody
     public Status addExpensePersonal(
             @RequestBody AccountExpense expense, Principal principal) {
-        BigInteger accountId = getAccountByPrincipal(principal);
-        PersonalDebitAccount debit = personalDebitAccountDao.getPersonalAccountById(accountId);
-        if (debit.getAmount() < expense.getAmount())
-            return new Status(false, MessageController.NOT_ENOUGH_MONEY_MESSAGE);
-        operationService.createPersonalOperationExpense(accountId, expense.getAmount(), LocalDateTime.now(), expense.getCategoryExpense());
-        double amount = debit.getAmount() - expense.getAmount();
-        personalDebitAccountDao.updateAmountOfPersonalAccount(accountId, amount);
-        return new Status(true, MessageController.ADD_EXPENSE_PERS);
+        double expenseAmount = expense.getAmount();
+        if (expenseAmount < MessageController.MIN || expenseAmount > MessageController.MAX) {
+            return new Status(false, MessageController.INCORRECT_AMOUNT);
+        } else {
+            BigInteger accountId = getAccountByPrincipal(principal);
+            PersonalDebitAccount debit = personalDebitAccountDao.getPersonalAccountById(accountId);
+            if (debit.getAmount() < expense.getAmount())
+                return new Status(false, MessageController.NOT_ENOUGH_MONEY_MESSAGE);
+            operationService.createPersonalOperationExpense(accountId, expense.getAmount(), LocalDateTime.now(), expense.getCategoryExpense());
+            double amount = new BigDecimal(debit.getAmount() - expense.getAmount()).setScale(2, RoundingMode.UP).doubleValue();
+            personalDebitAccountDao.updateAmountOfPersonalAccount(accountId, amount);
+            return new Status(true, MessageController.ADD_EXPENSE_PERS);
+        }
     }
 
     private BigInteger getAccountByPrincipal(Principal principal) {

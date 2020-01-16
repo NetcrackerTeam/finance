@@ -1,5 +1,7 @@
 package com.netcracker.services.utils;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 
 import static com.netcracker.services.utils.DateUtils.getMonthAmountBetweenDates;
@@ -18,11 +20,12 @@ public final class CreditUtils {
         double allowance = (amount / PERCENT_CALC) * oneMonthRate;
         double paymentWithoutRate = amount / getMonthAmountBetweenDates(dateFrom, dateTo);
         double result = paymentWithoutRate + allowance;
-        return Math.round(result * 100.0) / 100.0;
+        return new BigDecimal(result).setScale(2, RoundingMode.UP).doubleValue();
     }
 
     public static double getTotalCreditPayment(LocalDate dateFrom, LocalDate dateTo, double amount, double rate) {
-        return Math.round(getMonthAmountBetweenDates(dateFrom, dateTo) * calculateMonthPayment(dateFrom, dateTo, amount, rate)) * 100 / 100;
+        return new BigDecimal(getMonthAmountBetweenDates(dateFrom, dateTo) * calculateMonthPayment(dateFrom, dateTo, amount, rate))
+                .setScale(2, RoundingMode.UP).doubleValue();
     }
 
 

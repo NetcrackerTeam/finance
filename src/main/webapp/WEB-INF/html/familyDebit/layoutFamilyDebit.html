@@ -385,7 +385,8 @@
                             <div style="position: relative;">
                             <label for="addCrPay">Payment amount:</label>
                             <input type="number" name="am" min="1" max="10000000" id="addCrPay" ng-model="amountToPay" step="0.01" class="item-input-wrapper form-control" placeholder="Enter amount" required="required"/>
-                            {{ messageAmountPay }}
+                                <p class="help-block">{{ IncErrorMessage }}</p>
+                                <p class="text-success">{{ messageAmountPaySuccess }}</p>
                             <button type="submit" class="btn btn-primary"
                                     style="position: absolute; top: 100%; left: 50%; margin: 30px -50% 0 0; transform: translate(-50%, -50%);">
                                 Add payment</button>

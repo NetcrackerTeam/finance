@@ -208,12 +208,16 @@ var FamilyCreditController = function ($scope, $http, $rootScope) {
                 'Content-Type': 'application/json'
             }
         }).success(function (response) {
-            if (response.status === false)
+            if (response.status === false) {
+                $scope.messageAmountPaySuccess = null;
                 $scope.messageAmountPay = response.message;
+            } else {
+                $scope.messageAmountPay = null;
+                $scope.messageAmountPaySuccess = response.message;
+                $scope.amountToPay = null;
+            }
         });
     };
-
-
 
     $scope.checkFamilyCredit = function () {
 

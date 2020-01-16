@@ -58,6 +58,7 @@ public class CreditPersonalController {
     }
 
     @RequestMapping(value = "/pay/{id}", method = RequestMethod.POST)
+    @ResponseBody
     public Status addPersonalCreditPayment(@RequestBody Double amount, Principal principal, @PathVariable("id") BigInteger crId) {
         debitId = userController.getAccountByPrincipal(principal);
         User user = userDao.getUserByEmail(principal.getName());
@@ -67,18 +68,7 @@ public class CreditPersonalController {
         } catch (CreditAccountException ex) {
             return new Status(false, ex.getMessage());
         }
-        return new Status(true, null);
-//        double amount = Double.parseDouble(amountMap.get("amount"));
-//        model.addAttribute("creditPayment", amount);
-//        try {
-//            personalCreditService.addPersonalCreditPayment(debitId, creditId, amount);
-//        } catch (CreditAccountException ex) {
-//            if (ex.getMessage().equals(ExceptionMessages.NOT_ENOUGH_MONEY_ERROR))
-//                model.addAttribute("message", ErrorsMap.getErrorsMap().get(ExceptionMessages.NOT_ENOUGH_MONEY_ERROR));
-//            else model.addAttribute("message", ex.getMessage());
-//            return URL.EXCEPTION_PAGE;
-//        }
-//        return URL.PERSONAL_CREDIT;
+        return new Status(true, MessageController.SUCCESS_CREDIT_PAYMENT);
     }
 
     @RequestMapping(value = "/getPersonalCredits", method = RequestMethod.GET)

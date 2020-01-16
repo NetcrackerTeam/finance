@@ -71,7 +71,7 @@ public class CreditFamilyController {
         } catch (CreditAccountException ex) {
             return new Status(false, ex.getMessage());
         }
-        return new Status(true, null);
+        return new Status(true, MessageController.SUCCESS_CREDIT_PAYMENT);
     }
 
     @RequestMapping(value = "/getFamilyCredits", method = RequestMethod.GET)

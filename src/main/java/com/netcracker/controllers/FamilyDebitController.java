@@ -13,12 +13,19 @@ import com.netcracker.services.utils.DateUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.RoundingMode;
@@ -30,6 +37,7 @@ import java.util.Collection;
 import java.util.List;
 
 import static com.netcracker.controllers.MessageController.*;
+import static org.springframework.security.web.context.HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY;
 
 @Controller
 @RequestMapping("/debitFamily")
@@ -62,6 +70,8 @@ public class FamilyDebitController {
     OperationDao operationDao;
     @Autowired
     private FamilyCreditService familyCreditService;
+    @Autowired
+    AuthenticationManager authenticationManager;
 
     private static final Logger logger = Logger.getLogger(FamilyDebitController.class);
 
@@ -116,6 +126,9 @@ public class FamilyDebitController {
             familyDebitService.deleteFamilyDebitAccount(accountId, userId);
             PersonalDebitAccount personalDebitAccount = personalDebitService.getPersonalDebitAccount(user.getPersonalDebitAccount());
             userDao.updateRole(userId, UserRole.USER.getId());
+            updateUserRole(user, request);
+//            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+//            logger.error(auth.getAuthorities().toString());
             double amount = personalDebitAccount.getAmount() + familyAmount;
             personalDebitAccountDao.updateAmountOfPersonalAccount(personalDebitAccount.getId(), amount);
             logger.debug("success deactivate");
@@ -176,13 +189,13 @@ public class FamilyDebitController {
                                   Principal principal) {
         double incomeAmount = income.getAmount();
         if (incomeAmount < MessageController.MIN || incomeAmount > MessageController.MAX) {
-            return new Status(true, MessageController.INCORRECT_AMOUNT);
+            return new Status(false, MessageController.INCORRECT_AMOUNT);
         } else {
             BigInteger accountId = getAccountByPrincipal(principal);
             BigInteger userId = getUserIdByPrincipal(principal);
             operationService.createFamilyOperationIncome(userId, accountId, income.getAmount(), LocalDateTime.now(), income.getCategoryIncome());
             FamilyDebitAccount familyDebitAccount = familyDebitService.getFamilyDebitAccount(accountId);
-            double amount = familyDebitAccount.getAmount() + income.getAmount();
+            double amount = new BigDecimal(familyDebitAccount.getAmount() + income.getAmount()).setScale(2, RoundingMode.UP).doubleValue();
             familyDebitService.updateAmountOfFamilyAccount(accountId, amount);
             return new Status(true, MessageController.ADD_INCOME);
         }
@@ -192,16 +205,21 @@ public class FamilyDebitController {
     @ResponseBody
     public Status addExpenseFamily(
             @RequestBody AccountExpense expense, Principal principal) {
-        BigInteger accountId = getAccountByPrincipal(principal);
-        BigInteger userId = getUserIdByPrincipal(principal);
-        FamilyDebitAccount debit = familyDebitService.getFamilyDebitAccount(accountId);
-        if (debit.getAmount() < expense.getAmount()) {
-            return new Status(false, MessageController.NOT_ENOUGH_MONEY_MESSAGE);
+        double expenseAmount = expense.getAmount();
+        if (expenseAmount < MessageController.MIN || expenseAmount > MessageController.MAX) {
+            return new Status(false, MessageController.INCORRECT_AMOUNT);
+        } else {
+            BigInteger accountId = getAccountByPrincipal(principal);
+            BigInteger userId = getUserIdByPrincipal(principal);
+            FamilyDebitAccount debit = familyDebitService.getFamilyDebitAccount(accountId);
+            if (debit.getAmount() < expenseAmount) {
+                return new Status(false, MessageController.NOT_ENOUGH_MONEY_MESSAGE);
+            }
+            operationService.createFamilyOperationExpense(userId, accountId, expense.getAmount(), LocalDateTime.now(), expense.getCategoryExpense());
+            double amount = new BigDecimal(debit.getAmount() - expense.getAmount()).setScale(2, RoundingMode.UP).doubleValue();
+            familyDebitService.updateAmountOfFamilyAccount(accountId, amount);
+            return new Status(true, MessageController.ADD_EXPENSE_PERS);
         }
-        operationService.createFamilyOperationExpense(userId, accountId, expense.getAmount(), LocalDateTime.now(), expense.getCategoryExpense());
-        double amount = new BigDecimal(debit.getAmount() - expense.getAmount()).setScale(2, RoundingMode.UP).doubleValue();
-        familyDebitService.updateAmountOfFamilyAccount(accountId, amount);
-        return new Status(true, MessageController.ADD_EXPENSE_PERS);
     }
 
     @RequestMapping(value = "/history", method = RequestMethod.GET)
@@ -336,4 +354,56 @@ public class FamilyDebitController {
     public String getParticipants() {
         return URL.PARTICIPANTS_OF_FAMILY;
     }
+
+    private void updateUserRole(User user, HttpServletRequest req){
+        User newUser = userDao.getUserByEmail(user.geteMail());
+
+        // If contents of auth.getAuthorities() equals authorities then no need to re-set.
+//        UsernamePasswordAuthenticationToken newAuth = new  UsernamePasswordAuthenticationToken(newUser.geteMail(), newUser.getPassword(), AuthorityUtils.createAuthorityList(newUser.getUserRole().name()));
+//
+//
+//        Authentication auth = authenticationManager.authenticate(newAuth);
+//
+//
+//        SecurityContext sc = SecurityContextHolder.getContext();
+//        sc.setAuthentication(auth);
+//        HttpSession session = req.getSession(true);
+//        session.setAttribute(SPRING_SECURITY_CONTEXT_KEY, sc);
+
+
+//        RequestContextHolder.currentRequestAttributes().setAttribute("SPRING_SECURITY_CONTEXT", newAuth, RequestAttributes.SCOPE_SESSION);
+
+
+
+
+
+//        HttpSession session = request.getSession(true);
+//        session.setAttribute("SPRING_SECURITY_CONTEXT", securityContext);
+
+//        UserDetailsService userDetailsService = new UserDetailsServiceImpl(userDao);
+//        UserDetails userDetails = userDetailsService.loadUserByUsername(user.geteMail());
+//
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//
+//        UsernamePasswordAuthenticationToken currentAuth = (UsernamePasswordAuthenticationToken) authentication;
+//
+//        UsernamePasswordAuthenticationToken updateAuth = new UsernamePasswordAuthenticationToken(userDetails ,
+//                currentAuth.getCredentials(),
+//                currentAuth.getAuthorities());
+//
+//        SecurityContextHolder.getContext().setAuthentication(updateAuth);
+
+
+
+        UsernamePasswordAuthenticationToken newAuth = new  UsernamePasswordAuthenticationToken(newUser.geteMail(), newUser.getPassword(), AuthorityUtils.createAuthorityList(newUser.getUserRole().name()));
+        Authentication auth = authenticationManager.authenticate(newAuth);
+
+        SecurityContext sc = SecurityContextHolder.getContext();
+        sc.setAuthentication(auth);
+        HttpSession session = req.getSession(true);
+        session.setAttribute(SPRING_SECURITY_CONTEXT_KEY, sc);
+
+
+    }
+
 }
