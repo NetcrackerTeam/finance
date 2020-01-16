@@ -90,9 +90,9 @@ public interface FamilyAccountDebitDao {
             "WHERE DEBIT.OBJECT_ID = ?\n" +
             "      AND USER_TO_DEBIT.ATTR_ID = 2 /*  REFERENCE USER TO FAMILY ACCOUNT  */\n" +
             "      AND USER_TO_DEBIT.REFERENCE = DEBIT.OBJECT_ID\n" +
-            "      AND AMOUNT.OBJECT_ID = USER_TO_DEBIT.REFERENCE\n" +
+            "      AND AMOUNT.OBJECT_ID = DEBIT.OBJECT_ID\n" +
             "      AND AMOUNT.ATTR_ID = 9 /* ATTRIBUTE ID AMOUNT OF FAMILY ACCOUNT */\n" +
-            "      AND STATUS_DEBIT.OBJECT_ID = USER_TO_DEBIT.REFERENCE\n" +
+            "      AND STATUS_DEBIT.OBJECT_ID = DEBIT.OBJECT_ID\n" +
             "      AND STATUS_DEBIT.ATTR_ID = 69 /* ATTRIBUTE ID STATUS OF FAMILY ACCOUNT */\n" +
             "      AND NAME_USER.OBJECT_ID = USER_TO_DEBIT.OBJECT_ID\n" +
             "      AND NAME_USER.ATTR_ID = 5 /* ATTRIBUTE ID NAME OF USER */\n" +

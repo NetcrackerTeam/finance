@@ -117,7 +117,7 @@ public interface OperationDao {
             " AND SUMM.OBJECT_ID = O.OBJECT_ID AND SUMM.ATTR_ID = 50 /* amount*/" +
             " AND CATEGORY.OBJECT_ID = O.OBJECT_ID AND CATEGORY.ATTR_ID = 51 /* category*/" +
             " AND DATE_OF.OBJECT_ID = O.OBJECT_ID AND DATE_OF.ATTR_ID = 52/* date*/" +
-            " AND DATE_OF.DATE_VALUE > TO_DATE(?)" +
+            " AND DATE_OF.DATE_VALUE > ?" +
             " ORDER BY O.OBJECT_ID ";
 
     String GET_EXPENSES_PERSONAL_GROUP_BY_CATEGORIES = "SELECT  SUM(SUMM.VALUE) AS AMOUNT,  CATEGORY.LIST_VALUE_ID AS CATEGORY" +
