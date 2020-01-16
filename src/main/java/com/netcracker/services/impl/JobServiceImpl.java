@@ -20,13 +20,13 @@ import java.math.BigInteger;
 import java.nio.file.Path;
 import java.time.LocalDate;
 import java.util.Collection;
-import java.util.List;
 
 @Service
 public class JobServiceImpl implements JobService {
 
     private static final Logger logger = Logger.getLogger(JobServiceImpl.class);
 
+    private static final int MaxNumber = 31;
     @Autowired
     private MonthReportService monthReportService;
 
@@ -66,6 +66,7 @@ public class JobServiceImpl implements JobService {
     private LocalDate localDateNow = LocalDate.now();
     private LocalDate dateFrom = DateUtils.addMonthsToDate(localDateNow, -1);
     private int dayNow = localDateNow.getDayOfMonth();
+    private int lastDays = DateUtils.MaxDayInCurrentMonth();
 
     @Override
     @Scheduled(cron = CRON_BY_REPORT)
@@ -75,12 +76,14 @@ public class JobServiceImpl implements JobService {
             return;
         familyDebitAccounts.forEach(debitAccountFamily -> {
             boolean checkStatus = UserStatusActive.YES.equals(debitAccountFamily.getOwner().getUserStatusActive());
-            ObjectsCheckUtils.isNotNull(debitAccountFamily);
-            monthReportService.formMonthFamilyReportFromDb(debitAccountFamily.getId(), dateFrom, localDateNow);
-            MonthReport monthReport = monthReportService.getMonthPersonalReport(debitAccountFamily.getId(), localDateNow, true);
-            sendReportByMail(monthReport, (AbstractDebitAccount) familyDebitAccounts);
+            if (checkStatus) {
+                ObjectsCheckUtils.isNotNull(debitAccountFamily);
+                monthReportService.formMonthFamilyReportFromDb(debitAccountFamily.getId(), dateFrom, localDateNow);
+                MonthReport monthReport = monthReportService.getMonthPersonalReport(debitAccountFamily.getId(), localDateNow, true);
+                sendReportByMail(monthReport, (AbstractDebitAccount) familyDebitAccounts);
+            } else
+                logger.debug("user status not active " + debitAccountFamily.getOwner().getId());
         });
-
     }
 
     @Override
@@ -116,7 +119,7 @@ public class JobServiceImpl implements JobService {
     @Override
     @Scheduled(cron = CRON_BY_EVERYDAY)
     public void executeRemindAutoIncomeFamilyJob() {
-        List<AutoOperationIncome> autoOperationIncomesFamily = accountAutoOperationService.getAllTodayOperationsFamilyIncome(dayNow);
+        Collection<AutoOperationIncome> autoOperationIncomesFamily = accountAutoOperationService.getAllTodayOperationsFamilyIncome(dayNow);
         if (autoOperationIncomesFamily.isEmpty())
             return;
         for (AutoOperationIncome autoIncome : autoOperationIncomesFamily) {
@@ -133,13 +136,17 @@ public class JobServiceImpl implements JobService {
             emailServiceSender.sendMailAutoFamilyIncome(debitAccount.getOwner().geteMail(),
                     debitAccount.getOwner().getName(), autoIncome.getAmount(), autoIncome.getCategoryIncome().name());
             logger.debug("Email have been sent with  " + debitAccount.getOwner().getName());
+
+            if (dayNow == lastDays) {
+                executeFamilyIncomeAutoOperationLastDay(dayNow);
+            }
         }
     }
 
     @Override
     @Scheduled(cron = CRON_BY_EVERYDAY)
     public void executeRemindAutoIncomePersonalJob() {
-        List<AutoOperationIncome> autoOperationIncomePersonal = accountAutoOperationService.getAllTodayOperationsPersonalIncome(dayNow);
+        Collection<AutoOperationIncome> autoOperationIncomePersonal = accountAutoOperationService.getAllTodayOperationsPersonalIncome(dayNow);
         if (autoOperationIncomePersonal.isEmpty())
             return;
         for (AutoOperationIncome autoIncome : autoOperationIncomePersonal) {
@@ -156,6 +163,9 @@ public class JobServiceImpl implements JobService {
             emailServiceSender.sendMailAutoPersonalIncome(debitAccount.getOwner().geteMail(),
                     debitAccount.getOwner().getName(), autoIncome.getAmount(), autoIncome.getCategoryIncome().name());
             logger.debug("Email have been sent with  " + debitAccount.getOwner().getName());
+            if (dayNow == lastDays) {
+                executePersonalIncomeAutoOperationLastDay(dayNow);
+            }
         }
     }
 
@@ -189,6 +199,9 @@ public class JobServiceImpl implements JobService {
                         autoExpense.getCategoryExpense().name());
             }
         }
+        if (dayNow == lastDays) {
+            executeFamilyExpenseAutoOperationLastDay(dayNow);
+        }
     }
 
 
@@ -210,6 +223,9 @@ public class JobServiceImpl implements JobService {
                         autoExpense.getAmount(),
                         autoExpense.getCategoryExpense().name());
             }
+        }
+        if (dayNow == lastDays) {
+            executePersonalExpenseAutoOperationLastDay(dayNow);
         }
     }
 
@@ -259,4 +275,89 @@ public class JobServiceImpl implements JobService {
             }
         }
     }
+
+
+    public void executePersonalIncomeAutoOperationLastDay(int lastDayOfCurrentMonth) {
+        for (int lastDay = lastDayOfCurrentMonth; lastDay <= MaxNumber; lastDay++) {
+            Collection<AutoOperationIncome> autoOperationIncomePersonal = accountAutoOperationService.getAllTodayOperationsPersonalIncome(lastDay);
+            if (autoOperationIncomePersonal.isEmpty())
+                return;
+            for (AutoOperationIncome autoIncome : autoOperationIncomePersonal) {
+                ObjectsCheckUtils.isNotNull(autoIncome);
+                PersonalDebitAccount debitAccount = personalDebitService.getPersonalDebitAccount(autoIncome.getDebitId());
+                operationService.createPersonalOperationIncome(autoIncome.getDebitId(), autoIncome.getAmount(), localDateNow, autoIncome.getCategoryIncome());
+                double newAmount = debitAccount.getAmount() + autoIncome.getAmount();
+                debitAccount.setAmount(newAmount);
+                personalDebitAccountDao.updateAmountOfPersonalAccount(debitAccount.getId(), newAmount);
+                Collection<PersonalCreditAccount> creditAccounts = personalCreditService.getPersonalCredits(debitAccount.getId());
+                for (PersonalCreditAccount cr : creditAccounts) {
+                    checkDebtRepayment(cr, debitAccount);
+                }
+            }
+        }
+    }
+
+
+    public void executeFamilyIncomeAutoOperationLastDay(int lastDayOfCurrentMonth) {
+        for (int lastDay = lastDayOfCurrentMonth; lastDay <= MaxNumber; lastDay++) {
+            Collection<AutoOperationIncome> autoOperationIncomesFamily = accountAutoOperationService.getAllTodayOperationsFamilyIncome(lastDay);
+            if (autoOperationIncomesFamily.isEmpty())
+                for (AutoOperationIncome autoIncome : autoOperationIncomesFamily) {
+                    ObjectsCheckUtils.isNotNull(autoIncome);
+                    FamilyDebitAccount debitAccount = familyDebitService.getFamilyDebitAccount(autoIncome.getDebitId());
+                    operationService.createFamilyOperationIncome(autoIncome.getUserId(), autoIncome.getDebitId(), autoIncome.getAmount(), localDateNow, autoIncome.getCategoryIncome());
+                    double newAmount = debitAccount.getAmount() + autoIncome.getAmount();
+                    debitAccount.setAmount(newAmount);
+                    familyDebitAccountDao.updateAmountOfFamilyAccount(debitAccount.getId(), debitAccount.getAmount());
+                    Collection<FamilyCreditAccount> credits = familyCreditService.getFamilyCredits(debitAccount.getId());
+                    for (FamilyCreditAccount cr : credits) {
+                        checkDebtRepayment(cr, debitAccount);
+                    }
+                }
+        }
+    }
+
+    public void executePersonalExpenseAutoOperationLastDay(int lastDayOfCurrentMonth) {
+        for (int lastDay = lastDayOfCurrentMonth; lastDay <= MaxNumber; lastDay++) {
+            Collection<AutoOperationExpense> autoOperationExpensePersonal = accountAutoOperationService.getAllTodayOperationsPersonalExpense(lastDay);
+            for (AutoOperationExpense autoExpense : autoOperationExpensePersonal) {
+                ObjectsCheckUtils.isNotNull(autoExpense);
+                operationService.createPersonalOperationExpense(autoExpense.getUserId(), autoExpense.getAmount(), localDateNow, autoExpense.getCategoryExpense());
+                PersonalDebitAccount debitAccount = personalDebitAccountDao.getPersonalAccountById(autoExpense.getId());
+                if (debitAccount.getAmount() < autoExpense.getAmount()) {
+                    logger.debug("Auto expense cannot be done. Not enough money");
+                } else {
+                    double newAmount = debitAccount.getAmount() - autoExpense.getAmount();
+                    personalDebitAccountDao.updateAmountOfPersonalAccount(autoExpense.getDebitId(), newAmount);
+                    emailServiceSender.sendMailAutoPersonalExpense(debitAccount.getOwner().geteMail(),
+                            debitAccount.getOwner().getName(),
+                            autoExpense.getAmount(),
+                            autoExpense.getCategoryExpense().name());
+                }
+            }
+        }
+    }
+
+
+    public void executeFamilyExpenseAutoOperationLastDay(int lastDayOfCurrentMonth) {
+        for (int lastDay = lastDayOfCurrentMonth; lastDay <= MaxNumber; lastDay++) {
+            Collection<AutoOperationExpense> autoOperationExpenseFamily = accountAutoOperationService.getAllTodayOperationsFamilyExpense(lastDay);
+            for (AutoOperationExpense autoExpense : autoOperationExpenseFamily) {
+                ObjectsCheckUtils.isNotNull(autoExpense);
+                operationService.createFamilyOperationExpense(autoExpense.getUserId(), autoExpense.getDebitId(), autoExpense.getAmount(), localDateNow, autoExpense.getCategoryExpense());
+                FamilyDebitAccount debitAccount = familyAccountDebitDao.getFamilyAccountById(autoExpense.getId());
+                if (debitAccount.getAmount() < autoExpense.getAmount()) {
+                    logger.debug("Auto expense cannot be done. Not enough money");
+                } else {
+                    double newAmount = debitAccount.getAmount() - autoExpense.getAmount();
+                    familyDebitAccountDao.updateAmountOfFamilyAccount(autoExpense.getDebitId(), newAmount);
+                    emailServiceSender.sendMailAutoFamilyExpense(debitAccount.getOwner().geteMail(),
+                            debitAccount.getOwner().getName(),
+                            autoExpense.getAmount(),
+                            autoExpense.getCategoryExpense().name());
+                }
+            }
+        }
+    }
 }
+

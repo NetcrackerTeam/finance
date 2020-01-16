@@ -6,8 +6,6 @@ public interface JobService {
 
     String CRON_BY_REPORT = "0 0 9 1 * ?";//At 9 am every first day of month
 
-    String cront = "*/20 * * * * *"; // every ten second for test
-
     void executeMonthPersonalReportOnEmailJob();
 
     void executeMonthFamilyReportOnEmailJob();

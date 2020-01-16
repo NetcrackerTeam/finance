@@ -7,7 +7,9 @@ import com.netcracker.exception.UserException;
 import com.netcracker.models.PersonalDebitAccount;
 import com.netcracker.models.User;
 import com.netcracker.models.enums.UserStatusActive;
+import com.netcracker.services.JobService;
 import com.netcracker.services.PersonalDebitService;
+import com.netcracker.services.impl.JobServiceImpl;
 import com.netcracker.services.utils.ExceptionMessages;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -27,16 +29,21 @@ import javax.servlet.http.HttpServletResponse;
 public class LoginController {
 
     @Autowired
-    UserDao userDao;
+    private UserDao userDao;
 
     @Autowired
-    PersonalDebitService debitService;
+    private PersonalDebitService debitService;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+//    @Autowired
+//    private JobService jobService;
+
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public String login(Model model, String error) {
+        //for local test
+        //  jobService.executeRemindAutoIncomePersonalJob();
         if (error != null) {
             model.addAttribute("error", "Username or password is incorrect.");
         }
@@ -90,10 +97,10 @@ public class LoginController {
         return URL.REGISTRATIONS_URL;
     }
 
-    @RequestMapping(value="/logout", method = RequestMethod.GET)
-    public String logoutPage (HttpServletRequest request, HttpServletResponse response) {
+    @RequestMapping(value = "/logout", method = RequestMethod.GET)
+    public String logoutPage(HttpServletRequest request, HttpServletResponse response) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth != null){
+        if (auth != null) {
             new SecurityContextLogoutHandler().logout(request, response, auth);
         }
         return URL.LOGIN_URL;
