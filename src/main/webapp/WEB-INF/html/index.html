@@ -139,17 +139,6 @@
 <script src="resources/js/controllers/ReportController.js"></script>
 </body>
 <script >
-    // $(document).ready(function(){
-    //     //при нажатию на элемент, имеющий класс .open-modal, открыть модальное окно
-    //     $('.open-modal').click(function(){
-    //         $('#deactivate').modal('show');
-    //     });
-    //     //отобразить сообщение, когда модальное окно будет полностью скрыто от пользователя
-    //     $("#deactivate").on('hidden.bs.modal', function(){
-    //         alert("window open");
-    //     });
-    // });
-
 </script>
 <form th:action="@{/deactivate}" method="get" action="">
     <div class="modal fade" id="deactivate" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
@@ -245,5 +234,15 @@
         </div>
     </div>
 </form>
-
+<script>
+    $('#emailModal').on('hidden.bs.modal', function () {
+        $(this).find('form').trigger('reset');
+    })
+    $('#passwordModal').on('hidden.bs.modal', function () {
+        $(this).find('form').trigger('reset');
+    })
+    $('#deactivate').on('hidden.bs.modal', function () {
+        $(this).find('form').trigger('reset');
+    })
+</script>
 </html>
