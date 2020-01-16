@@ -263,7 +263,6 @@ var PersonalCreditController = function ($scope, $http, $rootScope) {
             amount: null,
             paidAmount: 0,
             date: new Date(),
-            creditRate: 30,
             dateTo: new Date(),
             monthDay: 1,
             isPaid: "NO",

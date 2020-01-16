@@ -129,43 +129,41 @@
                     <h6 class="m-0 font-weight-bold text-primary">History</h6>
                 </div>
                 <div class="card-body" ng-controller="FamilyDebitController">
-<!--                    <select class="form-control" id = "historyPeriod" ng-click="fetchFamilyPeriodHistory()">-->
-<!--                        <option selected="selected" value="1">Last operations</option>-->
-<!--                        <option value="1">Month</option>-->
-<!--                        <option value="6">Half year</option>-->
-<!--                        <option value="12">Year</option>-->
-<!--                    </select>-->
                     <div class="table-responsive">
                     <table class="table">
                         <thead>
                         <tr>
-                            <th>UserName</th>
+                            <th>Type</th>
                             <th>Amount</th>
-                            <th>Income</th>
-                            <th>Expense</th>
+                            <th>Name</th>
+                            <th>User</th>
                             <th>Date</th>
                         </tr>
-                        <!--                        <tr>-->
-                        <!--                            <th>Type</th>-->
-                        <!--                            <th>Amount</th>-->
-                        <!--                            <th>Name</th>-->
-                        <!--                            <th>Date</th>-->
-                        <!--                        </tr>-->
                         </thead>
                         <tbody>
-                        <tr ng-repeat="hisInf in familyHistory">
+                        <tr ng-repeat="hisInf in familyHistory"  ng-class="{'text-success' : hisInf.categoryIncome, 'text-danger' : hisInf.categoryExpense}">
+                            <td>
+                                <span ng-show="hisInf.categoryIncome">
+                                    Income
+                                </span>
+                                <span ng-show="hisInf.categoryExpense">
+                                    Expense
+                                </span>
+                            </td>
+                            <td>
+                                <span ng-show="hisInf.categoryIncome">
+                                    +{{hisInf.amount}}
+                                </span>
+                                <span ng-show="hisInf.categoryExpense">
+                                    -{{hisInf.amount}}
+                                </span>
+                            </td>
+                            <td>
+                                {{hisInf.categoryIncome}}{{hisInf.categoryExpense}}
+                            </td>
                             <td>{{hisInf.userName}}</td>
-                            <td>{{hisInf.amount}}</td>
-                            <td>{{hisInf.categoryIncome}}</td>
-                            <td>{{hisInf.categoryExpense}}</td>
                             <td>{{hisInf.date.date.year}}-{{hisInf.date.date.month}}-{{hisInf.date.date.day}} {{hisInf.date.time.hour}}:{{hisInf.date.time.minute}}</td>
                         </tr>
-                        <!--                        <tr class="text-success">-->
-                        <!--                            <td>Income</td>-->
-                        <!--                            <td>+2000</td>-->
-                        <!--                            <td>SALARY</td>-->
-                        <!--                            <td>2020-01-19</td>-->
-                        <!--                        </tr>-->
                         </tbody>
                     </table>
                     </div>

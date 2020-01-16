@@ -105,31 +105,35 @@
                     <table class="table">
                         <thead>
                         <tr>
+                            <th>Type</th>
                             <th>Amount</th>
-                            <th>Income</th>
-                            <th>Expense</th>
+                            <th>Name</th>
                             <th>Date</th>
                         </tr>
-<!--                        <tr>-->
-<!--                            <th>Type</th>-->
-<!--                            <th>Amount</th>-->
-<!--                            <th>Name</th>-->
-<!--                            <th>Date</th>-->
-<!--                        </tr>-->
                         </thead>
                         <tbody>
-                        <tr ng-repeat="hisInf in personalHistory">
-                            <td>{{hisInf.amount}}</td>
-                            <td>{{hisInf.categoryIncome}}</td>
-                            <td>{{hisInf.categoryExpense}}</td>
+                        <tr  ng-repeat="hisInf in personalHistory" ng-class="{'text-success' : hisInf.categoryIncome, 'text-danger' : hisInf.categoryExpense}">
+                            <td>
+                                <span ng-show="hisInf.categoryIncome">
+                                    Income
+                                </span>
+                                <span ng-show="hisInf.categoryExpense">
+                                    Expense
+                                </span>
+                            </td>
+                            <td>
+                                <span ng-show="hisInf.categoryIncome">
+                                    +{{hisInf.amount}}
+                                </span>
+                                <span ng-show="hisInf.categoryExpense">
+                                    -{{hisInf.amount}}
+                                </span>
+                            </td>
+                            <td>
+                                {{hisInf.categoryIncome}}{{hisInf.categoryExpense}}
+                            </td>
                             <td>{{hisInf.date.date.year}}-{{hisInf.date.date.month}}-{{hisInf.date.date.day}} {{hisInf.date.time.hour}}:{{hisInf.date.time.minute}}</td>
                         </tr>
-<!--                        <tr class="text-success">-->
-<!--                            <td>Income</td>-->
-<!--                            <td>+2000</td>-->
-<!--                            <td>SALARY</td>-->
-<!--                            <td>2020-01-19</td>-->
-<!--                        </tr>-->
                         </tbody>
                     </table>
                     </div>
