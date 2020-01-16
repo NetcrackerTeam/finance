@@ -5,6 +5,7 @@ import com.netcracker.models.PersonalDebitAccount;
 
 import java.math.BigInteger;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 
@@ -16,7 +17,7 @@ public interface PersonalDebitService {
 
     PersonalDebitAccount getPersonalDebitAccount(BigInteger id);
 
-    List<AbstractAccountOperation> getHistory(BigInteger accountId, LocalDate date);
+    List<AbstractAccountOperation> getHistory(BigInteger accountId, LocalDateTime date);
 
     Collection<PersonalDebitAccount> getAllPersonalAccounts();
 

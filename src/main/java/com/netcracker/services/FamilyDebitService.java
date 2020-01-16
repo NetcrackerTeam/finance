@@ -6,6 +6,7 @@ import com.netcracker.models.User;
 
 import java.math.BigInteger;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 
@@ -20,7 +21,7 @@ public interface FamilyDebitService {
 
     void deleteUserFromAccount(BigInteger accountId, BigInteger userId);
 
-    List<AbstractAccountOperation> getHistory(BigInteger familyAccountId, LocalDate date);
+    List<AbstractAccountOperation> getHistory(BigInteger familyAccountId, LocalDateTime date);
 
     Collection<User> getParticipantsOfFamilyAccount(BigInteger accountId);
 

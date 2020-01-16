@@ -6,34 +6,35 @@ import com.netcracker.models.enums.CategoryIncome;
 
 import java.math.BigInteger;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 
 public interface OperationDao {
 
-    void createIncomePersonalByAccId(BigInteger id, double income, LocalDate date, CategoryIncome categoryIncome);
+    void createIncomePersonalByAccId(BigInteger id, double income, LocalDateTime date, CategoryIncome categoryIncome);
 
-    void createExpensePersonaByAccId(BigInteger id, double expense, LocalDate date, CategoryExpense categoryExpense);
+    void createExpensePersonaByAccId(BigInteger id, double expense, LocalDateTime date, CategoryExpense categoryExpense);
 
-    void createIncomeFamilyByAccId(BigInteger idUser, BigInteger idFamily, double income, LocalDate date, CategoryIncome categoryIncome);
+    void createIncomeFamilyByAccId(BigInteger idUser, BigInteger idFamily, double income, LocalDateTime date, CategoryIncome categoryIncome);
 
-    void createExpenseFamilyByAccId(BigInteger idUser, BigInteger idFamily, double expense, LocalDate date, CategoryExpense categoryExpense);
+    void createExpenseFamilyByAccId(BigInteger idUser, BigInteger idFamily, double expense, LocalDateTime date, CategoryExpense categoryExpense);
 
-    List<AccountIncome> getIncomesPersonalAfterDateByAccountId(BigInteger id, LocalDate date);
+    List<AccountIncome> getIncomesPersonalAfterDateByAccountId(BigInteger id, LocalDateTime date);
 
-    List<AccountExpense> getExpensesPersonalAfterDateByAccountId(BigInteger id, LocalDate date);
+    List<AccountExpense> getExpensesPersonalAfterDateByAccountId(BigInteger id, LocalDateTime date);
 
-    List<AccountIncome> getIncomesFamilyAfterDateByAccountId(BigInteger id, LocalDate data);
+    List<AccountIncome> getIncomesFamilyAfterDateByAccountId(BigInteger id, LocalDateTime data);
 
-    List<AccountExpense> getExpensesFamilyAfterDateByAccountId(BigInteger id, LocalDate data);
+    List<AccountExpense> getExpensesFamilyAfterDateByAccountId(BigInteger id, LocalDateTime data);
 
-    Collection<CategoryExpenseReport> getExpensesPersonalGroupByCategories(BigInteger id, LocalDate date);
+    Collection<CategoryExpenseReport> getExpensesPersonalGroupByCategories(BigInteger id, LocalDateTime date);
 
-    Collection<CategoryIncomeReport> getIncomesPersonalGroupByCategories(BigInteger id, LocalDate date);
+    Collection<CategoryIncomeReport> getIncomesPersonalGroupByCategories(BigInteger id, LocalDateTime date);
 
-    Collection<CategoryExpenseReport> getExpensesFamilyGroupByCategories(BigInteger id, LocalDate date);
+    Collection<CategoryExpenseReport> getExpensesFamilyGroupByCategories(BigInteger id, LocalDateTime date);
 
-    Collection<CategoryIncomeReport> getIncomesFamilyGroupByCategories(BigInteger id, LocalDate date);
+    Collection<CategoryIncomeReport> getIncomesFamilyGroupByCategories(BigInteger id, LocalDateTime date);
 
     List<HistoryOperation> getHistoryByAccountId(BigInteger id, int period);
 

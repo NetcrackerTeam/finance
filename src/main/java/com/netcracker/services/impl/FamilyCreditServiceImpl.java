@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Date;
 
@@ -50,7 +51,7 @@ public class FamilyCreditServiceImpl implements FamilyCreditService {
             double amount = debitAccountDao.getFamilyAccountById(id).getAmount();
             debitAccountDao.updateAmountOfFamilyAccount(id,
                     amount + creditAccount.getAmount());
-            operationService.createFamilyOperationIncome(userId, id, creditAccount.getAmount(), LocalDate.now(), CategoryIncome.CREDIT);
+            operationService.createFamilyOperationIncome(userId, id, creditAccount.getAmount(), LocalDateTime.now(), CategoryIncome.CREDIT);
         }
         creditAccountDao.createFamilyCreditByDebitAccountId(id, creditAccount);
     }
@@ -159,11 +160,11 @@ public class FamilyCreditServiceImpl implements FamilyCreditService {
     }
 
     private void changeDebtDateTo(BigInteger id, LocalDate date) {
-        creditDeptDao.updateFamilyDebtDateTo(id, DateUtils.localDateToDate(date));
+        creditDeptDao.updateFamilyDebtDateTo(id, DateUtils.localDateToDateCredit(date));
     }
 
     private void changeDebtDateFrom(BigInteger id, LocalDate date) {
-        creditDeptDao.updatePersonalDebtDateFrom(id, DateUtils.localDateToDate(date));
+        creditDeptDao.updatePersonalDebtDateFrom(id, DateUtils.localDateToDateCredit(date));
     }
 
     private void changeDebtAmount(BigInteger id, double amount) {
@@ -173,7 +174,7 @@ public class FamilyCreditServiceImpl implements FamilyCreditService {
     private void addPayment(FamilyCreditAccount creditAccount, FamilyDebitAccount debitAccount, double amount, BigInteger idUser) {
         double actualDebitAmount = debitAccount.getAmount();
         debitAccountDao.updateAmountOfFamilyAccount(debitAccount.getId(), actualDebitAmount - amount);
-        operationService.createFamilyOperationExpense(idUser,debitAccount.getId(), amount, LocalDate.now(), CategoryExpense.CREDIT);
+        operationService.createFamilyOperationExpense(idUser,debitAccount.getId(), amount, LocalDateTime.now(), CategoryExpense.CREDIT);
         creditOperationDao.createFamilyCreditOperation(amount, LocalDate.now(), creditAccount.getCreditId(), idUser);
         double updatedAmount = creditAccount.getPaidAmount() + amount;
         creditAccountDao.updateFamilyCreditPayment(creditAccount.getCreditId(), updatedAmount);

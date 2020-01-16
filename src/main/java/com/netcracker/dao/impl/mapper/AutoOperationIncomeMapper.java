@@ -6,6 +6,8 @@ import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.time.ZoneId;
 
 public class AutoOperationIncomeMapper implements RowMapper<AutoOperationIncome> {
 
@@ -16,7 +18,7 @@ public class AutoOperationIncomeMapper implements RowMapper<AutoOperationIncome>
                 .accountDebitId(resultSet.getBigDecimal("debit_id").toBigInteger())
                 .categoryIncome(CategoryIncome.getNameByKey(resultSet.getBigDecimal("category_id").toBigInteger()))
                 .accountAmount(resultSet.getDouble("amount"))
-                .accountDate(resultSet.getDate("date_of_creation").toLocalDate())
+                .accountDate(new Timestamp(resultSet.getDate("date_of_creation").getTime()).toLocalDateTime())
                 .dayOfMonth(resultSet.getInt("day_of_month"))
                 .build();
     }

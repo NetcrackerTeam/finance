@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -26,7 +27,7 @@ public class OperationServiceImpl implements OperationService {
     private static final Logger logger = Logger.getLogger(OperationServiceImpl.class);
 
     @Override
-    public List<AbstractAccountOperation> getAllFamilyOperations(BigInteger accountId, LocalDate afterDate) {
+    public List<AbstractAccountOperation> getAllFamilyOperations(BigInteger accountId, LocalDateTime afterDate) {
         logger.debug("[getAllFamilyOperations]" + debugStartMessage + "[accountId = " + accountId + "], [afterDate = " + afterDate + "]");
 
         ObjectsCheckUtils.isNotNull(accountId, afterDate);
@@ -36,7 +37,7 @@ public class OperationServiceImpl implements OperationService {
     }
 
     @Override
-    public List<AccountExpense> getExpensesFamilyAfterDateByAccountId(BigInteger id, LocalDate afterDate) {
+    public List<AccountExpense> getExpensesFamilyAfterDateByAccountId(BigInteger id, LocalDateTime afterDate) {
         logger.debug("[getExpensesFamilyAfterDateByAccountId]" + debugStartMessage + "[id = " + id + "], afterDate = " + afterDate + "]");
 
         ObjectsCheckUtils.isNotNull(id, afterDate);
@@ -46,7 +47,7 @@ public class OperationServiceImpl implements OperationService {
     }
 
     @Override
-    public List<AccountIncome> getIncomesFamilyAfterDateByAccountId(BigInteger id, LocalDate afterDate) {
+    public List<AccountIncome> getIncomesFamilyAfterDateByAccountId(BigInteger id, LocalDateTime afterDate) {
         logger.debug("[getIncomesFamilyAfterDateByAccountId]" + debugStartMessage + "[id = " + id + "], afterDate = " + afterDate + "]");
 
         ObjectsCheckUtils.isNotNull(id, afterDate);
@@ -56,7 +57,7 @@ public class OperationServiceImpl implements OperationService {
     }
 
     @Override
-    public List<AccountExpense> getExpensesPersonalAfterDateByAccountId(BigInteger id, LocalDate afterDate) {
+    public List<AccountExpense> getExpensesPersonalAfterDateByAccountId(BigInteger id, LocalDateTime afterDate) {
         logger.debug("[getExpensesPersonalAfterDateByAccountId]" + debugStartMessage + "[id = " + id + "], afterDate = " + afterDate + "]");
 
         ObjectsCheckUtils.isNotNull(id, afterDate);
@@ -66,7 +67,7 @@ public class OperationServiceImpl implements OperationService {
     }
 
     @Override
-    public List<AccountIncome> getIncomesPersonalAfterDateByAccountId(BigInteger id, LocalDate afterDate) {
+    public List<AccountIncome> getIncomesPersonalAfterDateByAccountId(BigInteger id, LocalDateTime afterDate) {
         logger.debug("[getIncomesPersonalAfterDateByAccountId]" + debugStartMessage + "[id = " + id + "], afterDate = " + afterDate + "]");
 
         ObjectsCheckUtils.isNotNull(id, afterDate);
@@ -76,7 +77,7 @@ public class OperationServiceImpl implements OperationService {
     }
 
     @Override
-    public List<AbstractAccountOperation> getAllPersonalOperations(BigInteger accountId, LocalDate afterDate) {
+    public List<AbstractAccountOperation> getAllPersonalOperations(BigInteger accountId, LocalDateTime afterDate) {
         logger.debug("[getAllPersonalOperations]" + debugStartMessage + "[accountId = " + accountId + "], [afterDate = " + afterDate + "]");
 
         ObjectsCheckUtils.isNotNull(accountId, afterDate);
@@ -95,7 +96,7 @@ public class OperationServiceImpl implements OperationService {
     }
 
     @Override
-    public void createFamilyOperationIncome(BigInteger idUser, BigInteger idFamily, double income, LocalDate date, CategoryIncome categoryIncome) {
+    public void createFamilyOperationIncome(BigInteger idUser, BigInteger idFamily, double income, LocalDateTime date, CategoryIncome categoryIncome) {
         logger.debug("[createFamilyOperationIncome]" + debugStartMessage + "[idUser = " + idUser + "], [idFamily = "
                 + idFamily + "], [income = " + income + "], [date = " + date + "], [categoryIncome = " + categoryIncome + "]");
 
@@ -104,7 +105,7 @@ public class OperationServiceImpl implements OperationService {
     }
 
     @Override
-    public void createFamilyOperationExpense(BigInteger idUser, BigInteger idFamily, double expense, LocalDate date, CategoryExpense categoryExpense) {
+    public void createFamilyOperationExpense(BigInteger idUser, BigInteger idFamily, double expense, LocalDateTime date, CategoryExpense categoryExpense) {
         logger.debug("[createFamilyOperationExpense]" + debugStartMessage + "[idUser = " + idUser + "], [idFamily = "
                 + idFamily + "], [expense = " + expense + "], [date = " + date + "], [categoryExpense = " + categoryExpense + "]");
 
@@ -113,7 +114,7 @@ public class OperationServiceImpl implements OperationService {
     }
 
     @Override
-    public void createPersonalOperationIncome(BigInteger id, double income, LocalDate date, CategoryIncome categoryIncome) {
+    public void createPersonalOperationIncome(BigInteger id, double income, LocalDateTime date, CategoryIncome categoryIncome) {
         logger.debug("[createPersonalOperationIncome]" + debugStartMessage + "[id = " + id + "], [income = " + income +
                 "], [date = " + date + "], [categoryIncome = " + categoryIncome + "]");
 
@@ -122,7 +123,7 @@ public class OperationServiceImpl implements OperationService {
     }
 
     @Override
-    public void createPersonalOperationExpense(BigInteger id, double expense, LocalDate date, CategoryExpense categoryExpense) {
+    public void createPersonalOperationExpense(BigInteger id, double expense, LocalDateTime date, CategoryExpense categoryExpense) {
         logger.debug("[createPersonalOperationExpense]" + debugStartMessage + "[id = " + id + "], [expense = " + expense +
                 "], [date = " + date + "], [categoryExpense = " + categoryExpense + "]");
 

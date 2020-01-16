@@ -6,6 +6,7 @@ import com.netcracker.models.MonthReport;
 
 import java.math.BigInteger;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Collection;
 
 public interface MonthReportDao {
@@ -15,9 +16,9 @@ public interface MonthReportDao {
 
     void createFamilyMonthReport(MonthReport monthReport, BigInteger id);
 
-    MonthReport getMonthReportByFamilyAccountId(BigInteger id, LocalDate dateFrom, LocalDate dateTo);
+    MonthReport getMonthReportByFamilyAccountId(BigInteger id, LocalDateTime dateFrom, LocalDateTime dateTo);
 
-    MonthReport getMonthReportByPersonalAccountId(BigInteger id, LocalDate dateFrom, LocalDate dateTo);
+    MonthReport getMonthReportByPersonalAccountId(BigInteger id, LocalDateTime dateFrom, LocalDateTime dateTo);
 
 
 

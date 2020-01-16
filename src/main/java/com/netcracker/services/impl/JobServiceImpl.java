@@ -19,6 +19,7 @@ import javax.mail.MessagingException;
 import java.math.BigInteger;
 import java.nio.file.Path;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Collection;
 
 @Service
@@ -63,8 +64,8 @@ public class JobServiceImpl implements JobService {
     @Autowired
     FamilyAccountDebitDao familyDebitAccountDao;
 
-    private LocalDate localDateNow = LocalDate.now();
-    private LocalDate dateFrom = DateUtils.addMonthsToDate(localDateNow, -1);
+    private LocalDateTime localDateNow = LocalDateTime.now();
+    private LocalDateTime dateFrom = DateUtils.addMonthsToDate(localDateNow, -1);
     private int dayNow = localDateNow.getDayOfMonth();
     private int lastDays = DateUtils.MaxDayInCurrentMonth();
 

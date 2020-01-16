@@ -16,6 +16,7 @@ import java.math.BigInteger;
 import java.nio.file.Path;
 import java.security.Principal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static com.netcracker.controllers.MessageController.*;
@@ -60,7 +61,7 @@ public class PersonalDebitController {
             return new Status(true, MessageController.INCORRECT_AMOUNT);
         } else {
             BigInteger accountId = getAccountByPrincipal(principal);
-            operationService.createPersonalOperationIncome(accountId, income.getAmount(), LocalDate.now(), income.getCategoryIncome());
+            operationService.createPersonalOperationIncome(accountId, income.getAmount(), LocalDateTime.now(), income.getCategoryIncome());
             PersonalDebitAccount debit = personalDebitAccountDao.getPersonalAccountById(accountId);
             double amount = debit.getAmount() + income.getAmount();
             personalDebitAccountDao.updateAmountOfPersonalAccount(accountId, amount);
@@ -76,7 +77,7 @@ public class PersonalDebitController {
         PersonalDebitAccount debit = personalDebitAccountDao.getPersonalAccountById(accountId);
         if (debit.getAmount() < expense.getAmount())
             return new Status(false, MessageController.NOT_ENOUGH_MONEY_MESSAGE);
-        operationService.createPersonalOperationExpense(accountId, expense.getAmount(), LocalDate.now(), expense.getCategoryExpense());
+        operationService.createPersonalOperationExpense(accountId, expense.getAmount(), LocalDateTime.now(), expense.getCategoryExpense());
         double amount = debit.getAmount() - expense.getAmount();
         personalDebitAccountDao.updateAmountOfPersonalAccount(accountId, amount);
         return new Status(true, MessageController.ADD_EXPENSE_PERS);
@@ -169,7 +170,7 @@ public class PersonalDebitController {
     @ResponseBody
     public String getReport(
             Principal principal,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDateTime date
     ) {
         BigInteger accountId = getAccountByPrincipal(principal);
 
@@ -185,7 +186,7 @@ public class PersonalDebitController {
     @RequestMapping(value = "/sendReport", method = RequestMethod.GET)
     public void sendReport(
             Principal principal,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDateTime date
     ) {
         BigInteger accountId = getAccountByPrincipal(principal);
 

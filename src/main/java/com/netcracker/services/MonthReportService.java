@@ -6,19 +6,20 @@ import java.io.FileOutputStream;
 import java.math.BigInteger;
 import java.nio.file.Path;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public interface MonthReportService {
 
 
-    void formMonthPersonalReportFromDb(BigInteger id, LocalDate dateFrom, LocalDate dateTo);
+    void formMonthPersonalReportFromDb(BigInteger id, LocalDateTime dateFrom, LocalDateTime dateTo);
 
-    void formMonthFamilyReportFromDb(BigInteger id, LocalDate dateFrom, LocalDate dateTo);
+    void formMonthFamilyReportFromDb(BigInteger id, LocalDateTime dateFrom, LocalDateTime dateTo);
 
     Path convertToTxt(MonthReport monthReport);
 
-    MonthReport getMonthPersonalReport(BigInteger id, LocalDate date, boolean isJob);
+    MonthReport getMonthPersonalReport(BigInteger id, LocalDateTime date, boolean isJob);
 
-    MonthReport getMonthFamilyReport(BigInteger id, LocalDate date, boolean isJob);
+    MonthReport getMonthFamilyReport(BigInteger id, LocalDateTime date, boolean isJob);
 
     String convertToString(Path path);
 

@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -48,7 +49,7 @@ public class PersonalDebitServiceImpl implements PersonalDebitService {
         logger.debug("get personal debit account by id:" + id);
         ObjectsCheckUtils.isNotNull(id);
         PersonalDebitAccount debitAccount = personalDebitAccountDao.getPersonalAccountById(id);
-        LocalDate startMonthDate = LocalDate.of(LocalDate.now().getYear(), LocalDate.now().getMonth(), 1);
+        LocalDateTime startMonthDate = LocalDateTime.of(LocalDate.now().getYear(), LocalDate.now().getMonth(), 1, 0, 0);
         Collection<AccountIncome> incomes = operationService.getIncomesPersonalAfterDateByAccountId(id, startMonthDate);
         Collection<AccountExpense> expenses = operationService.getExpensesPersonalAfterDateByAccountId(id, startMonthDate);
         debitAccount.setMonthIncome(incomes.stream().mapToDouble(AccountIncome::getAmount).sum());
@@ -57,7 +58,7 @@ public class PersonalDebitServiceImpl implements PersonalDebitService {
     }
 
 
-    public List<AbstractAccountOperation> getHistory(BigInteger accountId, LocalDate date) {
+    public List<AbstractAccountOperation> getHistory(BigInteger accountId, LocalDateTime date) {
         logger.debug("Entering select(getHistory=" + accountId + " date :" + date + ")");
         return operationService.getAllPersonalOperations(accountId, date);
     }

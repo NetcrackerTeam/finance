@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 
@@ -46,7 +47,7 @@ public class FamilyDebitServiceImpl implements FamilyDebitService {
         logger.debug("Entering select(getFamilyDebitAccount=" + id + ")");
         ObjectsCheckUtils.isNotNull(id);
         FamilyDebitAccount debitAccount = familyAccountDebitDao.getFamilyAccountById(id);
-        LocalDate startMonthDate = LocalDate.of(LocalDate.now().getYear(), LocalDate.now().getMonth(), 1);
+        LocalDateTime startMonthDate = LocalDateTime.of(LocalDate.now().getYear(), LocalDate.now().getMonth(), 1, 0, 0);
         Collection<AccountIncome> incomes = operationService.getIncomesFamilyAfterDateByAccountId(id, startMonthDate);
         Collection<AccountExpense> expenses = operationService.getExpensesFamilyAfterDateByAccountId(id, startMonthDate);
         debitAccount.setMonthIncome(incomes.stream().mapToDouble(AccountIncome::getAmount).sum());
@@ -106,7 +107,7 @@ public class FamilyDebitServiceImpl implements FamilyDebitService {
     }
 
     @Override
-    public List<AbstractAccountOperation> getHistory(BigInteger familyAccountId, LocalDate date) {
+    public List<AbstractAccountOperation> getHistory(BigInteger familyAccountId, LocalDateTime date) {
         logger.debug("Entering select(getHistory=" + familyAccountId + " " + date + ")");
         return operationService.getAllFamilyOperations(familyAccountId, date);
     }

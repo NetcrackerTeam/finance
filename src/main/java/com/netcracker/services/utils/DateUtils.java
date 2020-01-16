@@ -1,6 +1,7 @@
 package com.netcracker.services.utils;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.Period;
 import java.time.ZoneId;
 import java.util.Calendar;
@@ -16,16 +17,24 @@ public final class DateUtils {
         return Period.between(dateFrom, dateTo).getMonths();
     }
 
-    public static Date localDateToDate(LocalDate date) {
-        return date == null ? null : Date.from(date.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
+    public static Date localDateToDate(LocalDateTime date) {
+        return date == null ? null : Date.from(date.atZone( ZoneId.systemDefault()).toInstant());
     }
 
     public static LocalDate dateToLocalDate(Date date) {
         return date == null ? null : date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
     }
 
-    public static LocalDate addMonthsToDate(LocalDate date, int amount) {
+    public static LocalDateTime addMonthsToDate(LocalDateTime date, int amount) {
         return date.plusMonths(amount);
+    }
+
+    public static LocalDate addMonthsToDateCredit(LocalDate date, int amount) {
+        return date.plusMonths(amount);
+    }
+
+    public static Date localDateToDateCredit(LocalDate date) {
+        return date == null ? null : Date.from(date.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
     }
 
     public static  boolean checkMaxDayInCurrentMonth(int days) {

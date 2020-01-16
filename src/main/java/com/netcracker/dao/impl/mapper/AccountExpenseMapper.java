@@ -7,6 +7,8 @@ import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.time.ZoneId;
 
 public class AccountExpenseMapper implements RowMapper<AccountExpense> {
 
@@ -16,7 +18,7 @@ public class AccountExpenseMapper implements RowMapper<AccountExpense> {
                 new AccountExpense.Builder()
                         .accountId(resultSet.getBigDecimal("account_expense_id").toBigInteger())
                         .accountAmount(resultSet.getDouble("expense_amount"))
-                        .accountDate(resultSet.getDate("date_expense").toLocalDate())
+                        .accountDate(new Timestamp(resultSet.getDate("date_expense").getTime()).toLocalDateTime())
                         .categoryExpense(CategoryExpense.getNameByKey(resultSet.getBigDecimal("category_expense").toBigInteger()))
                         .build();
         return (AccountExpense) accountExpense;

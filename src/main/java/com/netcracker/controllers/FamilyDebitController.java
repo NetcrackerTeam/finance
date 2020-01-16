@@ -25,6 +25,7 @@ import java.math.RoundingMode;
 import java.nio.file.Path;
 import java.security.Principal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 
@@ -179,7 +180,7 @@ public class FamilyDebitController {
         } else {
             BigInteger accountId = getAccountByPrincipal(principal);
             BigInteger userId = getUserIdByPrincipal(principal);
-            operationService.createFamilyOperationIncome(userId, accountId, income.getAmount(), LocalDate.now(), income.getCategoryIncome());
+            operationService.createFamilyOperationIncome(userId, accountId, income.getAmount(), LocalDateTime.now(), income.getCategoryIncome());
             FamilyDebitAccount familyDebitAccount = familyDebitService.getFamilyDebitAccount(accountId);
             double amount = familyDebitAccount.getAmount() + income.getAmount();
             familyDebitService.updateAmountOfFamilyAccount(accountId, amount);
@@ -197,7 +198,7 @@ public class FamilyDebitController {
         if (debit.getAmount() < expense.getAmount()) {
             return new Status(false, MessageController.NOT_ENOUGH_MONEY_MESSAGE);
         }
-        operationService.createFamilyOperationExpense(userId, accountId, expense.getAmount(), LocalDate.now(), expense.getCategoryExpense());
+        operationService.createFamilyOperationExpense(userId, accountId, expense.getAmount(), LocalDateTime.now(), expense.getCategoryExpense());
         double amount = new BigDecimal(debit.getAmount() - expense.getAmount()).setScale(2, RoundingMode.UP).doubleValue();
         familyDebitService.updateAmountOfFamilyAccount(accountId, amount);
         return new Status(true, MessageController.ADD_EXPENSE_PERS);
@@ -288,7 +289,7 @@ public class FamilyDebitController {
     @ResponseBody
     public String getReport(
             Principal principal,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDateTime date
     ) {
         BigInteger accountId = getAccountByPrincipal(principal);
 
@@ -302,7 +303,7 @@ public class FamilyDebitController {
     @RequestMapping(value = "/sendReport", method = RequestMethod.GET)
     public void sendReport(
             Principal principal,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDateTime date
     ) {
         BigInteger accountId = getAccountByPrincipal(principal);
 

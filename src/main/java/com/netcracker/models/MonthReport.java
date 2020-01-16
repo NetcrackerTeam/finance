@@ -2,6 +2,7 @@ package com.netcracker.models;
 
 import java.math.BigInteger;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Collection;
 
 public class MonthReport {
@@ -10,8 +11,8 @@ public class MonthReport {
     private double totalIncome;
     private double totalExpense;
     private double balance;
-    private LocalDate dateFrom;
-    private LocalDate dateTo;
+    private LocalDateTime dateFrom;
+    private LocalDateTime dateTo;
     private Collection<CategoryExpenseReport> categoryExpense;
     private Collection<CategoryIncomeReport> categoryIncome;
     public static  class Builder {
@@ -19,8 +20,8 @@ public class MonthReport {
         private double totalIncome;
         private double totalExpense;
         private double balance;
-        private LocalDate dateFrom;
-        private LocalDate dateTo;
+        private LocalDateTime dateFrom;
+        private LocalDateTime dateTo;
 
         private Collection<CategoryExpenseReport> categoryExpense;
         private Collection<CategoryIncomeReport>  categoryIncome;
@@ -44,11 +45,11 @@ public class MonthReport {
             this.balance = val;
             return this;
         }
-        public Builder dateFrom( LocalDate val) {
+        public Builder dateFrom( LocalDateTime val) {
             this.dateFrom = val;
             return this;
         }
-        public Builder dateTo( LocalDate val) {
+        public Builder dateTo( LocalDateTime val) {
             this.dateTo = val;
             return this;
         }
@@ -93,19 +94,19 @@ public class MonthReport {
         return balance;
     }
 
-    public LocalDate getDateFrom() {
+    public LocalDateTime getDateFrom() {
         return dateFrom;
     }
 
-    public void setDateFrom(LocalDate dateFrom) {
+    public void setDateFrom(LocalDateTime dateFrom) {
         this.dateFrom = dateFrom;
     }
 
-    public LocalDate getDateTo() {
+    public LocalDateTime getDateTo() {
         return dateTo;
     }
 
-    public void setDateTo(LocalDate dateTo) {
+    public void setDateTo(LocalDateTime dateTo) {
         this.dateTo = dateTo;
     }
 

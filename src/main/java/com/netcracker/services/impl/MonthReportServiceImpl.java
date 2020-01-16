@@ -4,7 +4,6 @@ import com.netcracker.dao.*;
 import com.netcracker.exception.MonthReportException;
 import com.netcracker.exception.UserException;
 import com.netcracker.models.*;
-import com.netcracker.services.FamilyDebitService;
 import com.netcracker.services.MonthReportService;
 import com.netcracker.services.utils.DateUtils;
 import com.netcracker.services.utils.ExceptionMessages;
@@ -12,7 +11,6 @@ import com.netcracker.services.utils.ObjectsCheckUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedWriter;
@@ -21,7 +19,7 @@ import java.math.BigInteger;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Collection;
 
 @Service
@@ -45,7 +43,7 @@ public class MonthReportServiceImpl implements MonthReportService {
     UserDao userDao;
 
     @Override
-    public void formMonthFamilyReportFromDb(BigInteger id, LocalDate dateFrom, LocalDate dateTo) {
+    public void formMonthFamilyReportFromDb(BigInteger id, LocalDateTime dateFrom, LocalDateTime dateTo) {
         logger.debug("Insert formFamilyReportFromDb " + id);
 
         ObjectsCheckUtils.isNotNull(id);
@@ -90,7 +88,7 @@ public class MonthReportServiceImpl implements MonthReportService {
     }
 
     @Override
-    public void formMonthPersonalReportFromDb(BigInteger id, LocalDate dateFrom, LocalDate dateTo) {
+    public void formMonthPersonalReportFromDb(BigInteger id, LocalDateTime dateFrom, LocalDateTime dateTo) {
         logger.debug("Insert formPersonalReportFromDb " + id);
 
         ObjectsCheckUtils.isNotNull(id, dateTo);
@@ -197,12 +195,12 @@ public class MonthReportServiceImpl implements MonthReportService {
 
 
     @Override
-    public MonthReport getMonthPersonalReport(BigInteger id, LocalDate date, boolean isJob) {
+    public MonthReport getMonthPersonalReport(BigInteger id, LocalDateTime date, boolean isJob) {
         logger.debug("Id " + id + " date " + date);
 
         ObjectsCheckUtils.isNotNull(id, date);
 
-        TwoValue<LocalDate> dates = calculateDates(date, id, isJob, false);
+        TwoValue<LocalDateTime> dates = calculateDates(date, id, isJob, false);
 
         MonthReport monthReport = monthReportDao.getMonthReportByPersonalAccountId(id, dates.getValue1(), dates.getValue2());
         ObjectsCheckUtils.isNotNull(monthReport);
@@ -216,12 +214,12 @@ public class MonthReportServiceImpl implements MonthReportService {
     }
 
     @Override
-    public MonthReport getMonthFamilyReport(BigInteger id, LocalDate date, boolean isJob) {
+    public MonthReport getMonthFamilyReport(BigInteger id, LocalDateTime date, boolean isJob) {
         logger.debug("Id " + id + " dateFrom " + date);
 
         ObjectsCheckUtils.isNotNull(id, date);
 
-        TwoValue<LocalDate> dates = calculateDates(date, id, isJob, true);
+        TwoValue<LocalDateTime> dates = calculateDates(date, id, isJob, true);
 
         MonthReport monthReport = monthReportDao.getMonthReportByFamilyAccountId(id, dates.getValue1(), dates.getValue2());
         ObjectsCheckUtils.isNotNull(monthReport);
@@ -246,18 +244,18 @@ public class MonthReportServiceImpl implements MonthReportService {
         return report;
     }
 
-    private TwoValue<LocalDate> calculateDates(LocalDate date, BigInteger id, boolean isJob, boolean isFamily) {
+    private TwoValue<LocalDateTime> calculateDates(LocalDateTime date, BigInteger id, boolean isJob, boolean isFamily) {
         logger.debug("Date " + id + " id" + " isJob " + isJob + " isFamily " + isFamily);
-        LocalDate dateTo;
-        LocalDate dateFrom;
+        LocalDateTime dateTo;
+        LocalDateTime dateFrom;
         MonthReport monthReport;
 
         if(isJob) {
             dateTo = date;
             dateFrom = DateUtils.addMonthsToDate(date, -1);
-        } else if (date.getMonth().getValue() == LocalDate.now().getMonth().getValue()) {
-            dateTo = LocalDate.now();
-            dateFrom = LocalDate.of(LocalDate.now().getYear(), LocalDate.now().getMonth().getValue(), 1);
+        } else if (date.getMonth().getValue() == LocalDateTime.now().getMonth().getValue()) {
+            dateTo = LocalDateTime.now();
+            dateFrom = LocalDateTime.of(LocalDateTime.now().getYear(), LocalDateTime.now().getMonthValue(), 1, 00, 00);
 
             try {
                 if(isFamily){

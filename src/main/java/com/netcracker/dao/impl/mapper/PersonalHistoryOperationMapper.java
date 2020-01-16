@@ -10,6 +10,9 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 public class PersonalHistoryOperationMapper implements RowMapper<HistoryOperation> {
 
@@ -18,7 +21,7 @@ public class PersonalHistoryOperationMapper implements RowMapper<HistoryOperatio
         AbstractAccountOperation accountOperation =
                 new HistoryOperation.Builder()
                         .accountAmount(resultSet.getDouble("AMOUNT"))
-                        .accountDate(resultSet.getDate("DATE_IN").toLocalDate())
+                        .accountDate(new Timestamp(resultSet.getDate("DATE_IN").getTime()).toLocalDateTime())
                         .categoryExpense(CategoryExpense.getNameByKey(getKeyCategory(resultSet.getBigDecimal("CATEGORY_EXPENSE"))))
                         .categoryIncome(CategoryIncome.getNameByKey(getKeyCategory(resultSet.getBigDecimal("CATEGORY_INCOME"))))
                         .build();

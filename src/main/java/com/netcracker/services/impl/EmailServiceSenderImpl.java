@@ -24,6 +24,7 @@ import java.math.BigInteger;
 import java.nio.file.Path;
 import java.text.MessageFormat;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Service
 public class EmailServiceSenderImpl implements EmailServiceSender {
@@ -99,7 +100,7 @@ public class EmailServiceSenderImpl implements EmailServiceSender {
     }
 
     @Override
-    public void sendMailReminderPersonalCredit(String emailTo, String userName, double amountPaid, String credName, LocalDate date) {
+    public void sendMailReminderPersonalCredit(String emailTo, String userName, double amountPaid, String credName, LocalDateTime date) {
         ObjectsCheckUtils.isNotNull(emailTo, userName, credName, date);
 
         String personalCred = MessageFormat.format(templatesDao.sendMassageById(EmailServiceTemplateCategory.REMINDER_PERSONAL_CREDIT.getId()), userName, amountPaid, credName, date);
@@ -107,7 +108,7 @@ public class EmailServiceSenderImpl implements EmailServiceSender {
     }
 
     @Override
-    public void sendMailReminderFamilyCredit(String emailTo, String userName, double amountPaid, String credName, LocalDate date) {
+    public void sendMailReminderFamilyCredit(String emailTo, String userName, double amountPaid, String credName, LocalDateTime date) {
         ObjectsCheckUtils.isNotNull(emailTo, userName, credName, date);
 
         String familyCredit = MessageFormat.format(templatesDao.sendMassageById(EmailServiceTemplateCategory.REMINDER_FAMILY_CREDIT.getId()), userName, amountPaid, credName, date);
