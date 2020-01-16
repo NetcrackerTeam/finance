@@ -4,10 +4,12 @@ import com.netcracker.models.CategoryExpenseReport;
 import com.netcracker.models.CategoryIncomeReport;
 import com.netcracker.models.MonthReport;
 
+import javax.print.DocFlavor;
 import java.math.BigInteger;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.List;
 
 public interface MonthReportDao {
 
@@ -19,7 +21,6 @@ public interface MonthReportDao {
     MonthReport getMonthReportByFamilyAccountId(BigInteger id, LocalDateTime dateFrom, LocalDateTime dateTo);
 
     MonthReport getMonthReportByPersonalAccountId(BigInteger id, LocalDateTime dateFrom, LocalDateTime dateTo);
-
 
 
     void createCategoryIncomePersonalReport(BigInteger id, CategoryIncomeReport categoryIncomeReport);
@@ -42,15 +43,19 @@ public interface MonthReportDao {
 
     Collection<MonthReport> getAllFamilyReports(BigInteger id);
 
+    List<MonthReport> getFullPersonalReports(BigInteger id);
+
+    List<MonthReport> getFullFamilyReports(BigInteger id);
+
 
     String CREATE_PERSONAL_MONTH_REPORT = "INSERT ALL" +
             " INTO OBJECTS(OBJECT_ID,PARENT_ID,OBJECT_TYPE_ID,NAME,DESCRIPTION) VALUES (OBJECTS_ID_S.NEXTVAL, null,3, 'Personal report', 'Personal report')" +
-            " INTO ATTRIBUTES(ATTR_ID, OBJECT_ID, VALUE) VALUES(12, OBJECTS_ID_S.CURRVAL, ?) /*TotalIncome */ "  +
+            " INTO ATTRIBUTES(ATTR_ID, OBJECT_ID, VALUE) VALUES(12, OBJECTS_ID_S.CURRVAL, ?) /*TotalIncome */ " +
             " INTO ATTRIBUTES(ATTR_ID, OBJECT_ID, VALUE) VALUES(13, OBJECTS_ID_S.CURRVAL, ?) /*TotalExpense*/ " +
             " INTO ATTRIBUTES(ATTR_ID, OBJECT_ID, VALUE) VALUES(14, OBJECTS_ID_S.CURRVAL, ?) /*Balance*/ " +
             " INTO ATTRIBUTES(ATTR_ID, OBJECT_ID, DATE_VALUE) VALUES(15, OBJECTS_ID_S.CURRVAL, ?) /*DateFrom*/ " +
-            " INTO ATTRIBUTES(ATTR_ID, OBJECT_ID, DATE_VALUE) VALUES(16, OBJECTS_ID_S.CURRVAL,?) /*DateTo*/"  +
-            " INTO OBJREFERENCE (ATTR_ID,OBJECT_ID,REFERENCE) VALUES (10,OBJECTS_ID_S.CURRVAL,?) /*PersonalDebit*/ "+
+            " INTO ATTRIBUTES(ATTR_ID, OBJECT_ID, DATE_VALUE) VALUES(16, OBJECTS_ID_S.CURRVAL,?) /*DateTo*/" +
+            " INTO OBJREFERENCE (ATTR_ID,OBJECT_ID,REFERENCE) VALUES (10,OBJECTS_ID_S.CURRVAL,?) /*PersonalDebit*/ " +
             " SELECT * FROM DUAL";
 
     String CREATE_FAMILY_MONTH_REPORT = "INSERT ALL" +
@@ -169,4 +174,30 @@ public interface MonthReportDao {
             "  AND BALANCE.OBJECT_ID = O.OBJECT_ID AND BALANCE.ATTR_ID = 14 /*BALANCE*/ " +
             "  AND DATE_FROM.OBJECT_ID = O.OBJECT_ID AND  DATE_FROM.ATTR_ID = 15  /* date from */ " +
             "  AND DATE_TO.OBJECT_ID = O.OBJECT_ID AND DATE_TO.ATTR_ID = 16 /* date to*/ ";
+
+    String GET_FULL_PERSONAL_REPORTS = "SELECT O.OBJECT_ID AS MONTH_REPORT_ID, TOTALINCOME.VALUE AS INCOME, " +
+            "  TOTALEXPENSE.VALUE AS EXPENSE, BALANCE.VALUE AS BALANCE, " +
+            "  DATE_TO.DATE_VALUE AS DATE_TO, DATE_FROM.DATE_VALUE AS DATE_FROM " +
+            "  FROM ATTRIBUTES TOTALINCOME, ATTRIBUTES TOTALEXPENSE, " +
+            "  ATTRIBUTES BALANCE, ATTRIBUTES DATE_FROM, ATTRIBUTES DATE_TO, OBJREFERENCE OBJ, OBJECTS O " +
+            "  WHERE OBJ.ATTR_ID = 10 AND O.OBJECT_ID = OBJ.OBJECT_ID AND OBJ.REFERENCE = ? " +
+            "  AND TOTALINCOME.OBJECT_ID = O.OBJECT_ID AND TOTALINCOME.ATTR_ID = 12 /*TOTALINCOME*/ " +
+            "  AND TOTALEXPENSE.OBJECT_ID = O.OBJECT_ID AND TOTALEXPENSE.ATTR_ID = 13 /*TOTALEXPENSE*/ " +
+            "  AND BALANCE.OBJECT_ID = O.OBJECT_ID AND BALANCE.ATTR_ID = 14 /*BALANCE*/ " +
+            "  AND DATE_FROM.OBJECT_ID = O.OBJECT_ID AND  DATE_FROM.ATTR_ID = 15 AND EXTRACT(DAY FROM DATE_FROM.DATE_VALUE) LIKE '1'  /* date from */ " +
+            "  AND DATE_TO.OBJECT_ID = O.OBJECT_ID AND DATE_TO.ATTR_ID = 16 AND EXTRACT(DAY FROM DATE_TO.DATE_VALUE) LIKE '1' /* date to*/ " +
+            "  ORDER BY DATE_FROM";
+
+    String GET_FULL_FAMILY_REPORTS = "SELECT O.OBJECT_ID AS MONTH_REPORT_ID, TOTALINCOME.VALUE AS INCOME, " +
+            "  TOTALEXPENSE.VALUE AS EXPENSE, BALANCE.VALUE AS BALANCE, " +
+            "  DATE_FROM.DATE_VALUE AS DATE_FROM, DATE_TO.DATE_VALUE AS DATE_TO " +
+            "  FROM ATTRIBUTES TOTALINCOME, ATTRIBUTES TOTALEXPENSE, " +
+            "  ATTRIBUTES BALANCE, ATTRIBUTES DATE_FROM, ATTRIBUTES DATE_TO, OBJREFERENCE OBJ, OBJECTS O " +
+            "  WHERE OBJ.ATTR_ID = 11 AND O.OBJECT_ID = OBJ.OBJECT_ID AND OBJ.REFERENCE = ? " +
+            "  AND TOTALINCOME.OBJECT_ID = O.OBJECT_ID AND TOTALINCOME.ATTR_ID = 12 /*TOTALINCOME*/ " +
+            "  AND TOTALEXPENSE.OBJECT_ID = O.OBJECT_ID AND TOTALEXPENSE.ATTR_ID = 13 /*TOTALEXPENSE*/ " +
+            "  AND BALANCE.OBJECT_ID = O.OBJECT_ID AND BALANCE.ATTR_ID = 14 /*BALANCE*/ " +
+            "  AND DATE_FROM.OBJECT_ID = O.OBJECT_ID AND  DATE_FROM.ATTR_ID = 15 AND EXTRACT(DAY FROM DATE_FROM.DATE_VALUE) LIKE '1' " +
+            "  AND DATE_TO.OBJECT_ID = O.OBJECT_ID AND DATE_TO.ATTR_ID = 16 AND EXTRACT(DAY FROM DATE_TO.DATE_VALUE) LIKE '1' " +
+            "  ORDER BY DATE_FROM";
 }

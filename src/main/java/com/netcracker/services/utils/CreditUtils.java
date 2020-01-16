@@ -28,5 +28,4 @@ public final class CreditUtils {
                 .setScale(2, RoundingMode.UP).doubleValue();
     }
 
-
 }

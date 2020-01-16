@@ -62,6 +62,9 @@ public interface MessageController {
     String END_DATE_ERROR = "Choose an earlier date";
     String CREDIT_RATE_ERROR = "Rate cannot be less then 1 or more then 60";
     String INVALID_DAY_OF_MONTH = "Invalid day of month";
+    String INVALID_DURATION = "Invalid duration";
+    String ABLE_TO_PAY = "You are able to pay for this credit";
+    String NOT_ABLE_TO_PAY = "Your are not able to pay for this credit";
     String SUCCESS_CREDIT_PAYMENT = "Payment added successfully";
 
 }

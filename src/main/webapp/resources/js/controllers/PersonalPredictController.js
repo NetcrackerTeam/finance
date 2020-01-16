@@ -26,9 +26,9 @@ app.controller("PersonalPredictController", ['$scope', '$http', '$templateCache'
                 params: {duration: $scope.predict.duration}
             }).
             then(function(response) {
-                $scope.status = response.data;
+                $scope.status = response.data.message;
             }, function() {
-                $scope.status = 'Not enough data from account to make a prediction';
+                $scope.status = 'Not enough data from account';
             });
         };
 
@@ -65,9 +65,9 @@ app.controller("FamilyPredictController", ['$scope', '$http', '$templateCache',
                 params: {duration: $scope.predict.duration}
             }).
             then(function(response) {
-                $scope.status = response.data;
+                $scope.status = response.data.message;
             }, function() {
-                $scope.status = 'Not enough data from account to make a prediction';
+                $scope.status = 'Not enough data from account';
             });
         };
 

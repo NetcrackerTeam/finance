@@ -560,7 +560,7 @@
     </div>
 </form>
 
-<form ng-controller="PersonalPredictController" ng-submit="getPredict()">
+<form ng-controller="PersonalPredictController" xmlns:th="http://www.thymeleaf.org">
     <div class="modal fade" id="prediction" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -570,13 +570,15 @@
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
-                        <label for="category">Income category:</label>
+                        <label for="category">Category:</label>
                         <select class="form-control" id="category" ng-model="predict.category">
-                            <option>Income</option>
+                            <option selected="selected">Income</option>
                             <option>Expense</option>
                         </select>
+
                     </div>
                     <p><input type="number" min="1" class="form-control" placeholder="Enter duration" max ="120" ng-model="predict.duration"/></p>
+                    <p th:text="${name}"></p>
                     <pre>Predict sum: {{status}}</pre>
                 </div>
                 <div class="modal-footer">

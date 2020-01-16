@@ -233,16 +233,10 @@ var PersonalCreditController = function ($scope, $http, $rootScope) {
         $http({
             method: 'GET',
             url: 'prediction/personal/checkCredit',
-            params: {duration: $scope.duration, amount: $scope.credit.amount}
+            params: {duration: $scope.duration, amount: $scope.credit.amount, rate: $scope.credit.rate}
         }).then(function (response) {
             console.log(response);
-            if (response.status === 200) {
-                $scope.check = "You will be able to pay for this credit ";
-            } else if (response.status === 202) {
-                $scope.check = "No enough data to predict";
-            } else {
-                $scope.check = "You will not be able to pay for this credit";
-            }
+            $scope.check = response.data.message;
         }, function () {
             $scope.check = "error";
         });

@@ -16,6 +16,7 @@ import java.time.LocalDateTime;
 import java.util.Date;
 import java.time.LocalDate;
 import java.util.Collection;
+import java.util.List;
 
 @Repository
 public class MonthReportDaoImpl implements MonthReportDao {
@@ -115,5 +116,15 @@ public class MonthReportDaoImpl implements MonthReportDao {
     @Override
     public Collection<MonthReport> getAllFamilyReports(BigInteger id) {
         return template.query(GET_ALL_FAMILY_REPORTS, new Object[]{id}, new MonthReportMapper());
+    }
+
+    @Override
+    public List<MonthReport> getFullPersonalReports(BigInteger id) {
+        return template.query(GET_FULL_PERSONAL_REPORTS, new Object[]{id}, new MonthReportMapper());
+    }
+
+    @Override
+    public List<MonthReport> getFullFamilyReports(BigInteger id) {
+        return template.query(GET_FULL_FAMILY_REPORTS, new Object[]{id}, new MonthReportMapper());
     }
 }

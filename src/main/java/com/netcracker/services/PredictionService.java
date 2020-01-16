@@ -6,9 +6,9 @@ import java.math.BigInteger;
 
 public interface PredictionService {
 
-     boolean predictPersonalCreditPossibility(BigInteger id, int duration, double amount);
+     boolean predictPersonalCreditPossibility(BigInteger id, int duration, double amount, double rate);
 
-     boolean predictFamilyCreditPossibility(BigInteger id, int duration, double amount);
+     boolean predictFamilyCreditPossibility(BigInteger id, int duration, double amount, double rate);
 
      double predictPersonalMonthIncome(BigInteger id, int duration);
 
