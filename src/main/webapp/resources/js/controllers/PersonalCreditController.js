@@ -102,7 +102,7 @@ var PersonalCreditController = function ($scope, $http, $rootScope) {
     function success() {
         refreshPageData();
         clearForm();
-        alert("success'");
+        //alert("success'");
         window.location.reload();
     }
 
@@ -171,7 +171,7 @@ var PersonalCreditController = function ($scope, $http, $rootScope) {
 
     var sliderEdit = document.getElementById("creditRateRangeEdit");
     var outputEdit = document.getElementById("creditRateTextEdit");
-    outputEdit.innerHTML = 'Credit rate: ' + sliderEdit.value + ' %';
+    //outputEdit.innerHTML = 'Credit rate: ' + sliderEdit.value + ' %';
     sliderEdit.oninput = function () {
         outputEdit.innerHTML = 'Credit rate: ' + this.value + ' %';
     };

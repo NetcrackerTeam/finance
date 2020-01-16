@@ -280,7 +280,8 @@
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header" style="position: relative;">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"
+                        onclick="$('.modal').modal('hide'); $('#showAllCreditModal').modal('show');">
                     <span aria-hidden="true">&times;</span>
                 </button>
                 <h4 class="modal-title" style="position: absolute; top: 50%; left: 50%; margin: 0 -50% 0 0; transform: translate(-50%, -50%);">
@@ -295,7 +296,8 @@
                     <p>Total credits already paid: {{totalPaidCredits}}</p></b>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="$('.modal').modal('hide');
+                $('#showAllCreditModal').modal('show'); ">Close</button>
             </div>
         </div>
     </div>
@@ -307,7 +309,8 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 align="center" class="modal-title"> "{{personalCreditor.name}}" credit</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"
+                            onclick="$('body').css('overflow','auto'); $('body').css('position','relative');">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -360,9 +363,10 @@
                                 <td>{{personalCreditor.totalCreditPayment}}</td>
                             </tr>
                         </table>
-                        <button type="button" class="btn btn-info" data-toggle="modal" data-target="#updateCreditModal"
+                        <button type="button" class="btn btn-info"
                                 style="position: absolute; top: 100%; left: 50%; margin: 10px -50% 0 0; transform: translate(-50%, -50%);"
-                                data-dismiss="modal">
+                        onclick="$('.modal').modal('hide'); $('#updateCreditModal').modal('show'); $('body').css('overflow','hidden');
+                        $('body').css('position','fixed'); $('.modal').css('overflow','auto');">
                             Edit Credit</button>
                     </div>
                         <div class="col-lg-6 mb-4" style="position: relative;">
@@ -399,7 +403,8 @@
                 </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="$('body').css('overflow','auto');
+                        $('body').css('position','relative');">Close</button>
                 </div>
             </div>
         </div>
@@ -407,11 +412,15 @@
 </form>
 
 <form novalidate="novalidate" name="editCreditForm" ng-controller="PersonalCreditController" ng-submit="updatePersonalCredit()" class="needs-validation">
-    <div  class="modal fade" id="updateCreditModal" tabindex="-1" role="document" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="true">
-        <div class="modal-dialog" role="document">
+    <div  class=" modal fade" id="updateCreditModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="true">
+        <div class="modal-dialog " role="dialog">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h4 align="center" class="modal-title"> Edit credit</h4>
+                <div class="modal-header" style="position: relative;">
+                    <button type="button" class="close" onclick="$('#infoCreditModal').modal('show'); $('.modal').modal('hide');" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" style="position: absolute; top: 50%; left: 50%; margin: 0 -50% 0 0; transform: translate(-50%, -50%);">
+                        Edit credit</h4>
                 </div>
                 <div class="modal-body">
                     <div class="form-group" ng-class="{ 'has-error' : editCreditForm.nameCr.$invalid &amp;&amp; !editCreditForm.nameCr.$pristine}">
@@ -449,7 +458,7 @@
                     </div>
 
                     <div class="form-group slidecontainer">
-                        <label for="creditRateRange" id="creditRateTextEdit">Credit rate:</label>
+                        <label for="creditRateRange" id="creditRateTextEdit">Credit rate: {{personalCreditor.creditRate}} %</label>
                         <p><input type="range" min="0" max="60" step="0.1" class="slider" id="creditRateRangeEdit" ng-model="personalCreditor.creditRate"/></p>
                     </div>
 
@@ -473,8 +482,9 @@
                 </div>
                 <div class="modal-footer">
                     <button style="float: left" ng-disabled="editCreditForm.$invalid" type="button" class="btn btn-info" ng-click="checkPersonalCredit()">Check credit possibility</button>
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary" ng-disabled="editCreditForm.$invalid" onclick="$('.modal').modal('hide')">Save changes</button>
+                    <button type="button" class="btn btn-secondary" onclick="$('#infoCreditModal').modal('show'); $('.modal').modal('hide');" >Close</button>
+                    <button type="submit" class="btn btn-primary" ng-disabled="editCreditForm.$invalid"
+                            onclick="$('#infoCreditModal').modal('show'); $('.modal').modal('hide');">Save changes</button>
                 </div>
             </div>
         </div>
