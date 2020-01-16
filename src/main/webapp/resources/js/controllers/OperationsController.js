@@ -7,7 +7,7 @@ app.controller("AddIncomeControllerPersonal", function ($scope, $http) {
         amount: 0.00,
         categoryIncome: "DEFAULT",
         checkbox: false,
-        dayOfMonth: "1"
+        dayOfMonth: 1
     };
     var pat = /^[0-9]+(\.[0-9][0-9]?)?$/;
 
@@ -32,7 +32,7 @@ app.controller("AddIncomeControllerPersonal", function ($scope, $http) {
                     }
                 }).success(function (response) {
                     if (response.status === false)
-                        $scope.amountIncErrorMessage = response.message;
+                        $scope.IncErrorMessage = response.message;
                     else {
                         $('.modal').modal('hide');
                         window.location.reload();
@@ -44,6 +44,14 @@ app.controller("AddIncomeControllerPersonal", function ($scope, $http) {
             }
         }
     };
+    $scope.clear = function() {
+        $scope.form = {
+            amount: null,
+            categoryIncome: "DEFAULT",
+            checkbox: false,
+            dayOfMonth: 1
+        };
+    };
 });
 
 app.controller("AddExpenseControllerPersonal", function ($scope, $http) {
@@ -51,7 +59,7 @@ app.controller("AddExpenseControllerPersonal", function ($scope, $http) {
         amount: 0.00,
         categoryExpense: "DEFAULT",
         checkbox: false,
-        dayOfMonth: "1"
+        dayOfMonth: 1
     };
     var pat = /^[0-9]+(\.[0-9][0-9]?)?$/;
 
@@ -76,7 +84,7 @@ app.controller("AddExpenseControllerPersonal", function ($scope, $http) {
                     }
                 }).success(function (response) {
                     if (response.status === false)
-                        $scope.amountExpErrorMessage = response.message;
+                        $scope.ExpErrorMessage = response.message;
                     else {
                         $('.modal').modal('hide');
                         window.location.reload();
@@ -87,8 +95,14 @@ app.controller("AddExpenseControllerPersonal", function ($scope, $http) {
 
             }
         }
-
-
+    };
+    $scope.clear = function() {
+        $scope.form = {
+            amount: null,
+            categoryExpense: "DEFAULT",
+            checkbox: false,
+            dayOfMonth: 1
+        };
     };
 })
 ;
@@ -101,7 +115,7 @@ app.controller("AddIncomeControllerFamily", function ($scope, $http) {
         amount: 0.00,
         categoryIncome: "DEFAULT",
         checkbox: false,
-        dayOfMonth: "1"
+        dayOfMonth: 1
     };
     var pat = /^[0-9]+(\.[0-9][0-9]?)?$/;
 
@@ -126,7 +140,7 @@ app.controller("AddIncomeControllerFamily", function ($scope, $http) {
                     }
                 }).success(function (response) {
                     if (response.status === false)
-                        $scope.amountIncErrorMessage = response.message;
+                        $scope.IncErrorMessage = response.message;
                     else {
                         $('.modal').modal('hide');
                         window.location.reload();
@@ -137,7 +151,15 @@ app.controller("AddIncomeControllerFamily", function ($scope, $http) {
 
             }
         }
-    }
+    };
+    $scope.clear = function() {
+        $scope.form = {
+            amount: null,
+            categoryIncome: "DEFAULT",
+            checkbox: false,
+            dayOfMonth: 1
+        };
+    };
 });
 
 
@@ -146,7 +168,7 @@ app.controller("AddExpenseControllerFamily", function ($scope, $http) {
         amount: 0.00,
         categoryExpense: "DEFAULT",
         checkbox: false,
-        dayOfMonth: "1"
+        dayOfMonth: 1
     };
     var pat = /^[0-9]+(\.[0-9][0-9]?)?$/;
 
@@ -170,7 +192,7 @@ app.controller("AddExpenseControllerFamily", function ($scope, $http) {
                     }
                 }).success(function (response) {
                     if (response.status === false)
-                        $scope.amountExpErrorMessage = response.message;
+                        $scope.ExpErrorMessage = response.message;
                     else {
                         $('.modal').modal('hide');
                         window.location.reload();
@@ -180,7 +202,15 @@ app.controller("AddExpenseControllerFamily", function ($scope, $http) {
                 });
             }
         }
-        ;
-    }
+    };
+
+    $scope.clear = function() {
+        $scope.form = {
+            amount: null,
+            categoryExpense: "DEFAULT",
+            checkbox: false,
+            dayOfMonth: 1
+        };
+    };
 });
 

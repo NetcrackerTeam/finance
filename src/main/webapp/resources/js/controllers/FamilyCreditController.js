@@ -80,7 +80,7 @@ var FamilyCreditController = function ($scope, $http, $rootScope) {
                 if (response.status === true) {
                     $('.modal').modal('hide');
                     refreshPageData();
-                    //window.location.reload();
+                    window.location.reload();
                 }
             });
         }
@@ -249,6 +249,24 @@ var FamilyCreditController = function ($scope, $http, $rootScope) {
                 if ($rootScope.familyCreditor.isCommodity === true) $rootScope.familyCreditor.isCommodity = "YES";
             }
         }
+    };
+
+    $scope.clear = function() {
+        $scope.credit = {
+            name: "",
+            amount: null,
+            paidAmount: 0,
+            date: new Date(),
+            creditRate: 30,
+            dateTo: new Date(),
+            monthDay: 1,
+            isPaid: "NO",
+            isCommodity: "false",
+            monthPayment: 0,
+            remainsToPay: 0,
+            totalCreditPayment: 0
+        };
+        $scope.duration = null;
     };
 
 };

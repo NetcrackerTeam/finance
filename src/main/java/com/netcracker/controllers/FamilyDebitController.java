@@ -18,6 +18,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;
+import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.RoundingMode;
@@ -96,7 +97,7 @@ public class FamilyDebitController {
 
     @RequestMapping(value = "/deactivation", method = RequestMethod.GET)
     @ResponseBody
-    public Status deleteFamilyDebitAccount(Principal principal) {
+    public Status deleteFamilyDebitAccount(Principal principal, HttpServletRequest request) {
 
         try {
             User user = userDao.getParticipantByEmail(principal.getName());
@@ -167,14 +168,6 @@ public class FamilyDebitController {
             return new Status(true, MessageController.DELETE_UNS_USER_FAM + userDao.getUserById(userId).getName());
         }
     }
-
-//    @RequestMapping(value = "/addCredit", method = RequestMethod.POST)
-//    @ResponseBody
-//    public List<FamilyCreditAccount> addCreditAccount(@RequestBody FamilyCreditAccount creditAccount,
-//                                                      @PathVariable("id") BigInteger id) {
-//        creditService.createFamilyCredit(id, creditAccount);
-//        return creditAccountDao.getAllFamilyCreditsByAccountId(id);
-//    }
 
     @RequestMapping(value = "/income", method = RequestMethod.POST)
     @ResponseBody
@@ -251,7 +244,7 @@ public class FamilyDebitController {
             return new Status(true, MessageController.ADD_AUTO_INCOME);
         }
         logger.debug("autoExpense is not valid !" + autoOperationIncome.getId() + " " + autoOperationIncome.getCategoryIncome());
-        return new Status(false, NO_VALID_ADD_AUTO_INCOME );
+        return new Status(false, INVALID_DAY_OF_MONTH );
     }
 
     @RequestMapping(value = "/createAutoExpense", method = RequestMethod.POST)
@@ -267,7 +260,7 @@ public class FamilyDebitController {
             return new Status(true, ADD_AUTO_EXPENSE);
         }
         logger.debug("autoExpense is not valid !" + autoOperationExpense.getId() + " " + autoOperationExpense.getCategoryExpense());
-        return new Status(false, NO_VALID_ADD_AUTO_EXPENSE);
+        return new Status(false, INVALID_DAY_OF_MONTH);
 
     }
 

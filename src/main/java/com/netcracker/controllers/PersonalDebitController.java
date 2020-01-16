@@ -127,7 +127,7 @@ public class PersonalDebitController {
             return new Status(true, ADD_AUTO_INCOME);
         }
         logger.debug("autoIncome is not valid !" + autoOperationIncome.getId() + " " + autoOperationIncome.getCategoryIncome());
-        return new Status(false, NO_VALID_ADD_AUTO_INCOME );
+        return new Status(false, INVALID_DAY_OF_MONTH );
     }
 
     @RequestMapping(value = "/createAutoExpense", method = RequestMethod.POST)
@@ -142,7 +142,7 @@ public class PersonalDebitController {
             return new Status(true, ADD_AUTO_EXPENSE);
         }
         logger.debug("autoExpense is not valid !" + autoOperationExpense.getId() + " " + autoOperationExpense.getCategoryExpense());
-        return new Status(false, NO_VALID_ADD_AUTO_EXPENSE );
+        return new Status(false, INVALID_DAY_OF_MONTH );
 
     }
 

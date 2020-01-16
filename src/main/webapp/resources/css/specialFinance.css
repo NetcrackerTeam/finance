@@ -111,8 +111,12 @@ input::-webkit-inner-spin-button {
     margin: 0;
 }
 /*.datepicker.datepicker-dropdown.dropdown-menu { z-index: 9999999; }*/
-.modal {
-    overflow: auto !important;
+/*.modal {*/
+/*     overflow: auto !important;*/
+/* }*/
+
+.help-block {
+    color: #e74a3b;
 }
 
 pre.content {

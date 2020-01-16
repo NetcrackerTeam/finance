@@ -257,4 +257,22 @@ var PersonalCreditController = function ($scope, $http, $rootScope) {
         }
     };
 
+    $scope.clear = function() {
+        $scope.credit = {
+            name: "",
+            amount: null,
+            paidAmount: 0,
+            date: new Date(),
+            creditRate: 30,
+            dateTo: new Date(),
+            monthDay: 1,
+            isPaid: "NO",
+            isCommodity: "false",
+            monthPayment: 0,
+            remainsToPay: 0,
+            totalCreditPayment: 0
+        };
+        $scope.duration = null;
+    };
+
 };

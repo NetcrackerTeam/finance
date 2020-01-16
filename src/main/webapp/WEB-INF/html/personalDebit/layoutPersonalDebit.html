@@ -459,8 +459,8 @@
 
                     <div class="form-group" ng-class="{ 'has-error' : (editCreditForm.pd.$error.max || editCreditForm.pd.$error.min) &amp;&amp; !editCreditForm.pd.$pristine}">
                         <label for="paymentDayEdit">Credit payment day of month</label>
-                        <input type="number" name="pd" min="1" id="paymentDayEdit" max="28" class="form-control" placeholder="Enter payment day of month" ng-model="personalCreditor.monthDay" required="required"/>
-                        <p ng-show="(editCreditForm.pd.$error.max || editCreditForm.pd.$error.min) &amp;&amp; !editCreditForm.pd.$pristine" class="help-block">Payment day can be from 1 to 28</p>
+                        <input type="number" name="pd" min="1" id="paymentDayEdit" max="31" class="form-control" placeholder="Enter payment day of month" ng-model="personalCreditor.monthDay" required="required"/>
+                        <p ng-show="(editCreditForm.pd.$error.max || editCreditForm.pd.$error.min) &amp;&amp; !editCreditForm.pd.$pristine" class="help-block">Payment day can be from 1 to 31</p>
                     </div>
 
                     <div class="form-group">
@@ -537,8 +537,8 @@
 
                     <div class="form-group" ng-class="{ 'has-error' : (addCreditForm.pd.$error.max || addCreditForm.pd.$error.min) &amp;&amp; !addCreditForm.pd.$pristine}">
                         <label for="paymentDay">Credit payment day of month</label>
-                        <input type="number" name="pd" min="1" id="paymentDay" max="28" class="form-control" placeholder="Enter payment day of month" ng-model="credit.monthDay" required="required"/>
-                        <p ng-show="(addCreditForm.pd.$error.max || addCreditForm.pd.$error.min) &amp;&amp; !addCreditForm.pd.$pristine" class="help-block">Payment day can be from 1 to 28</p>
+                        <input type="number" name="pd" min="1" id="paymentDay" max="31" class="form-control" placeholder="Enter payment day of month" ng-model="credit.monthDay" required="required"/>
+                        <p ng-show="(addCreditForm.pd.$error.max || addCreditForm.pd.$error.min) &amp;&amp; !addCreditForm.pd.$pristine" class="help-block">Payment day can be from 1 to 31</p>
                     </div>
 
                     <div class="form-group">
@@ -550,7 +550,7 @@
                 </div>
                 <div class="modal-footer">
                     <button style="float: left" ng-disabled="addCreditForm.$invalid" type="button" class="btn btn-info" ng-click="checkPersonalCredit()">Check credit possibility</button>
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary" ng-click="clear()" data-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-primary" ng-disabled="addCreditForm.$invalid" >Save changes</button>
                 </div>
             </div>
@@ -648,16 +648,16 @@
                         <p ng-if="categoryCheck" class="help-block">{{ categoryCheck }}</p>
                     </div>
                     <div class="form-group">
-                        <input type="checkbox" ng-model="form.checkbox" name="-ch"/> Make operation repetitive each month
+                        <input type="checkbox" ng-model="form.checkbox" name="ch"/> Make operation repetitive each month
                     </div>
                     <div class="form-group" ng-class="{ 'has-error' : (addIncomeForm.pd.$error.max || addIncomeForm.pd.$error.min) &amp;&amp; !addIncomeForm.pd.$pristine &amp;&amp; form.checkbox}">
                         <label for="income">Day of month:</label>
                         <input type="number" ng-disabled="!form.checkbox" ng-model="form.dayOfMonth" min="1" max="31" class="form-control" name="pd"/>
                         <p ng-show="(addIncomeForm.pd.$error.max || addIncomeForm.pd.$error.min) &amp;&amp; !addIncomeForm.pd.$pristine &amp;&amp; addIncomeForm.ch" class="help-block">Payment day can be from 1 to 31</p>
                     </div>
-
+                    <p class="help-block">{{ IncErrorMessage }}</p>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal" >Close</button>
+                        <button type="button" class="btn btn-secondary" ng-click="clear()" data-dismiss="modal" >Close</button>
                         <button type="submit" value="Submit" class="btn btn-primary" ng-disabled = "!form.amount"  ng-click="submitOperation()" >Add </button>
                     </div>
                 </form>
@@ -698,7 +698,6 @@
                             <option>CHILDREN</option>
                             <option>SPORT</option>
                             <option>CLOTHES</option>
-                            <option>CREDIT</option>
                             <option>OTHER</option>
                         </select>
                         <p ng-if="categoryCheck" class="help-block">{{ categoryCheckExp }}</p>
@@ -711,9 +710,9 @@
                         <input type="number" ng-disabled="!form.checkbox" ng-model="form.dayOfMonth" min="1" max="31" class="form-control" placeholder="Enter day of month" name="pd"/>
                         <p ng-show="(addExpenseForm.pd.$error.max || addExpenseForm.pd.$error.min) &amp;&amp; !addExpenseForm.pd.$pristine &amp;&amp; addExpenseForm.chEx" class="help-block">Payment day can be from 1 to 31</p>
                     </div>
-
+                    <p class="help-block">{{ ExpErrorMessage }}</p>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal" >Close</button>
+                        <button type="button" class="btn btn-secondary" ng-click="clear()" data-dismiss="modal" >Close</button>
                         <button type="submit" value="Submit" class="btn btn-primary" ng-disabled = "!form.amount" ng-click="submitOperation()" >Add </button>
                     </div>
                 </form>

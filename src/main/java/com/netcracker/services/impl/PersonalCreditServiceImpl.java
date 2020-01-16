@@ -231,7 +231,7 @@ public class PersonalCreditServiceImpl implements PersonalCreditService {
             return new Status(false, MessageController.START_DATE_ERROR);
         if (LocalDate.now().plusMonths(600).isBefore(creditAccount.getDateTo()))
             return new Status(false, MessageController.END_DATE_ERROR);
-        if (creditAccount.getCreditRate() < 0 || creditAccount.getCreditRate() > 30)
+        if (creditAccount.getCreditRate() < 0 || creditAccount.getCreditRate() > 60)
             return new Status(false, MessageController.CREDIT_RATE_ERROR);
         if (creditAccount.getMonthDay() < 1 || creditAccount.getMonthDay() > 31)
             return new Status(false, MessageController.INVALID_DAY_OF_MONTH);
