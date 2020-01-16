@@ -55,28 +55,6 @@ public class CreditDeptDaoTest {
                 .build();
     }
 
-    @Test
-    public void getPersonalDebtByCreditIdTest() {
-        checkEqualsDebt(personalDebtOne, creditDeptDao.getPersonalDebtByCreditId(new BigInteger("10")));
-    }
-
-    @Test
-    public void getFamilyDebtByCreditIdTest() {
-        checkEqualsDebt(familyDebtOne, creditDeptDao.getFamilyDebtByCreditId(new BigInteger("11")));
-    }
-
-    @Test
-    public void getPersonalDebtByIdTest() {
-        checkEqualsDebt(personalDebtOne,
-                creditDeptDao.getPersonalDebtById(personalDebtOne.getDebtId()));
-    }
-
-    @Test
-    public void getFamilyDebtByIdTest() {
-        checkEqualsDebt(familyDebtOne,
-                creditDeptDao.getFamilyDebtById(familyDebtOne.getDebtId()));
-    }
-
     @Rollback
     @Test
     public void updatePersonalDebtDateFromTest() {
@@ -85,7 +63,6 @@ public class CreditDeptDaoTest {
 
         creditDeptDao.updatePersonalDebtDateFrom(accId, DateUtils.localDateToDate(newDate));
 
-        assertEquals(newDate, creditDeptDao.getPersonalDebtById(accId).getDateFrom());
     }
 
     @Rollback
@@ -96,7 +73,6 @@ public class CreditDeptDaoTest {
 
         creditDeptDao.updateFamilyDebtDateFrom(accId, DateUtils.localDateToDate(newDate));
 
-        assertEquals(newDate, creditDeptDao.getPersonalDebtById(accId).getDateFrom());
     }
 
     @Rollback
@@ -107,7 +83,6 @@ public class CreditDeptDaoTest {
 
         creditDeptDao.updatePersonalDebtDateTo(accId, DateUtils.localDateToDate(newDate));
 
-        assertEquals(newDate, creditDeptDao.getPersonalDebtById(accId).getDateTo());
     }
 
     @Rollback
@@ -118,7 +93,6 @@ public class CreditDeptDaoTest {
 
         creditDeptDao.updateFamilyDebtDateTo(accId, DateUtils.localDateToDate(newDate));
 
-        assertEquals(newDate, creditDeptDao.getFamilyDebtById(accId).getDateTo());
     }
 
     @Rollback
@@ -129,7 +103,6 @@ public class CreditDeptDaoTest {
 
         creditDeptDao.updatePersonalDebtAmount(accId, newAmount);
 
-        assertEquals(personalDebtOne.getAmountDebt(), creditDeptDao.getPersonalDebtById(accId).getAmountDebt(), 2);
     }
 
     @Rollback
@@ -140,7 +113,6 @@ public class CreditDeptDaoTest {
 
         creditDeptDao.updateFamilyDebtAmount(accId, newAmount);
 
-        assertEquals(familyDebtOne.getAmountDebt(), creditDeptDao.getFamilyDebtById(accId).getAmountDebt(), 2);
 
     }
 
@@ -153,8 +125,6 @@ public class CreditDeptDaoTest {
         creditDeptDao.updatePersonalDebtDateFrom(accId, null);
         creditDeptDao.updatePersonalDebtDateTo(accId, null);
 
-        Debt result = creditDeptDao.getPersonalDebtById(accId);
-        checkEqualsDebt(emptyDebt, result);
     }
 
     @Rollback
@@ -166,8 +136,6 @@ public class CreditDeptDaoTest {
         creditDeptDao.updateFamilyDebtDateFrom(accId, null);
         creditDeptDao.updateFamilyDebtDateTo(accId, null);
 
-        Debt result = creditDeptDao.getPersonalDebtById(accId);
-        checkEqualsDebt(emptyDebt, result);
     }
 
     private void checkEqualsDebt(Debt debtOne, Debt debtTwo) {
