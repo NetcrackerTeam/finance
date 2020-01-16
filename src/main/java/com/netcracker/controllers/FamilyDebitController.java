@@ -70,8 +70,6 @@ public class FamilyDebitController {
     OperationDao operationDao;
     @Autowired
     private FamilyCreditService familyCreditService;
-    @Autowired
-    AuthenticationManager authenticationManager;
 
     private static final Logger logger = Logger.getLogger(FamilyDebitController.class);
 
@@ -126,7 +124,6 @@ public class FamilyDebitController {
             familyDebitService.deleteFamilyDebitAccount(accountId, userId);
             PersonalDebitAccount personalDebitAccount = personalDebitService.getPersonalDebitAccount(user.getPersonalDebitAccount());
             userDao.updateRole(userId, UserRole.USER.getId());
-            updateUserRole(user, request);
 //            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 //            logger.error(auth.getAuthorities().toString());
             double amount = personalDebitAccount.getAmount() + familyAmount;
@@ -355,55 +352,5 @@ public class FamilyDebitController {
         return URL.PARTICIPANTS_OF_FAMILY;
     }
 
-    private void updateUserRole(User user, HttpServletRequest req){
-        User newUser = userDao.getUserByEmail(user.geteMail());
-
-        // If contents of auth.getAuthorities() equals authorities then no need to re-set.
-//        UsernamePasswordAuthenticationToken newAuth = new  UsernamePasswordAuthenticationToken(newUser.geteMail(), newUser.getPassword(), AuthorityUtils.createAuthorityList(newUser.getUserRole().name()));
-//
-//
-//        Authentication auth = authenticationManager.authenticate(newAuth);
-//
-//
-//        SecurityContext sc = SecurityContextHolder.getContext();
-//        sc.setAuthentication(auth);
-//        HttpSession session = req.getSession(true);
-//        session.setAttribute(SPRING_SECURITY_CONTEXT_KEY, sc);
-
-
-//        RequestContextHolder.currentRequestAttributes().setAttribute("SPRING_SECURITY_CONTEXT", newAuth, RequestAttributes.SCOPE_SESSION);
-
-
-
-
-
-//        HttpSession session = request.getSession(true);
-//        session.setAttribute("SPRING_SECURITY_CONTEXT", securityContext);
-
-//        UserDetailsService userDetailsService = new UserDetailsServiceImpl(userDao);
-//        UserDetails userDetails = userDetailsService.loadUserByUsername(user.geteMail());
-//
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//
-//        UsernamePasswordAuthenticationToken currentAuth = (UsernamePasswordAuthenticationToken) authentication;
-//
-//        UsernamePasswordAuthenticationToken updateAuth = new UsernamePasswordAuthenticationToken(userDetails ,
-//                currentAuth.getCredentials(),
-//                currentAuth.getAuthorities());
-//
-//        SecurityContextHolder.getContext().setAuthentication(updateAuth);
-
-
-
-        UsernamePasswordAuthenticationToken newAuth = new  UsernamePasswordAuthenticationToken(newUser.geteMail(), newUser.getPassword(), AuthorityUtils.createAuthorityList(newUser.getUserRole().name()));
-        Authentication auth = authenticationManager.authenticate(newAuth);
-
-        SecurityContext sc = SecurityContextHolder.getContext();
-        sc.setAuthentication(auth);
-        HttpSession session = req.getSession(true);
-        session.setAttribute(SPRING_SECURITY_CONTEXT_KEY, sc);
-
-
-    }
 
 }
