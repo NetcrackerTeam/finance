@@ -6,14 +6,10 @@ import com.netcracker.dao.PersonalDebitAccountDao;
 import com.netcracker.dao.UserDao;
 import com.netcracker.exception.PredictionException;
 import com.netcracker.models.MonthReport;
-import com.netcracker.models.PersonalDebitAccount;
-import com.netcracker.services.PersonalCreditService;
 import com.netcracker.services.PredictionService;
 import com.netcracker.services.utils.CreditUtils;
-import com.netcracker.services.utils.DateUtils;
 import com.netcracker.services.utils.ExceptionMessages;
 import com.netcracker.services.utils.ObjectsCheckUtils;
-import com.sun.javafx.collections.MappingChange;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,8 +18,10 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.RoundingMode;
 import java.time.LocalDate;
-import java.util.*;
-import java.util.stream.Stream;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class PredictionServiceImpl implements PredictionService {
