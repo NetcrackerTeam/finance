@@ -19,7 +19,7 @@ app.controller("PersonalPredictController", ['$scope', '$http', '$templateCache'
             } else {
                 $scope.url = 'prediction/personal/expense';
             }
-            alert($scope.url);
+
             $http({
                 method: $scope.method,
                 url: $scope.url,
