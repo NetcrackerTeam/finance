@@ -268,6 +268,7 @@ var FamilyCreditController = function ($scope, $http, $rootScope) {
             remainsToPay: 0,
             totalCreditPayment: 0
         };
+        $scope.check = null;
         $scope.duration = null;
     };
 
