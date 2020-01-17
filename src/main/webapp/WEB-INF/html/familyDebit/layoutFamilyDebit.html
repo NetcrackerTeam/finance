@@ -695,14 +695,16 @@
 
                 <div class="modal-body">
                     <label for="category">Choose month to get report</label>
-                    <input type="text" name="dmf" class="form-control" placeholder="yyyy-mm" id="datetimepickerPerRepFam"/>
+                    <input type="text" name="dmf" class="form-control" placeholder="yyyy-mm" autocomplete="off" id="datetimepickerPerRepFam"/>
                     <script type="text/javascript">
                         $(function() {
                             $('#datetimepickerPerRepFam').datepicker({
                                 format: "yyyy-mm",
                                 startView: "year",
-                                minViewMode: "months"//,
-                                //endDate: '0'
+                                autoclose: true,
+                                minViewMode: "months",
+                                todayHighlight: true,
+                                endDate: '0'
                             }).datepicker("setDate", new Date());
                         });
                     </script>
@@ -710,7 +712,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal" ng-click="clear()">Close</button>
-                    <button type="button" class="btn btn-primary" ng-disabled="!sendCondition" data-dismiss="modal" ng-click="sendReport()">Send Report</button>
+                    <button type="button" class="btn btn-primary" ng-disabled="!sendCondition" ng-click="sendReport()">Send Report</button>
                     <button type="submit" class="btn btn-primary" ng-click="getReport()">Get report</button>
                 </div>
             </div>

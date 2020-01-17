@@ -12,9 +12,9 @@ import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
 import java.math.BigInteger;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.Date;
-import java.time.LocalDate;
+
 import java.util.Collection;
 import java.util.List;
 
@@ -61,7 +61,7 @@ public class MonthReportDaoImpl implements MonthReportDao {
     @Override
     public MonthReport getMonthReportByPersonalAccountId(BigInteger id, LocalDateTime dateFrom, LocalDateTime dateTo) {
         return template.queryForObject(GET_MONTH_REPORT_BY_PERSONAL_ACCOUNT_ID,
-                new Object[]{id, DateUtils.localDateToDate(dateFrom), DateUtils.localDateToDate(dateTo)}, new MonthReportMapper());
+                new Object[]{id, dateFrom, dateTo}, new MonthReportMapper());
     }
 
     @Override

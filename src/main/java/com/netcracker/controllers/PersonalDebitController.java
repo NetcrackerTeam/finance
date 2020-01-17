@@ -19,6 +19,7 @@ import java.nio.file.Path;
 import java.security.Principal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 import static com.netcracker.controllers.MessageController.*;
@@ -175,29 +176,34 @@ public class PersonalDebitController {
 
     @RequestMapping(value = "/report", method = RequestMethod.GET)
     @ResponseBody
-    public String getReport(
+    public Status getReport(
             Principal principal,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDateTime date
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date
     ) {
+        if(date.isAfter(LocalDate.now())) {
+            return new Status(false, INVALID_DATE);
+        }
+        LocalDateTime dateReformat = LocalDateTime.of(date.getYear(), date.getMonth().getValue(), date.getDayOfMonth(),0,0, 0);
         BigInteger accountId = getAccountByPrincipal(principal);
 
-        MonthReport monthReport = monthReportService.getMonthPersonalReport(accountId, date, false);
+        MonthReport monthReport = monthReportService.getMonthPersonalReport(accountId, dateReformat, false);
 
         Path path = monthReportService.convertToTxt(monthReport);
 
-        String report = monthReportService.convertToString(path);
-
-        return report;
+        return new Status(true,monthReportService.convertToString(path));
     }
 
     @RequestMapping(value = "/sendReport", method = RequestMethod.GET)
-    public void sendReport(
+    public Status sendReport(
             Principal principal,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDateTime date
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date
     ) {
+        if(date.isAfter(LocalDate.now())) {
+            return new Status(false, INVALID_DATE);
+        }
         BigInteger accountId = getAccountByPrincipal(principal);
-
-        MonthReport monthReport = monthReportService.getMonthPersonalReport(accountId, date, false);
+        LocalDateTime dateReformat = LocalDateTime.of(date.getYear(), date.getMonth().getValue(), date.getDayOfMonth(),0,0, 0);
+        MonthReport monthReport = monthReportService.getMonthPersonalReport(accountId, dateReformat, false);
 
         Path path;
         try {
@@ -209,7 +215,7 @@ public class PersonalDebitController {
         }
 
         logger.debug("Month report is ready");
-
+        return new Status(true, SUCCESSFUL_SENDING);
     }
 
     @RequestMapping(value = "/info", method = RequestMethod.GET)

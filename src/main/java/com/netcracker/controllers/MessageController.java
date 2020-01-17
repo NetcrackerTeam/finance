@@ -66,5 +66,7 @@ public interface MessageController {
     String ABLE_TO_PAY = "You are able to pay for this credit";
     String NOT_ABLE_TO_PAY = "Your are not able to pay for this credit";
     String SUCCESS_CREDIT_PAYMENT = "Payment added successfully";
+    String INVALID_DATE = "Date can not be later than today";
+    String SUCCESSFUL_SENDING = "Report was sent";
 
 }

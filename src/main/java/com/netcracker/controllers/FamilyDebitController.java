@@ -302,27 +302,36 @@ public class FamilyDebitController {
 
     @RequestMapping(value = "/report", method = RequestMethod.GET)
     @ResponseBody
-    public String getReport(
+    public Status getReport(
             Principal principal,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDateTime date
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date
     ) {
+        if(date.isAfter(LocalDate.now())) {
+            return new Status(false, INVALID_DATE);
+        }
         BigInteger accountId = getAccountByPrincipal(principal);
 
-        MonthReport monthReport = monthReportService.getMonthFamilyReport(accountId, date, false);
+        LocalDateTime dateReformat = LocalDateTime.of(date.getYear(), date.getMonth().getValue(),
+                date.getDayOfMonth(),0,0, 0);
+        MonthReport monthReport = monthReportService.getMonthFamilyReport(accountId, dateReformat, false);
 
         Path path = monthReportService.convertToTxt(monthReport);
 
-        return monthReportService.convertToString(path);
+        return new Status(true,monthReportService.convertToString(path));
     }
 
     @RequestMapping(value = "/sendReport", method = RequestMethod.GET)
-    public void sendReport(
+    public Status sendReport(
             Principal principal,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDateTime date
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date
     ) {
+        if(date.isAfter(LocalDate.now())) {
+            return new Status(false, INVALID_DATE);
+        }
         BigInteger accountId = getAccountByPrincipal(principal);
-
-        MonthReport monthReport = monthReportService.getMonthFamilyReport(accountId, date, false);
+        LocalDateTime dateReformat = LocalDateTime.of(date.getYear(), date.getMonth().getValue(),
+                date.getDayOfMonth(),0,0, 0);
+        MonthReport monthReport = monthReportService.getMonthFamilyReport(accountId, dateReformat, false);
 
         Path path;
         try {
@@ -334,6 +343,7 @@ public class FamilyDebitController {
         }
 
         logger.debug("Month report is ready");
+        return new Status(true, SUCCESSFUL_SENDING);
     }
 
     @RequestMapping(value = "/info", method = RequestMethod.GET)
@@ -351,6 +361,5 @@ public class FamilyDebitController {
     public String getParticipants() {
         return URL.PARTICIPANTS_OF_FAMILY;
     }
-
 
 }

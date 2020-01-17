@@ -9,7 +9,7 @@ app.controller("RepCtrl", ['$scope', '$http', '$templateCache',
     $scope.getReport = function() {
 
         $scope.month = $("#datetimepickerPerRep").val() + "-01";
-
+        alert($scope.month)
         $http({
             method: 'GET',
             url: $scope.getReportURL,
@@ -17,7 +17,7 @@ app.controller("RepCtrl", ['$scope', '$http', '$templateCache',
                  date: $scope.month
             }
         }).then(function(response) {
-            $scope.content = response.data;
+            $scope.content = response.data.message;
             $scope.sendCondition = 'ok';
         }, function(response) {
             $scope.content = 'No information about this report';
@@ -31,6 +31,8 @@ app.controller("RepCtrl", ['$scope', '$http', '$templateCache',
                 params: {
                     date: $scope.month
                 }
+            }).success(function(response){
+                $scope.text = response.data.message;
             });
         };
 
@@ -71,7 +73,7 @@ app.controller("RepFamilyCtrl", ['$scope', '$http', '$templateCache',
                     date: $scope.month
                 }
             }).then(function(response) {
-                $scope.content = response.data;
+                $scope.content = response.data.message;
                 $scope.sendCondition = 'ok';
             }, function(response) {
                 $scope.content = 'No information about this report';
@@ -84,8 +86,7 @@ app.controller("RepFamilyCtrl", ['$scope', '$http', '$templateCache',
                 method: 'GET',
                 url: $scope.sendReportURL,
                 params: {
-                    dateFrom: $scope.dateFrom,
-                    dateTo: $scope.dateTo
+                    date: $scope.month
                 }
             });
         };

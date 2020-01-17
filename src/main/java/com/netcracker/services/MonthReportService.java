@@ -37,5 +37,6 @@ public interface MonthReportService {
     String SPACE = " ";
     String UNDERLINE = "_";
     String TXT_FORMAT = ".txt";
+    String HYPHEN = "-";
 
 }

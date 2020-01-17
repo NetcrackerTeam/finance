@@ -133,8 +133,13 @@ public class MonthReportServiceImpl implements MonthReportService {
         Path path = Paths.get(monthReport.getDateFrom() + UNDERLINE + monthReport.getDateTo() + TXT_FORMAT);
 
         try (BufferedWriter writer = Files.newBufferedWriter(path)) {
-            writer.write(MONTH_REPORT_FROM + monthReport.getDateTo());
-            writer.write(MONTH_REPORT_TO + monthReport.getDateFrom() + NEW_LINE);
+            writer.write(MONTH_REPORT_FROM +
+                            + monthReport.getDateTo().getYear() + HYPHEN +
+                            monthReport.getDateTo().getMonth().getValue() +
+                            HYPHEN + monthReport.getDateTo().getDayOfMonth());
+            writer.write(MONTH_REPORT_TO + monthReport.getDateFrom().getYear() +
+                    HYPHEN + monthReport.getDateFrom().getMonth().getValue() + HYPHEN +
+                    monthReport.getDateFrom().getDayOfMonth() +  NEW_LINE);
             writer.write(DOTTED_LINE);
             writer.write(ACTUAL_BALANCE + monthReport.getBalance() + TAB_AND_LINE);
             writer.write(TOTAL_EXPENSE + monthReport.getTotalExpense() + TAB_AND_LINE);
@@ -254,8 +259,9 @@ public class MonthReportServiceImpl implements MonthReportService {
             dateTo = date;
             dateFrom = DateUtils.addMonthsToDate(date, -1);
         } else if (date.getMonth().getValue() == LocalDateTime.now().getMonth().getValue()) {
-            dateTo = LocalDateTime.now();
-            dateFrom = LocalDateTime.of(LocalDateTime.now().getYear(), LocalDateTime.now().getMonthValue(), 1, 00, 00);
+            dateTo = LocalDateTime.of(LocalDateTime.now().getYear(), LocalDateTime.now().getMonth().getValue(),
+                    LocalDateTime.now().getDayOfMonth(),LocalDateTime.now().getHour(), LocalDateTime.now().getMinute(),0);
+            dateFrom = LocalDateTime.of(LocalDateTime.now().getYear(), LocalDateTime.now().getMonthValue(), 1, 0, 0);
 
             try {
                 if(isFamily){
