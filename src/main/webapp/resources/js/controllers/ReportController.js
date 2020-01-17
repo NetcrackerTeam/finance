@@ -7,9 +7,9 @@ app.controller("RepCtrl", ['$scope', '$http', '$templateCache',
     $scope.sendCondition = null;
 
     $scope.getReport = function() {
-
+        $scope.text = null;
         $scope.month = $("#datetimepickerPerRep").val() + "-01";
-        alert($scope.month)
+
         $http({
             method: 'GET',
             url: $scope.getReportURL,
@@ -32,7 +32,9 @@ app.controller("RepCtrl", ['$scope', '$http', '$templateCache',
                     date: $scope.month
                 }
             }).success(function(response){
-                $scope.text = response.data.message;
+                $scope.text = response.message;
+            }).error(function (response) {
+                $scope.text = 'Report was not sent';
             });
         };
 
@@ -46,6 +48,7 @@ app.controller("RepCtrl", ['$scope', '$http', '$templateCache',
     $scope.clear = function () {
         $scope.month = null;
         $scope.content = null;
+        $scope.text = null;
     };
 }]);
 
@@ -61,10 +64,8 @@ app.controller("RepFamilyCtrl", ['$scope', '$http', '$templateCache',
 
         $scope.getReport = function() {
 
-
+        $scope.text = null;
             $scope.month = $("#datetimepickerPerRepFam").val() + "-01";
-
-            alert($scope.month);
 
             $http({
                 method: 'GET',
@@ -88,6 +89,10 @@ app.controller("RepFamilyCtrl", ['$scope', '$http', '$templateCache',
                 params: {
                     date: $scope.month
                 }
+            }).success(function(response){
+                 $scope.text = response.message;
+            }).error(function (response) {
+                 $scope.text = 'Report was not sent';
             });
         };
 
@@ -99,6 +104,7 @@ app.controller("RepFamilyCtrl", ['$scope', '$http', '$templateCache',
         $scope.clear = function () {
             $scope.month = null;
             $scope.content = null;
+            $scope.text = null;
         };
     }]);
 

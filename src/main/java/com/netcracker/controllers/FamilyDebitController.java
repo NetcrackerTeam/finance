@@ -321,6 +321,7 @@ public class FamilyDebitController {
     }
 
     @RequestMapping(value = "/sendReport", method = RequestMethod.GET)
+    @ResponseBody
     public Status sendReport(
             Principal principal,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date
