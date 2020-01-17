@@ -60,6 +60,8 @@ public class CreditPersonalController {
     @RequestMapping(value = "/pay/{id}", method = RequestMethod.POST)
     @ResponseBody
     public Status addPersonalCreditPayment(@RequestBody Double amount, Principal principal, @PathVariable("id") BigInteger crId) {
+        if (amount < MessageController.MIN || amount > MessageController.MAX)
+            return new Status(false, MessageController.INCORRECT_AMOUNT);
         debitId = userController.getAccountByPrincipal(principal);
         User user = userDao.getUserByEmail(principal.getName());
         logger.debug("[addPersonalCreditPayment]" + MessageController.debugStartMessage + "[debitId = " + debitId + "], [creditId = " + creditId + "]");

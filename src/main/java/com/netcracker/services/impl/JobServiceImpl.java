@@ -240,7 +240,7 @@ public class JobServiceImpl implements JobService {
             BigInteger id = creditAccountDao.getFamilyDebitIdByCreditId(familyCredit.getCreditId());
             calculateCredit = CreditUtils.calculateMonthPayment(familyCredit.getDate(), familyCredit.getDateTo(), familyCredit.getPaidAmount(), familyCredit.getCreditRate());
             User user = familyDebitService.getFamilyDebitAccount(id).getOwner();
-            boolean paymentAutoFamilyCredit = familyCreditService.addFamilyCreditPaymentAuto(id, familyCredit.getCreditId(), calculateCredit, null);
+            boolean paymentAutoFamilyCredit = familyCreditService.addFamilyCreditPaymentAuto(id, familyCredit.getCreditId(), calculateCredit, user.getId());
             if (!paymentAutoFamilyCredit) {
                 familyCreditService.increaseDebt(familyCredit.getCreditId(), familyCredit.getPaidAmount());
                 emailServiceSender.sendMailAboutFamilyDebt(user.geteMail(), user.getName(), familyCredit.getName(), calculateCredit);

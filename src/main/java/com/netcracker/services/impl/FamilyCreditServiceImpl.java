@@ -14,7 +14,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collection;
@@ -173,10 +175,11 @@ public class FamilyCreditServiceImpl implements FamilyCreditService {
 
     private void addPayment(FamilyCreditAccount creditAccount, FamilyDebitAccount debitAccount, double amount, BigInteger idUser) {
         double actualDebitAmount = debitAccount.getAmount();
-        debitAccountDao.updateAmountOfFamilyAccount(debitAccount.getId(), actualDebitAmount - amount);
+        double newDebitAmount = new BigDecimal(actualDebitAmount - amount).setScale(2, RoundingMode.UP).doubleValue();
+        debitAccountDao.updateAmountOfFamilyAccount(debitAccount.getId(), newDebitAmount);
         operationService.createFamilyOperationExpense(idUser,debitAccount.getId(), amount, LocalDateTime.now(), CategoryExpense.CREDIT);
         creditOperationDao.createFamilyCreditOperation(amount, LocalDate.now(), creditAccount.getCreditId(), idUser);
-        double updatedAmount = creditAccount.getPaidAmount() + amount;
+        double updatedAmount = new BigDecimal(creditAccount.getPaidAmount() + amount).setScale(2, RoundingMode.UP).doubleValue();
         creditAccountDao.updateFamilyCreditPayment(creditAccount.getCreditId(), updatedAmount);
         double totalPay = getTotalCreditPayment(creditAccount.getDate(), creditAccount.getDateTo(),
                 creditAccount.getAmount(), creditAccount.getCreditRate());

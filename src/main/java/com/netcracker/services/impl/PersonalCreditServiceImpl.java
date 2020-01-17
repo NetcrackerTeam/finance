@@ -21,7 +21,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collection;
@@ -241,10 +243,11 @@ public class PersonalCreditServiceImpl implements PersonalCreditService {
 
     private void addPayment(AbstractCreditAccount creditAccount, AbstractDebitAccount debitAccount, double amount) {
         double actualDebitAmount = debitAccount.getAmount();
-        debitAccountDao.updateAmountOfPersonalAccount(debitAccount.getId(), actualDebitAmount - amount);
+        double newDebitAmount = new BigDecimal(actualDebitAmount - amount).setScale(2, RoundingMode.UP).doubleValue();
+        debitAccountDao.updateAmountOfPersonalAccount(debitAccount.getId(), newDebitAmount);
         operationService.createPersonalOperationExpense(debitAccount.getId(), amount, LocalDateTime.now(), CategoryExpense.CREDIT);
         creditOperationDao.createPersonalCreditOperation(amount, LocalDate.now(), creditAccount.getCreditId());
-        double updatedAmount = creditAccount.getPaidAmount() + amount;
+        double updatedAmount = new BigDecimal(creditAccount.getPaidAmount() + amount).setScale(2, RoundingMode.UP).doubleValue();
         creditAccountDao.updatePersonalCreditPayment(creditAccount.getCreditId(), updatedAmount);
         double totalPay = getTotalCreditPayment(creditAccount.getDate(), creditAccount.getDateTo(),
                 creditAccount.getAmount(), creditAccount.getCreditRate());

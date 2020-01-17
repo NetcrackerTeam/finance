@@ -61,6 +61,8 @@ public class CreditFamilyController {
     @RequestMapping(value = "/pay/{id}", method = RequestMethod.POST)
     @ResponseBody
     public Status addFamilyCreditPayment(@RequestBody Double amount, Principal principal, @PathVariable("id") BigInteger crId){
+        if (amount < MessageController.MIN || amount > MessageController.MAX)
+            return new Status(false, MessageController.INCORRECT_AMOUNT);
         getUserInfo(principal);
         familyDebitId = getFamilyAccountByPrincipal(principal);
         userId = getUserIdByPrincipal(principal);

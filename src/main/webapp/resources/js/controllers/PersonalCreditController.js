@@ -207,23 +207,35 @@ var PersonalCreditController = function ($scope, $http, $rootScope) {
     var addCreditPayURL = 'personalCredit/pay/';
     $scope.addCreditPayment = function(creditId) {
         var amount = $scope.amountToPay;
-        $http({
-            method: 'POST',
-            url: addCreditPayURL + creditId,
-            data: angular.toJson(amount),
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        }).success(function (response) {
-            if (response.status === false) {
-                $scope.messageAmountPaySuccess = null;
-                $scope.messageAmountPay = response.message;
-            } else {
-                $scope.messageAmountPay = null;
-                $scope.messageAmountPaySuccess = response.message;
-                $scope.amountToPay = null;
-            }
-        });
+        var pat = /^[0-9]+(\.[0-9][0-9]?)?$/;
+        if (!pat.test(amount) ){
+            $scope.messageAmountPay = 'Invalid amount';
+        } else {
+            $http({
+                method: 'POST',
+                url: addCreditPayURL + creditId,
+                data: angular.toJson(amount),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).success(function (response) {
+                if (response.status === false) {
+                    $scope.messageAmountPaySuccess = null;
+                    $scope.messageAmountPay = response.message;
+                } else {
+                    $scope.messageAmountPay = null;
+                    $scope.messageAmountPaySuccess = response.message;
+                    $scope.amountToPay = null;
+                }
+            });
+        }
+    };
+
+    $scope.closeInfo = function () {
+        $scope.messageAmountPaySuccess = null;
+        $scope.messageAmountPay = null;
+        $scope.amountToPay = null;
+        window.location.reload();
     };
 
 
