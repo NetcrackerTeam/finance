@@ -230,7 +230,7 @@ var FamilyCreditController = function ($scope, $http, $rootScope) {
         $http({
             method: 'GET',
             url: 'prediction/family/checkCredit',
-            params: {duration: $scope.duration, amount: $scope.credit.amount, rate: $scope.credit.rate}
+            params: {duration: $scope.duration, amount: $scope.credit.amount, rate: $scope.credit.creditRate}
         }).then(function (response) {
             console.log(response);
             $scope.check = response.data.message;

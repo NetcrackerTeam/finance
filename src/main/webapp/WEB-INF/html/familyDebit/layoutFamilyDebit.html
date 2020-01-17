@@ -663,12 +663,13 @@
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
-                        <label for="category">Income category:</label>
+                        <label for="category">Category:</label>
                         <select class="form-control" id="category" ng-model="predict.category">
                             <option>Income</option>
                             <option>Expense</option>
                         </select>
                     </div>
+                    <label for="category">Prediction in months</label>
                     <p><input type="number" min="1" class="form-control" placeholder="Enter duration" max ="120"
                               ng-model="predict.duration"/></p>
                     <pre>Predict sum: {{status}}</pre>
