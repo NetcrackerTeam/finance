@@ -21,6 +21,7 @@ app.controller("RepCtrl", ['$scope', '$http', '$templateCache',
             $scope.sendCondition = 'ok';
         }, function(response) {
             $scope.content = 'No information about this report';
+            $scope.sendCondition = null;
         });
     };
 
@@ -79,6 +80,7 @@ app.controller("RepFamilyCtrl", ['$scope', '$http', '$templateCache',
             }, function(response) {
                 $scope.content = 'No information about this report';
                 $scope.status = response.status;
+                $scope.sendCondition = null;
             });
         };
 
