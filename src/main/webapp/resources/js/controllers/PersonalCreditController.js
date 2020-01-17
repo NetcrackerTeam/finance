@@ -228,12 +228,11 @@ var PersonalCreditController = function ($scope, $http, $rootScope) {
 
 
     $scope.checkPersonalCredit = function () {
-
-
+        alert($scope.credit.creditRate);
         $http({
             method: 'GET',
             url: 'prediction/personal/checkCredit',
-            params: {duration: $scope.duration, amount: $scope.credit.amount, rate: $scope.credit.rate}
+            params: {duration: $scope.duration, amount: $scope.credit.amount, rate: $scope.credit.creditRate}
         }).then(function (response) {
             console.log(response);
             $scope.check = response.data.message;

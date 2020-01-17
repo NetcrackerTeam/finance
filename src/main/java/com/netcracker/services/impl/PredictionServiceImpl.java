@@ -47,7 +47,7 @@ public class PredictionServiceImpl implements PredictionService {
 
         double sumToPay = CreditUtils.getTotalCreditPayment(LocalDate.now(), LocalDate.now().plusMonths(duration), amount, rate);
 
-        double currentAmount = personalDebitAccountDao.getPersonalAccountById(userDao.getUserById(id).getPersonalDebitAccount()).getAmount();
+        double currentAmount = personalDebitAccountDao.getPersonalAccountById(id).getAmount();
 
         boolean result;
         try {

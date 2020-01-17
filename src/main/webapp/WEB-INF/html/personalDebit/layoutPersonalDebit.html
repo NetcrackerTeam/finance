@@ -593,7 +593,7 @@
                     </div>
                     <p><input type="number" min="1" class="form-control" placeholder="Enter duration" max ="120" ng-model="predict.duration"/></p>
                     <p th:text="${name}"></p>
-                    <pre>Predict sum: {{status}}</pre>
+                    <pre class="pre">Predict sum: {{status}}</pre>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal" ng-click="clear()">Close</button>
@@ -628,7 +628,7 @@
                             }).datepicker("setDate", new Date());
                         });
                     </script>
-                    <pre class="content">{{content}}</pre>
+                    <pre class="pre">{{content}}</pre>
                     <p class="text-info">{{ text }}</p>
                 </div>
                 <div class="modal-footer">

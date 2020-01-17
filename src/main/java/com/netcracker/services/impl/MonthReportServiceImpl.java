@@ -145,8 +145,10 @@ public class MonthReportServiceImpl implements MonthReportService {
             writer.write(TOTAL_EXPENSE + monthReport.getTotalExpense() + TAB_AND_LINE);
             writer.write(TOTAL_INCOME + monthReport.getTotalIncome() + TAB_AND_LINE);
 
-            writer.write(NEW_LINE + EXPENSES_BY_CATEGORIES);
-            writer.write(DOTTED_LINE);
+            if(monthReport.getCategoryExpense().size() > 0) {
+                writer.write(NEW_LINE + EXPENSES_BY_CATEGORIES);
+                writer.write(DOTTED_LINE);
+            }
 
             String compareParticipants = null;
             String name = null;
@@ -168,8 +170,10 @@ public class MonthReportServiceImpl implements MonthReportService {
                 writer.write(exp.getCategoryExpense().toString() + DOUBLE_DOTS + exp.getAmount() + NEW_LINE);
             }
 
-            writer.write(INCOMES_BY_CATEGORIES);
-            writer.write(DOTTED_LINE);
+            if(monthReport.getCategoryIncome().size() > 0) {
+                writer.write(INCOMES_BY_CATEGORIES);
+                writer.write(DOTTED_LINE);
+            }
 
             compareParticipants = null;
             name = null;
