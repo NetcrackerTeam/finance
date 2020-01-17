@@ -294,13 +294,13 @@
 <!-- /.container-fluid -->
 
 <form novalidate="novalidate" name="addPay" ng-controller="FamilyCreditController" ng-submit="addCreditPayment(familyCreditor.creditId)">
-    <div class="modal fade" id="infoCreditModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="infoCreditModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static">
         <div class="modal-dialog  modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 align="center" class="modal-title"> "{{familyCreditor.name}}" credit</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"
-                            onclick="$('body').css('overflow','auto'); $('body').css('position','relative');">
+                            onclick="$('.modal').modal('hide');">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -355,8 +355,7 @@
                     </table>
                         <button type="button" class="btn btn-info"
                                 style="position: absolute; top: 100%; left: 50%; margin: 10px -50% 0 0; transform: translate(-50%, -50%);"
-                                onclick="$('.modal').modal('hide'); $('#updateCreditModal').modal('show'); $('body').css('overflow','hidden');
-                        $('body').css('position','fixed'); $('.modal').css('overflow','auto');">
+                                data-toggle="modal" data-target="#updateCreditModal" onclick="$('#infoCreditModal').css('display', 'none');">
                             Edit Credit</button>
                     </div>
                     <div class="col-lg-6 mb-4" style="position: relative;">
@@ -396,8 +395,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal"  onclick="$('body').css('overflow','auto');
-                        $('body').css('position','relative');">Close</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal"  onclick="$('.modal').modal('hide');">Close</button>
                 </div>
             </div>
         </div>
@@ -407,11 +405,12 @@
 
 
 <form novalidate="novalidate" name="editCreditForm" ng-controller="FamilyCreditController" ng-submit="updateFamilyCredit()" class="needs-validation">
-    <div  class="modal fade" id="updateCreditModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div  class="modal fade" id="updateCreditModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header" style="position: relative;">
-                    <button type="button" class="close" onclick="$('#infoCreditModal').modal('show'); $('.modal').modal('hide');" aria-label="Close">
+                    <button type="button" class="close" onclick="$('#updateCreditModal').css('display', 'none');
+                         $('#infoCreditModal').css('display', 'block');" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                     <h4 class="modal-title" style="position: absolute; top: 50%; left: 50%; margin: 0 -50% 0 0; transform: translate(-50%, -50%);">
@@ -477,9 +476,11 @@
                 </div>
                 <div class="modal-footer">
                     <button style="float: left" ng-disabled="editCreditForm.$invalid" type="button" class="btn btn-info" ng-click="checkFamilyCredit()">Check credit possibility</button>
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="$('#infoCreditModal').modal('show'); $('.modal').modal('hide');">Close</button>
+                    <button type="button" class="btn btn-secondary" onclick="$('#updateCreditModal').css('display', 'none');
+                         $('#infoCreditModal').css('display', 'block');">Close</button>
                     <button type="submit" class="btn btn-primary" ng-disabled="editCreditForm.$invalid"
-                            onclick="$('#infoCreditModal').modal('show'); $('.modal').modal('hide');">Save changes</button>
+                            onclick="$('#updateCreditModal').css('display', 'none');
+                        $('#infoCreditModal').css('display', 'block');">Save changes</button>
                 </div>
             </div>
         </div>
@@ -487,7 +488,7 @@
 </form>
 
 <div class="modal fade " id="showAllCreditModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabelCr"
-     aria-hidden="true" style="overflow-x: hidden;" data-backdrop="true" >
+     aria-hidden="true" style="overflow-x: hidden;" data-backdrop="static">
     <div class="modal-dialog modal-lg mw-100" role="document">
         <div class="modal-content">
             <div class="modal-header" style="position: relative;">
@@ -539,7 +540,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-info" style="float: left;" data-toggle="modal" data-target="#showAdditionalInfo"
-                        onclick="$('.modal').modal('hide');">Show additional information</button>
+                        onclick="$('#showAllCreditModal').css('display', 'none');">Show additional information</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
         </div>
@@ -547,12 +548,12 @@
 </div>
 
 <div class=" modal fade" id="showAdditionalInfo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabelCr"
-     aria-hidden="true" style="overflow-x: hidden;" data-backdrop="true" ng-controller="FamilyCreditController">
+     aria-hidden="true" style="overflow-x: hidden;" data-backdrop="static" ng-controller="FamilyCreditController">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header" style="position: relative;">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"
-                        onclick="$('.modal').modal('hide'); $('#showAllCreditModal').modal('show');">
+                        onclick="$('#showAllCreditModal').css('display', 'block');">
                     <span aria-hidden="true">&times;</span>
                 </button>
                 <h4 class="modal-title" style="position: absolute; top: 50%; left: 50%; margin: 0 -50% 0 0; transform: translate(-50%, -50%);">
@@ -567,8 +568,7 @@
                     <p>Total credits already paid: {{totalPaidCredits}}</p></b>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="$('.modal').modal('hide');
-                $('#showAllCreditModal').modal('show');">Close</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="$('#showAllCreditModal').css('display', 'block');">Close</button>
             </div>
         </div>
     </div>

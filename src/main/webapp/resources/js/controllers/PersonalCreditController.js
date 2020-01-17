@@ -235,7 +235,7 @@ var PersonalCreditController = function ($scope, $http, $rootScope) {
         $scope.messageAmountPaySuccess = null;
         $scope.messageAmountPay = null;
         $scope.amountToPay = null;
-        window.location.reload();
+        //window.location.reload();
     };
 
 
