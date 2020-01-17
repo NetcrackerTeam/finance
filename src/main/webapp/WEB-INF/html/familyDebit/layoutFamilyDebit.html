@@ -26,7 +26,7 @@
 <!--    <div sec:authorize="hasAuthority('USER')">-->
     <div>
     <div class="input-append" ng-show="user.familyDebitId.length == 0" ng-class="{ 'is-invalid' : ErrorFamilyName}" >
-        <input class="span2" type="text" ng-model="nameFamilyAccount"
+        <input style="margin: 5px 10px 5px 100px;" class="span2" type="text" ng-model="nameFamilyAccount"
                placeholder="Enter family account name" required="required" ng-minlength="2"/>
         <!-- <p style="margin: 5px 10px 5px 100px;" class = "help-block"> {{ErrorFamilyName}}</p> -->
         <br/>
