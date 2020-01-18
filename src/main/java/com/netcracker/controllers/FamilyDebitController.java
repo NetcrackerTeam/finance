@@ -8,6 +8,7 @@ import com.netcracker.models.*;
 import com.netcracker.models.enums.CreditStatusPaid;
 import com.netcracker.models.enums.FamilyAccountStatusActive;
 import com.netcracker.models.enums.UserRole;
+import com.netcracker.models.enums.UserStatusActive;
 import com.netcracker.services.*;
 import com.netcracker.services.utils.DateUtils;
 import org.apache.log4j.Logger;
@@ -37,6 +38,7 @@ import java.util.Collection;
 import java.util.List;
 
 import static com.netcracker.controllers.MessageController.*;
+import static com.netcracker.controllers.UserController.getCurrentUsername;
 import static org.springframework.security.web.context.HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY;
 
 @Controller
@@ -88,6 +90,10 @@ public class FamilyDebitController {
     public Status createFamilyDebitAccount(@RequestParam(value = "nameAccount") String nameAccount,
                                            Principal principal) {
         try {
+            boolean validStatusActive = UserStatusActive.YES.equals(getCurrentUser().getUserStatusActive());
+            if (!validStatusActive) {
+                return new Status(true, NOT_ACTIVE_USER);
+            } else {
             UserDataValidator.isValidNameFamily(nameAccount);
             User user = userDao.getUserByEmail(principal.getName());
             FamilyDebitAccount familyDebitAccount = new FamilyDebitAccount.Builder()
@@ -98,7 +104,7 @@ public class FamilyDebitController {
                     .build();
             familyDebitService.createFamilyDebitAccount(familyDebitAccount);
             userDao.updateRole(user.getId(), UserRole.OWNER.getId());
-            return new Status(true, MessageController.ADD_FAMILY_ACCOUNT);
+            return new Status(true, MessageController.ADD_FAMILY_ACCOUNT);}
         } catch (RuntimeException ex) {
             return new Status(true, ex.getMessage());
         }
@@ -142,12 +148,18 @@ public class FamilyDebitController {
 
         try {
             BigInteger userId = userDao.getParticipantByEmail(userLogin).getId();
-            BigInteger accountId = getAccountByPrincipal(principal);
-            logger.debug("add user to account " + accountId + "user id " + userId);
-            familyDebitService.addUserToAccount(accountId, userId);
-            logger.debug("success adding user");
-            userDao.updateRole(userId, UserRole.PARTICIPANT.getId());
-            return new Status(true, MessageController.ADD_USER_FAM + userDao.getUserById(userId).getName());
+            User userTemp = userDao.getUserById(userId);
+            boolean validStatusActive = UserStatusActive.YES.equals(userTemp.getUserStatusActive());
+            if (!validStatusActive) {
+                return new Status(true, NOT_ACTIVE_USER);
+            } else {
+                BigInteger accountId = getAccountByPrincipal(principal);
+                logger.debug("add user to account " + accountId + "user id " + userId);
+                familyDebitService.addUserToAccount(accountId, userId);
+                logger.debug("success adding user");
+                userDao.updateRole(userId, UserRole.PARTICIPANT.getId());
+                return new Status(true, ADD_USER_FAM + userDao.getUserById(userId).getName());
+            }
         } catch (RuntimeException ex) {
             return new Status(true, ex.getMessage());
         }
@@ -174,9 +186,9 @@ public class FamilyDebitController {
             familyDebitService.deleteUserFromAccount(accountId, userId);
             logger.debug("success adding user");
             userDao.updateRole(userId, UserRole.USER.getId());
-            return new Status(true, MessageController.DELETE_USER_FAM + userDao.getUserById(userId).getName());
+            return new Status(true, DELETE_USER_FAM + userDao.getUserById(userId).getName());
         } catch (NullObjectException ex) {
-            return new Status(true, MessageController.DELETE_UNS_USER_FAM + userDao.getUserById(userId).getName());
+            return new Status(true, DELETE_UNS_USER_FAM + userDao.getUserById(userId).getName());
         }
     }
 
@@ -185,8 +197,11 @@ public class FamilyDebitController {
     public Status addIncomeFamily(@RequestBody AccountIncome income,
                                   Principal principal) {
         double incomeAmount = income.getAmount();
-        if (incomeAmount < MessageController.MIN || incomeAmount > MessageController.MAX) {
-            return new Status(false, MessageController.INCORRECT_AMOUNT);
+        boolean validUserActive = UserStatusActive.YES.equals(getCurrentUser().getUserStatusActive());
+        if (!validUserActive) {
+            return new Status(false, NOT_ACTIVE_USER);
+        } else if (incomeAmount < MIN || incomeAmount > MAX) {
+            return new Status(false, INCORRECT_AMOUNT);
         } else {
             BigInteger accountId = getAccountByPrincipal(principal);
             BigInteger userId = getUserIdByPrincipal(principal);
@@ -194,7 +209,7 @@ public class FamilyDebitController {
             FamilyDebitAccount familyDebitAccount = familyDebitService.getFamilyDebitAccount(accountId);
             double amount = new BigDecimal(familyDebitAccount.getAmount() + income.getAmount()).setScale(2, RoundingMode.UP).doubleValue();
             familyDebitService.updateAmountOfFamilyAccount(accountId, amount);
-            return new Status(true, MessageController.ADD_INCOME);
+            return new Status(true, ADD_INCOME);
         }
     }
 
@@ -203,19 +218,22 @@ public class FamilyDebitController {
     public Status addExpenseFamily(
             @RequestBody AccountExpense expense, Principal principal) {
         double expenseAmount = expense.getAmount();
-        if (expenseAmount < MessageController.MIN || expenseAmount > MessageController.MAX) {
-            return new Status(false, MessageController.INCORRECT_AMOUNT);
+        boolean validUserActive = UserStatusActive.YES.equals(getCurrentUser().getUserStatusActive());
+        if (!validUserActive) {
+            return new Status(false, NOT_ACTIVE_USER);
+        } else if (expenseAmount < MIN || expenseAmount > MAX) {
+            return new Status(false, INCORRECT_AMOUNT);
         } else {
             BigInteger accountId = getAccountByPrincipal(principal);
             BigInteger userId = getUserIdByPrincipal(principal);
             FamilyDebitAccount debit = familyDebitService.getFamilyDebitAccount(accountId);
             if (debit.getAmount() < expenseAmount) {
-                return new Status(false, MessageController.NOT_ENOUGH_MONEY_MESSAGE);
+                return new Status(false, NOT_ENOUGH_MONEY_MESSAGE);
             }
             operationService.createFamilyOperationExpense(userId, accountId, expense.getAmount(), LocalDateTime.now(), expense.getCategoryExpense());
             double amount = new BigDecimal(debit.getAmount() - expense.getAmount()).setScale(2, RoundingMode.UP).doubleValue();
             familyDebitService.updateAmountOfFamilyAccount(accountId, amount);
-            return new Status(true, MessageController.ADD_EXPENSE_PERS);
+            return new Status(true, ADD_EXPENSE_PERS);
         }
     }
 
@@ -252,15 +270,18 @@ public class FamilyDebitController {
         BigInteger userId = getUserIdByPrincipal(principal);
         boolean validDate = (UserDataValidator.isValidDateForAutoOperation(autoOperationIncome));
         double incomeAmount = autoOperationIncome.getAmount();
-        if (incomeAmount < MessageController.MIN || incomeAmount > MessageController.MAX) {
-            return new Status(true, MessageController.INCORRECT_AMOUNT);
+        boolean validUserActive = UserStatusActive.YES.equals(getCurrentUser().getUserStatusActive());
+        if (!validUserActive) {
+            return new Status(false, NOT_ACTIVE_USER);
+        } else if (incomeAmount < MIN || incomeAmount > MAX) {
+            return new Status(true, INCORRECT_AMOUNT);
         } else if (validDate) {
             accountAutoOperationService.createFamilyIncomeAutoOperation(autoOperationIncome, userId, accountId);
             logger.debug("autoIncome is done!");
-            return new Status(true, MessageController.ADD_AUTO_INCOME);
+            return new Status(true, ADD_AUTO_INCOME);
         }
         logger.debug("autoExpense is not valid !" + autoOperationIncome.getId() + " " + autoOperationIncome.getCategoryIncome());
-        return new Status(false, INVALID_DAY_OF_MONTH );
+        return new Status(false, INVALID_DAY_OF_MONTH);
     }
 
     @RequestMapping(value = "/createAutoExpense", method = RequestMethod.POST)
@@ -270,7 +291,10 @@ public class FamilyDebitController {
         BigInteger accountId = getAccountByPrincipal(principal);
         BigInteger userId = getUserIdByPrincipal(principal);
         boolean validDate = (UserDataValidator.isValidDateForAutoOperation(autoOperationExpense));
-        if (validDate) {
+        boolean validUserActive = UserStatusActive.YES.equals(getCurrentUser().getUserStatusActive());
+        if (!validUserActive) {
+            return new Status(false, NOT_ACTIVE_USER);
+        } else if (validDate) {
             accountAutoOperationService.createFamilyExpenseAutoOperation(autoOperationExpense, userId, accountId);
             logger.debug("autoIncome is done!");
             return new Status(true, ADD_AUTO_EXPENSE);
@@ -306,18 +330,21 @@ public class FamilyDebitController {
             Principal principal,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date
     ) {
-        if(date.isAfter(LocalDate.now())) {
+        boolean validUserActive = UserStatusActive.YES.equals(getCurrentUser().getUserStatusActive());
+        if (!validUserActive) {
+            return new Status(false, NOT_ACTIVE_USER);
+        } else if (date.isAfter(LocalDate.now())) {
             return new Status(false, INVALID_DATE);
         }
         BigInteger accountId = getAccountByPrincipal(principal);
 
         LocalDateTime dateReformat = LocalDateTime.of(date.getYear(), date.getMonth().getValue(),
-                date.getDayOfMonth(),0,0, 0);
+                date.getDayOfMonth(), 0, 0, 0);
         MonthReport monthReport = monthReportService.getMonthFamilyReport(accountId, dateReformat, false);
 
         Path path = monthReportService.convertToTxt(monthReport);
 
-        return new Status(true,monthReportService.convertToString(path));
+        return new Status(true, monthReportService.convertToString(path));
     }
 
     @RequestMapping(value = "/sendReport", method = RequestMethod.GET)
@@ -326,12 +353,12 @@ public class FamilyDebitController {
             Principal principal,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date
     ) {
-        if(date.isAfter(LocalDate.now())) {
+        if (date.isAfter(LocalDate.now())) {
             return new Status(false, INVALID_DATE);
         }
         BigInteger accountId = getAccountByPrincipal(principal);
         LocalDateTime dateReformat = LocalDateTime.of(date.getYear(), date.getMonth().getValue(),
-                date.getDayOfMonth(),0,0, 0);
+                date.getDayOfMonth(), 0, 0, 0);
         MonthReport monthReport = monthReportService.getMonthFamilyReport(accountId, dateReformat, false);
 
         Path path;
@@ -363,4 +390,8 @@ public class FamilyDebitController {
         return URL.PARTICIPANTS_OF_FAMILY;
     }
 
+    public User getCurrentUser() {
+        User userTemp = userDao.getUserByEmail(getCurrentUsername());
+        return userTemp;
+    }
 }

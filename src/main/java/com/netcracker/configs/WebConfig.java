@@ -76,21 +76,32 @@ public class WebConfig implements WebMvcConfigurer {
         props.put("mail.debug", "true");
         return mailSender;
     }
-    @Bean
-    public DataSource dataSource() {
-        TimeZone timeZone = TimeZone.getTimeZone("Europe/Kiev");
-        TimeZone.setDefault(timeZone);
+//
+//    @Bean
+//    public DataSource dataSource() {
+//        TimeZone timeZone = TimeZone.getTimeZone("Europe/Kiev");
+//        TimeZone.setDefault(timeZone);
+//
+//        String dbUrl = System.getenv("JDBC_DATABSE_URL");
+//        String username = System.getenv("JDBC_DATABASE_USERNAME");
+//        String password = System.getenv("JDBC_DATABASE_PASSWORD");
+//
+//        DriverManagerDataSource ds = new DriverManagerDataSource();
+//        ds.setDriverClassName(oracle.jdbc.driver.OracleDriver.class.getName());
+//        ds.setUrl(dbUrl);
+//        ds.setUsername(username);
+//        ds.setPassword(password);
+//        return ds;
+//    }
 
-        String dbUrl = System.getenv("JDBC_DATABSE_URL");
-        String username = System.getenv("JDBC_DATABASE_USERNAME");
-        String password = System.getenv("JDBC_DATABASE_PASSWORD");
-
-        DriverManagerDataSource ds = new DriverManagerDataSource();
-        ds.setDriverClassName(oracle.jdbc.driver.OracleDriver.class.getName());
-        ds.setUrl(dbUrl);
-        ds.setUsername(username);
-        ds.setPassword(password);
-        return ds;
+    @Bean(name = "dataSource")
+    public DataSource getDataSource() {
+        DriverManagerDataSource dataSource = new DriverManagerDataSource();
+        dataSource.setDriverClassName(env.getProperty("db.driver-class-name"));
+        dataSource.setUrl(env.getProperty("db.url"));
+        dataSource.setUsername(env.getProperty("db.username"));
+        dataSource.setPassword(env.getProperty("db.password"));
+        return dataSource;
     }
 
     @Override
@@ -105,9 +116,9 @@ public class WebConfig implements WebMvcConfigurer {
     }
 
     @Bean
-    public PlatformTransactionManager txManager(){
+    public PlatformTransactionManager txManager() {
         Locale.setDefault(Locale.ENGLISH);
-        return new DataSourceTransactionManager(dataSource());
+        return new DataSourceTransactionManager(getDataSource());
     }
 
     @Bean(name = "userService")

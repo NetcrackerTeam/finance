@@ -9,6 +9,7 @@ import com.netcracker.models.CreditOperation;
 import com.netcracker.models.PersonalCreditAccount;
 import com.netcracker.models.Status;
 import com.netcracker.models.User;
+import com.netcracker.models.enums.UserStatusActive;
 import com.netcracker.services.PersonalCreditService;
 import com.netcracker.services.utils.ExceptionMessages;
 import org.apache.log4j.Logger;
@@ -25,6 +26,9 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+
+import static com.netcracker.controllers.MessageController.NOT_ACTIVE_USER;
+import static com.netcracker.controllers.UserController.getCurrentUsername;
 
 @Controller
 @RequestMapping("/personalCredit")
@@ -48,6 +52,11 @@ public class CreditPersonalController {
     @ResponseBody
     public Status createCreditAccount(@RequestBody PersonalCreditAccount creditAccount, Principal principal) {
         debitId = userController.getAccountByPrincipal(principal);
+        User userTemp = userDao.getUserByEmail(getCurrentUsername());
+        boolean validUserActive = UserStatusActive.YES.equals(userTemp.getUserStatusActive());
+        if (!validUserActive) {
+            return new Status(false, NOT_ACTIVE_USER);
+        } else
         logger.debug("[createCreditAccount]" + MessageController.debugStartMessage + "[debitId = " + debitId + "]");
         if (!personalCreditService.doesCreditWithNameNotExist(debitId, creditAccount.getName()))
             return new Status(false, MessageController.CREDIT_NAME_EXISTS);

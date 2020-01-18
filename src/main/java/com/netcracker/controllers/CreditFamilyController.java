@@ -5,6 +5,7 @@ import com.netcracker.dao.CreditOperationDao;
 import com.netcracker.dao.UserDao;
 import com.netcracker.exception.CreditAccountException;
 import com.netcracker.models.*;
+import com.netcracker.models.enums.UserStatusActive;
 import com.netcracker.services.FamilyCreditService;
 import com.netcracker.services.PersonalCreditService;
 import org.apache.log4j.Logger;
@@ -20,6 +21,9 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+
+import static com.netcracker.controllers.MessageController.NOT_ACTIVE_USER;
+import static com.netcracker.controllers.UserController.getCurrentUsername;
 
 @Controller
 @RequestMapping("/familyCredit")
@@ -48,6 +52,11 @@ public class CreditFamilyController {
     public Status createFamilyCreditAccount(@RequestBody FamilyCreditAccount creditAccount, Principal principal) {
         familyDebitId = getFamilyAccountByPrincipal(principal);
         userId = getUserIdByPrincipal(principal);
+        User userTemp = userDao.getUserByEmail(getCurrentUsername());
+        boolean validUserActive = UserStatusActive.YES.equals(userTemp.getUserStatusActive());
+        if (!validUserActive) {
+            return new Status(false, NOT_ACTIVE_USER);
+        } else
         logger.debug("[createFamilyCreditAccount]" + MessageController.debugStartMessage  + "[personalDebitID = " + personalDebitId +
                 "], [familyDebitId = " + familyDebitId + "], [userId = " + userId + "]");
         if (!familyCreditService.doesCreditWithNameNotExist(familyDebitId, creditAccount.getName()))

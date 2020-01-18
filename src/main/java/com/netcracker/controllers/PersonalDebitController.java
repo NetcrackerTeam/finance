@@ -3,11 +3,14 @@ package com.netcracker.controllers;
 import com.netcracker.controllers.validators.UserDataValidator;
 import com.netcracker.dao.*;
 import com.netcracker.models.*;
+import com.netcracker.models.enums.UserStatusActive;
 import com.netcracker.services.*;
 import com.netcracker.services.utils.DateUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,6 +26,7 @@ import java.time.LocalTime;
 import java.util.List;
 
 import static com.netcracker.controllers.MessageController.*;
+import static com.netcracker.controllers.UserController.getCurrentUsername;
 
 @Controller
 @RequestMapping("/debitPersonal")
@@ -60,7 +64,10 @@ public class PersonalDebitController {
     public Status addIncomePersonal(@RequestBody AccountIncome income,
                                     Principal principal) {
         double incomeAmount = income.getAmount();
-        if ((incomeAmount < MessageController.MIN || incomeAmount > MessageController.MAX)) {
+        boolean validUserActive = UserStatusActive.YES.equals(getCurrentUser().getUserStatusActive());
+        if (!validUserActive) {
+            return new Status(false, NOT_ACTIVE_USER);
+        } else if ((incomeAmount < MessageController.MIN || incomeAmount > MessageController.MAX)) {
             return new Status(false, MessageController.INCORRECT_AMOUNT);
         } else {
             BigInteger accountId = getAccountByPrincipal(principal);
@@ -77,7 +84,10 @@ public class PersonalDebitController {
     public Status addExpensePersonal(
             @RequestBody AccountExpense expense, Principal principal) {
         double expenseAmount = expense.getAmount();
-        if (expenseAmount < MessageController.MIN || expenseAmount > MessageController.MAX) {
+        boolean validUserActive = UserStatusActive.YES.equals(getCurrentUser().getUserStatusActive());
+        if (!validUserActive) {
+            return new Status(false, NOT_ACTIVE_USER);
+        } else if (expenseAmount < MessageController.MIN || expenseAmount > MessageController.MAX) {
             return new Status(false, MessageController.INCORRECT_AMOUNT);
         } else {
             BigInteger accountId = getAccountByPrincipal(principal);
@@ -128,15 +138,18 @@ public class PersonalDebitController {
         BigInteger accountId = getAccountByPrincipal(principal);
         double incomeAmount = autoOperationIncome.getAmount();
         boolean validDate = (UserDataValidator.isValidDateForAutoOperation(autoOperationIncome));
-        if ((incomeAmount < MessageController.MIN || incomeAmount > MessageController.MAX)) {
-            return new Status(true, MessageController.INCORRECT_AMOUNT);
+        boolean validUserActive = UserStatusActive.YES.equals(getCurrentUser().getUserStatusActive());
+        if (!validUserActive) {
+            return new Status(false, NOT_ACTIVE_USER);
+        } else if ((incomeAmount < MIN || incomeAmount > MAX)) {
+            return new Status(true, INCORRECT_AMOUNT);
         } else if (validDate) {
             accountAutoOperationService.createPersonalIncomeAutoOperation(autoOperationIncome, accountId);
             logger.debug("autoIncome is done!");
             return new Status(true, ADD_AUTO_INCOME);
         }
         logger.debug("autoIncome is not valid !" + autoOperationIncome.getId() + " " + autoOperationIncome.getCategoryIncome());
-        return new Status(false, INVALID_DAY_OF_MONTH );
+        return new Status(false, INVALID_DAY_OF_MONTH);
     }
 
     @RequestMapping(value = "/createAutoExpense", method = RequestMethod.POST)
@@ -145,13 +158,16 @@ public class PersonalDebitController {
                              Principal principal) {
         BigInteger accountId = getAccountByPrincipal(principal);
         boolean validDate = (UserDataValidator.isValidDateForAutoOperation(autoOperationExpense));
-        if (validDate) {
+        boolean validUserActive = UserStatusActive.YES.equals(getCurrentUser().getUserStatusActive());
+        if (!validUserActive) {
+            return new Status(false, NOT_ACTIVE_USER);
+        } else if (validDate) {
             accountAutoOperationService.createPersonalExpenseAutoOperation(autoOperationExpense, accountId);
             logger.debug("expense is done!");
             return new Status(true, ADD_AUTO_EXPENSE);
         }
         logger.debug("autoExpense is not valid !" + autoOperationExpense.getId() + " " + autoOperationExpense.getCategoryExpense());
-        return new Status(false, INVALID_DAY_OF_MONTH );
+        return new Status(false, INVALID_DAY_OF_MONTH);
 
     }
 
@@ -180,17 +196,21 @@ public class PersonalDebitController {
             Principal principal,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date
     ) {
-        if(date.isAfter(LocalDate.now())) {
+        boolean validUserActive = UserStatusActive.YES.equals(getCurrentUser().getUserStatusActive());
+        if (!validUserActive) {
+            return new Status(false, NOT_ACTIVE_USER);
+        } else
+        if (date.isAfter(LocalDate.now())) {
             return new Status(false, INVALID_DATE);
         }
-        LocalDateTime dateReformat = LocalDateTime.of(date.getYear(), date.getMonth().getValue(), date.getDayOfMonth(),0,0, 0);
+        LocalDateTime dateReformat = LocalDateTime.of(date.getYear(), date.getMonth().getValue(), date.getDayOfMonth(), 0, 0, 0);
         BigInteger accountId = getAccountByPrincipal(principal);
 
         MonthReport monthReport = monthReportService.getMonthPersonalReport(accountId, dateReformat, false);
 
         Path path = monthReportService.convertToTxt(monthReport);
 
-        return new Status(true,monthReportService.convertToString(path));
+        return new Status(true, monthReportService.convertToString(path));
     }
 
     @RequestMapping(value = "/sendReport", method = RequestMethod.GET)
@@ -199,11 +219,11 @@ public class PersonalDebitController {
             Principal principal,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date
     ) {
-        if(date.isAfter(LocalDate.now())) {
+        if (date.isAfter(LocalDate.now())) {
             return new Status(false, INVALID_DATE);
         }
         BigInteger accountId = getAccountByPrincipal(principal);
-        LocalDateTime dateReformat = LocalDateTime.of(date.getYear(), date.getMonth().getValue(), date.getDayOfMonth(),0,0, 0);
+        LocalDateTime dateReformat = LocalDateTime.of(date.getYear(), date.getMonth().getValue(), date.getDayOfMonth(), 0, 0, 0);
         MonthReport monthReport = monthReportService.getMonthPersonalReport(accountId, dateReformat, false);
 
         Path path;
@@ -241,4 +261,8 @@ public class PersonalDebitController {
         return URL.REPORT_PERS;
     }
 
+    public User getCurrentUser(){
+        User userTemp = userDao.getUserByEmail(getCurrentUsername());
+        return userTemp;
+    }
 }

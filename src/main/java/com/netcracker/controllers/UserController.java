@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.Map;
 
 import static com.netcracker.controllers.MessageController.*;
@@ -26,6 +27,8 @@ public class UserController {
     private UserValidationRegex userValidation;
     @Autowired
     private UserService userService;
+    @Autowired
+    private FamilyDebitController familyDebitController;
 
 
     private static final Logger logger = Logger.getLogger(UserController.class);
@@ -35,14 +38,10 @@ public class UserController {
                               @RequestParam Map<String, String> mapUserData, Model model) {
         User userTemp = userDao.getUserByEmail(getCurrentUsername());
         logger.debug(MessageController.LOGGER_UPDATE_EMAIL + userTemp.getId());
-        String oldEmail = mapUserData.get("oldEmail");
         String newEmail = mapUserData.get("newEmail");
-        boolean validOldEmail = userTemp.geteMail().equals(oldEmail);
         boolean validateEmail = userValidation.validateValueByUser(newEmail, RegexPatterns.EMAIL_PATTERN);
-        boolean equalsEmail = (userDao.getNumberOfUsersByEmail(newEmail) > 0);
-        if (!validOldEmail) {
-            model.addAttribute("errorOldEmail", INVALID_OLD_EMAIL);
-        } else if ((validateEmail) && (!equalsEmail)) {
+        boolean emailAlreadyExit = (userDao.getNumberOfUsersByEmail(newEmail) > 0);
+        if ((validateEmail) && (!emailAlreadyExit)) {
             userDao.updateEmail(userTemp.getId(), newEmail);
             model.addAttribute("successUpdatePass", SUCCESS_UPDATE_EMAIL);
         } else {
@@ -72,11 +71,12 @@ public class UserController {
     }
 
     @RequestMapping(value = "/deactivate", method = RequestMethod.GET)
-    public String deactivateUser(Model model) {
+    public String deactivateUser(Model model, Principal principal) {
         User userTemp = userDao.getUserByEmail(getCurrentUsername());
         logger.debug("updateUserStatus by user id " + userTemp.getId());
         if (userService.deactivateUser(userTemp)) {
             userDao.updateUserStatus(userTemp.getId(), UserStatusActive.NO.getId());
+            familyDebitController.deleteUserFromAccount(userTemp.geteMail(), principal);
             model.addAttribute("success", MessageController.SUCCESS_DEACTIVATE);
         } else model.addAttribute("unsuccess", UN_SUCCESS_DEACTIVATE);
         return URL.INDEX;

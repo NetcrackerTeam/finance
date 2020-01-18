@@ -9,20 +9,20 @@
 <body class="background-colors">
 
 <div class="container">
-    <form class="form-signin form-group"
+    <form id="form" class="form-signin form-group"
           action="#" th:action="@{/registration}" th:object="${user}" method="post">
         <img class="img-circle center-block center-img" src="resources/images/ewallet.png"
              alt="" width="82" height="82"/>
         <h2 class="form-signin-heading">Create your account</h2>
         <div class="form-group">
-            <input type="text" class="form-control" maxlength="40" th:field="*{name}" placeholder="Username" autofocus="true"/>
+            <input   type="text" class="form-control " maxlength="40" th:field="*{name}" placeholder="Username" autofocus="true"/>
             <p></p>
             <input type="password" class="form-control"  th:field="*{password}" placeholder="Password"/>
             <p></p>
             <input type="text" class="form-control" th:field="*{eMail}" placeholder="E-mail"/>
             <p></p>
             <span align="center" style="color:#b42624;"  th:text="${message}"></span>
-            <button type="submit" class="btn btn-lg btn-primary btn-block">Submit</button>
+            <button type="submit"  class="btn btn-lg btn-primary btn-block">Submit</button>
             <p></p>
             <h4 class="text-center"><a href="login">back to login Tab </a></h4>
         </div>
@@ -43,3 +43,4 @@
 </div>
 </body>
 </html>
+

@@ -3,6 +3,7 @@ package com.netcracker.services.impl;
 import com.netcracker.dao.CreditAccountDao;
 import com.netcracker.dao.FamilyAccountDebitDao;
 import com.netcracker.dao.PersonalDebitAccountDao;
+import com.netcracker.dao.UserDao;
 import com.netcracker.exception.JobException;
 import com.netcracker.models.*;
 import com.netcracker.models.enums.UserStatusActive;
@@ -59,10 +60,13 @@ public class JobServiceImpl implements JobService {
     private FamilyAccountDebitDao familyAccountDebitDao;
 
     @Autowired
-    PersonalDebitAccountDao personalDebitAccountDao;
+    private PersonalDebitAccountDao personalDebitAccountDao;
 
     @Autowired
-    FamilyAccountDebitDao familyDebitAccountDao;
+    private FamilyAccountDebitDao familyDebitAccountDao;
+
+    @Autowired
+    private UserDao userDao;
 
     private LocalDateTime localDateNow = LocalDateTime.now();
     private LocalDateTime dateFrom = DateUtils.addMonthsToDate(localDateNow, -1);
@@ -124,22 +128,29 @@ public class JobServiceImpl implements JobService {
         if (autoOperationIncomesFamily.isEmpty())
             return;
         for (AutoOperationIncome autoIncome : autoOperationIncomesFamily) {
+            BigInteger userId = autoIncome.getUserId();
+            User user = userDao.getUserById(userId);
             ObjectsCheckUtils.isNotNull(autoIncome);
-            FamilyDebitAccount debitAccount = familyDebitService.getFamilyDebitAccount(autoIncome.getDebitId());
-            operationService.createFamilyOperationIncome(autoIncome.getUserId(), autoIncome.getDebitId(), autoIncome.getAmount(), localDateNow, autoIncome.getCategoryIncome());
-            double newAmount = debitAccount.getAmount() + autoIncome.getAmount();
-            debitAccount.setAmount(newAmount);
-            familyDebitAccountDao.updateAmountOfFamilyAccount(debitAccount.getId(), debitAccount.getAmount());
-            Collection<FamilyCreditAccount> credits = familyCreditService.getFamilyCredits(debitAccount.getId());
-            for (FamilyCreditAccount cr : credits) {
-                checkDebtRepayment(cr, debitAccount);
-            }
-            emailServiceSender.sendMailAutoFamilyIncome(debitAccount.getOwner().geteMail(),
-                    debitAccount.getOwner().getName(), autoIncome.getAmount(), autoIncome.getCategoryIncome().name());
-            logger.debug("Email have been sent with  " + debitAccount.getOwner().getName());
+            boolean checkStatus = UserStatusActive.YES.equals(user.getUserStatusActive());
+            if (!checkStatus) {
+                logger.debug("user not active for executeRemindAutoIncomeFamilyJob in job service ");
+            } else {
+                FamilyDebitAccount debitAccount = familyDebitService.getFamilyDebitAccount(autoIncome.getDebitId());
+                operationService.createFamilyOperationIncome(autoIncome.getUserId(), autoIncome.getDebitId(), autoIncome.getAmount(), localDateNow, autoIncome.getCategoryIncome());
+                double newAmount = debitAccount.getAmount() + autoIncome.getAmount();
+                debitAccount.setAmount(newAmount);
+                familyDebitAccountDao.updateAmountOfFamilyAccount(debitAccount.getId(), debitAccount.getAmount());
+                Collection<FamilyCreditAccount> credits = familyCreditService.getFamilyCredits(debitAccount.getId());
+                for (FamilyCreditAccount cr : credits) {
+                    checkDebtRepayment(cr, debitAccount);
+                }
+                emailServiceSender.sendMailAutoFamilyIncome(debitAccount.getOwner().geteMail(),
+                        debitAccount.getOwner().getName(), autoIncome.getAmount(), autoIncome.getCategoryIncome().name());
+                logger.debug("Email have been sent with  " + debitAccount.getOwner().getName());
 
-            if (dayNow == lastDays) {
-                executeFamilyIncomeAutoOperationLastDay(dayNow);
+                if (dayNow == lastDays) {
+                    executeFamilyIncomeAutoOperationLastDay(dayNow);
+                }
             }
         }
     }
