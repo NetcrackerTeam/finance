@@ -45,7 +45,7 @@ public class UserDataValidator {
     public static void isValidUsername(String username) {
         if (!isEmptyString(username)) {
             if (!onlyLatinLetters.matcher(username).find()) throw new UserException(ExceptionMessages.LATIN_LETTERS);
-            if (username.length() < 2) throw new UserException(ExceptionMessages.NAME_SHORT);
+            if (username.length() < 2|| username.length()>25) throw new UserException(ExceptionMessages.NAME_SHORT);
         } else throw new UserException(ExceptionMessages.EMPTY_FIELD);
     }
 
