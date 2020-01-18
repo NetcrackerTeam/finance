@@ -57,9 +57,13 @@ public class CreditPersonalController {
         if (!validUserActive) {
             return new Status(false, NOT_ACTIVE_USER);
         } else
-        logger.debug("[createCreditAccount]" + MessageController.debugStartMessage + "[debitId = " + debitId + "]");
-        if (!personalCreditService.doesCreditWithNameNotExist(debitId, creditAccount.getName()))
+            logger.debug("[createCreditAccount]" + MessageController.debugStartMessage + "[debitId = " + debitId + "]");
+        if (!personalCreditService.doesCreditWithNameNotExist(debitId, creditAccount.getName())) {
             return new Status(false, MessageController.CREDIT_NAME_EXISTS);
+        }
+        if (creditAccount.getName().length()>20){
+            return new Status(false, MessageController.CREDIT_NAME_LENGHT_FULL);
+        }
         Status checked = personalCreditService.checkCreditData(creditAccount);
         if (!checked.isStatus()) return checked;
         personalCreditService.createPersonalCredit(debitId, creditAccount);
@@ -119,7 +123,8 @@ public class CreditPersonalController {
     }
 
     @RequestMapping(value = "/getCreditHistoryPersonal", method = RequestMethod.GET)
-    public @ResponseBody List<CreditOperation> getCreditHistoryPersonal(){
+    public @ResponseBody
+    List<CreditOperation> getCreditHistoryPersonal() {
         logger.debug("[getCreditHistoryPersonal]" + MessageController.debugStartMessage + "[personalDebitId = " + debitId +
                 "], [creditId = " + creditId + "]");
         return creditOperationDao.getAllCreditOperationsByCreditPersonalId(creditId);

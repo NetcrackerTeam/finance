@@ -57,10 +57,13 @@ public class CreditFamilyController {
         if (!validUserActive) {
             return new Status(false, NOT_ACTIVE_USER);
         } else
-        logger.debug("[createFamilyCreditAccount]" + MessageController.debugStartMessage  + "[personalDebitID = " + personalDebitId +
-                "], [familyDebitId = " + familyDebitId + "], [userId = " + userId + "]");
-        if (!familyCreditService.doesCreditWithNameNotExist(familyDebitId, creditAccount.getName()))
+            logger.debug("[createFamilyCreditAccount]" + MessageController.debugStartMessage + "[personalDebitID = " + personalDebitId +
+                    "], [familyDebitId = " + familyDebitId + "], [userId = " + userId + "]");
+        if (!familyCreditService.doesCreditWithNameNotExist(familyDebitId, creditAccount.getName())) {
             return new Status(false, MessageController.CREDIT_NAME_EXISTS);
+        } else if (creditAccount.getName().length() > 20) {
+            return new Status(false, MessageController.CREDIT_NAME_LENGHT_FULL);
+        }
         Status checked = personalCreditService.checkCreditData(creditAccount);
         if (!checked.isStatus()) return checked;
         familyCreditService.createFamilyCredit(familyDebitId, creditAccount, userId);
@@ -69,13 +72,13 @@ public class CreditFamilyController {
 
     @RequestMapping(value = "/pay/{id}", method = RequestMethod.POST)
     @ResponseBody
-    public Status addFamilyCreditPayment(@RequestBody Double amount, Principal principal, @PathVariable("id") BigInteger crId){
+    public Status addFamilyCreditPayment(@RequestBody Double amount, Principal principal, @PathVariable("id") BigInteger crId) {
         if (amount < MessageController.MIN || amount > MessageController.MAX)
             return new Status(false, MessageController.INCORRECT_AMOUNT);
         getUserInfo(principal);
         familyDebitId = getFamilyAccountByPrincipal(principal);
         userId = getUserIdByPrincipal(principal);
-        logger.debug("[addFamilyCreditPayment]" + MessageController.debugStartMessage  + "[personalDebitID = " + personalDebitId +
+        logger.debug("[addFamilyCreditPayment]" + MessageController.debugStartMessage + "[personalDebitID = " + personalDebitId +
                 "], [familyDebitId = " + familyDebitId + "], [userId = " + userId + "], [creditId = " + crId + "]");
         try {
             familyCreditService.addFamilyCreditPayment(familyDebitId, crId, amount, new Date(), userId);
@@ -86,20 +89,22 @@ public class CreditFamilyController {
     }
 
     @RequestMapping(value = "/getFamilyCredits", method = RequestMethod.GET)
-    public @ResponseBody Collection<FamilyCreditAccount> getFamilyCredits(Principal principal){
+    public @ResponseBody
+    Collection<FamilyCreditAccount> getFamilyCredits(Principal principal) {
         getUserInfo(principal);
         familyDebitId = getFamilyAccountByPrincipal(principal);
         userId = getUserIdByPrincipal(principal);
-        logger.debug("[getFamilyCredits]" + MessageController.debugStartMessage  + "[personalDebitID = " + personalDebitId +
+        logger.debug("[getFamilyCredits]" + MessageController.debugStartMessage + "[personalDebitID = " + personalDebitId +
                 "], [familyDebitId = " + familyDebitId + "], [userId = " + userId + "]");
         return familyCreditService.getFamilyCredits(familyDebitId);
     }
 
     @RequestMapping(value = "/getFamilyCredit", method = RequestMethod.GET)
-    public @ResponseBody FamilyCreditAccount getFamilyCredit(Principal principal) {
+    public @ResponseBody
+    FamilyCreditAccount getFamilyCredit(Principal principal) {
         familyDebitId = getFamilyAccountByPrincipal(principal);
         userId = getUserIdByPrincipal(principal);
-        logger.debug("[getFamilyCredit]" + MessageController.debugStartMessage  + "[familyDebitId = " + familyDebitId + "], [creditId = " + creditId + "]");
+        logger.debug("[getFamilyCredit]" + MessageController.debugStartMessage + "[familyDebitId = " + familyDebitId + "], [creditId = " + creditId + "]");
         return creditAccountDao.getFamilyCreditById(creditId);
     }
 
@@ -107,14 +112,14 @@ public class CreditFamilyController {
     public ResponseEntity<String> sendCreditId(@RequestBody BigInteger creditId, Principal principal) {
         familyDebitId = getFamilyAccountByPrincipal(principal);
         userId = getUserIdByPrincipal(principal);
-        logger.debug("[sendCreditId]" + MessageController.debugStartMessage  + "[debitId = " + familyDebitId + "], [creditId = " + creditId + "]");
+        logger.debug("[sendCreditId]" + MessageController.debugStartMessage + "[debitId = " + familyDebitId + "], [creditId = " + creditId + "]");
         this.creditId = creditId;
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @RequestMapping(value = "deleteFamilyCredit/{creditId}", method = RequestMethod.DELETE)
     public ResponseEntity<String> deleteFamilyCredit(@PathVariable("creditId") BigInteger creditId) {
-        logger.debug("[deleteFamilyCredit]" + MessageController.debugStartMessage  + "[personalDebitID = " + personalDebitId +
+        logger.debug("[deleteFamilyCredit]" + MessageController.debugStartMessage + "[personalDebitID = " + personalDebitId +
                 "], [familyDebitId = " + familyDebitId + "], [userId = " + userId + "], [creditId = " + creditId + "]");
         creditAccountDao.deleteCreditAccountByCreditId(creditId);
         return new ResponseEntity<>(HttpStatus.OK);
@@ -124,21 +129,22 @@ public class CreditFamilyController {
     public ResponseEntity<FamilyCreditAccount> updateFamilyCreditAccount(@RequestBody FamilyCreditAccount familyCreditAccount, Principal principal) {
         familyDebitId = getFamilyAccountByPrincipal(principal);
         userId = getUserIdByPrincipal(principal);
-        logger.debug("[updatePersonalCredit]" + MessageController.debugStartMessage  + "[personalDebitId = " + personalDebitId +
+        logger.debug("[updatePersonalCredit]" + MessageController.debugStartMessage + "[personalDebitId = " + personalDebitId +
                 "], [familyDebitId = " + familyDebitId + "], [creditId = " + creditId + "]");
         creditAccountDao.updateCreditAccountByCreditId(familyCreditAccount, creditId);
         return new ResponseEntity<>(familyCreditAccount, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/getCreditHistoryFamily", method = RequestMethod.GET)
-    public @ResponseBody List<CreditOperation> getCreditHistoryFamily(){
+    public @ResponseBody
+    List<CreditOperation> getCreditHistoryFamily() {
         logger.debug("[getCreditHistoryFamily]" + MessageController.debugStartMessage + "[familyDebitId = " + familyDebitId +
                 "], [creditId = " + creditId + "]");
         return creditOperationDao.getAllCreditOperationsByCreditFamilyId(creditId);
     }
 
     private void getUserInfo(Principal principal) {
-        currentUser =  userDao.getUserByEmail(principal.getName());
+        currentUser = userDao.getUserByEmail(principal.getName());
         personalDebitId = currentUser.getPersonalDebitAccount();
         familyDebitId = currentUser.getFamilyDebitAccount();
         userId = currentUser.getId();

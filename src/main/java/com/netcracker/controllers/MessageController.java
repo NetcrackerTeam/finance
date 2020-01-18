@@ -55,6 +55,7 @@ public interface MessageController {
     String LATIN_LETTERS = "The username must contain only Latin letters without other characters.";
     String NAME_SHORT = "The username must contain at least 2 characters.";
     String CREDIT_NAME_EXISTS = "Credit with this name already exists";
+    String CREDIT_NAME_LENGHT_FULL = "Credit name more then 20 characters ";
     String INVALID_NAME = "Invalid name";
     String CREDIT_NAME_ERROR = "The name can contain only latin letters, numbers and spaces";
     String ACCOUNT_FAMILY_NAME = "name of family account is incorrect";
