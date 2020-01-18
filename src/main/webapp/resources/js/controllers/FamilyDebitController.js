@@ -32,8 +32,11 @@ var FamilyDebitController = function ($scope, $http, $rootScope) {
             }
         }).success(function (response) {
          //   $scope.ErrorFamilyName = response.message;
-            alert(response.message);
-            window.location.reload();
+         //    alert(response.message);
+            if (response.status === true)
+                window.location.reload();
+            else
+                alert(response.message);
         }).error(function () {
             alert("unsuccess")
         });
@@ -48,9 +51,13 @@ var FamilyDebitController = function ($scope, $http, $rootScope) {
             method: method,
             url: url
         }).success(function (response) {
-            alert(response.message);
-            window.location.reload();
-        })
+            if (response.status === true)
+                window.location.reload();
+            else
+                alert(response.message);
+        }).error(function () {
+            alert("unsuccess")
+        });
     };
     $scope.loginParticipant = "";
     $scope.addParticipant = function () {

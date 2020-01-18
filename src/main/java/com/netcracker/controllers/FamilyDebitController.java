@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -72,6 +73,8 @@ public class FamilyDebitController {
     OperationDao operationDao;
     @Autowired
     private FamilyCreditService familyCreditService;
+    @Autowired
+    LoginController loginController;
 
     private static final Logger logger = Logger.getLogger(FamilyDebitController.class);
 
@@ -88,23 +91,25 @@ public class FamilyDebitController {
     @RequestMapping(value = "/createAccount", method = RequestMethod.POST)
     @ResponseBody
     public Status createFamilyDebitAccount(@RequestParam(value = "nameAccount") String nameAccount,
-                                           Principal principal) {
+                                           Principal principal, HttpServletRequest request, HttpServletResponse response) {
         try {
             boolean validStatusActive = UserStatusActive.YES.equals(getCurrentUser().getUserStatusActive());
             if (!validStatusActive) {
                 return new Status(true, NOT_ACTIVE_USER);
             } else {
-            UserDataValidator.isValidNameFamily(nameAccount);
-            User user = userDao.getUserByEmail(principal.getName());
-            FamilyDebitAccount familyDebitAccount = new FamilyDebitAccount.Builder()
-                    .debitObjectName(nameAccount)
-                    .debitAmount(0)
-                    .debitFamilyAccountStatus(FamilyAccountStatusActive.YES)
-                    .debitOwner(user)
-                    .build();
-            familyDebitService.createFamilyDebitAccount(familyDebitAccount);
-            userDao.updateRole(user.getId(), UserRole.OWNER.getId());
-            return new Status(true, MessageController.ADD_FAMILY_ACCOUNT);}
+                UserDataValidator.isValidNameFamily(nameAccount);
+                User user = userDao.getUserByEmail(principal.getName());
+                FamilyDebitAccount familyDebitAccount = new FamilyDebitAccount.Builder()
+                        .debitObjectName(nameAccount)
+                        .debitAmount(0)
+                        .debitFamilyAccountStatus(FamilyAccountStatusActive.YES)
+                        .debitOwner(user)
+                        .build();
+                familyDebitService.createFamilyDebitAccount(familyDebitAccount);
+                userDao.updateRole(user.getId(), UserRole.OWNER.getId());
+                loginController.logoutPage(request, response);
+            return new Status(true, MessageController.ADD_FAMILY_ACCOUNT);
+            }
         } catch (RuntimeException ex) {
             return new Status(true, ex.getMessage());
         }
@@ -112,7 +117,7 @@ public class FamilyDebitController {
 
     @RequestMapping(value = "/deactivation", method = RequestMethod.GET)
     @ResponseBody
-    public Status deleteFamilyDebitAccount(Principal principal, HttpServletRequest request) {
+    public Status deleteFamilyDebitAccount(Principal principal, HttpServletRequest request, HttpServletResponse response) {
 
         try {
             User user = userDao.getParticipantByEmail(principal.getName());
@@ -123,7 +128,7 @@ public class FamilyDebitController {
             Collection<FamilyCreditAccount> credits = familyCreditService.getFamilyCredits(accountId);
             for (FamilyCreditAccount credit : credits) {
                 if (CreditStatusPaid.NO == credit.isPaid()) {
-                    return new Status(true, MessageController.FAMILY_ACCOUNT_HAS_NOT_PAID_CREDITS);
+                    return new Status(false, MessageController.FAMILY_ACCOUNT_HAS_NOT_PAID_CREDITS);
                 }
             }
             double familyAmount = familyDebitAccount.getAmount();
@@ -135,9 +140,10 @@ public class FamilyDebitController {
             double amount = personalDebitAccount.getAmount() + familyAmount;
             personalDebitAccountDao.updateAmountOfPersonalAccount(personalDebitAccount.getId(), amount);
             logger.debug("success deactivate");
+            loginController.logoutPage(request, response);
             return new Status(true, MessageController.DEACT_FAMACC_FAM);
         } catch (RuntimeException ex) {
-            return new Status(true, ex.getMessage());
+            return new Status(false, ex.getMessage());
         }
     }
 
@@ -161,7 +167,7 @@ public class FamilyDebitController {
                 return new Status(true, ADD_USER_FAM + userDao.getUserById(userId).getName());
             }
         } catch (RuntimeException ex) {
-            return new Status(true, ex.getMessage());
+            return new Status(false, ex.getMessage());
         }
     }
 
@@ -188,7 +194,7 @@ public class FamilyDebitController {
             userDao.updateRole(userId, UserRole.USER.getId());
             return new Status(true, DELETE_USER_FAM + userDao.getUserById(userId).getName());
         } catch (NullObjectException ex) {
-            return new Status(true, DELETE_UNS_USER_FAM + userDao.getUserById(userId).getName());
+            return new Status(false, DELETE_UNS_USER_FAM + userDao.getUserById(userId).getName());
         }
     }
 

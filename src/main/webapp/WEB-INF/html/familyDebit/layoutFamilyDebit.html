@@ -4,9 +4,14 @@
     <div class="d-sm-flex align-items-center justify-content-between mb-3 mt-2">
         <h1 class="h3 mb-0 text-gray-800">Family account "{{accountInfo.name}}"</h1>
 
-<!--        <div sec:authorize="hasAuthority('OWNER')">--> <div>
+        <div sec:authorize="hasAuthority('OWNER')">
             <a href="#" class="btn btn-secondary btn-icon-split ml-5" ng-click="deleteFamilyAccount()" ng-show="user.familyDebitId.length > 0" >
                 <span class="text">Delete account</span>
+            </a>
+        </div>
+        <div sec:authorize="hasAuthority('PARTICIPANT')">
+            <a href="#" class="btn btn-danger btn-icon-split ml-5" ng-click="deleteParticipant(userInfo.eMail)" ng-show="user.familyDebitId.length > 0" >
+                <span class="text">Leave</span>
             </a>
         </div>
     </div>
@@ -23,8 +28,7 @@
 <div class="container-fluid" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
     <!-- familyDebitId: {{user.familyDebitId}} -->
 
-<!--    <div sec:authorize="hasAuthority('USER')">-->
-    <div>
+    <div sec:authorize="hasAuthority('USER')">
     <div class="input-append" ng-show="user.familyDebitId.length == 0" ng-class="{ 'is-invalid' : ErrorFamilyName}" >
         <input style="margin: 5px 10px 5px 100px;" class="span2" type="text" ng-model="nameFamilyAccount"
                placeholder="Enter family account name" required="required" ng-minlength="2"/>
@@ -36,8 +40,7 @@
             - at least 2 characters</p>
     </div>
     </div>
-<!--    <div sec:authorize="hasAnyAuthority('PARTICIPANT', 'OWNER', 'USER')">-->
-    <div>
+    <div sec:authorize="hasAnyAuthority('PARTICIPANT', 'OWNER', 'USER')">
     <div class="row"  ng-show="user.familyDebitId.length > 0">
 
         <!-- Content Column -->
@@ -185,36 +188,40 @@
                             <table class="table">
                                 <thead>
                                 <tr>
+                                    <th></th>
                                     <th>Name</th>
                                     <th>Email</th>
                                     <th>Role</th>
                                     <th>Month income</th>
                                     <th>Month expense</th>
-                                    <th></th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 <tr ng-repeat="participant in participants">
+                                    <td>
+                                        <div sec:authorize="hasAuthority('OWNER')">
+                                            <a class="text-danger" ng-click="deleteParticipant(participant.eMail)" ng-show="userInfo.id != participant.id">
+                                                <i class="fas fa-times"></i>
+                                            </a>
+                                        </div>
+                                    </td>
                                     <td>{{participant.name}}</td>
                                     <td>{{participant.eMail}}</td>
                                     <td>{{participant.userRole}}</td>
                                     <td>{{participant.totalIncome}}</td>
                                     <td>{{participant.totalExpense}}</td>
-                                    <td style="width:70px;text-align:center;">
-                                        <button class="btn btn-mini btn-danger" ng-hide="participant.userRole == 'OWNER' || participant.id == user.id" ng-click="deleteParticipant(participant.eMail)">Remove
-                                        </button>
-                                        <button class="btn btn-mini btn-danger" ng-hide="participant.userRole == 'OWNER' || participant.id != user.id" ng-click="deleteParticipant(participant.eMail)">Leave
-                                        </button>
-                                    </td>
+
                                 </tr>
                                 </tbody>
 
                             </table>
                         </div>
+                        <div sec:authorize="hasAuthority('OWNER')">
                         <div class="ml-auto row mt-2">
                             <a href="#addUser" data-toggle="modal" class="btn btn-success btn-icon-split ml-auto mr-2">
                                 <span class="text">Add user</span>
                             </a>
+                        </div>
                         </div>
                     </div>
                 </div>

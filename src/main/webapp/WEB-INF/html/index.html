@@ -63,11 +63,21 @@
                 <span>Personal</span></a>
         </li>
 
-        <li class="nav-item">
-            <a class="nav-link account" href="#/familyAccount">
-                <i class="fa fa-users"></i>
-                <span>Family</span></a>
-        </li>
+        <div sec:authorize="hasAnyAuthority('OWNER', 'PARTICIPANT')">
+            <li class="nav-item">
+                <a class="nav-link account" href="#/familyAccount">
+                    <i class="fa fa-users"></i>
+                    <span>Family</span></a>
+            </li>
+        </div>
+
+        <div sec:authorize="hasAuthority('USER')">
+            <li class="nav-item">
+                <a class="nav-link account" href="#/familyAccount">
+                    <i class="fa fa-plus"></i>
+                    <span>Create family account</span></a>
+            </li>
+        </div>
 
         <!-- Divider -->
         <hr class="sidebar-divider"/>
