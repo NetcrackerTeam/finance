@@ -187,7 +187,7 @@ public interface AutoOperationDao {
             "WHERE DAY_OF_MONTH.ATTR_ID = 68 /*DAY_OF_MONTH*/ " +
             "  AND DAY_OF_MONTH.VALUE = ? " +
             "  AND USER_REF.ATTR_ID = 66 /*TRANSACTION_AUTOINCOME_USER_ID*/ " +
-            "  AND AUTO_OPERATION.OBJECT_ID = USER_REF.OBJECT_ID " +
+            "  AND DEBIT_REF.OBJECT_ID = USER_REF.OBJECT_ID " +
             "  AND AMOUNT.ATTR_ID = 56 /*AMOUNT*/ " +
             "  AND CATEGORY.LIST_VALUE_ID = LISTS.LIST_VALUE_ID " +
             "  AND CATEGORY.ATTR_ID = 57 /*CATEGORY*/ " +

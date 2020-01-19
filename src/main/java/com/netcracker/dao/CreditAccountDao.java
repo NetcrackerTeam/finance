@@ -235,7 +235,7 @@ public interface CreditAccountDao {
             "        AND DEBT_DATE_TO_AT.ATTR_ID = 45/*DEBT DATE TO ATTRIBUTE*/\n" +
             "        AND DEBT_AMOUNT_AT.ATTR_ID = 46/*DEBT AMOUNT ATTRIBUTE*/\n" +
             "        AND COM_AT.ATTR_ID = 72/*CREDIT COMMODITY ATTRIBUTE*/\n" +
-            "   ORDER BY DATE_CR DESC";
+            "   ORDER BY CREDIT_ID DESC";
 
     String SELECT_FAMILY_CREDITS_BY_ACCOUNT_QUERY = "SELECT CRED.OBJECT_ID CREDIT_ID, NAME_AT.VALUE NAME, AMOUNT_AT.VALUE AMOUNT,\n" +
             " PAID_AT.VALUE PAID, DATE_AT.DATE_VALUE DATE_CR,  RATE_AT.VALUE CREDIT_RATE,\n" +
@@ -276,7 +276,7 @@ public interface CreditAccountDao {
             "       AND DEBT_DATE_TO_AT.ATTR_ID = 45/*DEBT DATE TO ATTRIBUTE*/\n" +
             "       AND DEBT_AMOUNT_AT.ATTR_ID = 46/*DEBT AMOUNT ATTRIBUTE*/\n" +
             "        AND COM_AT.ATTR_ID = 72/*CREDIT COMMODITY ATTRIBUTE*/\n" +
-            "   ORDER BY DATE_CR DESC";
+            "   ORDER BY CREDIT_ID DESC";
 
     String UPDATE_CREDIT_PAYMENT_QUERY = "UPDATE ATTRIBUTES\n" +
             "    SET VALUE = ?/*NEW CREDIT PAYED AMOUNT */\n" +
