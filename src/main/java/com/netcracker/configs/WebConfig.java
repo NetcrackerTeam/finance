@@ -66,8 +66,11 @@ public class WebConfig implements WebMvcConfigurer {
         mailSender.setHost("smtp.gmail.com");
         mailSender.setPort(587);
 
-        mailSender.setUsername("nectrackerteam@gmail.com");
-        mailSender.setPassword("1234team");
+        String mail = System.getenv("MAIL_MAILSENDER");
+        String password = System.getenv("PASSWORD_MAILSENDER");
+
+        mailSender.setUsername(mail);
+        mailSender.setPassword(password);
 
         Properties props = mailSender.getJavaMailProperties();
         props.put("mail.transport.protocol", "smtp");
@@ -76,6 +79,7 @@ public class WebConfig implements WebMvcConfigurer {
         props.put("mail.debug", "true");
         return mailSender;
     }
+
     @Bean
     public DataSource dataSource() {
         TimeZone timeZone = TimeZone.getTimeZone("Europe/Kiev");
@@ -117,7 +121,7 @@ public class WebConfig implements WebMvcConfigurer {
     }
 
     @Bean
-    public SpringSecurityDialect springSecurityDialect(){
+    public SpringSecurityDialect springSecurityDialect() {
         return new SpringSecurityDialect();
     }
 }
