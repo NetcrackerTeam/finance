@@ -196,30 +196,25 @@
                     <div  class="table-responsive">
                     <table class="table">
                         <thead>
-                        <th>Expense</th>
-                        <th>Income</th>
-                        <th>Day of month</th>
-                        <th>Amount</th>
-<!--                        <tr>-->
-<!--                            <th>Amount</th>-->
-<!--                            <th>Type</th>-->
-<!--                            <th>Name</th>-->
-<!--                            <th>Day of month</th>-->
-<!--                        </tr>-->
+                        <tr>
+                            <th></th>
+                            <th>Type</th>
+                            <th>Name</th>
+                            <th>Amount</th>
+                            <th>Day of month</th>
+                        </tr>
                         </thead>
                         <tbody>
                         <tr ng-repeat="autoOperInf in personalAutoOperationHistory">
-                            <td>{{autoOperInf.categoryExpense}}</td>
-                            <td>{{autoOperInf.categoryIncome}}</td>
-                            <td>{{autoOperInf.dayOfMonth}}</td>
+                            <td>
+                                <a class="text-danger" ng-click="">
+                                    <i class="fas fa-times"></i>
+                                </a>
+                            </td>
+                            <td>{{autoOperInf.categoryExpense}}{{autoOperInf.categoryIncome}}</td>
                             <td>{{autoOperInf.amount}}</td>
+                            <td>{{autoOperInf.dayOfMonth}}</td>
                         </tr>
-<!--                        <tr>-->
-<!--                            <td>30000</td>-->
-<!--                            <td>Income</td>-->
-<!--                            <td>SALARY</td>-->
-<!--                            <td>3</td>-->
-<!--                        </tr>-->
                         </tbody>
                     </table>
                     </div>
@@ -520,7 +515,7 @@
                 <div class="modal-body">
                     <div class="form-group" ng-class="{ 'has-error' : (addCreditForm.nameCr.$invalid) &amp;&amp; !addCreditForm.nameCr.$pristine}">
                         <label for="creditName">Credit name:</label>
-                        <input type="text" name="nameCr" class="item-input-wrapper form-control" maxlength="60" placeholder="Enter name" ng-model="credit.name" id="creditName" required="required" ng-minlength="3"/>
+                        <input type="text" name="nameCr" class="item-input-wrapper form-control" maxlength="20" placeholder="Enter name" ng-model="credit.name" id="creditName" required="required" ng-minlength="3"/>
                         <p ng-show="addCreditForm.nameCr.$error.minlength" class="help-block">Credit name is too short</p>
                     </div>
 

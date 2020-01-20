@@ -238,6 +238,8 @@ public class PersonalCreditServiceImpl implements PersonalCreditService {
             return new Status(false, MessageController.CREDIT_RATE_ERROR);
         if (creditAccount.getMonthDay() < 1 || creditAccount.getMonthDay() > 31)
             return new Status(false, MessageController.INVALID_DAY_OF_MONTH);
+        if (creditAccount.getName().length() < 2 || creditAccount.getName().length() > 20)
+            return new Status(false, MessageController.INVALID_NAME);
         return checkCreditName(creditAccount.getName());
     }
 

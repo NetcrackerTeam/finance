@@ -50,18 +50,15 @@ public class CreditFamilyController {
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     @ResponseBody
     public Status createFamilyCreditAccount(@RequestBody FamilyCreditAccount creditAccount, Principal principal) {
+        logger.debug("[createFamilyCreditAccount]" + MessageController.debugStartMessage + "[personalDebitID = " + personalDebitId +
+                "], [familyDebitId = " + familyDebitId + "], [userId = " + userId + "]");
         familyDebitId = getFamilyAccountByPrincipal(principal);
         userId = getUserIdByPrincipal(principal);
         User userTemp = userDao.getUserByEmail(getCurrentUsername());
         boolean validUserActive = UserStatusActive.YES.equals(userTemp.getUserStatusActive());
-        if (!validUserActive) {
+        if (!validUserActive)
             return new Status(false, NOT_ACTIVE_USER);
-        } else
-            logger.debug("[createFamilyCreditAccount]" + MessageController.debugStartMessage + "[personalDebitID = " + personalDebitId +
-                    "], [familyDebitId = " + familyDebitId + "], [userId = " + userId + "]");
-        if (!familyCreditService.doesCreditWithNameNotExist(familyDebitId, creditAccount.getName())) {
-            return new Status(false, MessageController.CREDIT_NAME_EXISTS);
-        } else if (creditAccount.getName().length() > 20) {
+        if (creditAccount.getName().length() > 20) {
             return new Status(false, MessageController.CREDIT_NAME_LENGHT_FULL);
         }
         Status checked = personalCreditService.checkCreditData(creditAccount);

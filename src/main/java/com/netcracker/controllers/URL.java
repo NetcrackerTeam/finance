@@ -4,6 +4,7 @@ public interface URL {
     String INDEX = "index";
     String REGISTRATIONS_URL = "viewsLoginRegestration/layoutRegistrationUser";
     String LOGIN_URL = "viewsLoginRegestration/layoutLoginUser";
+    String FORGOT_PASS_URL = "viewsLoginRegestration/forgotPassword";
     String PERSONAL_DEBIT_URL = "personalDebit/layoutPrediction";
 //    PersonalDebitController URL
     String MODAL_DIALOG_PERS = "personalDebit/modalDialog";

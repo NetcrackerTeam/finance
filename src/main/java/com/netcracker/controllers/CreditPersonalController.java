@@ -51,18 +51,12 @@ public class CreditPersonalController {
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     @ResponseBody
     public Status createCreditAccount(@RequestBody PersonalCreditAccount creditAccount, Principal principal) {
+        logger.debug("[createCreditAccount]" + MessageController.debugStartMessage + "[debitId = " + debitId + "]");
         debitId = userController.getAccountByPrincipal(principal);
         User userTemp = userDao.getUserByEmail(getCurrentUsername());
         boolean validUserActive = UserStatusActive.YES.equals(userTemp.getUserStatusActive());
         if (!validUserActive) {
             return new Status(false, NOT_ACTIVE_USER);
-        } else
-            logger.debug("[createCreditAccount]" + MessageController.debugStartMessage + "[debitId = " + debitId + "]");
-        if (!personalCreditService.doesCreditWithNameNotExist(debitId, creditAccount.getName())) {
-            return new Status(false, MessageController.CREDIT_NAME_EXISTS);
-        }
-        if (creditAccount.getName().length()>20){
-            return new Status(false, MessageController.CREDIT_NAME_LENGHT_FULL);
         }
         Status checked = personalCreditService.checkCreditData(creditAccount);
         if (!checked.isStatus()) return checked;
@@ -76,7 +70,6 @@ public class CreditPersonalController {
         if (amount < MessageController.MIN || amount > MessageController.MAX)
             return new Status(false, MessageController.INCORRECT_AMOUNT);
         debitId = userController.getAccountByPrincipal(principal);
-        User user = userDao.getUserByEmail(principal.getName());
         logger.debug("[addPersonalCreditPayment]" + MessageController.debugStartMessage + "[debitId = " + debitId + "], [creditId = " + creditId + "]");
         try {
             personalCreditService.addPersonalCreditPayment(debitId, crId, amount);

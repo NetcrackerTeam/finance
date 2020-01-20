@@ -56,6 +56,11 @@ public class LoginController {
         return URL.REGISTRATIONS_URL;
     }
 
+    @RequestMapping(value = "/forgot", method = RequestMethod.GET)
+    public String showForgotPass() {
+        return URL.FORGOT_PASS_URL;
+    }
+
     @RequestMapping(value = "/registration", method = RequestMethod.POST)
     public String registerUserAccount(@ModelAttribute User user, Model model) {
         try {
@@ -103,6 +108,11 @@ public class LoginController {
         if (auth != null) {
             new SecurityContextLogoutHandler().logout(request, response, auth);
         }
+        return URL.LOGIN_URL;
+    }
+
+    @RequestMapping(value = "/forgot", method = RequestMethod.POST)
+    public String forgotPass() {
         return URL.LOGIN_URL;
     }
 
