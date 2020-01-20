@@ -650,7 +650,77 @@
                             }).datepicker("setDate", new Date());
                         });
                     </script>
-                    <pre class="pre">{{content}}</pre>
+
+                    <table class="table table-borderless">
+                        <tr>
+                            <th>Dates:</th>
+                            <td>{{duration}}</td>
+                        </tr>
+                        <tr>
+                            <th>Balance:</th>
+                            <td>{{balance}}</td>
+                        </tr>
+                        <tr>
+                            <th>Total income:</th>
+                            <td>{{totalIncome}}</td>
+                        </tr>
+                        <tr>
+                            <th>Total expense:</th>
+                            <td>{{totalExpense}}</td>
+                        </tr>
+                    </table>
+
+                    <div class="card shadow mb-4" >
+                        <a href="#collapseCardExample" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseCardExample">
+                            <h6 class="m-0 font-weight-bold text-primary">Incomes</h6>
+                        </a>
+                        <div class="collapse" id="collapseCardExample">
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <thead>
+                                        <tr>
+                                            <th>Category</th>
+                                            <th>Sum</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr ng-repeat="income in incomes">
+                                            <td>{{income.categoryIncome}}</td>
+                                            <td>{{income.amount}}</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card shadow mb-4">
+                        <a href="#collapseCardExample2" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseCardExample">
+                            <h6 class="m-0 font-weight-bold text-primary">Expenses</h6>
+                        </a>
+                        <div class="collapse" id="collapseCardExample2">
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <thead>
+                                        <tr>
+                                            <th>Category</th>
+                                            <th>Sum</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr ng-repeat="expense in expenses">
+                                            <td>{{expense.categoryExpense}}</td>
+                                            <td>{{expense.amount}}</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
                     <p class="text-info">{{ text }}</p>
                 </div>
                 <div class="modal-footer">

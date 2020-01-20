@@ -9,6 +9,8 @@ import com.netcracker.services.utils.DateUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -192,25 +194,23 @@ public class PersonalDebitController {
 
     @RequestMapping(value = "/report", method = RequestMethod.GET)
     @ResponseBody
-    public Status getReport(
+    public ResponseEntity<MonthReport> getReport(
             Principal principal,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date
     ) {
-        boolean validUserActive = UserStatusActive.YES.equals(getCurrentUser().getUserStatusActive());
-        if (!validUserActive) {
-            return new Status(false, NOT_ACTIVE_USER);
-        } else
-        if (date.isAfter(LocalDate.now())) {
-            return new Status(false, INVALID_DATE);
-        }
+//        boolean validUserActive = UserStatusActive.YES.equals(getCurrentUser().getUserStatusActive());
+//        if (!validUserActive) {
+//            return new Status(false, NOT_ACTIVE_USER);
+//        } else
+//        if (date.isAfter(LocalDate.now())) {
+//            return new Status(false, INVALID_DATE);
+//        }
         LocalDateTime dateReformat = LocalDateTime.of(date.getYear(), date.getMonth().getValue(), date.getDayOfMonth(), 0, 0, 0);
         BigInteger accountId = getAccountByPrincipal(principal);
 
         MonthReport monthReport = monthReportService.getMonthPersonalReport(accountId, dateReformat, false);
 
-        Path path = monthReportService.convertToTxt(monthReport);
-
-        return new Status(true, monthReportService.convertToString(path));
+        return new ResponseEntity<>(monthReport, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/sendReport", method = RequestMethod.GET)

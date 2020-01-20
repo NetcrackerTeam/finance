@@ -4,6 +4,16 @@ app.controller("RepCtrl", ['$scope', '$http', '$templateCache',
     $scope.getReportURL = 'debitPersonal/report';
     $scope.sendReportURL = 'debitPersonal/sendReport';
 
+    $scope.duration = null;
+    $scope.balance = null;
+    $scope.totalIncome = null;
+    $scope.totalExpense= null;
+
+    $scope.incomes = null;
+    $scope.expenses = null;
+
+
+
     $scope.sendCondition = null;
 
     $scope.getReport = function() {
@@ -17,7 +27,13 @@ app.controller("RepCtrl", ['$scope', '$http', '$templateCache',
                  date: $scope.month
             }
         }).then(function(response) {
-            $scope.content = response.data.message;
+            $scope.duration = response.data.dateTo.date.year + "." + response.data.dateTo.date.month + "." + response.data.dateTo.date.day
+                +  "-" + response.data.dateFrom.date.year + "." + response.data.dateFrom.date.month + "." + response.data.dateFrom.date.day;
+            $scope.balance = response.data.balance;
+            $scope.totalIncome = response.data.totalIncome;
+            $scope.totalExpense = response.data.totalExpense;
+            $scope.incomes = response.data.categoryIncome;
+            $scope.expenses = response.data.categoryExpense;
             $scope.sendCondition = 'ok';
         }, function(response) {
             $scope.content = 'No information about this report';
