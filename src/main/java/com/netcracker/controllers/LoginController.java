@@ -12,15 +12,18 @@ import com.netcracker.services.PersonalDebitService;
 import com.netcracker.services.impl.JobServiceImpl;
 import com.netcracker.services.utils.ExceptionMessages;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -36,6 +39,7 @@ public class LoginController {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
 
 //    @Autowired
 //    private JobService jobService;
@@ -67,10 +71,12 @@ public class LoginController {
             String username = user.getName();
             String password = user.getPassword();
             String email = user.geteMail();
+            String confirmPassword = user.getConfirmPassword();
 
             UserDataValidator.isValidEmail(email);
             UserDataValidator.isValidUsername(username);
             UserDataValidator.isValidPassword(password);
+            UserDataValidator.comparePasswords(password, confirmPassword);
 
             if (userDao.getNumberOfUsersByEmail(email) > 0) return showMsg(model, ExceptionMessages.USER_ALREADY_EXIST);
         } catch (UserException ex) {
@@ -84,6 +90,7 @@ public class LoginController {
             if (ExceptionMessages.PASS_UPPER.equals(error)) return showMsg(model, ExceptionMessages.PASS_UPPER);
             if (ExceptionMessages.PASS_LOWER.equals(error)) return showMsg(model, ExceptionMessages.PASS_LOWER);
             if (ExceptionMessages.PASS_NUM.equals(error)) return showMsg(model, ExceptionMessages.PASS_NUM);
+            if (ExceptionMessages.INVALID_CONFIRM_PASSWORD.equals(error)) return showMsg(model, ExceptionMessages.INVALID_CONFIRM_PASSWORD);
         }
 
         model.addAttribute("user", user);

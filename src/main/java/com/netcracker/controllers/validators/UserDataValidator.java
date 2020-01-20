@@ -64,4 +64,10 @@ public class UserDataValidator {
         } else
             return false;
     }
+
+    public static void comparePasswords(String firstPassword, String secondPassword) {
+        if (!isEmptyString(secondPassword)) {
+            if (!firstPassword.equals(secondPassword)) throw new UserException(ExceptionMessages.INVALID_CONFIRM_PASSWORD);
+        } else throw new UserException(ExceptionMessages.EMPTY_FIELD);
+    }
 }

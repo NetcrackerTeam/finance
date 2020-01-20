@@ -24,6 +24,7 @@ public class ErrorsMap {
         tempMap.put(ExceptionMessages.LATIN_CHAR, MessageController.LATIN_CHAR);
         tempMap.put(ExceptionMessages.LATIN_LETTERS, MessageController.LATIN_LETTERS);
         tempMap.put(ExceptionMessages.NAME_SHORT, MessageController.NAME_SHORT);
+        tempMap.put(ExceptionMessages.INVALID_CONFIRM_PASSWORD, MessageController.INVALID_CONFIRM_PASSWORD);
         errorsMap = Collections.unmodifiableMap(tempMap);
     }
 

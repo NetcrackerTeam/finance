@@ -16,6 +16,7 @@ public class User {
     private UserRole userRole;
     private double totalIncome;
     private double totalExpense;
+    private String confirmPassword;
 
     public User() {
     }
@@ -167,5 +168,13 @@ public class User {
     }
     public void setExpense(double expense) {
         this.totalExpense = expense;
+    }
+
+    public void setConfirmPassword(String confirmPassword) {
+        this.confirmPassword = confirmPassword;
+    }
+
+    public String getConfirmPassword() {
+        return confirmPassword;
     }
 }
