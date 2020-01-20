@@ -26,7 +26,7 @@
 
 <!-- Begin Page Content -->
 <div class="container-fluid" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
-    <!-- familyDebitId: {{user.familyDebitId}} -->
+   <!--familyDebitId: {{user.familyDebitId}}-->
 
     <div sec:authorize="hasAuthority('USER')">
     <div class="input-append" ng-show="user.familyDebitId.length == 0" ng-class="{ 'is-invalid' : ErrorFamilyName}" >
@@ -274,6 +274,7 @@
                             <th>Name</th>
                             <th>Amount</th>
                             <th>Day of month</th>
+                            <th>User</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -294,6 +295,7 @@
                             <td>{{autoOperInf.categoryExpense}}{{autoOperInf.categoryIncome}}</td>
                             <td>{{autoOperInf.amount}}</td>
                             <td>{{autoOperInf.dayOfMonth}}</td>
+                            <td>{{autoOperInf.username}}</td>
                         </tr>
                         </tbody>
                     </table>

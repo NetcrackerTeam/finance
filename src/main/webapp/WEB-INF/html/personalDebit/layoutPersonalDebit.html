@@ -13,9 +13,11 @@
 </nav>
 <!-- End of Topbar -->
 
-<div class="container-fluid">
+<div class="container-fluid" >
     <!--userDebitId: {{user.debitId}}
-    userId: {{user.id}} -->
+    userId: {{user.id}}
+    IsCheckedIndex: {{isCheckedIndex}}
+    TestScope: {{testScope}}-->
     <!-- Content Row -->
     <div class="row">
 
@@ -211,6 +213,14 @@
                                     <i class="fas fa-times"></i>
                                 </a>
                             </td>
+                            <td>
+                                <span ng-show="autoOperInf.categoryIncome">
+                                    Income
+                                </span>
+                                <span ng-show="autoOperInf.categoryExpense">
+                                    Expense
+                                </span>
+                            </td>
                             <td>{{autoOperInf.categoryExpense}}{{autoOperInf.categoryIncome}}</td>
                             <td>{{autoOperInf.amount}}</td>
                             <td>{{autoOperInf.dayOfMonth}}</td>
@@ -318,7 +328,8 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 align="center" class="modal-title"> "{{personalCreditor.name}}" credit</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="$('.modal').modal('hide');">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="$('.modal').modal('hide');"
+                    ng-click="closeInfo(); setCheckedIndexFalse();">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -412,7 +423,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" onclick="$('.modal').modal('hide');"
-                            ng-click="closeInfo()">
+                            ng-click="closeInfo(); setCheckedIndexFalse();">
                         Close
                     </button>
                 </div>

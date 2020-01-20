@@ -10,6 +10,7 @@ public abstract class AbstractAccountOperation {
     private Debt debt;
     private BigInteger userId;
     private BigInteger debitId;
+    private String username;
 
     protected static abstract class BaseBuilder<T extends AbstractAccountOperation, B extends BaseBuilder> {
         protected T actualClass;
@@ -84,6 +85,8 @@ public abstract class AbstractAccountOperation {
         return debitId;
     }
 
+    public String getUsername() { return username; }
+
     public void setId(BigInteger id) {
         this.id = id;
     }
@@ -106,5 +109,9 @@ public abstract class AbstractAccountOperation {
 
     public void setDebitId(BigInteger debitId) {
         this.debitId = debitId;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 }

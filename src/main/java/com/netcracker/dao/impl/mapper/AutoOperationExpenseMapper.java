@@ -13,7 +13,7 @@ public class AutoOperationExpenseMapper implements RowMapper<AutoOperationExpens
 
     @Override
     public AutoOperationExpense mapRow(ResultSet resultSet, int i) throws SQLException {
-        return new AutoOperationExpense.Builder()
+        AutoOperationExpense autoOperationExpense = new AutoOperationExpense.Builder()
                 .accountId(resultSet.getBigDecimal("ao_object_id").toBigInteger())
                 .accountDebitId(resultSet.getBigDecimal("debit_id").toBigInteger())
                 .categoryExpense(CategoryExpense.getNameByKey(resultSet.getBigDecimal("category_id").toBigInteger()))
@@ -21,5 +21,10 @@ public class AutoOperationExpenseMapper implements RowMapper<AutoOperationExpens
                 .accountDate(new Timestamp(resultSet.getDate("date_of_creation").getTime()).toLocalDateTime())
                 .dayOfMonth(resultSet.getInt("day_of_month"))
                 .build();
+
+        if ("FAMILY_EXPENSE_AO".equals(resultSet.getString("ao_name")))
+            autoOperationExpense.setUsername(resultSet.getString("username"));
+
+        return autoOperationExpense;
     }
 }
