@@ -35,6 +35,7 @@ public interface MessageController {
     String FAMILY_ACCOUNT_HAS_NOT_PAID_CREDITS = "The family account has debt or debts";
     String INCORRECT_AMOUNT = "Invalid amount";
     String NOT_ACTIVE_USER = "User not active";
+    String HAVE_FAMILY_ACCOUNT = "User can own only one family account";
 
     String debugStartMessage = " method start with parameters: ";
     //     CreditsControllers

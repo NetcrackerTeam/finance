@@ -84,7 +84,7 @@ public class FamilyDebitController {
     }
 
     private BigInteger getUserIdByPrincipal(Principal principal) {
-        User user = userDao.getUserByEmail(principal.getName());
+        User user = userDao.getParticipantByEmail(principal.getName());
         return user.getId();
     }
 
@@ -98,20 +98,25 @@ public class FamilyDebitController {
                 return new Status(true, NOT_ACTIVE_USER);
             } else {
                 UserDataValidator.isValidNameFamily(nameAccount);
-                User user = userDao.getUserByEmail(principal.getName());
-                FamilyDebitAccount familyDebitAccount = new FamilyDebitAccount.Builder()
-                        .debitObjectName(nameAccount)
-                        .debitAmount(0)
-                        .debitFamilyAccountStatus(FamilyAccountStatusActive.YES)
-                        .debitOwner(user)
-                        .build();
-                familyDebitService.createFamilyDebitAccount(familyDebitAccount);
-                userDao.updateRole(user.getId(), UserRole.OWNER.getId());
-                loginController.logoutPage(request, response);
-            return new Status(true, MessageController.ADD_FAMILY_ACCOUNT);
+                BigInteger accountId = getCurrentUser().getFamilyDebitAccount();
+                if (accountId != null){
+                    return new Status(false, HAVE_FAMILY_ACCOUNT);
+                } else {
+                    User user = userDao.getUserByEmail(principal.getName());
+                    FamilyDebitAccount familyDebitAccount = new FamilyDebitAccount.Builder()
+                            .debitObjectName(nameAccount)
+                            .debitAmount(0)
+                            .debitFamilyAccountStatus(FamilyAccountStatusActive.YES)
+                            .debitOwner(user)
+                            .build();
+                    familyDebitService.createFamilyDebitAccount(familyDebitAccount);
+                    userDao.updateRole(user.getId(), UserRole.OWNER.getId());
+                    loginController.logoutPage(request, response);
+                    return new Status(true, MessageController.ADD_FAMILY_ACCOUNT);
+                }
             }
         } catch (RuntimeException ex) {
-            return new Status(true, ex.getMessage());
+            return new Status(false, ex.getMessage());
         }
     }
 
@@ -397,7 +402,7 @@ public class FamilyDebitController {
     }
 
     public User getCurrentUser() {
-        User userTemp = userDao.getUserByEmail(getCurrentUsername());
+        User userTemp = userDao.getParticipantByEmail(getCurrentUsername());
         return userTemp;
     }
 }

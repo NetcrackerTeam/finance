@@ -31,14 +31,12 @@ var FamilyDebitController = function ($scope, $http, $rootScope) {
                 'Content-Type': 'application/json'
             }
         }).success(function (response) {
-         //   $scope.ErrorFamilyName = response.message;
-         //    alert(response.message);
-            if (response.status === true)
+            if (response.status === false)
+                $scope.ErrorFamilyName = response.message;
+            else {
+                $('.modal').modal('hide');
                 window.location.reload();
-            else
-                alert(response.message);
-        }).error(function () {
-            alert("unsuccess")
+            }
         });
     };
 
@@ -73,9 +71,13 @@ var FamilyDebitController = function ($scope, $http, $rootScope) {
                 'Content-Type': 'application/json'
             }
         }).success(function (response) {
-            alert(response.message);
-            window.location.reload();
-        })
+            if (response.status === false)
+                $scope.ErrorParticipantName = response.message;
+            else {
+                $('.modal').modal('hide');
+                window.location.reload();
+            }
+        });
     };
 
     $scope.deleteParticipant = function (userLogin) {
@@ -91,7 +93,6 @@ var FamilyDebitController = function ($scope, $http, $rootScope) {
                 'Content-Type': 'application/json'
             }
         }).success(function () {
-            alert("success");
             window.location.reload();
         }).error(function () {
             alert("unsuccess " + $scope.loginParticipant)

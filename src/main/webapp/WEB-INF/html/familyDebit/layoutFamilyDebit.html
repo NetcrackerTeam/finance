@@ -32,8 +32,7 @@
     <div class="input-append" ng-show="user.familyDebitId.length == 0" ng-class="{ 'is-invalid' : ErrorFamilyName}" >
         <input style="margin: 5px 10px 5px 100px;" class="span2" type="text" ng-model="nameFamilyAccount"
                placeholder="Enter family account name" required="required" ng-minlength="2"/>
-        <!-- <p style="margin: 5px 10px 5px 100px;" class = "help-block"> {{ErrorFamilyName}}</p> -->
-        <br/>
+        <p style="margin: 0 10px 0 100px;" class = "help-block"> {{ErrorFamilyName}}</p>
         <button style="margin: 5px 10px 5px 100px;" type="submit" ng-disabled="!nameFamilyAccount" class="btn btn-primary" ng-click="createFamilyAccount()">Add Family Account</button>
         <p style="font-size: 8pt; margin: 5px 10px 5px 100px;">Your Account name must contain:<br/>
             - only Latin letters without other characters except spacebar<br/>
@@ -190,7 +189,6 @@
                                 <tr>
                                     <th></th>
                                     <th>Name</th>
-                                    <th>Email</th>
                                     <th>Role</th>
                                     <th>Month income</th>
                                     <th>Month expense</th>
@@ -206,7 +204,6 @@
                                         </div>
                                     </td>
                                     <td>{{participant.name}}</td>
-                                    <td>{{participant.eMail}}</td>
                                     <td>{{participant.userRole}}</td>
                                     <td>{{participant.totalIncome}}</td>
                                     <td>{{participant.totalExpense}}</td>
@@ -848,9 +845,10 @@
                 <h4 align="center" class="modal-title" id="exampleModalLabelAdd">Add user</h4>
             </div>
             <form>
-                <div class="modal-body">
+                <div class="modal-body" ng-class="{ 'is-invalid' : ErrorParticipantName}">
                     <label for="inputEm">User email:</label>
                     <input type="text" id="inputEm" class="form-control" placeholder="Enter user email" ng-model="loginParticipant" required="required" min="1" />
+                    <p class = "help-block"> {{ErrorParticipantName}}</p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary"  data-dismiss="modal">Close</button>
