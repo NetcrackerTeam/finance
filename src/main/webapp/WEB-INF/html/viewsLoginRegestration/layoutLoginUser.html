@@ -2,7 +2,7 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8"/>
-    <title>Service App</title>
+    <title>Finance</title>
     <link rel="stylesheet" href="resources/css/specialFinance.css"/>
     <link rel="stylesheet" href="resources/bootstrap/css/bootstrap.min.css"/>
 </head>
@@ -19,6 +19,7 @@
             <input type="password"  name="password" class="form-control" placeholder="Password"/>
             <p></p>
             <span style="color:#b42624;" th:text="${error}"> </span>
+            <a href="forgot">Forgot password?</a>
             <input type="submit" class="btn btn-lg btn-primary btn-block" value="Log In"/>
             <h4 class="text-center"><a href="registration">Create an account</a></h4>
         </div>

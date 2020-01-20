@@ -112,4 +112,24 @@ public class UserDaoImpl implements UserDao {
             throw new UserException(ExceptionMessages.ERROR_MESSAGE_USER);
         }
     }
+
+    @Override
+    public void setPasswordToken(String email, String token) {
+        int result = template.queryForObject(IF_TOKEN_ATTR_EXISTS, new Object[]{email}, Integer.class);
+        BigInteger id = getUserByEmail(email).getId();
+        if (result == 0)
+            template.update(CREATE_USER_TOKEN, id, token);
+        else
+            template.update(UPDATE_TOKEN, token, id);
+    }
+
+    @Override
+    public User findUserByToken(String token) {
+        return template.queryForObject(GET_USER_BY_TOKEN, new Object[]{token}, new UserDaoMapper());
+    }
+
+    @Override
+    public void clearPassToken(BigInteger userId) {
+        template.update(CLEAR_PASS_TOKEN, userId);
+    }
 }

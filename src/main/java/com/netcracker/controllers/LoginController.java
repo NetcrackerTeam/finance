@@ -7,14 +7,17 @@ import com.netcracker.exception.UserException;
 import com.netcracker.models.PersonalDebitAccount;
 import com.netcracker.models.User;
 import com.netcracker.models.enums.UserStatusActive;
+import com.netcracker.services.EmailServiceSender;
 import com.netcracker.services.JobService;
 import com.netcracker.services.PersonalDebitService;
+import com.netcracker.services.UserService;
 import com.netcracker.services.impl.JobServiceImpl;
 import com.netcracker.services.utils.ExceptionMessages;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
@@ -27,6 +30,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.math.BigInteger;
+import java.util.UUID;
 
 @Controller
 public class LoginController {
@@ -39,6 +44,12 @@ public class LoginController {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    EmailServiceSender emailServiceSender;
+
+    @Autowired
+    UserService userService;
 
 
 //    @Autowired
@@ -119,8 +130,28 @@ public class LoginController {
     }
 
     @RequestMapping(value = "/forgot", method = RequestMethod.POST)
-    public String forgotPass() {
-        return URL.LOGIN_URL;
+    public String forgotPass(@RequestParam String email, Model model, HttpServletRequest request) {
+        String token = UUID.randomUUID().toString();
+        User user = userDao.getUserByEmail(email);
+        userDao.setPasswordToken(email, token);
+        emailServiceSender.sendMailResetPass(email, user.getName(), token,
+                request.getRequestURL().toString().replace(request.getRequestURI(), request.getContextPath()), user.getId());
+        model.addAttribute("error", "Check your mail");
+        return URL.FORGOT_PASS_URL;
+    }
+
+    @RequestMapping(value = "/resetPass", method = RequestMethod.GET)
+    public String resetPass(Model model, @RequestParam("id") BigInteger id, @RequestParam("token") String token) {
+        userService.validatePasswordResetToken(id, token);
+        return URL.RESET_PASS;
+    }
+
+    @RequestMapping(value = "/savePass", method = RequestMethod.POST)
+    public String savePassword(@RequestParam String password, HttpServletRequest request, HttpServletResponse response) {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        userDao.updateUserPasswordById(user.getId(), new BCryptPasswordEncoder().encode(password));
+        userDao.clearPassToken(user.getId());
+        return logoutPage(request, response);
     }
 
 }

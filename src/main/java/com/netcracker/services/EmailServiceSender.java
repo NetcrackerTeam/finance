@@ -28,6 +28,8 @@ public interface EmailServiceSender {
 
     void sendMailAutoFamilyIncome(String emailTo, String userName, double amountPaid, String incName);
 
+    void sendMailResetPass(String emailTo, String userName, String token, String addr, BigInteger userId);
+
     String MAIL = "<nectrackerteam@gmail.com>";
 
     String FILE_NAME = "Month_report.txt";

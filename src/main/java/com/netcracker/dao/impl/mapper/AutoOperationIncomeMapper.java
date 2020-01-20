@@ -20,6 +20,7 @@ public class AutoOperationIncomeMapper implements RowMapper<AutoOperationIncome>
                 .accountAmount(resultSet.getDouble("amount"))
                 .accountDate(new Timestamp(resultSet.getDate("date_of_creation").getTime()).toLocalDateTime())
                 .dayOfMonth(resultSet.getInt("day_of_month"))
+                .accountUserId(resultSet.getBigDecimal("user_id").toBigInteger())
                 .build();
 
         if ("FAMILY_INCOME_AO".equals(resultSet.getString("ao_name")))

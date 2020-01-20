@@ -16,4 +16,6 @@ public interface UserService {
     String encodePassword(String password);
 
     boolean deactivateUser(User user);
+
+    boolean validatePasswordResetToken(BigInteger id, String token);
 }

@@ -18,16 +18,16 @@
             <input   type="text" class="form-control " pattern="[A-Za-z]{2,}"   title="Please enter only English characters"
                      maxlength="25" th:field="*{name}" placeholder="Username" autofocus="true"/>
             <p></p>
+            <input type="text" class="form-control" th:field="*{eMail}" placeholder="E-mail"/>
+            <p></p>
             <input type="password" class="form-control"  th:field="*{password}" placeholder="Password"/>
             <p></p>
             <input type="password" class="form-control" th:field="*{confirmPassword}" placeholder="Confirm password"/>
             <p></p>
-            <input type="text" class="form-control" th:field="*{eMail}" placeholder="E-mail"/>
-            <p></p>
             <span align="center" style="color:#b42624;"  th:text="${message}"></span>
             <button type="submit" class="btn btn-lg btn-primary btn-block" >Submit</button>
             <p></p>
-            <h4 class="text-center"><a href="login">back to login Tab </a></h4>
+            <h4 class="text-center"><a href="login">Back to login page</a></h4>
         </div>
         <p style="font-size: 8pt;">Your username must contain:<br/>
             - only Latin letters without other characters except spacebar<br/>

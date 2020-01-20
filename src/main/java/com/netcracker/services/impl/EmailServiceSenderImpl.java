@@ -6,7 +6,6 @@ import com.netcracker.exception.UserException;
 import com.netcracker.models.enums.EmailServiceTemplateCategory;
 import com.netcracker.models.enums.UserStatusActive;
 import com.netcracker.services.EmailServiceSender;
-import com.netcracker.services.UserService;
 import com.netcracker.services.utils.ExceptionMessages;
 import com.netcracker.services.utils.ObjectsCheckUtils;
 import org.apache.log4j.Logger;
@@ -23,7 +22,6 @@ import javax.mail.internet.MimeMessage;
 import java.math.BigInteger;
 import java.nio.file.Path;
 import java.text.MessageFormat;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Service
@@ -145,5 +143,19 @@ public class EmailServiceSenderImpl implements EmailServiceSender {
 
         String familyInc = MessageFormat.format(templatesDao.sendMassageById(EmailServiceTemplateCategory.AUTO_FAMILY_INCOME.getId()), userName, incName, amountPaid);
         sendMail(emailTo, familyInc, EmailServiceTemplateCategory.AUTO_FAMILY_INCOME.getId());
+    }
+
+    @Override
+    public void sendMailResetPass(String emailTo, String userName, String token, String addr, BigInteger userId) {
+        ObjectsCheckUtils.isNotNull(emailTo, userName, token);
+        String url = addr + "/resetPass?id="  +
+                userId + "&token=" + token;
+
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(RIGHT_BRACKET + emailTo + LEFT_BRACKET);
+        message.setSubject("Password reset request");
+        message.setFrom(MAIL);
+        message.setText("To reset the password follow the link: " + url);
+        mailSender.send(message);
     }
 }
