@@ -280,7 +280,8 @@
                         <tbody>
                         <tr ng-repeat="autoOperInf in familyAutoOperationHistory">
                             <td>
-                            <a class="text-danger" ng-click="deleteAutoOperation(autoOperInf.id)" ng-show="userInfo.name == autoOperInf.username || userInfo.userRole == 'OWNER'">
+                            <a class="text-danger" ng-click="deleteAutoOperation(autoOperInf.id)" ng-show="userInfo.name == autoOperInf.username || userInfo.userRole == 'OWNER'"
+                               title="Delete auto operation">
                                 <i class="fas fa-times"></i>
                             </a>
                             </td>
@@ -511,16 +512,16 @@
 <div class="modal fade " id="showAllCreditModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabelCr"
      aria-hidden="true" style="overflow-x: hidden;" data-backdrop="static">
     <div class="modal-dialog modal-lg mw-100" role="document">
-        <div class="modal-content">
-            <div class="modal-header" style="position: relative;">
+        <div class="modal-content card">
+            <div class="card-header" style="position: relative;">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
                 <h4 id="exampleModalLabelCr" class="modal-title" style="position: absolute; top: 50%; left: 50%; margin: 0 -50% 0 0; transform: translate(-50%, -50%);">
                     All credits</h4>
             </div>
-            <div class="modal-body" ng-controller="FamilyCreditController" >
-                <div style="height: 400px; overflow-y: auto;">
+            <div ng-controller="FamilyCreditController" >
+                <div style="height: 400px; overflow-y: auto; margin: 0;" class="card-body">
                     <table class="table table-striped default-table">
                         <thead style="background: #F8F9FC; color: #4E73E5;">
                         <tr>
@@ -531,7 +532,7 @@
                             <th>Credit rate</th>
                             <th>Ends date</th>
                             <th>Month day</th>
-                            <th>Is commo<br/>dity</th>
+                            <th>Is commodity</th>
                             <th>Debt</th>
                             <th>Is paid</th>
                             <th>Total credit payment</th>

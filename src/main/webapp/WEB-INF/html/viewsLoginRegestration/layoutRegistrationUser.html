@@ -15,7 +15,7 @@
              alt="" width="82" height="82"/>
         <h2 class="form-signin-heading">Create your account</h2>
         <div class="form-group">
-            <input   type="text" class="form-control " pattern="[A-Za-z]{2,}"   title="Please enter only English characters"
+            <input   type="text" class="form-control " pattern="[A-Za-z\s]{2,}"   title="Please enter only English characters"
                      maxlength="25" th:field="*{name}" placeholder="Username" autofocus="true"/>
             <p></p>
             <input type="text" class="form-control" th:field="*{eMail}" placeholder="E-mail"/>
