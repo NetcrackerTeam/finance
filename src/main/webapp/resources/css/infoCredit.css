@@ -199,6 +199,13 @@
     height: 100%;
 }
 
+#updateCreditModal::-webkit-scrollbar {
+    width: 0;
+}
+#infoCreditModal::-webkit-scrollbar {
+    width: 0;
+}
+
 .dm-cell {
     display: table-cell;
     padding: 0 1em;
@@ -208,7 +215,6 @@
 
 .dm-modal {
     display: inline-block;
-    padding: 20px;
     max-width: 100%;
     background: white;
     -webkit-box-shadow: 0px 15px 20px rgba(0, 0, 0, 0.22), 0px 19px 60px rgba(0, 0, 0, 0.3);
@@ -216,7 +222,7 @@
     box-shadow: 0px 15px 20px rgba(0, 0, 0, 0.22), 0px 19px 60px rgba(0, 0, 0, 0.3);
     color: black;
     text-align: left;
-    border-radius: 10px;
+    border-radius: 5px;
 }
 
 .dm-modal img {

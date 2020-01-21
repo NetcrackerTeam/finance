@@ -173,8 +173,8 @@
                         <tbody>
                         <!--<tr ng-repeat="credInf in personalCredit" ng-show="credInf.isPaid == 'NO'" data-toggle="modal"
                             data-target="#infoCreditModal" ng-click="fetchPersonalCredit()" ng-mouseover="sendCreditId(credInf.creditId)">-->
-                        <tr ng-repeat="credInf in personalCredit" ng-show="credInf.isPaid == 'NO'" data-toggle="modal"
-                            data-target="#infoCreditModal" ng-click="fetchPersonalCreditFromArray(); fetchCreditHistoryPersonal()" ng-mouseover="changeCreditIdInArray(credInf.creditId)">
+                        <tr ng-repeat="credInf in personalCredit" ng-show="credInf.isPaid == 'NO'" onclick="InfoModalShow()"
+                            ng-click="fetchPersonalCreditFromArray(); fetchCreditHistoryPersonal()" ng-mouseover="changeCreditIdInArray(credInf.creditId)">
                             <td>{{credInf.name}}</td>
                             <td>{{credInf.amount}}</td>
                             <td>{{credInf.remainsToPay}}</td>
@@ -323,12 +323,11 @@
 </div>
 
 <form novalidate="novalidate" name="addPay" ng-controller="PersonalCreditController" ng-submit="addCreditPayment(personalCreditor.creditId)">
-    <div class="modal fade" id="infoCreditModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static">
-        <div class="modal-dialog modal-lg" role="document">
+    <div class="dm-overlay" id="infoCreditModal"><div class="dm-table"><div class="dm-cell"><div class="dm-modal">
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 align="center" class="modal-title"> "{{personalCreditor.name}}" credit</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="$('.modal').modal('hide');"
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="InfoModalHide()"
                     ng-click="closeInfo(); setCheckedIndexFalse();">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -382,9 +381,9 @@
                                 <td>{{personalCreditor.totalCreditPayment}}</td>
                             </tr>
                         </table>
-                        <button type="button" class="btn btn-info" data-toggle="modal" data-target="#updateCreditModal"
+                        <button type="button" class="btn btn-info"
                                 style="position: absolute; top: 100%; left: 50%; margin: 10px -50% 0 0; transform: translate(-50%, -50%);"
-                        onclick="$('#infoCreditModal').css('display', 'none');">
+                        onclick="InfoModalHide(); EditModalShow()">
                             Edit Credit</button>
                     </div>
                         <div class="col-lg-6 mb-4" style="position: relative;">
@@ -422,24 +421,35 @@
                 </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" onclick="$('.modal').modal('hide');"
+                    <button type="button" class="btn btn-secondary" onclick="InfoModalHide()"
                             ng-click="closeInfo(); setCheckedIndexFalse();">
                         Close
                     </button>
                 </div>
             </div>
-        </div>
-    </div>
+    </div></div></div></div>
 </form>
 
+<script type="text/javascript">
+    function EditModalShow() {
+        $("#updateCreditModal").show();
+    }
+    function EditModalHide() {
+        $("#updateCreditModal").hide();
+    }
+    function InfoModalShow() {
+        $("#infoCreditModal").show();
+    }
+    function InfoModalHide() {
+        $("#infoCreditModal").hide();
+    }
+</script>
+
 <form novalidate="novalidate" name="editCreditForm" ng-controller="PersonalCreditController" ng-submit="updatePersonalCredit()" class="needs-validation">
-    <div  class=" modal fade" id="updateCreditModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static">
-        <div class="modal-dialog " role="dialog">
+    <div class="dm-overlay" id="updateCreditModal"><div class="dm-table"><div class="dm-cell"><div class="dm-modal">
             <div class="modal-content">
                 <div class="modal-header" style="position: relative;">
-                    <button type="button" class="close"
-                            onclick="$('#updateCreditModal').css('display', 'none');
-                         $('#infoCreditModal').css('display', 'block');" aria-label="Close">
+                    <button type="button" class="close" aria-label="Close" onclick="EditModalHide(); InfoModalShow()">
                         <span aria-hidden="true">&times;</span>
                     </button>
                     <h4 class="modal-title" style="position: absolute; top: 50%; left: 50%; margin: 0 -50% 0 0; transform: translate(-50%, -50%);">
@@ -505,15 +515,11 @@
                 </div>
                 <div class="modal-footer">
                     <button style="float: left" ng-disabled="editCreditForm.$invalid" type="button" class="btn btn-info" ng-click="checkPersonalCredit()">Check credit possibility</button>
-                    <button type="button" class="btn btn-secondary" onclick="$('#updateCreditModal').css('display', 'none');
-                         $('#infoCreditModal').css('display', 'block');" >Close</button>
-                    <button type="submit" class="btn btn-primary" ng-disabled="editCreditForm.$invalid"
-                            onclick="$('#updateCreditModal').css('display', 'none');
-                        $('#infoCreditModal').css('display', 'block');">Save changes</button>
+                    <button type="button" class="btn btn-secondary" onclick="EditModalHide(); InfoModalShow()">Close</button>
+                    <button type="submit" class="btn btn-primary" ng-disabled="editCreditForm.$invalid">Save changes</button>
                 </div>
             </div>
-        </div>
-    </div>
+    </div></div></div></div>
 </form>
 
 <form novalidate="novalidate" name="addCreditForm" ng-controller="PersonalCreditController" ng-submit="addPersonalCredit()" class="needs-validation">
