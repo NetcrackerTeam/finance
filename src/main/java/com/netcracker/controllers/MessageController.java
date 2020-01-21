@@ -55,6 +55,9 @@ public interface MessageController {
     String LATIN_CHAR = "The password must contain only Latin characters.";
     String LATIN_LETTERS = "The username must contain only Latin letters without other characters.";
     String NAME_SHORT = "The username must contain at least 2 characters.";
+    String UNKNOWN_ERR = "Something went wrong...";
+    String USER_NOT_EXIST = "A user with this email doesn't exist.";
+
     String CREDIT_NAME_EXISTS = "Credit with this name already exists";
     String CREDIT_NAME_LENGHT_FULL = "Credit name has more then 20 characters ";
     String INVALID_NAME = "Invalid name";
@@ -72,5 +75,6 @@ public interface MessageController {
     String INVALID_DATE = "Date can not be later than today";
     String SUCCESSFUL_SENDING = "Report was sent";
     String SUCCESSFUL_DELETE_AO = "The autoOperation deleting successful";
+
 
 }

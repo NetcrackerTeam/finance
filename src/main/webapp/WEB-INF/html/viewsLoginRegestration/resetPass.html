@@ -8,16 +8,16 @@
 </head>
 <body class="background-colors">
 <div class="container">
-    <form class="form-signin" th:action="@{/savePass}" method="post">
+    <form class="form-signin" th:action="@{/savePass}" th:object="${user}" method="post">
         <img class="img-circle center-block center-img"  src="resources/images/ewallet.png"
              alt="" width="82" height="82"></img>
         <h1 align="center">Enter new password</h1>
         <div class="form-group">
-            <input type="password" name="password" class="form-control" placeholder="Password"/>
+            <input type="password" class="form-control" th:field="*{password}" placeholder="Password"/>
             <p></p>
-            <input type="password" name="passwordConf" class="form-control" placeholder="Confirm password"/>
+            <input type="password" class="form-control" th:field="*{confirmPassword}" placeholder="Confirm password"/>
             <p></p>
-            <span style="color:#b42624;" th:text="${error}"> </span>
+            <span style="color:#b42624;" th:text="${message}"> </span>
             <input type="submit" class="btn btn-lg btn-primary btn-block" value="Confirm"/>
             <h4 class="text-center"><a href="login">Back to login page</a></h4>
         </div>

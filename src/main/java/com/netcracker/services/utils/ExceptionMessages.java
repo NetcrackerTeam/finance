@@ -16,7 +16,6 @@ public interface ExceptionMessages {
     String ERROR_MESSAGE_PERSONAL = "the personal debit account doesn`t exist";
     String ERROR_MESSAGE_PERSONAL_STATUS = "The user is unactive";
     String ERROR_MESSAGE_ILLEGAL_AMOUNT = "Amount can`t be negative";
-    String ERROR_MESSAGE_NUMBER_ZERO = "The value of the entered number is zero";
 
     String INVALID_EMAIL = "The email is invalid";
     String INVALID_PASSWORD = "The password is invalid";
@@ -31,4 +30,7 @@ public interface ExceptionMessages {
     String NAME_SHORT = "Username is too short";
     String NAME_FAMILY_SHORT = "account name is too short";
     String INVALID_CONFIRM_PASSWORD = "Passwords are not equals";
+    String UNKNOWN_ERR = "Unknown error";
+    String USER_NOT_EXIST = "User doesn't exist";
+
 }
