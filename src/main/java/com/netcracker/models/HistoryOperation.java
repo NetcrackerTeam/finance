@@ -7,6 +7,7 @@ public class HistoryOperation extends AbstractAccountOperation {
     private CategoryIncome categoryIncome;
     private CategoryExpense categoryExpense;
     private  String userName;
+    private String dateStr;
 
     public static class Builder extends BaseBuilder<HistoryOperation, Builder> {
 
@@ -24,6 +25,12 @@ public class HistoryOperation extends AbstractAccountOperation {
             actualClass.setName(userName);
             return this;
         }
+
+        public Builder dateStr(String dateStr){
+            actualClass.setDateStr(dateStr);
+            return this;
+        }
+
 
         @Override
         protected HistoryOperation getActual() {
@@ -60,4 +67,8 @@ public class HistoryOperation extends AbstractAccountOperation {
     public void setName(String userName) {
         this.userName = userName;
     }
+
+    public String getDateStr(){return dateStr;}
+
+    public void setDateStr(String dateStr){this.dateStr = dateStr;}
 }

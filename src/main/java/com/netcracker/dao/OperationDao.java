@@ -195,7 +195,7 @@ public interface OperationDao {
 
     String GET_FIRST_15_PERSONAL_HISTORY_BY_ACCOUNT_ID = " SELECT *\n" +
             "            FROM (SELECT SUMM.VALUE AS AMOUNT,  \n" +
-            "                   DATE_OF.DATE_VALUE AS DATE_IN,  \n" +
+            "                   TO_CHAR(DATE_OF.DATE_VALUE, 'DD-MM-YYYY HH24:MI') AS DATE_IN,  \n" +
             "                   DECODE(O.OBJECT_TYPE_ID,  \n" +
             "                          10, CATEGORY.LIST_VALUE_ID  \n" +
             "                           ) AS CATEGORY_INCOME,  \n" +
@@ -213,7 +213,7 @@ public interface OperationDao {
 
     String GET_FIRST_15_FAMILY_HISTORY_BY_ACCOUNT_ID = "SELECT *\n" +
             "           FROM (SELECT NAME.VALUE USERNAME,  SUMM.VALUE AS AMOUNT,  \n" +
-            "                   DATE_OF.DATE_VALUE AS DATE_IN,  \n" +
+            "                   TO_CHAR(DATE_OF.DATE_VALUE, 'DD-MM-YYYY HH24:MI') AS DATE_IN,  \n" +
             "                   DECODE(O.OBJECT_TYPE_ID,  \n" +
             "                          21, CATEGORY.LIST_VALUE_ID  \n" +
             "                           ) AS CATEGORY_INCOME,  \n" +

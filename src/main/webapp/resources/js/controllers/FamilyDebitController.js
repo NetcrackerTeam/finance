@@ -6,7 +6,7 @@ var FamilyDebitController = function ($scope, $http, $rootScope) {
         });
     };
 
-    $scope.fetchPersonalAutoOperationHistory = function () {
+    $scope.fetchFamilyAutoOperationHistory = function () {
         $http.get('debitFamily/autoOperationHistory').success(function (autoOper) {
             $scope.familyAutoOperationHistory = autoOper;
         });
@@ -131,8 +131,7 @@ var FamilyDebitController = function ($scope, $http, $rootScope) {
     };
 
    // $scope.fetchFamilyPeriodHistory();
-    $scope.fetchPersonalAutoOperationHistory();
-    $scope.fetchFamilyHistory();
+
     $scope.fetchFamilyInfo();
     $scope.fetchUserInfo();
 };

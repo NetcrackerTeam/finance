@@ -126,11 +126,11 @@
 
 
             <!-- History Card -->
-            <div class="card shadow mb-4">
+            <div class="card shadow mb-4" ng-init="fetchFamilyHistory()">
                 <div class="card-header py-3">
                     <h6 class="m-0 font-weight-bold text-primary">History</h6>
                 </div>
-                <div class="card-body" ng-controller="FamilyDebitController">
+                <div class="card-body">
                     <div class="table-responsive">
                     <table class="table">
                         <thead>
@@ -164,7 +164,7 @@
                                 {{hisInf.categoryIncome}}{{hisInf.categoryExpense}}
                             </td>
                             <td>{{hisInf.userName}}</td>
-                            <td>{{hisInf.date.date.year}}-{{hisInf.date.date.month}}-{{hisInf.date.date.day}} {{hisInf.date.time.hour}}:{{hisInf.date.time.minute}}</td>
+                            <td>{{hisInf.dateStr}}</td>
                         </tr>
                         </tbody>
                     </table>
@@ -260,11 +260,11 @@
                 </div>
             </div>
 
-            <div class="card shadow mb-4">
+            <div class="card shadow mb-4" ng-init="fetchFamilyAutoOperationHistory()">
                 <div class="card-header py-3">
                     <h6 class="m-0 font-weight-bold text-primary">Auto operations</h6>
                 </div>
-                <div class="card-body" ng-controller="FamilyDebitController">
+                <div class="card-body">
                     <div class="table-responsive">
                     <table class="table ">
                         <thead>

@@ -50,8 +50,6 @@ var PersonalDebitController = function($scope, $http) {
         });
     };
 
-    $scope.fetchPersonalAutoOperationHistory();
-    $scope.fetchPersonalHistory();
     $scope.fetchPersonalInfo();
     $scope.fetchUserInfo();
 };

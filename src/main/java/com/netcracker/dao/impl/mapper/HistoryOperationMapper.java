@@ -20,7 +20,7 @@ public class HistoryOperationMapper implements RowMapper<HistoryOperation> {
                 new HistoryOperation.Builder()
                         .userName(resultSet.getString("USERNAME"))
                         .accountAmount(resultSet.getDouble("AMOUNT"))
-                        .accountDate(new Timestamp(resultSet.getDate("DATE_IN").getTime()).toLocalDateTime())
+                        .dateStr(resultSet.getString("DATE_IN"))
                         .categoryExpense(CategoryExpense.getNameByKey(getKeyCategory(resultSet.getBigDecimal("CATEGORY_EXPENSE"))))
                         .categoryIncome(CategoryIncome.getNameByKey(getKeyCategory(resultSet.getBigDecimal("CATEGORY_INCOME"))))
                         .build();
