@@ -20,7 +20,6 @@ public class AutoOperationExpenseMapper implements RowMapper<AutoOperationExpens
                 .accountAmount(resultSet.getDouble("amount"))
                 .accountDate(new Timestamp(resultSet.getDate("date_of_creation").getTime()).toLocalDateTime())
                 .dayOfMonth(resultSet.getInt("day_of_month"))
-                .accountUserId(resultSet.getBigDecimal("user_id").toBigInteger())
                 .build();
 
         if ("FAMILY_EXPENSE_AO".equals(resultSet.getString("ao_name")))

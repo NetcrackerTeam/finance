@@ -309,12 +309,11 @@
 <!-- /.container-fluid -->
 
 <form novalidate="novalidate" name="addPay" ng-controller="FamilyCreditController" ng-submit="addCreditPayment(familyCreditor.creditId)">
-    <div class="dm-overlay" id="infoCreditModal"><div class="dm-table"><div class="dm-cell"><div class="dm-modal">
+    <div class="dm-overlay" id="infoCreditModal"><div class="dm-table"><div class="dm-cell"><div class="dm-modal min-width700">
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 align="center" class="modal-title"> "{{familyCreditor.name}}" credit</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"
-                            onclick="InfoModalHide()">
+                    <button type="button" class="close" aria-label="Close" onclick="InfoModalHide()">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>

@@ -225,6 +225,10 @@
     border-radius: 5px;
 }
 
+.min-width700 {
+    min-width: 700px;
+}
+
 .dm-modal img {
     width: 100%;
     height: auto;
