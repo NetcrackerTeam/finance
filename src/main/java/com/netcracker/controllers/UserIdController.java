@@ -4,6 +4,7 @@ import com.netcracker.dao.FamilyAccountDebitDao;
 import com.netcracker.dao.UserDao;
 import com.netcracker.models.FamilyDebitAccount;
 import com.netcracker.models.User;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.apache.log4j.Logger;
 import com.netcracker.models.enums.UserRole;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -29,6 +31,7 @@ public class UserIdController {
     private User user;
     private BigInteger personalDebitId;
     private BigInteger familyDebitId;
+    private String isCheckedIndex = "false";
 
     @RequestMapping(value = "/getUserDebitId", produces = MediaType.APPLICATION_JSON_VALUE,  method = RequestMethod.GET)
     public ResponseEntity<BigInteger> getUserDebitId() {
@@ -63,6 +66,17 @@ public class UserIdController {
     @RequestMapping(value = "/templateURL", method = RequestMethod.GET)
     public String templateMethod() {
         return URL.TEMPLATE_URL;
+    }
+
+    @RequestMapping(value = "/sendCheckedIndex", method = RequestMethod.POST)
+    public ResponseEntity<String> sendCreditId(@RequestBody String isCheckedIndex) {
+        this.isCheckedIndex = isCheckedIndex;
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/getCheckedIndex", method = RequestMethod.GET)
+    public ResponseEntity<String> getCheckedIndex() {
+        return new ResponseEntity<>(isCheckedIndex, HttpStatus.OK);
     }
 
     private void getUserInfo() {

@@ -4,6 +4,33 @@
  * @constructor
  */
 var FamilyCreditController = function ($scope, $http, $rootScope) {
+    function InfoModalShow() {
+        $("#infoCreditModal").show();
+    }
+
+    $scope.getCheckedIndex = function () {
+        $http.get('getCheckedIndex').success(function (response) {
+            $scope.isCheckedIndex = response;
+            if ($scope.isCheckedIndex === "true") {
+                $scope.fetchFamilyCredit();
+                $rootScope.fetchCreditHistoryFamily();
+                InfoModalShow();
+            }
+        });
+    };
+    $scope.getCheckedIndex();
+
+    $scope.sendCheckedIndex = function (checkedIndex) {
+        $http({
+            method: 'POST',
+            url: 'sendCheckedIndex',
+            data: angular.toJson(checkedIndex),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+    };
+
     $scope.check = null;
     $scope.credits = [];
     $scope.credit = {
@@ -194,7 +221,12 @@ var FamilyCreditController = function ($scope, $http, $rootScope) {
             headers: {
                 'Content-Type': 'application/json'
             }
-        }).then(success, error);
+        }).then(function(){
+            refreshPageData();
+            clearForm();
+            $scope.sendCheckedIndex(true);
+            window.location.reload();
+        }, error);
     };
 
     var addCreditPayURL = 'familyCredit/pay/';
@@ -219,9 +251,17 @@ var FamilyCreditController = function ($scope, $http, $rootScope) {
                     $scope.messageAmountPay = null;
                     $scope.messageAmountPaySuccess = response.message;
                     $scope.amountToPay = null;
+                    $scope.sendCheckedIndex(true);
+                    window.location.reload();
                 }
             });
         }
+    };
+
+    $scope.closeInfo = function () {
+        $scope.messageAmountPaySuccess = null;
+        $scope.messageAmountPay = null;
+        $scope.amountToPay = null;
     };
 
     $scope.checkFamilyCredit = function () {

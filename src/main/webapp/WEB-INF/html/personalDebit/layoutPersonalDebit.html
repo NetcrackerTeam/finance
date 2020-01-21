@@ -328,7 +328,7 @@
                 <div class="modal-header">
                     <h4 align="center" class="modal-title"> "{{personalCreditor.name}}" credit</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="InfoModalHide()"
-                    ng-click="closeInfo(); setCheckedIndexFalse();">
+                    ng-click="closeInfo(); sendCheckedIndex(false)">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -421,8 +421,7 @@
                 </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" onclick="InfoModalHide()"
-                            ng-click="closeInfo(); setCheckedIndexFalse();">
+                    <button type="button" class="btn btn-secondary" onclick="InfoModalHide()" ng-click="closeInfo(); sendCheckedIndex(false)">
                         Close
                     </button>
                 </div>
@@ -449,7 +448,8 @@
     <div class="dm-overlay" id="updateCreditModal"><div class="dm-table"><div class="dm-cell"><div class="dm-modal">
             <div class="modal-content">
                 <div class="modal-header" style="position: relative;">
-                    <button type="button" class="close" aria-label="Close" onclick="EditModalHide(); InfoModalShow()">
+                    <button type="button" class="close" aria-label="Close" onclick="EditModalHide(); InfoModalShow()"
+                    ng-click="sendCheckedIndex(false)">
                         <span aria-hidden="true">&times;</span>
                     </button>
                     <h4 class="modal-title" style="position: absolute; top: 50%; left: 50%; margin: 0 -50% 0 0; transform: translate(-50%, -50%);">
@@ -515,7 +515,7 @@
                 </div>
                 <div class="modal-footer">
                     <button style="float: left" ng-disabled="editCreditForm.$invalid" type="button" class="btn btn-info" ng-click="checkPersonalCredit()">Check credit possibility</button>
-                    <button type="button" class="btn btn-secondary" onclick="EditModalHide(); InfoModalShow()">Close</button>
+                    <button type="button" class="btn btn-secondary" onclick="EditModalHide(); InfoModalShow()" ng-click="sendCheckedIndex(false)">Close</button>
                     <button type="submit" class="btn btn-primary" ng-disabled="editCreditForm.$invalid">Save changes</button>
                 </div>
             </div>
