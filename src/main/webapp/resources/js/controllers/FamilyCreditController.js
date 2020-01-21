@@ -45,7 +45,8 @@ var FamilyCreditController = function ($scope, $http, $rootScope) {
         isCommodity: "false",
         monthPayment: 0,
         remainsToPay: 0,
-        totalCreditPayment: 0
+        totalCreditPayment: 0,
+        dateFrom: ""
     };
 
     $scope.summAmount = 0;
@@ -174,6 +175,7 @@ var FamilyCreditController = function ($scope, $http, $rootScope) {
     $scope.fetchFamilyCredit = function () {
         $http.get('familyCredit/getFamilyCredit').success(function (response) {
             $rootScope.familyCreditor = response;
+            $scope.familyCreditor.duration = moment($scope.familyCreditor.dateTo).diff(moment($scope.familyCreditor.date), 'month');
             if ($rootScope.familyCreditor.isCommodity === false) $rootScope.familyCreditor.isCommodity = "NO";
             if ($rootScope.familyCreditor.isCommodity === true) $rootScope.familyCreditor.isCommodity = "YES";
         });
@@ -199,19 +201,19 @@ var FamilyCreditController = function ($scope, $http, $rootScope) {
     var updateCreditURL = 'familyCredit/updateFamilyCredit';
     $scope.updateFamilyCredit = function () {
         // var dateFrom = $("#datetimepicker").datepicker('getDate');
-        var dateFromStr = $("#datetimepickerEdit").val();
-        var dateFrom = moment(dateFromStr).format('YYYY-MM-DD');
-        var duration = $scope.duration;
+        // var dateFromStr = $("#datetimepickerEdit").val();
+        var dateFrom = $rootScope.familyCreditor.date;
+        var duration = $rootScope.familyCreditor.duration;
         var dateTo = moment(dateFrom).clone().add(duration, 'months').format('YYYY-MM-DD');
         // var dateTo = new Date(dateFrom.setMonth(dateFrom.getMonth() + 5))
         $rootScope.familyCreditor.date = {
             year: moment(dateFrom).year(),
-            month: moment(dateFrom).month() + 1,
+            month: moment(dateFrom).month(),
             day: moment(dateFrom).date()
         };
         $rootScope.familyCreditor.dateTo = {
             year: moment(dateTo).year(),
-            month: moment(dateTo).month() + 1,
+            month: moment(dateTo).month(),
             day: moment(dateTo).date()
         };
         $http({
@@ -288,6 +290,8 @@ var FamilyCreditController = function ($scope, $http, $rootScope) {
         for (var i = 0; i < $rootScope.familyCreditRoot.length; i++) {
             if ($rootScope.familyCreditRoot[i].creditId === $rootScope.creditIdInArray) {
                 $rootScope.familyCreditor = $rootScope.familyCreditRoot[i];
+                $scope.familyCreditor.duration = moment($scope.familyCreditor.dateTo).diff(moment($scope.familyCreditor.date), 'month');
+                $scope.familyCreditor.dateFrom = $scope.familyCreditor.date.year + '-' + $scope.familyCreditor.date.month + '-' + $scope.familyCreditor.date.day;
                 if ($rootScope.familyCreditor.isCommodity === false) $rootScope.familyCreditor.isCommodity = "NO";
                 if ($rootScope.familyCreditor.isCommodity === true) $rootScope.familyCreditor.isCommodity = "YES";
             }

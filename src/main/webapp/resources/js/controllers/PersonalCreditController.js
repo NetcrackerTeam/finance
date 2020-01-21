@@ -45,7 +45,8 @@ var PersonalCreditController = function ($scope, $http, $rootScope) {
         isCommodity: "false",
         monthPayment: 0,
         remainsToPay: 0,
-        totalCreditPayment: 0
+        totalCreditPayment: 0,
+        dateFrom: ""
     };
 
     $scope.summAmount = 0;
@@ -176,6 +177,7 @@ var PersonalCreditController = function ($scope, $http, $rootScope) {
     $scope.fetchPersonalCredit = function(){
         $http.get('personalCredit/getPersonalCredit').success(function (response) {
             $rootScope.personalCreditor = response;
+            $scope.personalCreditor.duration = moment($scope.personalCreditor.dateTo).diff(moment($scope.personalCreditor.date), 'month');
             if ($rootScope.personalCreditor.isCommodity === false) $rootScope.personalCreditor.isCommodity = "NO";
             if ($rootScope.personalCreditor.isCommodity === true) $rootScope.personalCreditor.isCommodity = "YES";
         });
@@ -206,20 +208,20 @@ var PersonalCreditController = function ($scope, $http, $rootScope) {
     var updateCreditURL = 'personalCredit/updatePersonalCredit';
     $scope.updatePersonalCredit = function () {
         // var dateFrom = $("#datetimepicker").datepicker('getDate');
-        var dateFromStr = $("#datetimepickerEdit").val();
-        var dateFrom = moment(dateFromStr).format('YYYY-MM-DD');
-        var duration = $scope.duration;
+        // var dateFromStr = $("#datetimepickerEdit").val();
+        var dateFrom = $rootScope.personalCreditor.date
+        var duration = $rootScope.personalCreditor.duration;
         var dateTo = moment(dateFrom).clone().add(duration, 'months').format('YYYY-MM-DD') ;
         // var dateTo = new Date(dateFrom.setMonth(dateFrom.getMonth() + 5))
         $rootScope.personalCreditor.date = {
-            year: moment(dateFrom).year() + 1,
-            month: moment(dateFrom).month() + 1,
-            day: moment(dateFrom).date() + 1
+            year: moment(dateFrom).year(),
+            month: moment(dateFrom).month(),
+            day: moment(dateFrom).date()
         };
         $rootScope.personalCreditor.dateTo = {
-            year: moment(dateTo).year() + 1,
-            month: moment(dateTo).month() + 1,
-            day: moment(dateTo).date() + 1
+            year: moment(dateTo).year(),
+            month: moment(dateTo).month(),
+            day: moment(dateTo).date()
         };
         $http({
             method : "PUT",
@@ -296,6 +298,8 @@ var PersonalCreditController = function ($scope, $http, $rootScope) {
         for (var i = 0; i < $rootScope.personalCreditRoot.length; i++) {
             if ($rootScope.personalCreditRoot[i].creditId === $rootScope.creditIdInArray) {
                 $rootScope.personalCreditor = $rootScope.personalCreditRoot[i];
+                $scope.personalCreditor.duration = moment($scope.personalCreditor.dateTo).diff(moment($scope.personalCreditor.date), 'month');
+                $scope.personalCreditor.dateFrom = $scope.personalCreditor.date.year + '-' + $scope.personalCreditor.date.month + '-' + $scope.personalCreditor.date.day;
                 if ($rootScope.personalCreditor.isCommodity === false) $rootScope.personalCreditor.isCommodity = "NO";
                 if ($rootScope.personalCreditor.isCommodity === true) $rootScope.personalCreditor.isCommodity = "YES";
             }

@@ -448,35 +448,19 @@
                 <div class="modal-body">
                     <div class="form-group" ng-class="{ 'has-error' : editCreditForm.nameCr.$invalid &amp;&amp; !editCreditForm.nameCr.$pristine}">
                         <label for="editCreditName">Credit name:</label>
-                        <input type="text" name="nameCr" class="item-input-wrapper form-control" maxlength="60" placeholder="Enter name" ng-model="familyCreditor.name" id="editCreditName" required="required" ng-minlength="3"/>
+                        <input type="text" name="nameCr" class="item-input-wrapper form-control" maxlength="20" placeholder="Enter name" ng-model="familyCreditor.name" id="editCreditName" required="required" ng-minlength="3"/>
                         <p ng-show="editCreditForm.nameCr.$error.minlength" class="help-block">Credit name is too short</p>
                     </div>
 
                     <div class="form-group" ng-class="{ 'has-error' : (editCreditForm.am.$error.max || editCreditForm.am.$error.min) &amp;&amp; !editCreditForm.am.$pristine}">
                         <label for="editCreditAmount">Credit amount:</label>
-                        <input type="number" name="am" min="1" max="10000000" id="editCreditAmount" step="0.01" class="item-input-wrapper form-control" placeholder="Enter amount" ng-model="familyCreditor.amount" required="required"/>
+                        <input type="number" name="am" min="1" max="10000000" disabled="disabled" id="editCreditAmount" step="0.01" class="item-input-wrapper form-control" placeholder="Enter amount" ng-model="familyCreditor.amount" required="required"/>
                         <p ng-show="(editCreditForm.am.$error.max || editCreditForm.am.$error.min) &amp;&amp; !editCreditForm.am.$pristine" class="help-block">Amount can be from 1 to 10000000</p>
                     </div>
 
                     <div class="form-group">
                         <label for="datetimepickerEdit">Credit start date:</label>
-                        <div class="input-group fetched-date date_field">
-                            <input type="text" name="dt" class="form-control" placeholder="yyyy/mm/dd" id="datetimepickerEdit" ng-model="dateFrom"/>
-                            <div class="input-group-addon">
-                                <span class="glyphicon glyphicon-th"></span>
-                            </div>
-                        </div>
-                        <script type="text/javascript">
-                            $(function() {
-                                $('#datetimepickerEdit').datepicker({
-                                    calendarWeeks: true,
-                                    todayHighlight: true,
-                                    autoclose: true,
-                                    zIndexOffset: '2001',
-                                    format: 'yyyy/mm/dd'
-                                }).datepicker("setDate", new Date());;
-                            });
-                        </script>
+                            <input type="text" name="dt" disabled="disabled" class="form-control" id="datetimepickerEdit" ng-model="familyCreditor.dateFrom"/>
                         <p ng-show="editCreditForm.dt.$invalid &amp;&amp; !editCreditForm.dt.$pristine" class="help-block">Required field</p>
                     </div>
 
@@ -487,7 +471,7 @@
 
                     <div class="form-group" ng-class="{ 'has-error' : (editCreditForm.dur.$error.max || editCreditForm.dur.$error.min) &amp;&amp; !editCreditForm.dur.$pristine}">
                         <label for="creditDurationEdit">Credit duration in months:</label>
-                        <input type="number" name="dur" min="1" max="600" id="creditDurationEdit" step="1" class="form-control" placeholder="Enter amount" ng-model="duration" required="required"/>
+                        <input type="number" name="dur" min="1" max="600" id="creditDurationEdit" step="1" class="form-control" placeholder="Enter amount" ng-model="familyCreditor.duration" required="required"/>
                         <p ng-show="(editCreditForm.dur.$error.max || editCreditForm.dur.$error.min) &amp;&amp; !editCreditForm.dur.$pristine" class="help-block">Duration can be from 1 to 600</p>
                     </div>
 

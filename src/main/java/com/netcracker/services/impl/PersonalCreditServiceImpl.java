@@ -230,9 +230,9 @@ public class PersonalCreditServiceImpl implements PersonalCreditService {
                 creditAccount.isCommodity());
         if (creditAccount.getAmount() < 1 || creditAccount.getAmount() > 100000000)
             return new Status(false, MessageController.INCORRECT_AMOUNT_BETWEEN);
-        if (LocalDate.now().minusWeeks(1).isAfter(creditAccount.getDate()))
+        if (LocalDate.now().minusMonths(1).isAfter(creditAccount.getDate()))
             return new Status(false, MessageController.START_DATE_ERROR);
-        if (LocalDate.now().plusMonths(600).isBefore(creditAccount.getDateTo()))
+        if (LocalDate.now().plusWeeks(600).isBefore(creditAccount.getDateTo()))
             return new Status(false, MessageController.END_DATE_ERROR);
         if (creditAccount.getCreditRate() < 0 || creditAccount.getCreditRate() > 60)
             return new Status(false, MessageController.CREDIT_RATE_ERROR);
