@@ -31,6 +31,25 @@ var PersonalDebitController = function($scope, $http) {
         });
     };
 
+    $scope.deleteAutoOperation = function (id) {
+        var method = "GET";
+
+        var url = 'debitPersonal/deleteAuto';
+
+        $http({
+            method: method,
+            url: url,
+            params: {'id': id},
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).success(function () {
+            window.location.reload();
+        }).error(function () {
+            alert("unsuccess ")
+        });
+    };
+
     $scope.fetchPersonalAutoOperationHistory();
     $scope.fetchPersonalHistory();
     $scope.fetchPersonalInfo();

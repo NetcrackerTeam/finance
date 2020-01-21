@@ -198,7 +198,7 @@ public class FamilyDebitController {
             logger.debug("success adding user");
             userDao.updateRole(userId, UserRole.USER.getId());
             return new Status(true, DELETE_USER_FAM + userDao.getUserById(userId).getName());
-        } catch (NullObjectException ex) {
+        } catch (RuntimeException ex) {
             return new Status(false, DELETE_UNS_USER_FAM + userDao.getUserById(userId).getName());
         }
     }
@@ -315,26 +315,6 @@ public class FamilyDebitController {
 
     }
 
-    @RequestMapping(value = "/deleteAutoIncome/{incomeId}", method = RequestMethod.GET)
-    public Status deleteAutoIncome(@PathVariable("incomeId") BigInteger incomeId,
-                                   Model model
-    ) {
-        logger.debug("delete autoIncomePersonal");
-        accountAutoOperationService.deleteAutoOperation(incomeId);
-        model.addAttribute("incomeId", incomeId);
-        return new Status(true, MessageController.DELETE_AUTO_INCOME_FAM + incomeId);
-    }
-
-    @RequestMapping(value = "/deleteAutoExpense/{expenseId}", method = RequestMethod.GET)
-    public Status deleteAutoExpense(@PathVariable("expenseId") BigInteger expenseId,
-                                    Model model
-    ) {
-        logger.debug("delete autoExpensePersonal");
-        accountAutoOperationService.deleteAutoOperation(expenseId);
-        model.addAttribute("expenseId", expenseId);
-        return new Status(true, MessageController.DELETE_AUTO_EXPENSE_FAM + expenseId);
-    }
-
     @RequestMapping(value = "/report", method = RequestMethod.GET)
     @ResponseBody
     public Status getReport(
@@ -383,6 +363,20 @@ public class FamilyDebitController {
 
         logger.debug("Month report is ready");
         return new Status(true, SUCCESSFUL_SENDING);
+    }
+
+    @RequestMapping(value = "/deleteAuto", method = RequestMethod.GET)
+    @ResponseBody
+    public Status deleteAutoOperation(@RequestParam(value = "id") BigInteger id){
+
+        try {
+            logger.debug("deleting AO with id " + id);
+            accountAutoOperationService.deleteAutoOperation(id);
+            logger.debug("success delete with id " + id);
+            return new  Status (true, SUCCESSFUL_DELETE_AO);
+        } catch (RuntimeException ex){
+            return  new Status(false, ex.getMessage());
+        }
     }
 
     @RequestMapping(value = "/info", method = RequestMethod.GET)

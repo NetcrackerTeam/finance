@@ -280,7 +280,7 @@
                         <tbody>
                         <tr ng-repeat="autoOperInf in familyAutoOperationHistory">
                             <td>
-                            <a class="text-danger" ng-click="" ng-show="userInfo.id == autoOperInf.userId || userInfo.userRole == 'OWNER'">
+                            <a class="text-danger" ng-click="deleteAutoOperation(autoOperInf.id)" ng-show="userInfo.name == autoOperInf.username || userInfo.userRole == 'OWNER'">
                                 <i class="fas fa-times"></i>
                             </a>
                             </td>

@@ -173,25 +173,6 @@ public class PersonalDebitController {
 
     }
 
-    @RequestMapping(value = "/deleteAutoIncome", method = RequestMethod.GET)
-    public Status deleteAutoIncome(Principal principal
-    ) {
-        logger.debug("delete autoIncomePersonal");
-        BigInteger debitId = getAccountByPrincipal(principal);
-        accountAutoOperationService.deleteAutoOperation(debitId);
-        return new Status(true, MessageController.DELETE_AUTO_INCOME_PERS);
-    }
-
-    @RequestMapping(value = "/deleteAutoExpense", method = RequestMethod.DELETE)
-    public Status deleteAutoExpense(
-            Principal principal
-    ) {
-        logger.debug("delete autoExpensePersonal");
-        BigInteger debitId = getAccountByPrincipal(principal);
-        accountAutoOperationService.deleteAutoOperation(debitId);
-        return new Status(true, MessageController.DELETE_AUTO_EXPENSE_PERS);
-    }
-
     @RequestMapping(value = "/report", method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity<MonthReport> getReport(
@@ -237,6 +218,20 @@ public class PersonalDebitController {
 
         logger.debug("Month report is ready");
         return new Status(true, SUCCESSFUL_SENDING);
+    }
+
+    @RequestMapping(value = "/deleteAuto", method = RequestMethod.GET)
+    @ResponseBody
+    public Status deleteAutoOperation(@RequestParam(value = "id") BigInteger id){
+
+        try {
+            logger.debug("deleting AO with id " + id);
+            accountAutoOperationService.deleteAutoOperation(id);
+            logger.debug("success delete with id " + id);
+            return new  Status (true, SUCCESSFUL_DELETE_AO);
+        } catch (RuntimeException ex){
+            return  new Status(false, ex.getMessage());
+        }
     }
 
     @RequestMapping(value = "/info", method = RequestMethod.GET)

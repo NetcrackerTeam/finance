@@ -99,6 +99,25 @@ var FamilyDebitController = function ($scope, $http, $rootScope) {
         });
     };
 
+    $scope.deleteAutoOperation = function (id) {
+        var method = "GET";
+
+        var url = 'debitFamily/deleteAuto';
+
+        $http({
+            method: method,
+            url: url,
+            params: {'id': id},
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).success(function () {
+            window.location.reload();
+        }).error(function () {
+            alert("unsuccess ")
+        });
+    };
+
     $scope.fetchParticipants = function () {
         $http.get('debitFamily/getParticipants').success(function (response) {
             $scope.participants = response;

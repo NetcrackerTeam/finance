@@ -71,5 +71,6 @@ public interface MessageController {
     String SUCCESS_CREDIT_PAYMENT = "Payment added successfully";
     String INVALID_DATE = "Date can not be later than today";
     String SUCCESSFUL_SENDING = "Report was sent";
+    String SUCCESSFUL_DELETE_AO = "The autoOperation deleting successful";
 
 }
