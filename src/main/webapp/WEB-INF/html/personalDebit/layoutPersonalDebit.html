@@ -530,13 +530,26 @@
                     <div class="form-group">
                         <label for="datetimepickerPer">Credit start date:</label>
                         <div class="input-group fetched-date date_field">
-                            <input type="text" name="dt" class="form-control" disabled="disabled" placeholder="yyyy/mm/dd" id="datetimepickerPer" ng-model="dateFrom"/>
+                            <input type="text" name="dt" class="form-control" placeholder="yyyy/mm/dd" id="datetimepickerPer" ng-model="dateFrom"/>
                             <div class="input-group-addon">
                                 <span class="glyphicon glyphicon-th"></span>
                             </div>
                         </div>
                         <p ng-show="addCreditForm.dt.$invalid &amp;&amp; !addCreditForm.dt.$pristine" class="help-block">Required field</p>
                     </div>
+                    <script type="text/javascript">
+                        $(function() {
+                            $('#datetimepickerPer').datepicker({
+                                calendarWeeks: true,
+                                todayHighlight: true,
+                                autoclose: true,
+                                zIndexOffset: '2001',
+                                format: 'yyyy/mm/dd',
+                                startDate: '-1m',
+                                endDate: '+1w'
+                            }).datepicker("setDate", new Date());;
+                        });
+                    </script>
 
                     <div class="form-group slidecontainer">
                         <label for="creditRateRange" id="creditRateText">Credit rate:</label>
