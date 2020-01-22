@@ -5,7 +5,7 @@ public interface MessageController {
     double MAX = 100000000;
 
     //UserController
-    String SUCCESS_UPDATE_PASSWORD = "Password was updated successfully ";
+    String SUCCESS_UPDATE_PASSWORD = "Password was updated successfully";
     String SUCCESS_UPDATE_EMAIL = "Email was updated successfully";
     String INVALID_OLD_EMAIL = "Old email incorrect,\n" +
             "does not match the old email try again ";

@@ -1,9 +1,14 @@
 package com.netcracker.controllers;
 
+import com.netcracker.controllers.validators.UserDataValidator;
 import com.netcracker.dao.UserDao;
+import com.netcracker.exception.ErrorsMap;
+import com.netcracker.exception.UserException;
+import com.netcracker.models.Status;
 import com.netcracker.models.User;
 import com.netcracker.models.enums.UserStatusActive;
 import com.netcracker.services.UserService;
+import com.netcracker.services.utils.ExceptionMessages;
 import com.netcracker.services.validation.RegexPatterns;
 import com.netcracker.services.validation.UserValidationRegex;
 import org.apache.log4j.Logger;
@@ -36,40 +41,53 @@ public class UserController {
     private static final Logger logger = Logger.getLogger(UserController.class);
 
     @RequestMapping(value = "/updateEmail", method = RequestMethod.POST)
-    public String updateEmail(@ModelAttribute
-                              @RequestParam Map<String, String> mapUserData, Model model) {
+    public @ResponseBody Status updateEmail (@RequestBody String email) {
         User userTemp = userDao.getUserByEmail(getCurrentUsername());
         logger.debug(MessageController.LOGGER_UPDATE_EMAIL + userTemp.getId());
-        String newEmail = mapUserData.get("newEmail");
-        boolean validateEmail = userValidation.validateValueByUser(newEmail, RegexPatterns.EMAIL_PATTERN);
-        boolean emailAlreadyExit = (userDao.getNumberOfUsersByEmail(newEmail) > 0);
-        if ((validateEmail) && (!emailAlreadyExit)) {
-            userDao.updateEmail(userTemp.getId(), newEmail);
-            model.addAttribute("successUpdatePass", SUCCESS_UPDATE_EMAIL);
-        } else {
-            model.addAttribute("errorValidateNewEmail or email already exist", ERROR_VALIDATE_EMAIL);
+
+        email = email.replace("\"", "");
+        try {
+            UserDataValidator.isValidEmail(email);
+            if (userDao.getNumberOfUsersByEmail(email) > 0) return showStatusFalse(ExceptionMessages.USER_ALREADY_EXIST);
+        } catch (UserException ex) {
+            String error = ex.getMessage();
+            if (ExceptionMessages.EMPTY_FIELD.equals(error)) return showStatusFalse(ExceptionMessages.EMPTY_FIELD);
+            if (ExceptionMessages.INVALID_EMAIL.equals(error)) return showStatusFalse(ExceptionMessages.INVALID_EMAIL);
         }
-        return URL.INDEX;
+
+        userDao.updateEmail(userTemp.getId(), email);
+        return new Status(true, SUCCESS_UPDATE_EMAIL);
+    }
+
+    private Status showStatusFalse(String msgKey) {
+        return new Status(false, ErrorsMap.getErrorsMap().get(msgKey));
     }
 
     @RequestMapping(value = "/updatePassword", method = RequestMethod.POST)
-    public String updateUserPassword(@ModelAttribute
-                                     @RequestParam Map<String, String> mapUserData, Model model) {
+    public @ResponseBody Status updateUserPassword(@RequestBody User user) {
         User userTemp = userDao.getUserByEmail(getCurrentUsername());
         logger.debug(MessageController.LOGGER_UPDATE_PASSWORD + userTemp.getId());
-        String newPassword = mapUserData.get("newPassword");
-        String newConfirmPassword = mapUserData.get("newConfirmPassword");
-        boolean confirmPass = userService.confirmUserPassword(newPassword, newConfirmPassword);
-        boolean validationPassword = userValidation.validateValueByUser(newPassword, RegexPatterns.PASSWORD_PATTERN);
-        if (!confirmPass) {
-            model.addAttribute("errorConfirm", INVALID_CONFIRM_PASSWORD);
-        } else if (validationPassword) {
-            String passwordEncode = userService.encodePassword(newPassword);
-            userDao.updateUserPasswordById(userTemp.getId(), passwordEncode);
-            model.addAttribute("successUpdatePass", SUCCESS_UPDATE_PASSWORD);
-        }
-        return URL.INDEX;
 
+        String password = user.getPassword();
+        String confirmPassword = user.getConfirmPassword();
+
+        try {
+            UserDataValidator.isValidPassword(password);
+            UserDataValidator.comparePasswords(password, confirmPassword);
+        } catch (UserException ex) {
+            String error = ex.getMessage();
+            if (ExceptionMessages.EMPTY_FIELD.equals(error)) return showStatusFalse(ExceptionMessages.EMPTY_FIELD);
+            if (ExceptionMessages.LATIN_CHAR.equals(error)) return showStatusFalse(ExceptionMessages.LATIN_CHAR);
+            if (ExceptionMessages.PASS_SHORT.equals(error)) return showStatusFalse(ExceptionMessages.PASS_SHORT);
+            if (ExceptionMessages.PASS_UPPER.equals(error)) return showStatusFalse(ExceptionMessages.PASS_UPPER);
+            if (ExceptionMessages.PASS_LOWER.equals(error)) return showStatusFalse(ExceptionMessages.PASS_LOWER);
+            if (ExceptionMessages.PASS_NUM.equals(error)) return showStatusFalse(ExceptionMessages.PASS_NUM);
+            if (ExceptionMessages.INVALID_CONFIRM_PASSWORD.equals(error)) return showStatusFalse(ExceptionMessages.INVALID_CONFIRM_PASSWORD);
+        }
+
+        String passwordEncode = userService.encodePassword(password);
+        userDao.updateUserPasswordById(userTemp.getId(), passwordEncode);
+        return new Status(true, SUCCESS_UPDATE_PASSWORD);
     }
 
     @RequestMapping(value = "/deactivate", method = RequestMethod.GET)

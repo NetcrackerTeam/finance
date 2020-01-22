@@ -147,6 +147,7 @@
 <script src="resources/js/controllers/PersonalPredictController.js"></script>
 <!--<script src="resources/js/controllers/FamilyPredictController.js"></script>-->
 <script src="resources/js/controllers/ReportController.js"></script>
+<script src="resources/js/controllers/UserController.js"></script>
 </body>
 <script >
 </script>
@@ -179,7 +180,7 @@
                     <h4 align="center" class="modal-title">Log out</h4>
                 </div>
                 <div class="modal-body">
-                    <h5>Are  you want to log out?</h5>
+                    <h5>Do you want to log out?</h5>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
@@ -191,56 +192,68 @@
 </form>
 
 <!-- Modal  password-->
-<form action="" th:action="@{/updatePassword}" method="post">
+<form ng-controller="UserController" ng-submit="updatePassword()" method="post">
     <div class="modal fade" id="passwordModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
          aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 align="center" class="modal-title" id="passwordModalLabel"> Change password </h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="clearPassword()">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
                     <!--                <span th:if="${errorOldEmail != null}"   th:text="${errorOldEmail}"> </span>-->
-                    <input class="form-control" placeholder="New password" type="password" name="newPassword"/>
+                    <input class="form-control" placeholder="New password" type="password" pattern="^[a-zA-Z0-9\S]+$"
+                           title="The password must contain only Latin characters." ng-model="user.password"/>
                     <p></p>
-                    <input class="form-control" placeholder="Confirm password" type="password" name="newConfirmPassword"/>
-
+                    <input class="form-control" placeholder="Confirm password" type="password" pattern="^[a-zA-Z0-9\S]+$"
+                           title="The password must contain only Latin characters." ng-model="user.confirmPassword"/>
+                    <p class="help-block">{{messageUpdatePasswordError}}</p>
+                    <p class="text-success">{{messageUpdatePasswordSuccess}}</p>
+                    <p></p>
+                    <p style="font-size: 8pt;">Please remember that your password must contain:<br/>
+                        - only Latin characters<br/>
+                        - at least one uppercase character<br/>
+                        - at least one lowercase character<br/>
+                        - at least 8 characters long<br/>
+                        - at least one number</p>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <input class="btn btn-primary" type="submit" value="Save changes"/>
-
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" ng-click="clearPassword()">Close</button>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
                 </div>
             </div>
         </div>
     </div>
 </form>
 <!-- Modal email -->
-<form action="" th:action="@{/updateEmail}" method="post">
+<form ng-controller="UserController" ng-submit="updateEmail()" method="post" novalidate="novalidate">
     <div class="modal fade" id="emailModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
          aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 align="center" class="modal-title" id="emailModalLabel"> Change Email </h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="clearEmail()">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <input class="form-control" placeholder="New Email" type="text" name="newEmail"/>
+                    <input class="form-control" placeholder="Enter new email" type="text" ng-model="newEmail"/>
+                    <p class="help-block">{{messageUpdateEmailError}}</p>
+                    <p class="text-success">{{messageUpdateEmailSuccess}}</p>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <input class="btn btn-primary" type="submit" value="Save changes"/>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" ng-click="clearEmail()">Close</button>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
                 </div>
             </div>
         </div>
     </div>
 </form>
+
 <script>
     $('#emailModal').on('hidden.bs.modal', function () {
         $(this).find('form').trigger('reset');

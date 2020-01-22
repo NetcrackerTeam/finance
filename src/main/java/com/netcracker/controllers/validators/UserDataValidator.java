@@ -1,10 +1,9 @@
 package com.netcracker.controllers.validators;
 
 import com.netcracker.exception.FamilyDebitAccountException;
+import com.netcracker.exception.NullObjectException;
 import com.netcracker.exception.UserException;
 import com.netcracker.models.AbstractAutoOperation;
-import com.netcracker.models.AutoOperationExpense;
-import com.netcracker.models.AutoOperationIncome;
 import com.netcracker.services.utils.ExceptionMessages;
 import com.netcracker.services.utils.ObjectsCheckUtils;
 import org.springframework.stereotype.Component;
@@ -22,7 +21,11 @@ public class UserDataValidator {
             Pattern.CASE_INSENSITIVE);
 
     private static boolean isEmptyString(String string) {
-        ObjectsCheckUtils.isNotNull(string);
+        try {
+            ObjectsCheckUtils.isNotNull(string);
+        } catch (NullObjectException ex) {
+            throw new UserException(ExceptionMessages.EMPTY_FIELD);
+        }
         return string.trim().length() == 0;
     }
 
