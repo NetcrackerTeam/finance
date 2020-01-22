@@ -130,8 +130,17 @@ var FamilyDebitController = function ($scope, $http, $rootScope) {
         });
     };
 
-   // $scope.fetchFamilyPeriodHistory();
+    $scope.checkUserRole = function () {
+        $http.get('debitFamily/role').success(function (response) {
+            if (response.status === false) {
+                window.location.reload();
+            }
 
+        })
+    };
+
+   // $scope.fetchFamilyPeriodHistory();
+    $scope.checkUserRole();
     $scope.fetchFamilyInfo();
     $scope.fetchUserInfo();
 };

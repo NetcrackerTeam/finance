@@ -14,6 +14,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.security.Principal;
 import java.util.Map;
 
@@ -71,12 +73,12 @@ public class UserController {
     }
 
     @RequestMapping(value = "/deactivate", method = RequestMethod.GET)
-    public String deactivateUser(Model model, Principal principal) {
+    public String deactivateUser(Model model, Principal principal, HttpServletResponse response, HttpServletRequest request) {
         User userTemp = userDao.getUserByEmail(getCurrentUsername());
         logger.debug("updateUserStatus by user id " + userTemp.getId());
         if (userService.deactivateUser(userTemp)) {
             userDao.updateUserStatus(userTemp.getId(), UserStatusActive.NO.getId());
-            familyDebitController.deleteUserFromAccount(userTemp.geteMail(), principal);
+            familyDebitController.deleteUserFromAccount(userTemp.geteMail(), principal, response, request);
             model.addAttribute("success", MessageController.SUCCESS_DEACTIVATE);
         } else model.addAttribute("unsuccess", UN_SUCCESS_DEACTIVATE);
         return URL.INDEX;

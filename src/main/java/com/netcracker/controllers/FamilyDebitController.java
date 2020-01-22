@@ -17,6 +17,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -37,6 +38,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static com.netcracker.controllers.MessageController.*;
 import static com.netcracker.controllers.UserController.getCurrentUsername;
@@ -188,8 +191,8 @@ public class FamilyDebitController {
     @RequestMapping(value = "/deleteUser", method = RequestMethod.GET)
     @ResponseBody
     public Status deleteUserFromAccount(@RequestParam(value = "userLogin") String userLogin,
-                                        Principal principal) {
-
+                                        Principal principal, HttpServletResponse response, HttpServletRequest request) {
+        BigInteger currentUserId = getUserIdByPrincipal(principal);
         BigInteger userId = userDao.getParticipantByEmail(userLogin).getId();
         BigInteger accountId = getAccountByPrincipal(principal);
         try {
@@ -197,6 +200,8 @@ public class FamilyDebitController {
             familyDebitService.deleteUserFromAccount(accountId, userId);
             logger.debug("success adding user");
             userDao.updateRole(userId, UserRole.USER.getId());
+            if (currentUserId.equals(userId))
+                loginController.logoutPage(request, response);
             return new Status(true, DELETE_USER_FAM + userDao.getUserById(userId).getName());
         } catch (RuntimeException ex) {
             return new Status(false, DELETE_UNS_USER_FAM + userDao.getUserById(userId).getName());
@@ -398,5 +403,24 @@ public class FamilyDebitController {
     public User getCurrentUser() {
         User userTemp = userDao.getParticipantByEmail(getCurrentUsername());
         return userTemp;
+    }
+
+    @RequestMapping("/role")
+    @ResponseBody
+    public Status checkUserStatus(HttpServletResponse response, HttpServletRequest request) {
+        User user = getCurrentUser();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        Set<String> roles = authentication.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority).collect(Collectors.toSet());
+
+        boolean isMatch = roles.stream()
+                .anyMatch(r -> r.equals(user.getUserRole().name()));
+
+        if (!isMatch) {
+            loginController.logoutPage(request, response);
+            return new Status(false, null);
+        }
+        return new Status();
     }
 }
