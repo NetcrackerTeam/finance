@@ -160,7 +160,7 @@
                     <h4 align="center" class="modal-title">Deactivate user</h4>
                 </div>
                 <div class="modal-body">
-                    <h5>Are you want to deactivate user?</h5>
+                    <h5>Do you want to deactivate user?</h5>
                     <p class="help-block"> {{messageDeactivation}} </p>
                 </div>
                 <div class="modal-footer">
@@ -172,7 +172,7 @@
     </div>
 </form>
 
-<form th:action="@{/logout}" method="get" action="">
+<form th:action="@{/logout}" method="get" action="" ng-controller="UserController">
     <div class="modal fade my-modal-wrapper" id="logout" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
          aria-hidden="true">
         <div class="modal-dialog" role="document">

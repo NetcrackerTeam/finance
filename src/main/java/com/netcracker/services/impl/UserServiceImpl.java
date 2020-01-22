@@ -5,7 +5,9 @@ import com.netcracker.dao.FamilyAccountDebitDao;
 import com.netcracker.dao.PersonalDebitAccountDao;
 import com.netcracker.dao.UserDao;
 import com.netcracker.models.*;
+import com.netcracker.models.enums.CreditStatusPaid;
 import com.netcracker.models.enums.UserStatusActive;
+import com.netcracker.services.FamilyDebitService;
 import com.netcracker.services.UserService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +17,10 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -32,6 +36,8 @@ public class UserServiceImpl implements UserService {
     FamilyAccountDebitDao familyAccountDebitDao;
     @Autowired
     private CreditAccountDao creditAccountDao;
+    @Autowired
+    FamilyDebitService familyDebitService;
 
     private final double ZERO = 0;
 
@@ -52,12 +58,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean isUserHaveFamilyAccount(BigInteger userId) {
         User userTemp = getUserById(userId);
-        boolean isUserHasFamilyAccount = BigInteger.ZERO.equals(userTemp.getFamilyDebitAccount());
-        if (isUserHasFamilyAccount) {
-            logger.debug("User  have family Account with id " + userId);
+        if (userTemp.getFamilyDebitAccount() != null || familyDebitService.isUserParticipant(userId)) {
+            logger.debug("User have family Account with id " + userId);
             return true;
         }
-        logger.debug("User didnt have family Account with id " + userId);
+        logger.debug("User don't have family Account with id " + userId);
         return false;
     }
 
@@ -91,23 +96,23 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean deactivateUser(User user) {
-        PersonalDebitAccount personalDebitAccount = personalDebitAccountDao.getPersonalAccountById(user.getPersonalDebitAccount());
-        boolean checkDebitPersonalAccount = (ZERO == personalDebitAccount.getAmount());
+        List<? extends AbstractCreditAccount> allPersonalCredits = creditAccountDao.getAllPersonalCreditsByAccountId(user.getPersonalDebitAccount());
 
         if (isUserHaveFamilyAccount(user.getId())) {
-            FamilyDebitAccount familyDebitAccount = familyAccountDebitDao.getFamilyAccountById(user.getFamilyDebitAccount());
-            if (familyDebitAccount != null) {
-                boolean checkDebitFamilyAndPersonalAccount = (ZERO == personalDebitAccount.getAmount()) && (ZERO == familyDebitAccount.getAmount());
-                if (checkDebitFamilyAndPersonalAccount && allFamilyCreditNull(user) && allPersonalCreditNull(user)) {
-                    return true;
-                }
-            }
-        }
-        if (checkDebitPersonalAccount && allPersonalCreditNull(user)) {
-            return true;
+            List<? extends AbstractCreditAccount> allFamilyCredits = creditAccountDao.getAllFamilyCreditsByAccountId(user.getFamilyDebitAccount());
+            if (isNotCreditDebts(allPersonalCredits) && isNotCreditDebts(allFamilyCredits)) return true;
         }
 
-        return false;
+        return isNotCreditDebts(allPersonalCredits);
+    }
+
+    private boolean isNotCreditDebts(List<? extends AbstractCreditAccount> allCredits) {
+        if (allCredits.isEmpty()) return true;
+        for (AbstractCreditAccount creditAccount : allCredits) {
+            if (creditAccount.getDebt().getAmountDebt() > 0) return false;
+            if (CreditStatusPaid.NO.equals(creditAccount.isPaid())) return false;
+        }
+        return true;
     }
 
     @Override
@@ -123,33 +128,4 @@ public class UserServiceImpl implements UserService {
         SecurityContextHolder.getContext().setAuthentication(auth);
         return true;
     }
-
-
-    public boolean allPersonalCreditNull(User user) {
-        List<PersonalCreditAccount> allPersonalCredit = creditAccountDao.getAllPersonalCreditsByAccountId(user.getId());
-        for (PersonalCreditAccount personalCredit : allPersonalCredit) {
-            if (personalCredit != null)
-                logger.debug("personalCredit null" + personalCredit.getCreditId());
-            boolean checkCredit = (ZERO == personalCredit.getAmount());
-            if (checkCredit) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    public boolean allFamilyCreditNull(User user) {
-        List<FamilyCreditAccount> allFamilyCredit = creditAccountDao.getAllFamilyCreditsByAccountId(user.getId());
-        for (FamilyCreditAccount familyCredit : allFamilyCredit) {
-            if (familyCredit != null) {
-                logger.debug("familyCredit null" + familyCredit.getCreditId());
-                boolean checkCredit = (ZERO == familyCredit.getAmount());
-                if (checkCredit) {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-
 }
