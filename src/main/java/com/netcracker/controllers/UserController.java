@@ -15,6 +15,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -91,14 +92,18 @@ public class UserController {
     }
 
     @RequestMapping(value = "/deactivate", method = RequestMethod.GET)
-    public String deactivateUser(Model model, Principal principal, HttpServletResponse response, HttpServletRequest request) {
+    public String deactivateUser(Principal principal, HttpServletResponse response, HttpServletRequest request) {
         User userTemp = userDao.getUserByEmail(getCurrentUsername());
         logger.debug("updateUserStatus by user id " + userTemp.getId());
+
         if (userService.deactivateUser(userTemp)) {
-            userDao.updateUserStatus(userTemp.getId(), UserStatusActive.NO.getId());
             familyDebitController.deleteUserFromAccount(userTemp.geteMail(), principal, response, request);
-            model.addAttribute("success", MessageController.SUCCESS_DEACTIVATE);
-        } else model.addAttribute("unsuccess", UN_SUCCESS_DEACTIVATE);
+            userDao.updateUserStatus(userTemp.getId(), UserStatusActive.NO.getId());
+
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            if (auth != null) new SecurityContextLogoutHandler().logout(request, response, auth);
+            return URL.LOGIN_URL;
+        }
         return URL.INDEX;
     }
 
