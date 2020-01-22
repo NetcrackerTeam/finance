@@ -92,7 +92,8 @@ public class UserController {
     }
 
     @RequestMapping(value = "/deactivate", method = RequestMethod.GET)
-    public String deactivateUser(Principal principal, HttpServletResponse response, HttpServletRequest request) {
+    @ResponseBody
+    public Status deactivateUser(Principal principal, HttpServletResponse response, HttpServletRequest request) {
         User userTemp = userDao.getUserByEmail(getCurrentUsername());
         logger.debug("updateUserStatus by user id " + userTemp.getId());
 
@@ -102,9 +103,9 @@ public class UserController {
 
             Authentication auth = SecurityContextHolder.getContext().getAuthentication();
             if (auth != null) new SecurityContextLogoutHandler().logout(request, response, auth);
-            return URL.LOGIN_URL;
+            return new Status();
         }
-        return URL.INDEX;
+        return new Status(false, DEACTIVATION_IMPOSSIBLE);
     }
 
     public static String getCurrentUsername() {

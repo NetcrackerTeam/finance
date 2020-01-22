@@ -67,4 +67,24 @@ var UserController = function ($scope, $http) {
         $scope.messageUpdatePasswordSuccess = null;
         $scope.messageUpdatePasswordError = null;
     };
+
+    $scope.deactivate = function() {
+        $http({
+            method: 'GET',
+            url: 'deactivate'
+        }).success(function (response) {
+            if (response.status === false) {
+                $scope.messageDeactivation = response.message;
+            } else {
+                $http({
+                    method: 'GET',
+                    url: 'logout'
+                })
+            }
+        });
+    };
+
+    $scope.clearDeact = function() {
+        $scope.messageDeactivation = null;
+    }
 };

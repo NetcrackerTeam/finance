@@ -151,7 +151,7 @@
 </body>
 <script >
 </script>
-<form th:action="@{/deactivate}" method="get" action="">
+<form ng-controller="UserController" ng-submit="deactivate()" method="get" action="">
     <div class="modal fade" id="deactivate" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
          aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -161,9 +161,10 @@
                 </div>
                 <div class="modal-body">
                     <h5>Are you want to deactivate user?</h5>
+                    <p class="help-block"> {{messageDeactivation}} </p>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                    <button type="button" class="btn btn-secondary" ng-click="clearDeact()" data-dismiss="modal">No</button>
                     <button type="submit" class="btn btn-primary">Yes</button>
                 </div>
             </div>
