@@ -1,6 +1,7 @@
 package com.netcracker.services;
 
 import com.netcracker.models.AbstractAccountOperation;
+import com.netcracker.models.ChartItem;
 import com.netcracker.models.FamilyDebitAccount;
 import com.netcracker.models.User;
 
@@ -30,4 +31,6 @@ public interface FamilyDebitService {
     Collection<FamilyDebitAccount> getAllFamilyAccounts();
 
     void updateAmountOfFamilyAccount(BigInteger accountId, double amount);
+
+    List<ChartItem> getMonthData(BigInteger accountId);
 }

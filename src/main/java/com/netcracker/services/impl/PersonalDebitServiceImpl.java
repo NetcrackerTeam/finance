@@ -1,11 +1,8 @@
 package com.netcracker.services.impl;
 
-import com.netcracker.dao.OperationDao;
+import com.netcracker.dao.MonthReportDao;
 import com.netcracker.dao.PersonalDebitAccountDao;
-import com.netcracker.models.AbstractAccountOperation;
-import com.netcracker.models.AccountExpense;
-import com.netcracker.models.AccountIncome;
-import com.netcracker.models.PersonalDebitAccount;
+import com.netcracker.models.*;
 import com.netcracker.services.OperationService;
 import com.netcracker.services.PersonalDebitService;
 import com.netcracker.services.utils.ObjectsCheckUtils;
@@ -16,9 +13,8 @@ import org.springframework.stereotype.Service;
 import java.math.BigInteger;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.time.format.TextStyle;
+import java.util.*;
 
 @Service
 public class PersonalDebitServiceImpl implements PersonalDebitService {
@@ -27,6 +23,8 @@ public class PersonalDebitServiceImpl implements PersonalDebitService {
     private PersonalDebitAccountDao personalDebitAccountDao;
     @Autowired
     private OperationService operationService;
+    @Autowired
+    private MonthReportDao monthReportDao;
 
     private static final Logger logger = Logger.getLogger(PersonalDebitServiceImpl.class);
 
@@ -66,6 +64,31 @@ public class PersonalDebitServiceImpl implements PersonalDebitService {
     @Override
     public Collection<PersonalDebitAccount> getAllPersonalAccounts() {
         return personalDebitAccountDao.getAllPersonalAccounts();
+    }
+
+    @Override
+    public List<ChartItem> getMonthData(BigInteger accountId) {
+        List<MonthReport> monthReports = new ArrayList<>(monthReportDao.getFullPersonalReports(accountId));
+        Locale locale = Locale.getDefault();
+        PersonalDebitAccount debitAccount = getPersonalDebitAccount(accountId);
+        List<ChartItem> chartItems = genChartListFromReports(monthReports, locale);
+//        monthReports.sort(Comparator.comparing(MonthReport::getDateFrom));
+//        List<ChartItem> chartItems = new ArrayList<>();
+//        for (MonthReport rep : monthReports) {
+//            chartItems.add(new ChartItem(rep.getDateFrom().getMonth().getDisplayName(TextStyle.SHORT, locale), rep.getTotalExpense(), rep.getTotalIncome()));
+//        }
+
+        chartItems.add(new ChartItem(LocalDate.now().getMonth().getDisplayName(TextStyle.SHORT, locale), debitAccount.getMonthExpense(), debitAccount.getMonthIncome()));
+        return chartItems;
+    }
+
+    public List<ChartItem> genChartListFromReports (List<MonthReport> monthReports, Locale locale) {
+        monthReports.sort(Comparator.comparing(MonthReport::getDateFrom));
+        List<ChartItem> chartItems = new ArrayList<>();
+        for (MonthReport rep : monthReports) {
+            chartItems.add(new ChartItem(rep.getDateFrom().getMonth().getDisplayName(TextStyle.SHORT, locale), rep.getTotalExpense(), rep.getTotalIncome()));
+        }
+        return chartItems;
     }
 
 }

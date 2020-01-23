@@ -1,6 +1,7 @@
 package com.netcracker.services.impl;
 
 import com.netcracker.dao.FamilyAccountDebitDao;
+import com.netcracker.dao.MonthReportDao;
 import com.netcracker.dao.UserDao;
 import com.netcracker.exception.FamilyDebitAccountException;
 import com.netcracker.exception.UserException;
@@ -8,6 +9,7 @@ import com.netcracker.models.*;
 import com.netcracker.models.enums.FamilyAccountStatusActive;
 import com.netcracker.services.FamilyDebitService;
 import com.netcracker.services.OperationService;
+import com.netcracker.services.PersonalDebitService;
 import com.netcracker.services.UserService;
 import com.netcracker.services.utils.ExceptionMessages;
 import com.netcracker.services.utils.ObjectsCheckUtils;
@@ -18,8 +20,8 @@ import org.springframework.stereotype.Service;
 import java.math.BigInteger;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.List;
+import java.time.format.TextStyle;
+import java.util.*;
 
 @Service
 public class FamilyDebitServiceImpl implements FamilyDebitService {
@@ -32,6 +34,10 @@ public class FamilyDebitServiceImpl implements FamilyDebitService {
     private OperationService operationService;
     @Autowired
     private UserService userService;
+    @Autowired
+    private MonthReportDao monthReportDao;
+    @Autowired
+    private PersonalDebitService personalDebitService;
 
     private static final Logger logger = Logger.getLogger(FamilyDebitServiceImpl.class);
 
@@ -149,5 +155,16 @@ public class FamilyDebitServiceImpl implements FamilyDebitService {
         } else {
             familyAccountDebitDao.updateAmountOfFamilyAccount(accountId, amount);
         }
+    }
+
+    @Override
+    public List<ChartItem> getMonthData(BigInteger accountId) {
+        List<MonthReport> monthReports = new ArrayList<>(monthReportDao.getFullFamilyReports(accountId));
+        Locale locale = Locale.getDefault();
+        FamilyDebitAccount debitAccount = getFamilyDebitAccount(accountId);
+        List<ChartItem> chartItems = personalDebitService.genChartListFromReports(monthReports, locale);
+
+        chartItems.add(new ChartItem(LocalDate.now().getMonth().getDisplayName(TextStyle.SHORT, locale), debitAccount.getMonthExpense(), debitAccount.getMonthIncome()));
+        return chartItems;
     }
 }

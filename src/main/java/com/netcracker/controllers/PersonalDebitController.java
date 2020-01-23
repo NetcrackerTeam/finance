@@ -262,4 +262,9 @@ public class PersonalDebitController {
         User userTemp = userDao.getUserByEmail(getCurrentUsername());
         return userTemp;
     }
+
+    @RequestMapping("/chartInfo")
+    public List<ChartItem> getChartInfo(Principal principal) {
+        return personalDebitService.getMonthData(getAccountByPrincipal(principal));
+    }
 }
