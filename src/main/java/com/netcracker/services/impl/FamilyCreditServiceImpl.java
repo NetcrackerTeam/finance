@@ -137,6 +137,12 @@ public class FamilyCreditServiceImpl implements FamilyCreditService {
 
     @Override
     public Collection<FamilyCreditAccount> getFamilyCredits(BigInteger id) {
+        Collection<FamilyCreditAccount> familyCreditAccounts = creditAccountDao.getAllFamilyCreditsByAccountId(id);
+        for (FamilyCreditAccount creditAccount : familyCreditAccounts) {
+            if (creditAccount.getRemainsToPay() <= 0) {
+                creditAccountDao.updateIsPaidStatusPersonalCredit(creditAccount.getCreditId(), CreditStatusPaid.YES);
+            }
+        }
         return creditAccountDao.getAllFamilyCreditsByAccountId(id);
     }
 

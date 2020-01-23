@@ -120,6 +120,7 @@ public abstract class AbstractCreditAccount {
 
     protected void setRemainsToPay() {
         remainsToPay = getTotalCreditPayment() - getPaidAmount();
+        if (remainsToPay < 0) remainsToPay = 0;
     }
 
     public double getRemainsToPay() {

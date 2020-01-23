@@ -197,6 +197,12 @@ public class PersonalCreditServiceImpl implements PersonalCreditService {
 
     @Override
     public Collection<PersonalCreditAccount> getPersonalCredits(BigInteger id) {
+        Collection<PersonalCreditAccount> personalCreditAccounts = creditAccountDao.getAllPersonalCreditsByAccountId(id);
+        for (PersonalCreditAccount creditAccount : personalCreditAccounts) {
+            if (creditAccount.getRemainsToPay() <= 0) {
+                creditAccountDao.updateIsPaidStatusPersonalCredit(creditAccount.getCreditId(), CreditStatusPaid.YES);
+            }
+        }
         return creditAccountDao.getAllPersonalCreditsByAccountId(id);
     }
 
