@@ -424,8 +424,8 @@ public class FamilyDebitController {
         return new Status();
     }
 
-    @RequestMapping("/chartInfo")
-    public List<ChartItem> getChartInfo(Principal principal) {
+    @RequestMapping(value = "/chartInfo", method = RequestMethod.GET)
+    public @ResponseBody List<ChartItem> getChartInfo(Principal principal) {
         return familyDebitService.getMonthData(getAccountByPrincipal(principal));
     }
 }

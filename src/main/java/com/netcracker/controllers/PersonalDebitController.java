@@ -258,8 +258,8 @@ public class PersonalDebitController {
         return userTemp;
     }
 
-    @RequestMapping("/chartInfo")
-    public List<ChartItem> getChartInfo(Principal principal) {
+    @RequestMapping(value = "/chartInfo", method = RequestMethod.GET)
+    public @ResponseBody List<ChartItem> getChartInfo(Principal principal) {
         return personalDebitService.getMonthData(getAccountByPrincipal(principal));
     }
 }

@@ -154,7 +154,7 @@
             </div>
 
             <!-- Area Chart -->
-            <div class="card shadow mb-4">
+            <!--<div class="card shadow mb-4">
                 <div class="card-header py-3">
                     <h6 class="m-0 font-weight-bold text-primary">Area Chart</h6>
                 </div>
@@ -164,7 +164,19 @@
                     </div>
                 </div>
             </div>
-            <script src="resources/js/jsviews/chart-area.js"></script>
+            <script src="resources/js/jsviews/chart-area.js"></script>-->
+
+            <div class="card shadow mb-4" ng-controller="PersonalDebitController">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Operations for 6 months</h6>
+                </div>
+                <div class="card-body">
+                    <div class="chart-area">
+                        <canvas id="InEx"></canvas>
+                    </div>
+                </div>
+            </div>
+
 
         </div>
 
