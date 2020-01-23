@@ -76,10 +76,7 @@ var UserController = function ($scope, $http) {
             if (response.status === false) {
                 $scope.messageDeactivation = response.message;
             } else {
-                $http({
-                    method: 'GET',
-                    url: 'logout'
-                })
+                window.location.reload();
             }
         });
     };
