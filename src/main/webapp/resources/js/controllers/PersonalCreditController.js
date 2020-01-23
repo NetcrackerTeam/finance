@@ -56,6 +56,7 @@ var PersonalCreditController = function ($scope, $http, $rootScope) {
     $scope.allDebt = 0;
     $scope.totalPaidCredits = 0;
     $scope.remainsToPayOne = 0;
+    $scope.activeCredits = 0;
     var getPersonalCreditsURL = 'personalCredit/getPersonalCredits';
     $scope.fetchCreditList = function () {
         $http.get(getPersonalCreditsURL).success(function (creditList) {
@@ -67,6 +68,7 @@ var PersonalCreditController = function ($scope, $http, $rootScope) {
                 $scope.allDebt += $scope.personalCredit[i].debt.amountDebt;
                 $scope.remainsToPay += $scope.personalCredit[i].remainsToPay;
                 if ($scope.personalCredit[i].isPaid === "YES") $scope.totalPaidCredits++;
+                if ($scope.personalCredit[i].isPaid === "NO") $scope.activeCredits++;
                 if ($scope.personalCredit[i].isCommodity === false) $scope.personalCredit[i].isCommodity = "NO";
                 if ($scope.personalCredit[i].isCommodity === true) $scope.personalCredit[i].isCommodity = "YES";
             }

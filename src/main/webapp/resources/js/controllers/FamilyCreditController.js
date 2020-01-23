@@ -55,6 +55,7 @@ var FamilyCreditController = function ($scope, $http, $rootScope) {
     $scope.totalCredits = 0;
     $scope.allDebt = 0;
     $scope.totalPaidCredits = 0;
+    $scope.activeCredits = 0;
     var getFamilyCreditsURL = 'familyCredit/getFamilyCredits';
     $scope.fetchCreditListFamily = function () {
         $http.get(getFamilyCreditsURL).success(function (creditList) {
@@ -66,6 +67,7 @@ var FamilyCreditController = function ($scope, $http, $rootScope) {
                 $scope.allDebt += $scope.familyCredit[i].debt.amountDebt;
                 $scope.remainsToPay += $scope.familyCredit[i].remainsToPay;
                 if ($scope.familyCredit[i].isPaid === "YES") $scope.totalPaidCredits++;
+                if ($scope.familyCredit[i].isPaid === "NO") $scope.activeCredits++;
                 if ($scope.familyCredit[i].isCommodity === false) $scope.familyCredit[i].isCommodity = "NO";
                 if ($scope.familyCredit[i].isCommodity === true) $scope.familyCredit[i].isCommodity = "YES";
             }
