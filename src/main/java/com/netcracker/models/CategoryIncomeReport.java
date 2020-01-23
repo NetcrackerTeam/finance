@@ -7,11 +7,17 @@ import com.netcracker.models.enums.ReportCategoryIncome;
 
 public class CategoryIncomeReport extends AbstractCategoryReport {
     private CategoryIncome categoryIncome;
+    private String userName;
 
     public static class Builder extends BaseBuilder<CategoryIncomeReport, Builder> {
 
         public Builder categoryIncome(CategoryIncome income) {
             actualClass.setCategoryIncome(income);
+            return this;
+        }
+
+        public Builder userName(String userName) {
+            actualClass.setUserName(userName);
             return this;
         }
 
@@ -32,5 +38,13 @@ public class CategoryIncomeReport extends AbstractCategoryReport {
 
     public void setCategoryIncome(CategoryIncome categoryIncome) {
         this.categoryIncome = categoryIncome;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 }

@@ -6,6 +6,7 @@ import com.netcracker.models.*;
 import com.netcracker.models.enums.UserStatusActive;
 import com.netcracker.services.*;
 import com.netcracker.services.utils.DateUtils;
+import com.sun.xml.internal.bind.v2.TODO;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -179,13 +180,14 @@ public class PersonalDebitController {
             Principal principal,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date
     ) {
-//        boolean validUserActive = UserStatusActive.YES.equals(getCurrentUser().getUserStatusActive());
-//        if (!validUserActive) {
-//            return new Status(false, NOT_ACTIVE_USER);
-//        } else
-//        if (date.isAfter(LocalDate.now())) {
-//            return new Status(false, INVALID_DATE);
-//        }
+        // TODO: write validation;
+        //        boolean validUserActive = UserStatusActive.YES.equals(getCurrentUser().getUserStatusActive());
+        //        if (!validUserActive) {
+        //            return new Status(false, NOT_ACTIVE_USER);
+        //        } else
+        //        if (date.isAfter(LocalDate.now())) {
+        //            return new Status(false, INVALID_DATE);
+        //        }
         LocalDateTime dateReformat = LocalDateTime.of(date.getYear(), date.getMonth().getValue(), date.getDayOfMonth(), 0, 0, 0);
         BigInteger accountId = getAccountByPrincipal(principal);
 

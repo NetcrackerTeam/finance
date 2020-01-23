@@ -20,6 +20,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
 
 @Service
@@ -232,8 +233,47 @@ public class MonthReportServiceImpl implements MonthReportService {
 
         MonthReport monthReport = monthReportDao.getMonthReportByFamilyAccountId(id, dates.getValue1(), dates.getValue2());
         ObjectsCheckUtils.isNotNull(monthReport);
+
         Collection<CategoryExpenseReport> expenseReports = monthReportDao.getCategoryExpenseFamilyReport(monthReport.getId());
+
+        String compare = null;
+        boolean check = false;
+        for (CategoryExpenseReport c: expenseReports) {
+            if(check) {
+                if (compare.equals(userDao.getUserById(c.getUserReference()).getName())) {
+                    c.setUserName("");
+                } else {
+                    compare = userDao.getUserById(c.getUserReference()).getName();
+                    c.setUserName(compare);
+                }
+            }
+            if(compare == null) {
+                compare = userDao.getUserById(c.getUserReference()).getName();
+                c.setUserName(compare);
+                check = true;
+            }
+        }
+
         Collection<CategoryIncomeReport> incomeReports = monthReportDao.getCategoryIncomeFamilyReport(monthReport.getId());
+
+        compare = null;
+        check = false;
+        for (CategoryIncomeReport c: incomeReports) {
+            if(check) {
+                if (compare.equals(userDao.getUserById(c.getUserReference()).getName())) {
+                    c.setUserName("");
+                } else {
+                    compare = userDao.getUserById(c.getUserReference()).getName();
+                    c.setUserName(compare);
+                }
+            }
+            if(compare == null) {
+                compare = userDao.getUserById(c.getUserReference()).getName();
+                c.setUserName(compare);
+                check = true;
+            }
+        }
+
         ObjectsCheckUtils.isNotNull(expenseReports, incomeReports);
         monthReport.setCategoryExpense(expenseReports);
         monthReport.setCategoryIncome(incomeReports);

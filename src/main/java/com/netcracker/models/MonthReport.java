@@ -26,6 +26,8 @@ public class MonthReport {
         private Collection<CategoryExpenseReport> categoryExpense;
         private Collection<CategoryIncomeReport>  categoryIncome;
 
+
+
         public Builder() {
         }
         public Builder id(BigInteger val) {
@@ -65,6 +67,7 @@ public class MonthReport {
         public MonthReport build() {
             return new MonthReport(this);
         }
+
     }
 
     private MonthReport(Builder builder) {

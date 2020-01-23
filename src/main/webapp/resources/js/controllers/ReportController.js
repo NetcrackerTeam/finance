@@ -36,7 +36,7 @@ app.controller("RepCtrl", ['$scope', '$http', '$templateCache',
             $scope.expenses = response.data.categoryExpense;
             $scope.sendCondition = 'ok';
         }, function(response) {
-            $scope.content = 'No information about this report';
+            $scope.text = 'No information about this report';
             $scope.sendCondition = null;
         });
     };
@@ -56,8 +56,6 @@ app.controller("RepCtrl", ['$scope', '$http', '$templateCache',
         };
 
 
-
-
     $scope.showContent = function($fileContent){
         $scope.content = $fileContent;
     };
@@ -66,6 +64,12 @@ app.controller("RepCtrl", ['$scope', '$http', '$templateCache',
         $scope.month = null;
         $scope.content = null;
         $scope.text = null;
+        $scope.duration = null;
+        $scope.balance = null;
+        $scope.totalIncome = null;
+        $scope.totalExpense = null;
+        $scope.incomes = null;
+        $scope.expenses = null;
     };
 }]);
 
@@ -91,10 +95,16 @@ app.controller("RepFamilyCtrl", ['$scope', '$http', '$templateCache',
                     date: $scope.month
                 }
             }).then(function(response) {
-                $scope.content = response.data.message;
+                $scope.duration = response.data.dateTo.date.year + "." + response.data.dateTo.date.month + "." + response.data.dateTo.date.day
+                    +  "-" + response.data.dateFrom.date.year + "." + response.data.dateFrom.date.month + "." + response.data.dateFrom.date.day;
+                $scope.balance = response.data.balance;
+                $scope.totalIncome = response.data.totalIncome;
+                $scope.totalExpense = response.data.totalExpense;
+                $scope.incomes = response.data.categoryIncome;
+                $scope.expenses = response.data.categoryExpense;
                 $scope.sendCondition = 'ok';
             }, function(response) {
-                $scope.content = 'No information about this report';
+                $scope.text = 'No information about this report';
                 $scope.status = response.status;
                 $scope.sendCondition = null;
             });
@@ -123,6 +133,12 @@ app.controller("RepFamilyCtrl", ['$scope', '$http', '$templateCache',
             $scope.month = null;
             $scope.content = null;
             $scope.text = null;
+            $scope.duration = null;
+            $scope.balance = null;
+            $scope.totalIncome = null;
+            $scope.totalExpense = null;
+            $scope.incomes = null;
+            $scope.expenses = null;
         };
     }]);
 
