@@ -131,16 +131,18 @@ public class MonthReportServiceImpl implements MonthReportService {
 
         ObjectsCheckUtils.isNotNull(monthReport);
 
-        Path path = Paths.get(monthReport.getDateFrom() + UNDERLINE + monthReport.getDateTo() + TXT_FORMAT);
+        Path path = Paths.get( "report.txt");
 
         try (BufferedWriter writer = Files.newBufferedWriter(path)) {
             writer.write(MONTH_REPORT_FROM +
-                            + monthReport.getDateTo().getYear() + HYPHEN +
-                            monthReport.getDateTo().getMonth().getValue() +
-                            HYPHEN + monthReport.getDateTo().getDayOfMonth());
-            writer.write(MONTH_REPORT_TO + monthReport.getDateFrom().getYear() +
+                    + monthReport.getDateFrom().getYear() +
                     HYPHEN + monthReport.getDateFrom().getMonth().getValue() + HYPHEN +
-                    monthReport.getDateFrom().getDayOfMonth() +  NEW_LINE);
+                    monthReport.getDateFrom().getDayOfMonth());
+
+            writer.write(MONTH_REPORT_TO + monthReport.getDateTo().getYear() + HYPHEN +
+                    monthReport.getDateTo().getMonth().getValue() +
+                    HYPHEN + monthReport.getDateTo().getDayOfMonth() +  NEW_LINE);
+
             writer.write(DOTTED_LINE);
             writer.write(ACTUAL_BALANCE + monthReport.getBalance() + TAB_AND_LINE);
             writer.write(TOTAL_EXPENSE + monthReport.getTotalExpense() + TAB_AND_LINE);
