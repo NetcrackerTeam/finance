@@ -5,15 +5,11 @@ import com.netcracker.dao.*;
 import com.netcracker.models.*;
 import com.netcracker.models.enums.UserStatusActive;
 import com.netcracker.services.*;
-import com.netcracker.services.utils.DateUtils;
-import com.sun.xml.internal.bind.v2.TODO;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,7 +21,6 @@ import java.nio.file.Path;
 import java.security.Principal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.List;
 
 import static com.netcracker.controllers.MessageController.*;
