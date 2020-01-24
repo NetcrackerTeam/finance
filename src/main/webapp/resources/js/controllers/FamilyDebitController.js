@@ -220,4 +220,96 @@ var FamilyDebitController = function ($scope, $http, $rootScope) {
         });
     };
     $scope.fetchChartInfo();
+
+
+    $scope.fetchExpInfo = function () {
+
+        $http.get('debitFamily/incomeInfo').success(function (response) {
+            $scope.chartInfo = response;
+            $scope.incPerc = [];
+            $scope.names = [];
+            for (var i = 0; i < $scope.chartInfo.length; i++) {
+                $scope.incPerc.push($scope.chartInfo[i].amount);
+                $scope.names.push($scope.chartInfo[i].categoryName);
+            }
+
+            var ctx = document.getElementById("CatInc");
+            var myPieChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: $scope.names,
+                    datasets: [{
+                        data: $scope.incPerc,
+                        backgroundColor: ['#4e73df', '#1cc88a', '#36b9cc', '#6610f2', '#6f42c1'],
+                        // hoverBackgroundColor: ['#2e59d9', '#17a673', '#2c9faf'],
+                        hoverBorderColor: "rgba(234, 236, 244, 1)",
+                    }],
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    tooltips: {
+                        backgroundColor: "rgb(255,255,255)",
+                        bodyFontColor: "#858796",
+                        borderColor: '#dddfeb',
+                        borderWidth: 1,
+                        xPadding: 15,
+                        yPadding: 15,
+                        displayColors: false,
+                        caretPadding: 10,
+                    },
+                    legend: {
+                        display: false
+                    },
+                    cutoutPercentage: 80,
+                },
+            });
+        });
+    };
+    $scope.fetchExpInfo();
+
+    $scope.fetchExpInfo = function () {
+
+        $http.get('debitFamily/expenseInfo').success(function (response) {
+            $scope.chartInfo = response;
+            $scope.expPerc = [];
+            $scope.names = [];
+            for (var i = 0; i < $scope.chartInfo.length; i++) {
+                $scope.expPerc.push($scope.chartInfo[i].amount);
+                $scope.names.push($scope.chartInfo[i].categoryName);
+            }
+
+            var ctx = document.getElementById("CatExp");
+            var myPieChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: $scope.names,
+                    datasets: [{
+                        data: $scope.expPerc,
+                        backgroundColor: ['#f6c23e', '#fd7e14', '#e74a3b', '#e74a3b', '#6f42c1', '#6610f2',
+                            '#4e73df', '#36b9cc', '#20c9a6', '#1cc88a', '#36b9cc', '#4e73df'],
+                        // hoverBackgroundColor: ['#2e59d9', '#17a673', '#2c9faf'],
+                        hoverBorderColor: "rgba(234, 236, 244, 1)",
+                    }],
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    tooltips: {
+                        backgroundColor: "rgb(255,255,255)",
+                        bodyFontColor: "#858796",
+                        borderColor: '#dddfeb',
+                        borderWidth: 1,
+                        xPadding: 15,
+                        yPadding: 15,
+                        displayColors: false,
+                        caretPadding: 10,
+                    },
+                    legend: {
+                        display: false
+                    },
+                    cutoutPercentage: 80,
+                },
+            });
+        });
+    };
+    $scope.fetchExpInfo();
 };
