@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Period;
 import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -14,7 +15,7 @@ public final class DateUtils {
     }
 
     public static int getMonthAmountBetweenDates(LocalDate dateFrom, LocalDate dateTo) {
-        return Period.between(dateFrom, dateTo).getMonths();
+        return (int) ChronoUnit.MONTHS.between(dateFrom, dateTo);
     }
 
     public static Date localDateToDate(LocalDateTime date) {

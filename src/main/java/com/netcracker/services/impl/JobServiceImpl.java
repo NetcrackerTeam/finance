@@ -68,14 +68,11 @@ public class JobServiceImpl implements JobService {
     @Autowired
     private UserDao userDao;
 
-    private LocalDateTime localDateNow = LocalDateTime.now();
-    private LocalDateTime dateFrom = DateUtils.addMonthsToDate(localDateNow, -1);
-    private int dayNow = localDateNow.getDayOfMonth();
-    private int lastDays = DateUtils.MaxDayInCurrentMonth();
-
     @Override
     @Scheduled(cron = CRON_BY_REPORT)
     public void executeMonthFamilyReportOnEmailJob() {
+        LocalDateTime localDateNow = LocalDateTime.now();
+        LocalDateTime dateFrom = DateUtils.addMonthsToDate(localDateNow, -1);
         Collection<FamilyDebitAccount> familyDebitAccounts = familyDebitService.getAllFamilyAccounts();
         if (familyDebitAccounts.isEmpty())
             return;
@@ -94,6 +91,8 @@ public class JobServiceImpl implements JobService {
     @Override
     @Scheduled(cron = CRON_BY_REPORT)
     public void executeMonthPersonalReportOnEmailJob() {
+        LocalDateTime localDateNow = LocalDateTime.now();
+        LocalDateTime dateFrom = DateUtils.addMonthsToDate(localDateNow, -1);
         Collection<PersonalDebitAccount> personalDebitAccounts = personalDebitService.getAllPersonalAccounts();
         if (personalDebitAccounts.isEmpty())
             return;
@@ -124,6 +123,9 @@ public class JobServiceImpl implements JobService {
     @Override
     @Scheduled(cron = CRON_BY_EVERYDAY)
     public void executeRemindAutoIncomeFamilyJob() {
+        LocalDateTime localDateNow = LocalDateTime.now();
+        int dayNow = localDateNow.getDayOfMonth();
+        int lastDays = DateUtils.MaxDayInCurrentMonth();
         Collection<AutoOperationIncome> autoOperationIncomesFamily = accountAutoOperationService.getAllTodayOperationsFamilyIncome(dayNow);
         if (autoOperationIncomesFamily.isEmpty())
             return;
@@ -158,6 +160,9 @@ public class JobServiceImpl implements JobService {
     @Override
     @Scheduled(cron = CRON_BY_EVERYDAY)
     public void executeRemindAutoIncomePersonalJob() {
+        LocalDateTime localDateNow = LocalDateTime.now();
+        int dayNow = localDateNow.getDayOfMonth();
+        int lastDays = DateUtils.MaxDayInCurrentMonth();
         Collection<AutoOperationIncome> autoOperationIncomePersonal = accountAutoOperationService.getAllTodayOperationsPersonalIncome(dayNow);
         if (autoOperationIncomePersonal.isEmpty())
             return;
@@ -195,6 +200,9 @@ public class JobServiceImpl implements JobService {
     @Override
     @Scheduled(cron = CRON_BY_EVERYDAY)
     public void executeRemindAutoExpenseFamilyJob() {
+        LocalDateTime localDateNow = LocalDateTime.now();
+        int dayNow = localDateNow.getDayOfMonth();
+        int lastDays = DateUtils.MaxDayInCurrentMonth();
         try {
             Collection<AutoOperationExpense> autoOperationExpenseFamily = accountAutoOperationService.getAllTodayOperationsFamilyExpense(dayNow);
             for (AutoOperationExpense autoExpense : autoOperationExpenseFamily) {
@@ -224,6 +232,9 @@ public class JobServiceImpl implements JobService {
     @Override
     @Scheduled(cron = CRON_BY_EVERYDAY)
     public void executeRemindAutoExpensePersonalJob() {
+        LocalDateTime localDateNow = LocalDateTime.now();
+        int dayNow = localDateNow.getDayOfMonth();
+        int lastDays = DateUtils.MaxDayInCurrentMonth();
         Collection<AutoOperationExpense> autoOperationExpensePersonal = accountAutoOperationService.getAllTodayOperationsPersonalExpense(dayNow);
         for (AutoOperationExpense autoExpense : autoOperationExpensePersonal) {
             ObjectsCheckUtils.isNotNull(autoExpense);
@@ -248,6 +259,8 @@ public class JobServiceImpl implements JobService {
     @Override
     @Scheduled(cron = CRON_BY_EVERYDAY)
     public void executeAutoCreditExpenseFamily() {
+        LocalDateTime localDateNow = LocalDateTime.now();
+        int dayNow = localDateNow.getDayOfMonth();
         double calculateCredit;
         Collection<FamilyCreditAccount> allFamilyCredit = creditAccountDao.getAllFamilyCreditIdsByMonthDay(dayNow);
         for (FamilyCreditAccount familyCredit : allFamilyCredit) {
@@ -272,6 +285,8 @@ public class JobServiceImpl implements JobService {
     @Override
     @Scheduled(cron = CRON_BY_EVERYDAY)
     public void executeAutoCreditExpensePersonal() {
+        LocalDateTime localDateNow = LocalDateTime.now();
+        int dayNow = localDateNow.getDayOfMonth();
         double calculateCredit;
         Collection<PersonalCreditAccount> allPersonalCredit = creditAccountDao.getAllPersonCreditIdsByMonthDay(dayNow);
         for (PersonalCreditAccount personalCredit : allPersonalCredit) {
@@ -294,6 +309,7 @@ public class JobServiceImpl implements JobService {
 
 
     public void executePersonalIncomeAutoOperationLastDay(int lastDayOfCurrentMonth) {
+        LocalDateTime localDateNow = LocalDateTime.now();
         for (int lastDay = lastDayOfCurrentMonth; lastDay <= MaxNumber; lastDay++) {
             Collection<AutoOperationIncome> autoOperationIncomePersonal = accountAutoOperationService.getAllTodayOperationsPersonalIncome(lastDay);
             if (autoOperationIncomePersonal.isEmpty())
@@ -315,6 +331,7 @@ public class JobServiceImpl implements JobService {
 
 
     public void executeFamilyIncomeAutoOperationLastDay(int lastDayOfCurrentMonth) {
+        LocalDateTime localDateNow = LocalDateTime.now();
         for (int lastDay = lastDayOfCurrentMonth; lastDay <= MaxNumber; lastDay++) {
             Collection<AutoOperationIncome> autoOperationIncomesFamily = accountAutoOperationService.getAllTodayOperationsFamilyIncome(lastDay);
             if (autoOperationIncomesFamily.isEmpty())
@@ -334,6 +351,7 @@ public class JobServiceImpl implements JobService {
     }
 
     public void executePersonalExpenseAutoOperationLastDay(int lastDayOfCurrentMonth) {
+        LocalDateTime localDateNow = LocalDateTime.now();
         for (int lastDay = lastDayOfCurrentMonth; lastDay <= MaxNumber; lastDay++) {
             Collection<AutoOperationExpense> autoOperationExpensePersonal = accountAutoOperationService.getAllTodayOperationsPersonalExpense(lastDay);
             for (AutoOperationExpense autoExpense : autoOperationExpensePersonal) {
@@ -356,6 +374,7 @@ public class JobServiceImpl implements JobService {
 
 
     public void executeFamilyExpenseAutoOperationLastDay(int lastDayOfCurrentMonth) {
+        LocalDateTime localDateNow = LocalDateTime.now();
         for (int lastDay = lastDayOfCurrentMonth; lastDay <= MaxNumber; lastDay++) {
             Collection<AutoOperationExpense> autoOperationExpenseFamily = accountAutoOperationService.getAllTodayOperationsFamilyExpense(lastDay);
             for (AutoOperationExpense autoExpense : autoOperationExpenseFamily) {
