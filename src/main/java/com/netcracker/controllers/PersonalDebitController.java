@@ -21,6 +21,7 @@ import java.nio.file.Path;
 import java.security.Principal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.List;
 
 import static com.netcracker.controllers.MessageController.*;
@@ -109,6 +110,8 @@ public class PersonalDebitController {
     List<HistoryOperation> getHistory(Principal principal) {
         logger.debug("getHistory Personal");
         BigInteger debitId = getAccountByPrincipal(principal);
+        Collection<DonutChartItem> items = personalDebitService.getMonthExpenseList(getAccountByPrincipal(principal));
+        Collection<DonutChartItem> items2 = personalDebitService.getMonthIncomeList(getAccountByPrincipal(principal));
         return operationDao.getFirstPersonalHistoryByAccountId(debitId);
     }
 
@@ -257,5 +260,17 @@ public class PersonalDebitController {
     @RequestMapping(value = "/chartInfo", method = RequestMethod.GET)
     public @ResponseBody List<ChartItem> getChartInfo(Principal principal) {
         return personalDebitService.getMonthData(getAccountByPrincipal(principal));
+    }
+
+    @RequestMapping("/expenseInfo")
+    @ResponseBody
+    public Collection<DonutChartItem> getExpenseInfo(Principal principal) {
+        return personalDebitService.getMonthExpenseList(getAccountByPrincipal(principal));
+    }
+
+    @RequestMapping("/incomeInfo")
+    @ResponseBody
+    public Collection<DonutChartItem> getIncomeInfo(Principal principal) {
+        return personalDebitService.getMonthIncomeList(getAccountByPrincipal(principal));
     }
 }

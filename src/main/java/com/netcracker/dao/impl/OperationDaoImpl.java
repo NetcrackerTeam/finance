@@ -92,6 +92,16 @@ public class OperationDaoImpl implements OperationDao {
     }
 
     @Override
+    public Collection<CategoryExpenseReport> getExpensesFamilyGroupByCategoriesWithoutUser(BigInteger id, LocalDateTime date) {
+        return template.query(GET_EXPENSES_FAMILY_GROUP_BY_CATEGORIES_WITHOUT_USER, new Object[]{id, date}, new CategoryExpensePersonalReportMapper());
+    }
+
+    @Override
+    public Collection<CategoryIncomeReport> getIncomesFamilyGroupByCategoriesWithoutUser(BigInteger id, LocalDateTime date) {
+        return template.query(GET_INCOMES_FAMILY_GROUP_BY_CATEGORIES_WITHOUT_USER, new Object[]{id, date}, new CategoryIncomePersonalReportMapper());
+    }
+
+    @Override
     public List<HistoryOperation> getHistoryByAccountId(BigInteger id, int period) {
         return template.query(GET_PERSONAL_FOR_DATE_BY_ACCOUNT_ID, new Object[]{id, period}, new PersonalHistoryOperationMapper());
     }

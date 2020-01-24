@@ -102,6 +102,17 @@
                 </div>
             </div>
 
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Cash flow</h6>
+                </div>
+                <div class="card-body">
+                    <div class="chart-area">
+                        <canvas id="InEx"></canvas>
+                    </div>
+                </div>
+            </div>
+
             <!-- History Card -->
             <div class="card shadow mb-4" ng-init="fetchPersonalHistory()">
                 <div class="card-header py-3">
@@ -152,36 +163,45 @@
                     </div>
                 </div>
             </div>
-
-            <!-- Area Chart -->
-            <!--<div class="card shadow mb-4">
-                <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">Area Chart</h6>
-                </div>
-                <div class="card-body">
-                    <div class="chart-area">
-                        <canvas id="lineChart"></canvas>
-                    </div>
-                </div>
-            </div>
-            <script src="resources/js/jsviews/chart-area.js"></script>-->
-
-            <div class="card shadow mb-4" ng-controller="PersonalDebitController">
-                <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">Operations for 6 months</h6>
-                </div>
-                <div class="card-body">
-                    <div class="chart-area">
-                        <canvas id="InEx"></canvas>
-                    </div>
-                </div>
-            </div>
-
-
         </div>
 
-        <div class="col-lg-6 mb-4" ng-controller="PersonalCreditController" style="position: relative;">
-            <div class="card shadow mb-4">
+        <div class="col-lg-6 mb-4">
+            <div class="row">
+            <!-- Donut Chart -->
+            <div class="col-md-6">
+                <div class="card shadow mb-4">
+                    <!-- Card Header - Dropdown -->
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">Income categories</h6>
+                    </div>
+                    <!-- Card Body -->
+                    <div class="card-body">
+                        <div class="chart-pie pt-4">
+                            <canvas id="CatInc"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+<!--             Donut Chart -->
+            <div class="col-md-6">
+                <div class="card shadow mb-4">
+                    <!-- Card Header - Dropdown -->
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">Expense categories</h6>
+                    </div>
+                    <!-- Card Body -->
+                    <div class="card-body">
+                        <div class="chart-pie pt-4">
+                            <canvas id="CatExp"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+                <script src="resources/js/jsviews/chart-area.js"></script>
+            </div>
+
+            <div class="card shadow mb-4" ng-controller="PersonalCreditController" style="position: relative;">
                 <div class="card-header py-3">
                     <h6 class="m-0 font-weight-bold text-primary">Credits</h6>
                 </div>
@@ -261,7 +281,6 @@
                     </div>
                 </div>
             </div>
-
     </div>
 </div>
 </div>

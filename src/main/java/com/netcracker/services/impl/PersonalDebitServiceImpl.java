@@ -1,6 +1,7 @@
 package com.netcracker.services.impl;
 
 import com.netcracker.dao.MonthReportDao;
+import com.netcracker.dao.OperationDao;
 import com.netcracker.dao.PersonalDebitAccountDao;
 import com.netcracker.models.*;
 import com.netcracker.services.OperationService;
@@ -10,7 +11,9 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.TextStyle;
@@ -25,6 +28,8 @@ public class PersonalDebitServiceImpl implements PersonalDebitService {
     private OperationService operationService;
     @Autowired
     private MonthReportDao monthReportDao;
+    @Autowired
+    private OperationDao operationDao;
 
     private static final Logger logger = Logger.getLogger(PersonalDebitServiceImpl.class);
 
@@ -72,16 +77,12 @@ public class PersonalDebitServiceImpl implements PersonalDebitService {
         Locale locale = Locale.getDefault();
         PersonalDebitAccount debitAccount = getPersonalDebitAccount(accountId);
         List<ChartItem> chartItems = genChartListFromReports(monthReports, locale);
-//        monthReports.sort(Comparator.comparing(MonthReport::getDateFrom));
-//        List<ChartItem> chartItems = new ArrayList<>();
-//        for (MonthReport rep : monthReports) {
-//            chartItems.add(new ChartItem(rep.getDateFrom().getMonth().getDisplayName(TextStyle.SHORT, locale), rep.getTotalExpense(), rep.getTotalIncome()));
-//        }
 
         chartItems.add(new ChartItem(LocalDate.now().getMonth().getDisplayName(TextStyle.SHORT, locale), debitAccount.getMonthExpense(), debitAccount.getMonthIncome()));
         return chartItems;
     }
 
+    @Override
     public List<ChartItem> genChartListFromReports (List<MonthReport> monthReports, Locale locale) {
         monthReports.sort(Comparator.comparing(MonthReport::getDateFrom));
         List<ChartItem> chartItems = new ArrayList<>();
@@ -89,6 +90,44 @@ public class PersonalDebitServiceImpl implements PersonalDebitService {
             chartItems.add(new ChartItem(rep.getDateFrom().getMonth().getDisplayName(TextStyle.SHORT, locale), rep.getTotalExpense(), rep.getTotalIncome()));
         }
         return chartItems;
+    }
+
+    @Override
+    public Collection<DonutChartItem> getMonthExpenseList(BigInteger accountId) {
+        LocalDateTime startDate = LocalDateTime.of(LocalDate.now().getYear(), LocalDate.now().getMonth(), 1, 0, 0);
+        Collection<CategoryExpenseReport> expenseReports = operationDao.getExpensesPersonalGroupByCategories(accountId, startDate);
+        return genExpenseList(expenseReports);
+    }
+
+    @Override
+    public Collection<DonutChartItem> getMonthIncomeList(BigInteger accountId) {
+        LocalDateTime startDate = LocalDateTime.of(LocalDate.now().getYear(), LocalDate.now().getMonth(), 1, 0, 0);
+        Collection<CategoryIncomeReport> incomeReports = operationDao.getIncomesPersonalGroupByCategories(accountId, startDate);
+        return genIncomeList(incomeReports);
+    }
+
+    @Override
+    public Collection<DonutChartItem> genExpenseList(Collection<CategoryExpenseReport> expenseReports){
+        Collection<DonutChartItem> donutChartItems = new ArrayList<>();
+        double totalExpense = expenseReports.stream().mapToDouble(AbstractCategoryReport::getAmount).sum();
+
+        expenseReports.forEach(rep ->
+                donutChartItems.add(new DonutChartItem(rep.getCategoryExpense().name(),
+                        rep.getAmount()))
+        );
+        return donutChartItems;
+    }
+
+    @Override
+    public Collection<DonutChartItem> genIncomeList(Collection<CategoryIncomeReport> incomeReports){
+        Collection<DonutChartItem> donutChartItems = new ArrayList<>();
+        double totalIncome = incomeReports.stream().mapToDouble(AbstractCategoryReport::getAmount).sum();
+
+        incomeReports.forEach(rep ->
+                donutChartItems.add(new DonutChartItem(rep.getCategoryIncome().name(),
+                       rep.getAmount()))
+        );
+        return donutChartItems;
     }
 
 }

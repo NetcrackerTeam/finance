@@ -1,9 +1,6 @@
 package com.netcracker.services;
 
-import com.netcracker.models.AbstractAccountOperation;
-import com.netcracker.models.ChartItem;
-import com.netcracker.models.MonthReport;
-import com.netcracker.models.PersonalDebitAccount;
+import com.netcracker.models.*;
 
 import java.math.BigInteger;
 import java.time.LocalDateTime;
@@ -25,7 +22,15 @@ public interface PersonalDebitService {
 
     List<ChartItem> getMonthData(BigInteger accountId);
 
-    List<ChartItem> genChartListFromReports (List<MonthReport> monthReports, Locale locale);
+    List<ChartItem> genChartListFromReports(List<MonthReport> monthReports, Locale locale);
+
+    Collection<DonutChartItem> getMonthExpenseList(BigInteger accountId);
+
+    Collection<DonutChartItem> getMonthIncomeList(BigInteger accountId);
+
+    Collection<DonutChartItem> genExpenseList(Collection<CategoryExpenseReport> expenseReports);
+
+    Collection<DonutChartItem> genIncomeList(Collection<CategoryIncomeReport> incomeReports);
 
     String ACCOUNT_NAME = "account";
 

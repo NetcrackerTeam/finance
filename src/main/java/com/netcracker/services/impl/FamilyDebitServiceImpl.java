@@ -2,6 +2,7 @@ package com.netcracker.services.impl;
 
 import com.netcracker.dao.FamilyAccountDebitDao;
 import com.netcracker.dao.MonthReportDao;
+import com.netcracker.dao.OperationDao;
 import com.netcracker.dao.UserDao;
 import com.netcracker.exception.FamilyDebitAccountException;
 import com.netcracker.exception.UserException;
@@ -38,6 +39,8 @@ public class FamilyDebitServiceImpl implements FamilyDebitService {
     private MonthReportDao monthReportDao;
     @Autowired
     private PersonalDebitService personalDebitService;
+    @Autowired
+    private OperationDao operationDao;
 
     private static final Logger logger = Logger.getLogger(FamilyDebitServiceImpl.class);
 
@@ -166,5 +169,19 @@ public class FamilyDebitServiceImpl implements FamilyDebitService {
 
         chartItems.add(new ChartItem(LocalDate.now().getMonth().getDisplayName(TextStyle.SHORT, locale), debitAccount.getMonthExpense(), debitAccount.getMonthIncome()));
         return chartItems;
+    }
+
+    @Override
+    public Collection<DonutChartItem> getMonthExpenseList(BigInteger accountId) {
+        LocalDateTime startDate = LocalDateTime.of(LocalDate.now().getYear(), LocalDate.now().getMonth(), 1, 0, 0);
+        Collection<CategoryExpenseReport> expenseReports = operationDao.getExpensesFamilyGroupByCategoriesWithoutUser(accountId, startDate);
+        return personalDebitService.genExpenseList(expenseReports);
+    }
+
+    @Override
+    public Collection<DonutChartItem> getMonthIncomeList(BigInteger accountId) {
+        LocalDateTime startDate = LocalDateTime.of(LocalDate.now().getYear(), LocalDate.now().getMonth(), 1, 0, 0);
+        Collection<CategoryIncomeReport> incomeReports = operationDao.getIncomesFamilyGroupByCategoriesWithoutUser(accountId, startDate);
+        return personalDebitService.genIncomeList(incomeReports);
     }
 }

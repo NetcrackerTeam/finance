@@ -35,6 +35,10 @@ public interface OperationDao {
 
     Collection<CategoryIncomeReport> getIncomesFamilyGroupByCategories(BigInteger id, LocalDateTime date);
 
+    Collection<CategoryExpenseReport> getExpensesFamilyGroupByCategoriesWithoutUser(BigInteger id, LocalDateTime date);
+
+    Collection<CategoryIncomeReport> getIncomesFamilyGroupByCategoriesWithoutUser(BigInteger id, LocalDateTime date);
+
     List<HistoryOperation> getHistoryByAccountId(BigInteger id, int period);
 
     List<HistoryOperation> getFamilyHistoryByAccountId(BigInteger id, int period);
@@ -146,6 +150,15 @@ public interface OperationDao {
             "  AND DATE_OF.DATE_VALUE > ? " +
             "  GROUP BY CATEGORY.LIST_VALUE_ID, CONSUMER.REFERENCE";
 
+    String GET_EXPENSES_FAMILY_GROUP_BY_CATEGORIES_WITHOUT_USER = "SELECT  SUM(SUMM.VALUE) AS AMOUNT,  CATEGORY.LIST_VALUE_ID AS CATEGORY " +
+            "  FROM ATTRIBUTES SUMM, ATTRIBUTES DATE_OF, ATTRIBUTES CATEGORY, OBJECTS O, OBJREFERENCE REF " +
+            "  WHERE O.OBJECT_TYPE_ID = 20 AND REF.ATTR_ID = 48 AND O.OBJECT_ID = REF.OBJECT_ID AND REF.REFERENCE = ? " +
+            "  AND SUMM.OBJECT_ID = O.OBJECT_ID AND SUMM.ATTR_ID = 50 /* amount*/ " +
+            "  AND CATEGORY.OBJECT_ID = O.OBJECT_ID AND CATEGORY.ATTR_ID = 51 /* category*/ " +
+            "  AND DATE_OF.OBJECT_ID = O.OBJECT_ID AND DATE_OF.ATTR_ID = 52 /* date*/ " +
+            "  AND DATE_OF.DATE_VALUE > ? " +
+            "  GROUP BY CATEGORY.LIST_VALUE_ID";
+
     String GET_INCOMES_FAMILY_GROUP_BY_CATEGORIES = "SELECT SUM(SUMM.VALUE) AS AMOUNT, CATEGORY.LIST_VALUE_ID AS CATEGORY, CONSUMER.REFERENCE AS USER_ID " +
             "  FROM ATTRIBUTES SUMM, ATTRIBUTES DATE_OF, ATTRIBUTES CATEGORY, OBJECTS O, OBJREFERENCE REF, OBJREFERENCE CONSUMER " +
             "  WHERE REF.ATTR_ID = 55 AND O.OBJECT_ID = REF.OBJECT_ID AND REF.REFERENCE = ? " +
@@ -155,6 +168,15 @@ public interface OperationDao {
             "  AND CONSUMER.ATTR_ID = 54 AND O.OBJECT_ID = CONSUMER.OBJECT_ID " +
             "  AND DATE_OF.DATE_VALUE > ? " +
             "  GROUP BY CONSUMER.REFERENCE, CATEGORY.LIST_VALUE_ID";
+
+    String GET_INCOMES_FAMILY_GROUP_BY_CATEGORIES_WITHOUT_USER = "SELECT SUM(SUMM.VALUE) AS AMOUNT, CATEGORY.LIST_VALUE_ID AS CATEGORY " +
+            "  FROM ATTRIBUTES SUMM, ATTRIBUTES DATE_OF, ATTRIBUTES CATEGORY, OBJECTS O, OBJREFERENCE REF " +
+            "  WHERE REF.ATTR_ID = 55 AND O.OBJECT_ID = REF.OBJECT_ID AND REF.REFERENCE = ? " +
+            "  AND SUMM.OBJECT_ID = O.OBJECT_ID AND SUMM.ATTR_ID = 56 /* amount*/ " +
+            "  AND CATEGORY.OBJECT_ID = O.OBJECT_ID AND CATEGORY.ATTR_ID = 57 /* category*/ " +
+            "  AND DATE_OF.OBJECT_ID = O.OBJECT_ID AND DATE_OF.ATTR_ID = 58 /* date*/ " +
+            "  AND DATE_OF.DATE_VALUE > ? " +
+            "  GROUP BY CATEGORY.LIST_VALUE_ID";
 
     String GET_PERSONAL_FOR_DATE_BY_ACCOUNT_ID = "SELECT SUMM.VALUE AS AMOUNT, " +
             "       DATE_OF.DATE_VALUE AS DATE_IN, " +

@@ -426,4 +426,17 @@ public class FamilyDebitController {
     public @ResponseBody List<ChartItem> getChartInfo(Principal principal) {
         return familyDebitService.getMonthData(getAccountByPrincipal(principal));
     }
+
+    @RequestMapping("/expenseInfo")
+    @ResponseBody
+    public Collection<DonutChartItem> getExpenseInfo(Principal principal) {
+        return familyDebitService.getMonthExpenseList(getAccountByPrincipal(principal));
+    }
+
+    @RequestMapping("/incomeInfo")
+    @ResponseBody
+    public Collection<DonutChartItem> getIncomeInfo(Principal principal) {
+        return familyDebitService.getMonthIncomeList(getAccountByPrincipal(principal));
+    }
+
 }

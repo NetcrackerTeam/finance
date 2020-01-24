@@ -123,7 +123,16 @@
                 </div>
             </div>
 
-
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Cash flow</h6>
+                </div>
+                <div class="card-body">
+                    <div class="chart-area">
+                        <canvas id="InEx"></canvas>
+                    </div>
+                </div>
+            </div>
 
             <!-- History Card -->
             <div class="card shadow mb-4" ng-init="fetchFamilyHistory()">
@@ -171,18 +180,6 @@
                     </div>
                 </div>
             </div>
-
-            <div class="card shadow mb-4" ng-controller="FamilyDebitController">
-                <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">Operations for 6 months</h6>
-                </div>
-                <div class="card-body">
-                    <div class="chart-area">
-                        <canvas id="InEx"></canvas>
-                    </div>
-                </div>
-            </div>
-
 
         </div>
 
