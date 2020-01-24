@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="AngularSpringApp" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <meta charset="UTF-8"></meta>
+    <title></title>
+</head>
+<body>
+<h3 align="center" >Test auto operation  </h3>
+<form th:action="@{/executeRemindAutoIncomePersonalJob}" method="get" >
+    <button type="submit" class="btn btn-primary">executeRemindAutoIncomePersonalJob</button>
+    <p th:text="'result: ' + ${AutoIncMSg}" />
+</form>
+
+<form th:action="@{/executeRemindAutoExpensePersonalJob}" method="get" >
+    <button type="submit" class="btn btn-primary">executeRemindAutoExpensePersonalJob</button>
+    <p th:text="'result: ' + ${AutoExcMsg}" />
+</form>
+
+<form th:action="@{/executeRemindAutoIncomeFamilyJob}" method="get" >
+    <button type="submit" class="btn btn-primary">executeRemindAutoIncomeFamilyJob</button>
+    <p th:text="'result: ' + ${AutoIncMSgFam}" />
+</form>
+
+<form th:action="@{/executeRemindAutoExpenseFamilyJob}" method="get" >
+    <button type="submit" class="btn btn-primary">executeRemindAutoExpenseFamilyJob</button>
+    <p th:text="'result: ' + ${AutoExcMsgFam}" />
+</form>
+
+
+</body>
+</html>

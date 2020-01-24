@@ -137,7 +137,7 @@ public class JobServiceImpl implements JobService {
             } else {
                 FamilyDebitAccount debitAccount = familyDebitService.getFamilyDebitAccount(autoIncome.getDebitId());
                 operationService.createFamilyOperationIncome(autoIncome.getUserId(), autoIncome.getDebitId(), autoIncome.getAmount(), localDateNow, autoIncome.getCategoryIncome());
-                double newAmount = debitAccount.getAmount() + autoIncome.getAmount();
+                double newAmount = debitAccount.getAmount()+ autoIncome.getAmount();
                 debitAccount.setAmount(newAmount);
                 familyDebitAccountDao.updateAmountOfFamilyAccount(debitAccount.getId(), debitAccount.getAmount());
                 Collection<FamilyCreditAccount> credits = familyCreditService.getFamilyCredits(debitAccount.getId());
@@ -165,7 +165,7 @@ public class JobServiceImpl implements JobService {
             ObjectsCheckUtils.isNotNull(autoIncome);
             PersonalDebitAccount debitAccount = personalDebitService.getPersonalDebitAccount(autoIncome.getDebitId());
             operationService.createPersonalOperationIncome(autoIncome.getDebitId(), autoIncome.getAmount(), localDateNow, autoIncome.getCategoryIncome());
-            double newAmount = debitAccount.getAmount() + autoIncome.getAmount();
+            double newAmount = debitAccount.getAmount()+ autoIncome.getAmount();
             debitAccount.setAmount(newAmount);
             personalDebitAccountDao.updateAmountOfPersonalAccount(debitAccount.getId(), newAmount);
             Collection<PersonalCreditAccount> creditAccounts = personalCreditService.getPersonalCredits(debitAccount.getId());
@@ -195,24 +195,28 @@ public class JobServiceImpl implements JobService {
     @Override
     @Scheduled(cron = CRON_BY_EVERYDAY)
     public void executeRemindAutoExpenseFamilyJob() {
-        Collection<AutoOperationExpense> autoOperationExpenseFamily = accountAutoOperationService.getAllTodayOperationsFamilyExpense(dayNow);
-        for (AutoOperationExpense autoExpense : autoOperationExpenseFamily) {
-            ObjectsCheckUtils.isNotNull(autoExpense);
-            operationService.createFamilyOperationExpense(autoExpense.getUserId(), autoExpense.getDebitId(), autoExpense.getAmount(), localDateNow, autoExpense.getCategoryExpense());
-            FamilyDebitAccount debitAccount = familyAccountDebitDao.getFamilyAccountById(autoExpense.getId());
-            if (debitAccount.getAmount() < autoExpense.getAmount()) {
-                logger.debug("Auto expense cannot be done. Not enough money");
-            } else {
-                double newAmount = debitAccount.getAmount() - autoExpense.getAmount();
-                familyDebitAccountDao.updateAmountOfFamilyAccount(autoExpense.getDebitId(), newAmount);
-                emailServiceSender.sendMailAutoFamilyExpense(debitAccount.getOwner().geteMail(),
-                        debitAccount.getOwner().getName(),
-                        autoExpense.getAmount(),
-                        autoExpense.getCategoryExpense().name());
+        try {
+            Collection<AutoOperationExpense> autoOperationExpenseFamily = accountAutoOperationService.getAllTodayOperationsFamilyExpense(dayNow);
+            for (AutoOperationExpense autoExpense : autoOperationExpenseFamily) {
+                ObjectsCheckUtils.isNotNull(autoExpense);
+                operationService.createFamilyOperationExpense(autoExpense.getUserId(), autoExpense.getDebitId(), autoExpense.getAmount(), localDateNow, autoExpense.getCategoryExpense());
+                FamilyDebitAccount debitAccount = familyAccountDebitDao.getFamilyAccountById(autoExpense.getDebitId());
+                if (debitAccount.getAmount() < autoExpense.getAmount()) {
+                    logger.debug("Auto expense cannot be done. Not enough money");
+                } else {
+                    double newAmount = debitAccount.getAmount() - autoExpense.getAmount();
+                    familyDebitAccountDao.updateAmountOfFamilyAccount(autoExpense.getDebitId(), newAmount);
+                    emailServiceSender.sendMailAutoFamilyExpense(debitAccount.getOwner().geteMail(),
+                            debitAccount.getOwner().getName(),
+                            autoExpense.getAmount(),
+                            autoExpense.getCategoryExpense().name());
+                }
             }
-        }
-        if (dayNow == lastDays) {
-            executeFamilyExpenseAutoOperationLastDay(dayNow);
+            if (dayNow == lastDays) {
+                executeFamilyExpenseAutoOperationLastDay(dayNow);
+            }
+        } catch (Exception ex) {
+
         }
     }
 
@@ -223,8 +227,8 @@ public class JobServiceImpl implements JobService {
         Collection<AutoOperationExpense> autoOperationExpensePersonal = accountAutoOperationService.getAllTodayOperationsPersonalExpense(dayNow);
         for (AutoOperationExpense autoExpense : autoOperationExpensePersonal) {
             ObjectsCheckUtils.isNotNull(autoExpense);
-            operationService.createPersonalOperationExpense(autoExpense.getUserId(), autoExpense.getAmount(), localDateNow, autoExpense.getCategoryExpense());
-            PersonalDebitAccount debitAccount = personalDebitAccountDao.getPersonalAccountById(autoExpense.getId());
+            operationService.createPersonalOperationExpense(autoExpense.getDebitId(), autoExpense.getAmount(), localDateNow, autoExpense.getCategoryExpense());
+            PersonalDebitAccount debitAccount = personalDebitAccountDao.getPersonalAccountById(autoExpense.getDebitId());
             if (debitAccount.getAmount() < autoExpense.getAmount()) {
                 logger.debug("Auto expense cannot be done. Not enough money");
             } else {

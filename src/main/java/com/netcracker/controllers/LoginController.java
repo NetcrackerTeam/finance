@@ -51,14 +51,8 @@ public class LoginController {
     @Autowired
     UserService userService;
 
-
-//    @Autowired
-//    private JobService jobService;
-
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public String login(Model model, String error) {
-        //for local test
-        //  jobService.executeRemindAutoIncomePersonalJob();
         if (error != null) {
             model.addAttribute("error", "Username or password is incorrect.");
         }
