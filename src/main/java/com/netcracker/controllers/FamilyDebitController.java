@@ -328,12 +328,10 @@ public class FamilyDebitController {
             Principal principal,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date
     ) {
-//        boolean validUserActive = UserStatusActive.YES.equals(getCurrentUser().getUserStatusActive());
-//        if (!validUserActive) {
-//            return new Status(false, NOT_ACTIVE_USER);
-//        } else if (date.isAfter(LocalDate.now())) {
-//            return new Status(false, INVALID_DATE);
-//        }
+
+        if (date.isAfter(LocalDate.now())) {
+            return new ResponseEntity<>(null, HttpStatus.FORBIDDEN);
+        }
         BigInteger accountId = getAccountByPrincipal(principal);
 
         LocalDateTime dateReformat = LocalDateTime.of(date.getYear(), date.getMonth().getValue(),

@@ -27,8 +27,8 @@ app.controller("RepCtrl", ['$scope', '$http', '$templateCache',
                  date: $scope.month
             }
         }).then(function(response) {
-            $scope.duration = response.data.dateTo.date.year + "." + response.data.dateTo.date.month + "." + response.data.dateTo.date.day
-                +  "-" + response.data.dateFrom.date.year + "." + response.data.dateFrom.date.month + "." + response.data.dateFrom.date.day;
+            $scope.duration = response.data.dateFrom.date.year + "." + response.data.dateFrom.date.month + "." + response.data.dateFrom.date.day
+                +  "-" +  response.data.dateTo.date.year + "." + response.data.dateTo.date.month + "." + response.data.dateTo.date.day;
             $scope.balance = response.data.balance;
             $scope.totalIncome = response.data.totalIncome;
             $scope.totalExpense = response.data.totalExpense;
@@ -36,7 +36,11 @@ app.controller("RepCtrl", ['$scope', '$http', '$templateCache',
             $scope.expenses = response.data.categoryExpense;
             $scope.sendCondition = 'ok';
         }, function(response) {
-            $scope.text = 'No information about this report';
+            if(response.status === 403) {
+                $scope.text = 'Date cannot be later than today';
+            } else {
+                $scope.text = 'No information about this report';
+            }
             $scope.sendCondition = null;
         });
     };
@@ -95,8 +99,8 @@ app.controller("RepFamilyCtrl", ['$scope', '$http', '$templateCache',
                     date: $scope.month
                 }
             }).then(function(response) {
-                $scope.duration = response.data.dateTo.date.year + "." + response.data.dateTo.date.month + "." + response.data.dateTo.date.day
-                    +  "-" + response.data.dateFrom.date.year + "." + response.data.dateFrom.date.month + "." + response.data.dateFrom.date.day;
+                $scope.duration = response.data.dateFrom.date.year + "." + response.data.dateFrom.date.month + "." + response.data.dateFrom.date.day
+                    +  "-" + response.data.dateTo.date.year + "." + response.data.dateTo.date.month + "." + response.data.dateTo.date.day ;
                 $scope.balance = response.data.balance;
                 $scope.totalIncome = response.data.totalIncome;
                 $scope.totalExpense = response.data.totalExpense;
@@ -104,7 +108,11 @@ app.controller("RepFamilyCtrl", ['$scope', '$http', '$templateCache',
                 $scope.expenses = response.data.categoryExpense;
                 $scope.sendCondition = 'ok';
             }, function(response) {
-                $scope.text = 'No information about this report';
+                if(response.status === 403) {
+                    $scope.text = 'Date cannot be later than today';
+                } else {
+                    $scope.text = 'No information about this report';
+                }
                 $scope.status = response.status;
                 $scope.sendCondition = null;
             });

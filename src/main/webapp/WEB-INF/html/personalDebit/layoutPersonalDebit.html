@@ -180,13 +180,19 @@
 
         </div>
 
-        <div class="col-lg-6 mb-4" ng-controller="PersonalCreditController">
+        <div class="col-lg-6 mb-4" ng-controller="PersonalCreditController" style="position: relative;">
             <div class="card shadow mb-4">
                 <div class="card-header py-3">
                     <h6 class="m-0 font-weight-bold text-primary">Credits</h6>
                 </div>
-                <div class="card-body" ng-init="fetchCreditList()">
-                    <table class="table table-hover table-cursor" id="tableCreditBase">
+                <div class="card-body" style="height: 250px; overflow-y: auto;" ng-init="fetchCreditList()">
+                    <div class="center-element-hz center-element-vr" style="color: #4C71DE;" ng-show="activeCredits == 0 &amp;&amp; personalCredit.length > 0">
+                        There are no active credits
+                    </div>
+                    <div class="center-element-hz center-element-vr" style="color: #4C71DE;" ng-show="personalCredit.length == 0">
+                        There are no credits
+                    </div>
+                    <table class="table table-hover table-cursor" id="tableCreditBase" ng-hide="activeCredits == 0">
                         <thead>
                         <tr>
                             <th>Name</th>
