@@ -33,6 +33,10 @@ var app = angular.module('AngularSpringApp', []).run(function ($rootScope, $http
         isCommodity: "false"
     };
 
+    $rootScope.datePeriodPers = {
+        dateFromFrom: '',
+        dateToTo: ''
+    };
 
     $rootScope.optionSelect = {
         idCredit: "01"
@@ -47,7 +51,7 @@ var app = angular.module('AngularSpringApp', []).run(function ($rootScope, $http
 
     $rootScope.gottenPersonalCredit = "";
 
-    $rootScope.fetchUserId = function(){
+    $rootScope.fetchUserId = function () {
         $http.get('getUserId').success(function (response) {
             $rootScope.user.id = response;
         });
@@ -55,7 +59,7 @@ var app = angular.module('AngularSpringApp', []).run(function ($rootScope, $http
 
     $rootScope.fetchUserId();
 
-    $rootScope.fetchUserInfo = function() {
+    $rootScope.fetchUserInfo = function () {
         $http.get('getUserInfo').success(function (userInfo) {
             $rootScope.userInfo = userInfo;
         });
@@ -63,7 +67,7 @@ var app = angular.module('AngularSpringApp', []).run(function ($rootScope, $http
 
     $rootScope.fetchUserInfo();
 
-    $rootScope.fetchUserDebitId = function(){
+    $rootScope.fetchUserDebitId = function () {
         $http.get('getUserDebitId').success(function (response) {
             $rootScope.user.debitId = response;
         });
@@ -72,14 +76,14 @@ var app = angular.module('AngularSpringApp', []).run(function ($rootScope, $http
     $rootScope.fetchUserDebitId();
 
     $rootScope.fetchFamilyDebitId = function () {
-      $http.get('getFamilyDebitId').success(function (response) {
-          $rootScope.user.familyDebitId = response;
-      });
+        $http.get('getFamilyDebitId').success(function (response) {
+            $rootScope.user.familyDebitId = response;
+        });
     };
 
     $rootScope.fetchFamilyDebitId();
 
-    $rootScope.fetchUserRole = function(){
+    $rootScope.fetchUserRole = function () {
         $http.get('getUserRole').success(function (response) {
             $rootScope.user.role = response;
         });
@@ -121,19 +125,26 @@ app.config(['$routeProvider', function ($routeProvider) {
     }).when('/personalReport', {
         templateUrl: 'debitPersonal/getReportView',
         controller: PersonalDebitController
+    }).when('/personalHistoryPeriod', {
+        templateUrl: 'debitPersonal/personalHistoryPeriod',
+        controller: PersonalDebitController
     });
+
     $routeProvider.when('/familyAccount', {
         templateUrl: 'debitFamily/layout',
         controller: FamilyDebitController
     }).when('/userControl', {
         templateUrl: 'debitFamily/getUserControl',
         controller: FamilyDebitController
+    }).when('/familyHistoryPeriod',{
+        templateUrl: 'debitFamily/famHistoryPeriod',
+        controller: FamilyDebitController
     });
 
- //   $routeProvider.otherwise({redirectTo: '/'});
+    //   $routeProvider.otherwise({redirectTo: '/'});
 }]);
 
-app.controller('AppCtrl', function() {
+app.controller('AppCtrl', function () {
     this.myDate = new Date();
     this.isOpen = false;
 });

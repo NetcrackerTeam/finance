@@ -115,14 +115,17 @@ public class PersonalDebitController {
         return operationDao.getFirstPersonalHistoryByAccountId(debitId);
     }
 
-    @RequestMapping(value = "/historyByPerio", method = RequestMethod.GET)
+    @RequestMapping(value = "/historyByPeriod", method = RequestMethod.GET)
     public @ResponseBody
     List<HistoryOperation> getHistoryByPeriod(Principal principal,
-                                              @RequestParam("period") int period
+                                              @RequestParam("dateFrom") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateFrom,
+                                              @RequestParam("dateTo") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateTo
     ) {
         logger.debug("getHistory Personal");
+        LocalDateTime dateF = LocalDateTime.of(dateFrom.getYear(), dateFrom.getMonth().getValue(), dateFrom.getDayOfMonth(), 0, 0, 0);
+        LocalDateTime dateT = LocalDateTime.of(dateTo.getYear(), dateTo.getMonth().getValue(), dateTo.getDayOfMonth(), 0, 0, 0);
         BigInteger debitId = getAccountByPrincipal(principal);
-        return operationDao.getHistoryByAccountId(debitId, period);
+        return operationDao.getHistoryByAccountId(debitId, dateF, dateT);
     }
 
     @RequestMapping(value = "/autoOperationHistory", method = RequestMethod.GET)
@@ -250,6 +253,11 @@ public class PersonalDebitController {
     @RequestMapping("/getReportView")
     public String getReportView() {
         return URL.REPORT_PERS;
+    }
+
+    @RequestMapping("/personalHistoryPeriod")
+    public String getPeriodHistoryPers(){
+        return URL.PERIOD_HISTORY_PERS;
     }
 
     public User getCurrentUser(){

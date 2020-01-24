@@ -263,14 +263,17 @@ public class FamilyDebitController {
         return operationDao.getFirstFamilyHistoryByAccountId(debitId);
     }
 
-    @RequestMapping(value = "/historyByPerio", method = RequestMethod.GET)
+    @RequestMapping(value = "/familyHistoryByPeriod", method = RequestMethod.GET)
     public @ResponseBody
     List<HistoryOperation> getHistoryByPeriod(Principal principal,
-                                              @RequestParam("period") int period
+                                              @RequestParam("dateFrom") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateFrom,
+                                              @RequestParam("dateTo") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateTo
     ) {
         logger.debug("getHistory Personal");
+        LocalDateTime dateF = LocalDateTime.of(dateFrom.getYear(), dateFrom.getMonth().getValue(), dateFrom.getDayOfMonth(), 0, 0, 0);
+        LocalDateTime dateT = LocalDateTime.of(dateTo.getYear(), dateTo.getMonth().getValue(), dateTo.getDayOfMonth(), 0, 0, 0);
         BigInteger debitId = getAccountByPrincipal(principal);
-        return operationDao.getFamilyHistoryByAccountId(debitId, period);
+        return operationDao.getFamilyHistoryByAccountId(debitId, dateF, dateT);
     }
 
     @RequestMapping(value = "/autoOperationHistory", method = RequestMethod.GET)
@@ -391,6 +394,11 @@ public class FamilyDebitController {
     @RequestMapping("/layout")
     public String getFamilyAccountPartialPage() {
         return URL.FAMILY_DEBIT;
+    }
+
+    @RequestMapping("/famHistoryPeriod")
+    public String getFmilyHistoryPeriod() {
+        return URL.FAMILY_HISTORY_PERIOD;
     }
 
     @RequestMapping("/getUserControl")

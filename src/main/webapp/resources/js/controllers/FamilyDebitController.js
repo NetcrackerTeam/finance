@@ -1,4 +1,5 @@
 var FamilyDebitController = function ($scope, $http, $rootScope) {
+    $scope.familyHistoryPeriod = 'debitFamily/familyHistoryByPeriod';
 
     $scope.fetchFamilyHistory = function () {
         $http.get('debitFamily/history').success(function (historyList) {
@@ -6,7 +7,28 @@ var FamilyDebitController = function ($scope, $http, $rootScope) {
         });
     };
 
-    $scope.fetchFamilyAutoOperationHistory = function () {
+    $scope.goToFam = function(){
+        window.location = "#/familyHistoryPeriod";
+//        window.location.reload();
+    };
+
+    $scope.fetchFamilyHistoryPeriod = function(dateFrom, dateTo){
+        $http({
+            method: 'GET',
+            url:  $scope.familyHistoryPeriod,
+            params: {
+                'dateFrom': dateFrom.toLocaleString(),
+                'dateTo': dateTo.toLocaleString()
+            },
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).success(function(res){
+            $scope.familyHistoryPer = res;
+        });
+    };
+
+$scope.fetchFamilyAutoOperationHistory = function () {
         $http.get('debitFamily/autoOperationHistory').success(function (autoOper) {
             $scope.familyAutoOperationHistory = autoOper;
         });

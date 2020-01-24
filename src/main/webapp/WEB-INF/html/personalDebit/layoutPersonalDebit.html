@@ -57,6 +57,12 @@
                         <span class="text">Prediction</span>
                     </a>
                 </div>
+
+                <div class="mb-2">
+                    <a href="#periodHistory" data-toggle="modal" class="btn btn-warning btn-icon-split ml-1">
+                        <span class="text">History for period</span>
+                    </a>
+                </div>
             </div>
             <div class="row">
 
@@ -819,6 +825,46 @@
         </div>
     </div>
 </div>
+
+<!--History for period-->
+<form >
+    <div class="modal fade" id="periodHistory" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 align="center" class="modal-title"> History for period </h4>
+
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label >Date from:</label>
+                        <div class="input-group fetched-date date_field">
+                            <input type="date" ng-model="datePeriodPers.dateFromFrom" class="form-control" placeholder="yyyy-mm-dd"/>
+                            <div class="input-group-addon">
+                                <span class="glyphicon glyphicon-th"></span>
+                            </div>
+                        </div>
+                        <p ng-show="getHistoryPeriod.dt.$invalid &amp;&amp; !getHistoryPeriod.dt.$pristine" class="help-block">Required field</p>
+                    </div>
+                    <div class="form-group">
+                        <label >Date to:</label>
+                        <div class="input-group fetched-date date_field">
+                            <input type="date" ng-model="datePeriodPers.dateToTo" class="form-control" placeholder="yyyy-mm-dd"/>
+                            <div class="input-group-addon">
+                                <span class="glyphicon glyphicon-th"></span>
+                            </div>
+                        </div>
+                        <p ng-show="getHistoryPeriod.dt.$invalid &amp;&amp; !getHistoryPeriod.dt.$pristine" class="help-block">Required field</p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" ng-click="clear()">Close</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="goTo()">Get story</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
 
 <!-- Expense/Auto_Expense Operations -->
 <div class="modal fade" id="expenseOp" tabindex="-1" role="dialog" aria-labelledby="expenseOpLabel" aria-hidden="true">

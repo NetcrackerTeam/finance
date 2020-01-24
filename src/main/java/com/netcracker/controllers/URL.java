@@ -11,6 +11,7 @@ public interface URL {
     String MODAL_DIALOG_PERS = "personalDebit/modalDialog";
     String PERSONAL_DEBIT = "personalDebit/layoutPersonalDebit";
     String REPORT_PERS = "personalDebit/layoutReport";
+    String PERIOD_HISTORY_PERS = "personalDebit/layoutPersonalHistoryPeriod";
     String TEMPLATE_URL = "templateForURL";
     String FAMILY_DEBIT = "familyDebit/layoutFamilyDebit";
 //    PersonalCreditController URL
@@ -20,4 +21,5 @@ public interface URL {
 
     String EXCEPTION_PAGE = "exceptionPage";
     String PARTICIPANTS_OF_FAMILY = "familyDebit/ParticipantsOfFamilyAccount";
+    String FAMILY_HISTORY_PERIOD = "familyDebit/layoutFamilyHistoryPeriod";
 }

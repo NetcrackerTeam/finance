@@ -5,10 +5,31 @@
  * @constructor
  */
 var PersonalDebitController = function($scope, $http) {
+    $scope.personalHistoryPeriod = 'debitPersonal/historyByPeriod';
 
     $scope.fetchPersonalHistory = function(){
         $http.get('debitPersonal/history').success(function (response) {
             $scope.personalHistory = response;
+        });
+    };
+    $scope.goTo = function(){
+        window.location = "#/personalHistoryPeriod";
+//        window.location.reload();
+    };
+
+    $scope.fetchPersonalHistoryPeriod = function(dateFrom, dateTo){
+        $http({
+            method: 'GET',
+            url: $scope.personalHistoryPeriod,
+            params: {
+                'dateFrom': dateFrom.toLocaleString(),
+                'dateTo': dateTo.toLocaleString()
+            },
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).success(function(res){
+            $scope.personalHistoryPer = res;
         });
     };
 
