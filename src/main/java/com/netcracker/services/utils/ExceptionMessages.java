@@ -7,7 +7,7 @@ public interface ExceptionMessages {
     String ERROR_MESSAGE_FAMILY = "the family debit account doesn`t exist";
     String ERROR_MESSAGE_FAMILY_STATUS = "The user is unactive";
     String ERROR_MESSAGE_FAMILY_PARTICIPANTS = "the family debit account has participants";
-    String ERROR_MESSAGE_USER = "The user doesn`t exist";
+    String ERROR_MESSAGE_USER = "The user doesn't exist";
     String ERROR_MESSAGE_USER_STATUS = "The user is unactive";
     String ERROR_MESSAGE_USER_EXIST_FAMILY = "The user has family debit account";
     String ERROR_MESSAGE_OWNER = "Owner can`t delete yourself, try to delete account";
@@ -28,9 +28,9 @@ public interface ExceptionMessages {
     String LATIN_CHAR = "String hasn't latin char";
     String LATIN_LETTERS = "Must be only latin char without numbers";
     String NAME_SHORT = "Username is too short";
-    String NAME_FAMILY_SHORT = "account name is too short";
+    String NAME_FAMILY_SHORT = "Account name is too short";
     String INVALID_CONFIRM_PASSWORD = "Passwords are not equals";
     String UNKNOWN_ERR = "Unknown error";
-    String USER_NOT_EXIST = "User doesn't exist";
+    String USER_NOT_EXIST = "The user doesn't exist";
 
 }

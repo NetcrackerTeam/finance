@@ -17,6 +17,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -78,6 +79,17 @@ public class UserController {
     public @ResponseBody Status updateUserPassword(@RequestBody User user) {
         User userTemp = userDao.getUserByEmail(getCurrentUsername());
         logger.debug(MessageController.LOGGER_UPDATE_PASSWORD + userTemp.getId());
+
+        String oldPassword = userTemp.getPassword();
+        String enteredOldPassword = user.getOldPassword();
+
+        try {
+            UserDataValidator.isValidPassword(enteredOldPassword);
+        } catch (UserException ex) {
+            if (ExceptionMessages.EMPTY_FIELD.equals(ex.getMessage())) return showStatusFalse(ExceptionMessages.EMPTY_FIELD);
+        }
+
+        if (!BCrypt.checkpw(enteredOldPassword, oldPassword)) return new Status(false, INVALID_OLD_PASSWORD);
 
         String password = user.getPassword();
         String confirmPassword = user.getConfirmPassword();

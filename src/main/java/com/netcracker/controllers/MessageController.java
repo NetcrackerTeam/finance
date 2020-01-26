@@ -57,6 +57,7 @@ public interface MessageController {
     String NAME_SHORT = "The username must contain at least 2 characters.";
     String UNKNOWN_ERR = "Something went wrong...";
     String USER_NOT_EXIST = "A user with this email doesn't exist.";
+    String INVALID_OLD_PASSWORD = "You entered the wrong password to your account";
 
     String CREDIT_NAME_EXISTS = "Credit with this name already exists";
     String CREDIT_NAME_LENGHT_FULL = "Credit name has more then 20 characters ";

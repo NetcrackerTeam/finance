@@ -37,7 +37,8 @@ var UserController = function ($scope, $http) {
 
     $scope.user = {
         password: null,
-        confirmPassword: null
+        confirmPassword: null,
+        oldPassword: null
     };
     $scope.messageUpdatePasswordSuccess = null;
     $scope.messageUpdatePasswordError = null;
@@ -58,6 +59,7 @@ var UserController = function ($scope, $http) {
                 $scope.messageUpdatePasswordSuccess = response.message;
                 $scope.user.password = null;
                 $scope.user.confirmPassword = null;
+                $scope.user.oldPassword = null;
                 window.location.reload();
             }
         });
@@ -66,6 +68,7 @@ var UserController = function ($scope, $http) {
     $scope.clearPassword = function () {
         $scope.user.password = null;
         $scope.user.confirmPassword = null;
+        $scope.user.oldPassword = null;
         $scope.messageUpdatePasswordSuccess = null;
         $scope.messageUpdatePasswordError = null;
     };

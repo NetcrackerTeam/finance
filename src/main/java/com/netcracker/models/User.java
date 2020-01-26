@@ -17,6 +17,7 @@ public class User {
     private double totalIncome;
     private double totalExpense;
     private String confirmPassword;
+    private String oldPassword;
 
     public User() {
     }
@@ -176,5 +177,13 @@ public class User {
 
     public String getConfirmPassword() {
         return confirmPassword;
+    }
+
+    public void setOldPassword(String oldPassword) {
+        this.oldPassword = oldPassword;
+    }
+
+    public String getOldPassword() {
+        return oldPassword;
     }
 }
