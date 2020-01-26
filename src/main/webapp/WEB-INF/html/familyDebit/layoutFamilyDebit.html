@@ -133,8 +133,11 @@
                 <div class="card-header py-3">
                     <h6 class="m-0 font-weight-bold text-primary">Cash flow</h6>
                 </div>
-                <div class="card-body">
-                    <div class="chart-area">
+                <div class="card-body" >
+                    <div class="center text-center text-secondary" ng-show="noInfoChart">
+                        No information to show
+                    </div>
+                    <div class="chart-area" ng-hide="noInfoChart">
                         <canvas id="InEx"></canvas>
                     </div>
                 </div>
@@ -143,9 +146,13 @@
             <!-- History Card -->
             <div class="card shadow mb-4" ng-init="fetchFamilyHistory()">
                 <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">History</h6>
+                    <h6 class="m-0 font-weight-bold text-primary" >History</h6>
                 </div>
                 <div class="card-body">
+                    <div class="center text-center text-secondary" ng-show="familyHistory.length == 0">
+                        No information to show
+                    </div>
+                    <div ng-show="familyHistory.length != 0">
                     <div class="table-responsive">
                     <table class="table">
                         <thead>
@@ -183,6 +190,7 @@
                         </tr>
                         </tbody>
                     </table>
+                    </div>
                     </div>
                 </div>
             </div>
@@ -242,7 +250,7 @@
 
             <div class="row">
                 <!-- Donut Chart -->
-                <div class="col-md-6">
+                <div class="col-md-6" ng-hide="accountInfo.monthIncome == 0">
                     <div class="card shadow mb-4">
                         <!-- Card Header - Dropdown -->
                         <div class="card-header py-3">
@@ -258,7 +266,7 @@
                 </div>
 
                 <!--             Donut Chart -->
-                <div class="col-md-6">
+                <div class="col-md-6" ng-hide="accountInfo.monthExpense == 0">
                     <div class="card shadow mb-4">
                         <!-- Card Header - Dropdown -->
                         <div class="card-header py-3">
@@ -278,14 +286,15 @@
                 <div class="card-header py-3">
                     <h6 class="m-0 font-weight-bold text-primary">Credits</h6>
                 </div>
-                <div class="card-body" style="height: 250px; overflow-y: auto;" ng-init="fetchCreditListFamily()">
-                    <div class="center-element-hz center-element-vr" style="color: #4C71DE;" ng-show="activeCredits == 0 &amp;&amp; familyCredit.length > 0">
+                <div class="card-body" ng-init="fetchCreditListFamily()">
+                    <div class="center text-center text-secondary" ng-show="activeCredits == 0 &amp;&amp; familyCredit.length > 0">
                         There are no active credits
                     </div>
-                    <div class="center-element-hz center-element-vr" style="color: #4C71DE;" ng-show="familyCredit.length == 0">
+                    <div class="center text-center text-secondary" ng-show="familyCredit.length == 0">
                         There are no credits
                     </div>
-                    <table class="table table-hover table-cursor" ng-hide="activeCredits == 0">
+                    <div style="height: 250px; overflow-y: auto;" ng-hide="activeCredits == 0">
+                    <table class="table table-hover table-cursor">
                         <thead>
                         <tr>
                             <th>Name</th>
@@ -305,13 +314,15 @@
                             <td>{{credInf.dateTo.year}}-{{credInf.dateTo.month}}-{{credInf.dateTo.day}}</td>
                         </tr>
                         </tbody>
-
                     </table>
+                    </div>
                 </div>
-                <div class="card-footer" style="height: 60px; position:relative;">
-                    <center><button class="btn btn-info" style="position: absolute; top: 50%; left: 50%; margin: 0 -50% 0 0; transform: translate(-50%, -50%);"
+                <div ng-show="familyCredit.length != 0">
+                <div class="card-footer">
+                    <center><button class="btn btn-info"
                                     data-toggle="modal" href="#showAllCreditModal"  ng-show="familyCredit.length > 0">
                         Show all credits</button></center>
+                </div>
                 </div>
             </div>
 
@@ -320,6 +331,10 @@
                     <h6 class="m-0 font-weight-bold text-primary">Auto operations</h6>
                 </div>
                 <div class="card-body">
+                    <div class="center text-center text-secondary" ng-show="familyAutoOperationHistory.length == 0">
+                        No information to show
+                    </div>
+                    <div ng-show="familyAutoOperationHistory.length != 0">
                     <div class="table-responsive">
                     <table class="table ">
                         <thead>
@@ -355,6 +370,7 @@
                         </tr>
                         </tbody>
                     </table>
+                </div>
                 </div>
             </div>
 

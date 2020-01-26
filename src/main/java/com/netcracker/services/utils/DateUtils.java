@@ -17,7 +17,7 @@ public final class DateUtils {
     public static int getMonthAmountBetweenDates(LocalDate dateFrom, LocalDate dateTo) {
             int yearFrom = dateFrom.getYear();
             int yearTo = dateTo.getYear();
-            int monthFromYear = (yearFrom - yearTo) * 12;
+            int monthFromYear = (yearTo - yearFrom) * 12;
             return monthFromYear + Math.abs(dateTo.getMonthValue() - dateFrom.getMonthValue());
     }
 

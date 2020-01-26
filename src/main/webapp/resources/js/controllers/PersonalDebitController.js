@@ -6,6 +6,7 @@
  */
 var PersonalDebitController = function($scope, $http) {
     $scope.personalHistoryPeriod = 'debitPersonal/historyByPeriod';
+    $scope.noInfoChart = false;
 
     $scope.fetchPersonalHistory = function(){
         $http.get('debitPersonal/history').success(function (response) {
@@ -78,72 +79,77 @@ var PersonalDebitController = function($scope, $http) {
         $http.get('debitPersonal/chartInfo').success(function (response) {
             $scope.incomes = [];
             $scope.expenses = [];
+            $scope.noInfoChart = false;
             $scope.dates = [];
             $scope.chartInfo = response;
-            $scope.minExp = '';
-            $scope.minInc = '';
-            $scope.maxExp = '';
-            $scope.maxInc = '';
-            for (var i = 0; i < $scope.chartInfo.length; i++) {
-                $scope.incomes.push($scope.chartInfo[i].amountInc);
-                $scope.expenses.push($scope.chartInfo[i].amountExp);
-                $scope.dates.push($scope.chartInfo[i].month);
-            }
+            if ($scope.chartInfo.length === 1 && $scope.chartInfo[0].amountInc === 0 && $scope.chartInfo[0].amountExp === 0) {
+                $scope.noInfoChart = true;
+            } else {
+                $scope.minExp = '';
+                $scope.minInc = '';
+                $scope.maxExp = '';
+                $scope.maxInc = '';
+                for (var i = 0; i < $scope.chartInfo.length; i++) {
+                    $scope.incomes.push($scope.chartInfo[i].amountInc);
+                    $scope.expenses.push($scope.chartInfo[i].amountExp);
+                    $scope.dates.push($scope.chartInfo[i].month);
+                }
 
-            var dataIncomes = {
-                label: 'Incomes',
-                data: $scope.incomes,
-                fill: false,
-                borderColor: '#1CC88A',
-                pointBackgroundColor: 'rgba(28, 200, 138, 0.5)',
-                pointBorderColor: '#1CC88A',
-                backgroundColor: 'transparent',
-                pointRadius: 5,
-                pointHoverRadius: 10
-            };
+                var dataIncomes = {
+                    label: 'Incomes',
+                    data: $scope.incomes,
+                    fill: false,
+                    borderColor: '#1CC88A',
+                    pointBackgroundColor: 'rgba(28, 200, 138, 0.5)',
+                    pointBorderColor: '#1CC88A',
+                    backgroundColor: 'transparent',
+                    pointRadius: 5,
+                    pointHoverRadius: 10
+                };
 
-            var dataExpenses = {
-                label: "Expenses",
-                data: $scope.expenses,
-                fill: false,
-                borderColor: '#E74A3B',
-                pointBackgroundColor: 'rgba(232, 85, 71, 0.5)',
-                pointBorderColor: '#E74A3B',
-                backgroundColor: 'transparent',
-                pointRadius: 5,
-                pointHoverRadius: 10
-            };
+                var dataExpenses = {
+                    label: "Expenses",
+                    data: $scope.expenses,
+                    fill: false,
+                    borderColor: '#E74A3B',
+                    pointBackgroundColor: 'rgba(232, 85, 71, 0.5)',
+                    pointBorderColor: '#E74A3B',
+                    backgroundColor: 'transparent',
+                    pointRadius: 5,
+                    pointHoverRadius: 10
+                };
 
-            var InExData = {
-                labels: $scope.dates,
-                datasets: [dataIncomes, dataExpenses]
-            };
+                var InExData = {
+                    labels: $scope.dates,
+                    datasets: [dataIncomes, dataExpenses]
+                };
 
-            var InExLine = document.getElementById("InEx");
-            if (InExLine) {
-                new Chart(InExLine, {
-                    type: 'line',
-                    data: InExData,
-                    options: {
-                        scales: {
-                            yAxes: [{
-                                ticks: {
-                                    beginAtZero: false,
-                                    maxTicksLimit: 10
+                var InExLine = document.getElementById("InEx");
+                if (InExLine) {
+                    new Chart(InExLine, {
+                        type: 'line',
+                        data: InExData,
+                        options: {
+                            scales: {
+                                yAxes: [{
+                                    ticks: {
+                                        beginAtZero: false,
+                                        maxTicksLimit: 10
+                                    }
+                                }]
+                            },
+                            legend: {
+                                display: true,
+                                position: 'top',
+                                labels: {
+                                    boxWidth: 60,
+                                    fontColor: 'black',
+                                    fontSize: 14
                                 }
-                            }]
-                        },
-                        legend: {
-                            display: true,
-                            position: 'top',
-                            labels: {
-                                boxWidth: 60,
-                                fontColor: 'black',
-                                fontSize: 14
                             }
                         }
-                    }
-                });
+                    });
+                }
             }
         });
     };

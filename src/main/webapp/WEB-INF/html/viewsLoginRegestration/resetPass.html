@@ -9,7 +9,7 @@
 <body class="background-colors">
 <div class="container">
     <form class="form-signin" th:action="@{/savePass}" th:object="${user}" method="post">
-        <img class="center-block center-img"  src="resources/images/logo_blue_small.png"
+        <img class="center-block center-img"  src="resources/images/logo_blue_small.png"/>
         <h1 align="center">Enter new password</h1>
         <div class="form-group">
             <input type="password" class="form-control" th:field="*{password}" placeholder="Password"/>

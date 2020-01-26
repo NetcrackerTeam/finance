@@ -300,7 +300,7 @@ var PersonalCreditController = function ($scope, $http, $rootScope) {
 
                 var yearFrom = $scope.personalCreditor.date.year;
                 var yearTo = $scope.personalCreditor.dateTo.year;
-                var monthFromYear = (yearFrom - yearTo) * 12;
+                var monthFromYear = (yearTo - yearFrom) * 12;
 
                 var monthFrom = $scope.personalCreditor.date.month;
                 var monthTo = $scope.personalCreditor.dateTo.month;
