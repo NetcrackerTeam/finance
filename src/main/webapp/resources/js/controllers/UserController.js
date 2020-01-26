@@ -24,6 +24,7 @@ var UserController = function ($scope, $http) {
                 $scope.messageUpdateEmailError = null;
                 $scope.messageUpdateEmailSuccess = response.message;
                 $scope.newEmail = null;
+                window.location.reload();
             }
         });
     };
@@ -57,6 +58,7 @@ var UserController = function ($scope, $http) {
                 $scope.messageUpdatePasswordSuccess = response.message;
                 $scope.user.password = null;
                 $scope.user.confirmPassword = null;
+                window.location.reload();
             }
         });
     };

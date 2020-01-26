@@ -3,7 +3,9 @@ package com.netcracker.controllers;
 
 import com.netcracker.controllers.validators.UserDataValidator;
 import com.netcracker.dao.*;
+import com.netcracker.exception.FamilyDebitAccountException;
 import com.netcracker.exception.NullObjectException;
+import com.netcracker.exception.UserException;
 import com.netcracker.models.*;
 import com.netcracker.models.enums.CreditStatusPaid;
 import com.netcracker.models.enums.FamilyAccountStatusActive;
@@ -176,7 +178,7 @@ public class FamilyDebitController {
                 userDao.updateRole(userId, UserRole.PARTICIPANT.getId());
                 return new Status(true, ADD_USER_FAM + userDao.getUserById(userId).getName());
             }
-        } catch (RuntimeException ex) {
+        } catch (UserException | FamilyDebitAccountException ex) {
             return new Status(false, ex.getMessage());
         }
     }

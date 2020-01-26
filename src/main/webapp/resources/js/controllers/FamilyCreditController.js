@@ -202,20 +202,17 @@ var FamilyCreditController = function ($scope, $http, $rootScope) {
 
     var updateCreditURL = 'familyCredit/updateFamilyCredit';
     $scope.updateFamilyCredit = function () {
-        // var dateFrom = $("#datetimepicker").datepicker('getDate');
-        // var dateFromStr = $("#datetimepickerEdit").val();
         var dateFrom = $rootScope.familyCreditor.date;
         var duration = $rootScope.familyCreditor.duration;
-        var dateTo = moment(dateFrom).clone().add(duration, 'months').format('YYYY-MM-DD');
-        // var dateTo = new Date(dateFrom.setMonth(dateFrom.getMonth() + 5))
-        $rootScope.familyCreditor.date = {
-            year: moment(dateFrom).year(),
-            month: moment(dateFrom).month(),
-            day: moment(dateFrom).date()
-        };
+
+        var dateFromMom = moment([dateFrom.year, dateFrom.month - 1, dateFrom.day]);
+
+        var dateTo = moment(dateFromMom).clone().add(duration, 'months').format('YYYY-MM-DD') ;
+
+        $rootScope.familyCreditor.date = dateFrom;
         $rootScope.familyCreditor.dateTo = {
             year: moment(dateTo).year(),
-            month: moment(dateTo).month(),
+            month: moment(dateTo).month() + 1,
             day: moment(dateTo).date()
         };
         $http({
@@ -292,7 +289,16 @@ var FamilyCreditController = function ($scope, $http, $rootScope) {
         for (var i = 0; i < $rootScope.familyCreditRoot.length; i++) {
             if ($rootScope.familyCreditRoot[i].creditId === $rootScope.creditIdInArray) {
                 $rootScope.familyCreditor = $rootScope.familyCreditRoot[i];
-                $scope.familyCreditor.duration = moment($scope.familyCreditor.dateTo).diff(moment($scope.familyCreditor.date), 'month');
+
+                var yearFrom = $scope.familyCreditor.date.year;
+                var yearTo = $scope.familyCreditor.dateTo.year;
+                var monthFromYear = (yearFrom - yearTo) * 12;
+
+                var monthFrom = $scope.familyCreditor.date.month;
+                var monthTo = $scope.familyCreditor.dateTo.month;
+
+                $scope.familyCreditor.duration = monthFromYear + Math.abs(monthFrom - monthTo);
+
                 $scope.familyCreditor.dateFrom = $scope.familyCreditor.date.year + '-' + $scope.familyCreditor.date.month + '-' + $scope.familyCreditor.date.day;
                 if ($rootScope.familyCreditor.isCommodity === false) $rootScope.familyCreditor.isCommodity = "NO";
                 if ($rootScope.familyCreditor.isCommodity === true) $rootScope.familyCreditor.isCommodity = "YES";

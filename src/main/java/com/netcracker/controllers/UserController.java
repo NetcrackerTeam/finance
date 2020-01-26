@@ -9,21 +9,24 @@ import com.netcracker.models.User;
 import com.netcracker.models.enums.UserStatusActive;
 import com.netcracker.services.UserService;
 import com.netcracker.services.utils.ExceptionMessages;
-import com.netcracker.services.validation.RegexPatterns;
 import com.netcracker.services.validation.UserValidationRegex;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.security.Principal;
-import java.util.Map;
 
 import static com.netcracker.controllers.MessageController.*;
 
@@ -37,12 +40,14 @@ public class UserController {
     private UserService userService;
     @Autowired
     private FamilyDebitController familyDebitController;
+    @Autowired
+    private AuthenticationManager authenticationManager;
 
 
     private static final Logger logger = Logger.getLogger(UserController.class);
 
     @RequestMapping(value = "/updateEmail", method = RequestMethod.POST)
-    public @ResponseBody Status updateEmail (@RequestBody String email) {
+    public @ResponseBody Status updateEmail (@RequestBody String email, HttpServletRequest request) {
         User userTemp = userDao.getUserByEmail(getCurrentUsername());
         logger.debug(MessageController.LOGGER_UPDATE_EMAIL + userTemp.getId());
 
@@ -57,6 +62,11 @@ public class UserController {
         }
 
         userDao.updateEmail(userTemp.getId(), email);
+        User newUser = userDao.getUserByEmail(email);
+
+        Authentication newAuth = new  UsernamePasswordAuthenticationToken(newUser.geteMail(), newUser.getPassword(), AuthorityUtils.createAuthorityList(newUser.getUserRole().name()));
+        SecurityContextHolder.getContext().setAuthentication(newAuth);
+
         return new Status(true, SUCCESS_UPDATE_EMAIL);
     }
 
@@ -88,6 +98,10 @@ public class UserController {
 
         String passwordEncode = userService.encodePassword(password);
         userDao.updateUserPasswordById(userTemp.getId(), passwordEncode);
+        User newUser = userDao.getUserByEmail(userTemp.geteMail());
+
+        Authentication newAuth = new  UsernamePasswordAuthenticationToken(newUser.geteMail(), newUser.getPassword(), AuthorityUtils.createAuthorityList(newUser.getUserRole().name()));
+        SecurityContextHolder.getContext().setAuthentication(newAuth);
         return new Status(true, SUCCESS_UPDATE_PASSWORD);
     }
 

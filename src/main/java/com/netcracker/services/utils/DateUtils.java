@@ -15,7 +15,10 @@ public final class DateUtils {
     }
 
     public static int getMonthAmountBetweenDates(LocalDate dateFrom, LocalDate dateTo) {
-        return (int) ChronoUnit.MONTHS.between(dateFrom, dateTo);
+            int yearFrom = dateFrom.getYear();
+            int yearTo = dateTo.getYear();
+            int monthFromYear = (yearFrom - yearTo) * 12;
+            return monthFromYear + Math.abs(dateTo.getMonthValue() - dateFrom.getMonthValue());
     }
 
     public static Date localDateToDate(LocalDateTime date) {
