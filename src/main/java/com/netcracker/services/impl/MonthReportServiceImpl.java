@@ -1,13 +1,11 @@
 package com.netcracker.services.impl;
 
 
-
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.text.pdf.draw.LineSeparator;
-import com.netcracker.controllers.MessageController;
 import com.netcracker.dao.*;
 import com.netcracker.exception.MonthReportException;
 import com.netcracker.exception.UserException;
@@ -16,8 +14,6 @@ import com.netcracker.services.MonthReportService;
 import com.netcracker.services.utils.DateUtils;
 import com.netcracker.services.utils.ExceptionMessages;
 import com.netcracker.services.utils.ObjectsCheckUtils;
-
-import com.sun.scenario.effect.ImageData;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -27,8 +23,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.math.BigInteger;
-import java.net.MalformedURLException;
-import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
