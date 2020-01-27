@@ -6,6 +6,7 @@ import com.netcracker.dao.PersonalDebitAccountDao;
 import com.netcracker.models.*;
 import com.netcracker.services.OperationService;
 import com.netcracker.services.PersonalDebitService;
+import com.netcracker.services.PredictionService;
 import com.netcracker.services.utils.ObjectsCheckUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +17,10 @@ import java.math.BigInteger;
 import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Month;
 import java.time.format.TextStyle;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class PersonalDebitServiceImpl implements PersonalDebitService {
@@ -30,6 +33,8 @@ public class PersonalDebitServiceImpl implements PersonalDebitService {
     private MonthReportDao monthReportDao;
     @Autowired
     private OperationDao operationDao;
+    @Autowired
+    private PredictionService predictionService;
 
     private static final Logger logger = Logger.getLogger(PersonalDebitServiceImpl.class);
 
@@ -78,7 +83,11 @@ public class PersonalDebitServiceImpl implements PersonalDebitService {
         PersonalDebitAccount debitAccount = getPersonalDebitAccount(accountId);
         List<ChartItem> chartItems = genChartListFromReports(monthReports, locale);
 
-        chartItems.add(new ChartItem(LocalDate.now().getMonth().getDisplayName(TextStyle.SHORT, locale), debitAccount.getMonthExpense(), debitAccount.getMonthIncome()));
+        if (chartItems.size() > 2) {
+            chartItems.get(chartItems.size() - 3).setAmountExp(debitAccount.getMonthExpense());
+            chartItems.get(chartItems.size() - 3).setAmountInc(debitAccount.getMonthIncome());
+        } else
+            chartItems.add(new ChartItem(LocalDate.now().getMonth().getDisplayName(TextStyle.SHORT, locale), debitAccount.getMonthExpense(), debitAccount.getMonthIncome()));
         return chartItems;
     }
 
@@ -88,6 +97,14 @@ public class PersonalDebitServiceImpl implements PersonalDebitService {
         List<ChartItem> chartItems = new ArrayList<>();
         for (MonthReport rep : monthReports) {
             chartItems.add(new ChartItem(rep.getDateFrom().getMonth().getDisplayName(TextStyle.SHORT, locale), rep.getTotalExpense(), rep.getTotalIncome()));
+        }
+        if (chartItems.size() > 2) {
+            List<Double> expWithPredicted = predictionService.getArrayByMovingAverage(chartItems.stream().map(ChartItem::getAmountExp).collect(Collectors.toList()), 3);
+            List<Double> incWithPredicted = predictionService.getArrayByMovingAverage(chartItems.stream().map(ChartItem::getAmountInc).collect(Collectors.toList()), 3);
+            int monthNow = LocalDate.now().getMonthValue();
+            for (int i = 0; i < expWithPredicted.size(); i++) {
+                chartItems.add(new ChartItem(expWithPredicted.get(i), incWithPredicted.get(i), Month.of(monthNow + i).getDisplayName(TextStyle.SHORT, locale)));
+            }
         }
         return chartItems;
     }
@@ -109,7 +126,6 @@ public class PersonalDebitServiceImpl implements PersonalDebitService {
     @Override
     public Collection<DonutChartItem> genExpenseList(Collection<CategoryExpenseReport> expenseReports){
         Collection<DonutChartItem> donutChartItems = new ArrayList<>();
-        double totalExpense = expenseReports.stream().mapToDouble(AbstractCategoryReport::getAmount).sum();
 
         expenseReports.forEach(rep ->
                 donutChartItems.add(new DonutChartItem(rep.getCategoryExpense().name(),

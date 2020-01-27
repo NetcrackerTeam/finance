@@ -79,20 +79,47 @@ var PersonalDebitController = function($scope, $http) {
         $http.get('debitPersonal/chartInfo').success(function (response) {
             $scope.incomes = [];
             $scope.expenses = [];
+            $scope.incomesPred = [];
+            $scope.expensesPred = [];
             $scope.noInfoChart = false;
             $scope.dates = [];
             $scope.chartInfo = response;
             if ($scope.chartInfo.length === 1 && $scope.chartInfo[0].amountInc === 0 && $scope.chartInfo[0].amountExp === 0) {
                 $scope.noInfoChart = true;
             } else {
-                $scope.minExp = '';
-                $scope.minInc = '';
-                $scope.maxExp = '';
-                $scope.maxInc = '';
-                for (var i = 0; i < $scope.chartInfo.length; i++) {
-                    $scope.incomes.push($scope.chartInfo[i].amountInc);
-                    $scope.expenses.push($scope.chartInfo[i].amountExp);
-                    $scope.dates.push($scope.chartInfo[i].month);
+                var lengthInfo = $scope.chartInfo.length;
+                if (lengthInfo > 2) {
+                    for (var i = 0; i < lengthInfo; i++) {
+                        $scope.dates.push($scope.chartInfo[i].month);
+                        if (i < lengthInfo - 3) {
+                            $scope.incomes.push($scope.chartInfo[i].amountInc);
+                            $scope.expenses.push($scope.chartInfo[i].amountExp);
+                            if (i === lengthInfo - 4) {
+                                $scope.incomesPred.push($scope.chartInfo[i].amountInc);
+                                $scope.expensesPred.push($scope.chartInfo[i].amountExp);
+                            } else {
+                                $scope.incomesPred.push(null);
+                                $scope.expensesPred.push(null);
+                            }
+                        } else if (i === lengthInfo - 3) {
+                            $scope.incomes.push($scope.chartInfo[i].amountInc);
+                            $scope.expenses.push($scope.chartInfo[i].amountExp);
+                            $scope.incomesPred.push($scope.chartInfo[i].amountIncPred);
+                            $scope.expensesPred.push($scope.chartInfo[i].amountExpPred);
+                        } else {
+                            $scope.incomesPred.push($scope.chartInfo[i].amountIncPred);
+                            $scope.expensesPred.push($scope.chartInfo[i].amountExpPred);
+                            $scope.incomes.push(null);
+                            $scope.expenses.push(null);
+                        }
+
+                    }
+                } else {
+                    for (i = 0; i < lengthInfo; i++) {
+                        $scope.dates.push($scope.chartInfo[i].month);
+                        $scope.incomes.push($scope.chartInfo[i].amountInc);
+                        $scope.expenses.push($scope.chartInfo[i].amountExp);
+                    }
                 }
 
                 var dataIncomes = {
@@ -119,9 +146,33 @@ var PersonalDebitController = function($scope, $http) {
                     pointHoverRadius: 10
                 };
 
+                var dataIncomesPred = {
+                    label: "Expenses predicted",
+                    data: $scope.incomesPred,
+                    fill: false,
+                    borderColor: '#baffd4',
+                    pointBackgroundColor: 'rgba(186,255,212,0.5)',
+                    pointBorderColor: '#baffd4',
+                    backgroundColor: 'transparent',
+                    pointRadius: 5,
+                    pointHoverRadius: 10
+                };
+
+                var dataExpxensesPred = {
+                    label: "Expenses predicted",
+                    data: $scope.expensesPred,
+                    fill: false,
+                    borderColor: '#ffd6c3',
+                    pointBackgroundColor: 'rgba(255,214,195,0.5)',
+                    pointBorderColor: '#ffd6c3',
+                    backgroundColor: 'transparent',
+                    pointRadius: 5,
+                    pointHoverRadius: 10
+                };
+
                 var InExData = {
                     labels: $scope.dates,
-                    datasets: [dataIncomes, dataExpenses]
+                    datasets: [dataIncomes, dataExpenses, dataIncomesPred, dataExpxensesPred]
                 };
 
                 var InExLine = document.getElementById("InEx");

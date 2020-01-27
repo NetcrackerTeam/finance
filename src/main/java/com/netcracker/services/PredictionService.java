@@ -2,6 +2,7 @@ package com.netcracker.services;
 
 
 import java.math.BigInteger;
+import java.util.List;
 
 
 public interface PredictionService {
@@ -18,6 +19,7 @@ public interface PredictionService {
 
      double predictFamilyMonthExpense(BigInteger id, int duration);
 
+     List<Double> getArrayByMovingAverage(List<Double> valuesForMonth, int months);
 
     String INCOME = "income";
 

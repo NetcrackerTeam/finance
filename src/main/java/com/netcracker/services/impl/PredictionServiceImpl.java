@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class PredictionServiceImpl implements PredictionService {
@@ -169,20 +170,25 @@ public class PredictionServiceImpl implements PredictionService {
 
     private double calculateSumByMovingAverage(List<Double> valuesForMonth, int months) {
 
+        return new BigDecimal((getArrayByMovingAverage(valuesForMonth, months)).stream().mapToDouble(Double::doubleValue).sum())
+                .setScale(2, RoundingMode.UP).doubleValue();
+    }
+
+    @Override
+    public List<Double> getArrayByMovingAverage(List<Double> valuesForMonth, int months){
         Map<Integer, Double> movingFunctionValue = new HashMap<>();
 
         int lastStaticValue = valuesForMonth.size();
+        int skipVals = lastStaticValue;
 
-        double average = 0;
+        double average;
 
         for (int i = 1; i < valuesForMonth.size() - 1; i++) {
             average = (valuesForMonth.get(i - 1) + valuesForMonth.get(i) + valuesForMonth.get(i+1))/3;
             movingFunctionValue.put(i,average);
         }
 
-        double predictMonthSum = 0;
-
-        int monthFromCount = lastStaticValue;
+        double predictMonthSum;
 
         for (int i = 1; i <= months; i++) {
             predictMonthSum = movingFunctionValue.get(movingFunctionValue.size()) +
@@ -194,8 +200,9 @@ public class PredictionServiceImpl implements PredictionService {
             lastStaticValue++;
         }
 
-        return new BigDecimal(valuesForMonth.stream().skip(monthFromCount).mapToDouble(Double::doubleValue).sum())
-                .setScale(2, RoundingMode.UP).doubleValue();
+        return valuesForMonth.stream().skip(skipVals)
+                .map(val -> new BigDecimal(val).setScale(2, RoundingMode.UP).doubleValue())
+                .collect(Collectors.toList());
     }
 
 }

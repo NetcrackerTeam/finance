@@ -167,8 +167,14 @@ public class FamilyDebitServiceImpl implements FamilyDebitService {
         FamilyDebitAccount debitAccount = getFamilyDebitAccount(accountId);
         List<ChartItem> chartItems = personalDebitService.genChartListFromReports(monthReports, locale);
 
-        chartItems.add(new ChartItem(LocalDate.now().getMonth().getDisplayName(TextStyle.SHORT, locale), debitAccount.getMonthExpense(), debitAccount.getMonthIncome()));
-        return chartItems;
+        if (chartItems.size() > 2) {
+            chartItems.get(chartItems.size() - 3).setAmountExp(debitAccount.getMonthExpense());
+            chartItems.get(chartItems.size() - 3).setAmountInc(debitAccount.getMonthIncome());
+            return chartItems;
+        } else {
+            chartItems.add(new ChartItem(LocalDate.now().getMonth().getDisplayName(TextStyle.SHORT, locale), debitAccount.getMonthExpense(), debitAccount.getMonthIncome()));
+            return chartItems;
+        }
     }
 
     @Override
