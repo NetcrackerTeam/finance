@@ -9,11 +9,17 @@ var FamilyDebitController = function ($scope, $http, $rootScope) {
     };
 
     $scope.goToFam = function(){
+        var dateFromFrom = $("#datetimepickerDateFr").val();
+        var dateFrom = moment(dateFromFrom).format('YYYY-MM-DD');
+        var dateToTo = $("#datetimepickerDateTo").val();
+        var dateTo = moment(dateToTo).format('YYYY-MM-DD');
         window.location = "#/familyHistoryPeriod";
-//        window.location.reload();
+        window.location.reload();
     };
 
-    $scope.fetchFamilyHistoryPeriod = function(dateFrom, dateTo){
+    $scope.fetchFamilyHistoryPeriod = function(){
+        var dateFrom = sessionStorage.getItem('dateFrom');
+        var dateTo = sessionStorage.getItem('dateTo');
         $http({
             method: 'GET',
             url:  $scope.familyHistoryPeriod,

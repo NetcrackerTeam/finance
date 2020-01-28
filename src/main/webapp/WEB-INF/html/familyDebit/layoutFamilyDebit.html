@@ -2,10 +2,10 @@
 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow"
      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
     <div class="d-sm-flex align-items-center justify-content-between mb-3 mt-2">
-        <h1 class="h3 mb-0 text-gray-800">Family account "{{accountInfo.name}}"</h1>
+        <h1 class="h3 mb-0 text-gray-800" ng-show="user.familyDebitId.length > 0">Family account: {{accountInfo.name}}</h1>
 
         <div sec:authorize="hasAuthority('OWNER')">
-            <a href="#" class="btn btn-secondary btn-icon-split ml-5" ng-click="deleteFamilyAccount()" ng-show="user.familyDebitId.length > 0" >
+            <a href="#" class="btn btn-secondary btn-icon-split ml-5" ng-click="deleteFamilyAccount()" >
                 <span class="text">Delete account</span>
             </a>
         </div>
@@ -927,7 +927,7 @@
 
         <!--History for period-->
         <form >
-            <div class="modal fade" id="famPeriodHistory" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal fade" id="famPeriodHistory" name="getFamPeriodHistory" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -938,23 +938,47 @@
                             <div class="form-group">
                                 <label >Date from:</label>
                                 <div class="input-group fetched-date date_field">
-                                    <input type="date" ng-model="datePeriodPers.dateFromFrom" class="form-control" placeholder="yyyy-mm-dd"/>
+                                    <input type="text" name="dp" id="datetimepickerDateFrFamily" class="form-control" placeholder="yyyy-mm-dd"/>
                                     <div class="input-group-addon">
                                         <span class="glyphicon glyphicon-th"></span>
                                     </div>
                                 </div>
-                                <p ng-show="famPeriodHistory.dt.$invalid &amp;&amp; !famPeriodHistory.dt.$pristine" class="help-block">Required field</p>
+                                <p ng-show="getFamPeriodHistory.dp.$invalid &amp;&amp; !getFamPeriodHistory.dp.$pristine" class="help-block">Required field</p>
                             </div>
+                            <script type="text/javascript">
+                                $(function() {
+                                    $('#datetimepickerDateFrFamily').datepicker({
+                                        calendarWeeks: true,
+                                        todayHighlight: true,
+                                        autoclose: true,
+                                        zIndexOffset: '2001',
+                                        format: 'yyyy/mm/dd',
+                                        endDate: '+0w'
+                                    }).datepicker("setDate", new Date());
+                                });
+                            </script>
                             <div class="form-group">
                                 <label >Date to:</label>
                                 <div class="input-group fetched-date date_field">
-                                    <input type="date" ng-model="datePeriodPers.dateToTo" class="form-control" placeholder="yyyy-mm-dd"/>
+                                    <input type="text" name="dp" id="datetimepickerDateToFamily" class="form-control" placeholder="yyyy-mm-dd"/>
                                     <div class="input-group-addon">
                                         <span class="glyphicon glyphicon-th"></span>
                                     </div>
                                 </div>
-                                <p ng-show="famPeriodHistory.dt.$invalid &amp;&amp; !famPeriodHistory.dt.$pristine" class="help-block">Required field</p>
+                                <p ng-show="getFamPeriodHistory.dp.$invalid &amp;&amp; !getFamPeriodHistory.dp.$pristine" class="help-block">Required field</p>
                             </div>
+                            <script type="text/javascript">
+                                $(function() {
+                                    $('#datetimepickerDateToFamily').datepicker({
+                                        calendarWeeks: true,
+                                        todayHighlight: true,
+                                        autoclose: true,
+                                        zIndexOffset: '2001',
+                                        format: 'yyyy/mm/dd',
+                                        endDate: '+0w'
+                                    }).datepicker("setDate", new Date());
+                                });
+                            </script>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal" ng-click="clear()">Close</button>
