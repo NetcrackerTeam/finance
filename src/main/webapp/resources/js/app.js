@@ -33,11 +33,6 @@ var app = angular.module('AngularSpringApp', []).run(function ($rootScope, $http
         isCommodity: "false"
     };
 
-    $rootScope.datePeriodPers = {
-        dateFromFrom: '',
-        dateToTo: ''
-    };
-
     $rootScope.optionSelect = {
         idCredit: "01"
     };

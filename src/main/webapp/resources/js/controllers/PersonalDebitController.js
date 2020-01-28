@@ -14,11 +14,20 @@ var PersonalDebitController = function($scope, $http) {
         });
     };
     $scope.goTo = function(){
+        var dateFromFrom = $("#datetimepickerDateFr").val();
+        var dateFrom = moment(dateFromFrom).format('YYYY-MM-DD');
+        var dateToTo = $("#datetimepickerDateTo").val();
+        var dateTo = moment(dateToTo).format('YYYY-MM-DD');
+        sessionStorage.setItem('dateFrom', dateFrom);
+        sessionStorage.setItem('dateTo', dateTo);
         window.location = "#/personalHistoryPeriod";
-//        window.location.reload();
+        window.location.reload();
     };
 
-    $scope.fetchPersonalHistoryPeriod = function(dateFrom, dateTo){
+
+    $scope.fetchPersonalHistoryPeriod = function(){
+        var dateFrom = sessionStorage.getItem('dateFrom');
+        var dateTo = sessionStorage.getItem('dateTo');
         $http({
             method: 'GET',
             url: $scope.personalHistoryPeriod,
