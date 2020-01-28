@@ -65,7 +65,8 @@ public class UserController {
         userDao.updateEmail(userTemp.getId(), email);
         User newUser = userDao.getUserByEmail(email);
 
-        Authentication newAuth = new  UsernamePasswordAuthenticationToken(newUser.geteMail(), newUser.getPassword(), AuthorityUtils.createAuthorityList(newUser.getUserRole().name()));
+        Authentication newAuth = new  UsernamePasswordAuthenticationToken(newUser.geteMail(), newUser.getPassword(),
+                AuthorityUtils.createAuthorityList(newUser.getUserRole().name()));
         SecurityContextHolder.getContext().setAuthentication(newAuth);
 
         return new Status(true, SUCCESS_UPDATE_EMAIL);
@@ -112,7 +113,8 @@ public class UserController {
         userDao.updateUserPasswordById(userTemp.getId(), passwordEncode);
         User newUser = userDao.getUserByEmail(userTemp.geteMail());
 
-        Authentication newAuth = new  UsernamePasswordAuthenticationToken(newUser.geteMail(), newUser.getPassword(), AuthorityUtils.createAuthorityList(newUser.getUserRole().name()));
+        Authentication newAuth = new  UsernamePasswordAuthenticationToken(newUser.geteMail(), newUser.getPassword(),
+                AuthorityUtils.createAuthorityList(newUser.getUserRole().name()));
         SecurityContextHolder.getContext().setAuthentication(newAuth);
         return new Status(true, SUCCESS_UPDATE_PASSWORD);
     }

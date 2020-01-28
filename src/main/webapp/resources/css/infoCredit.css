@@ -350,3 +350,15 @@
 .center-element-vr {
     top: 50%;
 }
+
+.logo-img {
+    max-width: 190px;
+    max-height: 38px;
+}
+
+ @media only screen and (max-width : 320px) {
+     .logo-img {
+         max-width: 85px;
+         max-height: 17px;
+     }
+}
