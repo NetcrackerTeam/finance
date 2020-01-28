@@ -9,9 +9,10 @@
             <div class="small text-right">{{accountInfo.owner.eMail}}</div>
         </div>
     </div>
-
 </nav>
-<div ng-controller="PersonalDebitController" class="card shadow mb-4" ng-init="fetchPersonalHistoryPeriod()">
+<div ng-init="fetchPersonalHistoryPeriod()">
+    <h3>{{dateFromPers.toString()}} to: {{dateToPers.toString()}}</h3>
+<div ng-controller="PersonalDebitController" class="card shadow mb-4">
     <div class="card-header py-3" >
         <h6 class="m-0 font-weight-bold text-primary">History</h6>
     </div>
@@ -54,4 +55,5 @@
             </table>
         </div>
     </div>
+</div>
 </div>

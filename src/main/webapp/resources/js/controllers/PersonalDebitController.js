@@ -26,14 +26,14 @@ var PersonalDebitController = function($scope, $http) {
 
 
     $scope.fetchPersonalHistoryPeriod = function(){
-        var dateFrom = sessionStorage.getItem('dateFrom');
-        var dateTo = sessionStorage.getItem('dateTo');
+        $scope.dateFromPers = sessionStorage.getItem('dateFrom');
+        $scope.dateToPers = sessionStorage.getItem('dateTo');
         $http({
             method: 'GET',
             url: $scope.personalHistoryPeriod,
             params: {
-                'dateFrom': dateFrom.toLocaleString(),
-                'dateTo': dateTo.toLocaleString()
+                'dateFrom': $scope.dateFromPers.toLocaleString(),
+                'dateTo': $scope.dateToPers.toLocaleString()
             },
             headers: {
                 'Content-Type': 'application/json'
