@@ -39,16 +39,32 @@ public class checksAutoOperationController {
     @RequestMapping(value = "/executeRemindAutoIncomeFamilyJob", method = RequestMethod.GET)
     public String AutoIncFam(Model model, String error) {
         jobService.executeRemindAutoIncomeFamilyJob();
-        model.addAttribute("AutoIncMSgFam", "get page");
+        model.addAttribute("AutoIncMSgFam", "please check you acc after test");
         return currentPage;
     }
 
     @RequestMapping(value = "/executeRemindAutoExpenseFamilyJob", method = RequestMethod.GET)
     public String AutoExpFam(Model model, String error) {
         jobService.executeRemindAutoExpenseFamilyJob();
-        model.addAttribute("AutoExcMsgFam", "get page");
+        model.addAttribute("AutoExcMsgFam", "please check you acc after test");
         return currentPage;
     }
+
+    @RequestMapping(value = "/executeAutoCreditExpenseFamily", method = RequestMethod.GET)
+    public String AutoCreditFam(Model model, String error) {
+        jobService.executeAutoCreditExpenseFamily();
+        model.addAttribute("AutoCreditMSgFam", "please check you acc after test");
+        return currentPage;
+    }
+
+    @RequestMapping(value = "/executeAutoCreditExpensePersonal", method = RequestMethod.GET)
+    public String AutoCreditPer(Model model, String error) {
+        jobService.executeAutoCreditExpensePersonal();
+        model.addAttribute("AutoCreditMsgPersonal", "please check you acc after test");
+        return currentPage;
+    }
+
+
 
 }
 

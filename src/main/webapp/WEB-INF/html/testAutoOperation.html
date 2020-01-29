@@ -24,8 +24,19 @@
 
 <form th:action="@{/executeRemindAutoExpenseFamilyJob}" method="get" >
     <button type="submit" class="btn btn-primary">executeRemindAutoExpenseFamilyJob</button>
-    <p th:text="'result: ' + ${AutoExcMsgFam}" />
+    <p th:text="'result: ' + ${AutoCreditMSgFam}" />
 </form>
+
+<form th:action="@{/executeAutoCreditExpenseFamily}" method="get" >
+    <button type="submit" class="btn btn-primary">executeRemindAutoCreditPersonalJob</button>
+    <p th:text="'result: ' + ${AutoIncMSgFam}" />
+</form>
+
+<form th:action="@{/executeAutoCreditExpensePersonal}" method="get" >
+    <button type="submit" class="btn btn-primary">executeRemindAutoCreditFamilyJob</button>
+    <p th:text="'result: ' + ${AutoCreditMsgPersonal}" />
+</form>
+
 
 
 </body>
