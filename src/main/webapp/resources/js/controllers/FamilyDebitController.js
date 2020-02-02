@@ -9,23 +9,25 @@ var FamilyDebitController = function ($scope, $http, $rootScope) {
     };
 
     $scope.goToFam = function(){
-        var dateFromFrom = $("#datetimepickerDateFr").val();
+        var dateFromFrom = $("#datetimepickerDateFrFamily").val();
         var dateFrom = moment(dateFromFrom).format('YYYY-MM-DD');
-        var dateToTo = $("#datetimepickerDateTo").val();
+        var dateToTo = $("#datetimepickerDateToFamily").val();
         var dateTo = moment(dateToTo).format('YYYY-MM-DD');
+        sessionStorage.setItem('dateFrom', dateFrom);
+        sessionStorage.setItem('dateTo', dateTo);
         window.location = "#/familyHistoryPeriod";
         window.location.reload();
     };
 
     $scope.fetchFamilyHistoryPeriod = function(){
-        var dateFrom = sessionStorage.getItem('dateFrom');
-        var dateTo = sessionStorage.getItem('dateTo');
+        $scope.dateFromFamily = sessionStorage.getItem('dateFrom');
+        $scope.dateToFamily = sessionStorage.getItem('dateTo');
         $http({
             method: 'GET',
             url:  $scope.familyHistoryPeriod,
             params: {
-                'dateFrom': dateFrom.toLocaleString(),
-                'dateTo': dateTo.toLocaleString()
+                'dateFrom': $scope.dateFromFamily.toLocaleString(),
+                'dateTo': $scope.dateToFamily.toLocaleString()
             },
             headers: {
                 'Content-Type': 'application/json'

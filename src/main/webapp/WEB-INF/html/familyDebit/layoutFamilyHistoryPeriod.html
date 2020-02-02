@@ -22,48 +22,50 @@
 
 </nav>
 
-<div class="card shadow mb-4" ng-init="fetchFamilyHistoryPeriod(datePeriodPers.dateFromFrom, datePeriodPers.dateToTo)">
-    <div class="card-header py-3">
-        <h6 class="m-0 font-weight-bold text-primary">History</h6>
-    </div>
-    <div class="card-body">
-        <div class="table-responsive">
-            <table class="table">
-                <thead>
-                <tr>
-                    <th>Type</th>
-                    <th>Amount</th>
-                    <th>Name</th>
-                    <th>User</th>
-                    <th>Date</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr ng-repeat="hisInf in familyHistoryPer"  ng-class="{'text-success' : hisInf.categoryIncome, 'text-danger' : hisInf.categoryExpense}">
-                    <td>
-                                <span ng-show="hisInf.categoryIncome">
-                                    Income
-                                </span>
-                        <span ng-show="hisInf.categoryExpense">
-                                    Expense
-                                </span>
-                    </td>
-                    <td>
-                                <span ng-show="hisInf.categoryIncome">
-                                    +{{hisInf.amount}}
-                                </span>
-                        <span ng-show="hisInf.categoryExpense">
-                                    -{{hisInf.amount}}
-                                </span>
-                    </td>
-                    <td>
-                        {{hisInf.categoryIncome}}{{hisInf.categoryExpense}}
-                    </td>
-                    <td>{{hisInf.userName}}</td>
-                    <td>{{hisInf.dateStr}}</td>
-                </tr>
-                </tbody>
-            </table>
+<div ng-init="fetchFamilyHistoryPeriod()">
+    <h3>{{dateFromFamily.toString()}} to: {{dateToFamily.toString()}}</h3>
+    <div ng-controller="FamilyDebitController" class="card shadow mb-4">
+        <div class="card-header py-3" >
+            <h6 class="m-0 font-weight-bold text-primary">History</h6>
+        </div>
+        <div class="card-body" >
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Type</th>
+                        <th>Amount</th>
+                        <th>Name</th>
+                        <th>Date</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="hisInf in familyHistoryPer"
+                        ng-class="{'text-success' : hisInf.categoryIncome, 'text-danger' : hisInf.categoryExpense}">
+                        <td>
+                        <span ng-show="hisInf.categoryIncome">
+                            Income
+                        </span>
+                            <span ng-show="hisInf.categoryExpense">
+                            Expense
+                        </span>
+                        </td>
+                        <td>
+                        <span ng-show="hisInf.categoryIncome">
+                            +{{hisInf.amount}}
+                        </span>
+                            <span ng-show="hisInf.categoryExpense">
+                            -{{hisInf.amount}}
+                        </span>
+                        </td>
+                        <td>
+                            {{hisInf.categoryIncome}}{{hisInf.categoryExpense}}
+                        </td>
+                        <td>{{hisInf.dateStr}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>
