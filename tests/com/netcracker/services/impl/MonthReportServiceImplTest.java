@@ -130,8 +130,8 @@ public class MonthReportServiceImplTest {
                 .totalExpense(1200L)
                 .totalIncome(1100L)
                 .balance(1600L)
-                .dateFrom(testLocalDate)
-                .dateTo(testLocalDate)
+                .dateFrom(testLocalDate.atTime(0,0))
+                .dateTo(testLocalDate.atTime(0,0))
                 .categoryExpense(categoryExpenseReport)
                 .categoryIncome(categoryIncomeReport)
                 .build();

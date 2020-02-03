@@ -93,7 +93,7 @@ public class PersonalDebitAccountServiceTest {
 
     @Test
     public void getHistory() {
-        Collection<AbstractAccountOperation> operations = personalDebitService.getHistory(ID, LocalDate.of(2019, 01, 11));
+        Collection<AbstractAccountOperation> operations = personalDebitService.getHistory(ID, LocalDate.of(2019, 01, 11).atTime(0,0));
         assertNotNull(operations);
     }
 }

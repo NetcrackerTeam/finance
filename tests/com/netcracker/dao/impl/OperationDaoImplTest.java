@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigInteger;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -37,13 +38,13 @@ public class OperationDaoImplTest {
     @Before
     public void initializeObjects() {
         testIncome = new AccountIncome.Builder()
-            .accountDate(LocalDate.of(1995, 10, 20))
+            .accountDate(LocalDateTime.of(1995, 10, 20, 0, 0))
             .categoryIncome(CategoryIncome.getNameByKey(BigInteger.valueOf(14)))
             .accountAmount(1357L)
             .build();
 
         testExpense = new AccountExpense.Builder()
-                .accountDate(LocalDate.of(2001, 12, 9))
+                .accountDate(LocalDateTime.of(2001, 12, 9, 0, 0))
                 .categoryExpense(CategoryExpense.getNameByKey(BigInteger.valueOf(5)))
                 .accountAmount(14685L)
                 .build();
@@ -56,7 +57,7 @@ public class OperationDaoImplTest {
         operationDao.createIncomePersonalByAccId(BigInteger.valueOf(2), testIncome.getAmount(), testIncome.getDate(), testIncome.getCategoryIncome());
         int expected = 2;
         int actual = operationDao.getIncomesPersonalAfterDateByAccountId(BigInteger.valueOf(2),
-                LocalDate.of(1990,10,10)).size();
+                LocalDateTime.of(1990,10,10, 0, 0)).size();
         assertEquals(expected, actual);
     }
     @Rollback
@@ -66,7 +67,7 @@ public class OperationDaoImplTest {
                 testExpense.getDate(), testExpense.getCategoryExpense());
         int expected = 2;
         int actual = operationDao.getExpensesPersonalAfterDateByAccountId(BigInteger.valueOf(2),
-                (LocalDate.of(1990,10,10))).size();
+                (LocalDateTime.of(1990,10,10, 0, 0))).size();
         assertEquals(expected, actual);
     }
     @Rollback
@@ -76,7 +77,7 @@ public class OperationDaoImplTest {
                 testIncome.getDate(), testIncome.getCategoryIncome());
         int expected = 2;
         int actual = operationDao.getIncomesFamilyAfterDateByAccountId(BigInteger.valueOf(3),
-                LocalDate.of(1990,10,10)).size();
+                LocalDateTime.of(1990,10,10, 0, 0)).size();
         assertEquals(expected, actual);
     }
     @Rollback
@@ -86,35 +87,35 @@ public class OperationDaoImplTest {
                 testExpense.getDate(), testExpense.getCategoryExpense());
         int expected = 2;
         int actual = operationDao.getExpensesFamilyAfterDateByAccountId(BigInteger.valueOf(3),
-                LocalDate.of(1990,10,10)).size();
+                LocalDateTime.of(1990,10,10, 0, 0)).size();
         assertEquals(expected, actual);
     }
 
     @Test
     public void getIncomesPersonalAfterDateByAccountId() {
         List<AccountIncome> list = (List<AccountIncome>) operationDao.getIncomesPersonalAfterDateByAccountId(BigInteger.valueOf(2),
-                LocalDate.of(1990, 11, 30));
+                LocalDateTime.of(1990, 11, 30, 0, 0));
         Assert.assertEquals(1, list.size());
     }
 
     @Test
     public void getExpensesPersonalAfterDateByAccountId() {
         List<AccountExpense> list = (List<AccountExpense>) operationDao.getExpensesPersonalAfterDateByAccountId(BigInteger.valueOf(2),
-                LocalDate.of(1990, 11, 30));
+                LocalDateTime.of(1990, 11, 30, 0, 0));
         Assert.assertEquals(1, list.size());
     }
 
     @Test
     public void getIncomesFamilyAfterDateByAccountId() {
         List<AccountIncome> list = (List<AccountIncome>) operationDao.getIncomesFamilyAfterDateByAccountId(BigInteger.valueOf(3),
-                LocalDate.of(1990, 11, 30));
+                LocalDateTime.of(1990, 11, 30, 0, 0));
         Assert.assertEquals(1, list.size());
     }
 
     @Test
     public void getExpensesFamilyAfterDateByAccountId() {
         List<AccountExpense> list = (List<AccountExpense>) operationDao.getExpensesFamilyAfterDateByAccountId(BigInteger.valueOf(3),
-                LocalDate.of(1990, 11, 30));
+                LocalDateTime.of(1990, 11, 30, 0, 0));
         Assert.assertEquals(1, list.size());
     }
 }

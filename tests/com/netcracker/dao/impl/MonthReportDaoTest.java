@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigInteger;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @WebAppConfiguration
 @ContextConfiguration(classes = {WebConfig.class})
@@ -35,16 +36,16 @@ public class MonthReportDaoTest {
                 .totalIncome(5000L)
                 .totalExpense(4500L)
                 .balance(9500L)
-                .dateTo(LocalDate.of(2019,12, 1))
-                .dateFrom(LocalDate.of(2019,12,30))
+                .dateTo(LocalDateTime.of(2019,12, 1, 0, 0))
+                .dateFrom(LocalDateTime.of(2019,12,30, 0, 0))
                 .build();
 
         expMonthReportPersonal = new MonthReport.Builder()
                 .totalIncome(4000L)
                 .totalExpense(3500L)
                 .balance(5500L)
-                .dateTo(LocalDate.of(2019,11,1))
-                .dateFrom(LocalDate.of(2019,11,30))
+                .dateTo(LocalDateTime.of(2019,11,1, 0, 0))
+                .dateFrom(LocalDateTime.of(2019,11,30, 0, 0))
                 .build();
     }
 

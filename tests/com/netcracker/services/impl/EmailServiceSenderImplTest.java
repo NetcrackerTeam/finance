@@ -250,7 +250,7 @@ public class EmailServiceSenderImplTest {
                 returnedUser.getName(),
                 personalCredit.getPaidAmount(),
                 personalCredit.getName(),
-                personalCredit.getDateTo()
+                personalCredit.getDateTo().atTime(0,0)
         );
         template.update(DELETE_USER);
 
@@ -298,7 +298,7 @@ public class EmailServiceSenderImplTest {
                 returnedUser.getName(),
                 familyCredit.getPaidAmount(),
                 familyCredit.getName(),
-                familyCredit.getDateTo()
+                familyCredit.getDateTo().atTime(0,0)
         );
     }
 

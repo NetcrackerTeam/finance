@@ -193,7 +193,7 @@ public class FamilyDebitAccountServiceTest {
 
     @Test
     public void getHistory() {
-        Collection<AbstractAccountOperation> operations = familyDebitService.getHistory(ID, LocalDate.of(1990, 10, 10));
+        Collection<AbstractAccountOperation> operations = familyDebitService.getHistory(ID, LocalDate.of(1990, 10, 10).atTime(0,0));
         assertNotNull(operations);
     }
 

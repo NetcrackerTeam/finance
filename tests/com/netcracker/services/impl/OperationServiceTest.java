@@ -63,16 +63,16 @@ public class OperationServiceTest {
     @Before
     public void initializeObjects() {
         familyIncomeExpected = new AccountIncome.Builder().accountId(BigInteger.valueOf(19)).accountUserId(debitIdFamily)
-                .accountAmount(7000L).accountDate(dateIncome).categoryIncome(CategoryIncome.SALARY).build();
+                .accountAmount(7000L).accountDate(dateIncome.atTime(0,0)).categoryIncome(CategoryIncome.SALARY).build();
 
         familyExpenseExpected = new AccountExpense.Builder().accountId(BigInteger.valueOf(17)).accountUserId(debitIdFamily)
-                .accountAmount(3000L).accountDate(dateExpense).categoryExpense(CategoryExpense.FOOD).build();
+                .accountAmount(3000L).accountDate(dateExpense.atTime(0,0)).categoryExpense(CategoryExpense.FOOD).build();
 
         personalIncomeExpected = new AccountIncome.Builder().accountId(BigInteger.valueOf(18)).accountUserId(debitIdPersonal)
-                .accountAmount(5000L).accountDate(dateIncome).categoryIncome(CategoryIncome.SALARY).build();
+                .accountAmount(5000L).accountDate(dateIncome.atTime(0,0)).categoryIncome(CategoryIncome.SALARY).build();
 
         personalExpenseExpected = new AccountExpense.Builder().accountId(BigInteger.valueOf(16)).accountUserId(debitIdPersonal)
-                .accountAmount(2000L).accountDate(dateExpense).categoryExpense(CategoryExpense.FOOD).build();
+                .accountAmount(2000L).accountDate(dateExpense.atTime(0,0)).categoryExpense(CategoryExpense.FOOD).build();
     }
 
     @Test
@@ -80,7 +80,7 @@ public class OperationServiceTest {
         expectedList.add(familyIncomeExpected);
         expectedList.add(familyExpenseExpected);
 
-        List<AbstractAccountOperation> actualList = new ArrayList<>(operationService.getAllFamilyOperations(debitIdFamily, date));
+        List<AbstractAccountOperation> actualList = new ArrayList<>(operationService.getAllFamilyOperations(debitIdFamily, date.atTime(0,0)));
         AssertUtils.assertOperationsCollections(expectedList, actualList);
     }
 
@@ -91,7 +91,7 @@ public class OperationServiceTest {
 
     @Test
     public void getAllFamilyOperationsEmptyList() {
-        List<AbstractAccountOperation> actualList = new ArrayList<>(operationService.getAllFamilyOperations(nonexistentId, date));
+        List<AbstractAccountOperation> actualList = new ArrayList<>(operationService.getAllFamilyOperations(nonexistentId, date.atTime(0,0)));
         AssertUtils.assertOperationsCollections(Collections.emptyList(), actualList);
     }
 
@@ -100,7 +100,7 @@ public class OperationServiceTest {
         expectedList.add(personalIncomeExpected);
         expectedList.add(personalExpenseExpected);
 
-        List<AbstractAccountOperation> actualList = new ArrayList<>(operationService.getAllPersonalOperations(debitIdPersonal, date));
+        List<AbstractAccountOperation> actualList = new ArrayList<>(operationService.getAllPersonalOperations(debitIdPersonal, date.atTime(0,0)));
         AssertUtils.assertOperationsCollections(expectedList, actualList);
     }
 
@@ -111,7 +111,7 @@ public class OperationServiceTest {
 
     @Test
     public void getAllPersonalOperationsEmptyList() {
-        List<AbstractAccountOperation> actualList = new ArrayList<>(operationService.getAllPersonalOperations(nonexistentId, date));
+        List<AbstractAccountOperation> actualList = new ArrayList<>(operationService.getAllPersonalOperations(nonexistentId, date.atTime(0,0)));
         AssertUtils.assertOperationsCollections(Collections.emptyList(), actualList);
     }
 
@@ -123,7 +123,7 @@ public class OperationServiceTest {
                 familyIncomeExpected.getDate(), familyIncomeExpected.getCategoryIncome());
 
         expectedList.add(familyIncomeExpected);
-        List<AccountIncome> familyIncomeActual = operationDao.getIncomesFamilyAfterDateByAccountId(debitIdFamily, dateIncome);
+        List<AccountIncome> familyIncomeActual = operationDao.getIncomesFamilyAfterDateByAccountId(debitIdFamily, dateIncome.atTime(0,0));
         List<AbstractAccountOperation> actualList = new ArrayList<>(familyIncomeActual);
         AssertUtils.assertOperationsCollections(expectedList, actualList);
     }
@@ -141,7 +141,7 @@ public class OperationServiceTest {
                 familyExpenseExpected.getDate(), familyExpenseExpected.getCategoryExpense());
 
         expectedList.add(familyExpenseExpected);
-        List<AccountExpense> familyExpenseActual = operationDao.getExpensesFamilyAfterDateByAccountId(debitIdFamily, dateExpense);
+        List<AccountExpense> familyExpenseActual = operationDao.getExpensesFamilyAfterDateByAccountId(debitIdFamily, dateExpense.atTime(0,0));
         List<AbstractAccountOperation> actualList = new ArrayList<>(familyExpenseActual);
         AssertUtils.assertOperationsCollections(expectedList, actualList);
     }
@@ -159,7 +159,7 @@ public class OperationServiceTest {
                 personalIncomeExpected.getDate(), personalIncomeExpected.getCategoryIncome());
 
         expectedList.add(personalIncomeExpected);
-        List<AccountIncome> personalIncomeActual = operationDao.getIncomesFamilyAfterDateByAccountId(debitIdPersonal, dateIncome);
+        List<AccountIncome> personalIncomeActual = operationDao.getIncomesFamilyAfterDateByAccountId(debitIdPersonal, dateIncome.atTime(0,0));
         List<AbstractAccountOperation> actualList = new ArrayList<>(personalIncomeActual);
         AssertUtils.assertOperationsCollections(expectedList, actualList);
     }
@@ -177,7 +177,7 @@ public class OperationServiceTest {
                 personalExpenseExpected.getDate(), personalExpenseExpected.getCategoryExpense());
 
         expectedList.add(personalExpenseExpected);
-        List<AccountExpense> personalExpenseActual = operationDao.getExpensesPersonalAfterDateByAccountId(debitIdPersonal, dateExpense);
+        List<AccountExpense> personalExpenseActual = operationDao.getExpensesPersonalAfterDateByAccountId(debitIdPersonal, dateExpense.atTime(0,0));
         List<AbstractAccountOperation> actualList = new ArrayList<>(personalExpenseActual);
         AssertUtils.assertOperationsCollections(expectedList, actualList);
     }

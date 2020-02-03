@@ -23,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.sql.DataSource;
 import java.math.BigInteger;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -75,27 +76,27 @@ public class AccountAutoOperationServiceTest {
     public void initializeObjects() {
         autoOperationIncomePersonalExpected = new AutoOperationIncome.Builder().accountId(personalIncomeObjectIdAO)
                 .dayOfMonth(dayOfMonth).accountAmount(13000.00).categoryIncome(CategoryIncome.AWARD).accountDebitId(personalDebitId)
-                .accountDate(LocalDate.parse("2019-12-20")).build();
+                .accountDate(LocalDate.parse("2019-12-20").atTime(0,0)).build();
 
         autoOperationExpensePersonalExpected = new AutoOperationExpense.Builder().accountId(personalExpenseObjectIdAO)
                 .dayOfMonth(dayOfMonth).accountAmount(17000.00).categoryExpense(CategoryExpense.FOOD).accountDebitId(personalDebitId)
-                .accountDate(LocalDate.parse("2019-12-02")).build();
+                .accountDate(LocalDate.parse("2019-12-02").atTime(0,0)).build();
 
         autoOperationIncomeFamilyExpected = new AutoOperationIncome.Builder().accountId(familyIncomeObjectIdAO)
                 .dayOfMonth(dayOfMonth).accountAmount(12000.00).categoryIncome(CategoryIncome.AWARD).accountDebitId(familyDebitId)
-                .accountDate(LocalDate.parse("2019-12-15")).build();
+                .accountDate(LocalDate.parse("2019-12-15").atTime(0,0)).build();
 
         autoOperationExpenseFamilyExpected = new AutoOperationExpense.Builder().accountId(familyExpenseObjectIdAO)
                 .dayOfMonth(dayOfMonth).accountAmount(16000.00).categoryExpense(CategoryExpense.FOOD).accountDebitId(familyDebitId)
-                .accountDate(LocalDate.parse("2019-12-03")).build();
+                .accountDate(LocalDate.parse("2019-12-03").atTime(0,0)).build();
 
         autoOperationExpenseExpected = new AutoOperationExpense.Builder().accountId(BigInteger.valueOf(9001))
                 .dayOfMonth(2).accountAmount(2000.00).categoryExpense(CategoryExpense.FOOD).accountDebitId(BigInteger.valueOf(2))
-                .accountDate(LocalDate.parse("2019-12-16")).build();
+                .accountDate(LocalDate.parse("2019-12-16").atTime(0,0)).build();
 
         autoOperationIncomeExpected = new AutoOperationIncome.Builder().accountId(BigInteger.valueOf(9004))
                 .dayOfMonth(2).accountAmount(3500.00).categoryIncome(CategoryIncome.PRESENTS).accountDebitId(BigInteger.valueOf(3))
-                .accountDate(LocalDate.parse("2019-12-16")).build();
+                .accountDate(LocalDate.parse("2019-12-16").atTime(0,0)).build();
     }
 
     @Test(expected = RuntimeException.class)
@@ -184,7 +185,7 @@ public class AccountAutoOperationServiceTest {
         AssertUtils.assertAutoOperationExpense(autoOperationExpenseFamilyExpected, autoOperationExpenseFamilyActual);
     }*/
 
-    private void setDateAndId(AbstractAutoOperation autoOperation, BigInteger newId, LocalDate newDate) {
+    private void setDateAndId(AbstractAutoOperation autoOperation, BigInteger newId, LocalDateTime newDate) {
         autoOperation.setId(newId);
         autoOperation.setDate(newDate);
     }

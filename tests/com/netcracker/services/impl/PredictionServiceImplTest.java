@@ -97,15 +97,15 @@ public class PredictionServiceImplTest {
 
 
 
-        testLocalDate = DateUtils.localDateToDate(LocalDate.of(2010,12,15));
+        testLocalDate = DateUtils.localDateToDate(LocalDate.of(2010,12,15).atTime(0,0));
 
         monthReport = new MonthReport.Builder()
                 .id(BigInteger.valueOf(10))
                 .totalExpense(1200L)
                 .totalIncome(1100L)
                 .balance(1600L)
-                .dateFrom(testTime)
-                .dateTo(testTime)
+                .dateFrom(testTime.atTime(0,0))
+                .dateTo(testTime.atTime(0,0))
                 .categoryExpense(categoryExpenseReport)
                 .categoryIncome(categoryIncomeReport)
                 .build();

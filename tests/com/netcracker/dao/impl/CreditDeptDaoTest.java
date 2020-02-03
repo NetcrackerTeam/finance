@@ -61,7 +61,7 @@ public class CreditDeptDaoTest {
         BigInteger accId = personalDebtOne.getDebtId();
         LocalDate newDate = LocalDate.of(2019, 11, 30);
 
-        creditDeptDao.updatePersonalDebtDateFrom(accId, DateUtils.localDateToDate(newDate));
+        creditDeptDao.updatePersonalDebtDateFrom(accId, DateUtils.localDateToDate(newDate.atTime(0,0)));
 
     }
 
@@ -71,7 +71,7 @@ public class CreditDeptDaoTest {
         BigInteger accId = familyDebtOne.getDebtId();
         LocalDate newDate = LocalDate.of(2019, 11, 21);
 
-        creditDeptDao.updateFamilyDebtDateFrom(accId, DateUtils.localDateToDate(newDate));
+        creditDeptDao.updateFamilyDebtDateFrom(accId, DateUtils.localDateToDate(newDate.atTime(0,0)));
 
     }
 
@@ -81,7 +81,7 @@ public class CreditDeptDaoTest {
         BigInteger accId = personalDebtOne.getDebtId();
         LocalDate newDate = LocalDate.of(2019, 11, 30);
 
-        creditDeptDao.updatePersonalDebtDateTo(accId, DateUtils.localDateToDate(newDate));
+        creditDeptDao.updatePersonalDebtDateTo(accId, DateUtils.localDateToDate(newDate.atTime(0,0)));
 
     }
 
@@ -91,7 +91,7 @@ public class CreditDeptDaoTest {
         BigInteger accId = familyDebtOne.getDebtId();
         LocalDate newDate = LocalDate.of(2019, 11, 30);
 
-        creditDeptDao.updateFamilyDebtDateTo(accId, DateUtils.localDateToDate(newDate));
+        creditDeptDao.updateFamilyDebtDateTo(accId, DateUtils.localDateToDate(newDate.atTime(0,0)));
 
     }
 
