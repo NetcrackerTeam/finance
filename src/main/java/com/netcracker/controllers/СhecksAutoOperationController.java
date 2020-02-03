@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
-public class checksAutoOperationController {
+public class СhecksAutoOperationController {
 
     private final String currentPage = "testAutoOperation";
     @Autowired
@@ -25,6 +25,7 @@ public class checksAutoOperationController {
     @RequestMapping(value = "/executeRemindAutoIncomePersonalJob", method = RequestMethod.GET)
     public String AutoIncPers(Model model ) {
         jobService.executeRemindAutoIncomePersonalJob();
+        jobService.executeAutoCreditExpensePersonal();
         model.addAttribute("AutoIncMSg", "please check you acc after test ");
         return currentPage;
     }

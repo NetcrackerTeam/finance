@@ -11,8 +11,10 @@
     </div>
 </nav>
 <div ng-init="fetchPersonalHistoryPeriod()">
-    <h3>{{dateFromPers.toString()}} to: {{dateToPers.toString()}}</h3>
-<div ng-controller="PersonalDebitController" class="card shadow mb-4">
+    <div class="text-secondary ml-3">
+    <h4>{{dateFromPers.toString()}} to {{dateToPers.toString()}}</h4>
+    </div>
+<div ng-controller="PersonalDebitController" class="card shadow mb-4 m-3">
     <div class="card-header py-3" >
         <h6 class="m-0 font-weight-bold text-primary">History</h6>
     </div>

@@ -2,9 +2,9 @@ package com.netcracker.services;
 
 
 public interface JobService {
-    String CRON_BY_EVERYDAY = "0 0 8 * * ?";//at 8 am every day
+    String CRON_BY_EVERYDAY = "0 0 6 * * ?";//at 6 am every day
 
-    String CRON_BY_REPORT = "0 0 9 1 * ?";//At 9 am every first day of month
+    String CRON_BY_REPORT = "0 0 1 1 * ?";//At 1 am every first day of month
 
     void executeMonthPersonalReportOnEmailJob();
 
