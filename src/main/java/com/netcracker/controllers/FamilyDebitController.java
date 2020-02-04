@@ -273,7 +273,7 @@ public class FamilyDebitController {
     ) {
         logger.debug("getHistory Personal");
         LocalDateTime dateF = LocalDateTime.of(dateFrom.getYear(), dateFrom.getMonth().getValue(), dateFrom.getDayOfMonth(), 0, 0, 0);
-        LocalDateTime dateT = LocalDateTime.of(dateTo.getYear(), dateTo.getMonth().getValue(), dateTo.getDayOfMonth(), 0, 0, 0);
+        LocalDateTime dateT = LocalDateTime.of(dateTo.getYear(), dateTo.getMonth().getValue(), dateTo.getDayOfMonth(), 23, 59, 0);
         BigInteger debitId = getAccountByPrincipal(principal);
         return operationDao.getFamilyHistoryByAccountId(debitId, dateF, dateT);
     }

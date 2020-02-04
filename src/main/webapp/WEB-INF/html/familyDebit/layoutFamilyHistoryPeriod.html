@@ -38,6 +38,7 @@
                         <th>Type</th>
                         <th>Amount</th>
                         <th>Name</th>
+                        <th>User</th>
                         <th>Date</th>
                     </tr>
                     </thead>
@@ -45,24 +46,25 @@
                     <tr ng-repeat="hisInf in familyHistoryPer"
                         ng-class="{'text-success' : hisInf.categoryIncome, 'text-danger' : hisInf.categoryExpense}">
                         <td>
-                        <span ng-show="hisInf.categoryIncome">
-                            Income
-                        </span>
+                                <span ng-show="hisInf.categoryIncome">
+                                    Income
+                                </span>
                             <span ng-show="hisInf.categoryExpense">
-                            Expense
-                        </span>
+                                    Expense
+                                </span>
                         </td>
                         <td>
-                        <span ng-show="hisInf.categoryIncome">
-                            +{{hisInf.amount}}
-                        </span>
+                                <span ng-show="hisInf.categoryIncome">
+                                    +{{hisInf.amount}}
+                                </span>
                             <span ng-show="hisInf.categoryExpense">
-                            -{{hisInf.amount}}
-                        </span>
+                                    -{{hisInf.amount}}
+                                </span>
                         </td>
                         <td>
                             {{hisInf.categoryIncome}}{{hisInf.categoryExpense}}
                         </td>
+                        <td>{{hisInf.userName}}</td>
                         <td>{{hisInf.dateStr}}</td>
                     </tr>
                     </tbody>
