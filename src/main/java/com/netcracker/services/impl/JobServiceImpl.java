@@ -261,20 +261,18 @@ public class JobServiceImpl implements JobService {
     public void executeAutoCreditExpenseFamily() {
         LocalDateTime localDateNow = LocalDateTime.now();
         int dayNow = localDateNow.getDayOfMonth();
-        double calculateCredit;
         Collection<FamilyCreditAccount> allFamilyCredit = creditAccountDao.getAllFamilyCreditIdsByMonthDay(dayNow);
         for (FamilyCreditAccount familyCredit : allFamilyCredit) {
             ObjectsCheckUtils.isNotNull(familyCredit);
             BigInteger id = creditAccountDao.getFamilyDebitIdByCreditId(familyCredit.getCreditId());
-            calculateCredit = CreditUtils.calculateMonthPayment(familyCredit.getDate(), familyCredit.getDateTo(), familyCredit.getPaidAmount(), familyCredit.getCreditRate());
             User user = familyDebitService.getFamilyDebitAccount(id).getOwner();
-            boolean paymentAutoFamilyCredit = familyCreditService.addFamilyCreditPaymentAuto(id, familyCredit.getCreditId(), calculateCredit, user.getId());
+            boolean paymentAutoFamilyCredit = familyCreditService.addFamilyCreditPaymentAuto(id, familyCredit.getCreditId(), familyCredit.getMonthPayment(), user.getId());
             if (!paymentAutoFamilyCredit) {
                 familyCreditService.increaseDebt(familyCredit.getCreditId(), familyCredit.getPaidAmount());
-                emailServiceSender.sendMailAboutFamilyDebt(user.geteMail(), user.getName(), familyCredit.getName(), calculateCredit);
+                emailServiceSender.sendMailAboutFamilyDebt(user.geteMail(), user.getName(), familyCredit.getName(), familyCredit.getMonthPayment());
             }
             try {
-                emailServiceSender.sendMailReminderFamilyCredit(user.geteMail(), user.getName(), calculateCredit, familyCredit.getName(), localDateNow);
+                emailServiceSender.sendMailReminderFamilyCredit(user.geteMail(), user.getName(), familyCredit.getMonthPayment(), familyCredit.getName(), localDateNow);
                 logger.debug("Email have been sent with auto credit . User id: {} " + user.getId());
             } catch (JobException e) {
                 logger.debug("Email can't be sent", e);
@@ -287,19 +285,17 @@ public class JobServiceImpl implements JobService {
     public void executeAutoCreditExpensePersonal() {
         LocalDateTime localDateNow = LocalDateTime.now();
         int dayNow = localDateNow.getDayOfMonth();
-        double calculateCredit;
         Collection<PersonalCreditAccount> allPersonalCredit = creditAccountDao.getAllPersonCreditIdsByMonthDay(dayNow);
         for (PersonalCreditAccount personalCredit : allPersonalCredit) {
             ObjectsCheckUtils.isNotNull(personalCredit);
             BigInteger id = creditAccountDao.getPersonalDebitIdByCreditId(personalCredit.getCreditId());
-            calculateCredit = CreditUtils.calculateMonthPayment(personalCredit.getDate(), personalCredit.getDateTo(), personalCredit.getPaidAmount(), personalCredit.getCreditRate());
             User user = personalDebitService.getPersonalDebitAccount(id).getOwner();
-            boolean paymentAutoPersonalCredit = personalCreditService.addPersonalCreditPaymentAuto(id, personalCredit.getCreditId(), calculateCredit);
+            boolean paymentAutoPersonalCredit = personalCreditService.addPersonalCreditPaymentAuto(id, personalCredit.getCreditId(), personalCredit.getMonthPayment());
             if (!paymentAutoPersonalCredit) {
                 personalCreditService.increaseDebt(personalCredit.getCreditId(), personalCredit.getPaidAmount());
             }
             try {
-                emailServiceSender.sendMailReminderPersonalCredit(user.geteMail(), user.getName(), calculateCredit, personalCredit.getName(), localDateNow);
+                emailServiceSender.sendMailReminderPersonalCredit(user.geteMail(), user.getName(), personalCredit.getMonthPayment(), personalCredit.getName(), localDateNow);
                 logger.debug("Email have been sent with auto credit . User id: {} " + user.getId());
             } catch (JobException e) {
                 logger.debug("Email can't be sent", e);
