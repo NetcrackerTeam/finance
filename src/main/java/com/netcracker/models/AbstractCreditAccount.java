@@ -2,6 +2,7 @@ package com.netcracker.models;
 
 import com.netcracker.models.enums.CreditStatusPaid;
 import com.netcracker.services.utils.CreditUtils;
+import org.decimal4j.util.DoubleRounder;
 
 import java.math.BigInteger;
 import java.time.LocalDate;
@@ -112,6 +113,7 @@ public abstract class AbstractCreditAccount {
 
     protected void setTotalCreditPayment(LocalDate dateFrom, LocalDate dateTo, double amount, double rate) {
         totalCreditPayment = CreditUtils.getTotalCreditPayment(getDate(), getDateTo(), getAmount(), getCreditRate());
+        totalCreditPayment =  DoubleRounder.round(totalCreditPayment, 2);
     }
 
     public double getTotalCreditPayment() {
@@ -120,6 +122,7 @@ public abstract class AbstractCreditAccount {
 
     protected void setRemainsToPay() {
         remainsToPay = getTotalCreditPayment() - getPaidAmount();
+        remainsToPay = DoubleRounder.round(remainsToPay, 2);
         if (remainsToPay < 0) remainsToPay = 0;
     }
 

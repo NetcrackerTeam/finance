@@ -1,5 +1,7 @@
 package com.netcracker.models;
 
+import org.decimal4j.util.DoubleRounder;
+
 import java.math.BigInteger;
 import java.util.List;
 
@@ -36,7 +38,7 @@ public abstract class AbstractDebitAccount {
         }
 
         public B debitAmount(double amount) {
-            actualClass.setAmount(amount);
+            actualClass.setAmount(DoubleRounder.round(amount, 2));
             return actualClassBuilder;
         }
 
@@ -79,7 +81,10 @@ public abstract class AbstractDebitAccount {
 
     public void setObjectName(String name) { this.name = name; }
 
-    public double getAmount() { return amount; }
+    public double getAmount() {
+        amount = DoubleRounder.round(amount, 2);
+        return amount;
+    }
 
     public void setAmount(double amount) { this.amount = amount; }
 
@@ -102,18 +107,20 @@ public abstract class AbstractDebitAccount {
     }
 
     public double getMonthIncome() {
+        monthIncome = DoubleRounder.round(monthIncome, 2);
         return monthIncome;
     }
 
     public void setMonthIncome(double monthIncome) {
-        this.monthIncome = monthIncome;
+        this.monthIncome = DoubleRounder.round(monthIncome, 2);
     }
 
     public double getMonthExpense() {
+        monthExpense = DoubleRounder.round(monthExpense, 2);
         return monthExpense;
     }
 
     public void setMonthExpense(double monthExpense) {
-        this.monthExpense = monthExpense;
+        this.monthExpense = DoubleRounder.round(monthExpense, 2);
     }
 }
