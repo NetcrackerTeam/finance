@@ -8,7 +8,7 @@
     <name>finance</name>
     <url>http://maven.apache.org</url>
     <properties>
-        <spring-framework-version>5.2.0.RELEASE</spring-framework-version>
+        <spring-framework-version>5.3.18</spring-framework-version>
         <maven.compiler.target>1.8</maven.compiler.target>
         <maven.compiler.source>1.8</maven.compiler.source>
         <javamail.version>1.4</javamail.version>
